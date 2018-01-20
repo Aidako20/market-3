@@ -1,4 +1,3 @@
-
 Flectra
 =======
 
@@ -14,4 +13,4 @@ a full-featured <a href="https://flectrahq.com">Open Source ERP</a> when you ins
 
 Getting started with Flectra
 ----------------------------
-For a standard installation please follow this <a href="https://gist.github.com/flectrahqadmin/d4c827577b3251a9505d3b697b1068be">gist</a>.
+For a standard installation please follow this <a href="https://gist.github.com/parthivgls/d1b18f34339709bb11ae10819b638266">gist</a>.
