@@ -13,6 +13,7 @@ class WizRequisitionRequest(models.TransientModel):
     _name = 'wiz.requisition.request'
 
     purchase_indent_id = fields.Many2one('purchase.indent', 'Purchase Indent')
+    branch_id = fields.Many2one('res.branch', string='Branch')
     partner_id = fields.Many2one(
         'res.partner', 'Vendor', domain="[('supplier','=',True)]")
     wiz_indent_line = fields.One2many(
@@ -179,9 +180,10 @@ class WizRequisitionRequest(models.TransientModel):
             vals = {
                 'partner_id': self.partner_id.id,
                 'state': 'draft',
+                'branch_id': self.branch_id.id,
                 'company_id': self.purchase_indent_id.company_id.id,
             }
-            purchase_order_id = self.env['purchase.order'].create(vals)
+            purchase_order_id = self.env['purchase.order'].with_context({'branch_id': self.branch_id.id}).create(vals)
         else:
             vals = {
                 'name': self.sudo().env['ir.sequence'].next_by_code(

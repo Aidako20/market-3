@@ -70,7 +70,11 @@ class PurchaseOrder(models.Model):
     def _default_picking_type(self):
         type_obj = self.env['stock.picking.type']
         company_id = self.env.context.get('company_id') or self.env.user.company_id.id
-        types = type_obj.search([('code', '=', 'incoming'), ('warehouse_id.company_id', '=', company_id)])
+        branch_id = self.env.context.get(
+            'branch_id') or self.env.user.default_branch_id.id
+        types = type_obj.search([('code', '=', 'incoming'),
+                                 ('warehouse_id.company_id', '=', company_id),
+                                 ('warehouse_id.branch_id', '=', branch_id)])
         if not types:
             types = type_obj.search([('code', '=', 'incoming'), ('warehouse_id', '=', False)])
         return types[:1]
@@ -98,6 +102,8 @@ class PurchaseOrder(models.Model):
     @api.constrains('picking_type_id', 'branch_id')
     def _check_branch(self):
         for order in self:
+            print ("!!!!!!!!!_check_branch!!!!!!!!1", order.picking_type_id)
+            print ("@@@@@@@@@@@@@@@@@@@@@@@@@@@", order.branch_id)
             warehouse_branch_id = order.picking_type_id.warehouse_id.branch_id
             if order.branch_id and warehouse_branch_id != order.branch_id:
                 raise ValidationError(
@@ -111,6 +117,7 @@ class PurchaseOrder(models.Model):
     @api.constrains('company_id', 'branch_id')
     def _check_company(self):
         for order in self:
+            print ("!!!!!!!!!_check_branch!!!!!!!!12222222222222")
             if order.branch_id and order.company_id != order.branch_id.company_id:
                 raise ValidationError(
                     _('Configuration Error of Company:\n'

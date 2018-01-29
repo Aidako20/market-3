@@ -2,7 +2,7 @@
 
 from datetime import datetime
 
-from flectra.exceptions import Warning, AccessError
+from flectra.exceptions import Warning, AccessError, ValidationError
 from flectra.tools.misc import formatLang
 
 import flectra.addons.decimal_precision as dp
@@ -167,6 +167,7 @@ class PurchaseRequisition(models.Model):
 
     purchase_indent_ids = fields.Many2many(
         'purchase.indent', string='Purchase Indent')
+    branch_id = fields.Many2one('res.branch', string="Branch")
 
     @api.multi
     def action_draft(self):
@@ -209,7 +210,7 @@ class PurchaseRequisitionLine(models.Model):
 
 class PurchaseIndent(models.Model):
     _name = 'purchase.indent'
-    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin',  'ir.branch.company.mixin']
     _description = "Purchase Indent"
 
     @api.multi
@@ -279,6 +280,18 @@ class PurchaseIndent(models.Model):
         string='Destination Location Type',
         help="Technical field used to display the Drop Ship Address",
         readonly=True)
+
+    @api.constrains('company_id', 'branch_id')
+    def _check_company(self):
+        for order in self:
+            if order.branch_id and order.company_id != order.branch_id.company_id:
+                raise ValidationError(
+                    _('Configuration Error of Company:\n'
+                      'The Purchase Indent Company (%s) and '
+                      'the Company (%s) of Branch must '
+                      'be the same company!') % (order.company_id.name,
+                                                order.branch_id.company_id.name)
+                )
 
     @api.multi
     def set_qty_state_cancel(self, purchase_order_id=False,
@@ -528,6 +541,8 @@ class PurchaseIndentLine(models.Model):
     company_id = fields.Many2one(
         'res.company', related='purchase_indent_id.company_id',
         string='Company', store=True, readonly=True)
+    branch_id = fields.Many2one(related='purchase_indent_id.branch_id',
+                                string='Branch', store=True)
     requisition_qty = fields.Float(
         string="Requisition Quantity",
         digits=dp.get_precision('Discount'))
@@ -599,6 +614,10 @@ class PurchaseIndentHistory(models.Model):
                     self_id.product_qty - self_id.requisition_qty
 
     purchase_indent_id = fields.Many2one('purchase.indent', 'Purchase Indent')
+    branch_id = fields.Many2one(related='purchase_indent_id.branch_id',
+                                string='Branch', store=True)
+    company_id = fields.Many2one(related='purchase_indent_id.company_id',
+                                 string="Company", store=True)
     product_id = fields.Many2one(
         'product.product', string='Product',
         domain=[('purchase_ok', '=', True)],
