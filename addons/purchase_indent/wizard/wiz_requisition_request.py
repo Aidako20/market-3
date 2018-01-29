@@ -48,6 +48,7 @@ class WizRequisitionRequest(models.TransientModel):
             purchase_indent_ids = self.purchase_indent_id.search([
                 ('category_id', '=', self.purchase_indent_id.category_id.id),
                 ('state', 'in', ['confirm', 'requisition']),
+                ('branch_id', '=', self.purchase_indent_id.branch_id.id),
                 ('company_id', '=', self.purchase_indent_id.company_id.id)])
             list_data = []
             value = {}
@@ -183,12 +184,14 @@ class WizRequisitionRequest(models.TransientModel):
                 'branch_id': self.branch_id.id,
                 'company_id': self.purchase_indent_id.company_id.id,
             }
-            purchase_order_id = self.env['purchase.order'].with_context({'branch_id': self.branch_id.id}).create(vals)
+            purchase_order_id = self.env['purchase.order'].with_context(
+                {'branch_id': self.branch_id.id}).create(vals)
         else:
             vals = {
                 'name': self.sudo().env['ir.sequence'].next_by_code(
                     'purchase.order.requisition') or 'New',
                 'type_id': self.requisition_type_id.id,
+                'branch_id': self.branch_id.id,
                 'state': 'draft',
                 'company_id': self.purchase_indent_id.company_id.id,
             }
@@ -201,6 +204,7 @@ class WizRequisitionRequest(models.TransientModel):
             line_vals = {
                 'product_id': current_line.product_id.id,
                 'product_qty': current_line.product_qty,
+                'branch_id': self.branch_id.id,
                 'purchase_indent_ids':
                     [(6, 0, current_line.purchase_indent_ids.ids)],
                 'purchase_indent_line_id':
@@ -273,6 +277,7 @@ class WizRequisitionRequest(models.TransientModel):
         purchase_indent_ids = self.purchase_indent_id.search([
             ('category_id', '=', self.purchase_indent_id.category_id.id),
             ('state', 'in', ['confirm', 'requisition']),
+            ('branch_id', '=', self.purchase_indent_id.branch_id.id),
             ('company_id', '=', self.purchase_indent_id.company_id.id)])
         for purchase_indent_id in purchase_indent_ids:
             check = False
