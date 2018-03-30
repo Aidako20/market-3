@@ -499,7 +499,6 @@ Docker
 The full documentation on how to use Flectra with Docker can be found on the
 offcial Flectra `docker image <https://hub.docker.com/r/flectrahq/flectra/>`_ page.
 
-.. _demo: https://demo.flectra.com
 .. _docker: https://www.docker.com
 .. _Debian Stretch: https://www.debian.org/releases/stretch/
 .. _Ubuntu Xenial: http://releases.ubuntu.com/16.04/

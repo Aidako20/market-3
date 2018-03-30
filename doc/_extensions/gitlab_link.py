@@ -7,7 +7,7 @@ from werkzeug import urls
 from flectra.tools import pycompat
 
 """
-* adds github_link(mode) context variable: provides URL (in relevant mode) of
+* adds gitlab_link(mode) context variable: provides URL (in relevant mode) of
   current document on github
 * if sphinx.ext.linkcode is enabled, automatically generates github linkcode
   links (by setting config.linkcode_resolve)
@@ -15,30 +15,30 @@ from flectra.tools import pycompat
 Settings
 ========
 
-* ``github_user``, username/organisation under which the project lives
-* ``github_project``, name of the project on github
-* (optional) ``version``, github branch to link to (default: master)
+* ``gitlab_user``, username/organisation under which the project lives
+* ``gitlab_project``, name of the project on gitlab
+* (optional) ``version``, gitlab branch to link to (default: master)
 
 Notes
 =====
 
 * provided ``linkcode_resolve`` only supports Python domain
-* generates https github links
+* generates https gitlab links
 * explicitly imports ``flectra``, so useless for anyone else
 """
 
 def setup(app):
-    app.add_config_value('github_user', None, 'env')
-    app.add_config_value('github_project', None, 'env')
+    app.add_config_value('gitlab_user', None, 'env')
+    app.add_config_value('gitlab_project', None, 'env')
     app.connect('html-page-context', add_doc_link)
 
     def linkcode_resolve(domain, info):
-        """ Resolves provided object to corresponding github URL
+        """ Resolves provided object to corresponding gitlab URL
         """
         # TODO: js?
         if domain != 'py':
             return None
-        if not (app.config.github_user and app.config.github_project):
+        if not (app.config.gitlab_user and app.config.gitlab_project):
             return None
 
         module, fullname = info['module'], info['fullname']
@@ -68,18 +68,18 @@ def setup(app):
         import flectra
         # FIXME: make finding project root project-independent
         project_root = os.path.join(os.path.dirname(flectra.__file__), '..')
-        return make_github_link(
+        return make_gitlab_link(
             app,
             os.path.relpath(obj_source_path, project_root),
             line)
     app.config.linkcode_resolve = linkcode_resolve
 
-def make_github_link(app, path, line=None, mode="blob"):
+def make_gitlab_link(app, path, line=None, mode="blob"):
     config = app.config
 
     urlpath = "/{user}/{project}/{mode}/{branch}/{path}".format(
-        user=config.github_user,
-        project=config.github_project,
+        user=config.gitlab_user,
+        project=config.gitlab_project,
         branch=config.version or 'master',
         path=path,
         mode=mode,
@@ -93,8 +93,8 @@ def make_github_link(app, path, line=None, mode="blob"):
     ))
 
 def add_doc_link(app, pagename, templatename, context, doctree):
-    """ Add github_link function linking to the current page on github """
-    if not app.config.github_user and app.config.github_project:
+    """ Add gitlab_link function linking to the current page on gitlab """
+    if not app.config.gitlab_user and app.config.gitlab_project:
         return
 
     # FIXME: find other way to recover current document's source suffix
@@ -103,5 +103,5 @@ def add_doc_link(app, pagename, templatename, context, doctree):
     source_suffix = app.config.source_suffix
     source_suffix = source_suffix if isinstance(source_suffix, pycompat.string_types) else source_suffix[0]
     # can't use functools.partial because 3rd positional is line not mode
-    context['github_link'] = lambda mode='edit': make_github_link(
+    context['github_link'] = lambda mode='edit': make_gitlab_link(
         app, 'doc/%s%s' % (pagename, source_suffix), mode=mode)

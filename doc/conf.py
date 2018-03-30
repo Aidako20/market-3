@@ -184,8 +184,8 @@ intersphinx_mapping = {
     'django': ('https://django.readthedocs.org/en/latest/', None),
 }
 
-github_user = 'flectra'
-github_project = 'flectra'
+gitlab_user = 'flectra-hq'
+gitlab_project = 'flectra'
 
 # monkeypatch PHP lexer to not require <?php
 from sphinx.highlighting import lexers
