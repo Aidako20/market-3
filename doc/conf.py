@@ -26,7 +26,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.linkcode',
     'autojsdoc.ext',
-    'github_link',
+    'gitlab_link',
     'flectra_ext',
     'html_domain',
     'exercise_admonition',
@@ -95,7 +95,7 @@ pygments_style = 'flectra'
 # a list of builtin themes.
 html_theme = 'flectra_ext'
 
-flectra_cover_default = 'banners/installing_flectra.jpg'
+flectra_cover_default = 'banners/flectra_modules.jpg'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

@@ -1,4 +1,4 @@
-:banner: banners/reports.jpg
+:banner: banners/flectra_qweb_reports.jpg
 
 .. highlight:: xml
 
