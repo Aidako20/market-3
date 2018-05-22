@@ -18,6 +18,13 @@ from ..rest_exception import *
 _logger = logging.getLogger(__name__)
 
 
+class JSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (bytes, bytearray)):
+            return obj.decode("ASCII")
+        return json.JSONEncoder.default(self, obj)
+
+
 def eval_json_to_data(modelname, json_data, create=True):
     Model = request.env[modelname]
     model_fiels = Model._fields
@@ -65,22 +72,27 @@ def object_read(modelname, default_domain, status_code,
     order = None
     if 'filters' in json_data:
         domain += ast.literal_eval(json_data['filters'])
-    elif 'field' in json_data:
+    if 'field' in json_data:
         field += ast.literal_eval(json_data['field'])
-    elif 'offset' in json_data:
+    if 'offset' in json_data:
         offset = int(json_data['offset'])
-    elif 'limit' in json_data:
+    if 'limit' in json_data:
         limit = int(json_data['limit'])
-    elif 'order' in json_data:
+    if 'order' in json_data:
         order = json_data['order']
-    else:
-        pass
+
     # Search Read object:
+    final_data = []
     data = request.env[modelname].search_read(domain, offset=offset, limit=limit, order=order)
-    return valid_response(status=status_code,
-                          data={
-                              'count': len(data), 'results': data
-                          })
+    if(data):
+        final_data = json.loads(json.dumps(data, cls=JSONEncoder))
+
+        return valid_response(status=status_code,
+                              data={
+                                  'count': len(data), 'results': final_data
+                              })
+    else:
+        return object_not_found_all(modelname)
 
 
 def object_read_one(modelname, id, status_code):
@@ -93,17 +105,14 @@ def object_read_one(modelname, id, status_code):
         return invalid_object_id()
     data = request.env[modelname].search_read(domain=[('id', '=', id)])
     if data:
-        return valid_response(status_code, data)
+        final_data = json.loads(json.dumps(data, cls=JSONEncoder))
+        return valid_response(status=status_code, data=final_data)
     else:
-        return object_not_found()
+        return object_not_found(id, modelname)
 
 
 def object_create_one(modelname, data, status_code):
-    rdata = request.httprequest.stream.read().decode('utf-8')
-    json_data = json.loads(rdata)
-    vals = eval_json_to_data(modelname, json_data)
-    if data:
-        vals.update(data)
+    vals = data
     try:
         res = request.env[modelname].create(vals)
         flectra_error = ''
@@ -116,25 +125,27 @@ def object_create_one(modelname, data, status_code):
         return no_object_created(flectra_error)
 
 
-def object_update_one(modelname, id, status_code):
+def object_update_one(modelname, id, data, status_code):
     try:
         id = int(id)
     except:
         id = None
     if not id:
         return invalid_object_id()
-    rdata = request.httprequest.stream.read().decode('utf-8')
-    json_data = ast.literal_eval(rdata)
-    vals = eval_json_to_data(modelname, json_data, create=False)
+
+    vals = data
     try:
-        res = request.env[modelname].browse(id).write(vals)
+        res = request.env[modelname].search([('id', '=', id)])
+        if res:
+            res.write(vals)
+        else:
+            return object_not_found(id, modelname)
         flectra_error = ''
     except Exception as e:
         res = None
         flectra_error = e
     if res:
-        return valid_response(status_code, 'Record Updated '
-                                                 'successfully!')
+        return valid_response(status_code, 'Record Updated successfully!')
     else:
         return no_object_updated(flectra_error)
 
@@ -147,14 +158,17 @@ def object_delete_one(modelname, id, status_code):
     if not id:
         return invalid_object_id()
     try:
-        res = request.env[modelname].browse(id).unlink()
+        res = request.env[modelname].search([('id', '=', id)])
+        if res:
+            res.unlink()
+        else:
+            return object_not_found(id, modelname)
         flectra_error = ''
     except Exception as e:
         res = None
         flectra_error = e
     if res:
-        return valid_response(status_code, 'Record Successfully '
-                                                 'Deleted!')
+        return valid_response(status_code, 'Record Successfully Deleted!')
     else:
         return no_object_deleted(flectra_error)
 
@@ -295,13 +309,16 @@ class ControllerREST(http.Controller):
     @check_valid_token
     def restapi_access_token(self, model_name=False, id=False, **post):
         Model = request.env['ir.model']
-        Model_ids = Model.sudo().search([('model', '=', model_name),
-                                  ('rest_api', '=', True)])
-        if Model_ids:
-            return getattr(self, '%s_data' % (
-                request.httprequest.method).lower())(
-                model_name=model_name, id=id, **post)
-        return object_not_found()
+        Model_id = Model.sudo().search([('model', '=', model_name)], limit=1)
+
+        if Model_id:
+            if Model_id.rest_api:
+                return getattr(self, '%s_data' % (
+                    request.httprequest.method).lower())(
+                    model_name=model_name, id=id, **post)
+            else:
+                return rest_api_unavailable(model_name)
+        return modal_not_found(model_name)
 
     def get_data(self, model_name=False, id=False, **post):
         if id:
@@ -321,13 +338,14 @@ class ControllerREST(http.Controller):
         return object_update_one(
             modelname=model_name,
             id=id,
+            data=post,
             status_code=200,
         )
 
     def post_data(self, model_name=False, id=False, **post):
         return object_create_one(
             modelname=model_name,
-            data={},
+            data=post,
             status_code=200,
         )
 
