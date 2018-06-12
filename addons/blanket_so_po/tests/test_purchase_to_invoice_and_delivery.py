@@ -173,31 +173,3 @@ class TestPurchaseOrder(TransactionCase):
             logging.info(
                 '========================================================='
                 '========================')
-
-        self.inv_obj = self.inv_obj.create({
-            'partner_id': self.po1.partner_id.id,
-            'purchase_id': self.po1.id,
-            # 'account_id':
-            #     self.po1.partner_id.property_account_payable_id.id,
-            # 'type': 'in_refund',
-        })
-        self.inv_obj.purchase_order_change()
-        self.inv_obj.invoice_line_ids[-1].quantity = 2.0
-        self.inv_obj.invoice_validate()
-        context = {"active_model": 'purchase.order',
-                   "active_ids": [self.po1.id], "active_id": self.po1.id}
-
-        for invoice in self.po1.invoice_ids:
-            logging.info('Invoice of Purchase order.')
-            logging.info(
-                '==================================================')
-            logging.info('| Product | Quantity | Unit Price | Subtotal |')
-            logging.info(
-                '=================================================|')
-            for line in invoice.invoice_line_ids:
-                logging.info(
-                    '|%s       |%d        |%d          |%d        |   ' % (
-                        line.product_id.name, line.quantity,
-                        line.price_unit,
-                        line.price_subtotal))
-            invoice.with_context(context).invoice_validate()
