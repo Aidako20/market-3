@@ -1,21 +1,13 @@
 # Part of Flectra. See LICENSE file for full copyright and licensing
 # details.
 
-from flectra import api, models, fields, _
+from flectra import api, models, fields
 from flectra.exceptions import UserError
 from flectra.tools import float_compare
 
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
-
-    @api.multi
-    def action_cancel(self):
-        if self.order_line.filtered(
-                lambda l: l.blanket_so_line):
-            raise Warning(
-                _('Sorry, You can not cancel blanket line based SO.'))
-        return super(SaleOrder, self).action_cancel()
 
 
 class SaleOrderLine(models.Model):
