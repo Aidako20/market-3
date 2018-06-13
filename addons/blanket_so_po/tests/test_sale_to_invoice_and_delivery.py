@@ -16,7 +16,7 @@ class TestSaleOrder(TransactionCase):
         self.stock_location_model = self.env['stock.location']
         self.sale_wizard = self.env['sale.transfer.products']
         self.invoice_wizard = self.env['sale.advance.payment.inv']
-        self.so1 = self.env.ref('blanket_so_po.sale_order_blanket1')
+        self.sale1 = self.env.ref('blanket_so_po.sale_order_blanket1')
         self.so_line_with_blanket = self.env.ref(
             'blanket_so_po.sale_order_line_blanket_1')
         self.so_line_without_blanket = self.env.ref(
@@ -26,19 +26,19 @@ class TestSaleOrder(TransactionCase):
         self.inv_obj = self.env['account.invoice']
 
     def test_1_sale_with_blanket(self):
-        self.so1.force_quotation_send()
-        self.so1.action_confirm()
-        self.assertTrue(self.so1.state, 'sale')
-        self.assertTrue(self.so1.invoice_status, 'to invoice')
+        self.sale1.force_quotation_send()
+        self.sale1.action_confirm()
+        self.assertTrue(self.sale1.state, 'sale')
+        self.assertTrue(self.sale1.invoice_status, 'to invoice')
         logging.info('Test Cases for Blanket Sale order')
-        logging.info('Sale Order - %s' % (self.so1.name))
+        logging.info('Sale Order - %s' % (self.sale1.name))
         logging.info(
             '============================================================'
             '===================+=====')
         logging.info(
             ' | Blanket So Line | Product  |  Ordered Qty  | Remaining '
             'to transfer  |  Delivered |')
-        for line in self.so1.order_line:
+        for line in self.sale1.order_line:
             logging.info(
                 ' %s            | %s       | %d            | %d          '
                 '           | %d ' % (
@@ -59,7 +59,7 @@ class TestSaleOrder(TransactionCase):
             '======================+=====')
         logging.info(
             ' |  Product  | Initial Demand  | Reserved  |  Done |')
-        for picking in self.so1.picking_ids:
+        for picking in self.sale1.picking_ids:
             for line in picking.move_lines:
                 logging.info('| %s     | %d              |%d         | %d' % (
                     line.product_id.name, line.product_uom_qty,
@@ -87,14 +87,14 @@ class TestSaleOrder(TransactionCase):
         logging.info(
             '*****************************************************')
         logging.info(
-            'Sale Order after Blanket Split lines- %s' % (self.so1.name))
+            'Sale Order after Blanket Split lines- %s' % (self.sale1.name))
         logging.info(
             '========================================================='
             '======================+=====')
         logging.info(
             ' | Blanket So Line | Product  |  Ordered Qty  | Remaining '
             'to transfer  |  Delivered |')
-        for line in self.so1.order_line:
+        for line in self.sale1.order_line:
             logging.info(
                 ' %s            | %s       | %d            | %d          '
                 '           | %d ' % (
@@ -105,21 +105,21 @@ class TestSaleOrder(TransactionCase):
                 '======================================================='
                 '==========================')
 
-        self.assertEqual(self.so1.picking_ids.move_lines[-1].quantity_done,
+        self.assertEqual(self.sale1.picking_ids.move_lines[-1].quantity_done,
                          0.0)
-        self.assertEqual(self.so1.picking_ids.move_lines[-2].quantity_done,
+        self.assertEqual(self.sale1.picking_ids.move_lines[-2].quantity_done,
                          0.0)
-        self.so1.picking_ids.move_lines[-1].quantity_done = 2
+        self.sale1.picking_ids.move_lines[-1].quantity_done = 2
 
         logging.info(
             '*****************************************************')
-        logging.info('Delivery Order - %s' % (self.so1.picking_ids.name))
+        logging.info('Delivery Order - %s' % (self.sale1.picking_ids.name))
         logging.info(
             '==========================================================='
             '====================+=====')
         logging.info(
             ' |  Product  | Initial Demand  | Reserved  |  Done |')
-        for move in self.so1.picking_ids.move_lines:
+        for move in self.sale1.picking_ids.move_lines:
             logging.info('| %s     | %d              |%d         | %d' % (
                 move.product_id.name, move.product_uom_qty,
                 move.reserved_availability, move.quantity_done))
@@ -127,9 +127,9 @@ class TestSaleOrder(TransactionCase):
                 '======================================================='
                 '==========================')
 
-        self.so1.picking_ids.action_confirm()
-        self.so1.picking_ids.action_assign()
-        res_dict = self.so1.picking_ids.button_validate()
+        self.sale1.picking_ids.action_confirm()
+        self.sale1.picking_ids.action_assign()
+        res_dict = self.sale1.picking_ids.button_validate()
         backorder_wizard = self.env[(res_dict.get('res_model'))].browse(
             res_dict.get('res_id'))
         backorder_wizard.process()
@@ -138,14 +138,14 @@ class TestSaleOrder(TransactionCase):
             '*****************************************************')
         logging.info(
             'Sale Order after validate Delivery order- %s' % (
-                self.so1.name))
+                self.sale1.name))
         logging.info(
             '=========================================================='
             '=====================+=====')
         logging.info(
             ' | Blanket So Line | Product  |  Ordered Qty  | Remaining '
             'to transfer  |  Delivered |invoice status')
-        for line in self.so1.order_line:
+        for line in self.sale1.order_line:
             logging.info(
                 ' %s            | %s       | %d            | %d          '
                 '           | %d         |%s' % (
@@ -156,14 +156,14 @@ class TestSaleOrder(TransactionCase):
                 '======================================================='
                 '==========================')
 
-        self.assertEqual(len(self.so1.picking_ids), 2,
+        self.assertEqual(len(self.sale1.picking_ids), 2,
                          'There is no 2 pickings are available')
 
         context = {"active_model": 'sale.order',
-                   "active_ids": [self.so1.id],
-                   "active_id": self.so1.id}
+                   "active_ids": [self.sale1.id],
+                   "active_id": self.sale1.id}
 
-        for invoice in self.so1.invoice_ids:
+        for invoice in self.sale1.invoice_ids:
             logging.info('Invoice of Delivered Quantity.')
             for line in invoice.invoice_line_ids:
                 logging.info(
