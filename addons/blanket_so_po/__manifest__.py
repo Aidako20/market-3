@@ -9,7 +9,7 @@
                'required and when they are to be delivered.',
     "author": "Flectra",
     'website': 'https://flectrahq.com',
-    'depends': ['sale_management', 'purchase', 'sale_stock'],
+    'depends': ['purchase', 'sale_stock'],
     'data': [
         'wizard/transfer_so_products_view.xml',
         'wizard/transfer_po_products_view.xml',

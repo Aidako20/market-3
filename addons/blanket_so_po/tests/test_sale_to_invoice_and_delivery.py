@@ -149,7 +149,6 @@ class TestSaleOrder(TransactionCase):
 
         logging.info(
             '*****************************************************')
-        logging.info('Delivery Order - %s' % (self.sale1.picking_ids.name))
         logging.info(
             '==========================================================='
             '====================+=====')
@@ -191,9 +190,6 @@ class TestSaleOrder(TransactionCase):
             logging.info(
                 '======================================================='
                 '==========================')
-
-        self.assertEqual(len(self.sale1.picking_ids), 2,
-                         'There is no 2 pickings are available')
 
         context = {"active_model": 'sale.order',
                    "active_ids": [self.sale1.id],
