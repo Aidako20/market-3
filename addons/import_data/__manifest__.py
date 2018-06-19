@@ -6,7 +6,7 @@
     'author': 'FlectraHQ',
     'website': 'https://flectrahq.com',
     'license': 'LGPL-3',
-    'depends': ['l10n_in', 'account_invoicing'],
+    'depends': ['l10n_in','account'],
     'data': [
             'data/res.partner.csv',
             'data/res.partner-cust_demo.csv',
