@@ -1,0 +1,11 @@
+id,partner_type,partner_id,amount,journal_id,payment_date,payment_method_id,payment_type
+purchase_receipt_supplier_1,Vendor,Radheshyam Borde,150,Bank,2018-6-25,Electronic,Send Money
+purchase_receipt_supplier_2,Vendor,Lakshmi Akshay Chokshi,350,Bank,2018-6-23,Electronic,Send Money
+purchase_receipt_supplier_3,Vendor,Uday Rao Rampersad,500,Bank,2018-6-20,Electronic,Send Money
+purchase_receipt_supplier_4,Vendor,Meghana Borra,650,Bank,2018-6-30,Electronic,Send Money
+purchase_receipt_supplier_5,Vendor,Faraz Rao,780,Bank,2018-7-25,Electronic,Send Money
+purchase_receipt_customer_1,Customer,Chinmay Rao Sekhon,1000,Bank,2018-7-25,Electronic,Receive Money
+purchase_receipt_customer_2,Customer,Bharat Verma,1560,Bank,2018-8-15,Electronic,Receive Money
+purchase_receipt_customer_3,Customer,Namita Sekhon,740,Bank,2018-7-11,Electronic,Receive Money
+purchase_receipt_customer_4,Customer,Parvez Kumar Varma,350,Bank,2018-8-12,Electronic,Receive Money
+purchase_receipt_customer_5,Customer,Lalit Natwar Vora,340,Bank,2018-7-06,Electronic,Receive Money

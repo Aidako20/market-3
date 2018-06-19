@@ -1,0 +1,41 @@
+id,partner_id,journal_id,account_id/id,invoice_line_ids/product_id,invoice_line_ids/name,invoice_line_ids/account_id/id,invoice_line_ids/price_unit,type
+cutomer_invoice_1,Mohan Nanda,Tax Invoices,l10n_in.1_p10040,Memory Cards,Memory Cards,l10n_in.p20011,220,out_invoice
+cutomer_invoice_2,Mohit Kanda,Tax Invoices,l10n_in.1_p10040,GPS and Navigation,GPS and Navigation,l10n_in.p20011,600,out_invoice
+cutomer_invoice_3,Sameera Manda,Tax Invoices,l10n_in.1_p10040,Car Speakers,Car Speakers,l10n_in.p20011,450,out_invoice
+cutomer_invoice_4,Uday Mitra,Tax Invoices,l10n_in.1_p10040,Pen Drives,Pen Drives,l10n_in.p20011,750,out_invoice
+cutomer_invoice_5,Lalit Natwar Vora,Tax Invoices,l10n_in.1_p10040,Clutches,Clutches,l10n_in.p20011,120,out_invoice
+cutomer_invoice_6,Parvez Kumar Varma,Tax Invoices,l10n_in.1_p10040,Washer,Washer,l10n_in.p20011,230,out_invoice
+cutomer_invoice_7,Namita Sekhon,Tax Invoices,l10n_in.1_p10040,Cosmetic Bags,Cosmetic Bags,l10n_in.p20011,1500,out_invoice
+cutomer_invoice_8,Bharat Verma,Tax Invoices,l10n_in.1_p10040,Hammers,Hammers,l10n_in.p20011,999,out_invoice
+cutomer_invoice_9,Nilam Nayan Agarwal,Tax Invoices,l10n_in.1_p10040,Spray Guns,Spray Guns,l10n_in.p20011,1200,out_invoice
+cutomer_invoice_10,Chinmay Rao Sekhon,Tax Invoices,l10n_in.1_p10040,Dinning Tables,Dinning Tables,l10n_in.p20011,3500,out_invoice
+supplier_invoice_1,Radheshyam Borde,Tax Invoices,l10n_in.1_p11211,GPS and Navigation,GPS and Navigation,l10n_in.1_p2107,220,in_invoice
+supplier_invoice_2,Lakshmi Akshay Chokshi,Tax Invoices,l10n_in.1_p11211,Car and Bike Care,Car and Bike Care,l10n_in.1_p2107,600,in_invoice
+supplier_invoice_3,Uday Rao Rampersad,Tax Invoices,l10n_in.1_p11211,Car Speakers,Car Speakers,l10n_in.1_p2107,450,in_invoice
+supplier_invoice_4,Meghana Borra,Tax Invoices,l10n_in.1_p11211,Clutches,Clutches,l10n_in.1_p2107,750,in_invoice
+supplier_invoice_5,Faraz Rao,Tax Invoices,l10n_in.1_p11211,Shoulder Bags,Shoulder Bags,l10n_in.1_p2107,120,in_invoice
+supplier_invoice_6,Abhinav Bhatt,Tax Invoices,l10n_in.1_p11211,Sunglasses,Sunglasses,l10n_in.1_p2107,230,in_invoice
+supplier_invoice_7,Namita Rajesh,Tax Invoices,l10n_in.1_p11211,Travel Accessories,Travel Accessories,l10n_in.1_p2107,1500,in_invoice
+supplier_invoice_8,Harpreet Kumar,Tax Invoices,l10n_in.1_p11211,Cosmetic Bags,Cosmetic Bags,l10n_in.1_p2107,999,in_invoice
+supplier_invoice_9,Bijoy Dev,Tax Invoices,l10n_in.1_p11211,Spray Guns,Spray Guns,l10n_in.1_p2107,1200,in_invoice
+supplier_invoice_10,Ankita Bumb,Tax Invoices,l10n_in.1_p11211,Dinning Tables,Dinning Tables,l10n_in.1_p2107,3500,in_invoice
+customer_credit_1,Bharat Verma,Tax Invoices,l10n_in.1_p10040,Hammers,Hammers,l10n_in.1_p20011,500,out_refund
+customer_credit_2,Namita Sekhon,Tax Invoices,l10n_in.1_p10040,Compressors,Compressors,l10n_in.1_p20011,1000,out_refund
+customer_credit_3,Parvez Kumar Varma,Tax Invoices,l10n_in.1_p10040,Spray Guns,Spray Guns,l10n_in.1_p20011,2000,out_refund
+customer_credit_4,Lalit Natwar Vora,Tax Invoices,l10n_in.1_p10040,CCTV Camera,CCTV Camera,l10n_in.1_p20011,4000,out_refund
+customer_credit_5,Lalit Natwar Vora,Tax Invoices,l10n_in.1_p10040,Washer,Washer,l10n_in.1_p20011,1000,out_refund
+customer_credit_6,Mohit Kanda,Tax Invoices,l10n_in.1_p10040,Dinning Tables,Dinning Tables,l10n_in.1_p20011,10000,out_refund
+customer_credit_7,Sameera Manda,Tax Invoices,l10n_in.1_p10040,Crockery Units,Crockery Units,l10n_in.1_p20011,5000,out_refund
+customer_credit_8,Uday Mitra,Tax Invoices,l10n_in.1_p10040,Bar Stools,Bar Stools,l10n_in.1_p20011,15000,out_refund
+customer_credit_9,Nilam Nayan Agarwal,Tax Invoices,l10n_in.1_p10040,Wall Shelves,Wall Shelves,l10n_in.1_p20011,3000,out_refund
+customer_credit_10,Chinmay Rao Sekhon,Tax Invoices,l10n_in.1_p10040,Bed Mattresses,Bed Mattresses,l10n_in.1_p20011,2500,out_refund
+supplier_credit_1,Abhinav Bhatt,Tax Invoices,l10n_in.1_p11211,Bar Stools,Bar Stools,l10n_in.1_p2107,220,in_refund
+supplier_credit_2,Harpreet Kumar,Tax Invoices,l10n_in.1_p11211,Wall Shelves,Wall Shelves,l10n_in.1_p2107,600,in_refund
+supplier_credit_3,Bijoy Dev,Tax Invoices,l10n_in.1_p11211,Bed Mattresses,Bed Mattresses,l10n_in.1_p2107,450,in_refund
+supplier_credit_4,Uday Rao Rampersad,Tax Invoices,l10n_in.1_p11211,Mini PC,Mini PC,l10n_in.1_p2107,750,in_refund
+supplier_credit_5,Ankita Bumb,Tax Invoices,l10n_in.1_p11211,Laser Jet,Laser Jet,l10n_in.1_p2107,120,in_refund
+supplier_credit_6,Faraz Rao,Tax Invoices,l10n_in.1_p11211,Pen Drives,Pen Drives,l10n_in.1_p2107,230,in_refund
+supplier_credit_7,Radheshyam Borde,Tax Invoices,l10n_in.1_p11211,Memory Cards,Memory Cards,l10n_in.1_p2107,1500,in_refund
+supplier_credit_8,Meghana Borra,Tax Invoices,l10n_in.1_p11211,Switches,Switches,l10n_in.1_p2107,999,in_refund
+supplier_credit_9,Namita Rajesh,Tax Invoices,l10n_in.1_p11211,Protection Jackets,Protection Jackets,l10n_in.1_p2107,1200,in_refund
+supplier_credit_10,Lakshmi Akshay Chokshi,Tax Invoices,l10n_in.1_p11211,Vacuum Cleaners,Vacuum Cleaners,l10n_in.1_p2107,3500,in_refund

@@ -1,0 +1,26 @@
+id,name,type,uom_id,categ_id,list_price
+product_1,Hammers,Consumable,Unit(s),Tools and Hardware,5000
+product_2,Compressors,Consumable,Unit(s),Tools and Hardware,10000
+product_3,Spray Guns,Consumable,Unit(s),Tools and Hardware,20000
+product_4,CCTV Camera,Consumable,Unit(s),Tools and Hardware,10000
+product_5,Washer,Consumable,Unit(s),Tools and Hardware,3000
+product_6,Dinning Tables,Consumable,Unit(s),Furniture,30000
+product_7,Crockery Units,Consumable,Unit(s),Furniture,6000
+product_8,Bar Stools,Consumable,Unit(s),Furniture,50000
+product_9,Wall Shelves,Consumable,Unit(s),Furniture,70000
+product_10,Bed Mattresses,Consumable,Unit(s),Furniture,10000
+product_11,Mini PC,Consumable,Unit(s),Electronics,25000
+product_12,Laser Jet,Consumable,Unit(s),Electronics,20000
+product_13,Pen Drives,Consumable,Unit(s),Electronics,3000
+product_14,Memory Cards,Consumable,Unit(s),Electronics,500
+product_15,Switches,Consumable,Unit(s),Electronics,1000
+product_16,Protection Jackets,Consumable,Unit(s),Automobile,2000
+product_17,Vacuum Cleaners,Consumable,Unit(s),Automobile,1500
+product_18,GPS and Navigation,Consumable,Unit(s),Automobile,1000
+product_19,Car and Bike Care,Consumable,Unit(s),Automobile,1400
+product_20,Car Speakers,Consumable,Unit(s),Automobile,2000
+product_21,Clutches,Consumable,Unit(s),Bag and Accessories,500
+product_22,Shoulder Bags,Consumable,Unit(s),Bag and Accessories,700
+product_23,Sunglasses,Consumable,Unit(s),Bag and Accessories,500
+product_24,Travel Accessories,Consumable,Unit(s),Bag and Accessories,1000
+product_25,Cosmetic Bags,Consumable,Unit(s),Bag and Accessories,2000
