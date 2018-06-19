@@ -19,14 +19,6 @@ class SaleOrderLine(models.Model):
                                             copy=False)
 
     @api.multi
-    def action_cancel(self):
-        if self.order_line.filtered(
-                lambda l: l.blanket_so_line):
-            raise Warning(
-                _('Sorry, You can not cancel blanket line based SO.'))
-        return super(SaleOrder, self).action_cancel()
-
-    @api.multi
     def _action_launch_procurement_rule(self):
         precision = self.env['decimal.precision'].precision_get(
             'Product Unit of Measure')
