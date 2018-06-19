@@ -17,8 +17,8 @@
         'views/purchase_view.xml',
     ],
     'demo': [
-        'demo/blanket_purchase_demo.xml',
-        'demo/blanket_sale_demo.xml'
+        'demo/blanket_sale_demo.xml',
+        'demo/blanket_purchase_demo.xml'
     ],
     'installable': True,
     'application': True,

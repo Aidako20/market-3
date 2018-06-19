@@ -16,54 +16,18 @@ class TestSaleOrder(TransactionCase):
         self.stock_location_model = self.env['stock.location']
         self.sale_wizard = self.env['sale.transfer.products']
         self.invoice_wizard = self.env['sale.advance.payment.inv']
-        # self.sale1 = self.env.ref('blanket_so_po.sale_order_blanket1')
+        self.sale1 = self.env.ref('blanket_so_po.sale_order_blanket1')
         self.so_line_with_blanket = self.env.ref(
-            'blanket_so_po.sale_order_line_with_blanket_1')
+            'blanket_so_po.sale_order_line_blanket_1')
         self.so_line_without_blanket = self.env.ref(
-            'blanket_so_po.sale_order_line_without_blanket_2')
+            'blanket_so_po.sale_order_line_blanket_2')
         self.so_line_without_blanket2 = self.env.ref(
-            'blanket_so_po.sale_order_line_without_blanket_3')
+            'blanket_so_po.sale_order_line_blanket_3')
         self.inv_obj = self.env['account.invoice']
 
     def test_1_sale_with_blanket(self):
-        self.partner = self.env.ref('base.res_partner_1')
-        self.product1 = self.env.ref('product.product_delivery_01')
-        self.product2 = self.env.ref('product.product_delivery_02')
-        self.product3 = self.env.ref('product.product_order_01')
-        so_vals = {
-            'partner_id': self.partner.id,
-            'partner_invoice_id': self.partner.id,
-            'partner_shipping_id': self.partner.id,
-            'order_line': [
-                (0, 0, {
-                    'name': self.product1.name,
-                    'product_id': self.product1.id,
-                    'product_uom_qty': 10.0,
-                    'product_uom': self.product1.uom_id.id,
-                    'price_unit': self.product1.list_price,
-                    'blanket_so_line': True
-                }),
-                (0, 0, {
-                    'name': self.product2.name,
-                    'product_id': self.product2.id,
-                    'product_uom_qty': 10.0,
-                    'product_uom': self.product2.uom_id.id,
-                    'price_unit': self.product2.list_price
-                }),
-                (0, 0, {
-                    'name': self.product3.name,
-                    'product_id': self.product3.id,
-                    'product_uom_qty': 10.0,
-                    'product_uom': self.product3.uom_id.id,
-                    'price_unit': self.product3.list_price})],
-            'pricelist_id': self.env.ref('product.list0').id,
-        }
-
-        self.sale1 = self.env['sale.order'].create(so_vals)
-
-        # confirm our standard so, check the picking
+        self.sale1.force_quotation_send()
         self.sale1.action_confirm()
-
         self.assertTrue(self.sale1.state, 'sale')
         self.assertTrue(self.sale1.invoice_status, 'to invoice')
         logging.info('Test Cases for Blanket Sale order')
@@ -84,3 +48,133 @@ class TestSaleOrder(TransactionCase):
             logging.info(
                 '========================================================'
                 '=========================')
+        uom_qty = self.so_line_with_blanket.product_uom_qty
+        transfer_qty = 2
+        remaining_qty = 0.0
+
+        logging.info(
+            '*****************************************************')
+        logging.info(
+            '========================================================='
+            '======================+=====')
+        logging.info(
+            ' |  Product  | Initial Demand  | Reserved  |  Done |')
+        for picking in self.sale1.picking_ids:
+            for line in picking.move_lines:
+                logging.info('| %s     | %d              |%d         | %d' % (
+                    line.product_id.name, line.product_uom_qty,
+                    line.reserved_availability, line.quantity_done))
+                logging.info(
+                    '======================================================='
+                    '==========================')
+
+        remaining_qty = uom_qty - transfer_qty
+        transfer_wizard = self.sale_wizard.create(
+            {'ref_id': self.so_line_with_blanket.id,
+             'transfer_qty': transfer_qty})
+        transfer_wizard.split_qty_wt_newline()
+        self.assertEqual(remaining_qty, uom_qty - transfer_qty,
+                         'Remaining to transfer qty is different')
+
+        transfer_qty += 5
+        remaining_qty = uom_qty - transfer_qty
+        transfer_wizard = self.sale_wizard.create(
+            {'ref_id': self.so_line_with_blanket.id, 'transfer_qty': 5})
+        transfer_wizard.split_qty_wt_newline()
+        self.assertEqual(remaining_qty, uom_qty - transfer_qty,
+                         'Remaining to transfer qty is different')
+
+        logging.info(
+            '*****************************************************')
+        logging.info(
+            'Sale Order after Blanket Split lines- %s' % (self.sale1.name))
+        logging.info(
+            '========================================================='
+            '======================+=====')
+        logging.info(
+            ' | Blanket So Line | Product  |  Ordered Qty  | Remaining '
+            'to transfer  |  Delivered |')
+        for line in self.sale1.order_line:
+            logging.info(
+                ' %s            | %s       | %d            | %d          '
+                '           | %d ' % (
+                    line.blanket_so_line, line.product_id.name,
+                    line.product_uom_qty, line.remaining_to_so_transfer,
+                    line.qty_delivered))
+            logging.info(
+                '======================================================='
+                '==========================')
+
+        self.assertEqual(self.sale1.picking_ids.move_lines[-1].quantity_done,
+                         0.0)
+        self.assertEqual(self.sale1.picking_ids.move_lines[-2].quantity_done,
+                         0.0)
+        self.sale1.picking_ids.move_lines[-1].quantity_done = 2
+
+        logging.info(
+            '*****************************************************')
+        logging.info('Delivery Order - %s' % (self.sale1.picking_ids.name))
+        logging.info(
+            '==========================================================='
+            '====================+=====')
+        logging.info(
+            ' |  Product  | Initial Demand  | Reserved  |  Done |')
+        for move in self.sale1.picking_ids.move_lines:
+            logging.info('| %s     | %d              |%d         | %d' % (
+                move.product_id.name, move.product_uom_qty,
+                move.reserved_availability, move.quantity_done))
+            logging.info(
+                '======================================================='
+                '==========================')
+
+        self.sale1.picking_ids.action_confirm()
+        self.sale1.picking_ids.action_assign()
+        res_dict = self.sale1.picking_ids.button_validate()
+        backorder_wizard = self.env[(res_dict.get('res_model'))].browse(
+            res_dict.get('res_id'))
+        backorder_wizard.process()
+
+        logging.info(
+            '*****************************************************')
+        logging.info(
+            'Sale Order after validate Delivery order- %s' % (
+                self.sale1.name))
+        logging.info(
+            '=========================================================='
+            '=====================+=====')
+        logging.info(
+            ' | Blanket So Line | Product  |  Ordered Qty  | Remaining '
+            'to transfer  |  Delivered |invoice status')
+        for line in self.sale1.order_line:
+            logging.info(
+                ' %s            | %s       | %d            | %d          '
+                '           | %d         |%s' % (
+                    line.blanket_so_line, line.product_id.name,
+                    line.product_uom_qty, line.remaining_to_so_transfer,
+                    line.qty_delivered, line.invoice_status))
+            logging.info(
+                '======================================================='
+                '==========================')
+
+        self.assertEqual(len(self.sale1.picking_ids), 2,
+                         'There is no 2 pickings are available')
+
+        context = {"active_model": 'sale.order',
+                   "active_ids": [self.sale1.id],
+                   "active_id": self.sale1.id}
+
+        for invoice in self.sale1.invoice_ids:
+            logging.info('Invoice of Delivered Quantity.')
+            for line in invoice.invoice_line_ids:
+                logging.info(
+                    '==================================================')
+                logging.info(
+                    '| Product | Quantity | Unit Price | Subtotal |')
+                logging.info(
+                    '=================================================|')
+                logging.info(
+                    '|%s       |%d        |%d          |%d        |   ' % (
+                        line.product_id.name, line.quantity,
+                        line.price_unit,
+                        line.price_subtotal))
+            invoice.with_context(context).invoice_validate()

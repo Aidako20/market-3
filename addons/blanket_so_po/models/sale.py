@@ -1,9 +1,13 @@
 # Part of Flectra. See LICENSE file for full copyright and licensing
 # details.
 
-from flectra import api, fields, models
+from flectra import api, models, fields
 from flectra.exceptions import UserError
 from flectra.tools import float_compare
+
+
+class SaleOrder(models.Model):
+    _inherit = "sale.order"
 
 
 class SaleOrderLine(models.Model):
