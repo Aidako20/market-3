@@ -1,7 +1,7 @@
 # Part of Flectra. See LICENSE file for full copyright and licensing details.
 
 {
-    'name': 'Blanket So/Po',
+    'name': 'Blanket Sale Order/Purchase Order',
     'version': "1.0",
     'category': 'Sales and Purchase Management',
     'summary': 'A Blanket Sales/Purchase Order clearly lays out the terms '
@@ -21,6 +21,6 @@
         'demo/blanket_purchase_demo.xml'
     ],
     'installable': True,
-    'application': True,
+    'application': False,
     'auto_install': False,
 }
