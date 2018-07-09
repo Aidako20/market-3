@@ -252,7 +252,7 @@ var DashboardApps = Widget.extend({
     },
 
     confirm_upgrade: function() {
-        framework.redirect("https://www.flectra.com/flectra-enterprise/upgrade?num_users=" + (this.data.enterprise_users || 1));
+        framework.redirect("https://www.flectrahq.com/flectra-enterprise/upgrade?num_users=" + (this.data.enterprise_users || 1));
     },
 });
 
@@ -268,7 +268,7 @@ var DashboardShare = Widget.extend({
     init: function(parent, data){
         this.data = data;
         this.parent = parent;
-        this.share_url = 'https://www.flectra.com';
+        this.share_url = 'https://www.flectrahq.com';
         this.share_text = encodeURIComponent("I am using #Flectra - Awesome open source business apps.");
     },
 
@@ -283,7 +283,7 @@ var DashboardShare = Widget.extend({
     },
 
     share_linkedin: function(){
-        var popup_url = _.str.sprintf('http://www.linkedin.com/shareArticle?mini=true&url=%s&title=I am using flectra&summary=%s&source=www.flectra.com', encodeURIComponent(this.share_url), this.share_text);
+        var popup_url = _.str.sprintf('http://www.linkedin.com/shareArticle?mini=true&url=%s&title=I am using flectra&summary=%s&source=www.flectrahq.com', encodeURIComponent(this.share_url), this.share_text);
         this.sharer(popup_url);
     },
 
