@@ -34,7 +34,6 @@ var EventRegistrationForm = Widget.extend({
                 .off('click')
                 .removeClass('a-submit')
                 .click(function (ev) {
-                    $(this).attr('disabled', true);
                     self.on_click(ev);
                 });
         });
