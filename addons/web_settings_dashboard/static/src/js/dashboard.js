@@ -231,7 +231,6 @@ var DashboardApps = Widget.extend({
 
     events: {
         'click .o_browse_apps': 'on_new_apps',
-        'click .o_confirm_upgrade': 'confirm_upgrade',
     },
 
     init: function(parent, data){
@@ -242,17 +241,10 @@ var DashboardApps = Widget.extend({
 
     start: function() {
         this._super.apply(this, arguments);
-        if (flectra.db_info && _.last(flectra.db_info.server_version_info) !== 'e') {
-            $(QWeb.render("DashboardEnterprise")).appendTo(this.$el);
-        }
     },
 
     on_new_apps: function(){
         this.do_action('base.open_module_tree');
-    },
-
-    confirm_upgrade: function() {
-        framework.redirect("https://www.flectrahq.com/flectra-enterprise/upgrade?num_users=" + (this.data.enterprise_users || 1));
     },
 });
 
