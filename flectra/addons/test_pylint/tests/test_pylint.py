@@ -24,10 +24,9 @@ _logger = logging.getLogger(__name__)
 class TestPyLint(TransactionCase):
 
     ENABLED_CODES = [
-        'used-before-assignment',
-        'undefined-variable',
-        'eval-used',
-        'unreachable',
+        'E0601',  # using variable before assignment
+        'W0123',  # eval used
+        'W0101',  # unreachable code
 
         'mixed-indentation',
 
