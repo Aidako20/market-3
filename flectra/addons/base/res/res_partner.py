@@ -6,7 +6,6 @@ import datetime
 import hashlib
 import pytz
 import threading
-
 from email.utils import formataddr
 
 import requests
@@ -17,6 +16,7 @@ from flectra import api, fields, models, tools, SUPERUSER_ID, _
 from flectra.modules import get_module_resource
 from flectra.osv.expression import get_unaccent_wrapper
 from flectra.exceptions import UserError, ValidationError
+from validate_email import validate_email
 
 # Global variables used for the warning fields declared on the res.partner
 # in the following modules : sale, purchase, account, stock 
@@ -520,6 +520,12 @@ class Partner(models.Model):
             if any(u.has_group('base.group_user') for u in partner.user_ids if u != self.env.user):
                 self.env['res.users'].check_access_rights('write')
             partner._fields_sync(vals)
+        if vals.get('email'):
+            if not validate_email(vals.get('email'), check_mx=False,
+                                  verify=True, debug=False, smtp_timeout=10):
+                raise ValidationError(_(
+                    "Enter valid E-mail. %s does not exist") % (
+                    vals.get('email')))
         return result
 
     @api.model
@@ -532,6 +538,13 @@ class Partner(models.Model):
         # cannot be easily performed if default images are in the way
         if not vals.get('image'):
             vals['image'] = self._get_default_image(vals.get('type'), vals.get('is_company'), vals.get('parent_id'))
+        if vals.get('email'):
+            if not validate_email(vals.get('email'), check_mx=False,
+                                  verify=True, debug=False, smtp_timeout=10):
+                raise ValidationError(_(
+                    "Enter valid E-mail. %s does not exist") % (
+                    vals.get('email')))
+
         tools.image_resize_images(vals)
         partner = super(Partner, self).create(vals)
         partner._fields_sync(vals)
