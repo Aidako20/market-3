@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flectra>
+    <record id="uae_account_invoice_form_inherit" model="ir.ui.view">
+        <field name="name">uae.account.invoice.form.inherit</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="journal_config_type" domain="[('journal_id.type', '=', 'sale')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="uae_account_invoice_supplier_form_inherit" model="ir.ui.view">
+        <field name="name">uae.account.invoice.supplier.form.inherit</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="journal_config_type" domain="[('journal_id.type', '=', 'purchase')]"/>
+            </xpath>
+            <xpath expr="//field[@name='date_due']" position="after">
+                <field name="reverse_charge" attrs="{'invisible': [('type', 'in', ['out_invoice', 'out_refund'])]}"/>
+            </xpath>
+        </field>
+    </record>
+
+</flectra>

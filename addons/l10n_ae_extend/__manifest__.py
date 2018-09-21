@@ -4,7 +4,7 @@
 # Copyright (C) 2014 Tech Receptives (<http://techreceptives.com>)
 
 {
-    'name': 'U.A.E. - Accounting',
+    'name': 'U.A.E. - Accounting Extend',
     'author': 'Tech Receptives',
     'website': 'http://www.techreceptives.com',
     'category': 'Localization',
@@ -13,11 +13,14 @@ United Arab Emirates accounting chart and localization.
 =======================================================
 
     """,
-    'depends': ['base', 'account'],
+    'depends': ['account_invoicing', 'l10n_ae', 'sale_management', 'purchase'],
     'data': [
-             'data/account_data.xml',
-             'data/l10n_ae_chart_data.xml',
-             'data/account_fiscal_position_data.xml',
-             'data/account_chart_template_data.yml'
+             'data/journal_data.xml',
+             'data/config_type_data.xml',
+             'views/config_type.xml',
+             'views/company_view.xml',
+             'views/purchase_order_view.xml',
+             'views/sale_order_view.xml',
+             'views/account_invoice_view.xml',
     ],
 }

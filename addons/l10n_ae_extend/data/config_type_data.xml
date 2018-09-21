@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flectra noupdate="1">
+
+    <!-- sale Config Type-->
+    <record id="config_type_1" model="journal.config.type">
+        <field name="name">Local Sale</field>
+        <field name="code">LCLSJC</field>
+        <field name="journal_id" ref="local_sale_journal"/>
+    </record>
+
+    <record id="config_type_2" model="journal.config.type">
+        <field name="name">Inside GCC Sale</field>
+        <field name="code">IGCCSJC</field>
+        <field name="journal_id" ref="insidegcc_sale_journal"/>
+    </record>
+
+    <record id="config_type_3" model="journal.config.type">
+        <field name="name">Outside GCC Sale</field>
+        <field name="code">OGCCSJC</field>
+        <field name="journal_id" ref="outsidegcc_sale_journal"/>
+    </record>
+
+    <record id="config_type_4" model="journal.config.type">
+        <field name="name">Designated Zone Sale</field>
+        <field name="code">DZSJC</field>
+        <field name="journal_id" ref="designated_zone_sale_journal"/>
+    </record>
+
+    <!-- Purchase Config Type-->
+    <record id="config_type_5" model="journal.config.type">
+        <field name="name">Local Purchase</field>
+        <field name="code">LCLPJC</field>
+        <field name="journal_id" ref="local_purchase_journal"/>
+    </record>
+
+    <record id="config_type_6" model="journal.config.type">
+        <field name="name">Inside GCC Purchase</field>
+        <field name="code">IGCCPJC</field>
+        <field name="journal_id" ref="insidegcc_purchase_journal"/>
+    </record>
+
+    <record id="config_type_7" model="journal.config.type">
+        <field name="name">Outside GCC Purchase</field>
+        <field name="code">OGCCPJC</field>
+        <field name="journal_id" ref="outsidegcc_purchase_journal"/>
+    </record>
+
+    <record id="config_type_8" model="journal.config.type">
+        <field name="name">Designated Zone Purchase</field>
+        <field name="code">DZPJC</field>
+        <field name="journal_id" ref="designated_zone_purchase_journal"/>
+    </record>
+
+</flectra>
+
