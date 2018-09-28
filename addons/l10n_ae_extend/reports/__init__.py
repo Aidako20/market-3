@@ -1,5 +1,4 @@
 # Part of Flectra. See LICENSE file for full copyright and licensing details.
 
-from . import models
-from . import wizard
-from . import reports
+
+from . import vat_201_report

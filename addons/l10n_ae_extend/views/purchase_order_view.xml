@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="journal_config_type" domain="[('journal_id.type', '=', 'purchase')]"/>
+                <field name="vat_config_type" domain="[('journal_id.type', '=', 'purchase')]"/>
             </xpath>
             <xpath expr="//field[@name='company_id']" position="after">
                 <field name="reverse_charge"/>

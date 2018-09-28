@@ -8,8 +8,8 @@ class PurchaseOrder(models.Model):
 
     @api.multi
     def _default_config_type(self):
-        return self.journal_config_type.search([('journal_id.type', '=', 'purchase')], limit=1)
+        return self.vat_config_type.search([('journal_id.type', '=', 'purchase')], limit=1)
 
-    journal_config_type = fields.Many2one('journal.config.type', 'Type', default=_default_config_type, readonly=True, states={'draft': [('readonly', False)]})
+    vat_config_type = fields.Many2one('vat.config.type', 'Vat Type', default=_default_config_type, readonly=True, states={'draft': [('readonly', False)]})
     reverse_charge = fields.Boolean('Reverse Charge', readonly=True, states={'draft': [('readonly', False)]})
 

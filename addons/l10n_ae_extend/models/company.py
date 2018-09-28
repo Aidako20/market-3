@@ -7,4 +7,4 @@ from flectra import fields, models, api, _
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
-    rc_vat_account_id = fields.Many2one('account.account', 'Reverse Charge Account', required=True)
+    rc_vat_account_id = fields.Many2one('account.account', 'Reverse Charge Account')

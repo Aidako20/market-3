@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="journal_config_type" domain="[('journal_id.type', '=', 'sale')]"/>
+                <field name="vat_config_type" domain="[('journal_id.type', '=', 'sale')]"/>
             </xpath>
         </field>
     </record>
