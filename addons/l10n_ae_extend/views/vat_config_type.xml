@@ -9,7 +9,7 @@
                 <field name="name"/>
                 <field name="journal_id"/>
                 <field name="type"/>
-                <field name="reverse_charge"/>
+                <!-- <field name="reverse_charge"/> -->
             </tree>
         </field>
     </record>
@@ -29,7 +29,7 @@
                         <group>
                             <field name="code" required="1"/>
                             <field name="journal_id" required="1"/>
-                            <field name="reverse_charge" attrs="{'invisible': [('type', '!=', 'purchase')]}"/>
+                            <!-- <field name="reverse_charge" attrs="{'invisible': [('type', '!=', 'purchase')]}"/> -->
                         </group>
                     </group>
                 </sheet>

@@ -29,7 +29,6 @@ class AccountInvoice(models.Model):
         if self.vat_config_type:
             self.journal_id = self.vat_config_type.journal_id.id
             self.account_id = self.vat_config_type.journal_id.default_debit_account_id.id
-            self.reverse_charge = self.vat_config_type.reverse_charge if self.type in ['in_invoice', 'in_refund'] else False
         else:
             self.journal_id = self._default_journal()
 
@@ -46,6 +45,16 @@ class AccountInvoice(models.Model):
             self.residual_signed = abs(residual) * sign
             self.residual = abs(residual)
 
+
+    # Set Fiscal position wise tax in line after fiscal position set
+    # @api.multi
+    # def write(self, vals):
+    #     res = super(AccountInvoice, self).write(vals)
+    #     if self.fiscal_position_id:
+    #         for line in self.invoice_line_ids:
+    #             line._set_taxes()
+    #     return res
+
     @api.multi
     def action_invoice_open(self):
         if not self.reverse_charge:
@@ -54,9 +63,6 @@ class AccountInvoice(models.Model):
             raise Warning(_('Define Reverse Charge Account in Company!'))
         list_data = []
         account_tax_obj = self.env['account.tax']
-        # if self.type == 'in_refund':
-        #     for index, line_id in enumerate(self.invoice_line_ids):
-        #         line_id.invoice_line_tax_ids = [[6, 0, self.refund_invoice_id.invoice_line_ids[index].reverse_invoice_line_tax_ids.ids]]
         for tax_line in self.tax_line_ids:
             list_data.append((0, 0, {
                 'name': tax_line.name,
@@ -123,7 +129,7 @@ class AccountInvoice(models.Model):
         if result.refund_invoice_id.type == 'in_invoice':
             result.write({
             'reverse_charge': result.refund_invoice_id.reverse_charge})
-        if result.type == 'in_refund':
+        if result.type == 'in_refund' and result.refund_invoice_id.reverse_charge:
             for index, line_id in enumerate(result.invoice_line_ids):
                 line_id.invoice_line_tax_ids = [[6, 0, result.refund_invoice_id.invoice_line_ids[index].reverse_invoice_line_tax_ids.ids]]
             result._onchange_invoice_line_ids()

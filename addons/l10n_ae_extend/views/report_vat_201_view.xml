@@ -4,7 +4,7 @@
         <t t-call="web.html_container">
             <t t-call="web.internal_layout">
                 <div class="page">
-                    <h3 align="center">Vat 201</h3>
+                    <h3 align="center">VAT 201</h3>
                     <div class="row">
                         <div class="col-xs-4">
                             <t t-if="data['form']['date_from']"><strong>From</strong> <span t-esc="data['form']['date_from']"/><br/></t>
@@ -18,13 +18,11 @@
                                 <th width="52%" class="text-center"></th>
                                 <th width="15%" class="text-center">Amount(<span t-esc="currency_name"/>)</th>
                                 <th width="15%" class="text-center">Adjustment(<span t-esc="currency_name"/>)</th>
-                                <th width="15%" class="text-center">Vat Amount(<span t-esc="currency_name"/>)</th>
+                                <th width="15%" class="text-center">VAT(<span t-esc="currency_name"/>)</th>
                             </tr>
                         </thead>
                         <tr>
-<!--                                                         <td rowspan="6">
-                                <span style="position: absolute;transform: rotate(-90deg);top: 265px;font-size: 25px;left: -37px;">Vat on Sales</span></td> -->
-                            <td rowspan="6" style="font-size: 14px; letter-spacing: 1px;">Vat on Sales</td>
+                            <td rowspan="6" style="font-size: 14px; letter-spacing: 1px;">VAT on Sales</td>
                             <td class="success">Standard rated sales</td>
                             <td class="text-right"><span t-att-style="style" t-esc="get_local_sale.get('amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
                             <td class="text-right"><span t-att-style="style" t-esc="get_local_sale.get('adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
@@ -38,7 +36,7 @@
                         </tr>
                         <tr>
                             <td class="success">Zero rated domestic sales</td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_local_sale.get('subtotal')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="get_local_sale.get('total_zero_amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
                             <td class="text-right"><span t-att-style="style" t-esc="get_local_sale.get('zero_adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
                             <td class="text-right"><span t-att-style="style" t-esc="0.0" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
                         </tr>
@@ -61,7 +59,7 @@
                             <td class="text-right"><b><span t-att-style="style" t-esc="get_total_sale.get('tax_amount') - get_total_sale.get('return_tax_amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></b><br/></td>
                         </tr>
                         <tr>
-                            <td rowspan="6" style="font-size: 14px; letter-spacing: 1px;">Vat on Purchas</td>
+                            <td rowspan="6" style="font-size: 14px; letter-spacing: 1px;">VAT on Purchas</td>
                             <td class="danger">Standard rated domestic purchases</td>
                             <td class="text-right"><span t-att-style="style" t-esc="get_local_purchase.get('amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
                             <td class="text-right"><span t-att-style="style" t-esc="get_local_purchase.get('adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
@@ -69,24 +67,21 @@
                         </tr>
                         <tr>
                             <td class="danger">Imports subject to VAT paid at customs</td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_inside_gcc_purchase.get('amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_inside_gcc_purchase.get('adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_inside_gcc_purchase.get('tax_amount') - get_inside_gcc_purchase.get('return_tax_amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="get_inside_outside_gcc_purchase.get('amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="get_inside_outside_gcc_purchase.get('adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="get_inside_outside_gcc_purchase.get('tax_amount') - get_inside_outside_gcc_purchase.get('return_tax_amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
                         </tr>
                         <tr>
                             <td class="danger">Imports subject to VAT accounted for through reverse charge mechanism</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="get_reverse_charge_data.get('amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="get_reverse_charge_data.get('adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="get_reverse_charge_data.get('tax_amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
                         </tr>
                         <tr>
                             <td class="danger">Zero rated purchases</td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_local_purchase.get('subtotal')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_local_purchase.get('zero_adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="get_zero_vat_purchase.get('total_zero_amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="get_zero_vat_purchase.get('zero_adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
                             <td class="text-right"><span t-att-style="style" t-esc="0.0" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
-<!--                             <td class="text-right"><span t-att-style="style" t-esc="get_outside_gcc_purchase.get('amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_outside_gcc_purchase.get('adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_outside_gcc_purchase.get('tax_amount') - get_outside_gcc_purchase.get('return_tax_amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td> -->
                         </tr>
                         <tr>
                             <td class="danger">Exempte purchases</td>

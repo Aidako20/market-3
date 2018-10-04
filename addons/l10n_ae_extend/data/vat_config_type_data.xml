@@ -40,7 +40,6 @@
         <field name="code">LCLPJC</field>
         <field name="journal_id" ref="local_purchase_journal"/>
         <field name="type">purchase</field>
-        <field name="reverse_charge" eval="True"/>
         <field name="vat_type">local_purchase</field>
     </record>
 
@@ -49,7 +48,6 @@
         <field name="code">IGCCPJC</field>
         <field name="journal_id" ref="insidegcc_purchase_journal"/>
         <field name="type">purchase</field>
-        <field name="reverse_charge" eval="True"/>
         <field name="vat_type">inside_gcc_purchase</field>
     </record>
 
@@ -58,7 +56,6 @@
         <field name="code">OGCCPJC</field>
         <field name="journal_id" ref="outsidegcc_purchase_journal"/>
         <field name="type">purchase</field>
-        <field name="reverse_charge" eval="True"/>
         <field name="vat_type">outside_gcc_purchase</field>
     </record>
 
@@ -67,7 +64,6 @@
         <field name="code">DZPJC</field>
         <field name="journal_id" ref="designated_zone_purchase_journal"/>
         <field name="type">purchase</field>
-        <field name="reverse_charge" eval="True"/>
         <field name="vat_type">designated_zone_purchase</field>
     </record>
 
