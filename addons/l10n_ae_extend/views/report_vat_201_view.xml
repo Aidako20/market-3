@@ -36,8 +36,8 @@
                         </tr>
                         <tr>
                             <td class="success">Zero rated domestic sales</td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_local_sale.get('total_zero_amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_local_sale.get('zero_adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="get_designated_zone_sale.get('total_zero_amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="get_designated_zone_sale.get('zero_adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
                             <td class="text-right"><span t-att-style="style" t-esc="0.0" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
                         </tr>
                         <tr>
@@ -48,14 +48,14 @@
                         </tr>
                         <tr>
                             <td class="success">Exempte sales</td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_designated_zone_sale.get('amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_designated_zone_sale.get('adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_designated_zone_sale.get('tax_amount') - get_designated_zone_sale.get('return_tax_amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="get_designated_zone_sale.get('total_exempted_amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="get_designated_zone_sale.get('total_exempted_adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="0.0" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
                         </tr>
                         <tr>
                             <td class="success">Total sales</td>
-                            <td class="text-right"><b><span t-att-style="style" t-esc="get_total_sale.get('amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></b></td>
-                            <td class="text-right"><b><span t-att-style="style" t-esc="get_total_sale.get('adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></b></td>
+                            <td class="text-right"><b><span t-att-style="style" t-esc="get_total_sale.get('amount') + get_total_sale.get('total_zero_amount') + get_total_sale.get('total_exempted_amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></b></td>
+                            <td class="text-right"><b><span t-att-style="style" t-esc="get_total_sale.get('adjustment') + get_total_sale.get('zero_adjustment') + get_total_sale.get('total_exempted_adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></b></td>
                             <td class="text-right"><b><span t-att-style="style" t-esc="get_total_sale.get('tax_amount') - get_total_sale.get('return_tax_amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></b><br/></td>
                         </tr>
                         <tr>
@@ -75,7 +75,7 @@
                             <td class="danger">Imports subject to VAT accounted for through reverse charge mechanism</td>
                             <td class="text-right"><span t-att-style="style" t-esc="get_reverse_charge_data.get('amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
                             <td class="text-right"><span t-att-style="style" t-esc="get_reverse_charge_data.get('adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_reverse_charge_data.get('tax_amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="get_reverse_charge_data.get('tax_amount') - get_reverse_charge_data.get('return_tax_amount')"  t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
                         </tr>
                         <tr>
                             <td class="danger">Zero rated purchases</td>
@@ -85,9 +85,9 @@
                         </tr>
                         <tr>
                             <td class="danger">Exempte purchases</td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_designated_zone_purchase.get('amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_designated_zone_purchase.get('adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
-                            <td class="text-right"><span t-att-style="style" t-esc="get_designated_zone_purchase.get('tax_amount') - get_designated_zone_purchase.get('return_tax_amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="get_zero_vat_purchase.get('total_exempted_amount')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="get_zero_vat_purchase.get('total_exempted_adjustment')" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
+                            <td class="text-right"><span t-att-style="style" t-esc="0.0" t-options="{'widget': 'monetary', 'display_currency': currency_id}"/></td>
                         </tr>
                         <tr >
                             <td class="danger">Total purchases</td>

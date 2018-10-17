@@ -15,11 +15,4 @@ class Vat201Report(models.TransientModel):
 
     def print_report(self, data):
         data['form'] = self.read(['date_from', 'date_to', 'company_id', 'currency_id'])[0]
-        # data['form']['currency_id'] = self.env.user.company_id.currency_id
-        # data['date_from'] = form_data['date_from'] or False
-        # data['date_to'] = form_data['date_to'] or False
-        print("=====data======", data)
-
-        # invoices = self.env['account.invoice'].search([('date_invoice', '<=', self.date_to), ('date_invoice', '>=', self.date_from)])
-        # data['invoices'] = invoices
         return self.env.ref('l10n_ae_extend.action_report_vat_201').report_action(self, data=data)

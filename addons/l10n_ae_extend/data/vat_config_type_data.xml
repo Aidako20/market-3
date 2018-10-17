@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <flectra>
 
-    <!-- sale Config Type-->
+    <!-- Sale Config Type-->
     <record id="config_type_1" model="vat.config.type">
         <field name="name">Local Sale</field>
         <field name="code">LCLSJC</field>
