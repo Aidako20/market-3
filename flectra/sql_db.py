@@ -430,68 +430,42 @@ class Cursor(object):
     def closed(self):
         return self._closed
 
-
-class TestCursor(object):
-    """ A pseudo-cursor to be used for tests, on top of a real cursor. It keeps
-        the transaction open across requests, and simulates committing, rolling
-        back, and closing:
-
-              test cursor           | queries on actual cursor
-            ------------------------+---------------------------------------
-              cr = TestCursor(...)  | SAVEPOINT test_cursor_N
-                                    |
-              cr.execute(query)     | query
-                                    |
-              cr.commit()           | SAVEPOINT test_cursor_N
-                                    |
-              cr.rollback()         | ROLLBACK TO SAVEPOINT test_cursor_N
-                                    |
-              cr.close()            | ROLLBACK TO SAVEPOINT test_cursor_N
-                                    |
-
+class TestCursor(Cursor):
+    """ A cursor to be used for tests. It keeps the transaction open across
+        several requests, and simulates committing, rolling back, and closing.
     """
-    _savepoint_seq = itertools.count()
-
-    def __init__(self, cursor, lock):
-        self._closed = False
-        self._cursor = cursor
-        # we use a lock to serialize concurrent requests
-        self._lock = lock
-        self._lock.acquire()
+    def __init__(self, *args, **kwargs):
+        super(TestCursor, self).__init__(*args, **kwargs)
         # in order to simulate commit and rollback, the cursor maintains a
         # savepoint at its last commit
-        self._savepoint = "test_cursor_%s" % next(self._savepoint_seq)
-        self._cursor.execute('SAVEPOINT "%s"' % self._savepoint)
+        self.execute("SAVEPOINT test_cursor")
+        # we use a lock to serialize concurrent requests
+        self._lock = threading.RLock()
+
+    def acquire(self):
+        self._lock.acquire()
+
+    def release(self):
+        self._lock.release()
+
+    def force_close(self):
+        super(TestCursor, self).close()
 
     def close(self):
         if not self._closed:
-            self._closed = True
-            self._cursor.execute('ROLLBACK TO SAVEPOINT "%s"' % self._savepoint)
-            self._lock.release()
+            self.rollback()             # for stuff that has not been committed
+        self.release()
 
     def autocommit(self, on):
         _logger.debug("TestCursor.autocommit(%r) does nothing", on)
 
     def commit(self):
-        self._cursor.execute('SAVEPOINT "%s"' % self._savepoint)
+        self.execute("RELEASE SAVEPOINT test_cursor")
+        self.execute("SAVEPOINT test_cursor")
 
     def rollback(self):
-        self._cursor.execute('ROLLBACK TO SAVEPOINT "%s"' % self._savepoint)
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        if exc_type is None:
-            self.commit()
-        self.close()
-
-    def __getattr__(self, name):
-        value = getattr(self._cursor, name)
-        if callable(value) and self._closed:
-            raise psycopg2.OperationalError('Unable to use a closed cursor.')
-        return value
-
+        self.execute("ROLLBACK TO SAVEPOINT test_cursor")
+        self.execute("SAVEPOINT test_cursor")
 
 class LazyCursor(object):
     """ A proxy object to a cursor. The cursor itself is allocated only if it is
