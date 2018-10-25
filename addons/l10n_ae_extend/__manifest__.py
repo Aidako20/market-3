@@ -2,8 +2,8 @@
 
 {
     'name': 'U.A.E. - Accounting Extend',
-    'author': 'Tech Receptives',
-    'website': 'http://www.techreceptives.com',
+    'author': 'FlectraHQ',
+    'website': 'https://www.flectrahq.com/',
     'category': 'Localization',
     'description': """
 United Arab Emirates accounting chart and localization.
@@ -23,5 +23,8 @@ United Arab Emirates accounting chart and localization.
              'views/sale_order_view.xml',
              'views/account_invoice_view.xml',
              'wizard/vat_201_view.xml',
+    ],
+    'demo': [
+        'demo/account_invoice_demo.xml',
     ],
 }

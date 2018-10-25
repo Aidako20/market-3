@@ -1632,6 +1632,20 @@
         <field name="chart_template_id" ref="l10n_ae.uae_chart_template_standard"/>
     </record>
 
+    <record id="vat_custom" model="account.tax.template">
+        <field name="name">Custom</field>
+        <field name="description">Custom VAT </field>
+        <field name="type_tax_use">purchase</field>
+        <field name="amount_type">percent</field>
+        <field name="amount">5</field>
+        <field name="account_id" ref="rc_customs_expense_account"/>
+        <field name="refund_account_id" ref="rc_customs_expense_account"/>
+        <field name="tax_type">customs</field>
+        <field name="chart_template_id" ref="uae_chart_template_standard"/>
+        <field name="include_base_amount" eval="True"/>
+        <field name="sequence"/>0</record>
+    </record>
+
     <record id="sale_uae_vat_5" model="account.tax.template">
         <field name="name">Sale - VAT 5%</field>
         <field name="description">Sale VAT 5%</field>
@@ -1654,30 +1668,6 @@
         <field name="refund_account_id" ref="vat_receivable_account"/>
         <field name="tax_type">vat</field>
         <field name="chart_template_id" ref="l10n_ae.uae_chart_template_standard"/>
-    </record>
-
-    <record id="vat_with_custom" model="account.tax.template">
-        <field name="name">VAT with Custom</field>
-        <field name="description">VAT with Custom</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount_type">percent</field>
-        <field name="amount">5.25</field>
-        <field name="chart_template_id" ref="l10n_ae.uae_chart_template_standard"/>
-        <field name="account_id" ref="vat_receivable_account"/>
-        <field name="tax_type">vat</field>
-        <field name="refund_account_id" ref="vat_receivable_account"/>
-    </record>
-
-    <record id="vat_custom" model="account.tax.template">
-        <field name="name">Custom VAT</field>
-        <field name="description">Custom VAT </field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount_type">percent</field>
-        <field name="amount">5</field>
-        <field name="account_id" ref="rc_customs_expense_account"/>
-        <field name="refund_account_id" ref="rc_customs_expense_account"/>
-        <field name="tax_type">vat</field>
-        <field name="chart_template_id" ref="uae_chart_template_standard"/>
     </record>
 
 </flectra>

@@ -40,10 +40,9 @@
             <xpath expr="//field[@name='date_due']" position="after">
                 <field name="fiscal_position_id" options="{'no_create': True}" placeholder="Auto-detect"/>
                 <field name="reverse_charge" attrs="{'invisible': [('type', 'in', ['out_invoice', 'out_refund'])]}"/>
-                <!-- <field name="customs_duty" attrs="{'invisible': [('type', 'in', ['out_invoice', 'out_refund'])]}"/> -->
             </xpath>
             <xpath expr="//page[@name='other_info']" position="after">
-                <page string="Reverse Charge" name="reverse_charge_info" attrs="{'invisible': [('type', 'in', ['out_invoice', 'out_refund'])]}">
+                <page string="Reverse Charge" name="reverse_charge_info" attrs="{'invisible': [('reverse_charge', '=', False)]}">
                     <field name="reverse_tax_line_ids" nolabel="1"/>
                 </page>
             </xpath>
