@@ -1320,11 +1320,20 @@ class Root(object):
     def load_addons(self):
         """ Load all addons from addons path containing static files and
         controllers and configure them.  """
+        # The FLECTRA_PRELOAD_ADDONS environment variable is available for version 11.0 only.
+        # Due to two implementation changes in Python 3's GIL and import system, early
+        # requests have some chances to trigger an invalid RegistryManager if they are
+        # accepted just after the server listen on the socket. This bug is only reproducible
+        # in threaded mode and the odds to happen are pretty low except when using socket
+        # activation in such case ` FLECTRA_PRELOAD_ADDONS=no ` should be used.
+        # Note: Odoo versions > 11.0 does not preload addons anymore.
+        preload_addons = os.environ.get('FLECTRA_PRELOAD_ADDONS', 'yes') == 'yes'
+
         # TODO should we move this to ir.http so that only configured modules are served ?
         statics = {}
         for addons_path in flectra.modules.module.ad_paths:
             for module in sorted(os.listdir(str(addons_path))):
-                if module not in addons_manifest:
+                if module not in addons_module:
                     mod_path = opj(addons_path, module)
                     manifest_path = module_manifest(mod_path)
                     path_static = opj(addons_path, module, 'static')
@@ -1335,6 +1344,10 @@ class Root(object):
                             continue
                         manifest['addons_path'] = addons_path
                         _logger.debug("Loading %s", module)
+                        m = None
+                        if 'flectra.addons' in sys.modules and preload_addons:
+                            m = __import__('flectra.addons.' + module)
+                        addons_module[module] = m
                         addons_manifest[module] = manifest
                         statics['/%s/static' % module] = path_static
 
