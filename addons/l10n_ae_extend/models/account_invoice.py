@@ -22,7 +22,7 @@ class AccountInvoice(models.Model):
         return self.vat_config_type.search(domain, limit=1)
 
     vat_config_type = fields.Many2one(
-        'vat.config.type', 'Vat Type', default=_default_config_type,
+        'vat.config.type', 'VAT Type', default=_default_config_type,
         readonly=True, states={'draft': [('readonly', False)]})
     reverse_charge = fields.Boolean(
         'Reverse Charge', readonly=True,

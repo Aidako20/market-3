@@ -76,11 +76,11 @@ class TestAccountInvoice(TestAECommon):
         dict_data = report_obj.get_report_values(None, data)
 
         self.assertEquals(
-            dict_data['get_local_sale']['amount'], 1770)
-        self.assertEquals(dict_data['get_local_sale']['tax_amount'], 88.5)
-        self.assertEquals(dict_data['get_local_sale']['adjustment'], 885)
+            dict_data['get_local_sale']['amount'], 15930.0)
+        self.assertEquals(dict_data['get_local_sale']['tax_amount'], 796.5)
+        self.assertEquals(dict_data['get_local_sale']['adjustment'], 4425.00)
         self.assertEquals(
-            dict_data['get_local_sale']['return_tax_amount'], 44.25)
+            dict_data['get_local_sale']['return_tax_amount'], 221.25)
 
         self.assertEquals(dict_data['get_local_purchase']['amount'], 17520)
         self.assertEquals(dict_data['get_local_purchase']['tax_amount'], 876)
@@ -97,4 +97,4 @@ class TestAccountInvoice(TestAECommon):
         self.assertEquals(
             dict_data['get_reverse_charge_data']['return_tax_amount'], 219)
         self.assertEquals(
-            dict_data['get_total_vat_due']['total_tax_amount'], -1050.75)
+            round(dict_data['get_total_vat_due']['total_tax_amount'], 2), 587.40)

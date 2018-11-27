@@ -60,7 +60,7 @@
 
     <record id="rc_vat_account" model="account.account">
         <field name="code">205301</field>
-        <field name="name">Reverse Charge(Vat)</field>
+        <field name="name">Reverse Charge(VAT)</field>
         <field name="user_type_id" ref="account.data_account_type_current_liabilities"/>
     </record>
 

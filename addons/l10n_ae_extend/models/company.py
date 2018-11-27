@@ -9,4 +9,4 @@ class ResCompany(models.Model):
     rc_vat_account_id = fields.Many2one('account.account', 'Reverse Charge')
     customs_duty_account_id = fields.Many2one(
         'account.account', 'Customs Expense')
-    vat_expense_account_id = fields.Many2one('account.account', 'Vat Expense')
+    vat_expense_account_id = fields.Many2one('account.account', 'VAT Expense')
