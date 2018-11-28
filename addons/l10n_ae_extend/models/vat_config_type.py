@@ -18,6 +18,7 @@ class JournalConfigType(models.Model):
         ('local_purchase', 'Local Purchase'),
         ('inside_gcc_purchase', 'Inside GCC Purchase'),
         ('outside_gcc_purchase', 'Outside GCC Purchase'),
-        ('designated_zone_purchase', 'Designated Zone Purchase')], 'VAT Type', required=True)
+        ('designated_zone_purchase', 'Designated Zone Purchase')],
+        'VAT Type', required=True)
     type = fields.Selection([
         ('sale', 'Sale'), ('purchase', 'Purchase')], 'Type', required=True)
