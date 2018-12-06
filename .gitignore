@@ -1,0 +1,6 @@
+# Ignore everything
+*
+
+# Only keep
+
+!/addons/*/i18n/*
