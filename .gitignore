@@ -4,4 +4,6 @@
 # Only keep
 
 !.gitignore
+!addons/*
+!addons/*/i18n
 !addons/*/i18n/*
