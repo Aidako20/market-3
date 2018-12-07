@@ -1,9 +1,10 @@
-# Only keep
-
-!.gitignore
-
-!addons/*/i18n/**
-
 # Ignore everything
 
-addons/*
+*
+
+# Only keep
+!*/
+!.gitignore
+
+!/addons/*/i18n/**
+
