@@ -1,6 +1,6 @@
 # Ignore everything
 
-addons/**
+addons/*
 
 # Only keep
 
