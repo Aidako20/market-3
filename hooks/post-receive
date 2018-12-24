@@ -1,2 +1,2 @@
 #!/bin/bash
-git push main weblate-flectra
+git push main weblate-master
