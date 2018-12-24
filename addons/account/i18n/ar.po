@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-10 07:40+0000\n"
-"PO-Revision-Date: 2018-12-24 11:05+0000\n"
+"PO-Revision-Date: 2018-12-24 12:25+0000\n"
 "Last-Translator: Weblate Admin <weblate@flectrahq.com>\n"
 "Language-Team: Arabic (https://www.transifex.com/odoo/teams/41243/ar/)\n"
 "Language: ar\n"
@@ -587,7 +587,7 @@ msgstr "<span>التسوية</span>"
 #. module: account
 #: model:ir.ui.view,arch_db:account.account_journal_dashboard_kanban_view
 msgid "<span>Reporting</span>"
-msgstr ""
+msgstr "<span>التقارير</span>"
 
 #. module: account
 #: model:ir.ui.view,arch_db:account.account_journal_dashboard_kanban_view
