@@ -729,9 +729,12 @@ class configmanager(object):
             "In order to restore database please enable [--stop-after-init] option.")
         file = ''
         if restore:
-            file = destination + restore
+            file = os.path.join(destination, restore)
         elif restore_zip:
-            file = destination + restore_zip
+            file = os.path.join(destination, restore_zip)
+        if not os.path.exists(file):
+            logging.error('File does not exist. Please check for path : %s' % destination)
+            os._exit(1)
         flectra.service.db.restore_db(dbname, file, copy=True, flag=True)
 
     def _create_backup(self):
@@ -740,6 +743,9 @@ class configmanager(object):
         backup_zip = self['backup_zip']
         destination = self['destination']
         stop_after_init = self['stop_after_init']
+        if not os.path.isdir(destination) and not os.path.exists(destination):
+            logging.error('Directory does not exist. Please check for path : %s' % destination)
+            os._exit(1)
         def die(cond, msg):
             if cond:
                 self.parser.error(msg)
@@ -753,12 +759,20 @@ class configmanager(object):
             "In order to generate database backup please enable [--stop-after-init] option.")
         try:
             if backup_zip:
-                file = destination + backup_zip + '.zip'
+                file_name = os.path.join(destination, backup_zip)
+                file = '%s.%s' % (file_name, 'zip')
+                if os.path.exists(file):
+                    logging.error('File already exist. Please check for path : %s' % file)
+                    os._exit(1)
                 t = flectra.service.db.dump_db(dbname, None, 'zip')
                 function = "cp %s %s" % (t.name, file)
                 call(function, shell=True)
             elif backup:
-                file = destination + backup + '.dump'
+                file_name = os.path.join(destination, backup)
+                file = '%s.%s' % (file_name, 'dump')
+                if os.path.exists(file):
+                    logging.error('File already exist. Please check for path : %s' % file)
+                    os._exit(1)
                 t = flectra.service.db.dump_db(dbname, None, 'dump')
                 file = open(file, 'wb')
                 file.write(t.read())
