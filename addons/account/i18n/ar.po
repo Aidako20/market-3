@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-10 07:40+0000\n"
-"PO-Revision-Date: 2018-12-26 06:02+0000\n"
+"PO-Revision-Date: 2018-12-26 06:08+0000\n"
 "Last-Translator: Weblate Admin <weblate@flectrahq.com>\n"
 "Language-Team: Arabic (https://www.transifex.com/odoo/teams/41243/ar/)\n"
 "Language: ar\n"
@@ -1066,7 +1066,7 @@ msgstr "يجب أن تحتوي شروط الدفع على السطر الأخي�
 #: code:addons/account/models/account_invoice.py:1734
 #, python-format
 msgid "A Payment Terms should have only one line of type Balance."
-msgstr ""
+msgstr "يجب أن تحتوي \"شروط الدفع\" على سطر واحد فقط من النوع \"الرصيد\"."
 
 #. module: account
 #: code:addons/account/models/account.py:707
