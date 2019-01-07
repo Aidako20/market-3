@@ -55,8 +55,6 @@ class GenerateEwayBill(models.TransientModel):
 
     @api.multi
     def create_eway_bill(self, invoice, picking_ids):
-        model = self.env.context.get("active_model", False)
-        active_ids = self.env.context.get("active_ids", False)
         trans_mode = False
         trans_partner_id = False
         trans_id = False
@@ -108,8 +106,8 @@ class GenerateEwayBill(models.TransientModel):
         }
         if invoice.type in ['in_invoice', 'in_refund']:
             eway_bill_data.update({
-                'from_partner_id': picking.partner_id and
-                                   picking.partner_id.id or False,
+                'from_partner_id':
+                    picking.partner_id and picking.partner_id.id or False,
                 'to_partner_id': company_partner_id.id
             })
         elif invoice.type in ['out_invoice', 'out_refund']:

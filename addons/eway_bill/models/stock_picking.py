@@ -51,8 +51,8 @@ class StockPicking(models.Model):
     def create(self, vals):
         if vals.get('partner_id', False):
             partner = self.env['res.partner'].browse(vals['partner_id'])
-            vals['trans_partner_id'] = partner.transporter_id and \
-                                       partner.transporter_id.id or False
+            vals['trans_partner_id'] = \
+                partner.transporter_id and partner.transporter_id.id or False
             vals['trans_id'] = partner.trans_id
         return super(StockPicking, self).create(vals)
 

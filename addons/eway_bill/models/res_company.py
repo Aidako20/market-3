@@ -27,8 +27,8 @@ class Company(models.Model):
             result['vat'] = False
         if gst_type != 'unregistered':
             result['vat'] = state.l10n_in_tin
-        result['country_id'] = state.country_id and \
-                               state.country_id.id or False
+        result['country_id'] = \
+            state.country_id and state.country_id.id or False
         return result
 
     @api.multi
@@ -100,7 +100,8 @@ class CompanyB2CLimit(models.Model):
 
     @api.constrains('date_from', 'date_to')
     def _check_dates(self):
-        if any(self.filtered(lambda line: line.date_from and line.
-                date_to and line.date_from > line.date_to)):
+        if any(self.filtered(
+                lambda line: line.date_from and line.date_to and
+                line.date_from > line.date_to)):
             raise ValidationError(_(
                 'From date must be lower than to date.'))

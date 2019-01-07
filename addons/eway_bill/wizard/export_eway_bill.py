@@ -27,17 +27,19 @@ class ExportEwayBill(models.TransientModel):
         data = {"genMode": "Excel",
                 "userGstin": self.env.user.company_id.vat,
                 "supplyType": eway_bill.supply_type,
-                "subSupplyType": eway_bill.sub_type_id and
-                                 eway_bill.sub_type_id.name or '',
+                "subSupplyType":
+                    eway_bill.sub_type_id and eway_bill.sub_type_id.name or '',
                 "docType": eway_bill.invoice_type,
                 "docNo": eway_bill.invoice_type,
                 "docDate": eway_bill.doc_date,
                 "transMode": eway_bill.trans_mode,
                 "transDistance": eway_bill.distance,
-                "transporterName": eway_bill.trans_partner_id and
-                                   eway_bill.trans_partner_id.name or '',
-                "transporterId": eway_bill.trans_partner_id and
-                                 eway_bill.trans_partner_id.trans_id or '',
+                "transporterName":
+                    eway_bill.trans_partner_id and
+                    eway_bill.trans_partner_id.name or '',
+                "transporterId":
+                    eway_bill.trans_partner_id and
+                    eway_bill.trans_partner_id.trans_id or '',
                 "transDocNo": eway_bill.trans_doc_number,
                 "transDocDate": eway_bill.trans_doc_date,
                 "totalValue": eway_bill.amount_total,
@@ -55,8 +57,8 @@ class ExportEwayBill(models.TransientModel):
                 "fromAddr2": from_patrner.street2,
                 "fromPlace": from_patrner.city,
                 "fromPincode": from_patrner.zip,
-                "fromStateCode": from_patrner.state_id and
-                                 from_patrner.state_id.code or '',
+                "fromStateCode":
+                    from_patrner.state_id and from_patrner.state_id.code or '',
             })
         if to_partner:
             data.update({
@@ -75,11 +77,12 @@ class ExportEwayBill(models.TransientModel):
                 count += 1
                 lines.append({
                     "itemNo": count,
-                    "productName": line.product_id and line.product_id.name
-                                   or '',
+                    "productName":
+                        line.product_id and line.product_id.name or '',
                     "productDesc": line.product_desc,
-                    "hsnCode": line.product_id and
-                               line.product_id.l10n_in_hsn_code or '',
+                    "hsnCode":
+                        line.product_id and
+                        line.product_id.l10n_in_hsn_code or '',
                     "quantity": line.qty,
                     "qtyUnit": line.uom_id and line.uom_id.name or '',
                     "taxableAmount": line.asseseble_value,

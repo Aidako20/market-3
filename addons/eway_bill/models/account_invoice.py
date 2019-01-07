@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from flectra import api, fields, models, _
 from flectra.addons import decimal_precision as dp
-from flectra.exceptions import ValidationError, UserError
+from flectra.exceptions import UserError
 from flectra.tools import DEFAULT_SERVER_DATETIME_FORMAT, float_compare
 from flectra.tools.misc import formatLang
 
@@ -290,7 +290,6 @@ class AccountInvoice(models.Model):
     def compute_all_done_picking(self):
         total_quantity = 0.0
         total_pick_qty = 0.0
-        all_picking_done = False
         for invoice in self:
             total_quantity = sum(
                 [line.quantity for line in invoice.invoice_line_ids])
@@ -343,7 +342,7 @@ class AccountInvoice(models.Model):
                                           'out_refund'])]
             return self.search(domain, limit=limit).name_get()
         if self._context.get('invoice') or self._context.get(
-                'invoice') == False:
+                'invoice', False):
             list = []
             domain = []
             invoice_ids = self.env['account.invoice'].search([])
@@ -452,13 +451,6 @@ class AccountInvoice(models.Model):
                     'gst_invoice': 'b2b'
                 })
             elif invoice.type == 'out_invoice' and partner_location:
-                # b2c_limit = self.env['res.company.b2c.limit'].search(
-                #     [('date_from', '<=', invoice.date_invoice),
-                #      ('date_to', '>=', invoice.date_invoice),
-                #      ('company_id', '=', invoice.company_id.id)])
-                # if not b2c_limit:
-                #     raise ValidationError(_('Please define B2C limit line in '
-                #                             'company for current period!'))
                 if partner_location == 'inter_state':
                     invoice.write({'gst_invoice': 'b2cl'})
                 if partner_location == 'intra_state':
@@ -795,8 +787,8 @@ class AccountInvoiceLine(models.Model):
         qty = 0.0
         price_unit = self._get_stock_move_price_unit()
         for move in self.move_ids.filtered(
-                lambda x: x.state != 'cancel' and
-                          not x.location_dest_id.usage == "supplier"):
+                lambda x: x.state != 'cancel' and not
+                x.location_dest_id.usage == "supplier"):
             qty += move.product_uom._compute_quantity(
                 move.product_uom_qty, self.uom_id,
                 rounding_method='HALF-UP')

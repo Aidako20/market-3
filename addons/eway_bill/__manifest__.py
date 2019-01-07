@@ -23,7 +23,6 @@
         'views/eway_bill_view.xml',
         'views/stock_picking_view.xml',
         'views/menuitems_view.xml',
-        
     ],
     'demo': [
         'demo/res_partner_demo.xml',
