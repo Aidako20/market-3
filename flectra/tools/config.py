@@ -286,15 +286,16 @@ class configmanager(object):
                          help="specify the option to enable app store. (default : install) "
                               "Options : [install|download|disable]", my_default='install')
         group.add_option("-b", "--backup", dest="backup",
-                         help="specify the option to enable backup of database.", my_default=False)
+                         help="specify the file name to backup (without any extension).", my_default=False)
         group.add_option("--backup-zip", dest="backup_zip",
-                         help="specify the option to enable backup of database.", my_default=False)
+                         help="specify the file name to backup (without any extension)", my_default=False)
         group.add_option("--restore", dest="restore",
-                         help="specify the option to enable restore of database.", my_default=False)
+                         help="specify the file name to restore (with .dump extension)", my_default=False)
         group.add_option("--restore-zip", dest="restore_zip",
-                         help="specify the option to enable restore of database.", my_default=False)
+                         help="specify the file name to restore (with .zip extension)", my_default=False)
         group.add_option("--destination", dest="destination",
-                         help="specify the path where to take backup / from where to restore the database .", my_default=False)
+                         help="specify the destination folder where to save backup / from where to restore the database",
+                         my_default=False)
         parser.add_option_group(group)
 
         if os.name == 'posix':
