@@ -21,8 +21,8 @@
                   'name': _('Stock Journal'),
                   'type': 'general',
                   'code': 'STJ',
-                  'company_id': company_id,
-                  'branch_id': company_id.branch_id,
+                  'company_id': company_id.id,
+                  'branch_id': company_id.branch_id.id,
                   'show_on_dashboard': False
                 }).id
               vals = {'name': 'property_stock_journal',
@@ -30,7 +30,7 @@
                   ('name', '=', 'property_stock_journal'),
                   ('model', '=', 'product.category'),
                   ('relation', '=', 'account.journal')], limit=1).id,
-                'company_id': company_id,
+                'company_id': company_id.id,
                 'value': 'account.journal,' + str(journal_id)}
 
               PropertyObj.create(vals)
@@ -52,11 +52,11 @@
                   ], limit=1).id
                   vals = {
                       'name': record,
-                      'company_id': company_id,
+                      'company_id': company_id.id,
                       'fields_id': field_id,
                       'value': value,
                   }
-                  properties = PropertyObj.search([('name', '=', record), ('company_id', '=', company.id)], limit=1)
+                  properties = PropertyObj.search([('name', '=', record), ('company_id', '=', company_id.id)], limit=1)
                   if not properties:
                       # create the property
                       PropertyObj.create(vals)

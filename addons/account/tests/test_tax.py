@@ -78,8 +78,8 @@ class TestTax(AccountTestUsers):
         # Base after the second group (220) is dropped.
         # Base of the group of groups is passed out,
         # so we obtain base as after first group
-        self.assertEquals(res['base'], 210.0)
-        self.assertEquals(res['total_included'], 263.0)
+        self.assertEquals(res['base'], 200.0)
+        self.assertEquals(res['total_included'], 262.0)
 
     def test_tax_group(self):
         res = self.group_tax.compute_all(200.0)
