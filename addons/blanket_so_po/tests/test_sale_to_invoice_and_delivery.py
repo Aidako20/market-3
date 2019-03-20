@@ -7,6 +7,7 @@ from flectra.tests.common import TransactionCase
 
 
 class TestSaleOrder(TransactionCase):
+
     def setUp(self):
         super(TestSaleOrder, self).setUp()
         self.so_model = self.env['sale.order']
