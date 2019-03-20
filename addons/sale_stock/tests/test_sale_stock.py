@@ -69,6 +69,7 @@ class TestSaleStock(TestSale):
         and whatever other model there is in stock with "invoice on order" products
         """
         # let's cheat and put all our products to "invoice on order"
+
         self.so = self.env['sale.order'].create({
             'partner_id': self.partner.id,
             'partner_invoice_id': self.partner.id,
@@ -104,7 +105,7 @@ class TestSaleStock(TestSale):
         pick = self.so.picking_ids
         pick.force_assign()
         pick.move_lines.write({'quantity_done': 2})
-        self.assertIsNone(pick.button_validate(), 'Sale Stock: complete delivery should not need a backorder')
+        self.assertTrue(pick.button_validate(), 'Sale Stock: complete delivery should not need a backorder')
         del_qties = [sol.qty_delivered for sol in self.so.order_line]
         del_qties_truth = [2.0 if sol.product_id.type in ['product', 'consu'] else 0.0 for sol in self.so.order_line]
         self.assertEqual(del_qties, del_qties_truth, 'Sale Stock: delivered quantities are wrong after partial delivery')
