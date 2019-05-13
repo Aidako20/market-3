@@ -1,0 +1,7 @@
+<flectra>
+    <data noupdate="1">
+        <record id="base.main_company" model="res.company">
+            <field name="shortcut">MyC</field>
+        </record>
+    </data>
+</flectra>
