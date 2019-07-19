@@ -21,17 +21,20 @@ from flectra.exceptions import UserError, ValidationError
 # Global variables used for the warning fields declared on the res.partner
 # in the following modules : sale, purchase, account, stock 
 WARNING_MESSAGE = [
-                   ('no-message','No Message'),
-                   ('warning','Warning'),
-                   ('block','Blocking Message')
-                   ]
-WARNING_HELP = _('Selecting the "Warning" option will notify user with the message, Selecting "Blocking Message" will throw an exception with the message and block the flow. The Message has to be written in the next field.')
-
+    ('no-message', 'No Message'),
+    ('warning', 'Warning'),
+    ('block', 'Blocking Message')
+]
+WARNING_HELP = _(
+        'Selecting the "Warning" option will notify user with the message, Selecting "Blocking Message" will throw an exception with the message and block the flow. The Message has to be written in the next field.')
 
 ADDRESS_FIELDS = ('street', 'street2', 'zip', 'city', 'state_id', 'country_id')
+
+
 @api.model
 def _lang_get(self):
     return self.env['res.lang'].get_installed()
+
 
 @api.model
 def _tz_get(self):
@@ -46,15 +49,15 @@ class FormatAddressMixin(models.AbstractModel):
         # consider the country of the user, not the country of the partner we want to display
         address_view_id = self.env.user.company_id.country_id.address_view_id
         if address_view_id and not self._context.get('no_address_format'):
-            #render the partner address accordingly to address_view_id
+            # render the partner address accordingly to address_view_id
             doc = etree.fromstring(arch)
             for address_node in doc.xpath("//div[hasclass('o_address_format')]"):
                 Partner = self.env['res.partner'].with_context(no_address_format=True)
                 sub_view = Partner.fields_view_get(
-                    view_id=address_view_id.id, view_type='form', toolbar=False, submenu=False)
+                        view_id=address_view_id.id, view_type='form', toolbar=False, submenu=False)
                 sub_view_node = etree.fromstring(sub_view['arch'])
-                #if the model is different than res.partner, there are chances that the view won't work
-                #(e.g fields not present on the model). In that case we just return arch
+                # if the model is different than res.partner, there are chances that the view won't work
+                # (e.g fields not present on the model). In that case we just return arch
                 if self._name != 'res.partner':
                     try:
                         self.env['ir.ui.view'].postprocess_and_fields(self._name, sub_view_node, None)
@@ -63,6 +66,7 @@ class FormatAddressMixin(models.AbstractModel):
                 address_node.getparent().replace(address_node, sub_view_node)
             arch = etree.tostring(doc, encoding='unicode')
         return arch
+
 
 class PartnerCategory(models.Model):
     _description = 'Partner Tags'
@@ -146,7 +150,8 @@ class Partner(models.Model):
     title = fields.Many2one('res.partner.title')
     parent_id = fields.Many2one('res.partner', string='Related Company', index=True)
     parent_name = fields.Char(related='parent_id.name', readonly=True, string='Parent name')
-    child_ids = fields.One2many('res.partner', 'parent_id', string='Contacts', domain=[('active', '=', True)])  # force "active_test" domain to bypass _search() override
+    child_ids = fields.One2many('res.partner', 'parent_id', string='Contacts',
+                                domain=[('active', '=', True)])  # force "active_test" domain to bypass _search() override
     ref = fields.Char(string='Internal Reference', index=True)
     lang = fields.Selection(_lang_get, string='Language', default=lambda self: self.env.lang,
                             help="If the selected language is loaded in the system, all documents related to "
@@ -158,7 +163,7 @@ class Partner(models.Model):
                                "render date and time values: your computer's timezone.")
     tz_offset = fields.Char(compute='_compute_tz_offset', string='Timezone offset', invisible=True)
     user_id = fields.Many2one('res.users', string='Salesperson',
-      help='The internal user that is in charge of communicating with this contact if any.')
+                              help='The internal user that is in charge of communicating with this contact if any.')
     vat = fields.Char(string='TIN', help="Tax Identification Number. "
                                          "Fill it if the company is subjected to taxes. "
                                          "Used by the some of the legal statements.")
@@ -167,26 +172,26 @@ class Partner(models.Model):
     comment = fields.Text(string='Notes')
 
     category_id = fields.Many2many('res.partner.category', column1='partner_id',
-                                    column2='category_id', string='Tags', default=_default_category)
+                                   column2='category_id', string='Tags', default=_default_category)
     credit_limit = fields.Float(string='Credit Limit')
     barcode = fields.Char(oldname='ean13')
     active = fields.Boolean(default=True)
     customer = fields.Boolean(string='Is a Customer', default=True,
-                               help="Check this box if this contact is a customer.")
+                              help="Check this box if this contact is a customer.")
     supplier = fields.Boolean(string='Is a Vendor',
-                               help="Check this box if this contact is a vendor. "
-                               "If it's not checked, purchase people will not see it when encoding a purchase order.")
+                              help="Check this box if this contact is a vendor. "
+                                   "If it's not checked, purchase people will not see it when encoding a purchase order.")
     employee = fields.Boolean(help="Check this box if this contact is an Employee.")
     function = fields.Char(string='Job Position')
     type = fields.Selection(
-        [('contact', 'Contact'),
-         ('invoice', 'Invoice address'),
-         ('delivery', 'Shipping address'),
-         ('other', 'Other address'),
-         ("private", "Private Address"),
-        ], string='Address Type',
-        default='contact',
-        help="Used to select automatically the right address according to the context in sales and purchases documents.")
+            [('contact', 'Contact'),
+             ('invoice', 'Invoice address'),
+             ('delivery', 'Shipping address'),
+             ('other', 'Other address'),
+             ("private", "Private Address"),
+             ], string='Address Type',
+            default='contact',
+            help="Used to select automatically the right address according to the context in sales and purchases documents.")
     street = fields.Char()
     street2 = fields.Char()
     zip = fields.Char(change_default=True)
@@ -195,46 +200,46 @@ class Partner(models.Model):
     country_id = fields.Many2one('res.country', string='Country', ondelete='restrict')
     email = fields.Char()
     email_formatted = fields.Char(
-        'Formatted Email', compute='_compute_email_formatted',
-        help='Format email address "Name <email@domain>"')
+            'Formatted Email', compute='_compute_email_formatted',
+            help='Format email address "Name <email@domain>"')
     phone = fields.Char()
     mobile = fields.Char()
     is_company = fields.Boolean(string='Is a Company', default=False,
-        help="Check if the contact is a company, otherwise it is a person")
+                                help="Check if the contact is a company, otherwise it is a person")
     industry_id = fields.Many2one('res.partner.industry', 'Industry')
     # company_type is only an interface field, do not use it in business logic
     company_type = fields.Selection(string='Company Type',
-        selection=[('person', 'Individual'), ('company', 'Company')],
-        compute='_compute_company_type', inverse='_write_company_type')
+                                    selection=[('person', 'Individual'), ('company', 'Company')],
+                                    compute='_compute_company_type', inverse='_write_company_type')
     company_id = fields.Many2one('res.company', 'Company', index=True, default=_default_company)
     color = fields.Integer(string='Color Index', default=0)
     user_ids = fields.One2many('res.users', 'partner_id', string='Users', auto_join=True)
     partner_share = fields.Boolean(
-        'Share Partner', compute='_compute_partner_share', store=True,
-        help="Either customer (no user), either shared user. Indicated the current partner is a customer without "
-             "access or with a limited access created for sharing data.")
+            'Share Partner', compute='_compute_partner_share', store=True,
+            help="Either customer (no user), either shared user. Indicated the current partner is a customer without "
+                 "access or with a limited access created for sharing data.")
     contact_address = fields.Char(compute='_compute_contact_address', string='Complete Address')
 
     # technical field used for managing commercial fields
     commercial_partner_id = fields.Many2one('res.partner', compute='_compute_commercial_partner',
-                                             string='Commercial Entity', store=True, index=True)
+                                            string='Commercial Entity', store=True, index=True)
     commercial_partner_country_id = fields.Many2one('res.country', related='commercial_partner_id.country_id', store=True,
-        string="Commercial Entity's Country")
+                                                    string="Commercial Entity's Country")
     commercial_company_name = fields.Char('Company Name Entity', compute='_compute_commercial_company_name',
                                           store=True)
     company_name = fields.Char('Company Name')
 
     # image: all image fields are base64 encoded and PIL-supported
     image = fields.Binary("Image", attachment=True,
-        help="This field holds the image used as avatar for this contact, limited to 1024x1024px",)
+                          help="This field holds the image used as avatar for this contact, limited to 1024x1024px", )
     image_medium = fields.Binary("Medium-sized image", attachment=True,
-        help="Medium-sized image of this contact. It is automatically "\
-             "resized as a 128x128px image, with aspect ratio preserved. "\
-             "Use this field in form views or some kanban views.")
+                                 help="Medium-sized image of this contact. It is automatically " \
+                                      "resized as a 128x128px image, with aspect ratio preserved. " \
+                                      "Use this field in form views or some kanban views.")
     image_small = fields.Binary("Small-sized image", attachment=True,
-        help="Small-sized image of this contact. It is automatically "\
-             "resized as a 64x64px image, with aspect ratio preserved. "\
-             "Use this field anywhere a small image is required.")
+                                help="Small-sized image of this contact. It is automatically " \
+                                     "resized as a 64x64px image, with aspect ratio preserved. " \
+                                     "Use this field anywhere a small image is required.")
     # hack to allow using plain browse record in qweb views, and used in ir.qweb.field.contact
     self = fields.Many2one(comodel_name=_name, compute='_compute_get_ids')
 
@@ -355,6 +360,7 @@ class Partner(models.Model):
             if any(self.parent_id[key] for key in address_fields):
                 def convert(value):
                     return value.id if isinstance(value, models.BaseModel) else value
+
                 result['value'] = {key: convert(self.parent_id[key]) for key in address_fields}
         return result
 
@@ -466,7 +472,7 @@ class Partner(models.Model):
                 if any(field in values for field in commercial_fields):
                     self._commercial_sync_to_children()
             for child in self.child_ids.filtered(lambda c: not c.is_company):
-                if child.commercial_partner_id != self.commercial_partner_id :
+                if child.commercial_partner_id != self.commercial_partner_id:
                     self._commercial_sync_to_children()
                     break
             # 2b. Address fields: sync if address changed
@@ -482,7 +488,7 @@ class Partner(models.Model):
         parent = self.parent_id
         address_fields = self._address_fields()
         if (parent.is_company or not parent.parent_id) and len(parent.child_ids) == 1 and \
-            any(self[f] for f in address_fields) and not any(parent[f] for f in address_fields):
+                any(self[f] for f in address_fields) and not any(parent[f] for f in address_fields):
             addr_vals = self._update_fields_values(address_fields)
             parent.update_address(addr_vals)
 
@@ -638,7 +644,7 @@ class Partner(models.Model):
         """ Override search() to always show inactive children when searching via ``child_of`` operator. The ORM will
         always call search() with a simple domain of the form [('parent_id', 'in', [ids])]. """
         # a special ``domain`` is set on the ``child_ids`` o2m to bypass this logic, as it uses similar domain expressions
-        if len(args) == 1 and len(args[0]) == 3 and args[0][:2] == ('parent_id','in') \
+        if len(args) == 1 and len(args[0]) == 3 and args[0][:2] == ('parent_id', 'in') \
                 and args[0][2] != [False]:
             self = self.with_context(active_test=False)
         return super(Partner, self)._search(args, offset=offset, limit=limit, order=order,
@@ -681,9 +687,9 @@ class Partner(models.Model):
                                display_name=unaccent('res_partner.display_name'),
                                reference=unaccent('res_partner.ref'),
                                percent=unaccent('%s'),
-                               vat=unaccent('res_partner.vat'),)
+                               vat=unaccent('res_partner.vat'), )
 
-            where_clause_params += [search_name]*5
+            where_clause_params += [search_name] * 5
             if limit:
                 query += ' limit %s'
                 where_clause_params.append(limit)
@@ -691,7 +697,13 @@ class Partner(models.Model):
             partner_ids = [row[0] for row in self.env.cr.fetchall()]
 
             if partner_ids:
-                return self.browse(partner_ids).name_get()
+                result = self.browse(partner_ids).name_get()
+                if self._context.get('show_address_search'):
+                    # Are you a good coder? then you do not need the following comment ;-)))
+                    return map(lambda r: (r[0], ', '.join([p.strip() for p in r[1].split("\n") if p.strip()])), result)
+                # Beginner? Okay, read this:
+                # Replace \n with comma but ignore empty parts
+                return result
             else:
                 return []
         return super(Partner, self).name_search(name, args, operator=operator, limit=limit)
@@ -754,8 +766,8 @@ class Partner(models.Model):
                     if len(result) == len(adr_pref):
                         return result
                     to_scan = [c for c in record.child_ids
-                                 if c not in visited
-                                 if not c.is_company] + to_scan
+                               if c not in visited
+                               if not c.is_company] + to_scan
 
                 # Continue scanning at ancestor if current_partner is not a commercial entity
                 if current_partner.is_company or not current_partner.parent_id:
@@ -801,7 +813,7 @@ class Partner(models.Model):
         # get the information that will be injected into the display format
         # get the address format
         address_format = self.country_id.address_format or \
-            self._get_default_address_format()
+                         self._get_default_address_format()
         args = {
             'state_code': self.state_id.code or '',
             'state_name': self.state_id.name or '',
