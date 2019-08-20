@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Flectra Server 1.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-26 12:03+0000\n"
-"PO-Revision-Date: 2019-08-19 20:01+0300\n"
+"PO-Revision-Date: 2019-08-20 23:32+0300\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,65 +21,65 @@ msgstr ""
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_number_of_retrospectives
 msgid "# of Retrospectives"
-msgstr ""
+msgstr "# ретроспектив"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_number_of_stories
 msgid "# of stories"
-msgstr ""
+msgstr "# историй"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_number_of_tasks
 msgid "# of tasks"
-msgstr ""
+msgstr "# задач"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.release_planning_template_id
 msgid "<b>Planning Name</b>"
-msgstr ""
+msgstr "<b>Название планирования</b>"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.release_planning_template_id
 msgid "<b>Priority</b>"
-msgstr ""
+msgstr "<b>Приоритет</b>"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.release_planning_template_id
 msgid "<b>Release Date</b>"
-msgstr ""
+msgstr "<b>Дата выпуска</b>"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.release_planning_template_id
 msgid "<b>Sprint</b>"
-msgstr ""
+msgstr "<b>Спринт</b>"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.release_planning_template_id
 msgid "<b>Velocity</b>"
-msgstr ""
+msgstr "<b>Скорость</b>"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.view_project_sprint_kanban
 msgid "<span class=\"o_label\">Tasks</span>"
-msgstr ""
+msgstr "<span class=\"o_label\">Задачи</span>"
 
 #. module: project_scrum
 #: selection:project.sprint,time_zone:0
 msgid "AM"
-msgstr ""
+msgstr "AM"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.project_sprint_template_id
 #: model:ir.ui.view,arch_db:project_scrum.release_planning_template_id
 msgid "Actual End Date"
-msgstr ""
+msgstr "Фактическая дата окончания"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_actual_velocity
 #: model:ir.model.fields,field_description:project_scrum.field_project_story_actual_velocity
 #: model:ir.ui.view,arch_db:project_scrum.project_sprint_template_id
 msgid "Actual Velocity"
-msgstr ""
+msgstr "Фактическая скорость"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.view_project_story_form
@@ -89,12 +89,12 @@ msgstr ""
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.release_planning_template_id
 msgid "Assigned To"
-msgstr ""
+msgstr "Назначено"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.project_sprint_template_id
 msgid "Assigned to"
-msgstr ""
+msgstr "Назначено"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_sprint_planning_line_available_per
@@ -110,14 +110,14 @@ msgstr ""
 #: model:project.task,legend_blocked:project_scrum.project_task_4
 #: model:project.task,legend_blocked:project_scrum.project_task_9
 msgid "Blocked"
-msgstr ""
+msgstr "Заблокировано"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.release_planning_template_id
 #: model:ir.ui.view,arch_db:project_scrum.view_project_story_search
 #: model:ir.ui.view,arch_db:project_scrum.view_sprint_search
 msgid "Branch"
-msgstr ""
+msgstr "Филиал"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_working_days
@@ -130,24 +130,24 @@ msgstr ""
 #: model:ir.ui.view,arch_db:project_scrum.view_sprint_search
 #: selection:project.sprint,state:0 selection:project.story,state:0
 msgid "Cancel"
-msgstr ""
+msgstr "Отменить"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_story_priority_code
 #: model:ir.model.fields,field_description:project_scrum.field_story_type_code
 #: model:ir.model.fields,field_description:project_scrum.field_user_role_code
 msgid "Code"
-msgstr ""
+msgstr "Код"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_color
 msgid "Color Index"
-msgstr ""
+msgstr "Цветовая палитра"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.view_project_form_inherited
 msgid "Configuration"
-msgstr ""
+msgstr "Настройка"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_create_uid
@@ -162,7 +162,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:project_scrum.field_story_type_create_uid
 #: model:ir.model.fields,field_description:project_scrum.field_user_role_create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Создал"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_create_date
@@ -177,7 +177,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:project_scrum.field_story_type_create_date
 #: model:ir.model.fields,field_description:project_scrum.field_user_role_create_date
 msgid "Created on"
-msgstr ""
+msgstr "Создано на"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.view_project_sprint_form
@@ -189,17 +189,17 @@ msgstr ""
 #: code:addons/project_scrum/static/src/js/scrum_dashboard.js:308
 #, python-format
 msgid "Dashboard"
-msgstr ""
+msgstr "Дашборд"
 
 #. module: project_scrum
 #: selection:project.sprint,holiday_type:0
 msgid "Days"
-msgstr ""
+msgstr "Дней"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.view_project_story_kanban
 msgid "Delete"
-msgstr ""
+msgstr "Удалить"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_story_description
@@ -209,7 +209,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:project_scrum.view_project_story_form
 #: model:ir.ui.view,arch_db:project_scrum.view_project_team_form
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_display_name
@@ -224,25 +224,25 @@ msgstr ""
 #: model:ir.model.fields,field_description:project_scrum.field_story_type_display_name
 #: model:ir.model.fields,field_description:project_scrum.field_user_role_display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Отображаемое имя"
 
 #. module: project_scrum
 #: model:ir.model,name:project_scrum.model_mail_followers
 msgid "Document Followers"
-msgstr ""
+msgstr "Подписчики документа"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.view_project_story_form
 #: model:ir.ui.view,arch_db:project_scrum.view_sprint_search
 #: selection:project.sprint,state:0 selection:project.story,state:0
 msgid "Done"
-msgstr ""
+msgstr "Сделано"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.view_sprint_search
 #: selection:project.sprint,state:0 selection:project.story,state:0
 msgid "Draft"
-msgstr ""
+msgstr "Черновик"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_duration
@@ -253,12 +253,12 @@ msgstr ""
 #: model:ir.ui.view,arch_db:project_scrum.view_project_sprint_kanban
 #: model:ir.ui.view,arch_db:project_scrum.view_project_story_kanban
 msgid "Edit"
-msgstr ""
+msgstr "Править"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.project_sprint_template_id
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_end_date
@@ -266,24 +266,24 @@ msgstr ""
 #: model:ir.ui.view,arch_db:project_scrum.project_sprint_template_id
 #: model:ir.ui.view,arch_db:project_scrum.release_planning_template_id
 msgid "End Date"
-msgstr ""
+msgstr "Дата окончания"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_estimated_velocity
 #: model:ir.model.fields,field_description:project_scrum.field_project_story_estimated_velocity
 #: model:ir.ui.view,arch_db:project_scrum.project_sprint_template_id
 msgid "Estimated Velocity"
-msgstr ""
+msgstr "Ориентировочная скорость"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_goal_of_sprint
 msgid "Goal of Sprint"
-msgstr ""
+msgstr "Цель спринта"
 
 #. module: project_scrum
 #: selection:release.planning,priority:0
 msgid "High"
-msgstr ""
+msgstr "Высокий"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_holiday_type
@@ -298,17 +298,17 @@ msgstr ""
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_holiday_days
 msgid "Holiday Days"
-msgstr ""
+msgstr "Праздничные дни"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_hour
 msgid "Hour"
-msgstr ""
+msgstr "Час"
 
 #. module: project_scrum
 #: selection:project.sprint,holiday_type:0
 msgid "Hours"
-msgstr ""
+msgstr "Часы"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_id
@@ -323,7 +323,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:project_scrum.field_story_type_id
 #: model:ir.model.fields,field_description:project_scrum.field_user_role_id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.view_sprint_search
@@ -342,7 +342,7 @@ msgstr ""
 #: model:project.task,legend_normal:project_scrum.project_task_8
 #: model:project.task,legend_normal:project_scrum.project_task_9
 msgid "In Progress"
-msgstr ""
+msgstr "Выполняется"
 
 #. module: project_scrum
 #: code:addons/project_scrum/models/project_sprint.py:667
@@ -366,7 +366,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:project_scrum.field_story_type___last_update
 #: model:ir.model.fields,field_description:project_scrum.field_user_role___last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Последнее изменение"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_write_uid
@@ -381,7 +381,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:project_scrum.field_story_type_write_uid
 #: model:ir.model.fields,field_description:project_scrum.field_user_role_write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Последний раз обновил"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_write_date
@@ -396,39 +396,39 @@ msgstr ""
 #: model:ir.model.fields,field_description:project_scrum.field_story_type_write_date
 #: model:ir.model.fields,field_description:project_scrum.field_user_role_write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Последнее обновление от"
 
 #. module: project_scrum
 #: selection:release.planning,priority:0
 msgid "Low"
-msgstr ""
+msgstr "Низкий"
 
 #. module: project_scrum
 #: selection:release.planning,priority:0
 msgid "Medium"
-msgstr ""
+msgstr "Средний"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_team_member_ids
 msgid "Members"
-msgstr ""
+msgstr "Члены"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_retrospective_lines_message
 msgid "Message"
-msgstr ""
+msgstr "Сообщение"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_retrospective_method_name
 msgid "Method Name"
-msgstr ""
+msgstr "Название способа"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_story_priority_name
 #: model:ir.model.fields,field_description:project_scrum.field_story_type_name
 #: model:ir.ui.view,arch_db:project_scrum.project_sprint_template_id
 msgid "Name"
-msgstr ""
+msgstr "Название"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_resource_calendar_no_of_days
@@ -459,7 +459,7 @@ msgstr ""
 #: model:project.task,legend_blocked:project_scrum.project_task_7
 #: model:project.task,legend_blocked:project_scrum.project_task_8
 msgid "Not validated"
-msgstr ""
+msgstr "Не проверено"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_sprint_planning_line_off_hours
@@ -470,24 +470,24 @@ msgstr ""
 #: model:ir.ui.view,arch_db:project_scrum.view_project_sprint_form
 #: model:ir.ui.view,arch_db:project_scrum.view_project_story_form
 msgid "Open"
-msgstr ""
+msgstr "Открыть"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_story_owner_id
 #: model:ir.ui.view,arch_db:project_scrum.view_project_story_search
 msgid "Owner"
-msgstr ""
+msgstr "Владелец"
 
 #. module: project_scrum
 #: selection:project.sprint,time_zone:0
 msgid "PM"
-msgstr ""
+msgstr "PM"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.view_project_sprint_form
 #: selection:project.sprint,state:0
 msgid "Pending"
-msgstr ""
+msgstr "В ожидании"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_meeting_date
@@ -497,7 +497,7 @@ msgstr ""
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_release_planning_name
 msgid "Planning Name"
-msgstr ""
+msgstr "Название планирования"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_story_priority_id
@@ -506,17 +506,17 @@ msgstr ""
 #: model:ir.ui.view,arch_db:project_scrum.view_story_priority_form
 #: model:ir.ui.view,arch_db:project_scrum.view_story_priority_tree
 msgid "Priority"
-msgstr ""
+msgstr "Приоритет"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.view_project_story_search
 msgid "Product Backlog"
-msgstr ""
+msgstr "Бэклог продукта"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_productivity_per
 msgid "Productivity (%)"
-msgstr ""
+msgstr "Производительность (%)"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_sprint_planning_line_productivity_hours
@@ -535,24 +535,24 @@ msgstr ""
 #: model:ir.ui.view,arch_db:project_scrum.release_planning_template_id
 #: model:ir.ui.view,arch_db:project_scrum.view_sprint_search
 msgid "Project"
-msgstr ""
+msgstr "Проект"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.project_sprint_template_id
 msgid "Project Name"
-msgstr ""
+msgstr "Название проекта"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.view_project_sprint_calendar
 #: model:ir.ui.view,arch_db:project_scrum.view_project_sprint_form
 #: model:ir.ui.view,arch_db:project_scrum.view_project_sprint_tree
 msgid "Project Sprint"
-msgstr ""
+msgstr "Спринт проекта"
 
 #. module: project_scrum
 #: model:ir.actions.report,name:project_scrum.project_sprint_report
 msgid "Project Sprint Report"
-msgstr ""
+msgstr "Отчет о спринте проекта"
 
 #. module: project_scrum
 #: model:ir.actions.act_window,name:project_scrum.action_project_story_sprint
@@ -569,12 +569,12 @@ msgstr ""
 #: model:ir.ui.view,arch_db:project_scrum.view_project_team_form
 #: model:ir.ui.view,arch_db:project_scrum.view_project_team_tree
 msgid "Project Team"
-msgstr ""
+msgstr "Команда Проекта"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_project_task_type_ids
 msgid "Project(s)"
-msgstr ""
+msgstr "Проект(ы)"
 
 #. module: project_scrum
 #: model:project.task,legend_done:project_scrum.project_task_1
@@ -597,12 +597,12 @@ msgstr ""
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_sprint_seq
 #: model:ir.model.fields,field_description:project_scrum.field_project_story_sprint_seq
 msgid "Reference"
-msgstr ""
+msgstr "Ссылка"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_release_planning_release_date
 msgid "Release Date"
-msgstr ""
+msgstr "Дата выпуска"
 
 #. module: project_scrum
 #: model:ir.actions.act_window,name:project_scrum.action_release_planning
@@ -623,7 +623,7 @@ msgstr ""
 #. module: project_scrum
 #: model:ir.model,name:project_scrum.model_resource_calendar
 msgid "Resource Calendar"
-msgstr ""
+msgstr "Календарь ресурса"
 
 #. module: project_scrum
 #: model:ir.actions.act_window,name:project_scrum.action_retrospective_tree_view_id
@@ -632,7 +632,7 @@ msgstr ""
 #: model:ir.ui.menu,name:project_scrum.retrospective_menu_id
 #: model:ir.ui.view,arch_db:project_scrum.retrospective_form_view_id
 msgid "Retrospective"
-msgstr ""
+msgstr "Ретроспектива"
 
 #. module: project_scrum
 #: model:ir.model,name:project_scrum.model_retrospective_method
@@ -674,18 +674,18 @@ msgstr ""
 #: model:ir.model.fields,field_description:project_scrum.field_user_role_name
 #: model:ir.ui.view,arch_db:project_scrum.project_sprint_template_id
 msgid "Role"
-msgstr ""
+msgstr "Роль"
 
 #. module: project_scrum
 #: model:ir.actions.act_window,name:project_scrum.action_user_role
 #: model:ir.ui.menu,name:project_scrum.menu_user_role
 msgid "Roles"
-msgstr ""
+msgstr "Роли"
 
 #. module: project_scrum
 #: model:ir.ui.menu,name:project_scrum.menu_scrum
 msgid "Scrum"
-msgstr ""
+msgstr "Scrum"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_team_master_id
@@ -697,7 +697,7 @@ msgstr ""
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_story_sequence
 msgid "Sequence"
-msgstr ""
+msgstr "Нумерация"
 
 #. module: project_scrum
 #: model:ir.actions.act_window,name:project_scrum.action_project_sprint
@@ -711,7 +711,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:project_scrum.view_project_story_search
 #: model:ir.ui.view,arch_db:project_scrum.view_tasks_search_inherited
 msgid "Sprint"
-msgstr ""
+msgstr "Спринт"
 
 #. module: project_scrum
 #. flectra-web
@@ -798,17 +798,17 @@ msgstr ""
 #: model:ir.ui.view,arch_db:project_scrum.view_project_form_inherited
 #: model:ir.ui.view,arch_db:project_scrum.view_sprint_search
 msgid "Sprints"
-msgstr ""
+msgstr "Спринты"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.release_planning_template_id
 msgid "Stage"
-msgstr ""
+msgstr "Этап"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.view_project_form_inherited
 msgid "Stages"
-msgstr ""
+msgstr "Этапы"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_start_date
@@ -816,25 +816,25 @@ msgstr ""
 #: model:ir.ui.view,arch_db:project_scrum.project_sprint_template_id
 #: model:ir.ui.view,arch_db:project_scrum.release_planning_template_id
 msgid "Start Date"
-msgstr ""
+msgstr "Дата начала"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_state
 #: model:ir.ui.view,arch_db:project_scrum.project_sprint_template_id
 msgid "State"
-msgstr ""
+msgstr "Регион"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.view_project_sprint_form
 msgid "Stories"
-msgstr ""
+msgstr "Истории"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_task_story_id
 #: model:ir.ui.menu,name:project_scrum.menu_story
 #: model:ir.ui.view,arch_db:project_scrum.view_project_story_search
 msgid "Story"
-msgstr ""
+msgstr "История"
 
 #. module: project_scrum
 #: model:ir.actions.act_window,name:project_scrum.action_story_priority
@@ -858,24 +858,24 @@ msgstr ""
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_story_tags
 msgid "Tags"
-msgstr ""
+msgstr "Теги"
 
 #. module: project_scrum
 #: model:ir.model,name:project_scrum.model_project_task
 #: model:ir.model.fields,field_description:project_scrum.field_release_planning_task_id
 msgid "Task"
-msgstr ""
+msgstr "Задача"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.project_sprint_template_id
 #: model:ir.ui.view,arch_db:project_scrum.release_planning_template_id
 msgid "Task Details"
-msgstr ""
+msgstr "Детали задачи"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.project_sprint_template_id
 msgid "Task Name"
-msgstr ""
+msgstr "Имя задачи"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.project_sprint_template_id
@@ -885,7 +885,7 @@ msgstr ""
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.release_planning_template_id
 msgid "Task Title"
-msgstr ""
+msgstr "Название"
 
 #. module: project_scrum
 #: code:addons/project_scrum/models/project_story.py:56
@@ -897,30 +897,30 @@ msgstr ""
 #: model:ir.ui.view,arch_db:project_scrum.view_release_planning_form
 #, python-format
 msgid "Tasks"
-msgstr ""
+msgstr "Задачи"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_team_id
 #: model:ir.ui.menu,name:project_scrum.menu_team
 msgid "Team"
-msgstr ""
+msgstr "Команда"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.project_sprint_template_id
 msgid "Team Member(s)"
-msgstr ""
+msgstr "Член команды(ы)"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_team_name
 #: model:ir.ui.view,arch_db:project_scrum.project_sprint_template_id
 #: model:ir.ui.view,arch_db:project_scrum.view_project_team_form
 msgid "Team Name"
-msgstr ""
+msgstr "Название команды"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_team_strength
 msgid "Team Strength"
-msgstr ""
+msgstr "Сила команды"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.view_project_form_inherited
@@ -930,12 +930,12 @@ msgstr ""
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_sprint_time_zone
 msgid "Time Zone"
-msgstr ""
+msgstr "Часовой пояс"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_story_name
 msgid "Title"
-msgstr ""
+msgstr "Заголовок"
 
 #. module: project_scrum
 #: model:ir.ui.view,arch_db:project_scrum.view_project_sprint_form
@@ -952,28 +952,28 @@ msgstr ""
 #: code:addons/project_scrum/static/src/xml/scrum_dashboard.xml:14
 #, python-format
 msgid "Total Projects"
-msgstr ""
+msgstr "Всего проектов"
 
 #. module: project_scrum
 #. flectra-web
 #: code:addons/project_scrum/static/src/xml/scrum_dashboard.xml:29
 #, python-format
 msgid "Total Sprints"
-msgstr ""
+msgstr "Всего спринтов"
 
 #. module: project_scrum
 #. flectra-web
 #: code:addons/project_scrum/static/src/xml/scrum_dashboard.xml:44
 #, python-format
 msgid "Total Stories"
-msgstr ""
+msgstr "Всего историй"
 
 #. module: project_scrum
 #. flectra-web
 #: code:addons/project_scrum/static/src/xml/scrum_dashboard.xml:59
 #, python-format
 msgid "Total Tasks"
-msgstr ""
+msgstr "Итого задач"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_story_story_type_id
@@ -981,25 +981,25 @@ msgstr ""
 #: model:ir.ui.view,arch_db:project_scrum.view_story_type_form
 #: model:ir.ui.view,arch_db:project_scrum.view_story_type_tree
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_retrospective_lines_user_id
 #: model:ir.model.fields,field_description:project_scrum.field_sprint_planning_line_user_id
 msgid "User"
-msgstr ""
+msgstr "Пользователь"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_res_users_role_id
 #: model:ir.ui.view,arch_db:project_scrum.view_user_role_form
 #: model:ir.ui.view,arch_db:project_scrum.view_user_role_tree
 msgid "User Role"
-msgstr ""
+msgstr "Роль пользователя"
 
 #. module: project_scrum
 #: model:ir.model,name:project_scrum.model_res_users
 msgid "Users"
-msgstr ""
+msgstr "Пользователи"
 
 #. module: project_scrum
 #. flectra-web
@@ -1009,17 +1009,17 @@ msgstr ""
 #: model:ir.ui.view,arch_db:project_scrum.release_planning_template_id
 #, python-format
 msgid "Velocity"
-msgstr ""
+msgstr "Скорость"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_project_no_of_days
 msgid "Working Day(s) per Week"
-msgstr ""
+msgstr "Рабочий день (ы) в неделю"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_project_no_of_hours
 msgid "Working Hour(s) per Day"
-msgstr ""
+msgstr "Рабочий час (ы) в день"
 
 #. module: project_scrum
 #: code:addons/project_scrum/models/project_sprint.py:661
@@ -1028,43 +1028,45 @@ msgid ""
 "You can not Add Working Hour(s) for more than %s                    "
 "different days."
 msgstr ""
+"Вы не можете добавить рабочий час (ы) для более чем %s                     "
+"в разных днях."
 
 #. module: project_scrum
 #: model:ir.model,name:project_scrum.model_release_planning
 msgid "release.planning"
-msgstr ""
+msgstr "release.planning"
 
 #. module: project_scrum
 #: model:ir.model,name:project_scrum.model_retrospective
 msgid "retrospective"
-msgstr ""
+msgstr "ретроспективный"
 
 #. module: project_scrum
 #: model:ir.model,name:project_scrum.model_retrospective_lines
 msgid "retrospective.lines"
-msgstr ""
+msgstr "retrospective.lines"
 
 #. module: project_scrum
 #: model:ir.model,name:project_scrum.model_sprint_planning_line
 msgid "sprint.planning.line"
-msgstr ""
+msgstr "sprint.planning.line"
 
 #. module: project_scrum
 #: model:ir.model.fields,field_description:project_scrum.field_project_story_state
 msgid "states"
-msgstr ""
+msgstr "статус"
 
 #. module: project_scrum
 #: model:ir.model,name:project_scrum.model_story_priority
 msgid "story.priority"
-msgstr ""
+msgstr "story.priority"
 
 #. module: project_scrum
 #: model:ir.model,name:project_scrum.model_story_type
 msgid "story.type"
-msgstr ""
+msgstr "story.type"
 
 #. module: project_scrum
 #: model:ir.model,name:project_scrum.model_user_role
 msgid "user.role"
-msgstr ""
+msgstr "user.role"

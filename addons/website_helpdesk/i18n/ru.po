@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Flectra Server 1.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-26 12:03+0000\n"
-"PO-Revision-Date: 2019-08-16 22:26+0300\n"
+"PO-Revision-Date: 2019-08-20 23:15+0300\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,6 +24,9 @@ msgid ""
 "                                                Rating:\n"
 "                                            </span>"
 msgstr ""
+"<span style=\"color: #333333;\">\n"
+"                                               Рейтинг:\n"
+"                                            </span>"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.portal_my_ticket
@@ -32,66 +35,69 @@ msgid ""
 "                                        Priority:\n"
 "                                    </strong>"
 msgstr ""
+"<strong style=\"color:#333333;\">\n"
+"                                        Приоритет:\n"
+"                                    </strong>"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.portal_my_ticket
 msgid "<strong>Assigned to:</strong>"
-msgstr ""
+msgstr "<strong>Назначено:</strong>"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.portal_my_ticket
 msgid "<strong>Description</strong>"
-msgstr ""
+msgstr "<strong>Описание</strong>"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.portal_my_ticket
 msgid "<strong>End Date:</strong>"
-msgstr ""
+msgstr "<strong>Дата окончания:</strong>"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.portal_my_ticket
 msgid "<strong>Issue Type:</strong>"
-msgstr ""
+msgstr "<strong>Тип вопроса:</strong>"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.portal_my_ticket
 msgid "<strong>Reported by:</strong>"
-msgstr ""
+msgstr "<strong>Сообщается:</strong>"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.portal_my_ticket
 msgid "<strong>Start Date:</strong>"
-msgstr ""
+msgstr "<strong>Дата начала:</strong>"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.my_tickets
 msgid "Assigned To"
-msgstr ""
+msgstr "Назначено"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.portal_my_ticket
 msgid "Attachment"
-msgstr ""
+msgstr "Вложение"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.portal_my_ticket
 msgid "Attachments"
-msgstr ""
+msgstr "Вложения"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.portal_my_ticket
 msgid "Close"
-msgstr ""
+msgstr "Закрыть"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.my_tickets
 msgid "Create"
-msgstr ""
+msgstr "Создать"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.portal_my_ticket
 msgid "Current stage of this ticket"
-msgstr ""
+msgstr "Текущий этап этой запроса"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.portal_my_ticket
@@ -99,95 +105,97 @@ msgid ""
 "Edit\n"
 "                                    Ticket"
 msgstr ""
+"Редактировать\n"
+"                                    Заявку"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.helpdesk_form
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #. module: website_helpdesk
 #. flectra-web
 #: code:addons/website_helpdesk/static/src/js/helpdesk.js:35
 #, python-format
 msgid "File is too big. File size cannot exceed 25MB"
-msgstr ""
+msgstr "Файл слишком велик. Размер файла не может превышать 25 МБ"
 
 #. module: website_helpdesk
 #: model:website.menu,name:website_helpdesk.menu_helpdesk_form
 msgid "Helpdesk"
-msgstr ""
+msgstr "Поддержка"
 
 #. module: website_helpdesk
 #: model:ir.model,name:website_helpdesk.model_helpdesk_ticket
 msgid "Helpdesk Ticket"
-msgstr ""
+msgstr "Заявка поддержки"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.helpdesk_form
 msgid "Helpdesk: Issue Form"
-msgstr ""
+msgstr "Поддержка: Форма вопроса"
 
 #. module: website_helpdesk
 #. flectra-web
 #: code:addons/website_helpdesk/static/src/js/helpdesk.js:29
 #, python-format
 msgid "Invalid file type. Please select image file"
-msgstr ""
+msgstr "Недействительный тип файла. Пожалуйста, выберите файл изображения"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.helpdesk_form
 msgid "Issue"
-msgstr ""
+msgstr "Вопрос"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.portal_my_ticket
 msgid "Issue -"
-msgstr ""
+msgstr "Вопрос -"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.helpdesk_form
 msgid "Issue Description"
-msgstr ""
+msgstr "Описание вопроса"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.helpdesk_form
 msgid "Issue Type"
-msgstr ""
+msgstr "Тип вопроса"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.my_tickets
 msgid "Name"
-msgstr ""
+msgstr "Название"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.portal_my_ticket
 msgid "Rate It"
-msgstr ""
+msgstr "Оцените его"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.helpdesk_form
 msgid "Select Issue Type"
-msgstr ""
+msgstr "Выберите тип вопроса"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.my_tickets
 msgid "Status"
-msgstr ""
+msgstr "Статус"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.helpdesk_form
 msgid "Submit"
-msgstr ""
+msgstr "Подтвердить"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.my_tickets
 msgid "Team"
-msgstr ""
+msgstr "Команда"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.issue_submitted
 msgid "Thank You!"
-msgstr ""
+msgstr "Спасибо!"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.my_tickets
@@ -195,21 +203,23 @@ msgid ""
 "There are currently\n"
 "                                no ticket."
 msgstr ""
+"В настоящее время\n"
+"                                нет заявки."
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.portal_my_home_ticket
 msgid "Tickets"
-msgstr ""
+msgstr "Заявки"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.issue_submitted
 msgid "We have received your issue #"
-msgstr ""
+msgstr "Мы получили ваш вопрос #"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.my_tickets
 msgid "Your Helpdesk Tickets"
-msgstr ""
+msgstr "Ваши заявки поддержке"
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.issue_submitted
@@ -217,8 +227,10 @@ msgid ""
 "and will try\n"
 "                                    fix it soon."
 msgstr ""
+"и попробует\n"
+"                                    исправить это в ближайшее время."
 
 #. module: website_helpdesk
 #: model:ir.ui.view,arch_db:website_helpdesk.helpdesk_form
 msgid "demo@mail.com"
-msgstr ""
+msgstr "demo@mail.com"
