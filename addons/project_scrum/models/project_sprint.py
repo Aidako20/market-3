@@ -12,7 +12,7 @@ class ProjectSprint(models.Model):
     _rec_name = 'sprint_seq'
 
     sprint_seq = fields.Char(
-            string="Reference", readonly=True)
+        string="Reference", readonly=True)
     name = fields.Char("Sprint Name", required=True,
                        track_visibility="onchange")
     goal_of_sprint = fields.Char("Goal of Sprint", track_visibility="onchange")
@@ -25,41 +25,41 @@ class ProjectSprint(models.Model):
         ('pm', 'PM'),
     ], track_visibility="onchange")
     estimated_velocity = fields.Integer(
-            compute="calculate_estimated_velocity", string="Estimated Velocity",
-            store=True, track_visibility="onchange")
+        compute="calculate_estimated_velocity", string="Estimated Velocity",
+        store=True, track_visibility="onchange")
     actual_velocity = fields.Integer(
-            compute="calculate_actual_velocity", string="Actual Velocity",
-            store=True, track_visibility="onchange")
+        compute="calculate_actual_velocity", string="Actual Velocity",
+        store=True, track_visibility="onchange")
     sprint_planning_line = fields.One2many(
-            'sprint.planning.line', 'sprint_id', string="Sprint Planning Lines")
+        'sprint.planning.line', 'sprint_id', string="Sprint Planning Lines")
     project_id = fields.Many2one('project.project', string="Project",
                                  track_visibility="onchange")
     start_date = fields.Date(string="Start Date", track_visibility="onchange")
     end_date = fields.Date(string="End Date", track_visibility="onchange")
     working_days = fields.Integer(
-            compute="calculate_business_days", string="Business Days",
-            store=True, track_visibility="onchange")
+        compute="calculate_business_days", string="Business Days",
+        store=True, track_visibility="onchange")
     productivity_hours = fields.Float(string="Productivity Hours",
                                       track_visibility="onchange")
     productivity_per = fields.Float(
-            compute="calculate_productivity_per", string="Productivity (%)",
-            store=True, track_visibility="onchange")
+        compute="calculate_productivity_per", string="Productivity (%)",
+        store=True, track_visibility="onchange")
     holiday_type = fields.Selection(
-            [('hours', 'Hours'), ('days', 'Days')],
-            string="Holiday (Hours / Days)", default='hours',
-            track_visibility="onchange")
+        [('hours', 'Hours'), ('days', 'Days')],
+        string="Holiday (Hours / Days)", default='hours',
+        track_visibility="onchange")
     holiday_count = fields.Float(string="Holiday Count",
                                  track_visibility="onchange")
     holiday_days = fields.Float(
-            compute="calculate_holiday_days", string="Holiday Days", store=True,
-            track_visibility="onchange")
+        compute="calculate_holiday_days", string="Holiday Days", store=True,
+        track_visibility="onchange")
     state = fields.Selection([
         ('draft', 'Draft'),
         ('in_progress', 'In Progress'),
         ('pending', 'Pending'),
         ('done', 'Done'),
         ('cancel', 'Cancel')], string="State", default='draft',
-            track_visibility="onchange")
+        track_visibility="onchange")
     team_id = fields.Many2one('project.team', string="Team",
                               track_visibility="onchange", required=True)
     task_line = fields.One2many('project.task', 'sprint_id', string='Tasks')
@@ -69,13 +69,13 @@ class ProjectSprint(models.Model):
     def days_calculate(self):
         if self.start_date and self.end_date:
             diff = datetime.strptime(
-                    self.end_date, '%Y-%m-%d').date() - datetime.strptime(
-                    self.start_date, '%Y-%m-%d').date()
+                self.end_date, '%Y-%m-%d').date() - datetime.strptime(
+                self.start_date, '%Y-%m-%d').date()
             self.duration = diff.days
 
     duration = fields.Integer(
-            "Duration (In Days)", compute='days_calculate', store=True,
-            track_visibility="onchange")
+        "Duration (In Days)", compute='days_calculate', store=True,
+        track_visibility="onchange")
 
     @api.multi
     def _get_task_count(self):
@@ -84,7 +84,7 @@ class ProjectSprint(models.Model):
                 ('sprint_id', '=', record.id)])
 
     number_of_tasks = fields.Integer(
-            string="# of tasks", compute="_get_task_count")
+        string="# of tasks", compute="_get_task_count")
 
     @api.multi
     def _get_story_count(self):
@@ -94,7 +94,7 @@ class ProjectSprint(models.Model):
             record.number_of_stories = count
 
     number_of_stories = fields.Integer(
-            string="# of stories", compute="_get_story_count")
+        string="# of stories", compute="_get_story_count")
 
     @api.multi
     def _get_retrospective_count(self):
@@ -104,7 +104,7 @@ class ProjectSprint(models.Model):
             record.number_of_retrospectives = count
 
     number_of_retrospectives = fields.Integer(
-            string="# of Retrospectives", compute="_get_retrospective_count")
+        string="# of Retrospectives", compute="_get_retrospective_count")
 
     @api.multi
     @api.depends('task_line', 'task_line.stage_id', 'task_line.sprint_id',
@@ -121,12 +121,12 @@ class ProjectSprint(models.Model):
                     'task': task.task_seq or '/',
                     'velocity': task.velocity or 0,
                     'per': round(((float(task.velocity) * 100) / float(
-                            velocity)), 2)
+                        velocity)), 2)
                 })
             record.tasks_json = data
 
     tasks_json = fields.Char(
-            string="Tasks", compute="calculate_tasks_json", store=True)
+        string="Tasks", compute="calculate_tasks_json", store=True)
 
     @api.multi
     def get_data(self):
@@ -196,7 +196,7 @@ class ProjectSprint(models.Model):
         if self.start_date and self.end_date and (
                 self.start_date > self.end_date):
             raise ValidationError(
-                    "Start Date can not be greater than End date, Dude!")
+                "Start Date can not be greater than End date, Dude!")
 
     @api.onchange('holiday_type')
     def onchange_holiday_type(self):
@@ -281,7 +281,7 @@ class ProjectSprint(models.Model):
     def onchange_start_date(self):
         if self.start_date:
             end_date = datetime.strptime(
-                    self.start_date, '%Y-%m-%d') + timedelta(days=self.duration)
+                self.start_date, '%Y-%m-%d') + timedelta(days=self.duration)
             self.end_date = end_date
 
     @api.onchange('project_id')
@@ -303,7 +303,7 @@ class ProjectSprint(models.Model):
                 user_list.append(user.user_id.id)
             else:
                 raise ValidationError(
-                        "You can't add the same user twice in Sprint Planning!")
+                    "You can't add the same user twice in Sprint Planning!")
 
     @api.model
     def create(self, vals):
@@ -410,7 +410,7 @@ class Project(models.Model):
             project.sprint_count = count
 
     sprint_count = fields.Integer(
-            compute="_sprint_count", string="No. of sprints related to")
+        compute="_sprint_count", string="No. of sprints related to")
 
     @api.multi
     def show_sprints(self):
@@ -425,14 +425,14 @@ class Project(models.Model):
         }
 
     no_of_hours = fields.Integer(
-            related="resource_calendar_id.no_of_hours",
-            string="Working Hour(s) per Day", store=True)
+        related="resource_calendar_id.no_of_hours",
+        string="Working Hour(s) per Day", store=True)
     no_of_days = fields.Integer(
-            related="resource_calendar_id.no_of_days",
-            string="Working Day(s) per Week", store=True)
+        related="resource_calendar_id.no_of_days",
+        string="Working Day(s) per Week", store=True)
     task_type_ids = fields.Many2many(
-            'project.task.type', 'project_task_type_rel', 'project_id', 'type_id',
-            string='Project(s)')
+        'project.task.type', 'project_task_type_rel', 'project_id', 'type_id',
+        string='Project(s)')
 
 
 class SprintPlanningLine(models.Model):
@@ -447,8 +447,8 @@ class SprintPlanningLine(models.Model):
             project_id = record.sprint_id.project_id
             no_of_hours = project_id and project_id.no_of_hours or 0.0
             calc = (
-                           record.available_per *
-                           record.sprint_id.working_days * no_of_hours) / 100
+                record.available_per *
+                record.sprint_id.working_days * no_of_hours) / 100
             record.productivity_hours = float(calc)
 
     @api.multi
@@ -467,26 +467,26 @@ class SprintPlanningLine(models.Model):
         for record in self:
             if record.sprint_id.holiday_type == 'hours':
                 hours = (
-                        record.sprint_hours - record.sprint_id.holiday_count -
-                        record.off_hours)
+                    record.sprint_hours - record.sprint_id.holiday_count -
+                    record.off_hours)
             else:
                 hours = (
-                        record.sprint_hours - record.sprint_id.holiday_days -
-                        record.off_hours)
+                    record.sprint_hours - record.sprint_id.holiday_days -
+                    record.off_hours)
             record.total_hours = hours
 
     sprint_id = fields.Many2one('project.sprint', string="Sprint")
     user_id = fields.Many2one('res.users', string="User")
     role_id = fields.Many2one(
-            related="user_id.role_id", string="Role", store=True)
+        related="user_id.role_id", string="Role", store=True)
     available_per = fields.Integer(string="Available (%)")
     productivity_hours = fields.Float(
-            compute="calculate_hours", string="Productivity Hour(s)", store=True)
+        compute="calculate_hours", string="Productivity Hour(s)", store=True)
     sprint_hours = fields.Float(
-            compute="calculate_sprint_hours", string="Sprint Hour(s)", store=True)
+        compute="calculate_sprint_hours", string="Sprint Hour(s)", store=True)
     off_hours = fields.Float(string="Off Hour(s)")
     total_hours = fields.Float(
-            compute="calculate_total_hours", string="Total Hour(s)", store=True)
+        compute="calculate_total_hours", string="Total Hour(s)", store=True)
 
 
 class UserRole(models.Model):
@@ -506,13 +506,13 @@ class ProjectTask(models.Model):
     _inherit = "project.task"
 
     sprint_id = fields.Many2one(
-            'project.sprint', string="Sprint", track_visibility="onchange")
+        'project.sprint', string="Sprint", track_visibility="onchange")
     velocity = fields.Integer(string="Velocity", track_visibility="onchange")
     story_id = fields.Many2one(
-            'project.story', string="Story", track_visibility="onchange")
+        'project.story', string="Story", track_visibility="onchange")
     release_planning_id = fields.Many2one(
-            "release.planning", string="Release Planning",
-            track_visibility="onchange")
+        "release.planning", string="Release Planning",
+        track_visibility="onchange")
 
     @api.onchange('story_id')
     def onchange_story(self):
@@ -528,11 +528,11 @@ class ProjectTask(models.Model):
             if self.start_date and start_date and (
                     self.start_date < start_date):
                 raise ValidationError(
-                        "Start date is not valid according to the Sprint.")
+                    "Start date is not valid according to the Sprint.")
 
             if self.end_date and end_date and (self.end_date > end_date):
                 raise ValidationError(
-                        "End date is not valid according to the Sprint.")
+                    "End date is not valid according to the Sprint.")
 
     @api.model
     def create(self, vals):
@@ -565,7 +565,7 @@ class ProjectTask(models.Model):
         if len(self._ids) == 0:
             if self.task_seq == '/':
                 vals['task_seq'] = self.env['ir.sequence'].next_by_code(
-                        'project.task')
+                    'project.task')
             data = []
             for record in self:
                 task_ids = self.search([
@@ -575,7 +575,7 @@ class ProjectTask(models.Model):
                         'task': task.task_seq or '/',
                         'velocity': task.velocity or 0,
                         'per': round(((float(task.velocity) * 100) / float(
-                                record.sprint_id.estimated_velocity)), 2)
+                            record.sprint_id.estimated_velocity)), 2)
                         if record.sprint_id.estimated_velocity > 0 else 0
                     })
 
@@ -643,7 +643,7 @@ class ResourceCalendar(models.Model):
 
             if current_days > 7 or current_days < 1:
                 raise ValidationError(_(
-                        "No. of Days should be in between 1 - 7."))
+                    "No. of Days should be in between 1 - 7."))
 
             for attendance in resource.attendance_ids:
                 day = attendance.dayofweek
@@ -655,12 +655,12 @@ class ResourceCalendar(models.Model):
 
             if current_days and len(res) > current_days:
                 raise ValidationError(_(
-                        "You can not Add Working Hour(s) for more than %s\
-                        different days.") % current_days)
+                    "You can not Add Working Hour(s) for more than %s\
+                    different days.") % current_days)
 
             for day, hours in sorted(list(res.items())):
                 if current_hours and hours > current_hours:
                     raise ValidationError(_(
-                            "Invalid hours for %s!\n\nWorking hours per day should\
-                            not be greater than %s.") % (
-                                              week_days[int(day)], current_hours))
+                        "Invalid hours for %s!\n\nWorking hours per day should\
+                        not be greater than %s.") % (
+                            week_days[int(day)], current_hours))
