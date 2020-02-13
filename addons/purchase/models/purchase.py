@@ -479,13 +479,20 @@ class PurchaseOrder(models.Model):
             # Do not add a contact as a supplier
             partner = self.partner_id if not self.partner_id.parent_id else self.partner_id.parent_id
             if partner not in line.product_id.seller_ids.mapped('name') and len(line.product_id.seller_ids) <= 10:
+                # Convert the price in the right currency.
                 currency = partner.property_purchase_currency_id or self.env.user.company_id.currency_id
+                price = self.currency_id.compute(line.price_unit, currency, round=False)
+                # Compute the price for the template's UoM, because the supplier's UoM is related to that UoM.
+                if line.product_id.product_tmpl_id.uom_po_id != line.product_uom:
+                    default_uom = line.product_id.product_tmpl_id.uom_po_id
+                    price = line.product_uom._compute_price(price, default_uom)
+
                 supplierinfo = {
                     'name': partner.id,
                     'sequence': max(line.product_id.seller_ids.mapped('sequence')) + 1 if line.product_id.seller_ids else 1,
                     'product_uom': line.product_uom.id,
                     'min_qty': 0.0,
-                    'price': self.currency_id.compute(line.price_unit, currency, round=False),
+                    'price': price,
                     'currency_id': currency.id,
                     'delay': 0,
                 }
@@ -621,6 +628,12 @@ class PurchaseOrderLine(models.Model):
                     if move.location_dest_id.usage == "supplier":
                         if move.to_refund:
                             total -= move.product_uom._compute_quantity(move.product_uom_qty, line.product_uom)
+                    elif move.origin_returned_move_id._is_dropshipped() and not move._is_dropshipped_returned():
+                        # Edge case: the dropship is returned to the stock, no to the supplier.
+                        # In this case, the received quantity on the PO is set although we didn't
+                        # receive the product physically in our stock. To avoid counting the
+                        # quantity twice, we do nothing.
+                        pass
                     else:
                         total += move.product_uom._compute_quantity(move.product_uom_qty, line.product_uom)
             line.qty_received = total
@@ -755,7 +768,7 @@ class PurchaseOrderLine(models.Model):
         for move in self.move_ids.filtered(lambda x: x.state != 'cancel' and not x.location_dest_id.usage == "supplier"):
             qty += move.product_uom._compute_quantity(move.product_uom_qty, self.product_uom, rounding_method='HALF-UP')
         template = {
-            'name': self.name or '',
+            'name': (self.name or '')[:2000],
             'product_id': self.product_id.id,
             'product_uom': self.product_uom.id,
             'date': self.order_id.date_approve,
@@ -917,7 +930,7 @@ class PurchaseOrderLine(models.Model):
             return
 
         seller_min_qty = self.product_id.seller_ids\
-            .filtered(lambda r: r.name == self.order_id.partner_id)\
+            .filtered(lambda r: r.name == self.order_id.partner_id and (not r.product_id or r.product_id == self.product_id))\
             .sorted(key=lambda r: r.min_qty)
         if seller_min_qty:
             self.product_qty = seller_min_qty[0].min_qty or 1.0
@@ -1014,11 +1027,15 @@ class ProcurementRule(models.Model):
         if price_unit and seller and line.order_id.currency_id and seller.currency_id != line.order_id.currency_id:
             price_unit = seller.currency_id.compute(price_unit, line.order_id.currency_id)
 
-        return {
+        res = {
             'product_qty': line.product_qty + procurement_uom_po_qty,
             'price_unit': price_unit,
             'move_dest_ids': [(4, x.id) for x in values.get('move_dest_ids', [])]
         }
+        orderpoint_id = values.get('orderpoint_id')
+        if orderpoint_id:
+            res['orderpoint_id'] = orderpoint_id.id
+        return res
 
     @api.multi
     def _prepare_purchase_order_line(self, product_id, product_qty, product_uom, values, po, supplier):
