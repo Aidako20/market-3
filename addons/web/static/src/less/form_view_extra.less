@@ -1,4 +1,4 @@
-@sheet-max-width: 1024px;
+@sheet-max-width: 860px;
 @sheet-min-width: 650px;
 @sheet-padding: 16px;
 
@@ -74,6 +74,9 @@
 
                 > .o_stat_value, > .o_stat_text {
                     .o-text-overflow(block);
+                }
+
+                .o_stat_value {
                     font-weight: 700;
                     color: @flectra-brand-primary;
                 }
@@ -134,7 +137,7 @@
             border-right: 1px solid #ddd;
         }
         .o_td_label + td {
-            padding: 2px 36px 2px 8px;
+            padding: 0px 36px 0px 8px;
         }
         .o_field_widget.o_text_overflow {
             width: 1px!important; // hack to make the table layout believe it is a small element (so that the table does not grow too much) ...
@@ -178,6 +181,9 @@
     .o_form_view {
         .o_form_sheet_bg, .o_form_sheet {
             border: none;
+        }
+        .o_form_sheet_bg > .o_form_sheet {
+            min-height: 0;
         }
     }
 }
