@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<flectra>
+	<flectra>
 
         <!-- Graph report -->
         <record id="view_evaluation_report_graph" model="ir.ui.view">
