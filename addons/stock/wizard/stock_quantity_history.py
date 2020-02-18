@@ -33,5 +33,4 @@ class StockQuantityHistory(models.TransientModel):
             return action
         else:
             self.env['stock.quant']._merge_quants()
-            self.env['stock.quant']._unlink_zero_quants()
             return self.env.ref('stock.quantsact').read()[0]

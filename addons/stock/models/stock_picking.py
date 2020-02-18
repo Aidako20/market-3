@@ -303,7 +303,7 @@ class Picking(models.Model):
                                'initial demand. When the picking is done this allows '
                                'changing the done quantities.')
     # Used to search on pickings
-    product_id = fields.Many2one('product.product', 'Product', related='move_lines.product_id', readonly=True)
+    product_id = fields.Many2one('product.product', 'Product', related='move_lines.product_id')
     show_operations = fields.Boolean(compute='_compute_show_operations')
     show_lots_text = fields.Boolean(compute='_compute_show_lots_text')
     has_tracking = fields.Boolean(compute='_compute_has_tracking')
@@ -913,13 +913,4 @@ class Picking(models.Model):
         packages = self.move_line_ids.mapped('result_package_id')
         action['domain'] = [('id', 'in', packages.ids)]
         action['context'] = {'picking_id': self.id}
-        return action
-
-    def action_picking_move_tree(self):
-        action = self.env.ref('stock.stock_move_action').read()[0]
-        action['views'] = [
-            (self.env.ref('stock.view_picking_move_tree').id, 'tree'),
-        ]
-        action['context'] = self.env.context
-        action['domain'] = [('picking_id', 'in', self.ids)]
         return action

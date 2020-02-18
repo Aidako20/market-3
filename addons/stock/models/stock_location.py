@@ -235,7 +235,7 @@ class Route(models.Model):
     @api.onchange('warehouse_selectable')
     def _onchange_warehouse_selectable(self):
         if not self.warehouse_selectable:
-            self.warehouse_ids = [(5, 0, 0)]
+            self.warehouse_ids = []
 
     def write(self, values):
         '''when a route is deactivated, deactivate also its pull and push rules'''
