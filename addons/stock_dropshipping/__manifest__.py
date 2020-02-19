@@ -23,7 +23,7 @@ internal transfer document is needed.
 """,
     'website': 'https://flectrahq.com/inventory',
     'depends': ['purchase', 'sale_stock'],
-    'data': ['data/stock_data.xml'],
+    'data': ['data/stock_data.xml', 'views/sale_order_views.xml'],
     'test': [
         '../account/test/account_minimal_test.xml',
         '../stock_account/test/stock_valuation_account.xml',
