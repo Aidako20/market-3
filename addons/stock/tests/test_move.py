@@ -1858,7 +1858,7 @@ class StockMove(TransactionCase):
         """ Test that _free_reservation work when quantity is only available on
         reserved move lines.
         """
-        self.env['stock.quant']._update_available_quantity(self.product1, self.stock_location, 10.0)
+        self.env['stock.quant']._update_available_quantity(self.product1, self.stock_location, 20.0)
         move1 = self.env['stock.move'].create({
             'name': 'test_use_unreserved_move_line_1_1',
             'location_id': self.stock_location.id,
@@ -1890,10 +1890,10 @@ class StockMove(TransactionCase):
         })
         move3._action_confirm()
         move3._action_assign()
-        # move3._action_done()
-        # self.assertEqual(move3.state, 'done')
+        move3._action_done()
+        self.assertEqual(move3.state, 'done')
         quant = self.env['stock.quant']._gather(self.product1, self.stock_location)
-        self.assertEqual(quant.quantity, 10.0)
+        self.assertEqual(quant.quantity, 19.0)
         self.assertEqual(quant.reserved_quantity, 10.0)
 
     def test_use_unreserved_move_line_1(self):
@@ -3078,14 +3078,17 @@ class StockMove(TransactionCase):
     #         'name': 'lot1',
     #         'product_id': self.product3.id,
     #     })
-    #     self.env['stock.quant']._update_available_quantity(self.product3, self.stock_location, 5.0, lot_id=lot1)
+    #
+    #     self.env['stock.quant']._update_available_quantity(
+    #         self.product3, self.stock_location, 50.0, lot_id=lot1)
+    #
+    #     # move from shelf1
     #     picking = self.env['stock.picking'].create({
     #         'location_id': self.stock_location.id,
     #         'location_dest_id': self.customer_location.id,
     #         'partner_id': partner.id,
     #         'picking_type_id': self.env.ref('stock.picking_type_out').id,
     #     })
-    #     # move from shelf1
     #     self.env['stock.move'].create({
     #         'name': 'test_immediate_validate_4',
     #         'location_id': self.stock_location.id,

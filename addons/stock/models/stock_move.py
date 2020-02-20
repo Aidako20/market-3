@@ -778,10 +778,6 @@ class StockMove(models.Model):
             'location_dest_id': self.location_dest_id.id,
         }
 
-    def _should_be_assigned(self):
-        self.ensure_one()
-        return bool(not self.picking_id and self.picking_type_id)
-
     def _action_confirm(self, merge=True, merge_into=False):
         """ Confirms stock move or put it in waiting if it's linked to another move.
         :param: merge: According to this boolean, a newly confirmed move will be merged
@@ -801,7 +797,7 @@ class StockMove(models.Model):
                     move_create_proc |= move
                 else:
                     move_to_confirm |= move
-            if move._should_be_assigned():
+            if not move.picking_id and move.picking_type_id:
                 key = (move.group_id.id, move.location_id.id, move.location_dest_id.id)
                 if key not in to_assign:
                     to_assign[key] = self.env['stock.move']
