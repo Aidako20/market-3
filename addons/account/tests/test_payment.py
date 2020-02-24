@@ -31,6 +31,8 @@ class TestPayment(AccountingTestCase):
         self.bank_journal_euro = self.env['account.journal'].create({'name': 'Bank', 'type': 'bank', 'code': 'BNK67'})
         self.account_eur = self.bank_journal_euro.default_debit_account_id
 
+        self.cash_journal_euro = self.env['account.journal'].create({'name': 'Cash', 'type': 'cash', 'code': 'CASH'})
+
         self.bank_journal_usd = self.env['account.journal'].create({'name': 'Bank US', 'type': 'bank', 'code': 'BNK68', 'currency_id': self.currency_usd_id})
         self.account_usd = self.bank_journal_usd.default_debit_account_id
 
@@ -38,14 +40,14 @@ class TestPayment(AccountingTestCase):
         self.diff_income_account = self.env['res.users'].browse(self.env.uid).company_id.income_currency_exchange_account_id
         self.diff_expense_account = self.env['res.users'].browse(self.env.uid).company_id.expense_currency_exchange_account_id
 
-    def create_invoice(self, amount=100, type='out_invoice', currency_id=None, partner=None):
+    def create_invoice(self, amount=100, type='out_invoice', currency_id=None, partner=None, account_id=None):
         """ Returns an open invoice """
         invoice = self.invoice_model.create({
-            'partner_id': partner,
+            'partner_id': partner or self.partner_agrolait.id,
             'reference_type': 'none',
-            'currency_id': currency_id,
+            'currency_id': currency_id or self.currency_eur_id,
             'name': type,
-            'account_id': self.account_receivable.id,
+            'account_id': account_id or self.account_receivable.id,
             'type': type,
             'date_invoice': time.strftime('%Y') + '-06-26',
         })
@@ -96,9 +98,9 @@ class TestPayment(AccountingTestCase):
             self.assertEqual(len(aml_rec), 1, "Expected a move line with values : %s" % str(aml_dict))
             if aml_dict.get('currency_diff'):
                 if aml_rec.credit:
-                    currency_diff_move = aml_rec.matched_debit_ids.full_reconcile_id.exchange_move_id
+                    currency_diff_move = aml_rec.matched_debit_ids[0].full_reconcile_id.exchange_move_id
                 else:
-                    currency_diff_move = aml_rec.matched_credit_ids.full_reconcile_id.exchange_move_id
+                    currency_diff_move = aml_rec.matched_credit_ids[0].full_reconcile_id.exchange_move_id
                 for currency_diff_line in currency_diff_move.line_ids:
                     if aml_dict.get('currency_diff') > 0:
                         if currency_diff_line.account_id.id == aml_rec.account_id.id:
@@ -137,6 +139,7 @@ class TestPayment(AccountingTestCase):
             {'account_id': self.account_eur.id, 'debit': 300.0, 'credit': 0.0, 'amount_currency': 0, 'currency_id': False},
             {'account_id': inv_1.account_id.id, 'debit': 0.0, 'credit': 300.0, 'amount_currency': 00, 'currency_id': False},
         ])
+        self.assertTrue(payment.move_line_ids.filtered(lambda l: l.account_id == inv_1.account_id)[0].full_reconcile_id)
 
         liquidity_aml = payment.move_line_ids.filtered(lambda r: r.account_id == self.account_eur)
         bank_statement = self.reconcile(liquidity_aml, 200, 0, False)

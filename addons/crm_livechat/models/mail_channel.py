@@ -33,5 +33,5 @@ class MailChannel(models.Model):
                 'referred': partner.name
             })
             lead._onchange_partner_id()
-            msg = _('Created a new lead: <a href="#" data-oe-id="%s" data-oe-model="crm.lead">%s</a>') % (lead.id, lead.name)
+            msg = _('Created a new lead: <a href="#" data-oe-id="%s" data-oe-model="crm.lead">%s</a>') % (lead.id, html_escape(lead.name))
         self._send_transient_message(partner, msg)

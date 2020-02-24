@@ -64,7 +64,7 @@
       luhn: true
     }, {
       type: 'mastercard',
-      pattern: /^5[1-5]/,
+      pattern: /^(5[1-5]|2[2-7])/,
       format: defaultFormat,
       length: [16],
       cvcLength: [3],
