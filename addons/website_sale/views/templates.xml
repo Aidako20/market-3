@@ -100,11 +100,8 @@
         <form action="/shop/cart/update" method="post">
             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
             <div itemscope="itemscope" itemtype="http://schema.org/Product">
-                <div class="ribbon-wrap">
-                    <div class="ribbon"
-                        t-attf-style="background-color:#{product.ribbon_id.ribbon_color_back or product.ribbon_id.ribbon_color_back};color:#{product.ribbon_id.ribbon_color_text or product.ribbon_id.ribbon_color_text};">
-                        <span t-esc="product.ribbon_id.name"></span>
-                    </div>
+                <div class="ribbon-wrapper">
+                    <div class="ribbon btn btn-danger">Sale</div>
                 </div>
                 <div class="oe_product_image">
                     <a itemprop="url" t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']&gt;1 else None))">
@@ -209,14 +206,27 @@
                     <div class="row">
                         <div class="hidden" id="products_grid_before"></div>
                         <div class="col-md-12" id="products_grid">
-                            <t t-foreach="products" t-as="product">
-                                <div id="grid_list"
-                                    class="col-md-4 oe_product oe_grid oe_product_cart oe-height-4"
-                                    t-att-data-publish="product.website_published and website in product.website_ids and 'on' or 'off'">
-                                    <t t-call="website_sale.products_item">
-                                    </t>
-                                </div>
-                            </t>
+                            <table width="100%">
+                                <tbody>
+                                    <tr t-ignore="true">
+                                        <td t-foreach="range(0,rows)" t-as="row" t-attf-width="#{100/rows}%"></td>
+                                    </tr>
+                                    <tr t-foreach="bins" t-as="tr_product">
+                                        <t t-foreach="tr_product" t-as="td_product">
+                                            <t t-if="td_product">
+                                                <t t-set="product" t-value="td_product['product']" />
+                                                <td t-att-colspan="td_product['x'] != 1 and td_product['x']" t-att-rowspan="td_product['y'] != 1 and td_product['y']" t-attf-class="oe_product oe_grid oe-height-#{td_product['y']*2} #{ td_product['class'] }">
+                                                    <div class="oe_product_cart" t-att-data-publish="product.website_published and 'on' or 'off'">
+                                                        <t t-set="product_image_big" t-value="td_product['x']+td_product['y'] &gt; 2" />
+                                                        <t t-call="website_sale.products_item" />
+                                                    </div>
+                                                </td>
+                                            </t>
+                                            <td t-if="not td_product" class="oe-height-2" />
+                                        </t>
+                                    </tr>
+                                </tbody>
+                            </table>
                             <t t-if="not bins">
                                 <div class="text-center text-muted oe_product">
                                     <h3 class="css_editable_display">No product defined.</h3>
@@ -301,19 +311,16 @@
 
     <template id="sort" inherit_id="website_sale.products" active="True" customize_show="True" name="Show Sort by">
         <xpath expr="//div[hasclass('products_pager')]/div/t[@t-call][last()]" position="after">
-            <t t-set="new_arrivals_label">New Arrivals</t>
-            <t t-set="list_price_desc_label">Price</t>
-            <t t-set="list_price_asc_label">Price</t>
-            <t t-set="name_asc_label">Name</t>
-            <t t-set="name_desc_label">Name</t>
-            <t t-set="website_sale_sortable"
-               t-value="[
-               (new_arrivals_label + ' &lt;i class=\'fa fa-paper-plane\' aria-hidden=\'true\'&gt;&lt;/i&gt;', 'id desc'),
-               (list_price_desc_label + ' &lt;i class=\'fa fa-arrow-up\' aria-hidden=\'true\'&gt;&lt;/i&gt;', 'list_price desc'),
-               (list_price_asc_label + ' &lt;i class=\'fa fa-arrow-down\' aria-hidden=\'true\'&gt;&lt;/i&gt;', 'list_price asc'),
-               (name_asc_label + ' &lt;i class=\'fa fa-sort-alpha-asc\' aria-hidden=\'true\'&gt;&lt;/i&gt;', 'name asc'),
-               (name_asc_label + ' &lt;i class=\'fa fa-sort-alpha-desc\' aria-hidden=\'true\'&gt;&lt;/i&gt;', 'name desc'),
-            ]" />
+            <t t-set="list_price_desc_label">Catalog price: High to Low</t>
+            <t t-set="list_price_asc_label">Catalog price: Low to High</t>
+            <t t-set="name_asc_label">Name - A to Z</t>
+            <t t-set="name_desc_label">Name - Z to A</t>
+            <t t-set="website_sale_sortable" t-value="[
+                (list_price_desc_label, 'list_price desc'),
+                (list_price_asc_label, 'list_price asc'),
+                (name_asc_label, 'name asc'),
+                (name_desc_label, 'name desc')
+            ]"/>
             <t t-set="website_sale_sortable_current" t-value="[sort for sort in website_sale_sortable if sort[1]==request.params.get('order', '')]"/>
             <div class="dropdown btn-group dropdown_sorty_by">
                 <a href="#" class="dropdown-toggle btn btn-default" data-toggle="dropdown">
@@ -327,7 +334,7 @@
                 </a>
                 <ul class="dropdown-menu" role="menu">
                     <li t-foreach="website_sale_sortable" t-as="sortby">
-                        <a t-att-href="keep('/shop', order=sortby[1])">
+                        <a rel="noindex,nofollow" t-att-href="keep('/shop', order=sortby[1])">
                             <span t-raw="sortby[0]"/>
                         </a>
                     </li>
@@ -361,14 +368,8 @@
 
     <!-- Add to cart button-->
     <template id="categories_recursive" name="Category list">
-        <li t-att-class="'active' if c.id == int(category or 0) else None" t-if="website in c.website_ids or not c.website_ids">
-            <t t-set="is_publisher" t-value="request.env['res.users'].has_group('website.group_website_publisher')" />
-            <t t-if="not is_publisher">
-                <a t-if="c.id in categories_with_child" t-att-href="keep('/shop/category/' + slug(c), category=0)" t-field="c.name"></a>
-            </t>
-            <t t-else="">
-                <a t-att-href="keep('/shop/category/' + slug(c), category=0)" t-field="c.name"></a>
-            </t>
+        <li t-att-class="'active' if c.id == int(category or 0) else None">
+            <a t-att-href="keep('/shop/category/' + slug(c), category=0)" t-field="c.name"></a>
             <ul t-if="c.child_id" class="nav nav-pills nav-stacked nav-hierarchy">
                 <t t-foreach="c.child_id" t-as="c">
                     <t t-call="website_sale.categories_recursive" />
@@ -379,7 +380,7 @@
 
     <template id="products_categories" inherit_id="website_sale.products" active="False" customize_show="True" name="eCommerce Categories">
         <xpath expr="//div[@id='products_grid_before']" position="inside">
-            <ul class="nav nav-pills nav-stacked mt32" id="filter-cm">
+            <ul class="nav nav-pills nav-stacked mt16">
                 <li t-att-class=" '' if category else 'active' ">
                     <a t-att-href="keep('/shop',category=0)" class="o_not_editable">All Products</a>
                 </li>
@@ -429,14 +430,13 @@
     <template id="products_attributes" inherit_id="website_sale.products" active="False" customize_show="True" name="Product Attribute's Filters">
         <xpath expr="//div[@id='products_grid_before']" position="inside">
             <form class="js_attributes" method="get">
+                <input t-if="category" type="hidden" name="category" t-att-value="category.id" />
                 <input type="hidden" name="search" t-att-value="search" />
-                <ul class="nav nav-pills nav-stacked">
+                <ul class="nav nav-pills nav-stacked mt16">
                     <t t-foreach="attributes" t-as="a">
-                        <li t-if="a.value_ids and len(a.value_ids) &gt; 1" class="mt32 attr-list">
+                        <li t-if="a.value_ids and len(a.value_ids) &gt; 1">
                             <div>
-                                 <h4 class="title-block">
-                                     <span t-field="a.name"/>
-                                 </h4>
+                                <strong t-field="a.name" />
                             </div>
                             <t t-if="a.type == 'select'">
                                 <select class="form-control" name="attrib">
@@ -447,26 +447,23 @@
                                 </select>
                             </t>
                             <t t-if="a.type == 'radio'">
-                                <ul class="nav nav-pills nav-stacked" id="radio-option">
+                                <ul class="nav nav-pills nav-stacked">
                                     <t t-foreach="a.value_ids" t-as="v">
                                         <li t-att-class="'active' if v.id in attrib_set else None">
-                                            <div>
-                                                <input type="checkbox" name="attrib" t-att-value="'%s-%s' % (a.id,v.id)"
-                                                       t-att-checked="'checked' if v.id in attrib_set else None"/>
-                                                <label style="font-weight: normal" t-field="v.name"/>
-                                            </div>
+                                            <label style="margin: 0 20px;">
+                                                <input type="checkbox" name="attrib" t-att-value="'%s-%s' % (a.id,v.id)" t-att-checked="'checked' if v.id in attrib_set else None" />
+                                                <span style="font-weight: normal" t-field="v.name" />
+                                            </label>
                                         </li>
                                     </t>
                                 </ul>
                             </t>
                             <t t-if="a.type == 'color'">
-                                <ul class="nav nav-pills nav-stacked" id="color-option">
-                                    <t t-foreach="a.value_ids" t-as="v">
-                                        <label t-attf-style="background-color:#{v.html_color or v.name}" t-attf-class="css_attribute_color #{'active' if v.id in attrib_set else ''}">
-                                            <input type="checkbox" name="attrib" t-att-value="'%s-%s' % (a.id,v.id)" t-att-checked="'checked' if v.id in attrib_set else None" t-att-title="v.name"/>
-                                        </label>
-                                    </t>
-                                </ul>
+                                <t t-foreach="a.value_ids" t-as="v">
+                                    <label t-attf-style="background-color:#{v.html_color or v.name}" t-attf-class="css_attribute_color #{'active' if v.id in attrib_set else ''}">
+                                        <input type="checkbox" name="attrib" t-att-value="'%s-%s' % (a.id,v.id)" t-att-checked="'checked' if v.id in attrib_set else None" t-att-title="v.name" />
+                                    </label>
+                                </t>
                             </t>
                         </li>
                     </t>
@@ -481,14 +478,15 @@
         </xpath>
     </template>
 
-    <template id="products_list_view" inherit_id="website_sale.products" name="List View" active="False">
-        <xpath expr="//div[@id='products_grid']/t/div[@id='grid_list']" position="replace">
-            <div class="oe_product oe_list oe_product_cart"
-                t-att-data-publish="product.website_published and website in product.website_ids and 'on' or 'off'">
-                <t t-call="website_sale.products_item">
-                    <t t-set="show_publish" t-value="True" />
-                </t>
-            </div>
+    <template id="products_list_view" inherit_id="website_sale.products" active="False" customize_show="True" name="List View">
+        <xpath expr="//div[@id='products_grid']//table" position="replace">
+            <t t-foreach="products" t-as="product">
+                <div class="oe_product oe_list oe_product_cart" t-att-data-publish="product.website_published and 'on' or 'off'">
+                    <t t-call="website_sale.products_item">
+                        <t t-set="show_publish" t-value="True" />
+                    </t>
+                </div>
+            </t>
         </xpath>
     </template>
 
@@ -653,6 +651,7 @@
                         </div>
                     </div>
                 </section>
+                <div itemprop="description" t-field="product.website_description" class="oe_structure mt16" id="product_full_description" />
                 <t t-set="head">
                     <!-- Facebook and linkedin sharing data -->
                     <meta property="og:type" content="website" />
@@ -712,19 +711,19 @@
 
     <!-- Product options: OpenChatter -->
     <template id="product_comment" inherit_id="website_sale.product" active="False" customize_show="True" name="Discussion and Rating">
-        <xpath expr="//li[@id='li-full-desc']" position="after">
-            <li id="li-comment">
-                <a href="#full-comment" data-toggle="tab">
-                    <strong>Discussion and Rating</strong>
-                </a>
-            </li>
-        </xpath>
-        <xpath expr="//div[@id='full-desc']" position="after">
-            <div class="tab-pane fade" id="full-comment">
-                <t t-call="portal.message_thread">
-                    <t t-set="object" t-value="product"/>
-                    <t t-set="display_rating" t-value="True"/>
-                </t>
+        <xpath expr="//div[@t-field='product.website_description']" position="after">
+            <div class="o_shop_discussion_rating">
+                <section class="container mt16 mb16">
+                    <hr/>
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            <t t-call="portal.message_thread">
+                                <t t-set="object" t-value="product"/>
+                                <t t-set="display_rating" t-value="True"/>
+                            </t>
+                        </div>
+                    </div>
+                </section>
             </div>
         </xpath>
     </template>
@@ -895,7 +894,7 @@
                                     <t t-set="step" t-value="30"/>
                                 </t>
                             </div>
-                            <div class="row mb32">
+                            <div class="row">
                                 <div class='col-md-12 o_website_sale_rightfit'>
                                     <h2 class="mb8 mt8">Extra Step</h2>
                                     <form action="/website_form/" method="post" class="s_website_form form-horizontal container-fluid" enctype="multipart/form-data" data-force_action="shop.sale.order" data-model_name="sale.order" data-success_page="/shop/payment">
@@ -1049,7 +1048,7 @@
                                     <t t-set="step" t-value="10" />
                                 </t>
                             </div>
-                            <div class="row mb32">
+                            <div class="row">
                                 <div class="col-md-12 o_website_sale_rightfit">
                                     <h2 class="mb8 mt8">Shopping Cart</h2>
                                     <div t-if="abandoned_proceed or access_token" class="mt8 mb8 alert alert-info"> <!-- abandoned cart choices -->
@@ -1193,7 +1192,7 @@
                                     <t t-set="step" t-value="20" />
                                 </t>
                             </div>
-                            <div class="row mb32">
+                            <div class="row">
                                 <div class="col-md-12">
                                     <h2 class="page-header mt8">Billing Address</h2>
                                 </div>
@@ -1260,7 +1259,7 @@
                 </t>
                 <input type='submit'/>
             </form>
-            <a t-if="not actual_partner or (ship.id in actual_partner.ids + actual_partner.child_ids.ids)" class='btn btn-link pull-right fa fa-edit js_edit_address no-decoration' title="Edit this address"></a>
+            <a t-if="not actual_partner or (ship.id in actual_partner.child_ids.ids)" class='btn btn-link pull-right fa fa-edit js_edit_address no-decoration' title="Edit this address"></a>
             <div t-att-class="'panel panel-default %s' % (selected and 'border_primary' or 'js_change_shipping')">
                 <div class='panel-body' style='min-height: 130px;'>
                     <t t-esc="contact" t-options="dict(widget='contact', fields=['name', 'address'], no_marker=True)"/>
@@ -1292,7 +1291,7 @@
                             <t t-set="step" t-value="20" />
                         </t>
                     </div>
-                            <div class="row mb32">
+                            <div class="row">
                                 <t t-if="mode == ('new', 'billing')">
                                     <h2 class="page-header mt8 ml16">Your Address
                                         <small> or </small>
@@ -1434,7 +1433,7 @@
                                 <t t-set="step" t-value="40" />
                             </t>
                          </div>
-                         <div class="row mb32">
+                         <div class="row">
                             <div class='col-md-12 o_website_sale_rightfit'>
                                 <h2 class="mb8 mt8">Confirm Order</h2>
                                 <table class="table table-striped table-condensed" id="cart_products" t-if="website_sale_order and website_sale_order.website_order_line">
@@ -1553,9 +1552,9 @@
                             </div>
                         </div>
                     </div>
-                        <div class="row mb32">
+                        <div class="row">
                             <div class="col-md-9">
-                                <div class="oe_cart mb32">
+                                <div class="oe_cart">
                                     <h3 class="mt32 text-left">
                                         <strong>Order Details:</strong>
                                     </h3>

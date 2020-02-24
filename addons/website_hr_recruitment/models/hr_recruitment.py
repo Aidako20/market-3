@@ -51,7 +51,7 @@ class Job(models.Model):
         default_website_id = self.env.ref('website.default_website')
         return [default_website_id.id] if default_website_id else None
 
-    website_description = fields.Html('Website description', translate=html_translate, sanitize_attributes=False, default=_get_default_website_description)
+    website_description = fields.Html('Website description', translate=html_translate, sanitize_attributes=False, default=_get_default_website_description, prefetch=False)
     website_ids = fields.Many2many('website', 'website_hr_job_pub_rel',
                                    'website_id', 'job_id',
                                    default=_default_website,
