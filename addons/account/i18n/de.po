@@ -705,7 +705,7 @@ msgstr ""
 #. module: account
 #: model:ir.ui.view,arch_db:account.report_journal
 #: model:ir.ui.view,arch_db:account.report_partnerledger
-msgid "<strong>Company:</strong>"
+msgid "<strong>Unternehmen:</strong>"
 msgstr "<strong>Unternehmen:</strong>"
 
 #. module: account
@@ -1208,7 +1208,7 @@ msgstr ""
 #. module: account
 #: model:ir.actions.act_window,help:account.action_account_journal_form
 msgid ""
-"A typical company may use one journal per payment method (cash,\n"
+"A typical  Unternehmen may use one journal per payment method (cash,\n"
 "                bank accounts, checks), one purchase journal, one sales journal\n"
 "                and one for miscellaneous information."
 msgstr ""
@@ -1933,7 +1933,7 @@ msgstr "Ermögliche Scheckdruck und -hinterlegung"
 
 #. module: account
 #: model:res.groups,name:account.group_cash_rounding
-msgid "Allow the cash rounding management"
+msgid "Allow the Rundungsmethoden management"
 msgstr ""
 
 #. module: account
@@ -1991,7 +1991,7 @@ msgstr "Fälliger Betrag"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_invoice_residual_company_signed
-msgid "Amount Due in Company Currency"
+msgid "Amount Due in  Unternehmen Currency"
 msgstr "fälliger Betrag in Unternehmenswährung"
 
 #. module: account
@@ -2053,11 +2053,11 @@ msgstr "Eine Steuerzuordnung muss eindeutig sein."
 #. module: account
 #: model:ir.actions.act_window,help:account.action_account_form
 msgid ""
-"An account is part of a ledger allowing your company\n"
+"An account is part of a ledger allowing your  Unternehmen\n"
 "                to register all kinds of debit and credit transactions.\n"
 "                Companies present their annual accounts in two main parts: the\n"
 "                balance sheet and the income statement (profit and loss\n"
-"                account). The annual accounts of a company are required by law\n"
+"                account). The annual accounts of a  Unternehmen are required by law\n"
 "                to disclose a certain amount of information."
 msgstr ""
 "Ein Konto ist ein Teil der Finanzbücher, der es einem Unternehmen möglich macht, alle Arten der Soll- und Hebenstellungen festzuhalten.\n"
@@ -2391,7 +2391,7 @@ msgstr "Kontoname"
 #. module: account
 #: model:ir.model.fields,help:account.field_account_invoice_partner_bank_id
 msgid ""
-"Bank Account Number to which the invoice will be paid. A Company bank "
+"Bank Account Number to which the invoice will be paid. A  Unternehmen bank "
 "account if this is a Customer Invoice or Vendor Credit Note, otherwise a "
 "Partner bank account number."
 msgstr "Kontonummer, auf die die Rechnung gezahlt wird."
@@ -2557,7 +2557,7 @@ msgstr ""
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_journal_belongs_to_company
-msgid "Belong to the user's current company"
+msgid "Belong to the user's current  Unternehmen"
 msgstr "Zum aktuellen Unternehmen des Benutzer gehörend"
 
 #. module: account
@@ -2762,7 +2762,7 @@ msgstr "Sie können keinen unausgeglichenen Buchungssatz erstellen."
 #: code:addons/account/models/account_invoice.py:635
 #, python-format
 msgid ""
-"Cannot find a chart of accounts for this company, You should configure it. \n"
+"Cannot find a chart of accounts for this  Unternehmen, You should configure it. \n"
 "Please go to Account Configuration."
 msgstr ""
 "Ein Kontenplan für dieses Unternehmen kann nicht gefunden werden. Sie "
@@ -2843,7 +2843,7 @@ msgstr ""
 #: model:ir.actions.act_window,name:account.rounding_list_action
 #: model:ir.ui.menu,name:account.menu_action_rounding_form_view
 #: model:ir.ui.view,arch_db:account.res_config_settings_view_form
-msgid "Cash Roundings"
+msgid "Rundungsmethoden"
 msgstr ""
 
 #. module: account
@@ -3246,7 +3246,7 @@ msgstr "Unternehmen mit Bezug zu diesem Partner"
 #: model:ir.model.fields,field_description:account.field_account_payment_company_id
 #: model:ir.model.fields,field_description:account.field_account_payment_term_company_id
 #: model:ir.model.fields,field_description:account.field_account_print_journal_company_id
-#: model:ir.model.fields,field_description:account.field_account_reconcile_model_company_id
+#: model:ir.model.fields,field_description:account.field_account_reconcile_model_ Unternehmen_id
 #: model:ir.model.fields,field_description:account.field_account_register_payments_company_id
 #: model:ir.model.fields,field_description:account.field_account_report_general_ledger_company_id
 #: model:ir.model.fields,field_description:account.field_account_report_partner_ledger_company_id
@@ -3258,7 +3258,7 @@ msgstr "Unternehmen mit Bezug zu diesem Partner"
 #: model:ir.ui.view,arch_db:account.view_account_invoice_report_search
 #: model:ir.ui.view,arch_db:account.view_account_payment_search
 #: model:ir.ui.view,arch_db:account.view_account_tax_search
-msgid "Company"
+msgid "Unternehmen"
 msgstr "Unternehmen"
 
 #. module: account
@@ -3266,7 +3266,7 @@ msgstr "Unternehmen"
 #: model:ir.model.fields,field_description:account.field_account_invoice_line_company_currency_id
 #: model:ir.model.fields,field_description:account.field_account_move_line_company_currency_id
 #: model:ir.model.fields,field_description:account.field_tax_adjustments_wizard_company_currency_id
-msgid "Company Currency"
+msgid "Unternehmen Currency"
 msgstr "Betriebl. Währung"
 
 #. module: account
@@ -3274,17 +3274,17 @@ msgstr "Betriebl. Währung"
 #: code:addons/account/models/company.py:147
 #: code:addons/account/static/src/xml/account_dashboard_setup_bar.xml:25
 #, python-format
-msgid "Company Data"
+msgid "Unternehmen Data"
 msgstr ""
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_res_company_account_setup_company_data_done
-msgid "Company Setup Marked As Done"
+msgid "Unternehmen Setup Marked As Done"
 msgstr ""
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_res_config_settings_has_chart_of_accounts
-msgid "Company has a chart of accounts"
+msgid "Unternehmen has a chart of accounts"
 msgstr "Das Unternehmen hat einen Kontenplan"
 
 #. module: account
@@ -3295,7 +3295,7 @@ msgstr "Das Unternehmen hat einen Kontenplan"
 #: model:ir.model.fields,help:account.field_account_move_company_id
 #: model:ir.model.fields,help:account.field_account_payment_company_id
 #: model:ir.model.fields,help:account.field_account_register_payments_company_id
-msgid "Company related to this journal"
+msgid "Unternehmen related to this journal"
 msgstr "Unternehmen für dieses Journal"
 
 #. module: account
@@ -3515,7 +3515,7 @@ msgstr "Ländergruppe"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_invoice_report_country_id
-msgid "Country of the Partner Company"
+msgid "Country of the Partner Unternehmen"
 msgstr "Land des Geschäftspartners"
 
 #. module: account
@@ -3840,7 +3840,7 @@ msgstr "Wechselkurs"
 
 #. module: account
 #: model:ir.model.fields,help:account.field_wizard_multi_charts_accounts_currency_id
-msgid "Currency as per company's country."
+msgid "Currency as per Unternehmen's country."
 msgstr "Übliche Währung am Standort des Unternehmens"
 
 #. module: account
@@ -3984,7 +3984,7 @@ msgstr "Datum"
 #. module: account
 #: model:ir.model.fields,help:account.field_res_company_account_opening_date
 msgid ""
-"Date at which the opening entry of this company's accounting has been "
+"Date at which the opening entry of this Unternehmen's accounting has been "
 "posted."
 msgstr ""
 
@@ -5749,7 +5749,7 @@ msgstr "Rechnungsnummer"
 
 #. module: account
 #: sql_constraint:account.invoice:0
-msgid "Invoice Number must be unique per Company!"
+msgid "Invoice Number must be unique per Unternehmen!"
 msgstr "Die Rechnungsnummer muss je Firma eindeutig sein"
 
 #. module: account
@@ -5928,7 +5928,7 @@ msgstr ""
 #: model:ir.model.fields,help:account.field_account_report_partner_ledger_amount_currency
 msgid ""
 "It adds the currency column on report if the currency differs from the "
-"company currency."
+"Unternehmen currency."
 msgstr ""
 "Der Bericht ergänzt die Währungsspalte, wenn diese bei der Buchungseingabe "
 "vom Standard abweicht."
@@ -6657,12 +6657,12 @@ msgstr "Haupt Titel 1 (fett, unterstrichen)"
 
 #. module: account
 #: model:ir.model.fields,help:account.field_res_config_settings_currency_id
-msgid "Main currency of the company."
+msgid "Main currency of the Unternehmen."
 msgstr "Hauptwährung des Unternehmens."
 
 #. module: account
 #: model:ir.ui.view,arch_db:account.res_config_settings_view_form
-msgid "Main currency of your company"
+msgid "Main currency of your Unternehmen"
 msgstr "Hauptwährung Ihres Unternehmens"
 
 #. module: account
@@ -7281,7 +7281,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account.account_planner
 msgid ""
 "Odoo can manage multiple companies, but we suggest to setup everything for "
-"your first company before configuring the other ones."
+"your first Unternehmen before configuring the other ones."
 msgstr ""
 "Odoo kann mehrere Unternehmen verwalten, aber wir empfehlen zunächst einmal "
 "alles zu Ihrem ersten Unternehmen einzurichten, bevor Sie die anderen "
@@ -7361,7 +7361,7 @@ msgstr ""
 
 #. module: account
 #: model:ir.ui.view,arch_db:account.account_planner
-msgid "Once your company information is correct, you should"
+msgid "Once your Unternehmen information is correct, you should"
 msgstr ""
 "Ist die Information zu Ihrem Unternehmen richtig \n"
 "erfasst, sollten Sie"
@@ -7687,7 +7687,7 @@ msgstr "Partner"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_invoice_report_commercial_partner_id
-msgid "Partner Company"
+msgid "Partner Unternehmen"
 msgstr "Partner-Unternehmen"
 
 #. module: account
@@ -8026,7 +8026,7 @@ msgstr "Prüfen Sie, ob im Bankauszug das Journal eingetragen wurde"
 #. module: account
 #: code:addons/account/wizard/pos_box.py:29
 #, python-format
-msgid "Please check that the field 'Transfer Account' is set on the company."
+msgid "Please check that the field 'Transfer Account' is set on the Unternehmen."
 msgstr ""
 "*berprüfen Sie, ob ein 'durchlaufender Posten' für die Zahlungsmethode '%s' "
 "hinterlegt wurde."
@@ -8171,7 +8171,7 @@ msgstr "Rechnung drucken"
 #: model:ir.model.fields,help:account.field_account_print_journal_amount_currency
 msgid ""
 "Print Report with the currency column if the currency differs from the "
-"company currency."
+"Unternehmen currency."
 msgstr ""
 "Bei abweichender Währung sollten Auswertungen immer die Spalte Währung mit "
 "beinhalten."
@@ -8602,7 +8602,7 @@ msgstr "Regulär"
 
 #. module: account
 #: model:ir.model.fields,help:account.field_account_invoice_residual_company_signed
-msgid "Remaining amount due in the currency of the company."
+msgid "Remaining amount due in the currency of the Unternehmen."
 msgstr "Übriger Betrag in der Währung des Unternehmens."
 
 #. module: account
@@ -8777,7 +8777,7 @@ msgstr "Rundungsgenauigkeit"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_cash_rounding_strategy
-msgid "Rounding Strategy"
+msgid "Rundungsstrategie"
 msgstr ""
 
 #. module: account
@@ -9664,7 +9664,7 @@ msgstr ""
 
 #. module: account
 #: model:ir.model.fields,help:account.field_res_company_account_setup_company_data_done
-msgid "Technical field holding the status of the company setup step."
+msgid "Technical field holding the status of the Unternehmen setup step."
 msgstr ""
 
 #. module: account
@@ -9897,7 +9897,7 @@ msgstr ""
 #: model:ir.model.fields,help:account.field_account_analytic_line_analytic_amount_currency
 msgid ""
 "The amount expressed in the related account currency if not equal to the "
-"company one."
+"Unternehmen one."
 msgstr ""
 "Der Betrag ausgewiesen in der entsprechenden Kontenwährung, wenn abweichend "
 "von der Hauswährung"
@@ -9926,7 +9926,7 @@ msgstr ""
 #: code:addons/account/models/account.py:452
 #, python-format
 msgid ""
-"The bank account of a bank journal must belong to the same company (%s)."
+"The bank account of a bank journal must belong to the same Unternehmen (%s)."
 msgstr ""
 "Das Bankkonto eines Bank-Journals muss dem gleichen Unternehmen (%s) "
 "angehören."
@@ -9940,13 +9940,13 @@ msgstr "Der Kontoauszug, der zur Bankkontenabstimmung genutzt wird"
 #: code:addons/account/models/account_invoice.py:1159
 #, python-format
 msgid ""
-"The cash rounding cannot be computed because the difference must be added on the biggest tax found and no tax are specified.\n"
-"Please set up a tax or change the cash rounding method."
+"The Rundungsmethoden cannot be computed because the difference must be added on the biggest tax found and no tax are specified.\n"
+"Please set up a tax or change theRundungsmethode"
 msgstr ""
 
 #. module: account
 #: model:ir.model.fields,help:account.field_res_company_chart_template_id
-msgid "The chart template for the company (if any)"
+msgid "The chart template for the  Unternehmen (if any)"
 msgstr "Die Kontenplanvorlage des Unternehmen (wenn verwendet)"
 
 #. module: account
@@ -9956,14 +9956,14 @@ msgstr "Der Schlusssaldo weicht vom berechneten ab!"
 
 #. module: account
 #: sql_constraint:account.journal:0
-msgid "The code and name of the journal must be unique per company !"
+msgid "The code and name of the journal must be unique per  Unternehmen !"
 msgstr ""
 "Schlüssel und Bezeichnung der Journals müssen pro Unternehmen eindeutig "
 "sein."
 
 #. module: account
 #: sql_constraint:account.account:0
-msgid "The code of the account must be unique per company !"
+msgid "The code of the account must be unique per  Unternehmen !"
 msgstr ""
 "Die Kurzbezeichnung des Journals sollte je Unternehmen (Mandant) eindeutig "
 "sein."
@@ -10023,7 +10023,7 @@ msgstr ""
 #. module: account
 #: model:ir.ui.view,arch_db:account.account_planner
 msgid ""
-"The first step is to set up your company's information. This is mostly used "
+"The first step is to set up your  Unternehmen's information. This is mostly used "
 "in printed business documents like orders and invoices."
 msgstr ""
 "Der erste Schritt ist Ihre Unternehmensdaten einzupflegen. Dies wird "
@@ -10042,7 +10042,7 @@ msgstr ""
 #. module: account
 #: code:addons/account/models/account.py:456
 #, python-format
-msgid "The holder of a journal's bank account must be the company (%s)."
+msgid "The holder of a journal's bank account must be the  Unternehmen (%s)."
 msgstr ""
 "Der Inhaber, eines im Journal verwendeten Bankkontos, muss das Unternehmen "
 "(%s) sein."
@@ -10069,7 +10069,7 @@ msgstr ""
 #: model:ir.model.fields,help:account.field_account_opening_opening_move_id
 #: model:ir.model.fields,help:account.field_res_company_account_opening_move_id
 msgid ""
-"The journal entry containing the initial balance of all this company's "
+"The journal entry containing the initial balance of all this  Unternehmen's "
 "accounts."
 msgstr ""
 
@@ -10187,7 +10187,7 @@ msgstr ""
 #: model:ir.model.fields,help:account.field_account_move_line_amount_residual_currency
 msgid ""
 "The residual amount on a journal item expressed in its currency (possibly "
-"not the company currency)."
+"not the  Unternehmen currency)."
 msgstr ""
 "Der Restbetrag einer Buchungszeile (in möglicherweise von der Hauswährung "
 "abweichender Währung)."
@@ -10195,7 +10195,7 @@ msgstr ""
 #. module: account
 #: model:ir.model.fields,help:account.field_account_move_line_amount_residual
 msgid ""
-"The residual amount on a journal item expressed in the company currency."
+"The residual amount on a journal item expressed in the  Unternehmen currency."
 msgstr "Der Restbetrag einer Buchungszeile, in Hauswährung angegeben."
 
 #. module: account
@@ -10272,7 +10272,7 @@ msgstr "Es gibt keine Buchungssätze im Entwurf, die gebucht werden könnten."
 #: code:addons/account/models/account_move.py:1714
 #, python-format
 msgid ""
-"There is no tax cash basis journal defined for this company: \"%s\" \n"
+"There is no tax cash basis journal defined for this  Unternehmen: \"%s\" \n"
 "Configure it in Accounting/Configuration/Settings"
 msgstr ""
 "Es ist für das Unternehmen \"%s\" kein EÜR-Journal bestimmt worden.\n"
@@ -10380,7 +10380,7 @@ msgstr ""
 #. module: account
 #: model:ir.ui.view,arch_db:account.res_config_settings_view_form
 msgid ""
-"This allows you to manage the assets owned by a company or a person. It "
+"This allows you to manage the assets owned by a  Unternehmen or a person. It "
 "keeps track of the depreciation occurred on those assets, and creates "
 "account move for those depreciation lines."
 msgstr ""
@@ -10489,7 +10489,7 @@ msgstr ""
 #, python-format
 msgid ""
 "This journal already contains items, therefore you cannot modify its "
-"company."
+" Unternehmen."
 msgstr ""
 "In diesem Journal wurde bereits gebucht, deshalb dürfen Sie das Unternehmen "
 "nicht mehr ändern."
@@ -10668,7 +10668,7 @@ msgstr "Zu Bezahlen"
 #. module: account
 #: model:ir.ui.view,arch_db:account.account_planner
 msgid ""
-"To manage the tax applied when invoicing a Company, Odoo uses the concept of"
+"To manage the tax applied when invoicing a  Unternehmen, Odoo uses the concept of"
 " Fiscal Position: they serve to automatically set the right tax and/or "
 "account according to the customer country and state."
 msgstr ""
@@ -10685,7 +10685,7 @@ msgstr "Zu Bezahlen"
 #. module: account
 #: code:addons/account/models/account_move.py:1004
 #, python-format
-msgid "To reconcile the entries company should be the same for all entries!"
+msgid "To reconcile the entries  Unternehmen should be the same for all entries!"
 msgstr ""
 "Das Unternehmen sollte für alle auszugleichenden Buchungen identisch sein."
 
@@ -10759,13 +10759,13 @@ msgstr "Nettobetrag"
 
 #. module: account
 #: model:ir.model.fields,help:account.field_account_invoice_line_price_subtotal_signed
-msgid "Total amount in the currency of the company, negative for credit note."
+msgid "Total amount in the currency of the  Unternehmen, negative for credit note."
 msgstr ""
 
 #. module: account
 #: model:ir.model.fields,help:account.field_account_invoice_amount_total_company_signed
 msgid ""
-"Total amount in the currency of the company, negative for credit notes."
+"Total amount in the currency of the  Unternehmen, negative for credit notes."
 msgstr "Gesamtbetrag in der Unternehmenswährung, negativ bei Gutschriften."
 
 #. module: account
@@ -10799,7 +10799,7 @@ msgstr "Gesamtbetrag der offenen Zahlungen an diesen Lieferant."
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_invoice_amount_total_company_signed
-msgid "Total in Company Currency"
+msgid "Total in  Unternehmen Currency"
 msgstr "Gesamt (in eigener Währung)"
 
 #. module: account
@@ -10849,7 +10849,7 @@ msgstr "Überweisung an"
 #. module: account
 #: code:addons/account/models/account_payment.py:350
 #, python-format
-msgid "Transfer account not defined on the company."
+msgid "Transfer account not defined on the  Unternehmen."
 msgstr ""
 "Konto für durchlaufende Posten ist für das Unternehmen nicht festgelegt."
 
@@ -11012,7 +11012,7 @@ msgstr "Nettobetrag"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_invoice_amount_untaxed_signed
-msgid "Untaxed Amount in Company Currency"
+msgid "Untaxed Amount in  Unternehmen Currency"
 msgstr "Nettobetrag in Unternehmenswährung"
 
 #. module: account
@@ -11545,7 +11545,7 @@ msgstr ""
 #, python-format
 msgid ""
 "You cannot add/modify entries prior to and inclusive of the lock date %s. "
-"Check the company settings or ask someone with the 'Adviser' role"
+"Check the  Unternehmen settings or ask someone with the 'Adviser' role"
 msgstr ""
 "Sie dürfen keine Posten vor oder bis einschließlich dem Sperrdatum %s "
 "hinzufügen oder ändern. Prüfen Sie die Unternehmenseinstellungen oder fragen"
@@ -11565,7 +11565,7 @@ msgstr ""
 #: code:addons/account/models/account.py:235
 #, python-format
 msgid ""
-"You cannot change the owner company of an account that already contains "
+"You cannot change the owner  Unternehmen of an account that already contains "
 "journal items."
 msgstr ""
 "Sie dürfen die Unternehmenszuordnung eines Kontos nicht ändern, wenn es "
@@ -11746,7 +11746,7 @@ msgstr "Sie haben"
 #. module: account
 #: code:addons/account/models/account_payment.py:485
 #, python-format
-msgid "You have to define a sequence for %s in your company."
+msgid "You have to define a sequence for %s in your  Unternehmen."
 msgstr "Sie müssen eine Nummerfolge für %s in Ihrem Unternehmen erstellen."
 
 #. module: account
@@ -11842,7 +11842,7 @@ msgstr "Ihre Bankkonten"
 
 #. module: account
 #: model:ir.ui.view,arch_db:account.account_planner
-msgid "Your Company"
+msgid "Your  Unternehmen"
 msgstr "Ihr Unternehmen"
 
 #. module: account
@@ -11862,7 +11862,7 @@ msgstr "Ihre Stichtagsbilanz (Liste der Konten mit Ihren Salden)"
 
 #. module: account
 #: model:ir.ui.view,arch_db:account.account_planner
-msgid "Your company's legal name, tax ID, address, and logo."
+msgid "Your  Unternehmen's legal name, tax ID, address, and logo."
 msgstr "Ihr offizieller Firmenname, USt-ID, Adresse und Logo."
 
 #. module: account
@@ -12071,7 +12071,7 @@ msgstr "Senden Sie uns eine E-Mail"
 
 #. module: account
 #: model:ir.ui.view,arch_db:account.account_planner
-msgid "set company logo"
+msgid "set  Unternehmen logo"
 msgstr "Laden Sie Ihr Logo hoch"
 
 #. module: account
@@ -12086,7 +12086,7 @@ msgstr "Kundenliste"
 
 #. module: account
 #: model:ir.ui.view,arch_db:account.view_partner_property_form
-msgid "the parent company"
+msgid "the parent  Unternehmen"
 msgstr "der Mutterkonzern"
 
 #. module: account
