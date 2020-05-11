@@ -380,6 +380,12 @@ var FormRenderer = BasicRenderer.extend({
                 $buttons.append(self._renderHeaderButton(child));
             }
         });
+        if (config.device.isMobile) {
+            var $dropdown = $(core.qweb.render('MenuStatusbarButtons'));
+            $buttons.addClass("dropdown-menu").appendTo($dropdown);
+            $buttons.children().addClass("dropdown-item");
+            return $dropdown;
+        }
         return $buttons;
     },
     /**

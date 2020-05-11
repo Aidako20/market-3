@@ -150,6 +150,40 @@
         border-bottom: 1px solid @gray-lighter-darker;
         background-color: @flectra-view-background-color;
 
+        @media (max-width: @screen-sm-max) {
+            .o_statusbar_buttons_dropdown {
+                background-color: @flectra-view-background-color;
+                border-width: 0;
+                border-radius: 0;
+                height: 100%;
+            }
+            .o_statusbar_buttons_dropdown[aria-expanded="true"] {
+                color: @gray;
+                background-color: @gray-lighter;
+            }
+            .o_statusbar_buttons > .btn {
+                color: @gray;
+                background: none;
+                border-radius: 0;
+                border: 0;
+                width: 100%;
+                margin-bottom: 0.2rem;
+                text-align: left;
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+            .o_statusbar_buttons.dropdown-menu {
+                min-width: 100px;
+            }
+            .o_statusbar_status {
+                .o_arrow_button:first-child::before {
+                    content: none;
+                    display: none;
+                }
+            }
+        }
+
         > .o_statusbar_buttons, > .o_statusbar_status {
             .o-flex-display();
             .o-align-items(center);

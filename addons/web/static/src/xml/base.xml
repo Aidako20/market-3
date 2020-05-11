@@ -323,6 +323,14 @@
     <div class="o_debug_tooltip"/>
 </div>
 
+<t t-name="MenuStatusbarButtons">
+    <div class="dropdown">
+        <button class="o_statusbar_buttons_dropdown btn btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Actions <span class="caret"/>
+        </button>
+    </div>
+</t>
+
 <t t-name="Sidebar">
     <t t-foreach="widget.sections" t-as="section">
         <div class="btn-group o_dropdown">
