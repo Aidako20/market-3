@@ -19,6 +19,7 @@ var concurrency = require('web.concurrency');
 var ControlPanel = require('web.ControlPanel');
 var dialogs = require('web.view_dialogs');
 var core = require('web.core');
+var config = require("web.config");
 var data = require('web.data');
 var Dialog = require('web.Dialog');
 var KanbanRenderer = require('web.KanbanRenderer');
@@ -2002,6 +2003,11 @@ var FieldStatus = AbstractField.extend({
             }
             this.status_information = _.map(selection, function (val) {
                 return { id: val[0], display_name: val[1], selected: val[0] === self.value, fold: false };
+            });
+        }
+        if (config.device.isMobile) {
+            _.map(this.status_information, function (value) {
+                value.fold = true;
             });
         }
     },
