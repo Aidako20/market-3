@@ -3,6 +3,7 @@ flectra.define('web.Sidebar', function (require) {
 
 var Context = require('web.Context');
 var core = require('web.core');
+var config = require("web.config");
 var pyeval = require('web.pyeval');
 var Widget = require('web.Widget');
 
@@ -40,6 +41,16 @@ var Sidebar = Widget.extend({
         if (options.actions) {
             this._addToolbarActions(options.actions);
         }
+        if (config.device.isMobile) {
+            _.each(this.sections, function(element) {
+                if(element.name === 'print') {
+                    element.icon = 'fa fa-print';
+                }
+                if(element.name === 'other') {
+                    element.icon = 'fa fa-cogs';
+                }
+            });
+		}
     },
     /**
      * @override
