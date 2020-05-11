@@ -7,6 +7,29 @@
     .o-webclient-padding(@top: 10px, @bottom: 10px);
     background-color: @flectra-control-panel-background-color;
 
+    @media (max-width: @screen-sm-max) {
+        .breadcrumb > li {
+            padding-left: 0.5rem;
+        }
+        .breadcrumb > li:before {
+            display: none;
+        }
+        .breadcrumb > li:nth-last-of-type(2)::before {
+            font-family: FontAwesome;
+            content: "\f053";
+            color: @flectra-brand-primary !important;
+            display: inline-block;
+            padding: 0;
+            color: inherit;
+        }
+        .breadcrumb > li:nth-last-of-type(2) > a {
+            display: none;
+        }
+        .breadcrumb > li:nth-last-of-type(1n+3) {
+            display: none;
+        }
+    }
+
     > .breadcrumb {
         width: 50%;
         margin: 0px;
