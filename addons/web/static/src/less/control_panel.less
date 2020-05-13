@@ -64,6 +64,10 @@
         .o-justify-content(space-between);
         width: 50%;
         margin-top: 5px;
+        @media (max-width: @screen-sm-max) {
+            flex-basis: 65%;
+            white-space: nowrap;
+        }
 
         > .o_cp_sidebar {
             padding-right: 10px;
@@ -98,6 +102,9 @@
         .o-flex-display();
         width: 50%;
         margin-top: 5px;
+        @media (max-width: @screen-sm-max) {
+            flex-basis: 35%;
+        }
 
         > .o_cp_pager {
             margin: auto 0 auto auto;
