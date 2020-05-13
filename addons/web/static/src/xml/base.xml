@@ -336,7 +336,7 @@
         <div class="btn-group o_dropdown">
             <button t-if="section.name != 'buttons'" t-attf-class="o_dropdown_toggler_btn btn btn-sm dropdown-toggle #{section.icon}" data-toggle="dropdown" aria-expanded="false" >
                 <t t-if="section.name == 'files'" t-raw="widget.items[section.name].length || ''"/>
-                <t t-if="!section.icon" t-esc="section.label"/> <span t-if="!section.icon" class="caret"/>
+                <t t-if="!section.icon" t-esc="section.label"/> <span style="margin-left:8px;" class="caret"/>
             </button>
             <t t-if="section.name == 'buttons'" t-foreach="widget.items[section.name]" t-as="item" t-att-class="item.classname">
                 <a t-att-title="item.title or None" t-att-data-section="section.name" t-att-data-index="item_index" t-att-href="item.url or '#'" target="_blank">
