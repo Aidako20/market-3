@@ -421,14 +421,17 @@
     <div class="o_list_buttons">
         <t t-if="widget.is_action_enabled('create')">
             <button type="button" class="btn btn-primary btn-sm o_list_button_add" accesskey="c">
-                Create
+                <i t-attf-class="visible-xs-inline visible-sm-inline fa fa-plus" t-att-title="label"/>
+                <span class="hidden-xs hidden-sm">Create</span>
             </button>
         </t>
         <button type="button" class="btn btn-primary btn-sm o_list_button_save" accesskey="s">
-            Save
+            <i t-attf-class="visible-xs-inline visible-sm-inline fa fa-floppy-o" t-att-title="label"/>
+            <span class="hidden-xs hidden-sm">Save</span>
         </button>
         <button type="button" class="btn btn-default btn-sm o_list_button_discard" accesskey="j">
-            Discard
+            <i t-attf-class="visible-xs-inline visible-sm-inline fa fa-times" t-att-title="label"/>
+            <span class="hidden-xs hidden-sm">Discard</span>
         </button>
     </div>
 </t>
@@ -437,21 +440,25 @@
     <div class="o_form_buttons_view">
         <button t-if="widget.is_action_enabled('edit')" type="button"
                 class="btn btn-primary btn-sm o_form_button_edit" accesskey="a">
-            Edit
+                <i t-attf-class="visible-xs-inline visible-sm-inline fa fa-pencil" t-att-title="label"/>
+                <span class="hidden-xs hidden-sm">Edit</span>
         </button>
         <button t-if="widget.is_action_enabled('create')" type="button"
                 class="btn btn-default btn-sm o_form_button_create" accesskey="c">
-            Create
+                <i t-attf-class="visible-xs-inline visible-sm-inline fa fa-plus" t-att-title="label"/>
+                <span class="hidden-xs hidden-sm">Create</span>
         </button>
     </div>
     <div class="o_form_buttons_edit">
         <button type="button"
                 class="btn btn-primary btn-sm o_form_button_save" accesskey="s">
-            Save
+                <i t-attf-class="visible-xs-inline visible-sm-inline fa fa-floppy-o" t-att-title="label"/>
+                <span class="hidden-xs hidden-sm">Save</span>
         </button>
         <button type="button"
                 class="btn btn-default btn-sm o_form_button_cancel" accesskey="j">
-            Discard
+                <i t-attf-class="visible-xs-inline visible-sm-inline fa fa-times" t-att-title="label"/>
+                <span class="hidden-xs hidden-sm">Discard</span>
         </button>
     </div>
 </t>
