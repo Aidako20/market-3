@@ -1,3 +1,5 @@
+@screen-lg-max: 1534px;
+
 .o_form_view {
     background-color: @flectra-view-background-color;
 
@@ -149,6 +151,10 @@
         padding-left: @flectra-horizontal-padding;
         border-bottom: 1px solid @gray-lighter-darker;
         background-color: @flectra-view-background-color;
+        @media (min-width: @screen-lg-max) {
+            margin-left: -16px;
+            margin-right: -16px;
+        }
 
         > .o_statusbar_buttons, > .o_statusbar_status {
             .o-flex-display();

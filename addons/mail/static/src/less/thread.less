@@ -43,9 +43,12 @@
     }
 
     .o_thread_message {
+        background-color: @mail-thread-note;
+        border-bottom: 1px solid @gray-lighter-darker;
+        margin-bottom: 10px;
+
         .o-flex-display();
         padding: 4px @flectra-horizontal-padding;
-        margin-bottom: 0px;
 
         .o_thread_message_sidebar {
             .o-flex(0, 0, @mail-thread-avatar-size);
@@ -105,9 +108,7 @@
             word-wrap: break-word;
 
             &.o_mail_note {
-                background-color: @mail-thread-note;
                 padding-left: @grid-gutter-width*0.3;
-                border-bottom: 1px solid @gray-lighter-darker;
             }
 
             .o_mail_subject {
