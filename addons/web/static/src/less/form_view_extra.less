@@ -1,7 +1,6 @@
 @sheet-max-width: 1024px;
 @sheet-min-width: 650px;
 @sheet-padding: 16px;
-@screen-lg-max: 1534px;
 
 .o_form_view {
     @media (min-width: @screen-sm-min) {
@@ -10,10 +9,6 @@
         flex-flow: column nowrap;
         min-height: 100%;
     }
-    @media (min-width: @screen-lg-max) {
-        -webkit-flex-flow: row nowrap;
-        flex-flow: row nowrap;
-    }
 
     &.o_form_nosheet.oe_form_nomargin {
         margin: 0;
@@ -21,14 +16,6 @@
     .o_form_sheet_bg {
         border-bottom: 1px solid #ddd;
         background: url(/web/static/src/img/form_sheetbg.png);
-        @media (min-width: @screen-lg-max) {
-            -webkit-box-flex: 1;
-            -webkit-flex: 1 1 auto;
-            flex: 1 1 auto;
-            overflow: auto;
-            width: 66%;
-            padding: 0 16px;
-        }
 
         > .o_form_sheet {
             min-width: @sheet-min-width;
@@ -193,14 +180,6 @@
         -webkit-box-flex: 0;
         -webkit-flex: 1000 0 auto;
         flex: 1000 0 auto;
-        @media (min-width: @screen-lg-max) {
-            -webkit-box-flex: 1;
-            -webkit-flex: 1 1 auto;
-            flex: 1 1 auto;
-            overflow: auto;
-            width: 33%;
-            border-left: 1px solid @gray-lighter-darker;
-        }
     }
 }
 
