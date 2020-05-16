@@ -3,6 +3,13 @@
 @sheet-padding: 16px;
 
 .o_form_view {
+    @media (min-width: @screen-sm-min) {
+        display: flex;
+        -webkit-flex-flow: column nowrap;
+        flex-flow: column nowrap;
+        min-height: 100%;
+    }
+
     &.o_form_nosheet.oe_form_nomargin {
         margin: 0;
     }
@@ -169,7 +176,10 @@
         min-width: @sheet-min-width + 2* @sheet-padding;
         max-width: @sheet-max-width + 2* @sheet-padding;
         margin: 0 auto;
-        padding: 16px 16px 48px;
+        padding: 0;
+        -webkit-box-flex: 0;
+        -webkit-flex: 1000 0 auto;
+        flex: 1000 0 auto;
     }
 }
 
