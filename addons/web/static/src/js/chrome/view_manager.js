@@ -4,6 +4,7 @@ flectra.define('web.ViewManager', function (require) {
 var Context = require('web.Context');
 var ControlPanelMixin = require('web.ControlPanelMixin');
 var core = require('web.core');
+var config = require('web.config');
 var data = require('web.data');
 var data_manager = require('web.data_manager');
 var dom = require('web.dom');
@@ -388,19 +389,26 @@ var ViewManager = Widget.extend(ControlPanelMixin, {
 
         // Inner function to render and prepare switch_buttons
         var _render_switch_buttons = function(views) {
-            if (views.length > 1) {
-                var $switch_buttons = $(QWeb.render('ViewManager.switch-buttons', {views: views}));
-                // Create bootstrap tooltips
-                _.each(views, function(view) {
-                    $switch_buttons.filter('.o_cp_switch_' + view.type).tooltip();
-                });
-                // Add onclick event listener
-                $switch_buttons.filter('button').click(_.debounce(function(event) {
-                    var view_type = $(event.target).data('view-type');
-                    self.switch_mode(view_type);
-                }, 200, true));
-                return $switch_buttons;
+            if (views.length <= 1) {
+                return $();
             }
+
+            var template = config.device.isMobile ? 'ViewManager.switch-buttons.Mobile' : 'ViewManager.switch-buttons';
+            var $switch_buttons = $(QWeb.render(template, {
+                views: views,
+            }));
+            // Create bootstrap tooltips
+            _.each(views, function(view) {
+                $switch_buttons.filter('.o_cp_switch_' + view.type).tooltip();
+            });
+            // Add onclick event listener
+            var $switch_buttons_filtered = config.device.isMobile ? $switch_buttons.find('button') : $switch_buttons.filter('button');
+            $switch_buttons_filtered.click(_.debounce(function(event) {
+                var view_type = $(event.target).data('view-type');
+                self.switch_mode(view_type);
+            }, 200, true));
+
+            return $switch_buttons;
         };
 
         // Render switch buttons but do not append them to the DOM as this will

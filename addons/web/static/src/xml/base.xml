@@ -209,6 +209,17 @@
     </t>
 </t>
 
+<t t-name="ViewManager.switch-buttons.Mobile">
+    <button class="btn btn-link btn-sm" data-toggle="dropdown" aria-expanded="false">
+        <span class="o_switch_view_button_icon fa fa-lg fa-th"/>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-right list-inline">
+        <li>
+            <t t-call="ViewManager.switch-buttons"/>
+        </li>
+    </ul>
+</t>
+
 <t t-name="WebClient.DebugManager">
     <li class="o_debug_manager">
         <a href="#" title="Open Developer Tools" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
