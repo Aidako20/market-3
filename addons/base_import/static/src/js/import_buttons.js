@@ -1,6 +1,7 @@
 flectra.define('base_import.import_buttons', function (require) {
 "use strict";
 
+var config = require('web.config');
 var KanbanController = require('web.KanbanController');
 var KanbanView = require('web.KanbanView');
 var ListController = require('web.ListController');
@@ -15,7 +16,7 @@ var ImportViewMixin = {
     init: function (viewInfo, params) {
         var importEnabled = 'import_enabled' in params ? params.import_enabled : true;
         // if true, the 'Import' button will be visible
-        this.controllerParams.importEnabled = importEnabled;
+        this.controllerParams.importEnabled = importEnabled && !config.device.isMobile;
     },
 };
 
