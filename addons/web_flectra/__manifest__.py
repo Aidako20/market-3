@@ -18,6 +18,7 @@
         'views/res_company_view.xml',
         'views/sidebar.xml',
         'views/web.xml',
+        'views/web_pwa.xml',
         'views/home.xml',
     ],
     'qweb': [
