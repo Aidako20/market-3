@@ -16,7 +16,7 @@ $hover_color: #ddd;
 ///////////////
 /// Sidebar
 ///////////////
-html .o_web_client {
+body[data-menu="sidemenu"].o_web_client {
     flex-flow: row wrap;
     >header {
         flex: 0 0 100%;
@@ -273,4 +273,3 @@ html .o_web_client {
         flex: 1 1;
     }
 }
-

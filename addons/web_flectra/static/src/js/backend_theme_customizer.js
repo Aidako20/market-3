@@ -35,6 +35,7 @@ flectra.define('web_flectra.BackendThemeCustomizer', function (require) {
             this._super.apply(this, arguments);
             this.loader = core.qweb.render('web.color_palette_loading');
             this._toggle_dark_mode();
+            this._toggle_apps_menu();
             this._render();
         },
 
@@ -46,6 +47,12 @@ flectra.define('web_flectra.BackendThemeCustomizer', function (require) {
                 $('body').attr('data-theme', 'dark');
             } else {
                 $('body').removeAttr('data-theme');
+            }
+        },
+
+        _toggle_apps_menu: function () {
+            if (this.company_settings.theme_menu_style == 'sidemenu') {
+                $('body').attr('data-menu', 'sidemenu');
             }
         },
 
