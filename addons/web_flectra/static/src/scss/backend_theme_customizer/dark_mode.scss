@@ -317,6 +317,10 @@ body[data-theme="dark"] {
     .o_form_view .oe_button_box{
         border-bottom: 1px solid #555;
     }
+    .f-theme-customizer-panel {
+        background-color: #212529;
+        color: #fff;
+    }
 }
 .f_color_palette_loading {
     background-color: rgba(0, 0, 0, 0.5);
