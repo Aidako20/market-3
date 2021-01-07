@@ -7,7 +7,7 @@
             <!-- Add iOS meta tags and icons -->
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-            <meta name="apple-mobile-web-app-title" content="Odoo PWA" />
+            <meta name="apple-mobile-web-app-title" content="Flectra" />
             <link
                 rel="apple-touch-icon"
                 href="/web_flectra/static/src/img/icons/icon-152x152.png"
