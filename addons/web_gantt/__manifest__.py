@@ -1,7 +1,7 @@
 {
     'name': 'Web Gantt Chart',
-    'category': 'Education',
-    'version': '14.0',
+    'category': 'Project',
+    'version': '2.0',
     'summary': 'Gantt Chart',
     'depends': [
         'web'
