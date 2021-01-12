@@ -8,6 +8,7 @@ $Gray99: #dadada;
 $font_name: "sans-serif";
 $font_size: 0.85em;
 $menu_height: $o-navbar-height;
+$sidebar_collapsed_width: 56px;
 $sidebar_width: 240px;
 $theme_color: #ffffff;
 $highlight_color: #009efb;
@@ -22,45 +23,62 @@ body[data-menu="sidemenu"].o_web_client {
         flex: 0 0 100%;
     }
 
-    .f_sidebar {
+    .f_launcher {
+        position: absolute;
+        top: $menu_height;
+        z-index: 199;
         max-height: calc(100vH - #{$menu_height});
         height: calc(100vH - #{$menu_height});
         font-family: $font_name;
-        .f_sub_menu {
+        .f_launcher_content {
+            position: relative;
             background-color: $theme-sidebar-color;
             height: 100%;
             max-width: $sidebar_width;
             width: $sidebar_width;
-            flex-flow: column nowrap;
-            flex: 0 0 $sidebar_width;
-            display: -ms-flexbox;
-            display: -moz-box;
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: flex !important;
-            -ms-flex: 0 0 $sidebar_width;
-            -moz-flex: 0 0 $sidebar_width;
-            -webkit-box-flex: 0;
-            -webkit-flex: 0 0 $sidebar_width;
-            -ms-flex-flow: column nowrap;
-            -moz-flex-flow: column nowrap;
-            -webkit-flex-flow: column nowrap;
-            .f_sub_menu_content::-webkit-scrollbar {
+            overflow-x: hidden;
+            overflow-y: auto;
+            &::-webkit-scrollbar {
                 display: none;
             }
-            .f_sub_menu_content {
-                overflow-x: hidden;
-                overflow-y: auto;
-                .cssmenu {
+            ul {
+                list-style: none;
+            }
+            .hidden {
+                display: none !important;
+            }
+            ul {
+                padding: 0;
+                li {
+                    .oe_main_menu_container {
+                        display: flex;
+                        width: 100%;
+                        > a {
+                            display: flex;
+                            width: 100%;
+                            position: relative;
+                        }
+                        .app_icon {
+                            width: 45px;
+                            padding: 8px 5px 8px 10px;
+                        }
+                        .app_name {
+                            margin: 4px 0;
+                            padding: 8px 5px 8px 10px;
+                        }
+                        .more-less {
+                            margin: 13px;
+                            position: absolute;
+                            right: 0;
+                        }
+                    }
+                }
+                .panel {
                     &:hover {
                         background-color: $o-brand-primary;
                     }
-                    h3.active {
-                        background-color: $o-brand-primary;
-                    }
-                    .menu_heading {
+                    .oe_main_menu_container {
                         color: $white_color;
-                        padding: 8px 8px 8px 12px;
                         margin: 0px;
                         font-family: $o-root-font-family;
                         font-size: $font_size;
@@ -68,7 +86,6 @@ body[data-menu="sidemenu"].o_web_client {
                         font-weight: normal !important;
                         a {
                             color: $white_color;
-                            display: block;
                             i {
                                 padding-right: 10px;
                             }
@@ -153,7 +170,7 @@ body[data-menu="sidemenu"].o_web_client {
                                         text-indent: 1px;
                                         opacity: 1;
                                     }
-                                    &.active:after {
+                                    &.oe_menu_opened:after {
                                         content: "\f107";
                                     }
                                 }
@@ -197,14 +214,6 @@ body[data-menu="sidemenu"].o_web_client {
                             display: none;
                             font-family: $o-root-font-family;
                         }
-                        h6.side_menu_heading{
-                            text-align: center;
-                            color: $white_color;
-                            font-weight: bold !important;
-                            font-size: $font_size;
-                            background: $theme-sidebar-color;
-                            text-transform: uppercase;
-                        }
                         .oe_secondary_menu_section {
                             font-weight: bold;
                             background-color: $theme_sidebar_submenu_color;
@@ -231,6 +240,9 @@ body[data-menu="sidemenu"].o_web_client {
                                     outline: none;
                                 }
                             }
+                            &.active a {
+                                background-color: $o-brand-primary;
+                            }
                             .oe_menu_leaf {
                                 color: $white_color;
                                 font-weight: normal;
@@ -250,12 +262,12 @@ body[data-menu="sidemenu"].o_web_client {
             /// MOBILE VIEW
             ///////////////////
             &.mobile_views_menu {
-                flex: 0 0 56px;
-                width: 56px;
+                flex: 0 0 $sidebar_collapsed_width;
+                width: $sidebar_collapsed_width;
                 .mobile_view_title_hide {
                     display: none !important;
                 }
-                .f_sub_menu_content .cssmenu .arrow_sb_menu:after {
+                ul li.panel .oe_main_menu_container .app_name, more-less {
                     display: none;
                 }
             }
@@ -270,6 +282,6 @@ body[data-menu="sidemenu"].o_web_client {
             flex: 1 1;
         }
         height: calc(100% - #{$menu_height}) !important;
-        flex: 1 1;
+        padding-left: $sidebar_collapsed_width;
     }
 }
