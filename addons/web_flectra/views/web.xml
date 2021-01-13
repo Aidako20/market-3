@@ -21,7 +21,8 @@
             <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-            <meta name="apple-mobile-web-app-title" content="Flectra" />
+            <meta name="apple-mobile-web-app-title"
+                  t-attf-content="#{request.env['pwa.config'].search([('pwa_company_id', '=', request.env.user.company_id.id)]).pwa_name or 'Flectra'}" />
             <link rel="apple-touch-icon"
                   t-attf-href="#{'/web/image/pwa.config/'+str(request.env['pwa.config'].search([('pwa_company_id', '=', request.env.user.company_id.id)]).id)+'/pwa_icon_192'
                                 if request.env['pwa.config'].search([('pwa_company_id', '=', request.env.user.company_id.id)]).pwa_icon_192
