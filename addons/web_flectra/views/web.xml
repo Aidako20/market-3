@@ -21,11 +21,12 @@
             <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+            <t t-set="pwa_config" t-value="request.env['pwa.config'].search([('pwa_company_id', '=', request.env.user.company_id.id)])" />
             <meta name="apple-mobile-web-app-title"
-                  t-attf-content="#{request.env['pwa.config'].search([('pwa_company_id', '=', request.env.user.company_id.id)]).pwa_name or 'Flectra'}" />
+                  t-attf-content="#{pwa_config.pwa_name or 'Flectra'}" />
             <link rel="apple-touch-icon"
-                  t-attf-href="#{'/web/image/pwa.config/'+str(request.env['pwa.config'].search([('pwa_company_id', '=', request.env.user.company_id.id)]).id)+'/pwa_icon_192'
-                                if request.env['pwa.config'].search([('pwa_company_id', '=', request.env.user.company_id.id)]).pwa_icon_192
+                  t-attf-href="#{'/web/image/pwa.config/'+str(pwa_config.id)+'/pwa_icon_192'
+                                if pwa_config.pwa_icon_192
                                 else '/web_flectra/static/src/img/icons/icon-192x192.png'}"  />
             <!-- Add link rel manifest -->
             <link rel="manifest" t-att-href="'/manifest.json/'+str(request.env.user.company_id.id)" />
