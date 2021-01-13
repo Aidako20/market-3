@@ -14,11 +14,13 @@
         'web'
     ],
     'data': [
+        'security/ir.model.access.csv',
         'views/assets.xml',
+        'views/pwa_config_view.xml',
         'views/res_company_view.xml',
+        'views/res_config_settings_view.xml',
         'views/sidebar.xml',
         'views/web.xml',
-        'views/web_pwa.xml',
         'views/home.xml',
     ],
     'qweb': [
