@@ -19,9 +19,10 @@
         <xpath expr="//head" position="inside">
             <!-- Add meta tags and icons -->
             <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+            <t t-set="pwa_config" t-value="request.env['pwa.config'].search([('pwa_company_id', '=', request.env.user.company_id.id)]) or False" />
+            <t t-if="pwa_config != False">
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-            <t t-set="pwa_config" t-value="request.env['pwa.config'].search([('pwa_company_id', '=', request.env.user.company_id.id)])" />
             <meta name="apple-mobile-web-app-title"
                   t-attf-content="#{pwa_config.pwa_name or 'Flectra'}" />
             <link rel="apple-touch-icon"
@@ -33,6 +34,7 @@
             <!-- Add meta theme-color -->
             <meta name="theme-color"
                   t-attf-content="#{request.env['pwa.config'].search([('pwa_company_id', '=', request.env.user.company_id.id)]).pwa_theme_color or '#009efb'}" />
+            </t>
         </xpath>
     </template>
     <template id="pwa_offline">
@@ -104,23 +106,11 @@ self.addEventListener('fetch', event => {
     }
     console.debug('[ServiceWorker] Fetch', event.request.url);
     event.respondWith(
-       caches.match(event.request)
-            .then(response => {
-                if (response) {
-                    console.debug('[ServiceWorker] Found ', event.request.url, ' in cache');
-                    return response;
-                }
-                return fetch(event.request)
-                .then(response => {
-                    return caches.open(CACHE_NAME)
-                    .then(cache => {
-                        cache.put(event.request.url, response.clone());
-                        return response;
-                    });
-                });
-            }).catch(error => {
-                console.debug('[ServiceWorker] Error ', error);
-                return caches.match('/pwa/offline');
+        caches.open(CACHE_NAME).then(function(cache) {
+            return cache.match(event.request)
+                .then(function(response) {
+                    return response || fetch(event.request);
+            });
         })
     );
 });
