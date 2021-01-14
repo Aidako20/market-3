@@ -10,9 +10,7 @@
     "author": "FlectraHQ,Openworx",
     "license": "LGPL-3",
     'summary': 'Backend Theme For Flectra',
-    'depends': [
-        'web'
-    ],
+    'depends': ['base_setup'],
     'data': [
         'security/ir.model.access.csv',
         'views/assets.xml',
@@ -26,5 +24,6 @@
     'qweb': [
         'static/src/xml/*.xml'
     ],
+    'installable': True,
     'auto_install': True,
 }
