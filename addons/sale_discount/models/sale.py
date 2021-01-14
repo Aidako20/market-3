@@ -31,6 +31,13 @@ class SaleOrder(models.Model):
             compute='_amount_all',
     )
 
+    amount_discountable = fields.Monetary(
+            string='Base Discount Amount',
+            store=True,
+            readonly=True,
+            compute='_amount_all',
+    )
+
     document_discount = fields.Monetary(
             string='Document Discount',
             store=True,
@@ -50,22 +57,28 @@ class SaleOrder(models.Model):
         super(SaleOrder, self)._amount_all()
         for order in self:
             amount_gross = order.amount_untaxed
+            amount_discountable = 0
             document_discount = 0
             discount_tax_amount = 0
             discount_used = not float_is_zero(order.discount_value, precision_digits=order.currency_id.decimal_places)
 
             if discount_used:
+                amount_discountable = amount_gross
                 if order.discount_type == 'fixed':
                     document_discount = order.discount_value * -1
                 else:
-                    document_discount = (order.amount_gross * (order.discount_value / 100)) * -1
+                    excluded_lines = order.order_line.filtered(lambda f: f.product_id.exclude_from_document_discount)
+                    if excluded_lines:
+                        excluded_from_discount = sum(l.price_subtotal for l in excluded_lines)
+                        amount_discountable -= excluded_from_discount
+                    document_discount = (amount_discountable * (order.discount_value / 100)) * -1
 
-                for distribution in order._get_document_tax_distribution(amount_gross).values():
+                for distribution in order._get_document_tax_distribution(amount_discountable).values():
                     taxes = distribution['tax'].compute_all(
                             document_discount * distribution['factor'],
                             partner=order.partner_shipping_id,
                             is_refund=True,
-                    )
+                            )
                     discount_tax_amount += sum(t.get('amount', 0.0) for t in taxes.get('taxes', []))
 
             amount_untaxed = order.amount_untaxed + document_discount
@@ -74,6 +87,7 @@ class SaleOrder(models.Model):
 
             order.update({
                 'amount_gross': amount_gross,
+                'amount_discountable': amount_discountable,
                 'document_discount': document_discount,
                 'document_discount_tax_amount': discount_tax_amount,
                 'amount_untaxed': amount_untaxed,
@@ -106,7 +120,7 @@ class SaleOrder(models.Model):
                             res[group]['amount'] += t['amount']
                             res[group]['base'] += t['base']
 
-            for distribution in order._get_document_tax_distribution(order.amount_gross).values():
+            for distribution in order._get_document_tax_distribution(order.amount_discountable).values():
                 group = distribution['tax'].tax_group_id
                 taxes = distribution['tax'].compute_all(
                         order.document_discount * distribution['factor'],
@@ -125,16 +139,16 @@ class SaleOrder(models.Model):
                 len(res),
             ) for l in res]
 
-    def _get_document_tax_distribution(self, amount_gross):
+    def _get_document_tax_distribution(self, amount_discountable):
         """
         This function calculates distribution factor for right split
         of negative tax amount of document discount amount.
-        @param amount_gross: the base amount (total untaxed amount) used as 100%
+        @param amount_discountable: the base amount (total untaxed amount) used as 100%
         @return: dict with tax.id as key and tax data includin the distribution factor
         """
         self.ensure_one()
         res = {}
-        for line in self.order_line:
+        for line in self.order_line.filtered(lambda f: not f.product_id.exclude_from_document_discount):
             price_reduce = line.price_unit * (1.0 - line.discount / 100.0)
             taxes = line.tax_id.compute_all(
                     price_reduce,
@@ -149,5 +163,5 @@ class SaleOrder(models.Model):
                     if t['id'] == tax.id or t['id'] in tax.children_tax_ids.ids:
                         res[key]['amount'] += t['amount']
                         res[key]['base'] += t['base']
-                        res[key]['factor'] = res[key]['base'] / amount_gross
+                        res[key]['factor'] = res[key]['base'] / amount_discountable
         return res
