@@ -10,11 +10,9 @@ var rpc = require('web.rpc');
 var SideMenu = Widget.extend({
     init: function() {
         this._super.apply(this, arguments);
-        this.is_bound = $.Deferred();
         this._isMainMenuClick = false;
         this.data = {data:{children:[]}};
         this.isLoadflag = true;
-        core.bus.on('change_menu_section', this, this.on_change_top_menu);
     },
     start: function() {
         this._super.apply(this, arguments);
@@ -84,73 +82,8 @@ var SideMenu = Widget.extend({
         if (self.current_menu) {
             self.open_menu(self.current_menu);
         }
-        this.trigger('menu_bound');
-
-        var lazyreflow = _.debounce(this.reflow.bind(this), 200);
-        core.bus.on('resize', this, function() {
-            if ($(window).width() < 768 ) {
-                lazyreflow('all_outside');
-                self.is_menus_lite_mode = false;
-            } else {
-                lazyreflow();
-                self.is_menus_lite_mode = 'menus_lite_mode' in window.sessionStorage ? true : false;
-                if (self.is_menus_lite_mode) {
-                    self.$secondary_menus.addClass('f_launcher_close');
-                }
-            }
-        });
-        core.bus.trigger('resize');
-
-        this.is_bound.resolve();
     },
 
-    /**
-     * Reflow the menu items and dock overflowing items into a "More" menu item.
-     * Automatically called when 'menu_bound' event is triggered and on window resizing.
-     *
-     * @param {string} behavior If set to 'all_outside', all the items are displayed.
-     * If not set, only the overflowing items are hidden.
-     */
-    reflow: function(behavior) {
-        var self = this;
-        var $more_container = this.$('#menu_more_container').hide();
-        var $more = this.$('#menu_more');
-        var $systray = this.$el.parents().find('.oe_systray');
-
-        $more.children('li').insertBefore($more_container);  // Pull all the items out of the more menu
-
-        // 'all_outside' beahavior should display all the items, so hide the more menu and exit
-        if (behavior === 'all_outside') {
-            // Show list of menu items
-            self.$el.show();
-            this.$el.find('li').show();
-            $more_container.hide();
-            return;
-        }
-
-        // Hide all menu items
-        var $toplevel_items = this.$el.find('li').not($more_container).not($systray.find('li')).hide();
-        // Show list of menu items (which is empty for now since all menu items are hidden)
-        self.$el.show();
-        $toplevel_items.each(function() {
-            var remaining_space = self.$el.parent().width() - $more_container.outerWidth();
-            self.$el.parent().children(':visible').each(function() {
-                remaining_space -= $(this).outerWidth();
-            });
-
-            if ($(this).width() >= remaining_space) {
-                return false; // the current item will be appended in more_container
-            }
-            $(this).show(); // show the current item in menu bar
-        });
-        $more.append($toplevel_items.filter(':hidden').show());
-        $more_container.toggle(!!$more.children().length);
-        // Hide toplevel item if there is only one
-        var $toplevel = self.$el.children("li:visible");
-        if ($toplevel.length === 1) {
-            $toplevel.hide();
-        }
-    },
     /**
      * Opens a given menu by id, as if a user had browsed to that menu by hand
      * except does not trigger any event on the way
@@ -181,17 +114,10 @@ var SideMenu = Widget.extend({
             var href_id = $sub_menu.attr('id');
             if (href_id && $sub_menu.attr('class').indexOf('in') === -1) {
                 window.sessionStorage.removeItem('menus_lite_mode');
-                this.is_menus_lite_mode = false;
-                if (!this.is_menus_lite_mode) {
-                    this.$secondary_menus.find("a[href='#" + href_id + "']").trigger('click');
-                }
                 this.$secondary_menus.find("a[href='#" + href_id + " i']")
                     .addClass('fa-chevron-up')
                     .removeClass('fa-chevron-down');
             } else {
-                if (!this.is_menus_lite_mode) {
-                    $clicked_menu.parents('li.panel').find('.oe_main_menu_container .more-less a').trigger('click');
-                }
                 this.$secondary_menus.find("a[href='#" + href_id + " i']")
                     .addClass('fa-chevron-down')
                     .removeClass('fa-chevron-up');
@@ -266,11 +192,10 @@ var SideMenu = Widget.extend({
             }
         }
         if (action_id) {
-            this.trigger('menu_click', {
+            this.trigger_up('app_clicked', {
                 action_id: action_id,
-                id: id,
-                previous_menu_id: this.current_menu // Here we don't know if action will fail (in which case we have to revert menu)
-            }, $item);
+                menu_id: id,
+            });
         } else {
             console.log('Menu no action found web test 04 will fail');
         }
@@ -298,132 +223,16 @@ var SideMenu = Widget.extend({
 return SideMenu;
 });
 
-flectra.define('web_flectra.sidemenu.menu', function(require) {
+flectra.define('web_flectra.sidemenu.webclient', function(require) {
     "use strict";
     var Menu = require('web.Menu');
     var WebClient = require('web.WebClient');
-    var config = require('web.config');
-    var data_manager = require('web.data_manager');
     var SideMenu = require('web_flectra.sidemenu');
 
-    WebClient.include({
-        show_application: function () {
-            this.sidemenu = new SideMenu(this);
-            this.sidemenu.appendTo(this.$el.parents().find('.oe_application_menu_placeholder'));
-            this.sidemenu.on('menu_click', this, this.on_menu_action);
-
-            if (config.device.size_class < config.device.SIZES.SM) {
-                this.sidemenu.is_menus_lite_mode = false;
-            } else {
-                this.sidemenu.is_menus_lite_mode = 'menus_lite_mode' in window.sessionStorage ? true : false;
-            }
-
-            this.bind_hashchange();
-            return this._super.apply(this, arguments);
-        },
-
-        bind_hashchange: function() {
-            var self = this;
-            $(window).bind('hashchange', function(e) {
-                self.on_hashchange(e);
-            });
-            var didHashChanged = false;
-            $(window).one('hashchange', function () {
-                didHashChanged = true;
-            });
-
-            var state = $.bbq.getState(true);
-            if (_.isEmpty(state) || state.action === "login") {
-                self.sidemenu.is_bound.done(function() {
-                    self._rpc({
-                            model: 'res.users',
-                            method: 'read',
-                            args: [[session.uid], ['action_id']],
-                        })
-                        .done(function(result) {
-                            if (didHashChanged) {
-                                return;
-                            }
-                            var data = result[0];
-                            if(data.action_id) {
-                                self.action_manager.doAction(data.action_id[0]);
-                                self.sidemenu.open_action(data.action_id[0]);
-                            } else {
-                                var first_menu_id = self.sidemenu.$el.find("a:first").data("menu");
-                                if(first_menu_id) {
-                                    self.sidemenu.menu_click(first_menu_id);
-                                }
-                            }
-                        });
-                });
-            } else {
-                $(window).trigger('hashchange');
-            }
-        },
-
-        on_hashchange: function(event) {
-            this._super.apply(this, event);
-            if (this._ignore_hashchange) {
-                this._ignore_hashchange = false;
-                return;
-            }
-            var self = this;
-            this.clear_uncommitted_changes().then(function () {
-                var stringstate = $.bbq.getState(false);
-                if (!_.isEqual(self._current_state, stringstate)) {
-                    var state = $.bbq.getState(true);
-                    if(!state.action && state.menu_id) {
-                        self.sidemenu.is_bound.done(function() {
-                            self.sidemenu.menu_click(state.menu_id);
-                        });
-                    } else if (state.menu_id) {
-                        var action = self.action_manager.getCurrentAction();
-                        if (action) {
-                            self.sidemenu.open_action(action.id, state.menu_id);
-                        }
-                    }
-                }
-                self._current_state = stringstate;
-            }, function () {
-                if (event) {
-                    self._ignore_hashchange = true;
-                    window.location = event.originalEvent.oldURL;
-                }
-            });
-        },
-
-        on_menu_action: function(options) {
-            var self = this;
-            return this.menu_dp.add(data_manager.load_action(options.action_id))
-                .then(function (result) {
-                    return self.action_mutex.exec(function() {
-                        var completed = $.Deferred();
-                        $.when(self.action_manager.do_action(result, {
-                            clear_breadcrumbs: true,
-                            action_menu_id: options.id,
-                        })).fail(function() {
-                            self.sidemenu.open_menu(options.previous_menu_id);
-                        }).always(function() {
-                            completed.resolve();
-                        });
-                        setTimeout(function() {
-                            completed.resolve();
-                        }, 2000);
-                        // We block the menu when clicking on an element until the action has correctly finished
-                        // loading. If something crash, there is a 2 seconds timeout before it's unblocked.
-                        return completed;
-                    });
-                });
-        },
-    });
-});
-
-flectra.define('web_flectra.sidemenu.webclient', function(require) {
-    "use strict";
+    var config = require('web.config');
+    var data_manager = require('web.data_manager');
     var rpc = require('web.rpc');
     var session = require('web.session');
-
-    var WebClient = require('web.WebClient');
 
     WebClient.include({
         start : function () {
@@ -437,6 +246,11 @@ flectra.define('web_flectra.sidemenu.webclient', function(require) {
                         $('.o-menu-toggle, .o_menu_sections').remove();
                 }
             });
+        },
+        show_application: function () {
+            this.sidemenu = new SideMenu(this);
+            this.sidemenu.appendTo(this.$el.parents().find('.oe_application_menu_placeholder'));
+            return this._super.apply(this, arguments);
         },
     });
 });
