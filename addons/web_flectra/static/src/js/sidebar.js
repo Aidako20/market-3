@@ -8,11 +8,12 @@ var config = require('web.config');
 var rpc = require('web.rpc');
 
 var SideMenu = Widget.extend({
-    init: function() {
+    init: function(menu_data) {
         this._super.apply(this, arguments);
+        this.is_bound = $.Deferred();
         this._isMainMenuClick = false;
-        this.data = {data:{children:[]}};
         this.isLoadflag = true;
+        this.menu_data = menu_data;
     },
     start: function() {
         this._super.apply(this, arguments);
@@ -82,6 +83,65 @@ var SideMenu = Widget.extend({
         if (self.current_menu) {
             self.open_menu(self.current_menu);
         }
+        this.is_bound.resolve();
+    },
+
+    /**
+     * Highlights the active menu record
+     * collapse the menus and set the arrows in right direction.
+     *
+     * @param {Number} action id of the menu entry to select
+     */
+    set_menu: function (app) {
+        if (!app.actionID) {
+            return;
+        }
+        var $main_menu = $('.f_launcher_content');
+        var $clicked_menu = $main_menu.find('a[data-menu=' + app.menuID + ']');
+        var $main_menu_container = $clicked_menu.closest('li.panel');
+        var $main_menu_chevron = $main_menu_container.find('i');
+        var $secondary_menu =  $main_menu_container.find('.oe_secondary_menu');
+
+        $secondary_menu.collapse('toggle');
+        $clicked_menu.closest('li:not(".panel")').addClass('active');
+
+        /** If triggered a menu change from APP DASHBOARD use actionID instead. **/
+        if ($clicked_menu.length > 1) {
+            var $active_menu = $main_menu.find('a.oe_menu_leaf[data-action-id=' + app.actionID + ']').closest('li:not(".panel")');
+            $active_menu.addClass('active');
+        } else {
+            var $active_menu = $main_menu.find('a.oe_menu_leaf[data-action-id=' + app.actionID + ']').closest('.oe_secondary_menu_section');
+            $active_menu.addClass('active');
+        }
+
+        /** Open secondary submenus. **/
+        var $secondary_menu_parents = $clicked_menu.parents('.oe_secondary_submenu');
+        var $secondary_menu_toggler = $clicked_menu.closest('li:not(".active")').children('.oe_menu_toggler')
+        if ($secondary_menu_parents.length > 1) {
+            setTimeout(function () {
+                $secondary_menu_toggler.addClass('oe_menu_opened');
+                $clicked_menu.closest('ul').removeClass('o_hidden');
+            }, 2000);
+        }
+    },
+
+    /**
+     * Resets all highlighted menu entries and
+     * collapse all opened menu items.
+     */
+    reset_menu: function () {
+        var $main_menu = $('.f_launcher_content');
+        var $main_menu_container = $main_menu.find('.collapse.show');
+        var $active_entry = $main_menu.find('li.active');
+        var $chevron_down = $main_menu.find('.fa-chevron-down');
+        var $secondary_menu_link = $main_menu.find('.oe_menu_opened');
+        var $secondary_menu_container = $main_menu.find('.oe_secondary_menu > .oe_secondary_submenu > li > .oe_secondary_submenu')
+
+        $main_menu_container.removeClass('show');
+        $active_entry.removeClass('active');
+        $chevron_down.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+        $secondary_menu_link.removeClass('oe_menu_opened');
+        $secondary_menu_container.addClass('o_hidden');
     },
 
     /**
@@ -110,20 +170,20 @@ var SideMenu = Widget.extend({
         this.$el.find('.active').removeClass('active');
         $main_menu.parent().addClass('active');
 
-        if(this._isMainMenuClick || this.isLoadflag) {
+        var isNotMainMenu = $clicked_menu.hasClass('oe_main_menu');
+        if(this._isMainMenuClick || this.isLoadflag && isNotMainMenu) {
             var href_id = $sub_menu.attr('id');
             if (href_id && $sub_menu.attr('class').indexOf('in') === -1) {
-                window.sessionStorage.removeItem('menus_lite_mode');
+                this.$secondary_menus.find("a[href='#" + href_id + "']").trigger('click');
                 this.$secondary_menus.find("a[href='#" + href_id + " i']")
-                    .addClass('fa-chevron-up')
+                    .addClass('fa-chevron-right')
                     .removeClass('fa-chevron-down');
             } else {
+                $clicked_menu.parents('li.panel').find('.oe_main_menu_container .more-less a').trigger('click');
                 this.$secondary_menus.find("a[href='#" + href_id + " i']")
                     .addClass('fa-chevron-down')
-                    .removeClass('fa-chevron-up');
+                    .removeClass('fa-chevron-right');
             }
-            this.$el.parents().find('.f_search_launcher').removeClass('launcher_opened');
-            this.$el.parents().find('#f_apps_search').find('i').addClass('fa-search').removeClass('fa-times');
         }
 
         // Hide/Show the leftbar menu depending of the presence of sub-items
@@ -223,6 +283,20 @@ var SideMenu = Widget.extend({
 return SideMenu;
 });
 
+flectra.define('web_flectra.sidemenu.AppsMenu', function(require) {
+    "use strict";
+    var AppsMenu = require('web.AppsMenu');
+    var SideMenu = require('web_flectra.sidemenu');
+    AppsMenu.include({
+        _openApp: function (app) {
+            this.sidemenu = new SideMenu(this);
+            this.sidemenu.reset_menu();
+            this.sidemenu.set_menu(app);
+            return this._super.apply(this, arguments);
+        },
+    });
+});
+
 flectra.define('web_flectra.sidemenu.webclient', function(require) {
     "use strict";
     var Menu = require('web.Menu');
@@ -247,10 +321,114 @@ flectra.define('web_flectra.sidemenu.webclient', function(require) {
                 }
             });
         },
+
         show_application: function () {
+            var state = $.bbq.getState(true);
+            var app = {
+                'menuID': state.menu_id,
+                'actionID': state.action
+            }
             this.sidemenu = new SideMenu(this);
             this.sidemenu.appendTo(this.$el.parents().find('.oe_application_menu_placeholder'));
+            this.sidemenu.on('menu_click', this, this.on_menu_action);
+            this.sidemenu.set_menu(app);
+
+            this.bind_hashchange();
             return this._super.apply(this, arguments);
+        },
+
+        bind_hashchange: function() {
+            var self = this;
+            $(window).bind('hashchange', function(e) {
+                self.on_hashchange(e);
+            });
+            var didHashChanged = false;
+            $(window).one('hashchange', function () {
+                didHashChanged = true;
+            });
+
+            var state = $.bbq.getState(true);
+            if (_.isEmpty(state) || state.action === "login") {
+                self.sidemenu.is_bound.done(function() {
+                    self._rpc({
+                            model: 'res.users',
+                            method: 'read',
+                            args: [[session.uid], ['action_id']],
+                        })
+                        .done(function(result) {
+                            if (didHashChanged) {
+                                return;
+                            }
+                            var data = result[0];
+                            if(data.action_id) {
+                                self.action_manager.doAction(data.action_id[0]);
+                                self.sidemenu.open_action(data.action_id[0]);
+                            } else {
+                                var first_menu_id = self.sidemenu.$el.find("a:first").data("menu");
+                                if(first_menu_id) {
+                                    self.sidemenu.menu_click(first_menu_id);
+                                }
+                            }
+                        });
+                });
+            } else {
+                $(window).trigger('hashchange');
+            }
+        },
+
+        on_hashchange: function(event) {
+            this._super.apply(this, event);
+            if (this._ignore_hashchange) {
+                this._ignore_hashchange = false;
+                return;
+            }
+            var self = this;
+            this.clear_uncommitted_changes().then(function () {
+                var stringstate = $.bbq.getState(false);
+                var state = $.bbq.getState(true);
+                if (!_.isEqual(self._current_state, stringstate)) {
+                    if(!state.action && state.menu_id) {
+                        self.sidemenu.is_bound.done(function() {
+                            self.sidemenu.menu_click(state.menu_id);
+                        });
+                    } else if (state.menu_id) {
+                        var action = self.action_manager.getCurrentAction();
+                        if (action) {
+                            self.sidemenu.open_action(action.id, state.menu_id);
+                        }
+                    }
+                }
+                self._current_state = stringstate;
+            }, function () {
+                if (event) {
+                    self._ignore_hashchange = true;
+                    window.location = event.originalEvent.oldURL;
+                }
+            });
+        },
+
+        on_menu_action: function(options) {
+            var self = this;
+            return this.menu_dp.add(data_manager.load_action(options.action_id))
+                .then(function (result) {
+                    return self.action_mutex.exec(function() {
+                        var completed = $.Deferred();
+                        $.when(self.action_manager.do_action(result, {
+                            clear_breadcrumbs: true,
+                            action_menu_id: options.id,
+                        })).fail(function() {
+                            self.sidemenu.open_menu(options.previous_menu_id);
+                        }).always(function() {
+                            completed.resolve();
+                        });
+                        setTimeout(function() {
+                            completed.resolve();
+                        }, 2000);
+                        // We block the menu when clicking on an element until the action has correctly finished
+                        // loading. If something crash, there is a 2 seconds timeout before it's unblocked.
+                        return completed;
+                    });
+                });
         },
     });
 });
