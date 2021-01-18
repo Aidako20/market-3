@@ -21,7 +21,7 @@ class SaleOrder(models.Model):
 
     discount_value = fields.Float(
             string='Discount',
-            track_visibility='always',
+            tracking=True,
     )
 
     amount_gross = fields.Monetary(
@@ -78,7 +78,7 @@ class SaleOrder(models.Model):
                             document_discount * distribution['factor'],
                             partner=order.partner_shipping_id,
                             is_refund=True,
-                            )
+                    )
                     discount_tax_amount += sum(t.get('amount', 0.0) for t in taxes.get('taxes', []))
 
             amount_untaxed = order.amount_untaxed + document_discount
