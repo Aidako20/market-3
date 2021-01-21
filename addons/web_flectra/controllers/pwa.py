@@ -1,6 +1,9 @@
 from flectra.http import Controller, request, route, send_file, Response
 from flectra.modules import get_resource_path
 
+from io import BytesIO
+
+import base64
 import json
 import logging
 
@@ -44,19 +47,19 @@ class ProgressiveWebApp(Controller):
             icons = []
             if config.pwa_icon_128:
                 icons.append({
-                    'src': str('%s/web/image/%s/%s/%s' % (base_url, 'pwa.config', config.id, 'pwa_icon_128')),
+                    'src': '/pwa/icon/128/%s' % str(company_id),
                     'type': "image/png",
                     'sizes': "128x128",
                 })
             if config.pwa_icon_192:
                 icons.append({
-                    'src': str('%s/web/image/%s/%s/%s' % (base_url, 'pwa.config', config.id, 'pwa_icon_192')),
+                    'src': '/pwa/icon/192/%s' % str(company_id),
                     'type': "image/png",
                     'sizes': "192x192",
                 })
             if config.pwa_icon_512:
                 icons.append({
-                    'src': str('%s/web/image/%s/%s/%s' % (base_url, 'pwa.config', config.id, 'pwa_icon_512')),
+                    'src': '/pwa/icon/512/%s' % str(company_id),
                     'type': "image/png",
                     'sizes': "512x512",
                 })
@@ -72,6 +75,21 @@ class ProgressiveWebApp(Controller):
             return json.dumps(vals)
         else:
             return response
+
+    def _get_icon(self, icon_size, company_id):
+        config = request.env['pwa.config'].sudo().search([('pwa_company_id', '=', int(company_id))], limit=1)
+        if config:
+            if icon_size == 128:
+                icon = config.pwa_icon_128
+            elif icon_size == 192:
+                icon = config.pwa_icon_192
+            elif icon_size == 512:
+                icon = config.pwa_icon_512
+
+            if icon:
+                icon = BytesIO(base64.b64decode(icon))
+                return request.make_response(icon.read(), [('Content-Type', 'image/png')])
+        return False
 
     @route("/service-worker.js", type="http", auth="public")
     def service_worker(self):
@@ -114,3 +132,15 @@ class ProgressiveWebApp(Controller):
     @route('/pwa/offline', type='http', auth="public", website=True)
     def pwa_offline(self, **post):
         return request.render("web_flectra.pwa_offline")
+
+    @route('/pwa/icon/128/<int:company_id>', type='http', auth="public")
+    def icon_128(self, **post):
+        return self._get_icon(128, post.get('company_id'))
+
+    @route('/pwa/icon/192/<int:company_id>', type='http', auth="public")
+    def icon_192(self, **post):
+        return self._get_icon(192, post.get('company_id'))
+
+    @route('/pwa/icon/512/<int:company_id>', type='http', auth="public")
+    def icon_512(self, **post):
+        return self._get_icon(512, post.get('company_id'))
