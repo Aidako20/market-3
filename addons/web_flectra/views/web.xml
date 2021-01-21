@@ -68,14 +68,15 @@
             </div>
         </t>
     </template>
-    <template id="service_worker" name="PWA service worker">
-'use strict';
+    <template id="service_worker_settings" name="PWA service worker settings">
 const CACHE_NAME = '<t t-esc="pwa_cache_name" />';
 const FILES_TO_CACHE = [
   <t t-foreach="pwa_files_to_cache" t-as="file_to_cache">
       '<t t-esc="file_to_cache" />',
   </t>
 ];
+    </template>
+    <template id="service_worker_install" name="PWA service worker install">
 self.addEventListener('install', event => {
   console.debug('[ServiceWorker] Install');
   event.waitUntil(
@@ -86,6 +87,8 @@ self.addEventListener('install', event => {
   );
   self.skipWaiting();
 });
+    </template>
+    <template id="service_worker_activate" name="PWA service worker activate">
 self.addEventListener('activate', event => {
   console.debug('[ServiceWorker] Activate');
    event.waitUntil(
@@ -100,6 +103,8 @@ self.addEventListener('activate', event => {
    );
   self.clients.claim();
 });
+    </template>
+    <template id="service_worker_fetch" name="PWA service worker fetch">
 self.addEventListener('fetch', event => {
     if (event.request.cache === 'only-if-cached' &amp;&amp; event.request.mode !== 'same-origin') {
         return;
@@ -114,6 +119,13 @@ self.addEventListener('fetch', event => {
         })
     );
 });
+    </template>
+    <template id="service_worker" name="PWA service worker">
+'use strict';
+        <t t-call="web_flectra.service_worker_settings" />
+        <t t-call="web_flectra.service_worker_install" />
+        <t t-call="web_flectra.service_worker_activate" />
+        <t t-call="web_flectra.service_worker_fetch" />
     </template>
     <!--
         Progressive Web App - End
