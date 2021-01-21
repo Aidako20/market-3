@@ -130,17 +130,17 @@ class ProgressiveWebApp(Controller):
         return self._get_manifest(company_id)
 
     @route('/pwa/offline', type='http', auth="public", website=True)
-    def pwa_offline(self, **post):
+    def pwa_offline(self):
         return request.render("web_flectra.pwa_offline")
 
     @route('/pwa/icon/128/<int:company_id>', type='http', auth="public")
-    def icon_128(self, **post):
-        return self._get_icon(128, post.get('company_id'))
+    def icon_128(self, **kwargs):
+        return self._get_icon(128, kwargs.get('company_id'))
 
     @route('/pwa/icon/192/<int:company_id>', type='http', auth="public")
-    def icon_192(self, **post):
-        return self._get_icon(192, post.get('company_id'))
+    def icon_192(self, **kwargs):
+        return self._get_icon(192, kwargs.get('company_id'))
 
     @route('/pwa/icon/512/<int:company_id>', type='http', auth="public")
-    def icon_512(self, **post):
-        return self._get_icon(512, post.get('company_id'))
+    def icon_512(self, **kwargs):
+        return self._get_icon(512, kwargs.get('company_id'))
