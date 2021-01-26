@@ -124,9 +124,12 @@ class ProgressiveWebApp(Controller):
         )
         return request.make_response(content, [("Content-Type", mimetype)])
 
-    @route("/manifest.json/<int:company_id>", type="http", auth="public")
+    @route(["/manifest.json/<int:company_id>","/manifest.json"], type="http", auth="public")
     def manifest(self, **kwargs):
-        company_id = kwargs.get('company_id')
+        if not 'company_id' in kwargs or not kwargs['company_id']:
+            company_id = 1
+        else:
+            company_id = kwargs.get('company_id')
         return self._get_manifest(company_id)
 
     @route('/pwa/offline', type='http', auth="public", website=True)

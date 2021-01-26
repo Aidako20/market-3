@@ -19,7 +19,7 @@
         <xpath expr="//head" position="inside">
             <!-- Add meta tags and icons -->
             <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-            <t t-set="pwa_config" t-value="request.env['pwa.config'].search([('pwa_company_id', '=', request.env.user.company_id.id)]) or False" />
+            <t t-set="pwa_config" t-value="request.env['pwa.config'].sudo().search([('pwa_company_id', '=', request.env.user.company_id.id)]) or False" />
             <t t-if="pwa_config != False">
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -33,7 +33,7 @@
             <link rel="manifest" t-att-href="'/manifest.json/'+str(request.env.user.company_id.id)" />
             <!-- Add meta theme-color -->
             <meta name="theme-color"
-                  t-attf-content="#{request.env['pwa.config'].search([('pwa_company_id', '=', request.env.user.company_id.id)]).pwa_theme_color or '#009efb'}" />
+                  t-attf-content="#{request.env['pwa.config'].sudo().search([('pwa_company_id', '=', request.env.user.company_id.id)]).pwa_theme_color or '#009efb'}" />
             </t>
         </xpath>
     </template>
