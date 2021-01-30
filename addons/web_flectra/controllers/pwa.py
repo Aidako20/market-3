@@ -26,7 +26,6 @@ class ProgressiveWebApp(Controller):
         file = get_resource_path('web_flectra', 'static', 'src', 'manifest.json')
         response = send_file(file, filename='manifest.json', mimetype='application/json')
 
-        base_url = request.env['ir.config_parameter'].sudo().get_param('web.base.url')
         config = request.env['pwa.config'].sudo().search([('pwa_company_id', '=', int(company_id))], limit=1)
         vals = {
             "start_url": "/web",
