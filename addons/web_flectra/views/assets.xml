@@ -17,6 +17,8 @@
             <link href="/web_flectra/static/src/less/font_rubik.less" rel="stylesheet" type="text/less"/>
             <link rel="stylesheet" type="text/scss" href='/web_flectra/static/src/scss/backend_theme_customizer/dark_mode.scss' />
             <link rel="stylesheet" type="text/scss" href='/web_flectra/static/src/scss/backend_theme_customizer/style.scss' />
+            <link href="/web_flectra/static/src/scss/fonts.scss" rel="stylesheet" type="text/scss"/>
+            <link href="/web_flectra/static/src/scss/font_rubik.scss" rel="stylesheet" type="text/scss"/>
             <link rel="stylesheet" type="text/scss" href='/web_flectra/static/src/scss/navbar.scss' />
             <link rel="stylesheet" type="text/scss" href='/web_flectra/static/src/scss/apps_menu.scss' />
             <link rel="stylesheet" type="text/scss" href='/web_flectra/static/src/scss/web_responsive.scss'/>
@@ -30,6 +32,8 @@
             <link rel="stylesheet" type="text/scss" href='/web_flectra/static/src/scss/sidebar.scss' />
             <link rel="stylesheet" type="text/scss" href='/web_flectra/static/src/scss/kanban_view.scss' />
 
+            <script type="text/javascript" src="/web_flectra/static/src/js/base64js.min.js" />
+            <script type="text/javascript" src="/web_flectra/static/src/js/SystrayMenu_backend.js" />
             <script type="text/javascript" src="/web_flectra/static/src/js/web_client.js" />
             <script type="text/javascript" src="/web_flectra/static/src/js/apps_menu.js" />
             <script type="text/javascript" src="/web_flectra/static/src/js/menu.js" />
