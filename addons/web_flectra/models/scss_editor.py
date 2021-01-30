@@ -105,8 +105,6 @@ class ScssEditor(models.AbstractModel):
         custom_attachment = self._get_custom_attachment(custom_url)
         datas = base64.b64encode((content or "\n").encode("utf-8"))
         if custom_attachment.exists():
-            old_attachments = self._get_old_attachment(url, xmlid)
-            old_attachments.unlink()
             custom_attachment.write({"datas": datas})
         else:
             self.env["ir.attachment"].create({
