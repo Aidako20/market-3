@@ -31,6 +31,7 @@ class ProgressiveWebApp(Controller):
             icons = []
             manifest = {
                 "start_url": "/web",
+                "scope": "/web",
             }
             if config.pwa_name:
                 manifest.update({
