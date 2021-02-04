@@ -61,6 +61,8 @@ class DasboardBackground(Controller):
             for entry in company_settings:
                 if entry == 'theme_menu_style':
                     result.update({entry: company_settings[entry]})
+                elif entry == 'theme_font_name':
+                    result.update({entry: company_settings[entry]})
                 elif entry == 'theme_color_brand':
                     result.update({entry: company_settings[entry]})
                 elif entry == 'theme_background_color':
