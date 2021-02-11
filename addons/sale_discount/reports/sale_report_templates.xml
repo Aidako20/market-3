@@ -14,11 +14,11 @@
                 <tr style="">
                     <td name="td_document_discount_label">
                         <t t-if="doc.discount_type == 'percent'">
-                            <span t-field="doc.discount_value"/>
+                            <span t-field="doc.discount_value_percent"/>
                             <span>% Discount</span>
                         </t>
                         <t t-else="">
-                            <strong>Document Discount</strong>
+                            <strong>Fixed Discount</strong>
                         </t>
 
                     </td>

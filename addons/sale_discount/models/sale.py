@@ -24,6 +24,12 @@ class SaleOrder(models.Model):
             tracking=True,
     )
 
+    discount_value_percent = fields.Float(
+            string='Discount (%)',
+            digits='Discount',
+            compute='_amount_all',
+    )
+
     amount_gross = fields.Monetary(
             string='Gross Amount',
             store=True,
@@ -86,10 +92,11 @@ class SaleOrder(models.Model):
             amount_total = amount_untaxed + amount_tax
 
             order.update({
-                'amount_gross': amount_gross,
+                'discount_value_percent': order.discount_value,
                 'amount_discountable': amount_discountable,
                 'document_discount': document_discount,
                 'document_discount_tax_amount': discount_tax_amount,
+                'amount_gross': amount_gross,
                 'amount_untaxed': amount_untaxed,
                 'amount_tax': amount_tax,
                 'amount_total': amount_total,
@@ -165,3 +172,17 @@ class SaleOrder(models.Model):
                         res[key]['base'] += t['base']
                         res[key]['factor'] = res[key]['base'] / amount_discountable
         return res
+
+    def _prepare_invoice(self):
+        invoice_vals = super(SaleOrder, self)._prepare_invoice()
+
+        # To apply fixed discount only on first real invoice (no downpayment)
+        # we need to check if any real order position was already invoiced
+        real_invoice_exists = len(self.order_line.filtered(lambda f: not f.is_downpayment).invoice_lines.move_id)
+
+        # On fixed document discount we apply the discount only on first invoice
+        # On percent document discount the discount is applied on all invoices
+        if self.discount_type == 'percent' or not real_invoice_exists:
+            invoice_vals['discount_type'] = self.discount_type
+            invoice_vals['discount_value'] = self.discount_value
+        return invoice_vals
