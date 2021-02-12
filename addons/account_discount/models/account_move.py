@@ -126,16 +126,18 @@ class AccountMove(models.Model):
 
         aml = self.env['account.move.line'].with_context(check_move_validity=False)
 
+        update_needed = False
+
         for move in self:
 
-            needs_update = False
+            update_needed = False
 
             in_draft_mode = move != move._origin
             if float_is_zero(move.document_discount, precision_digits=move.currency_id.decimal_places):
                 to_del = move.line_ids.filtered(lambda f: f.is_document_discount_line)
                 if in_draft_mode:
                     move.update({'line_ids': [(2, line.id) for line in to_del]})
-                    needs_update = True
+                    update_needed = True
                 continue
 
             currency = move.currency_id or move.company_id.currency_id
@@ -166,7 +168,7 @@ class AccountMove(models.Model):
                     if existing_line.credit == line_values['credit'] and existing_line.debit == line_values['debit']:
                         continue
 
-                    needs_update = True
+                    update_needed = True
                     if in_draft_mode:
                         existing_line.update(line_values)
                     else:
@@ -189,9 +191,9 @@ class AccountMove(models.Model):
                         'tax_ids': distribution['tax'].ids,
                     }
                     create_method(line_values)
-                    needs_update = True
+                    update_needed = True
 
-        if needs_update:
+        if update_needed:
             self.with_context(check_move_validity=False)._recompute_dynamic_lines(recompute_all_taxes=True)
 
     def _get_document_tax_distribution(self):
