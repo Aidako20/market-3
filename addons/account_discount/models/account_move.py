@@ -28,6 +28,7 @@ class AccountMove(models.Model):
             string='Discount (%)',
             digits='Discount',
             compute='_compute_document_discount',
+            compute_sudo=True,
     )
 
     amount_gross = fields.Monetary(

@@ -28,6 +28,7 @@ class SaleOrder(models.Model):
             string='Discount (%)',
             digits='Discount',
             compute='_amount_all',
+            compute_sudo=True,
     )
 
     amount_gross = fields.Monetary(
