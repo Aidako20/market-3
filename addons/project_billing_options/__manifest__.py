@@ -9,6 +9,7 @@
         'security/ir.model.access.csv',
         'views/project_inherit.xml',
         'views/hr_timesheet_invoice_factor_view.xml',
+        'menu/menu.xml'
     ],
     'demo': [
         'demo/demodata_invoicable_factor.xml'
