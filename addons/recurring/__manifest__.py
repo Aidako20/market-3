@@ -5,6 +5,7 @@
 {
     'name': 'Recurring Documents',
     'category': 'Extra Tools',
+    'author': 'FlectraHQ',
     'description': """
 Create recurring documents.
 ===========================
@@ -19,10 +20,12 @@ e.g. To have an invoice generated automatically periodically:
       above. Specify the interval information and partner to be invoiced.
       Module taken from odoov10 subscription.
     """,
-    'depends': ['base', 'contacts', 'sale', 'l10n_generic_coa'],
+    'depends': ['account', 'purchase', 'sales_team', 'base', 'contacts', 'sale',
+                'l10n_generic_coa'],
     'data': [
         'security/ir.model.access.csv',
         'views/recurring_view.xml',
     ],
     'demo': ['demo/recurring_demo.xml'],
+    'license': 'LGPL-3',
 }

@@ -17,7 +17,7 @@
     <record id="recurring_document_sale0" model="recurring.document">
         <field eval="1" name="active"/>
         <field name="model" ref="sale.model_sale_order"/>
-        <field name="name">Sale Order</field>
+        <field name="name">Sale Recurring Type</field>
     </record>
 
     <record id="recurring_document_fields_4" model="recurring.document.fields">
@@ -27,9 +27,9 @@
     </record>
 
     <record id="recurring_sale1" model="recurring">
-        <field name="name">SO001</field>
+        <field name="name">Sale Recurring Document</field>
         <field name="exec_init">2</field>
-        <field name="interval_type">minutes</field>
+        <field name="interval_type">months</field>
         <field name="date_init" eval="datetime.now()"/>
         <field name="doc_source" ref='recurring_sale.sale_order_demo_recurring'/>
     </record>

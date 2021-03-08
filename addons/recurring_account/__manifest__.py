@@ -15,6 +15,7 @@
     'data': [
         'views/account_invoice_view.xml',
     ],
+    'license': 'LGPL-3',
     'installable': True,
     'auto_install': False,
 }

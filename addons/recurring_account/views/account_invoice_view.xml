@@ -15,16 +15,19 @@
                         id="generate_recurring"
                         string="Generate Recurring" class="btn-primary"
                         type="action"
-                        attrs="{'invisible': [('recurring_id', '!=', False)]}"/>
+                        attrs="{'invisible': [('recurring_id', '!=', False)]}"
+                        groups="account.group_account_manager"/>
             </xpath>
             <xpath expr="//sheet/div[@name='button_box']" position="inside">
                 <button class="oe_stat_button" type="object"
                         string="Recurring" name="get_recurring"
-                        icon="fa-tasks" attrs="{'invisible': [('recurring_id', '=', False)]}"/>
+                        icon="fa-tasks" attrs="{'invisible': [('recurring_id', '=', False)]}"
+                        groups="account.group_account_manager"/>
 
                 <button class="oe_stat_button" type="object"
                         string="Document" name="get_recurring_documents"
-                        icon="fa-tasks" attrs="{'invisible': [('recurring_id', '=', False)]}"/>
+                        icon="fa-tasks" attrs="{'invisible': [('recurring_id', '=', False)]}"
+                        groups="account.group_account_manager"/>
             </xpath>
         </field>
     </record>

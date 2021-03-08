@@ -16,6 +16,7 @@
         'views/purchase_views.xml',
     ],
     'demo': ['demo/purchase_recurring_demo.xml'],
+    'license': 'LGPL-3',
     'installable': True,
     'auto_install': False,
 }

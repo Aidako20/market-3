@@ -19,7 +19,7 @@
     <record id="recurring_document_purchase0" model="recurring.document">
         <field eval="1" name="active"/>
         <field name="model" ref="purchase.model_purchase_order"/>
-        <field name="name">Purchase Order</field>
+        <field name="name">Purchase Recurring Type</field>
     </record>
 
     <record id="recurring_document_fields_3" model="recurring.document.fields">
@@ -29,9 +29,9 @@
     </record>
 
     <record id="recurring_purchase1" model="recurring">
-        <field name="name">PO001</field>
+        <field name="name">Purchase Recurring Document</field>
         <field name="exec_init">2</field>
-        <field name="interval_type">minutes</field>
+        <field name="interval_type">months</field>
         <field name="date_init" eval="datetime.now()"/>
         <field name="doc_source" ref='recurring_purchase.purchase_order_demo_1'/>
     </record>
