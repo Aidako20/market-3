@@ -2,7 +2,8 @@
 # Part of Flectra. See LICENSE file for full copyright and licensing details.
 {
     'name': 'Project Billing Options',
-    'summary': 'Manage Timesheets and Calculate Profitability based on Invoicing Factor',
+    'summary': 'Manage Timesheets and Calculate Profitability '
+               'based on Invoicing Factor',
     'author': 'FlectraHQ',
     'depends': ['project', 'hr_timesheet', 'sale_timesheet', 'analytic'],
     'data': [
