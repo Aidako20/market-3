@@ -130,7 +130,7 @@ class test_search(TransactionCase):
         found_ids = Cats.search([('id', 'in', list(cat_ids.values()))]).ids
         self.assertEqual(found_ids, expected_ids)
 
-   def test_13_m2o_order_loop_multi(self):
+    def test_13_m2o_order_loop_multi(self):
         Users = self.env['res.users']
 
         # will sort by login desc of the creator, then by name
