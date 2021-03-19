@@ -336,8 +336,8 @@ msgstr "pvz., paieškos variklis, svetainės puslapis, ..."
 
 #. module: website_links
 #: model_terms:ir.ui.view,arch_db:website_links.create_shorten_url
-msgid "e.g. https://www.odoo.com/page/contactus"
-msgstr "pvz., https://www.odoo.com/page/contactus"
+msgid "e.g. https://flectrahq.com/contactus"
+msgstr "pvz., https://flectrahq.com/contactus"
 
 #. module: website_links
 #. openerp-web

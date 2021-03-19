@@ -92,7 +92,7 @@ msgid ""
 "            </a>\n"
 "        </div>\n"
 "        <div style=\"margin: 16px 8px 16px 8px; text-align: center;\">\n"
-"            <a href=\"${object.website_url}\" style=\"background-color: #009EFB; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;\">View <strong>${object.name}</strong></a>\n"
+"            <a href=\"${object.website_url}\" style=\"background-color: #875a7b; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;\">View <strong>${object.name}</strong></a>\n"
 "        </div>\n"
 "    </p>\n"
 "</div>\n"
@@ -112,7 +112,7 @@ msgid ""
 "            </a>\n"
 "        </div>\n"
 "        <div style=\"margin: 16px 8px 16px 8px; text-align: center;\">\n"
-"            <a href=\"${object.website_url}\" style=\"background-color: #009EFB; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;\">View <strong>${object.name}</strong></a>\n"
+"            <a href=\"${object.website_url}\" style=\"background-color: #875a7b; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;\">View <strong>${object.name}</strong></a>\n"
 "        </div>\n"
 "    </p>\n"
 "</div>\n"
@@ -545,14 +545,14 @@ msgstr ""
 msgid ""
 "Discover how you can integrate MRP, PLM, Quality and Maintenance in a single application to maximize the efficiency of your manufacturing operations.\n"
 "\n"
-"Read more about the features at: https://www.odoo.com/page/manufacturing-features\n"
+"Read more about the features at: https://flectrahq.com/manufacturing-features\n"
 "\n"
-"Discover Odoo MRP: https://www.odoo.com/page/manufacturing"
+"Discover Odoo MRP: https://flectrahq.com/manufacturing"
 msgstr ""
 
 #. module: website_slides
 #: model:slide.slide,description:website_slides.slide_1
-msgid "Discover the CRM sales people love https://www.odoo.com/page/crm"
+msgid "Discover the CRM sales people love https://flectrahq.com/crm"
 msgstr ""
 
 #. module: website_slides
@@ -871,7 +871,7 @@ msgstr ""
 
 #. module: website_slides
 #: model:slide.slide,description:website_slides.slide_8
-msgid "Learn more at https://www.odoo.com/page/sales"
+msgid "Learn more at https://flectrahq.com/sales"
 msgstr ""
 
 #. module: website_slides
@@ -1393,7 +1393,7 @@ msgstr ""
 msgid ""
 "Stop doing manual printing and scanning. Move to electronic signature with Odoo Sign!\n"
 "\n"
-"Discover more at https://www.odoo.com/page/sign"
+"Discover more at https://flectrahq.com/sign"
 msgstr ""
 
 #. module: website_slides
@@ -1611,7 +1611,7 @@ msgstr ""
 msgid ""
 "Warehouse management software for the 21st century.\n"
 "\n"
-"Discover Odoo Inventory: https://www.odoo.com/page/warehouse"
+"Discover Odoo Inventory: https://flectrahq.com/warehouse"
 msgstr ""
 
 #. module: website_slides

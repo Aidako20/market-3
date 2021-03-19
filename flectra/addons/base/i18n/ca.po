@@ -10,9 +10,8 @@
 # RGB Consulting <odoo@rgbconsulting.com>, 2020
 # Martin Trigaux, 2020
 # Arnau Ros, 2020
-# jabelchi <jabelchi@gmail.com>, 2020
 # Carles Antoli <carlesantoli@hotmail.com>, 2020
-# Susanna Pujol, 2020
+# Josep Anton Belchi, 2021
 # 
 msgid ""
 msgstr ""
@@ -20,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-27 13:50+0000\n"
 "PO-Revision-Date: 2020-09-07 08:09+0000\n"
-"Last-Translator: Susanna Pujol, 2020\n"
+"Last-Translator: Josep Anton Belchi, 2021\n"
 "Language-Team: Catalan (https://www.transifex.com/odoo/teams/41243/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1056,9 +1055,9 @@ msgid ""
 "\n"
 "    Make the lock date irreversible:\n"
 "\n"
-"    * You cannot define stricter conditions on advisors than on users. Then, the lock date on advisor must be set before the lock date for users.\n"
-"    * You cannot lock a period that is not finished yet. Then, the lock date for advisors must be set before the last day of the previous month.\n"
-"    * The new lock date for advisors must be set after the previous lock date.\n"
+"    * You cannot set stricter restrictions on advisors than on users. Therefore, the All Users Lock Date must be anterior (or equal) to the Invoice/Bills Lock Date.\n"
+"    * You cannot lock a period that has not yet ended. Therefore, the All Users Lock Date must be anterior (or equal) to the last day of the previous month.\n"
+"    * Any new All Users Lock Date must be posterior (or equal) to the previous one.\n"
 "    "
 msgstr ""
 
@@ -4094,6 +4093,10 @@ msgid ""
 "========================\n"
 "    "
 msgstr ""
+"\n"
+"Geolocalització de partners\n"
+"========================\n"
+"    "
 
 #. module: base
 #: model:ir.module.module,description:base.module_hr_appraisal
@@ -4622,6 +4625,9 @@ msgid ""
 "The kernel of Odoo, needed for all installation.\n"
 "===================================================\n"
 msgstr ""
+"\n"
+"Nucli de Odoo, necessari per a tota la instal·lació.\n"
+"===================================================\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_microsoft_account
@@ -5214,7 +5220,7 @@ msgstr ""
 "Aquest mòdul té com a objectiu gestionar l'assistència dels treballadors.\n"
 "==================================================\n"
 "\n"
-"Manté el compte de les assistències dels treballadors sobre la base de les accions (Check in / Check out) realitzats per ells."
+"Porta el control de les assistències dels treballadors sobre la base de les accions (fitxatges d'entrada-sortida) realitzats per ells."
 
 #. module: base
 #: model:ir.module.module,description:base.module_pos_hr
@@ -6569,6 +6575,14 @@ msgid ""
 "                                <b attrs=\"{'invisible': [('type', '!=', False)]}\">Address</b>\n"
 "                            </span>"
 msgstr ""
+"<span class=\"o_form_label o_td_label\" name=\"address_name\">\n"
+"                                <b attrs=\"{'invisible': [('type', '!=', 'contact')]}\">Adreça de la empresa</b>\n"
+"                                <b attrs=\"{'invisible': [('type', '!=', 'invoice')]}\">Adreça de facturació</b>\n"
+"                                <b attrs=\"{'invisible': [('type', '!=', 'delivery')]}\">Adreça de lliurament</b>\n"
+"                                <b attrs=\"{'invisible': [('type', '!=', 'other')]}\">Altra adreça</b>\n"
+"                                <b attrs=\"{'invisible': [('type', '!=', 'private')]}\">Adreça privada</b>\n"
+"                                <b attrs=\"{'invisible': [('type', '!=', False)]}\">Adreça</b>\n"
+"                            </span>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_base_module_update
@@ -6686,7 +6700,7 @@ msgstr "<strong>Dependències :</strong>"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_res_company_kanban
 msgid "<strong>Email:</strong>"
-msgstr ""
+msgstr "<strong>Email:</strong>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.report_irmodeloverview
@@ -6729,7 +6743,7 @@ msgstr "<strong>Nom</strong>"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_res_company_kanban
 msgid "<strong>Phone:</strong>"
-msgstr ""
+msgstr "<strong>Telèfon:</strong>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_res_company_kanban
@@ -8480,7 +8494,7 @@ msgstr "Llista d'arxius adjunts i indexació de documents"
 #: model:ir.module.category,name:base.module_category_human_resources_attendances
 #: model:ir.module.module,shortdesc:base.module_hr_attendance
 msgid "Attendances"
-msgstr "Serveis"
+msgstr "Assistències"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_hr_attendance_mobile
@@ -10364,7 +10378,7 @@ msgstr "Contacte"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_partner_form
 msgid "Contact / Address"
-msgstr "Contactes / Direccions"
+msgstr "Contacte / Adreça"
 
 #. module: base
 #: model:res.groups,name:base.group_partner_manager
@@ -10418,7 +10432,7 @@ msgstr "Contactes"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_partner_form
 msgid "Contacts & Addresses"
-msgstr "Contactes i Direccions"
+msgstr "Contactes i adreces"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_contacts_enterprise
@@ -11648,7 +11662,7 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_account_disallowed_expenses
 msgid "Disallowed Expenses"
-msgstr "Entrega no permesa"
+msgstr "Despeses no permeses"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_account_disallowed_expenses_fleet
@@ -11792,7 +11806,7 @@ msgstr "Mostrar "
 #: model:ir.model.fields,field_description:base.field_reset_view_arch_wizard__display_name
 #: model:ir.model.fields,field_description:base.field_wizard_ir_model_menu_create__display_name
 msgid "Display Name"
-msgstr "Mostrar Nom"
+msgstr "Nom mostrat"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_website_studio
@@ -14117,7 +14131,7 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_hr_holidays_attendance
 msgid "HR Attendance Holidays"
-msgstr ""
+msgstr "RRHH assistència festius"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_hr_gamification
@@ -14836,7 +14850,7 @@ msgid ""
 msgstr ""
 "Si aquesta vista és heretada,\n"
 "* si és cert, la vista sempre estén el seu pare\n"
-"* si és falç, la vista actualment no estén el seu pare, però es pot activar"
+"* si és fals, la vista actualment no estén el seu pare, però es pot activar"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_rule_form
@@ -16828,7 +16842,7 @@ msgid ""
 "---------------------------------------\n"
 "\n"
 "Publish, promote and organize your job offers with the Odoo\n"
-"<a href=\"https://www.odoo.com/page/recruitment\">Open Source Recruitment Application</a>.\n"
+"<a href=\"https://flectrahq.com/recruitment\">Open Source Recruitment Application</a>.\n"
 "\n"
 "Organize your job board, promote your job announces and keep track of\n"
 "application submissions easily. Follow every applicant and build up a database\n"
@@ -16868,7 +16882,7 @@ msgstr ""
 "---------------------------------------\n"
 "\n"
 "Publicar, promoure i organitzar les vostres ofertes de treball amb Odoo\n"
-"<a href=\"https://www.odoo.com/page/recruitment\">Sol·licitud de Contractacions de Codi Obert</a>.\n"
+"<a href=\"https://flectrahq.com/recruitment\">Sol·licitud de Contractacions de Codi Obert</a>.\n"
 "\n"
 "Organitzar la seva borsa de treball, promoure els anuncis de feina i fer el seguiment\n"
 "de les sol·licituds de manera àgil. Segueixi cada sol·licitant i construeixi una base de dades\n"
@@ -18349,7 +18363,7 @@ msgid ""
 "Odoo Blogs\n"
 "----------\n"
 "\n"
-"Write, Design, Promote and Engage with <a href=\"https://www.odoo.com/page/blog-engine\">Odoo Blogs</a>.\n"
+"Write, Design, Promote and Engage with <a href=\"https://flectrahq.com/blog-engine\">Odoo Blogs</a>.\n"
 "\n"
 "Express yourself with the Odoo enterprise grade blogging platform. Write\n"
 "beautiful blog posts, engage with visitors, translate content and moderate\n"
@@ -18446,7 +18460,7 @@ msgid ""
 "--------\n"
 "\n"
 "Boost sales productivity, improve win rates, grow revenue with the Odoo\n"
-"<a href=\"https://www.odoo.com/page/crm\">Open Source CRM</a>.\n"
+"<a href=\"https://flectrahq.com/crm\">Open Source CRM</a>.\n"
 "\n"
 "Manage your sales funnel with no effort. Attract leads, follow-up on phone\n"
 "calls and meetings. Analyse the quality of your leads to make informed\n"
@@ -18499,7 +18513,7 @@ msgid ""
 "Lead Automation and Marketing Campaigns\n"
 "---------------------------------------\n"
 "\n"
-"Drive performance by automating tasks with Odoo <a href=\"https://www.odoo.com/page/crm\">CRM</a>.\n"
+"Drive performance by automating tasks with Odoo <a href=\"https://flectrahq.com/crm\">CRM</a>.\n"
 "\n"
 "Use our marketing campaigns to automate lead acquisition, follow ups and\n"
 "promotions. Define automated actions (e.g. ask a salesperson to call, send an\n"
@@ -18558,7 +18572,7 @@ msgid ""
 "------------------------------\n"
 "\n"
 "Connect with experts, follow what interests you, share documents and promote\n"
-"best practices with Odoo <a href=\"https://www.odoo.com/page/enterprise-social-network\">Enterprise Social Network</a>. Get work done with\n"
+"best practices with Odoo <a href=\"https://flectrahq.com/enterprise-social-network\">Enterprise Social Network</a>. Get work done with\n"
 "effective collaboration across departments, geographies, documents and business\n"
 "applications. All of this while decreasing email overload.\n"
 "\n"
@@ -18613,7 +18627,7 @@ msgstr ""
 "------------------------------\n"
 "\n"
 "Connect with experts, follow what interests you, share documents and promote\n"
-"best practices with Odoo <a href=\"https://www.odoo.com/page/enterprise-social-network\">Enterprise Social Network</a>. Get work done with\n"
+"best practices with Odoo <a href=\"https://flectrahq.com/enterprise-social-network\">Enterprise Social Network</a>. Get work done with\n"
 "effective collaboration across departments, geographies, documents and business\n"
 "applications. All of this while decreasing email overload.\n"
 "\n"
@@ -18670,7 +18684,7 @@ msgid ""
 "Odoo Human Resources\n"
 "--------------------\n"
 "\n"
-"With Odoo <a href=\"https://www.odoo.com/page/employees\">Human Resources</a>,\n"
+"With Odoo <a href=\"https://flectrahq.com/employees\">Human Resources</a>,\n"
 "manage the most important asset in your company: People\n"
 "\n"
 "Get all your HR operations managed easily: knowledge sharing, recruitments,\n"
@@ -18690,7 +18704,7 @@ msgid ""
 "Streamline Your Recruitment Process\n"
 "-----------------------------------\n"
 "\n"
-"Index resumes, track applicants, search profiles with <a href=\"https://www.odoo.com/page/employees\">Odoo HR</a>.\n"
+"Index resumes, track applicants, search profiles with <a href=\"https://flectrahq.com/employees\">Odoo HR</a>.\n"
 "\n"
 "Post job offers and keep track of each application received. Follow applicants\n"
 "in your recruitment process with the smart kanban view.\n"
@@ -18768,7 +18782,7 @@ msgid ""
 "------------------------------------\n"
 "\n"
 "Manage Bill of Materials, plan manufacturing orders, track work orders with the\n"
-"Odoo <a href=\"https://www.odoo.com/page/manufacturing\">Open Source MRP</a> app.\n"
+"Odoo <a href=\"https://flectrahq.com/manufacturing\">Open Source MRP</a> app.\n"
 "\n"
 "Get all your assembly or manufacturing operations managed by Odoo. Schedule\n"
 "manufacturing orders and work orders automatically. Review the proposed\n"
@@ -18835,7 +18849,7 @@ msgid ""
 "-----------------\n"
 "\n"
 "Easily send mass mailing to your leads, opportunities or customers\n"
-"with Odoo <a href=\"https://www.odoo.com/page/mailing#\">Email Marketing</a>. Track\n"
+"with Odoo <a href=\"https://flectrahq.com/mailing#\">Email Marketing</a>. Track\n"
 "marketing campaigns performance to improve conversion rates. Design\n"
 "professional emails and reuse templates in a few clicks.\n"
 "\n"
@@ -18851,7 +18865,7 @@ msgid ""
 "Organize Marketing Campaigns\n"
 "----------------------------\n"
 "\n"
-"Design, Send, Track by Campaigns with our <a href=\"https://www.odoo.com/page/mailing\">Lead Automation</a> app.\n"
+"Design, Send, Track by Campaigns with our <a href=\"https://flectrahq.com/mailing\">Lead Automation</a> app.\n"
 "\n"
 "Get real time statistics on campaigns performance to improve your conversion\n"
 "rate. Track mails sent, received, opened and answered.\n"
@@ -18865,8 +18879,8 @@ msgid ""
 "Get access to mass mailing features from every Odoo app to improve the way your\n"
 "users communicate.\n"
 "\n"
-"Send template of emails from Odoo <a href=\"https://www.odoo.com/page/mailing\">CRM opportunities</a>, select leads based\n"
-"on marketing segments, send <a href=\"https://www.odoo.com/page/recruitment\">job offers</a> and automate\n"
+"Send template of emails from Odoo <a href=\"https://flectrahq.com/mailing\">CRM opportunities</a>, select leads based\n"
+"on marketing segments, send <a href=\"https://flectrahq.com/recruitment\">job offers</a> and automate\n"
 "answers to applicants, reuse email template in the lead automation marketing\n"
 "campaigns.\n"
 "\n"
@@ -18923,7 +18937,7 @@ msgid ""
 "Integrate a contact form in your website easily. Forms submissions create leads\n"
 "automatically in Odoo CRM. Leads can be used in marketing campaigns.\n"
 "\n"
-"Manage your <a href=\"https://www.odoo.com/page/crm\">sales funnel</a> with no\n"
+"Manage your <a href=\"https://flectrahq.com/crm\">sales funnel</a> with no\n"
 "effort. Attract leads, follow-up on phone calls and meetings. Analyse the\n"
 "quality of your leads to make informed decisions and save time by integrating\n"
 "emails directly into the application.\n"
@@ -18956,7 +18970,7 @@ msgid ""
 "Odoo Notes\n"
 "----------\n"
 "\n"
-"Organize yourself with efficient <a href=\"https://www.odoo.com/page/notes\">todo lists and notes</a>.\n"
+"Organize yourself with efficient <a href=\"https://flectrahq.com/notes\">todo lists and notes</a>.\n"
 "From personal tasks to collaborative meeting minutes, increase your user's\n"
 "productivity by giving them the tools to prioritize their work, share their\n"
 "ideas and collaborate on documents.\n"
@@ -19029,7 +19043,7 @@ msgid ""
 "Odoo Point of Sale\n"
 "-----------------------------\n"
 "\n"
-"Odoo's <a href=\"https://www.odoo.com/page/point-of-sale\">Point of Sale</a>\n"
+"Odoo's <a href=\"https://flectrahq.com/point-of-sale\">Point of Sale</a>\n"
 "introduces a super clean interface with no installation required that runs\n"
 "online and offline on modern hardwares.\n"
 "\n"
@@ -19149,7 +19163,7 @@ msgid ""
 "-----------------\n"
 "\n"
 "Automate requisition-to-pay, control invoicing with the Odoo\n"
-"<a href=\"https://www.odoo.com/page/purchase\">Open Source Supply Chain</a>.\n"
+"<a href=\"https://flectrahq.com/purchase\">Open Source Supply Chain</a>.\n"
 "\n"
 "Automate procurement propositions, launch request for quotations, track\n"
 "purchase orders, manage vendors' information, control products reception and\n"
@@ -19216,8 +19230,8 @@ msgid ""
 "Odoo Website Builder\n"
 "--------------------\n"
 "\n"
-"Get an awesome and <a href=\"https://www.odoo.com/page/website-builder\">free website</a>,\n"
-"easily customizable with the Odoo <a href=\"https://www.odoo.com/page/website-builder\">website builder</a>.\n"
+"Get an awesome and <a href=\"https://flectrahq.com/website-builder\">free website</a>,\n"
+"easily customizable with the Odoo <a href=\"https://flectrahq.com/website-builder\">website builder</a>.\n"
 "\n"
 "Create enterprise grade website with our super easy builder. Use finely\n"
 "designed building blocks and edit everything inline.\n"
@@ -19335,7 +19349,7 @@ msgid ""
 "\n"
 "### Optimize sales with an awesome online store.\n"
 "\n"
-"Odoo is an <a href=\"https://www.odoo.com/page/e-commerce\">Open Source eCommerce</a>\n"
+"Odoo is an <a href=\"https://flectrahq.com/e-commerce\">Open Source eCommerce</a>\n"
 "unlike anything you have ever seen before. Get an awesome catalog of products\n"
 "and great product description pages.\n"
 "\n"
@@ -19576,6 +19590,12 @@ msgid ""
 msgstr ""
 "Un dels documents al que està intentant accedir ha estat eliminat. Intenti-"
 "ho de nou, si us plau, després d'actualitzar."
+
+#. module: base
+#: code:addons/base/models/ir_actions_report.py:0
+#, python-format
+msgid "One of the documents, you try to merge is encrypted"
+msgstr ""
 
 #. module: base
 #: code:addons/models.py:0
@@ -20912,7 +20932,7 @@ msgid ""
 "### Infinitely flexible. Incredibly easy to use.\n"
 "\n"
 "\n"
-"Odoo's collaborative and realtime <a href=\"https://www.odoo.com/page/project-management\">open source project management</a>\n"
+"Odoo's collaborative and realtime <a href=\"https://flectrahq.com/project-management\">open source project management</a>\n"
 "helps your team get work done. Keep track of everything, from the big picture\n"
 "to the minute details, from the customer contract to the billing.\n"
 "\n"
@@ -22009,7 +22029,7 @@ msgstr "Transferència de crèdit SEPA"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_account_sepa_direct_debit
 msgid "SEPA Direct Debit"
-msgstr ""
+msgstr "Càrrec directe SEPA"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_hr_payroll_account_sepa
@@ -24978,7 +24998,7 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,summary:base.module_hr_attendance
 msgid "Track employee attendance"
-msgstr ""
+msgstr "Seguiment de l'assistència de l'empleat"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_hr_timesheet
@@ -26898,6 +26918,13 @@ msgid ""
 msgstr ""
 "Podrà definir regles d'accés addicionals editant el recentment creat usuari "
 "sota el menú Configuració / Usuaris."
+
+#. module: base
+#: model_terms:ir.ui.view,arch_db:base.view_currency_form
+msgid ""
+"You won't be able to reduce the number of decimal places of a currency which"
+" has already been used to make accounting entries."
+msgstr ""
 
 #. module: base
 #: code:addons/base/models/ir_mail_server.py:0

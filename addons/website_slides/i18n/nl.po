@@ -11,9 +11,9 @@
 # Martin Trigaux, 2020
 # Eric Geens <ericgeens@yahoo.com>, 2020
 # Charles Vervaecke <cvk@odoo.com>, 2020
-# Odoo Experts Consultants <consultants@odooexperts.nl>, 2020
 # Yenthe Van Ginneken <yenthespam@gmail.com>, 2020
-# Erwin van der Ploeg <erwin@odooexperts.nl>, 2020
+# Odoo Experts Consultants <consultants@odooexperts.nl>, 2020
+# Erwin van der Ploeg (Odoo Experts) <erwin@odooexperts.nl>, 2021
 # 
 msgid ""
 msgstr ""
@@ -21,7 +21,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-16 13:33+0000\n"
 "PO-Revision-Date: 2020-09-07 08:22+0000\n"
-"Last-Translator: Erwin van der Ploeg <erwin@odooexperts.nl>, 2020\n"
+"Last-Translator: Erwin van der Ploeg (Odoo Experts) <erwin@odooexperts.nl>, 2021\n"
 "Language-Team: Dutch (https://www.transifex.com/odoo/teams/41243/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42,7 +42,7 @@ msgstr "# Weergaven"
 #. module: website_slides
 #: model:ir.model.fields,field_description:website_slides.field_slide_slide__public_views
 msgid "# of Public Views"
-msgstr "# publieke weergaven"
+msgstr "# openbare weergaven"
 
 #. module: website_slides
 #: model:ir.model.fields,field_description:website_slides.field_slide_slide__slide_views
@@ -153,7 +153,7 @@ msgid ""
 "                            </a>\n"
 "                        </div>\n"
 "                        <div style=\"margin: 16px 8px 16px 8px; text-align: center;\">\n"
-"                            <a href=\"${(object.website_url + '?fullscreen=1') if ctx['fullscreen'] else object.website_url | safe}\" style=\"background-color: #009EFB; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;\">View <strong>${object.name}</strong></a>\n"
+"                            <a href=\"${(object.website_url + '?fullscreen=1') if ctx['fullscreen'] else object.website_url | safe}\" style=\"background-color: #875a7b; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;\">View <strong>${object.name}</strong></a>\n"
 "                        </div>\n"
 "                        % if user.signature\n"
 "                            <br/>\n"
@@ -173,7 +173,7 @@ msgstr ""
 "                               </a>\n"
 "                             </div>\n"
 "                              <div style=\"margin: 16px 8px 16px 8px; text-align: center;\">\n"
-"                                  <a href=\"${(object.website_url + '?fullscreen=1') if ctx['fullscreen'] else object.website_url | safe}\" style=\"background-color: #009EFB; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;\">Zie<strong>${object.name}</a>\n"
+"                                  <a href=\"${(object.website_url + '?fullscreen=1') if ctx['fullscreen'] else object.website_url | safe}\" style=\"background-color: #875a7b; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;\">Zie<strong>${object.name}</a>\n"
 "                               </div>\n"
 "                                % if user.signature\n"
 "                                    <br/>\n"
@@ -198,7 +198,7 @@ msgid ""
 "                        </div>\n"
 "                        % endif\n"
 "                        <div style=\"margin: 16px 8px 16px 8px; text-align: center;\">\n"
-"                            <a href=\"${object.website_url}\" style=\"background-color: #009EFB; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;\">View content</a>\n"
+"                            <a href=\"${object.website_url}\" style=\"background-color: #875a7b; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;\">View content</a>\n"
 "                        </div>\n"
 "                        Enjoy this exclusive content!\n"
 "                        % if user.signature\n"
@@ -222,7 +222,7 @@ msgstr ""
 "                                </div>\n"
 "                                % endif\n"
 "                                <div style=\"margin: 16px 8px 16px 8px; text-align: center;\">\n"
-"                                   <a href=\"${object.website_url}\" style=\"background-color: #009EFB; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;\">Zie inhoud</a>\n"
+"                                   <a href=\"${object.website_url}\" style=\"background-color: #875a7b; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;\">Zie inhoud</a>\n"
 "                                 </div>\n"
 "                                  Veel plezier hiermee!\n"
 "                                  % if user.signature\n"
@@ -235,7 +235,7 @@ msgstr ""
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.user_profile_content
 msgid "<i class=\"fa fa-arrow-right mr-1\"/>All Courses"
-msgstr "<i class=\"fa fa-arrow-right mr-1\"/> Alle opleidingen"
+msgstr "<i class=\"fa fa-arrow-right mr-1\"/> Alle cursussen"
 
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.slide_content_detailed
@@ -556,7 +556,7 @@ msgid ""
 "                      My Courses"
 msgstr ""
 "<i class=\"fa fa-tag mr-2 text-muted\"/>\n"
-"                      Mijn opleidingen"
+"                      Mijn cursussen"
 
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.lesson_card
@@ -614,7 +614,7 @@ msgstr ""
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.lesson_card
 msgid "<span class=\"badge badge-info\">Preview</span>"
-msgstr "<span class=\"badge badge-info\">Preview</span>"
+msgstr "<span class=\"badge badge-info\">Voorbeeld</span>"
 
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.course_slides_list_slide
@@ -668,7 +668,7 @@ msgid ""
 "m-1\"><span>Preview</span></span>"
 msgstr ""
 "<span class=\"badge badge-success font-weight-normal px-2 py-1 "
-"m-1\"><span>Preview</span></span>"
+"m-1\"><span>Voorbeeld</span></span>"
 
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.course_slides_list_sample
@@ -677,7 +677,7 @@ msgid ""
 "m-1\">Preview</span>"
 msgstr ""
 "<span class=\"badge badge-success font-weight-normal px-2 py-1 "
-"m-1\">Preview</span> "
+"m-1\">Voorbeeld</span>"
 
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.course_slides_list_sample
@@ -834,7 +834,7 @@ msgstr "<span>Wiskunde</span>"
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.course_slides_list_slide
 msgid "<span>Preview</span>"
-msgstr "<span>Preview</span>"
+msgstr "<span>Voorbeeld</span>"
 
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.course_slides_list_sample
@@ -1158,7 +1158,7 @@ msgstr "Sta downloaden toe"
 #. module: website_slides
 #: model:ir.model.fields,field_description:website_slides.field_slide_slide__is_preview
 msgid "Allow Preview"
-msgstr "Sta preview toe"
+msgstr "Sta voorbeeld toe"
 
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.view_slide_channel_form
@@ -2982,7 +2982,7 @@ msgstr "Interessante feiten over bomen"
 #. module: website_slides
 #: model:slide.slide,description:website_slides.slide_slide_demo_0_1
 msgid "Interesting information about home gardening. Keep it close !"
-msgstr ""
+msgstr "Interessante informatie over thuis tuinieren. Hou het dichtbij!"
 
 #. module: website_slides
 #: model:slide.channel.tag,name:website_slides.slide_channel_tag_level_intermediate
@@ -3578,7 +3578,7 @@ msgstr "Nog geen cursus aangemaakt."
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.user_profile_content
 msgid "No completed courses yet!"
-msgstr "Nog geen voltooide opleidingen!"
+msgstr "Nog geen voltooide cursussen!"
 
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.course_slides_cards
@@ -3603,7 +3603,7 @@ msgstr "Nog geen gegevens!"
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.user_profile_content
 msgid "No followed courses yet!"
-msgstr "Nog geen gevolgde opleidingen!"
+msgstr "Nog geen gevolgde cursussen!"
 
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.toggle_leaderboard
@@ -3837,7 +3837,7 @@ msgstr "Geef een geldige Youtube of Google Doc URL in"
 #: code:addons/website_slides/static/src/js/slides_course_quiz_question_form.js:0
 #, python-format
 msgid "Please fill in the question"
-msgstr ""
+msgstr "Gelieve de vraag in te vullen"
 
 #. module: website_slides
 #. openerp-web
@@ -3918,7 +3918,7 @@ msgstr "Openbaar"
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.slide_content_detailed
 msgid "Public Views"
-msgstr "Publieke weergaven"
+msgstr "Openbare weergaven"
 
 #. module: website_slides
 #: model:ir.model.fields,field_description:website_slides.field_slide_slide__date_published
@@ -4189,7 +4189,7 @@ msgstr "Terugkeren naar de cursus"
 #: code:addons/website_slides/static/src/xml/website_slides_channel.xml:0
 #, python-format
 msgid "Review"
-msgstr "Controle"
+msgstr "Beoordeling"
 
 #. module: website_slides
 #: model_terms:ir.ui.view,arch_db:website_slides.view_slide_channel_form

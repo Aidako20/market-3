@@ -15,7 +15,8 @@
 # Sepehr Khoshnood <sepehr.kho@gmail.com>, 2020
 # Martin Trigaux, 2020
 # Hamid Darabi, 2020
-# Hamed Mohammadi <hamed@dehongi.com>, 2020
+# Hamed Mohammadi <hamed@dehongi.com>, 2021
+# Mohsen Mohammadi <iammohsen.123@gmail.com>, 2021
 # 
 msgid ""
 msgstr ""
@@ -23,7 +24,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-27 13:50+0000\n"
 "PO-Revision-Date: 2020-09-07 08:09+0000\n"
-"Last-Translator: Hamed Mohammadi <hamed@dehongi.com>, 2020\n"
+"Last-Translator: Mohsen Mohammadi <iammohsen.123@gmail.com>, 2021\n"
 "Language-Team: Persian (https://www.transifex.com/odoo/teams/41243/fa/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1079,9 +1080,9 @@ msgid ""
 "\n"
 "    Make the lock date irreversible:\n"
 "\n"
-"    * You cannot define stricter conditions on advisors than on users. Then, the lock date on advisor must be set before the lock date for users.\n"
-"    * You cannot lock a period that is not finished yet. Then, the lock date for advisors must be set before the last day of the previous month.\n"
-"    * The new lock date for advisors must be set after the previous lock date.\n"
+"    * You cannot set stricter restrictions on advisors than on users. Therefore, the All Users Lock Date must be anterior (or equal) to the Invoice/Bills Lock Date.\n"
+"    * You cannot lock a period that has not yet ended. Therefore, the All Users Lock Date must be anterior (or equal) to the last day of the previous month.\n"
+"    * Any new All Users Lock Date must be posterior (or equal) to the previous one.\n"
 "    "
 msgstr ""
 
@@ -6118,7 +6119,7 @@ msgstr "%y - سال بدون صده [00,99].\""
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_base_language_install
 msgid "&amp; Close"
-msgstr ""
+msgstr "&amp; بستن"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.module_view_kanban
@@ -6262,17 +6263,17 @@ msgstr "- این ماجول ماجولی دیگر را حذف نمی‌کند."
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
 msgid "1. %b, %B         ==&gt; Dec, December"
-msgstr ""
+msgstr "1. %b, %B         ==&gt; Dec, December"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
 msgid "2. %a ,%A         ==&gt; Fri, Friday"
-msgstr ""
+msgstr "2. %a ,%A         ==&gt; جم, جمعه"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
 msgid "3. %y, %Y         ==&gt; 08, 2008"
-msgstr ""
+msgstr "3. %y, %Y         ==&gt; 08, 2008"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_hr_appraisal_survey
@@ -6282,12 +6283,12 @@ msgstr ""
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
 msgid "4. %d, %m         ==&gt; 05, 12"
-msgstr ""
+msgstr "4. %d, %m         ==&gt; 05, 12"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
 msgid "5. %H:%M:%S      ==&gt; 18:25:20"
-msgstr ""
+msgstr "5. %H:%M:%S      ==&gt; 18:25:20"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
@@ -6302,7 +6303,7 @@ msgstr ""
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
 msgid "8. %S              ==&gt; 20"
-msgstr ""
+msgstr "8. %S              ==&gt; 20"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
@@ -6426,12 +6427,12 @@ msgstr ""
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.onboarding_container
 msgid "<i class=\"fa fa-times\" title=\"Close the onboarding panel\"/>"
-msgstr ""
+msgstr "<i class=\"fa fa-times\" title=\"Close the onboarding panel\"/>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.onboarding_container
 msgid "<span aria-label=\"Close\">×</span>"
-msgstr ""
+msgstr "<span aria-label=\"Close\">×</span>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.reset_view_arch_wizard_view
@@ -6481,6 +6482,8 @@ msgid ""
 "<span class=\"searchIcon\"><i class=\"fa fa-search\" role=\"img\" aria-"
 "label=\"Search\" title=\"Search\"/></span>"
 msgstr ""
+"<span class=\"searchIcon\"><i class=\"fa fa-search\" role=\"img\" aria-"
+"label=\"Search\" title=\"Search\"/></span>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.demo_force_install_form
@@ -6503,6 +6506,9 @@ msgid ""
 "                                <span colspan=\"2\">Week of the Year: %(woy)s</span>\n"
 "                                <span colspan=\"2\">Day of the Week (0:Monday): %(weekday)s</span>"
 msgstr ""
+"<span colspan=\"2\">روز از سال: %(doy)s</span>\n"
+"                                <span colspan=\"2\">هفته از سال: %(woy)s</span>\n"
+"                                <span colspan=\"2\">روز از هفته (0:دوشنبه): %(weekday)s</span>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.sequence_view
@@ -6512,6 +6518,10 @@ msgid ""
 "                                <span colspan=\"2\">Minute: %(min)s</span>\n"
 "                                <span colspan=\"2\">Second: %(sec)s</span>"
 msgstr ""
+"<span colspan=\"2\">ساعت 00-&gt;24: %(h24)s</span>\n"
+"                                <span colspan=\"2\">ساعت 00-&gt;12: %(h12)s</span>\n"
+"                                <span colspan=\"2\">دقیقه: %(min)s</span>\n"
+"                                <span colspan=\"2\">ثانیه: %(sec)s</span>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.report_irmodulereference
@@ -7119,7 +7129,7 @@ msgstr ""
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_users_form_simple_modif
 msgid "Account Security"
-msgstr ""
+msgstr "امنیت حساب"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_account_taxcloud
@@ -7810,7 +7820,7 @@ msgstr ""
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.onboarding_step
 msgid "All done!"
-msgstr ""
+msgstr "انجام شد!"
 
 #. module: base
 #: model:ir.model.fields,help:base.field_res_partner__lang
@@ -8514,7 +8524,7 @@ msgstr "B1  15  707 x 1000 mm"
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__report_paperformat__format__b10
 msgid "B10    16  31 x 44 mm"
-msgstr ""
+msgstr "B10    16  31 x 44 mm"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__report_paperformat__format__b2
@@ -8602,7 +8612,7 @@ msgstr "حساب‌های بانکی"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_res_bank_form
 msgid "Bank Address"
-msgstr ""
+msgstr "آدرس بانک"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_bank__bic
@@ -8682,7 +8692,7 @@ msgstr ""
 #: code:addons/base/models/ir_qweb_fields.py:0
 #, python-format
 msgid "Barcode type, eg: UPCA, EAN13, Code128"
-msgstr ""
+msgstr "نوع بارکد, به عبارتی: UPCA, EAN13, Code128"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_stock_barcode_quality_control_picking_batch
@@ -10000,7 +10010,7 @@ msgstr "شرط"
 #. module: base
 #: model:ir.model,name:base.model_res_config
 msgid "Config"
-msgstr ""
+msgstr "پیکربندی"
 
 #. module: base
 #: model:ir.model,name:base.model_res_config_installer
@@ -10465,7 +10475,7 @@ msgstr "ایجاد یک رکورد جدید"
 #. module: base
 #: model_terms:ir.actions.act_window,help:base.action_res_bank_form
 msgid "Create a new bank"
-msgstr ""
+msgstr "ایجاد بانک جدید"
 
 #. module: base
 #: model_terms:ir.actions.act_window,help:base.action_res_company_form
@@ -11131,7 +11141,7 @@ msgstr "تعداد اعشار"
 #: model_terms:ir.ui.view,arch_db:base.view_decimal_precision_form
 #: model_terms:ir.ui.view,arch_db:base.view_decimal_precision_tree
 msgid "Decimal Precision"
-msgstr ""
+msgstr "دقت عددی"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_lang__decimal_point
@@ -13075,7 +13085,7 @@ msgstr ""
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_lang__week_start
 msgid "First Day of Week"
-msgstr ""
+msgstr "روز اول هفته"
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_mx_reports_closing
@@ -13162,7 +13172,7 @@ msgstr "Folio 27  210 x 330 mm"
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_company__font
 msgid "Font"
-msgstr ""
+msgstr "فونت"
 
 #. module: base
 #: model:res.partner.industry,name:base.res_partner_industry_I
@@ -13205,7 +13215,7 @@ msgstr ""
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.identity_check_wizard
 msgid "Forgot password?"
-msgstr ""
+msgstr "گذرواژه فراموش شده؟"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_actions_act_window_view__view_mode__form
@@ -16499,7 +16509,7 @@ msgid ""
 "---------------------------------------\n"
 "\n"
 "Publish, promote and organize your job offers with the Odoo\n"
-"<a href=\"https://www.odoo.com/page/recruitment\">Open Source Recruitment Application</a>.\n"
+"<a href=\"https://flectrahq.com/recruitment\">Open Source Recruitment Application</a>.\n"
 "\n"
 "Organize your job board, promote your job announces and keep track of\n"
 "application submissions easily. Follow every applicant and build up a database\n"
@@ -17966,7 +17976,7 @@ msgid ""
 "Odoo Blogs\n"
 "----------\n"
 "\n"
-"Write, Design, Promote and Engage with <a href=\"https://www.odoo.com/page/blog-engine\">Odoo Blogs</a>.\n"
+"Write, Design, Promote and Engage with <a href=\"https://flectrahq.com/blog-engine\">Odoo Blogs</a>.\n"
 "\n"
 "Express yourself with the Odoo enterprise grade blogging platform. Write\n"
 "beautiful blog posts, engage with visitors, translate content and moderate\n"
@@ -18063,7 +18073,7 @@ msgid ""
 "--------\n"
 "\n"
 "Boost sales productivity, improve win rates, grow revenue with the Odoo\n"
-"<a href=\"https://www.odoo.com/page/crm\">Open Source CRM</a>.\n"
+"<a href=\"https://flectrahq.com/crm\">Open Source CRM</a>.\n"
 "\n"
 "Manage your sales funnel with no effort. Attract leads, follow-up on phone\n"
 "calls and meetings. Analyse the quality of your leads to make informed\n"
@@ -18116,7 +18126,7 @@ msgid ""
 "Lead Automation and Marketing Campaigns\n"
 "---------------------------------------\n"
 "\n"
-"Drive performance by automating tasks with Odoo <a href=\"https://www.odoo.com/page/crm\">CRM</a>.\n"
+"Drive performance by automating tasks with Odoo <a href=\"https://flectrahq.com/crm\">CRM</a>.\n"
 "\n"
 "Use our marketing campaigns to automate lead acquisition, follow ups and\n"
 "promotions. Define automated actions (e.g. ask a salesperson to call, send an\n"
@@ -18175,7 +18185,7 @@ msgid ""
 "------------------------------\n"
 "\n"
 "Connect with experts, follow what interests you, share documents and promote\n"
-"best practices with Odoo <a href=\"https://www.odoo.com/page/enterprise-social-network\">Enterprise Social Network</a>. Get work done with\n"
+"best practices with Odoo <a href=\"https://flectrahq.com/enterprise-social-network\">Enterprise Social Network</a>. Get work done with\n"
 "effective collaboration across departments, geographies, documents and business\n"
 "applications. All of this while decreasing email overload.\n"
 "\n"
@@ -18233,7 +18243,7 @@ msgid ""
 "Odoo Human Resources\n"
 "--------------------\n"
 "\n"
-"With Odoo <a href=\"https://www.odoo.com/page/employees\">Human Resources</a>,\n"
+"With Odoo <a href=\"https://flectrahq.com/employees\">Human Resources</a>,\n"
 "manage the most important asset in your company: People\n"
 "\n"
 "Get all your HR operations managed easily: knowledge sharing, recruitments,\n"
@@ -18253,7 +18263,7 @@ msgid ""
 "Streamline Your Recruitment Process\n"
 "-----------------------------------\n"
 "\n"
-"Index resumes, track applicants, search profiles with <a href=\"https://www.odoo.com/page/employees\">Odoo HR</a>.\n"
+"Index resumes, track applicants, search profiles with <a href=\"https://flectrahq.com/employees\">Odoo HR</a>.\n"
 "\n"
 "Post job offers and keep track of each application received. Follow applicants\n"
 "in your recruitment process with the smart kanban view.\n"
@@ -18331,7 +18341,7 @@ msgid ""
 "------------------------------------\n"
 "\n"
 "Manage Bill of Materials, plan manufacturing orders, track work orders with the\n"
-"Odoo <a href=\"https://www.odoo.com/page/manufacturing\">Open Source MRP</a> app.\n"
+"Odoo <a href=\"https://flectrahq.com/manufacturing\">Open Source MRP</a> app.\n"
 "\n"
 "Get all your assembly or manufacturing operations managed by Odoo. Schedule\n"
 "manufacturing orders and work orders automatically. Review the proposed\n"
@@ -18398,7 +18408,7 @@ msgid ""
 "-----------------\n"
 "\n"
 "Easily send mass mailing to your leads, opportunities or customers\n"
-"with Odoo <a href=\"https://www.odoo.com/page/mailing#\">Email Marketing</a>. Track\n"
+"with Odoo <a href=\"https://flectrahq.com/mailing#\">Email Marketing</a>. Track\n"
 "marketing campaigns performance to improve conversion rates. Design\n"
 "professional emails and reuse templates in a few clicks.\n"
 "\n"
@@ -18414,7 +18424,7 @@ msgid ""
 "Organize Marketing Campaigns\n"
 "----------------------------\n"
 "\n"
-"Design, Send, Track by Campaigns with our <a href=\"https://www.odoo.com/page/mailing\">Lead Automation</a> app.\n"
+"Design, Send, Track by Campaigns with our <a href=\"https://flectrahq.com/mailing\">Lead Automation</a> app.\n"
 "\n"
 "Get real time statistics on campaigns performance to improve your conversion\n"
 "rate. Track mails sent, received, opened and answered.\n"
@@ -18428,8 +18438,8 @@ msgid ""
 "Get access to mass mailing features from every Odoo app to improve the way your\n"
 "users communicate.\n"
 "\n"
-"Send template of emails from Odoo <a href=\"https://www.odoo.com/page/mailing\">CRM opportunities</a>, select leads based\n"
-"on marketing segments, send <a href=\"https://www.odoo.com/page/recruitment\">job offers</a> and automate\n"
+"Send template of emails from Odoo <a href=\"https://flectrahq.com/mailing\">CRM opportunities</a>, select leads based\n"
+"on marketing segments, send <a href=\"https://flectrahq.com/recruitment\">job offers</a> and automate\n"
 "answers to applicants, reuse email template in the lead automation marketing\n"
 "campaigns.\n"
 "\n"
@@ -18486,7 +18496,7 @@ msgid ""
 "Integrate a contact form in your website easily. Forms submissions create leads\n"
 "automatically in Odoo CRM. Leads can be used in marketing campaigns.\n"
 "\n"
-"Manage your <a href=\"https://www.odoo.com/page/crm\">sales funnel</a> with no\n"
+"Manage your <a href=\"https://flectrahq.com/crm\">sales funnel</a> with no\n"
 "effort. Attract leads, follow-up on phone calls and meetings. Analyse the\n"
 "quality of your leads to make informed decisions and save time by integrating\n"
 "emails directly into the application.\n"
@@ -18519,7 +18529,7 @@ msgid ""
 "Odoo Notes\n"
 "----------\n"
 "\n"
-"Organize yourself with efficient <a href=\"https://www.odoo.com/page/notes\">todo lists and notes</a>.\n"
+"Organize yourself with efficient <a href=\"https://flectrahq.com/notes\">todo lists and notes</a>.\n"
 "From personal tasks to collaborative meeting minutes, increase your user's\n"
 "productivity by giving them the tools to prioritize their work, share their\n"
 "ideas and collaborate on documents.\n"
@@ -18592,7 +18602,7 @@ msgid ""
 "Odoo Point of Sale\n"
 "-----------------------------\n"
 "\n"
-"Odoo's <a href=\"https://www.odoo.com/page/point-of-sale\">Point of Sale</a>\n"
+"Odoo's <a href=\"https://flectrahq.com/point-of-sale\">Point of Sale</a>\n"
 "introduces a super clean interface with no installation required that runs\n"
 "online and offline on modern hardwares.\n"
 "\n"
@@ -18712,7 +18722,7 @@ msgid ""
 "-----------------\n"
 "\n"
 "Automate requisition-to-pay, control invoicing with the Odoo\n"
-"<a href=\"https://www.odoo.com/page/purchase\">Open Source Supply Chain</a>.\n"
+"<a href=\"https://flectrahq.com/purchase\">Open Source Supply Chain</a>.\n"
 "\n"
 "Automate procurement propositions, launch request for quotations, track\n"
 "purchase orders, manage vendors' information, control products reception and\n"
@@ -18779,8 +18789,8 @@ msgid ""
 "Odoo Website Builder\n"
 "--------------------\n"
 "\n"
-"Get an awesome and <a href=\"https://www.odoo.com/page/website-builder\">free website</a>,\n"
-"easily customizable with the Odoo <a href=\"https://www.odoo.com/page/website-builder\">website builder</a>.\n"
+"Get an awesome and <a href=\"https://flectrahq.com/website-builder\">free website</a>,\n"
+"easily customizable with the Odoo <a href=\"https://flectrahq.com/website-builder\">website builder</a>.\n"
 "\n"
 "Create enterprise grade website with our super easy builder. Use finely\n"
 "designed building blocks and edit everything inline.\n"
@@ -18898,7 +18908,7 @@ msgid ""
 "\n"
 "### Optimize sales with an awesome online store.\n"
 "\n"
-"Odoo is an <a href=\"https://www.odoo.com/page/e-commerce\">Open Source eCommerce</a>\n"
+"Odoo is an <a href=\"https://flectrahq.com/e-commerce\">Open Source eCommerce</a>\n"
 "unlike anything you have ever seen before. Get an awesome catalog of products\n"
 "and great product description pages.\n"
 "\n"
@@ -19135,6 +19145,12 @@ msgstr ""
 msgid ""
 "One of the documents you are trying to access has been deleted, please try "
 "again after refreshing."
+msgstr ""
+
+#. module: base
+#: code:addons/base/models/ir_actions_report.py:0
+#, python-format
+msgid "One of the documents, you try to merge is encrypted"
 msgstr ""
 
 #. module: base
@@ -20374,7 +20390,7 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_website_sale_stock
 msgid "Product Availability"
-msgstr ""
+msgstr "در درسترس بودن محصول"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_website_sale_comparison
@@ -20448,7 +20464,7 @@ msgid ""
 "### Infinitely flexible. Incredibly easy to use.\n"
 "\n"
 "\n"
-"Odoo's collaborative and realtime <a href=\"https://www.odoo.com/page/project-management\">open source project management</a>\n"
+"Odoo's collaborative and realtime <a href=\"https://flectrahq.com/project-management\">open source project management</a>\n"
 "helps your team get work done. Keep track of everything, from the big picture\n"
 "to the minute details, from the customer contract to the billing.\n"
 "\n"
@@ -21260,7 +21276,7 @@ msgstr "گزارش"
 #. module: base
 #: model:ir.model,name:base.model_ir_actions_report
 msgid "Report Action"
-msgstr ""
+msgstr "اکشن گزارش"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_actions_report__report_file
@@ -21700,7 +21716,7 @@ msgstr "ماتریس فروش"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_sale_product_configurator
 msgid "Sale Product Configurator"
-msgstr ""
+msgstr "پیکربندی کننده فروش محصول"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_sale_purchase
@@ -21988,7 +22004,7 @@ msgstr ""
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_company__secondary_color
 msgid "Secondary Color"
-msgstr ""
+msgstr "رنگ ثانویه"
 
 #. module: base
 #: model:ir.ui.menu,name:base.menu_security
@@ -22003,7 +22019,7 @@ msgstr "امنیت"
 #: model_terms:ir.ui.view,arch_db:base.identity_check_wizard
 #, python-format
 msgid "Security Control"
-msgstr ""
+msgstr "کنترل امنیتی"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.ir_mail_server_form
@@ -24757,7 +24773,7 @@ msgstr "URL"
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_lang__url_code
 msgid "URL Code"
-msgstr ""
+msgstr "کد URL"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_us_reports
@@ -25286,7 +25302,7 @@ msgstr "کاربر:"
 #: code:addons/base/models/ir_rule.py:0
 #, python-format
 msgid "User: %s"
-msgstr ""
+msgstr "کاربر: %s"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_mail_server__smtp_user
@@ -26080,7 +26096,7 @@ msgstr "یمن"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.demo_force_install_form
 msgid "Yes, I understand the risks"
-msgstr ""
+msgstr "بله، خطرات را می‌فهمم"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_account_yodlee
@@ -26128,6 +26144,7 @@ msgid ""
 "You are not allowed to modify '%(document_kind)s' (%(document_model)s) "
 "records."
 msgstr ""
+"شما اجازه تغییر '%(document_kind)s' (%(document_model)s) گزارش‌ها را ندارید."
 
 #. module: base
 #: code:addons/base/models/ir_module.py:0
@@ -26274,7 +26291,7 @@ msgstr "شما حق دسترسی کافی برای اجرای این عمل را
 #, python-format
 msgid ""
 "You don't have the rights to export data. Please contact an Administrator."
-msgstr ""
+msgstr "حق برونش داده را ندارید. با مدیر تماس بگیرید."
 
 #. module: base
 #: code:addons/base/wizard/base_partner_merge.py:0
@@ -26311,6 +26328,13 @@ msgid ""
 msgstr ""
 "شما قادر خواهید بود حق دسترسی‌های اضافی با ویرایش کاربران جدیدا ایجاد شده در"
 " منوی تنظیمات/کاربران تعریف کنید."
+
+#. module: base
+#: model_terms:ir.ui.view,arch_db:base.view_currency_form
+msgid ""
+"You won't be able to reduce the number of decimal places of a currency which"
+" has already been used to make accounting entries."
+msgstr ""
 
 #. module: base
 #: code:addons/base/models/ir_mail_server.py:0
@@ -26589,12 +26613,12 @@ msgstr ""
 #: code:addons/base/models/ir_qweb_fields.py:0
 #, python-format
 msgid "hour"
-msgstr ""
+msgstr "ساعت"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_model_fields__ttype__html
 msgid "html"
-msgstr ""
+msgstr "html"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__base_language_install__state__init
@@ -26661,7 +26685,7 @@ msgstr ""
 #: code:addons/base/models/ir_qweb_fields.py:0
 #, python-format
 msgid "minute"
-msgstr ""
+msgstr "دقیقه"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.demo_failures_dialog
@@ -26744,7 +26768,7 @@ msgstr ""
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_model_fields__ttype__reference
 msgid "reference"
-msgstr ""
+msgstr "مرجع"
 
 #. module: base
 #: model:ir.model,name:base.model_res_users_apikeys
@@ -26765,7 +26789,7 @@ msgstr ""
 #: code:addons/base/models/ir_qweb_fields.py:0
 #, python-format
 msgid "second"
-msgstr ""
+msgstr "ثانیه"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_model_fields__ttype__selection
@@ -26850,27 +26874,27 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_test_populate
 msgid "test-populate"
-msgstr ""
+msgstr "test-populate"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_test_translation_import
 msgid "test-translation-import"
-msgstr ""
+msgstr "test-translation-import"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_test_uninstall
 msgid "test-uninstall"
-msgstr ""
+msgstr "test-uninstall"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_test_convert
 msgid "test_convert"
-msgstr ""
+msgstr "test_convert"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_test_search_panel
 msgid "test_search_panel"
-msgstr ""
+msgstr "test_search_panel"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_model_fields__ttype__text
@@ -26891,19 +26915,19 @@ msgstr "درست‌"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_web_dashboard
 msgid "web_dashboard"
-msgstr ""
+msgstr "web_dashboard"
 
 #. module: base
 #: code:addons/base/models/ir_qweb_fields.py:0
 #, python-format
 msgid "week"
-msgstr ""
+msgstr "هفته"
 
 #. module: base
 #: code:addons/base/models/ir_qweb_fields.py:0
 #, python-format
 msgid "year"
-msgstr ""
+msgstr "سال"
 
 #. module: base
 #: code:addons/base/models/ir_fields.py:0

@@ -12,7 +12,7 @@
 # Bohdan Lisnenko, 2020
 # ТАрас <tratatuta@i.ua>, 2020
 # Martin Trigaux, 2020
-# Alina Lisnenko <alinasemeniuk1@gmail.com>, 2020
+# Alina Lisnenko <alinasemeniuk1@gmail.com>, 2021
 # 
 msgid ""
 msgstr ""
@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-27 13:50+0000\n"
 "PO-Revision-Date: 2020-09-07 08:09+0000\n"
-"Last-Translator: Alina Lisnenko <alinasemeniuk1@gmail.com>, 2020\n"
+"Last-Translator: Alina Lisnenko <alinasemeniuk1@gmail.com>, 2021\n"
 "Language-Team: Ukrainian (https://www.transifex.com/odoo/teams/41243/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -101,6 +101,19 @@ msgid ""
 "\n"
 "    "
 msgstr ""
+"\n"
+"   \n"
+"Австрійський план рахунків (Einheitskontenrahmen 2010).\n"
+"==========================================================\n"
+"\n"
+"    * Визначає наступні плани рахунків:\n"
+"        * Австрійський загальний план рахунків 2010\n"
+"    * Визначає шаблони для ПДВ на продажах та купівлях\n"
+"    * Визначає шаблони податків\n"
+"    * Визначає схему оподаткування для австрійського фінансовго законодавства\n"
+"    * Визначає податкові звіти U1/U30\n"
+" \n"
+"    "
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_hu
@@ -215,6 +228,88 @@ msgid ""
 "Copyright 2018 Odoo House ApS\n"
 "    "
 msgstr ""
+"\n"
+"\n"
+"Модуль локалізації для Данії\n"
+"===============================\n"
+"\n"
+"Це модуль для упраління **планом рахунків для Данії**. Охоплюйте як приватний бізнес, так і I/S, IVS, ApS та A/S\n"
+"\n"
+"**Modulet opsætter:**\n"
+"\n"
+"- **Dansk kontoplan**\n"
+"\n"
+"- Dansk moms\n"
+"        - 25% moms\n"
+"        - Resturationsmoms 6,25%\n"
+"        - Omvendt betalingspligt\n"
+"        \n"
+"- Konteringsgrupper\n"
+"        - EU (Virksomhed)\n"
+"        - EU (Privat)\n"
+"        - 3.lande\n"
+"\n"
+"- Finans raporter\n"
+"        - Resulttopgørelse\n"
+"        - Balance\n"
+"        - Momsafregning\n"
+"            - Afregning\n"
+"            - Rubrik A, B og C\n"
+"\n"
+"- **Anglo-Saxon regnskabsmetode**\n"
+"\n"
+".\n"
+"\n"
+"Produkt setup:\n"
+"==============\n"
+"\n"
+"**Vare**\n"
+"\n"
+"**Salgsmoms:**      Salgmoms 25%\n"
+"\n"
+"**Salgskonto:**     1010 Salg af vare, m/moms\n"
+"\n"
+"**Købsmoms:**       Købsmoms 25%\n"
+"\n"
+"**Købskonto:**      2010 Direkte omkostninger vare, m/moms\n"
+"\n"
+".\n"
+"\n"
+"**Ydelse**\n"
+"\n"
+"**Salgsmoms:**      Salgmoms 25%, ydelser\n"
+"\n"
+"**Salgskonto:**     1011 Salg af ydelser, m/moms\n"
+"\n"
+"**Købsmoms:**       Købsmoms 25%, ydelser\n"
+"\n"
+"**Købskonto:**      2011 Direkte omkostninger ydelser, m/moms\n"
+"\n"
+".\n"
+"\n"
+"**Vare med omvendt betalingspligt**\n"
+"\n"
+"**Salgsmoms:**      Salg omvendt betalingspligt\n"
+"\n"
+"**Salgskonto:**     1012 Salg af vare, u/moms\n"
+"\n"
+"**Købsmoms:**       Køb omvendt betalingspligt\n"
+"\n"
+"**Købskonto:**      2012 Direkte omkostninger vare, u/moms\n"
+"\n"
+"\n"
+".\n"
+"\n"
+"**Restauration**\n"
+"\n"
+"**Købsmoms:**       Restaurationsmoms 6,25%, købsmoms\n"
+"\n"
+"**Købskonto:**      4010 Restaurationsbesøg\n"
+"\n"
+".\n"
+"\n"
+"Copyright 2018 Odoo House ApS\n"
+"    "
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_do
@@ -618,6 +713,12 @@ msgid ""
 "        MTD-VAT API to HMRC.\n"
 "    "
 msgstr ""
+"\n"
+"        Бухгалтерські звіти для Великобританії\n"
+"        \n"
+"        Дозволяє надсилати податковий звіт через\n"
+"        MTD-VAT API до HMRC.   \n"
+"    "
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_us_reports
@@ -638,6 +739,10 @@ msgid ""
 "        the questions and answers linked to the registrations.\n"
 "    "
 msgstr ""
+"\n"
+"        Додайте інформацію, коли ми створюємо опис ліда, щоби включити\n"
+"        запитання та відповіді, пов'язані до реєстрації.\n"
+"    "
 
 #. module: base
 #: model:ir.module.module,summary:base.module_l10n_mx_reports_closing
@@ -691,6 +796,9 @@ msgid ""
 "        Bridge module between point_of_sale and account_reports,\n"
 "        for tax reporting."
 msgstr ""
+"\n"
+"        Мостовий модуль між point_of_sale та account_reports,\n"
+"        для податкового звіту."
 
 #. module: base
 #: model:ir.module.module,description:base.module_purchase_intrastat
@@ -699,6 +807,9 @@ msgid ""
 "        Bridge module between purchase and intrastat.\n"
 "    "
 msgstr ""
+"\n"
+"        Мостовий модуль між закупівлями та intrastat.\n"
+"    "
 
 #. module: base
 #: model:ir.module.module,description:base.module_sale_intrastat
@@ -885,6 +996,9 @@ msgid ""
 "        Disallowed Expenses Data for Belgium\n"
 "    "
 msgstr ""
+"\n"
+"        Дані заборонених витрат для Бельгії\n"
+"    "
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_id_efaktur
@@ -938,6 +1052,9 @@ msgid ""
 "        Enterprise digest data\n"
 "    "
 msgstr ""
+"\n"
+"        Цифрові дані Enterprise\n"
+"    "
 
 #. module: base
 #: model:ir.module.module,description:base.module_account_sepa
@@ -996,7 +1113,7 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"        Метою цього модуля є реалізація \"розріджених\" полів, тобто полів\n"
+"        Метою цього модуля є реалізація \"розділених\" полів, тобто полів\n"
 "         які переважно нульові. Ця реалізація обходить PostgreSQL\n"
 "         обмеження на кількість стовпців у таблиці. Значення всіх рідких\n"
 "         полів зберігаються у серії \"серійний\" у вигляді відображення JSON.\n"
@@ -1031,6 +1148,9 @@ msgid ""
 "        This bridge module is auto-installed when the modules stock_barcode and mrp_subcontracting are installed.\n"
 "    "
 msgstr ""
+"\n"
+"        Цей мостовий модуль встановлюється автоматично, після того, як встановлено модулі stock_barcode та mrp_subcontracting.\n"
+"    "
 
 #. module: base
 #: model:ir.module.module,description:base.module_stock_barcode_quality_control
@@ -1050,6 +1170,9 @@ msgid ""
 "        This module adds support for SEPA Credit Transfer QR-code generation.\n"
 "    "
 msgstr ""
+"\n"
+"        Цей модуль надає техпідтримку для генерації QR-коду переміщення кредитів SEPA.\n"
+"    "
 
 #. module: base
 #: model:ir.module.module,description:base.module_approvals_purchase
@@ -1059,6 +1182,10 @@ msgid ""
 "        RFQ from an approval purchase request.\n"
 "    "
 msgstr ""
+"\n"
+"        Цей модуль додає до процесу затвердження можливість генерувати\n"
+"        ЗНКП із запиту на затвердження закупівлі.\n"
+"    "
 
 #. module: base
 #: model:ir.module.module,description:base.module_purchase_product_matrix
@@ -1147,6 +1274,9 @@ msgid ""
 "        This module implements reCaptchaV3 so that you can prevent bot spam on your public modules.\n"
 "    "
 msgstr ""
+"\n"
+"        Цей модуль встановлює reCaptchaV3 так що ви можете запобігти спаму ботів на ваших загальнодоступних модулях.\n"
+"    "
 
 #. module: base
 #: model:ir.module.module,summary:base.module_account_online_sync
@@ -1362,18 +1492,11 @@ msgid ""
 "\n"
 "    Make the lock date irreversible:\n"
 "\n"
-"    * You cannot define stricter conditions on advisors than on users. Then, the lock date on advisor must be set before the lock date for users.\n"
-"    * You cannot lock a period that is not finished yet. Then, the lock date for advisors must be set before the last day of the previous month.\n"
-"    * The new lock date for advisors must be set after the previous lock date.\n"
+"    * You cannot set stricter restrictions on advisors than on users. Therefore, the All Users Lock Date must be anterior (or equal) to the Invoice/Bills Lock Date.\n"
+"    * You cannot lock a period that has not yet ended. Therefore, the All Users Lock Date must be anterior (or equal) to the last day of the previous month.\n"
+"    * Any new All Users Lock Date must be posterior (or equal) to the previous one.\n"
 "    "
 msgstr ""
-"\n"
-"   Зробити дату блокування незворотньою:\n"
-"\n"
-"     * Ви не можете визначити більш жорсткі умови для консультантів, ніж для користувачів. Потім дата блокування для консультанта повинна бути встановлена до дати блокування для користувачів.\n"
-"     * Ви не можете заблокувати період, який ще не завершено. Тоді, дата блокування консультантів повинна бути встановлена до останнього дня попереднього місяця.\n"
-"     * Нова дата блокування для консультантів повинна бути встановлена після попередньої дати блокування.\n"
-"    "
 
 #. module: base
 #: model:ir.module.module,description:base.module_sale_coupon_taxcloud
@@ -1701,7 +1824,7 @@ msgstr ""
 "Кредитний переказ ABA\n"
 "===================\n"
 "\n"
-"Цей модуль дозволяє генерувати платіжні партії як ABA (Австралійський\n"
+"Цей модуль дозволяє генерувати платіжні партії як ABA (Австралійська\n"
 "Асоціація банкірів) текстові файли. Створений файл \"aba\" може бути завантажений\n"
 "для багатьох австралійських банків.\n"
 "\n"
@@ -2015,6 +2138,9 @@ msgid ""
 "Add a dynamic report about recruitment.\n"
 "    "
 msgstr ""
+"\n"
+"AДодайте динамічний звіт по рекрутингу.\n"
+"    "
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_latam_base
@@ -2131,7 +2257,7 @@ msgstr ""
 "\n"
 "* Договір\n"
 "* Місце народження\n"
-"* Дата медичного обслідування\n"
+"* Дата медичного обстеження\n"
 "* Службовий транспорт\n"
 "\n"
 "Можна закріпляти кілька договорів за працівником."
@@ -2148,7 +2274,7 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"Додайте шаблони електронних листів до товарів, які надсилатимуться на підтвердження рахунку-фактури\n"
+"Додайте шаблони електронних листів до товарів, які надсилатимуться на підтвердження рахунка-фактури\n"
 "================================================== ================\n"
 "\n"
 "За допомогою цього модуля зв'яжіть ваші товари з шаблоном, щоби надіслати повну інформацію та інструменти своїм клієнтам.\n"
@@ -2169,7 +2295,7 @@ msgid ""
 "Add the ability to create invoices from the document module.\n"
 msgstr ""
 "\n"
-"Додайте можливість створення рахунків-фактур з модуля Документ.\n"
+"Додайте можливість створення рахунків-фактур з модуля Документи.\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_documents_sign
@@ -2179,7 +2305,7 @@ msgid ""
 "The first element of the selection (in DRM) will be used as the signature attachment.\n"
 msgstr ""
 "\n"
-"Додайте можливість створення підписів з модуля документ.\n"
+"Додайте можливість створення підписів з модуля Документи.\n"
 "Перший елемент виділення (в DRM) буде використовуватися як прикріплення підпису.\n"
 
 #. module: base
@@ -2218,7 +2344,7 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"Додає розширену підтримку для прикріплеь (Ether) Pad у веб-клієнті.\n"
+"Додає розширену підтримку для прикріплень (Ether) Pad у веб-клієнті.\n"
 "================================================== =================\n"
 "\n"
 "Дозволяє компанії налаштовувати, які установки Pad потрібно використовувати для посилання на нові\n"
@@ -2241,8 +2367,8 @@ msgid ""
 "option to send products' attachments to the documents app.\n"
 msgstr ""
 "\n"
-"Додає можливість створювати товари з модуля документ та додає\n"
-"опцію надсилати прикріплення товарів в модуль документи.\n"
+"Додає можливість створювати товари з модуля Документи та додає\n"
+"опцію надсилати прикріплення товарів в модуль Документи.\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_voip_crm
@@ -2275,7 +2401,7 @@ msgid ""
 "\n"
 msgstr ""
 "\n"
-"Дозвольте клієнтам призначати за допомогою вашого веб-сайту\n"
+"Дозвольте клієнтам планувати зустрічі за допомогою вашого веб-сайту\n"
 "-------------------------------------------------------------\n"
 "\n"
 
@@ -2398,7 +2524,7 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"Дозволяє здійснювати дзвінки з наступних дій або за допомогою натиснути для набору.\n"
+"Дозволяє здійснювати дзвінки з наступних дій або за допомогою натискання для набору.\n"
 "    "
 
 #. module: base
@@ -2482,6 +2608,8 @@ msgid ""
 "\n"
 "Allows using IoT devices, such as scales and printers, for delivery operations.\n"
 msgstr ""
+"\n"
+"Дозволяє використання пристроїв IoT, таких як ваги та принтери, для операцій доставки.\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_delivery
@@ -2497,7 +2625,7 @@ msgstr ""
 "Дозволяє додавати методи доставки у замовлення на продаж і комплектування.\n"
 "==============================================================\n"
 "Ви можете вказати власного перевізника і ціну. При створенні \n"
-"рахунків з комплектування, система здатна додавати та вираховувати вартість доставки.\n"
+"рахунків із комплектування, система здатна додавати та вираховувати вартість доставки.\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_mrp_account_enterprise
@@ -2566,7 +2694,7 @@ msgstr ""
 "======================\n"
 "За допомогою цього модуля ви можете вручну перевірити послідовності та невідповідності модуля бухгалтерського обліку в меню Звіти/ Бухгалтерія/Бухгалтерські тести.\n"
 "\n"
-"Ви можете написати запит, щоб створити Test Consistency, і ви отримаєте результат тесту\n"
+"Ви можете написати запит, щоб створити Тест узгодження, і ви отримаєте результат тесту\n"
 "у форматі PDF, до якого можна отримати доступ з Меню звітів-> Тестування бухгалтерського обліку, після чого виберіть тест\n"
 "і надрукуйте звіт з кнопки «Друк» в області заголовка.\n"
 
@@ -3176,7 +3304,7 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"Містить перегляд ентерпрайзу для управління складом\n"
+"Містить перегляди ентерпрайзу для управління складом\n"
 "    "
 
 #. module: base
@@ -3214,7 +3342,7 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"Створюйте сторно і заявок служби підтримки\n"
+"Створюйте сторно із заявок служби підтримки\n"
 "    "
 
 #. module: base
@@ -3266,6 +3394,9 @@ msgid ""
 "Create Sales order with timesheets and products from tasks\n"
 "    "
 msgstr ""
+"\n"
+"Створюйте замовлення на продаж з табелями та товарами із завдань\n"
+"    "
 
 #. module: base
 #: model:ir.module.module,description:base.module_survey
@@ -3327,7 +3458,7 @@ msgstr ""
 "=============================\n"
 "\n"
 "Цей модуль дозволяє вам автоматизувати та підключити створення реєстрації за допомогою\n"
-"вашого основного потоку продажів і, отже, щоби включити функцію рахунків-фактур реєстрацій.\n"
+"вашого основного процесу продажів і, отже, щоби включити функцію рахунків-фактур реєстрацій.\n"
 "\n"
 "Вона визначає новий вид послуг сервісу, який пропонує вам можливість\n"
 "вибрати категорію подій, пов'язану з нею. Коли ви кодуєте замовлення на продаж для\n"
@@ -3712,6 +3843,9 @@ msgid ""
 "Filters the stock lines out of the reconciliation widget\n"
 "    "
 msgstr ""
+"\n"
+"Фільтрує рядки складу з віджету узгодження\n"
+"    "
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_fr_hr_payroll
@@ -6397,6 +6531,9 @@ msgid ""
 "Technical module.\n"
 "    "
 msgstr ""
+"\n"
+"Технічний модуль.\n"
+"    "
 
 #. module: base
 #: model:ir.module.module,description:base.module_repair
@@ -6478,6 +6615,9 @@ msgid ""
 "The module adds Microsoft user in res user.\n"
 "===========================================\n"
 msgstr ""
+"\n"
+"Модуль додає поле користувача Microsoft на користувача.\n"
+"===========================================\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_google_account
@@ -7340,6 +7480,10 @@ msgid ""
 "widget.\n"
 "    "
 msgstr ""
+"\n"
+"Цей модуль додає можливість фільтрувати за номерами чеків із віджету\n"
+"узгодження.\n"
+"    "
 
 #. module: base
 #: model:ir.module.module,description:base.module_hr_attendance
@@ -8501,7 +8645,7 @@ msgstr ""
 #: code:addons/base/models/ir_ui_view.py:0
 #, python-format
 msgid "\"group_by\" value must be a string %(attribute)s=%(value)r"
-msgstr ""
+msgstr "значення \"group_by\" повинно бути рядком %(attribute)s=%(value)r"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_users__accesses_count
@@ -8522,19 +8666,21 @@ msgstr "К-сть записаних правил"
 #: code:addons/base/models/ir_ui_view.py:0
 #, python-format
 msgid "%(action_name)s is not a valid action on %(model_name)s"
-msgstr ""
+msgstr "%(action_name)s недійсна дія на %(model_name)s"
 
 #. module: base
 #: code:addons/base/models/ir_ui_view.py:0
 #, python-format
 msgid "%(attribute)r value must be an integer (%(value)s)"
-msgstr ""
+msgstr "%(attribute)r значення має бути цілим числом (%(value)s)"
 
 #. module: base
 #: code:addons/base/models/ir_ui_view.py:0
 #, python-format
 msgid "%(method)s on %(model)s is private and cannot be called from a button"
 msgstr ""
+"%(method)s на %(model)s приватний і не може бути викликаний за допомогою "
+"кнопки"
 
 #. module: base
 #: code:addons/fields.py:0 code:addons/models.py:0
@@ -8555,6 +8701,7 @@ msgid ""
 "%(xmlid)s is of type %(xmlid_model)s, expected a subclass of "
 "ir.actions.actions"
 msgstr ""
+"%(xmlid)s є типом %(xmlid_model)s, очікується підклас ir.actions.actions"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
@@ -8634,7 +8781,7 @@ msgstr "%s (копія)"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
 msgid "%w - Day of the week number [0(Sunday),6].\""
-msgstr ""
+msgstr "%w - Значення дня тижня [0(Sunday),6].\""
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
@@ -8644,7 +8791,7 @@ msgstr "%y - Рік без століття [00,99].\""
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_base_language_install
 msgid "&amp; Close"
-msgstr ""
+msgstr "&amp; Закрити"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.module_view_kanban
@@ -8809,7 +8956,7 @@ msgstr "3. %y, %Y         ==&gt; 08, 2008"
 #. module: base
 #: model:ir.module.module,summary:base.module_hr_appraisal_survey
 msgid "360 Feedback"
-msgstr ""
+msgstr "360 Відгук"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
@@ -8962,6 +9109,8 @@ msgid ""
 "<i class=\"fa fa-fw o_button_icon fa-arrow-right\"/>\n"
 "                                    <span>Documentation</span>"
 msgstr ""
+"<i class=\"fa fa-fw o_button_icon fa-arrow-right\"/>\n"
+"                                    <span>Документація</span>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_rule_form
@@ -8980,7 +9129,7 @@ msgstr "<i class=\"fa fa-times\" title=\"Close the onboarding panel\"/>"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.onboarding_container
 msgid "<span aria-label=\"Close\">×</span>"
-msgstr ""
+msgstr "<span aria-label=\"Close\">×</span>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.reset_view_arch_wizard_view
@@ -9187,7 +9336,7 @@ msgstr "<strong>Телефон</strong>"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.identity_check_wizard
 msgid "<strong>Please confirm your password to continue</strong>"
-msgstr ""
+msgstr "<strong>Підтвердіть ваш пароль, щоби продовжити</strong>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.report_irmodulereference
@@ -9479,7 +9628,7 @@ msgstr "Модуль для тестування імпорту/експорту
 #. module: base
 #: model:ir.module.module,description:base.module_test_populate
 msgid "A module to test populate."
-msgstr ""
+msgstr "Модуль для тестування заповнення."
 
 #. module: base
 #: model:ir.module.module,description:base.module_test_new_api
@@ -9553,6 +9702,7 @@ msgstr "Користувач, пов'язаний із контактом"
 #, python-format
 msgid "A valid email is required for find_or_create to work properly."
 msgstr ""
+"Вимагається дійсний email для find_or_create, щоби працювати належним чином."
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__report_paperformat__format__a0
@@ -9612,17 +9762,17 @@ msgstr "Кредитний переказ ABA"
 #. module: base
 #: model:ir.actions.act_window,name:base.action_res_users_keys_description
 msgid "API Key: description input wizard"
-msgstr ""
+msgstr "Ключ API: помічник вводу опису"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_users__api_key_ids
 msgid "API Keys"
-msgstr ""
+msgstr "API ключі"
 
 #. module: base
 #: model:ir.actions.act_window,name:base.action_apikeys_admin
 msgid "API Keys Listing"
-msgstr ""
+msgstr "Перелік API ключів "
 
 #. module: base
 #: code:addons/fields.py:0
@@ -9705,7 +9855,7 @@ msgstr "Доступ до приватних адрес"
 #. module: base
 #: model:res.groups,name:base.group_allow_export
 msgid "Access to export feature"
-msgstr ""
+msgstr "Функція доступу для експорту"
 
 #. module: base
 #: code:addons/api.py:0 code:addons/api.py:0
@@ -9778,7 +9928,7 @@ msgstr "Номер рахунку повинен бути унікальним"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_users_form_simple_modif
 msgid "Account Security"
-msgstr ""
+msgstr "Безпека облікового запису"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_account_taxcloud
@@ -9895,7 +10045,7 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_account_fleet
 msgid "Accounting/Fleet bridge"
-msgstr ""
+msgstr "Мостовий модуль Бухоблік/Автотранспорт"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_actions_act_window_view__act_window_id
@@ -10007,7 +10157,7 @@ msgstr "Дії"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_tree
 msgid "Activate / Update"
-msgstr ""
+msgstr "Активувати / Оновити"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
@@ -10057,7 +10207,7 @@ msgstr "Додати"
 #. module: base
 #: model:ir.actions.act_window,name:base.action_view_base_language_install
 msgid "Add Language"
-msgstr ""
+msgstr "Додати мову"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_mail_bot
@@ -10133,7 +10283,7 @@ msgstr "Додайте вартість доставки до онлайн-пр�
 #: code:addons/base/models/ir_qweb_fields.py:0
 #, python-format
 msgid "Add direction"
-msgstr ""
+msgstr "Додати напрямок"
 
 #. module: base
 #: code:addons/base/models/ir_qweb_fields.py:0
@@ -10475,7 +10625,7 @@ msgstr "Розширені функції для stock_account"
 #. module: base
 #: model:ir.module.module,summary:base.module_l10n_be_hr_payroll_proration
 msgid "Advantage Proration"
-msgstr ""
+msgstr "Пропорція надбавки"
 
 #. module: base
 #: model:ir.module.module,description:base.module_payment_adyen
@@ -10486,7 +10636,7 @@ msgstr "Платіжний еквайєр Adyen"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_adyen_platforms
 msgid "Adyen for Platforms"
-msgstr ""
+msgstr "Adyen для Platforms"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_module_module__license__agpl-3
@@ -10588,7 +10738,7 @@ msgstr "Дозволяє створювати завдання виїзного 
 #. module: base
 #: model:ir.module.module,summary:base.module_hr_payroll_edit_lines
 msgid "Allow payslip edition"
-msgstr ""
+msgstr "Дозволити версію платіжної відомості"
 
 #. module: base
 #: model:ir.module.module,description:base.module_website_event_crm
@@ -10880,7 +11030,7 @@ msgstr "Оцінка"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_hr_appraisal_survey
 msgid "Appraisal - Survey"
-msgstr ""
+msgstr "Оцінювання - Опитування"
 
 #. module: base
 #: model:ir.module.category,name:base.module_category_human_resources_appraisals
@@ -10896,12 +11046,12 @@ msgstr "Затвердження"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_approvals_purchase
 msgid "Approvals - Purchase"
-msgstr ""
+msgstr "Затвердження - Закупівлі"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_approvals_purchase_stock
 msgid "Approvals - Purchase - Stock"
-msgstr ""
+msgstr "Затвердження - Закупівлі - Склад"
 
 #. module: base
 #: model:ir.actions.act_window,name:base.open_module_tree
@@ -11027,7 +11177,7 @@ msgstr "Аруба"
 #: model_terms:res.partner,website_description:base.res_partner_3
 #: model_terms:res.partner,website_description:base.res_partner_4
 msgid "As a team, we are happy to contribute to this event."
-msgstr ""
+msgstr "Як команда, ми раді зробити свій внесок у подію."
 
 #. module: base
 #: model:ir.module.module,summary:base.module_hr_appraisal
@@ -11969,7 +12119,7 @@ msgstr "CRM"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_data_merge_crm
 msgid "CRM Deduplication"
-msgstr ""
+msgstr "Дедуплікація CRM"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_gamification_sale_crm
@@ -12058,7 +12208,7 @@ msgstr "Можна перейменувати лише одне поле за р
 #: code:addons/base/models/ir_ui_view.py:0
 #, python-format
 msgid "Can't compare more than two views."
-msgstr ""
+msgstr "Не можна порівняти більше ніж два перегляди."
 
 #. module: base
 #: model:res.country,name:base.ca
@@ -12286,7 +12436,7 @@ msgstr "Перевірка"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_account_accountant_check_printing
 msgid "Check Printing Accounting"
-msgstr ""
+msgstr "Бухоблік друку чеків"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_account_check_printing
@@ -12379,7 +12529,7 @@ msgstr "Чилі - Бухгалтерські звіти"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_cl_edi
 msgid "Chile - E-invoicing"
-msgstr ""
+msgstr "Чилі - Електронне виставлення рахунків"
 
 #. module: base
 #: model:res.country,name:base.cn
@@ -12526,7 +12676,7 @@ msgstr "Колумбія"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_co
 msgid "Colombia - Accounting"
-msgstr ""
+msgstr "Колумбія - Бухоблік"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_co_reports
@@ -12585,7 +12735,7 @@ msgstr "Колонка з посиланням на запис у таблицю
 #: model_terms:res.partner,website_description:base.res_partner_3
 #: model_terms:res.partner,website_description:base.res_partner_4
 msgid "Come see us live, we hope to meet you !"
-msgstr ""
+msgstr "Приходьте побачити нас вживу, маємо надію зустрітися з вами!"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__report_paperformat__format__comm10e
@@ -12748,7 +12898,7 @@ msgstr "Порівняйте табелі та планування"
 #. module: base
 #: model:ir.actions.act_window,name:base.reset_view_arch_wizard_action
 msgid "Compare/Reset"
-msgstr ""
+msgstr "Порівняти/Скинути"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_partner__contact_address
@@ -13810,7 +13960,7 @@ msgstr "Панелі приладів"
 #: model:ir.module.category,name:base.module_category_productivity_data_cleaning
 #: model:ir.module.module,shortdesc:base.module_data_cleaning
 msgid "Data Cleaning"
-msgstr ""
+msgstr "Очищення даних"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_data_merge
@@ -15936,7 +16086,7 @@ msgstr "Архітектура файлу"
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_attachment__datas
 msgid "File Content (base64)"
-msgstr ""
+msgstr "Вміст файлу (base64)"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_attachment__raw
@@ -16905,7 +17055,7 @@ msgstr "Обробляйте замовлення на обід ваших сп�
 #: model_terms:res.partner,website_description:base.res_partner_3
 #: model_terms:res.partner,website_description:base.res_partner_4
 msgid "Happy to be Sponsor"
-msgstr ""
+msgstr "Раді бути спонсором"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_hw_escpos
@@ -18302,6 +18452,8 @@ msgid ""
 "Invalid server name !\n"
 " %s"
 msgstr ""
+"Недійсна назва сервера!\n"
+" %s"
 
 #. module: base
 #: code:addons/base/models/ir_ui_view.py:0
@@ -18856,7 +19008,7 @@ msgstr "Дата останнього виконання"
 #: model:ir.model.fields,field_description:base.field_reset_view_arch_wizard____last_update
 #: model:ir.model.fields,field_description:base.field_wizard_ir_model_menu_create____last_update
 msgid "Last Modified on"
-msgstr "Останні зміни на"
+msgstr "Останні зміни"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_base_language_export__write_uid
@@ -19227,7 +19379,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:base.field_ir_actions_server__link_field_id
 #: model:ir.model.fields,field_description:base.field_ir_cron__link_field_id
 msgid "Link Field"
-msgstr ""
+msgstr "Зв'язати поле"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_link_tracker
@@ -19594,7 +19746,7 @@ msgid ""
 "---------------------------------------\n"
 "\n"
 "Publish, promote and organize your job offers with the Odoo\n"
-"<a href=\"https://www.odoo.com/page/recruitment\">Open Source Recruitment Application</a>.\n"
+"<a href=\"https://flectrahq.com/recruitment\">Open Source Recruitment Application</a>.\n"
 "\n"
 "Organize your job board, promote your job announces and keep track of\n"
 "application submissions easily. Follow every applicant and build up a database\n"
@@ -19634,7 +19786,7 @@ msgstr ""
 "---------------------------------------\n"
 "\n"
 "Публікуйте, рекламуйте та організовуйте свої пропозиції роботи з Odoo\n"
-"<a href=\"https://www.odoo.com/page/recruitment\">Заява про підбір персоналу з відкритим кодом</a>.\n"
+"<a href=\"https://flectrahq.com/recruitment\">Заява про підбір персоналу з відкритим кодом</a>.\n"
 "\n"
 "Організуйте вашу роботу, рекламуйте вашу роботу, оголошуйте та відстежуйте\n"
 "подання заявки легко. Стежте за кожним заявником і створюйте базу даних\n"
@@ -21126,7 +21278,7 @@ msgid ""
 "Odoo Blogs\n"
 "----------\n"
 "\n"
-"Write, Design, Promote and Engage with <a href=\"https://www.odoo.com/page/blog-engine\">Odoo Blogs</a>.\n"
+"Write, Design, Promote and Engage with <a href=\"https://flectrahq.com/blog-engine\">Odoo Blogs</a>.\n"
 "\n"
 "Express yourself with the Odoo enterprise grade blogging platform. Write\n"
 "beautiful blog posts, engage with visitors, translate content and moderate\n"
@@ -21218,7 +21370,7 @@ msgstr ""
 "Блоги Odoo\n"
 "----------\n"
 "\n"
-"Пишіть, створюйте дизайн, рекламуйте та Залучайте з <a href=\"https://www.odoo.com/page/blog-engine\">Блоги Odoo</a>.\n"
+"Пишіть, створюйте дизайн, рекламуйте та Залучайте з <a href=\"https://flectrahq.com/blog-engine\">Блоги Odoo</a>.\n"
 "\n"
 "Виразіть себе за допомогою блогів платформи Odoo для ведення бізнесу. Пишіть\n"
 "гарні пости, спілкуйтеся з відвідувачами, перекладайте вміст та модеруйте\n"
@@ -21313,7 +21465,7 @@ msgid ""
 "--------\n"
 "\n"
 "Boost sales productivity, improve win rates, grow revenue with the Odoo\n"
-"<a href=\"https://www.odoo.com/page/crm\">Open Source CRM</a>.\n"
+"<a href=\"https://flectrahq.com/crm\">Open Source CRM</a>.\n"
 "\n"
 "Manage your sales funnel with no effort. Attract leads, follow-up on phone\n"
 "calls and meetings. Analyse the quality of your leads to make informed\n"
@@ -21366,7 +21518,7 @@ msgid ""
 "Lead Automation and Marketing Campaigns\n"
 "---------------------------------------\n"
 "\n"
-"Drive performance by automating tasks with Odoo <a href=\"https://www.odoo.com/page/crm\">CRM</a>.\n"
+"Drive performance by automating tasks with Odoo <a href=\"https://flectrahq.com/crm\">CRM</a>.\n"
 "\n"
 "Use our marketing campaigns to automate lead acquisition, follow ups and\n"
 "promotions. Define automated actions (e.g. ask a salesperson to call, send an\n"
@@ -21411,7 +21563,7 @@ msgstr ""
 "--------\n"
 "\n"
 "Підвищуйте продуктивність продажів, покращуйте коефіцієнти виграшу, збільшуйте прибутки з Odoo\n"
-"<a href=\"https://www.odoo.com/page/crm\">CRM з відкритим кодом</a>.\n"
+"<a href=\"https://flectrahq.com/crm\">CRM з відкритим кодом</a>.\n"
 "\n"
 "Керуйте послідовністю продажів без зусиль. Залучення потенційних клієнтів, подальші дзвінки та зустрічі.\n"
 " Проаналізуйте якість ваших потенційних клієнтів, щоб прийняти обгрунтовані рішення та заощадити час, інтегруючи електронні листи\n"
@@ -21464,7 +21616,7 @@ msgstr ""
 "Автоматизація лідів та маркетингові кампанії\n"
 "---------------------------------------\n"
 "\n"
-"Підвищуйте продуктивність завдяки автоматизації завдань за допомогою програми Odoo <a href=\"https://www.odoo.com/page/crm\">CRM</a>.\n"
+"Підвищуйте продуктивність завдяки автоматизації завдань за допомогою програми Odoo <a href=\"https://flectrahq.com/crm\">CRM</a>.\n"
 "\n"
 "Використовуйте наші маркетингові кампанії, щоб автоматизувати\n"
 " придбання ліда, подальші заходи та рекламу. Визначте автоматизовані\n"
@@ -21522,7 +21674,7 @@ msgid ""
 "------------------------------\n"
 "\n"
 "Connect with experts, follow what interests you, share documents and promote\n"
-"best practices with Odoo <a href=\"https://www.odoo.com/page/enterprise-social-network\">Enterprise Social Network</a>. Get work done with\n"
+"best practices with Odoo <a href=\"https://flectrahq.com/enterprise-social-network\">Enterprise Social Network</a>. Get work done with\n"
 "effective collaboration across departments, geographies, documents and business\n"
 "applications. All of this while decreasing email overload.\n"
 "\n"
@@ -21577,7 +21729,7 @@ msgstr ""
 "------------------------------\n"
 "\n"
 "Зв'яжіться з експертами, стежте за тим, що вас цікавить, обмінюйтеся документами та рекламуйте\n"
-"найкращі практики з Odoo <a href=\"https://www.odoo.com/page/enterprise-social-network\">Соціальні мережі Enterprise</a>. Зробіть роботу з\n"
+"найкращі практики з Odoo <a href=\"https://flectrahq.com/enterprise-social-network\">Соціальні мережі Enterprise</a>. Зробіть роботу з\n"
 "ефективним співробітництвом між відомствами, географією, документами та бізнес-заявками.\n"
 "Все це при зниженні перевантаження електронної пошти.\n"
 "\n"
@@ -21635,7 +21787,7 @@ msgid ""
 "Odoo Human Resources\n"
 "--------------------\n"
 "\n"
-"With Odoo <a href=\"https://www.odoo.com/page/employees\">Human Resources</a>,\n"
+"With Odoo <a href=\"https://flectrahq.com/employees\">Human Resources</a>,\n"
 "manage the most important asset in your company: People\n"
 "\n"
 "Get all your HR operations managed easily: knowledge sharing, recruitments,\n"
@@ -21655,7 +21807,7 @@ msgid ""
 "Streamline Your Recruitment Process\n"
 "-----------------------------------\n"
 "\n"
-"Index resumes, track applicants, search profiles with <a href=\"https://www.odoo.com/page/employees\">Odoo HR</a>.\n"
+"Index resumes, track applicants, search profiles with <a href=\"https://flectrahq.com/employees\">Odoo HR</a>.\n"
 "\n"
 "Post job offers and keep track of each application received. Follow applicants\n"
 "in your recruitment process with the smart kanban view.\n"
@@ -21728,7 +21880,7 @@ msgstr ""
 "Відділ кадрів Odoo\n"
 "--------------------\n"
 "\n"
-"З <a href=\"https://www.odoo.com/page/employees\">Відділом кадрів</a> Odoo,\n"
+"З <a href=\"https://flectrahq.com/employees\">Відділом кадрів</a> Odoo,\n"
 "керуйте найважливішими активами вашої компанії: людьми\n"
 "\n"
 "Отримайте всі керовані операції легко: обмін знаннями, підбір персоналу, оцінка, \n"
@@ -21748,7 +21900,7 @@ msgstr ""
 "Оптимізуйте процес набору персоналу\n"
 "-----------------------------------\n"
 "\n"
-"Індекс резюме, відстеження заявників, пошук профілів з <a href=\"https://www.odoo.com/page/employees\">Відділом кадрів Odoo</a>.\n"
+"Індекс резюме, відстеження заявників, пошук профілів з <a href=\"https://flectrahq.com/employees\">Відділом кадрів Odoo</a>.\n"
 "\n"
 "Розміщуйте вакансії та відстежуйте кожну отриману заявку. Слідкуйте\n"
 " за заявниками у процесі підбору персоналу за допомогою інтелектуального перегляду канбану.\n"
@@ -21824,7 +21976,7 @@ msgid ""
 "------------------------------------\n"
 "\n"
 "Manage Bill of Materials, plan manufacturing orders, track work orders with the\n"
-"Odoo <a href=\"https://www.odoo.com/page/manufacturing\">Open Source MRP</a> app.\n"
+"Odoo <a href=\"https://flectrahq.com/manufacturing\">Open Source MRP</a> app.\n"
 "\n"
 "Get all your assembly or manufacturing operations managed by Odoo. Schedule\n"
 "manufacturing orders and work orders automatically. Review the proposed\n"
@@ -21887,7 +22039,7 @@ msgstr ""
 "------------------------------------\n"
 "\n"
 "Управління специфікацією, плануванням замовлень на виробництво, відстеженням робочих замовлень з додатком\n"
-"Odoo <a href=\"https://www.odoo.com/page/manufacturing\">Виробництвом Open Source</a>.\n"
+"Odoo <a href=\"https://flectrahq.com/manufacturing\">Виробництвом Open Source</a>.\n"
 "\n"
 "Отримайте всі ваші збірки або виробничі операції під управлінням Odoo. Плануйте\n"
 "замовлення на виробництво та робочі замовлення автоматично. Перегляньте пропонований варіант\n"
@@ -21953,7 +22105,7 @@ msgid ""
 "-----------------\n"
 "\n"
 "Easily send mass mailing to your leads, opportunities or customers\n"
-"with Odoo <a href=\"https://www.odoo.com/page/mailing#\">Email Marketing</a>. Track\n"
+"with Odoo <a href=\"https://flectrahq.com/mailing#\">Email Marketing</a>. Track\n"
 "marketing campaigns performance to improve conversion rates. Design\n"
 "professional emails and reuse templates in a few clicks.\n"
 "\n"
@@ -21969,7 +22121,7 @@ msgid ""
 "Organize Marketing Campaigns\n"
 "----------------------------\n"
 "\n"
-"Design, Send, Track by Campaigns with our <a href=\"https://www.odoo.com/page/mailing\">Lead Automation</a> app.\n"
+"Design, Send, Track by Campaigns with our <a href=\"https://flectrahq.com/mailing\">Lead Automation</a> app.\n"
 "\n"
 "Get real time statistics on campaigns performance to improve your conversion\n"
 "rate. Track mails sent, received, opened and answered.\n"
@@ -21983,8 +22135,8 @@ msgid ""
 "Get access to mass mailing features from every Odoo app to improve the way your\n"
 "users communicate.\n"
 "\n"
-"Send template of emails from Odoo <a href=\"https://www.odoo.com/page/mailing\">CRM opportunities</a>, select leads based\n"
-"on marketing segments, send <a href=\"https://www.odoo.com/page/recruitment\">job offers</a> and automate\n"
+"Send template of emails from Odoo <a href=\"https://flectrahq.com/mailing\">CRM opportunities</a>, select leads based\n"
+"on marketing segments, send <a href=\"https://flectrahq.com/recruitment\">job offers</a> and automate\n"
 "answers to applicants, reuse email template in the lead automation marketing\n"
 "campaigns.\n"
 "\n"
@@ -22041,7 +22193,7 @@ msgid ""
 "Integrate a contact form in your website easily. Forms submissions create leads\n"
 "automatically in Odoo CRM. Leads can be used in marketing campaigns.\n"
 "\n"
-"Manage your <a href=\"https://www.odoo.com/page/crm\">sales funnel</a> with no\n"
+"Manage your <a href=\"https://flectrahq.com/crm\">sales funnel</a> with no\n"
 "effort. Attract leads, follow-up on phone calls and meetings. Analyse the\n"
 "quality of your leads to make informed decisions and save time by integrating\n"
 "emails directly into the application.\n"
@@ -22051,7 +22203,7 @@ msgstr ""
 "-----------------\n"
 "\n"
 "Легко розсилайте масову розсилку вашим лідам, нагодам чи клієнтам\n"
-"<a href=\"https://www.odoo.com/page/mailing#\">Email-маркетингом</a> Odoo. Відстежуйте\n"
+"<a href=\"https://flectrahq.com/mailing#\">Email-маркетингом</a> Odoo. Відстежуйте\n"
 "виконання маркетингових кампаній, щоби підвищувати рівень конверсії. Створюйте\n"
 "професійні електронні листи та повторно використовуйте шаблони лише у кілька кліків.\n"
 "\n"
@@ -22067,7 +22219,7 @@ msgstr ""
 "Організуйте маркетингові кампанії\n"
 "----------------------------\n"
 "\n"
-"Створюйте, надсилайте, слідкуйте за кампаніями з нашим модулем <a href=\"https://www.odoo.com/page/mailing\">Автоматизація лідів</a>.\n"
+"Створюйте, надсилайте, слідкуйте за кампаніями з нашим модулем <a href=\"https://flectrahq.com/mailing\">Автоматизація лідів</a>.\n"
 "\n"
 "Отримуйте статистику виконання кампанії в реальному часі для покращення вашого рівня\n"
 "конверсії. Слідкуйте за надісланими листами, отриманими, відкритими та з відповідями.\n"
@@ -22081,8 +22233,8 @@ msgstr ""
 "Отримайте доступ до функцій масової розсилки з будь-якого модуля Odoo для покращення способу, яким спілкуються\n"
 "ваші користувачі.\n"
 "\n"
-"Надсилайте шаблони листів з <a href=\"https://www.odoo.com/page/mailing\">нагодами CRM</a>Odoo, обирайте ліди на основі\n"
-"сегментів маркетингу, надсилайте <a href=\"https://www.odoo.com/page/recruitment\">вакансії</a> та автоматично\n"
+"Надсилайте шаблони листів з <a href=\"https://flectrahq.com/mailing\">нагодами CRM</a>Odoo, обирайте ліди на основі\n"
+"сегментів маркетингу, надсилайте <a href=\"https://flectrahq.com/recruitment\">вакансії</a> та автоматично\n"
 "відповідайте заявникам, повторно використовуючи шаблони листів у кампаніях автоматичного маркетингу\n"
 "лідів.\n"
 "\n"
@@ -22139,7 +22291,7 @@ msgstr ""
 "Легко інтегруйте контактну форму у свій веб-сайт. Форми подань створюють ліди автоматично в Odoo CRM. \n"
 "Ліди можна використовувати в маркетингових кампаніях.\n"
 "\n"
-"Керуйте вашою <a href=\"https://www.odoo.com/page/crm\">лінією продажів</a> без\n"
+"Керуйте вашою <a href=\"https://flectrahq.com/crm\">лінією продажів</a> без\n"
 "зусиль. Залучайте ліди, наступні спостереження за телефонними дзвінками та зустрічами.\n"
 " Проаналізуйте якість потенційних клієнтів для прийняття обґрунтованих рішень та заощаджуйте час, інтегруючи електронні листи безпосередньо в програму.\n"
 "\n"
@@ -22170,7 +22322,7 @@ msgid ""
 "Odoo Notes\n"
 "----------\n"
 "\n"
-"Organize yourself with efficient <a href=\"https://www.odoo.com/page/notes\">todo lists and notes</a>.\n"
+"Organize yourself with efficient <a href=\"https://flectrahq.com/notes\">todo lists and notes</a>.\n"
 "From personal tasks to collaborative meeting minutes, increase your user's\n"
 "productivity by giving them the tools to prioritize their work, share their\n"
 "ideas and collaborate on documents.\n"
@@ -22243,7 +22395,7 @@ msgid ""
 "Odoo Point of Sale\n"
 "-----------------------------\n"
 "\n"
-"Odoo's <a href=\"https://www.odoo.com/page/point-of-sale\">Point of Sale</a>\n"
+"Odoo's <a href=\"https://flectrahq.com/point-of-sale\">Point of Sale</a>\n"
 "introduces a super clean interface with no installation required that runs\n"
 "online and offline on modern hardwares.\n"
 "\n"
@@ -22363,7 +22515,7 @@ msgid ""
 "-----------------\n"
 "\n"
 "Automate requisition-to-pay, control invoicing with the Odoo\n"
-"<a href=\"https://www.odoo.com/page/purchase\">Open Source Supply Chain</a>.\n"
+"<a href=\"https://flectrahq.com/purchase\">Open Source Supply Chain</a>.\n"
 "\n"
 "Automate procurement propositions, launch request for quotations, track\n"
 "purchase orders, manage vendors' information, control products reception and\n"
@@ -22427,7 +22579,7 @@ msgstr ""
 "-----------------\n"
 "\n"
 "Автоматизація заявки на оплату, контрольне виставлення рахунків за допомогою Odoo\n"
-"<a href=\"https://www.odoo.com/page/purchase\">Ланцюг поставок з відкритим кодом</a>.\n"
+"<a href=\"https://flectrahq.com/purchase\">Ланцюг поставок з відкритим кодом</a>.\n"
 "\n"
 "Автоматизація пропозицій щодо закупівель, запуск запиту на комерційну пропозицію, відстеження\n"
 "замовлення на купівлю, управління інформацією постачальників, прийом керованих товарів та\n"
@@ -22493,8 +22645,8 @@ msgid ""
 "Odoo Website Builder\n"
 "--------------------\n"
 "\n"
-"Get an awesome and <a href=\"https://www.odoo.com/page/website-builder\">free website</a>,\n"
-"easily customizable with the Odoo <a href=\"https://www.odoo.com/page/website-builder\">website builder</a>.\n"
+"Get an awesome and <a href=\"https://flectrahq.com/website-builder\">free website</a>,\n"
+"easily customizable with the Odoo <a href=\"https://flectrahq.com/website-builder\">website builder</a>.\n"
 "\n"
 "Create enterprise grade website with our super easy builder. Use finely\n"
 "designed building blocks and edit everything inline.\n"
@@ -22612,7 +22764,7 @@ msgid ""
 "\n"
 "### Optimize sales with an awesome online store.\n"
 "\n"
-"Odoo is an <a href=\"https://www.odoo.com/page/e-commerce\">Open Source eCommerce</a>\n"
+"Odoo is an <a href=\"https://flectrahq.com/e-commerce\">Open Source eCommerce</a>\n"
 "unlike anything you have ever seen before. Get an awesome catalog of products\n"
 "and great product description pages.\n"
 "\n"
@@ -22854,6 +23006,12 @@ msgid ""
 msgstr ""
 "Один із документів, які ви намагаєтесь отримати, було видалено. Будь ласка, "
 "повторіть спробу після оновлення."
+
+#. module: base
+#: code:addons/base/models/ir_actions_report.py:0
+#, python-format
+msgid "One of the documents, you try to merge is encrypted"
+msgstr "Один з документів, які ви намагаєтесь об'єднати, зашифровано"
 
 #. module: base
 #: code:addons/models.py:0
@@ -23395,7 +23553,7 @@ msgstr "Сервери вихідної пошти"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_microsoft_calendar
 msgid "Outlook Calendar"
-msgstr ""
+msgstr "Календар Outlook"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_report_paperformat__dpi
@@ -24249,7 +24407,7 @@ msgid ""
 "### Infinitely flexible. Incredibly easy to use.\n"
 "\n"
 "\n"
-"Odoo's collaborative and realtime <a href=\"https://www.odoo.com/page/project-management\">open source project management</a>\n"
+"Odoo's collaborative and realtime <a href=\"https://flectrahq.com/project-management\">open source project management</a>\n"
 "helps your team get work done. Keep track of everything, from the big picture\n"
 "to the minute details, from the customer contract to the billing.\n"
 "\n"
@@ -24388,6 +24546,8 @@ msgid ""
 "Provide the field used to link the newly created record on the record used "
 "by the server action."
 msgstr ""
+"Вкажіть поле, яке використовується для зв’язку новоствореного запису на "
+"записі, який використовується дією сервера."
 
 #. module: base
 #: model:ir.module.module,summary:base.module_mail_mobile
@@ -26124,6 +26284,8 @@ msgid ""
 "Server replied with following exception:\n"
 " %s"
 msgstr ""
+"Сервер відповів з наступною помилкою:\n"
+" %s"
 
 #. module: base
 #: model:ir.module.category,name:base.module_category_services
@@ -26594,7 +26756,7 @@ msgstr "Почніть налаштування"
 #: model_terms:ir.ui.view,arch_db:base.view_partner_form
 #: model_terms:ir.ui.view,arch_db:base.view_res_bank_form
 msgid "State"
-msgstr "Статус"
+msgstr "Область"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_country_state__code
@@ -28586,6 +28748,8 @@ msgid ""
 "Turn emails received in your Outlook mailbox into leads and log their "
 "content as internal notes."
 msgstr ""
+"Перетворіть отримані електронні листи в Outlook на ліди та запишіть їх вміст"
+" як внутрішні примітки."
 
 #. module: base
 #: model:res.country,name:base.tv
@@ -28610,7 +28774,7 @@ msgstr "Сніппет скролера Twitter на веб-сайті"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_auth_totp
 msgid "Two-Factor Authentication (TOTP)"
-msgstr ""
+msgstr "Двофакторна автентифікація (TOTP)"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_attachment__type
@@ -28730,7 +28894,7 @@ msgstr "USt"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_data_merge_utm
 msgid "UTM Deduplication"
-msgstr ""
+msgstr "Видалення UTM дублікатів "
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_utm
@@ -28965,6 +29129,8 @@ msgid ""
 "Unsearchable field \"%(field)s\" in path %(field_path)r in "
 "%(attribute)s=%(value)r"
 msgstr ""
+"Поле не знаходиться \"%(field)s\" in path %(field_path)r in "
+"%(attribute)s=%(value)r"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_web_unsplash
@@ -29037,7 +29203,7 @@ msgstr "Url-адреса"
 #. module: base
 #: model:ir.model.fields,help:base.field_res_country__image_url
 msgid "Url of static flag image"
-msgstr ""
+msgstr "Url статичного зображення прапора"
 
 #. module: base
 #: model:res.country,name:base.uy
@@ -29047,7 +29213,7 @@ msgstr "Уругвай"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_uy
 msgid "Uruguay - Accounting"
-msgstr ""
+msgstr "Уругвай - Бухоблік"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_decimal_precision__name
@@ -29066,17 +29232,17 @@ msgstr "Введіть \"1\" для 'так', і \"0\" для 'ні'."
 #. module: base
 #: model:ir.module.module,summary:base.module_pos_iot
 msgid "Use IoT Devices in the PoS"
-msgstr ""
+msgstr "Використовуйте пристрої IoT у точці продажу"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_delivery_iot
 msgid "Use IoT devices in delivery operations"
-msgstr ""
+msgstr "Використовуйте пристрої IoT в операціях доставки"
 
 #. module: base
 #: model:ir.model.fields,help:base.field_res_partner__barcode
 msgid "Use a barcode to identify this contact."
-msgstr ""
+msgstr "Використовуйте штрих-код для ідентифікації цього контакту."
 
 #. module: base
 #: model:ir.module.module,summary:base.module_stock_barcode
@@ -29104,7 +29270,7 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,summary:base.module_coupon
 msgid "Use discount coupons in different sales channels."
-msgstr ""
+msgstr "Використовуйте купони на знижку у різних каналах продажу."
 
 #. module: base
 #: model:ir.module.module,summary:base.module_sale_coupon
@@ -29167,7 +29333,7 @@ msgid ""
 "Used for custom many2many fields to define a custom relation table name"
 msgstr ""
 "Використовується для користувацьких полів many2many, щоб визначити пов'язану"
-" користувацьку назву таблиці"
+" кастомну назву таблиці"
 
 #. module: base
 #: model:ir.model.fields,help:base.field_ir_actions_act_window__usage
@@ -29258,7 +29424,7 @@ msgstr "Користувач:"
 #: code:addons/base/models/ir_rule.py:0
 #, python-format
 msgid "User: %s"
-msgstr ""
+msgstr "Користувач: %s"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_mail_server__smtp_user
@@ -29336,7 +29502,7 @@ msgstr "ПДВ"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_base_vat
 msgid "VAT Number Validation"
-msgstr "Вирівнювання номерів"
+msgstr "Валідація ІПН"
 
 #. module: base
 #: model:ir.module.category,name:base.module_category_productivity_voip
@@ -29432,7 +29598,7 @@ msgstr "Вануату"
 #. module: base
 #: model:ir.module.module,summary:base.module_l10n_be_hr_payroll_variable_revenue
 msgid "Variable Revenue"
-msgstr ""
+msgstr "Перемінний дохід"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_server_action_form
@@ -29477,7 +29643,7 @@ msgstr "Венесуела - Бухоблік"
 #: code:addons/base/models/ir_qweb_fields.py:0
 #, python-format
 msgid "Vertical bar"
-msgstr ""
+msgstr "Вертикальна гістограма"
 
 #. module: base
 #: model:res.country,name:base.vn
@@ -29501,13 +29667,13 @@ msgstr "Перегляд"
 #: code:addons/base/models/ir_ui_view.py:0
 #, python-format
 msgid "View '%(name)s' accessible only to groups %(groups)s "
-msgstr ""
+msgstr "Перегляд '%(name)s' доступний лише групам %(groups)s "
 
 #. module: base
 #: code:addons/base/models/ir_ui_view.py:0
 #, python-format
 msgid "View '%(name)s' is private"
-msgstr ""
+msgstr "Перегляд '%(name)s' приватний"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_ui_view__arch
@@ -29537,7 +29703,7 @@ msgstr "Назва перегляду"
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_actions_act_window__view_id
 msgid "View Ref."
-msgstr "Посилання перегляду"
+msgstr "Референс перегляду"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_actions_act_window_view__view_mode
@@ -29709,12 +29875,13 @@ msgstr "Веб-діаграма Ганта"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_test_web_grid
 msgid "Web Grid Tests"
-msgstr ""
+msgstr "Тести веб-сітки"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_test_web_grid
 msgid "Web Grid Tests: performances and tests specific to the grid view"
 msgstr ""
+"Тести веб-сітки: продуктивність та тести відповідно до перегляду сітки"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_ir_ui_menu__web_icon
@@ -29766,12 +29933,12 @@ msgstr "Веб-сайт Enterprise"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_website_event_crm_questions
 msgid "Website Event CRM Questions"
-msgstr ""
+msgstr "Веб-сайт Події CRM Запитання"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_website_event_crm
 msgid "Website Events CRM"
-msgstr ""
+msgstr "Веб-сайт Події CRM"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_website_form
@@ -29791,7 +29958,7 @@ msgstr "Служба підтримки живого чату IM веб-сайт
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_website_jitsi
 msgid "Website Jitsi"
-msgstr ""
+msgstr "Веб-сайт Jitsi"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_company__website
@@ -29868,7 +30035,7 @@ msgstr "Тест веб-сайту, в основному для модулів 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_crm_enterprise_iap_lead_website
 msgid "Website Visits Lead Generation Enterprise"
-msgstr ""
+msgstr "Генерація лідів з відвідувачів сайту версії Enterprise"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_website_profile
@@ -29893,7 +30060,7 @@ msgstr "Західна Сахара"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.form_res_users_key_description
 msgid "What's this key for?"
-msgstr ""
+msgstr "Для чого цей ключ?"
 
 #. module: base
 #: model:ir.model.fields,help:base.field_ir_actions_server__sequence
@@ -30030,7 +30197,7 @@ msgstr "Робочі записи"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_hr_work_entry_contract
 msgid "Work Entries - Contract"
-msgstr ""
+msgstr "Робочі записи - контракт"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_mrp_workorder
@@ -30072,7 +30239,7 @@ msgstr ""
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.form_res_users_key_show
 msgid "Write down your key"
-msgstr ""
+msgstr "Запишіть ваш ключ"
 
 #. module: base
 #: model:res.country,name:base.ye
@@ -30106,6 +30273,7 @@ msgid ""
 "You are not allowed to access '%(document_kind)s' (%(document_model)s) "
 "records."
 msgstr ""
+"У вас немає доступу до записів '%(document_kind)s' (%(document_model)s)."
 
 #. module: base
 #: code:addons/base/models/ir_model.py:0
@@ -30114,6 +30282,7 @@ msgid ""
 "You are not allowed to create '%(document_kind)s' (%(document_model)s) "
 "records."
 msgstr ""
+"Ви не можете створювати записи '%(document_kind)s' (%(document_model)s)."
 
 #. module: base
 #: code:addons/base/models/ir_model.py:0
@@ -30330,6 +30499,13 @@ msgstr ""
 "користувача в меню Налаштування/Користувачі."
 
 #. module: base
+#: model_terms:ir.ui.view,arch_db:base.view_currency_form
+msgid ""
+"You won't be able to reduce the number of decimal places of a currency which"
+" has already been used to make accounting entries."
+msgstr ""
+
+#. module: base
 #: code:addons/base/models/ir_mail_server.py:0
 #, python-format
 msgid ""
@@ -30381,7 +30557,7 @@ msgstr "Індекс"
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_country__zip_required
 msgid "Zip Required"
-msgstr ""
+msgstr "Потрібний індекс"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_base_import_language
@@ -30406,7 +30582,7 @@ msgstr "account_ponto"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_account_qr_code_sepa
 msgid "account_qr_code_sepa"
-msgstr ""
+msgstr "account_qr_code_sepa"
 
 #. module: base
 #: code:addons/models.py:0
@@ -30418,7 +30594,7 @@ msgstr "дозволено для груп %s"
 #: code:addons/models.py:0
 #, python-format
 msgid "always forbidden"
-msgstr ""
+msgstr "завжди заборонено"
 
 #. module: base
 #: code:addons/base/models/res_currency.py:0
@@ -30429,7 +30605,7 @@ msgstr "і"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_partner_kanban_view
 msgid "at"
-msgstr "за"
+msgstr "в"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_model_fields__ttype__binary
@@ -30497,7 +30673,7 @@ msgstr "напр. BE0477472701"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_base_import_language
 msgid "e.g. English"
-msgstr "наприклад: Українська"
+msgstr "напр.: Англійська"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_partner_form
@@ -30530,7 +30706,7 @@ msgstr "напр. en_US"
 #: model_terms:ir.ui.view,arch_db:base.view_partner_address_form
 #: model_terms:ir.ui.view,arch_db:base.view_partner_form
 msgid "e.g. https://www.odoo.com"
-msgstr "наприклад, https://www.odoo.com"
+msgstr "напр., https://www.odoo.com"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_sale_ebay
@@ -30609,6 +30785,8 @@ msgid ""
 "has been successfully installed.\n"
 "Users can choose his favorite language in their preferences."
 msgstr ""
+"було успішно встановлено.\n"
+"Користувачі можуть обрати мову у їхніх налаштуваннях профілю."
 
 #. module: base
 #: code:addons/base/models/ir_qweb_fields.py:0
@@ -30665,7 +30843,7 @@ msgstr "l10n_es_real_estates"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_mail_bot_hr
 msgid "mail_bot_hr"
-msgstr ""
+msgstr "mail_bot_hr"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_model_fields__ttype__many2many
@@ -30686,7 +30864,7 @@ msgstr "many2one_reference"
 #: code:addons/base/models/ir_qweb_fields.py:0
 #, python-format
 msgid "minute"
-msgstr ""
+msgstr "хвилина"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.demo_failures_dialog
@@ -30734,7 +30912,7 @@ msgstr "one2many"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_pos_account_reports
 msgid "pos_account_reports"
-msgstr ""
+msgstr "pos_account_reports"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_pos_cache
@@ -30764,7 +30942,7 @@ msgstr "pos_sale"
 #. module: base
 #: model:ir.module.module,summary:base.module_hr_expense_predict_product
 msgid "predict the product from the expense description based on old ones"
-msgstr ""
+msgstr "прогнозувати товар за описом витрат на основі старих"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_model_fields__ttype__reference
@@ -30774,23 +30952,23 @@ msgstr "посилання"
 #. module: base
 #: model:ir.model,name:base.model_res_users_apikeys
 msgid "res.users.apikeys"
-msgstr ""
+msgstr "res.users.apikeys"
 
 #. module: base
 #: model:ir.model,name:base.model_res_users_apikeys_description
 msgid "res.users.apikeys.description"
-msgstr ""
+msgstr "res.users.apikeys.description"
 
 #. module: base
 #: model:ir.model,name:base.model_res_users_apikeys_show
 msgid "res.users.apikeys.show"
-msgstr ""
+msgstr "res.users.apikeys.show"
 
 #. module: base
 #: code:addons/base/models/ir_qweb_fields.py:0
 #, python-format
 msgid "second"
-msgstr ""
+msgstr "секунда"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_model_fields__ttype__selection
@@ -30805,7 +30983,7 @@ msgstr "snailmail_account"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_users_form_simple_modif
 msgid "test"
-msgstr ""
+msgstr "тест"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_test_mimetypes
@@ -30875,7 +31053,7 @@ msgstr "test-lint"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_test_populate
 msgid "test-populate"
-msgstr ""
+msgstr "test-populate"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_test_translation_import
@@ -30895,7 +31073,7 @@ msgstr "test_convert"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_test_search_panel
 msgid "test_search_panel"
-msgstr ""
+msgstr "test_search_panel"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_model_fields__ttype__text
