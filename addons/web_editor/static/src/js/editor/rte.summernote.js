@@ -1006,7 +1006,7 @@ $.summernote.lang.flectra = {
       videoLink: _t('Video Link'),
       insert: _t('Insert Video'),
       url: _t('Video URL?'),
-      providers: _t('(YouTube, Vimeo, Vine, Instagram, DailyMotion or Youku)')
+      providers: _t('(YouTube, Vimeo, Vine, Instagram, DailyMotion, Youku or PeerTube)')
     },
     table: {
       table: _t('Table')
