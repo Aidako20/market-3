@@ -18,10 +18,6 @@
         <field name="users" eval="[(4, ref('base.user_root'))]"/>
     </record>
 
-    <record model="res.users" id="base.user_admin">
-        <field eval="[(4,ref('helpdesk_basic.helpdesk_group_manager'))]" name="groups_id"/>
-    </record>
-
     <record id="helpdesk_portal_user_rule" model="ir.rule">
         <field name="name">Portal See Own Issues</field>
         <field ref="model_helpdesk_ticket" name="model_id"/>
@@ -29,6 +25,10 @@
         <field name="domain_force">
             ['|', ('user_id','=',user.id), ('partner_id', '=', user.partner_id.id)]
         </field>
+    </record>
+
+    <record model="res.users" id="base.user_admin">
+        <field eval="[(4,ref('helpdesk_basic.helpdesk_group_manager'))]" name="groups_id"/>
     </record>
 
     <record id="helpdesk_user_rule" model="ir.rule">

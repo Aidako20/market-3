@@ -28,6 +28,39 @@ class HelpdeskTeam(models.Model):
     kanban_dashboard_graph = fields.Text(
         compute='_compute_kanban_dashboard_graph')
 
+    def _determine_stage(self):
+        """ Get a dict with the stage (per team) that should be set as first to a created ticket
+            :returns a mapping of team identifier with the stage (maybe an empty record).
+            :rtype : dict (key=team_id, value=record of helpdesk.stage)
+        """
+        result = dict.fromkeys(self.ids, self.env['helpdesk.stage'])
+        for team in self:
+            result[team.id] = self.env['helpdesk.stage'].search([('team_ids', 'in', team.id)], order='sequence', limit=1)
+        return result
+
+    def _determine_user_id(self):
+        """ Get a dict with the user (per team) that should be assign to the nearly created ticket according to the team policy
+            :returns a mapping of team identifier with the "to assign" user (maybe an empty record).
+            :rtype : dict (key=team_id, value=record of res.users)
+        """
+        result = dict.fromkeys(self.ids, self.env['res.users'])
+        for team in self:
+            member_ids = sorted(team.member_ids.ids) if team.member_ids else sorted(team.visibility_member_ids.ids)
+            if member_ids:
+                if team.assignment_method == 'random':  # randomly means new tickets get uniformly distributed
+                    last_assigned_user = self.env['helpdesk.ticket'].search([('team_id', '=', team.id)], order='create_date desc, id desc', limit=1).user_id
+                    index = 0
+                    if last_assigned_user and last_assigned_user.id in member_ids:
+                        previous_index = member_ids.index(last_assigned_user.id)
+                        index = (previous_index + 1) % len(member_ids)
+                    result[team.id] = self.env['res.users'].browse(member_ids[index])
+                elif team.assignment_method == 'balanced':  # find the member with the least open ticket
+                    ticket_count_data = self.env['helpdesk.ticket'].read_group([('stage_id.is_close', '=', False), ('user_id', 'in', member_ids), ('team_id', '=', team.id)], ['user_id'], ['user_id'])
+                    open_ticket_per_user_map = dict.fromkeys(member_ids, 0)  # dict: user_id -> open ticket count
+                    open_ticket_per_user_map.update((item['user_id'][0], item['user_id_count']) for item in ticket_count_data)
+                    result[team.id] = self.env['res.users'].browse(min(open_ticket_per_user_map, key=open_ticket_per_user_map.get))
+        return result
+
     @api.model
     def _default_create_mail(self):
         return self.env.ref('helpdesk_basic.ticket_mail_template').id
