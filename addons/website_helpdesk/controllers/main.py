@@ -50,20 +50,20 @@ class HelpdeskTicket(http.Controller):
         for rec in team:
             ticket.update({
                 'team_id': rec[0],
-                'stage_id': request.env.ref('helpdesk_basic.helpdesk_stage_draft')
+                # 'stage_id': request.env.ref('helpdesk_basic.helpdesk_stage_draft')
             })
-        if rec:
-            user_dict = {}
-            for member in ticket.team_id.member_ids:
-                if rec.assignment_method == 'balanced':
-                    tickets = request.env['helpdesk.ticket'].sudo().search_count([('team_id', '=', rec.id),('user_id', '=', member.id)])
-                    user_dict.update({member: tickets})
-                    temp = min(user_dict.values())
-                    res = [key for key in user_dict if user_dict[key] == temp]
-                    ticket.user_id = res[0]
+            if rec:
+                user_dict = {}
+                for member in ticket.team_id.member_ids:
+                    if rec.assignment_method == 'balanced':
+                        tickets = request.env['helpdesk.ticket'].sudo().search_count([('team_id', '=', rec.id),('user_id', '=', member.id)])
+                        user_dict.update({member: tickets})
+                        temp = min(user_dict.values())
+                        res = [key for key in user_dict if user_dict[key] == temp]
+                        ticket.user_id = res[0]
 
-                if rec.assignment_method == 'random':
-                    ticket.user_id = member.id
+                    if rec.assignment_method == 'random':
+                        ticket.user_id = member.id
         if request.env.user.partner_id:
             ticket.partner_id = request.env.user.partner_id or False
         values = {'ticket_seq': ticket.ticket_seq}

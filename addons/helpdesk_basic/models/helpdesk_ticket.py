@@ -1,6 +1,6 @@
 # Part of flectra. See LICENSE file for full copyright and licensing details.
 
-from flectra import api, fields, models, _
+from flectra import api, fields, models, tools, _
 from flectra.exceptions import AccessError
 from datetime import datetime
 import uuid
@@ -71,14 +71,8 @@ class HelpdeskTicket(models.Model):
     is_rating = fields.Boolean("Is Rating")
 
     def _merge_ticket_attachments(self, tickets):
-        """ Move attachments of given tickets to the current one `self`, and rename
-            the attachments having same name than native ones.
-
-        :param tickets: see ``merge_dependences``
-        """
         self.ensure_one()
 
-        # return attachments of ticket
         def _get_attachments(ticket_id):
             return self.env['ir.attachment'].search([('res_model', '=', self._name), ('res_id', '=', ticket_id)])
 
@@ -110,37 +104,83 @@ class HelpdeskTicket(models.Model):
             team = self.env['helpdesk.team']._get_default_team_id(user_id=user.id)
             team.team_id = team.id
 
+
+    def _message_get_suggested_recipients(self):
+        recipients = super(HelpdeskTicket, self)._message_get_suggested_recipients()
+        try:
+            for ticket in self:
+                if ticket.partner_id:
+                    ticket._message_add_suggested_recipient(recipients, partner=ticket.partner_id, reason=_('Customer'))
+                elif ticket.email:
+                    ticket._message_add_suggested_recipient(recipients, email=ticket.email, reason=_('Customer Email'))
+        except AccessError:  # no read access rights -> just ignore suggested recipients because this imply modifying followers
+            pass
+        return recipients
+
+    def _ticket_email_split(self, msg):
+        email_list = tools.email_split((msg.get('to') or '') + ',' + (msg.get('cc') or ''))
+        return [
+            x for x in email_list
+            if x.split('@')[0] not in self.mapped('team_id.alias_name')
+        ]
+
+    def message_update(self, msg, update_vals=None):
+        partner_ids = [x.id for x in self.env['mail.thread']._mail_find_partner_from_emails(self._ticket_email_split(msg), records=self) if x]
+        if partner_ids:
+            self.message_subscribe(partner_ids)
+        return super(HelpdeskTicket, self).message_update(msg, update_vals=update_vals)
+
+    def _track_template(self, changes):
+        res = super(HelpdeskTicket, self)._track_template(changes)
+        ticket = self[0]
+        if 'team_id' in changes and ticket.team_id.mail_template_id:
+            res['team_id'] = (ticket.team_id.mail_template_id, {
+                'auto_delete_message': True,
+                'subtype_id': self.env['ir.model.data'].xmlid_to_res_id('mail.mt_note'),
+                'email_layout_xmlid': 'mail.mail_notification_light'
+            }
+        )
+        return res
+
+    def _notify_get_reply_to(self, default=None, records=None, company=None, doc_names=None):
+        """ Override to set alias of tickets to their team if any. """
+        aliases = self.mapped('team_id').sudo()._notify_get_reply_to(default=default, records=None, company=company, doc_names=None)
+        res = {ticket.id: aliases.get(ticket.team_id.id) for ticket in self}
+        leftover = self.filtered(lambda rec: not rec.team_id)
+        if leftover:
+            res.update(super(HelpdeskTicket, leftover)._notify_get_reply_to(default=default, records=None, company=company, doc_names=doc_names))
+        return res
+
     @api.model
-    def message_new(self, msg_dict, custom_values=None):
-        """ Overrides mail_thread message_new that is called by the mailgateway
-            through message_process.
-            This override updates the document according to the email.
-        """
+    def message_new(self, msg, custom_values=None):
+        values = dict(custom_values or {}, email=msg.get('from'), partner_id=msg.get('author_id'))
+        ticket = super(HelpdeskTicket, self.with_context(mail_notify_author=True)).message_new(msg, custom_values=values)
+        partner_ids = [x.id for x in self.env['mail.thread']._mail_find_partner_from_emails(self._ticket_email_split(msg), records=ticket) if x]
+        customer_ids = [p.id for p in self.env['mail.thread']._mail_find_partner_from_emails(tools.email_split(values['email']), records=ticket) if p]
+        partner_ids += customer_ids
+        if customer_ids and not values.get('partner_id'):
+            ticket.partner_id = customer_ids[0]
+        if partner_ids:
+            ticket.message_subscribe(partner_ids)
+        return ticket
 
-        # remove external users
-        if self.env.user.has_group('base.group_portal'):
-            self = self.with_context(default_user_id=False)
-
-        # remove default author when going through the mail gateway. Indeed we
-        # do not want to explicitly set user_id to False; however we do not
-        # want the gateway user to be responsible if no other responsible is
-        # found.
-        if self._uid == self.env.ref('base.user_root').id:
-            self = self.with_context(default_user_id=False)
-
-        if custom_values is None:
-            custom_values = {}
-        defaults = {
-            'issue_name':  msg_dict.get('subject') or _("No Subject"),
-            'email': msg_dict.get('from'),
-            'partner_id': msg_dict.get('author_id', False),
-            # 'help_description': msg_dict.get('body')
-        }
+    
+    def _message_post_after_hook(self, message, msg_vals):
         
-        # assign right company
-        if 'company_id' not in defaults and 'team_id' in defaults:
-            defaults['company_id'] = self.env['helpdesk.team'].browse(defaults['team_id']).company_id.id
-        return super(HelpdeskTicket, self).message_new(msg_dict, custom_values=defaults)
+        if self.email and self.partner_id and not self.partner_id.email:
+            self.partner_id.email = self.partner_email
+
+        if self.email and not self.partner_id:
+            # we consider that posting a message with a specified recipient (not a follower, a specific one)
+            # on a document without customer means that it was created through the chatter using
+            # suggested recipients. This heuristic allows to avoid ugly hacks in JS.
+            new_partner = message.partner_ids.filtered(lambda partner: partner.email == self.email)
+            if new_partner:
+                self.search([
+                    ('partner_id', '=', False),
+                    ('email', '=', new_partner.email),
+                    ('stage_id.fold', '=', False)]).write({'partner_id': new_partner.id})
+        return super(HelpdeskTicket, self)._message_post_after_hook(message, msg_vals)
 
     @api.model
     def _default_access_token(self):
@@ -149,25 +189,15 @@ class HelpdeskTicket(models.Model):
     access_token = fields.Char('Access Token', default=_default_access_token)
     
     @api.model
-    def default_get(self, default_fields):
-        vals = super(HelpdeskTicket, self).default_get(default_fields)
-        if 'team_id' in vals:
-            user_dict = {}  
-            team_id = self.env['helpdesk.team'].search(
-                [("id", "=", vals['team_id'])])
-            if team_id.assignment_method == 'balanced':
-                for rec in team_id.member_ids.ids:
-                    ticket = self.env['helpdesk.ticket'].search_count(
-                        [('team_id', '=', team_id.id), ('user_id', '=', rec)])
-                    user_dict.update({rec: ticket})
-                temp = min(user_dict.values())
-                res = [key for key in user_dict if user_dict[key] == temp]
-                vals['user_id'] = res[0]
-
-            if team_id.assignment_method == 'random':
-                for member in team_id.member_ids:
-                    vals['user_id'] = member.id
-        return vals
+    def default_get(self, fields):
+        result = super(HelpdeskTicket, self).default_get(fields)
+        if result.get('team_id') and fields:
+            team = self.env['helpdesk.team'].browse(result['team_id'])
+            if 'user_id' in fields and 'user_id' not in result:  # if no user given, deduce it from the team
+                result['user_id'] = team._determine_user_id()[team.id].id
+            if 'stage_id' in fields and 'stage_id' not in result:  # if no stage given, deduce it from the team
+                result['stage_id'] = team._determine_stage()[team.id].id
+        return result
 
     @api.onchange('stage_id')
     def onchange_end_date(self):
@@ -191,34 +221,79 @@ class HelpdeskTicket(models.Model):
             return self.env.ref('helpdesk_basic.mt_ticket_stage')
         return super(HelpdeskTicket, self)._track_subtype(init_values)
 
-    def _message_get_suggested_recipients(self):
-        recipients = super(HelpdeskTicket, self)._message_get_suggested_recipients()
-        try:
-            for ticket in self:
-                if ticket.team_id.message_follower_ids:
-                    #for follower in ticket.team_id.message_follower_ids:
-                    pass
-                    # ticket.sudo()._message_add_suggested_recipient(recipients, partner=ticket.partner_id, reason=_('Customer'))
-                elif ticket.email:
-                    pass
-                    # ticket.sudo()._message_add_suggested_recipient(recipients, email=ticket.email, reason=_('Customer Email'))
-        except AccessError:  # no read access rights -> just ignore suggested recipients because this imply modifying followers
-            pass
-        return recipients
 
-    @api.model
+    @api.model_create_multi 
     def create(self, values):
-        if 'ticket_seq' not in values or values['ticket_seq'] == _('New'):
-            values['ticket_seq'] = self.env['ir.sequence'].next_by_code(
-                    'helpdesk.ticket') or _('New')
-        if values.get('team_id'):
-            team = self.team_id.browse(values.get('team_id'))
-            values.update(
-                {'stage_id': team.stage_ids and team.stage_ids[0].id or False})
-        res = super(HelpdeskTicket, self).create(values)
-        if not res.stage_id and res.team_id and res.team_id.stage_ids:
-            res.stage_id = res.team_id.stage_ids[0]
-        return res
+        now = fields.Datetime.now()
+
+        # determine user_id and stage_id if not given. Done in batch.
+        teams = self.env['helpdesk.team'].browse([vals['team_id'] for vals in values if vals.get('team_id')])
+        team_default_map = dict.fromkeys(teams.ids, dict())
+        for team in teams:
+            team_default_map[team.id] = {
+                'stage_id': team._determine_stage()[team.id].id,
+                'user_id': team._determine_user_id()[team.id].id
+
+            }
+
+        for vals in values:
+            if not vals.get('ticket_seq') or vals['ticket_seq'] == _('New'):
+                vals['ticket_seq'] = self.env['ir.sequence'].next_by_code('helpdesk.ticket') or _('New')
+
+            partner_id = vals.get('partner_id', False)
+            partner_name = vals.get('email', False)
+            partner_email = vals.get('email', False)
+            if partner_email and partner_name and not partner_id:
+                try:
+                    vals['partner_id'] = self.env['res.partner'].find_or_create(
+                        self._ticket_email_split({'to': partner_email, 'cc':''})[0]).id
+                except UnicodeEncodeError:
+                    
+                    vals['partner_id'] = self.env['res.partner'].create({
+                        'name': partner_name,
+                        'email': partner_email,
+                    }).id
+
+        partners = self.env['res.partner'].browse([vals['partner_id'] for vals in values if 'partner_id' in vals and vals.get('partner_id') and 'email' not in vals])
+        partner_email_map = {partner.id: partner.email for partner in partners}
+        partner_name_map = {partner.id: partner.name for partner in partners}
+
+        for vals in values:
+            if vals.get('team_id'):
+                team_default = team_default_map[vals['team_id']]
+                if 'stage_id' not in vals:
+                    vals['stage_id'] = team_default['stage_id']
+                # Note: this will break the randomly distributed user assignment. Indeed, it will be too difficult to
+                # equally assigned user when creating ticket in batch, as it requires to search after the last assigned
+                # after every ticket creation, which is not very performant. We decided to not cover this user case.
+                if 'user_id' not in vals:
+                    vals['user_id'] = team_default['user_id']
+        
+            # set partner email if in map of not given
+            if vals.get('partner_id') in partner_email_map:
+                vals['email'] = partner_email_map.get(vals['partner_id'])
+            # set partner name if in map of not given
+            if vals.get('partner_id') in partner_name_map:
+                vals['partner_name'] = partner_name_map.get(vals['partner_id'])
+
+            if vals.get('team_id'):
+                team = self.team_id.browse(vals.get('team_id'))
+                vals.update(
+                    {'stage_id': team.stage_ids and team.stage_ids[0].id or False})
+            if not self.stage_id and self.team_id and self.team_id.stage_ids:
+                self.stage_id = self.team_id.stage_ids[0]
+
+
+        # context: no_log, because subtype already handle this
+        tickets = super(HelpdeskTicket, self).create(values)
+
+        # make customer follower
+        for ticket in tickets:
+            if ticket.partner_id:
+                ticket.message_subscribe(partner_ids=ticket.partner_id.ids)
+
+            ticket._portal_ensure_token()
+        return tickets
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):
