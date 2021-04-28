@@ -123,11 +123,29 @@ var MessagingMenu = Widget.extend({
             var resID = $(event.currentTarget).data('res_id');
             var resModel = $(event.currentTarget).data('res_model');
             if (resModel && resModel !== 'mail.channel' && resID) {
-                this.do_action({
-                    type: 'ir.actions.act_window',
-                    res_model: resModel,
-                    views: [[false, 'form']],
-                    res_id: resID
+
+                this._rpc({
+                    model: resModel,
+                    method: 'search_read',
+                    domain: [['id', '=', resID]],
+                }).then(function(data){
+                    if(data.length > 0 && Object.keys(data[0]).includes('type') && resModel == 'account.invoice'){
+                        var form_view_ref = data[0].type == "out_invoice" ? 'account.invoice_form' : 'account.invoice_supplier_form' ;
+                        self.do_action({
+                            type: 'ir.actions.act_window',
+                            res_model: resModel,
+                            views: [[false, 'form']],
+                            res_id: resID,
+                            context: { form_view_ref : form_view_ref}
+                        });
+                    }else{
+                        self.do_action({
+                            type: 'ir.actions.act_window',
+                            res_model: resModel,
+                            views: [[false, 'form']],
+                            res_id: resID
+                        });
+                    }
                 });
             } else {
                 var clientChatOptions = {clear_breadcrumbs: true};

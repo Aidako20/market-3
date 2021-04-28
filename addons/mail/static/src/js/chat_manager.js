@@ -1171,7 +1171,7 @@ var ChatManager =  Class.extend(Mixins.EventDispatcherMixin, ServicesMixin, {
             var info;
             if (channel.channel_ids && _.contains(channel.channel_ids,"channel_inbox")) {
                 // map inbox(mail_message) data with existing channel/chat template
-                info = _.pick(channel, 'id', 'body', 'avatar_src', 'res_id', 'model', 'module_icon', 'subject','date', 'record_name', 'status', 'displayed_author', 'email_from', 'unread_counter');
+                info = _.pick(channel, 'id', 'type', 'body', 'avatar_src', 'res_id', 'model', 'module_icon', 'subject','date', 'record_name', 'status', 'displayed_author', 'email_from', 'unread_counter');
                 info.last_message = {
                     body: info.body,
                     date: info.date,
