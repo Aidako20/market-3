@@ -1,4 +1,4 @@
-<flectra>
+<odoo>
     <template id="portal_my_home_menu_invoice" name="Portal layout : invoice menu entries" inherit_id="portal.portal_breadcrumbs" priority="30">
         <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
             <li t-if="page_name == 'invoice'" t-attf-class="breadcrumb-item #{'active ' if not invoice else ''}">
@@ -172,4 +172,4 @@
             </div>
         </div>
     </template>
-</flectra>
+</odoo>

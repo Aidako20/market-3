@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<flectra>
+<odoo>
     <data>
         <template id="account_invoice_line_facturx_export">
             <t t-set="line" t-value="line_values['line']"/>
@@ -232,4 +232,4 @@
             </rsm:CrossIndustryInvoice>
         </template>
     </data>
-</flectra>
+</odoo>

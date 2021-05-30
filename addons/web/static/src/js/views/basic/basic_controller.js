@@ -1,4 +1,4 @@
-flectra.define('web.BasicController', function (require) {
+odoo.define('web.BasicController', function (require) {
 "use strict";
 
 /**
@@ -297,7 +297,7 @@ var BasicController = AbstractController.extend(FieldManagerMixin, {
      *
      * @param {string} id - the id of one of the view's records
      * @param {string[]} fields - the changed fields
-     * @param {FlectraEvent} e - the event that triggered the change
+     * @param {OdooEvent} e - the event that triggered the change
      * @returns {Promise}
      */
     _confirmChange: function (id, fields, e) {
@@ -672,7 +672,7 @@ var BasicController = AbstractController.extend(FieldManagerMixin, {
      */
     _onContentClicked(ev) {
         if (this.$buttons && this._shouldBounceOnClick(ev.target)) {
-            this.$buttons.find('.btn-primary:visible:first').flectraBounce();
+            this.$buttons.find('.btn-primary:visible:first').odooBounce();
         }
     },
     /**
@@ -681,7 +681,7 @@ var BasicController = AbstractController.extend(FieldManagerMixin, {
      * a list view.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onDiscardChanges: function (ev) {
         var self = this;
@@ -703,7 +703,7 @@ var BasicController = AbstractController.extend(FieldManagerMixin, {
      * in readonly (e.g. Priority).
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onFieldChanged: function (ev) {
         if (this.mode === 'readonly' && !('force_save' in ev.data)) {
@@ -713,7 +713,7 @@ var BasicController = AbstractController.extend(FieldManagerMixin, {
     },
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onPagerChanged: async function (ev) {
         ev.stopPropagation();
@@ -738,7 +738,7 @@ var BasicController = AbstractController.extend(FieldManagerMixin, {
      *
      * @todo: rename db_id into handle
      *
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      * @param {Object} ev.data
      * @param {string} [ev.data.db_id] handle of the data to reload and
      *   re-render (reload the whole form by default)
@@ -768,7 +768,7 @@ var BasicController = AbstractController.extend(FieldManagerMixin, {
      * Resequence records in the given order.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      * @param {string[]} ev.data.recordIds
      * @param {integer} ev.data.offset
      * @param {string} ev.data.handleField
@@ -794,7 +794,7 @@ var BasicController = AbstractController.extend(FieldManagerMixin, {
     /**
      * Load the optional columns settings in local storage for this view
      *
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      * @param {Object} ev.data.keyParts see _getLocalStorageKey
      * @param {function} ev.data.callback function to call with the result
      * @private
@@ -810,7 +810,7 @@ var BasicController = AbstractController.extend(FieldManagerMixin, {
     /**
      * Save the optional columns settings in local storage for this view
      *
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      * @param {Object} ev.data.keyParts see _getLocalStorageKey
      * @param {Array<string>} ev.data.optionalColumnsEnabled list of optional
      *   field names that have been enabled
@@ -826,7 +826,7 @@ var BasicController = AbstractController.extend(FieldManagerMixin, {
     },
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onSetDirty: function (ev) {
         ev.stopPropagation(); // prevent other controllers from handling this request
@@ -836,7 +836,7 @@ var BasicController = AbstractController.extend(FieldManagerMixin, {
      * open the translation view for the current field
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onTranslate: async function (ev) {
         ev.stopPropagation();

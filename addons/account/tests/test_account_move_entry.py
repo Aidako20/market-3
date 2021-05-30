@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from flectra.addons.account.tests.common import AccountTestInvoicingCommon
-from flectra.tests import tagged, new_test_user
-from flectra.tests.common import Form
-from flectra import fields, api, SUPERUSER_ID
-from flectra.exceptions import ValidationError, UserError, RedirectWarning
-from flectra.tools import mute_logger
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
+from odoo.tests import tagged, new_test_user
+from odoo.tests.common import Form
+from odoo import fields, api, SUPERUSER_ID
+from odoo.exceptions import ValidationError, UserError, RedirectWarning
+from odoo.tools import mute_logger
 
 from dateutil.relativedelta import relativedelta
 from functools import reduce

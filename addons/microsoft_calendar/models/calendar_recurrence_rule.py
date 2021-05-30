@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import re
 
-from flectra import api, fields, models
+from odoo import api, fields, models
 from dateutil.relativedelta import relativedelta
 
-from flectra.addons.microsoft_calendar.utils.microsoft_calendar import MicrosoftCalendarService
+from odoo.addons.microsoft_calendar.utils.microsoft_calendar import MicrosoftCalendarService
 
 
 class RecurrenceRule(models.Model):
@@ -80,7 +80,7 @@ class RecurrenceRule(models.Model):
         self.unlink()
 
     @api.model
-    def _microsoft_to_flectra_values(self, microsoft_recurrence, default_reminders=(), default_values={}):
+    def _microsoft_to_odoo_values(self, microsoft_recurrence, default_reminders=(), default_values={}):
         recurrence = microsoft_recurrence.get_recurrence()
 
         return {

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import time
 import unittest
 from datetime import timedelta
 
-from flectra import api, fields
-from flectra.addons.account.tests.common import TestAccountReconciliationCommon
-from flectra.tests import Form, tagged
+from odoo import api, fields
+from odoo.addons.account.tests.common import TestAccountReconciliationCommon
+from odoo.tests import Form, tagged
 
 
 @tagged('post_install', '-at_install')

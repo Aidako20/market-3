@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 import logging
 from datetime import timedelta
 from functools import partial
@@ -7,11 +7,11 @@ from functools import partial
 import psycopg2
 import pytz
 
-from flectra import api, fields, models, tools, _
-from flectra.tools import float_is_zero, float_round
-from flectra.exceptions import ValidationError, UserError
-from flectra.http import request
-from flectra.osv.expression import AND
+from odoo import api, fields, models, tools, _
+from odoo.tools import float_is_zero, float_round
+from odoo.exceptions import ValidationError, UserError
+from odoo.http import request
+from odoo.osv.expression import AND
 import base64
 
 _logger = logging.getLogger(__name__)

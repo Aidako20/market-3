@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 import json
 import logging
 from datetime import datetime
 from werkzeug.exceptions import Forbidden, NotFound
 
-from flectra import fields, http, SUPERUSER_ID, tools, _
-from flectra.http import request
-from flectra.addons.base.models.ir_qweb_fields import nl2br
-from flectra.addons.http_routing.models.ir_http import slug
-from flectra.addons.payment.controllers.portal import PaymentProcessing
-from flectra.addons.website.controllers.main import QueryURL
-from flectra.addons.website.models.ir_http import sitemap_qs2dom
-from flectra.exceptions import ValidationError
-from flectra.addons.portal.controllers.portal import _build_url_w_params
-from flectra.addons.website.controllers.main import Website
-from flectra.addons.website_form.controllers.main import WebsiteForm
-from flectra.osv import expression
+from odoo import fields, http, SUPERUSER_ID, tools, _
+from odoo.http import request
+from odoo.addons.base.models.ir_qweb_fields import nl2br
+from odoo.addons.http_routing.models.ir_http import slug
+from odoo.addons.payment.controllers.portal import PaymentProcessing
+from odoo.addons.website.controllers.main import QueryURL
+from odoo.addons.website.models.ir_http import sitemap_qs2dom
+from odoo.exceptions import ValidationError
+from odoo.addons.portal.controllers.portal import _build_url_w_params
+from odoo.addons.website.controllers.main import Website
+from odoo.addons.website_form.controllers.main import WebsiteForm
+from odoo.osv import expression
 _logger = logging.getLogger(__name__)
 
 

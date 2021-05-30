@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from collections import defaultdict
 from datetime import timedelta
 
-from flectra import api, fields, models, _
-from flectra.exceptions import AccessError, UserError, ValidationError
-from flectra.tools import float_is_zero, float_compare
+from odoo import api, fields, models, _
+from odoo.exceptions import AccessError, UserError, ValidationError
+from odoo.tools import float_is_zero, float_compare
 
 
 class PosSession(models.Model):

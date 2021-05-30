@@ -1,5 +1,5 @@
 from math import floor, log10
-from flectra import api, models
+from odoo import api, models
 
 
 class CRMHelpers(models.Model):

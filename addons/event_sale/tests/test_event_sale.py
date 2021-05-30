@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra.addons.event_sale.tests.common import TestEventSaleCommon
-from flectra.tests import tagged
-from flectra.tests.common import users
+from odoo.addons.event_sale.tests.common import TestEventSaleCommon
+from odoo.tests import tagged
+from odoo.tests.common import users
 
 
 @tagged('event_flow')

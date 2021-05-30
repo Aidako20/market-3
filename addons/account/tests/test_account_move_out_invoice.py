@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from flectra.addons.account.tests.common import AccountTestInvoicingCommon
-from flectra.tests.common import Form
-from flectra.tests import tagged
-from flectra import fields
-from flectra.exceptions import UserError
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
+from odoo.tests.common import Form
+from odoo.tests import tagged
+from odoo import fields
+from odoo.exceptions import UserError
 
 from unittest.mock import patch
 from datetime import timedelta

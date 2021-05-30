@@ -1,4 +1,4 @@
-flectra.define('partner.autocomplete.fieldchar', function (require) {
+odoo.define('partner.autocomplete.fieldchar', function (require) {
 'use strict';
 
 var basic_fields = require('web.basic_fields');

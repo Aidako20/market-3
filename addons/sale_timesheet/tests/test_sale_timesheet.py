@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 from datetime import date, timedelta
 
-from flectra.fields import Date
-from flectra.tools import float_is_zero
-from flectra.exceptions import UserError
-from flectra.addons.sale_timesheet.tests.common import TestCommonSaleTimesheet
-from flectra.tests import tagged
+from odoo.fields import Date
+from odoo.tools import float_is_zero
+from odoo.exceptions import UserError
+from odoo.addons.sale_timesheet.tests.common import TestCommonSaleTimesheet
+from odoo.tests import tagged
 
 
 @tagged('-at_install', 'post_install')

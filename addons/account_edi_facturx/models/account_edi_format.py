@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from flectra import api, models, fields, tools, _
-from flectra.tools import DEFAULT_SERVER_DATE_FORMAT, float_repr
-from flectra.tests.common import Form
-from flectra.exceptions import UserError
+from odoo import api, models, fields, tools, _
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT, float_repr
+from odoo.tests.common import Form
+from odoo.exceptions import UserError
 
 from datetime import datetime
 from lxml import etree

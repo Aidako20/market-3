@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from flectra import api, fields, models, _, tools
-from flectra.osv import expression
-from flectra.exceptions import UserError, ValidationError
+from odoo import api, fields, models, _, tools
+from odoo.osv import expression
+from odoo.exceptions import UserError, ValidationError
 
 
 class AccountAccountType(models.Model):

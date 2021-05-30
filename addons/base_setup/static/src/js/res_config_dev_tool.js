@@ -1,4 +1,4 @@
-flectra.define('base_setup.ResConfigDevTool', function (require) {
+odoo.define('base_setup.ResConfigDevTool', function (require) {
     "use strict";
 
     var config = require('web.config');

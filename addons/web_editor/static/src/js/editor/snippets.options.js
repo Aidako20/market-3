@@ -1,4 +1,4 @@
-flectra.define('web_editor.snippets.options', function (require) {
+odoo.define('web_editor.snippets.options', function (require) {
 'use strict';
 
 var core = require('web.core');
@@ -551,7 +551,7 @@ const UserValueWidget = Widget.extend({
 
     /**
      * @private
-     * @param {FlectraEvent|Event}
+     * @param {OdooEvent|Event}
      * @returns {boolean}
      */
     _handleNotifierEvent: function (ev) {
@@ -577,7 +577,7 @@ const UserValueWidget = Widget.extend({
      * change.
      *
      * @private
-     * @param {FlectraEvent|Event} [ev]
+     * @param {OdooEvent|Event} [ev]
      */
     _onUserValueChange: function (ev) {
         if (this._handleNotifierEvent(ev)) {
@@ -588,7 +588,7 @@ const UserValueWidget = Widget.extend({
      * Allows container widgets to add additional data if needed.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onUserValueNotification: function (ev) {
         ev.data.widget = this;
@@ -608,7 +608,7 @@ const UserValueWidget = Widget.extend({
      * preview.
      *
      * @private
-     * @param {FlectraEvent|Event} [ev]
+     * @param {OdooEvent|Event} [ev]
      */
     _onUserValuePreview: function (ev) {
         if (this._handleNotifierEvent(ev)) {
@@ -620,7 +620,7 @@ const UserValueWidget = Widget.extend({
      * reset.
      *
      * @private
-     * @param {FlectraEvent|Event} [ev]
+     * @param {OdooEvent|Event} [ev]
      */
     _onUserValueReset: function (ev) {
         if (this._handleNotifierEvent(ev)) {

@@ -2807,7 +2807,7 @@
         set(mode) {
             QWeb.dev = mode === "dev";
             if (QWeb.dev) {
-                const url = `https://github.com/flectra/owl/blob/master/doc/reference/config.md#mode`;
+                const url = `https://github.com/odoo/owl/blob/master/doc/reference/config.md#mode`;
                 console.warn(`Owl is running in 'dev' mode.  This is not suitable for production use. See ${url} for more information.`);
             }
             else {
@@ -3966,7 +3966,7 @@
          * setup is run just after the component is constructed. This is the standard
          * location where the component can setup its hooks. It has some advantages
          * over the constructor:
-         *  - it can be patched (useful in flectra ecosystem)
+         *  - it can be patched (useful in odoo ecosystem)
          *  - it does not need to propagate the arguments to the super call
          *
          * Note: this method should not be called manually.
@@ -5390,7 +5390,7 @@
     __info__.version = '1.2.6';
     __info__.date = '2021-05-19T10:28:32.429Z';
     __info__.hash = 'e838781';
-    __info__.url = 'https://github.com/flectra/owl';
+    __info__.url = 'https://github.com/odoo/owl';
 
 
 }(this.owl = this.owl || {}));

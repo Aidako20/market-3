@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<flectra>
+<odoo>
     <!-- ONBOARDING STEPS -->
     <template id="onboarding_invoice_layout_step">
         <t t-call="base.onboarding_step">
@@ -143,4 +143,4 @@
         <field name="view_id" ref="account_invoice_onboarding_sale_tax_form" />
         <field name="target">new</field>
     </record>
-</flectra>
+</odoo>

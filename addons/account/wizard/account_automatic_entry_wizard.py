@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from flectra import api, fields, models, _
-from flectra.exceptions import UserError
-from flectra.tools.misc import format_date, formatLang
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
+from odoo.tools.misc import format_date, formatLang
 
 from collections import defaultdict
 from itertools import groupby

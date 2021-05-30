@@ -1,4 +1,4 @@
-flectra.define('point_of_sale.PaymentScreen', function (require) {
+odoo.define('point_of_sale.PaymentScreen', function (require) {
     'use strict';
 
     const { parse } = require('web.field_utils');

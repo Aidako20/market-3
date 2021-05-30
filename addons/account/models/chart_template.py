@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from flectra.exceptions import AccessError
-from flectra import api, fields, models, _
-from flectra import SUPERUSER_ID
-from flectra.exceptions import UserError, ValidationError
-from flectra.http import request
-from flectra.addons.account.models.account_tax import TYPE_TAX_USE
+from odoo.exceptions import AccessError
+from odoo import api, fields, models, _
+from odoo import SUPERUSER_ID
+from odoo.exceptions import UserError, ValidationError
+from odoo.http import request
+from odoo.addons.account.models.account_tax import TYPE_TAX_USE
 
 import logging
 

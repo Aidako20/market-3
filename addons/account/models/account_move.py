@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from flectra import api, fields, models, _
-from flectra.exceptions import RedirectWarning, UserError, ValidationError, AccessError
-from flectra.tools import float_compare, date_utils, email_split, email_re
-from flectra.tools.misc import formatLang, format_date, get_lang
+from odoo import api, fields, models, _
+from odoo.exceptions import RedirectWarning, UserError, ValidationError, AccessError
+from odoo.tools import float_compare, date_utils, email_split, email_re
+from odoo.tools.misc import formatLang, format_date, get_lang
 
 from datetime import date, timedelta
 from collections import defaultdict
@@ -2098,16 +2098,16 @@ class AccountMove(models.Model):
         reference = 'RF{} {}'.format(check_digits, " ".join(["".join(x) for x in zip_longest(*[iter(partner_ref_nr)]*4, fillvalue="")]))
         return reference
 
-    def _get_invoice_reference_flectra_invoice(self):
-        """ This computes the reference based on the Flectra format.
+    def _get_invoice_reference_odoo_invoice(self):
+        """ This computes the reference based on the Odoo format.
             We simply return the number of the invoice, defined on the journal
             sequence.
         """
         self.ensure_one()
         return self.name
 
-    def _get_invoice_reference_flectra_partner(self):
-        """ This computes the reference based on the Flectra format.
+    def _get_invoice_reference_odoo_partner(self):
+        """ This computes the reference based on the Odoo format.
             The data used is the reference set on the partner or its database
             id otherwise. For instance if the reference of the customer is
             'dumb customer 97', the reference will be 'CUST/dumb customer 97'.
@@ -2889,18 +2889,18 @@ class AccountMove(models.Model):
         if len(self) != 1 or not attachments or self.env.context.get('no_new_invoice') or not self.is_invoice(include_receipts=True):
             return res
 
-        flectrabot = self.env.ref('base.partner_root')
+        odoobot = self.env.ref('base.partner_root')
         if attachments and self.state != 'draft':
             self.message_post(body=_('The invoice is not a draft, it was not updated from the attachment.'),
                               message_type='comment',
                               subtype_xmlid='mail.mt_note',
-                              author_id=flectrabot.id)
+                              author_id=odoobot.id)
             return res
         if attachments and self.line_ids:
             self.message_post(body=_('The invoice already contains lines, it was not updated from the attachment.'),
                               message_type='comment',
                               subtype_xmlid='mail.mt_note',
-                              author_id=flectrabot.id)
+                              author_id=odoobot.id)
             return res
 
         decoders = self.env['account.move']._get_update_invoice_from_attachment_decoders(self)

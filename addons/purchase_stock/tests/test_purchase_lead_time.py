@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from datetime import datetime, timedelta, time
 from unittest.mock import patch
 
-from flectra import fields
+from odoo import fields
 from .common import PurchaseTestCommon
-from flectra.tests.common import Form
+from odoo.tests.common import Form
 
 
 class TestPurchaseLeadTime(PurchaseTestCommon):
@@ -274,7 +274,7 @@ class TestPurchaseLeadTime(PurchaseTestCommon):
     def test_reordering_days_to_purchase(self):
         company = self.env.ref('base.main_company')
         company.write({'po_lead': 0.00})
-        self.patcher = patch('flectra.addons.stock.models.stock_orderpoint.fields.Date', wraps=fields.Date)
+        self.patcher = patch('odoo.addons.stock.models.stock_orderpoint.fields.Date', wraps=fields.Date)
         self.mock_date = self.patcher.start()
 
         vendor = self.env['res.partner'].create({
