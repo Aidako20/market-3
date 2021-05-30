@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
-from flectra import api, fields, models, _
-from flectra.exceptions import ValidationError
+from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
 
-from flectra.osv import expression
+from odoo.osv import expression
 
 class Contract(models.Model):
     _name = 'hr.contract'
@@ -30,7 +30,7 @@ class Contract(models.Model):
         help="End date of the trial period (if there is one).")
     resource_calendar_id = fields.Many2one(
         'resource.calendar', 'Working Schedule', compute='_compute_employee_contract', store=True, readonly=False,
-        default=lambda self: self.env.company.resource_calendar_id.id, copy=False,
+        default=lambda self: self.env.company.resource_calendar_id.id, copy=False, index=True,
         domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]")
     wage = fields.Monetary('Wage', required=True, tracking=True, help="Employee's monthly gross wage.")
     notes = fields.Text('Notes')

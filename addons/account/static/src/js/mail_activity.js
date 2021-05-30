@@ -1,4 +1,4 @@
-flectra.define('account.activity', function (require) {
+odoo.define('account.activity', function (require) {
 "use strict";
 
 var AbstractField = require('web.AbstractField');

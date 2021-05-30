@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 
-from flectra import api, fields, models, SUPERUSER_ID, _
-from flectra.osv import expression
-from flectra.addons.stock.models.stock_rule import ProcurementException
+from odoo import api, fields, models, SUPERUSER_ID, _
+from odoo.osv import expression
+from odoo.addons.stock.models.stock_rule import ProcurementException
 
 
 class StockRule(models.Model):
@@ -119,16 +119,19 @@ class StockRule(models.Model):
         and cumulative description.
         """
         delay, delay_description = super()._get_lead_days(product)
+        bypass_delay_description = self.env.context.get('bypass_delay_description')
         manufacture_rule = self.filtered(lambda r: r.action == 'manufacture')
         if not manufacture_rule:
             return delay, delay_description
         manufacture_rule.ensure_one()
         manufacture_delay = product.produce_delay
         delay += manufacture_delay
-        delay_description += '<tr><td>%s</td><td class="text-right">+ %d %s</td></tr>' % (_('Manufacturing Lead Time'), manufacture_delay, _('day(s)'))
+        if not bypass_delay_description:
+            delay_description += '<tr><td>%s</td><td class="text-right">+ %d %s</td></tr>' % (_('Manufacturing Lead Time'), manufacture_delay, _('day(s)'))
         security_delay = manufacture_rule.picking_type_id.company_id.manufacturing_lead
         delay += security_delay
-        delay_description += '<tr><td>%s</td><td class="text-right">+ %d %s</td></tr>' % (_('Manufacture Security Lead Time'), security_delay, _('day(s)'))
+        if not bypass_delay_description:
+            delay_description += '<tr><td>%s</td><td class="text-right">+ %d %s</td></tr>' % (_('Manufacture Security Lead Time'), security_delay, _('day(s)'))
         return delay, delay_description
 
     def _push_prepare_move_copy_values(self, move_to_copy, new_date):

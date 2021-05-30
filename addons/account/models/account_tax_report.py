@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from flectra import api, fields, models, _
-from flectra.exceptions import ValidationError
+from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
 
 
 class AccountTaxReport(models.Model):

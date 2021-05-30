@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import api, models, fields
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+from odoo import api, models, fields
 
 
 class ProductTemplate(models.Model):
@@ -14,5 +14,8 @@ class ProductTemplate(models.Model):
 
     def get_single_product_variant(self):
         res = super(ProductTemplate, self).get_single_product_variant()
-        res['mode'] = self.product_add_mode
+        if self.has_configurable_attributes:
+            res['mode'] = self.product_add_mode
+        else:
+            res['mode'] = 'configurator'
         return res

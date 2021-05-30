@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra.addons.hr_expense.tests.common import TestExpenseCommon
-from flectra.tests import tagged
-from flectra import fields
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+from odoo.addons.hr_expense.tests.common import TestExpenseCommon
+from odoo.tests import tagged
+from odoo import fields
 
 
 @tagged('-at_install', 'post_install')

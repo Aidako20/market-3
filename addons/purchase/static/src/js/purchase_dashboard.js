@@ -1,4 +1,4 @@
-flectra.define('purchase.dashboard', function (require) {
+odoo.define('purchase.dashboard', function (require) {
 "use strict";
 
 /**
@@ -130,7 +130,7 @@ var PurchaseListDashboardController = ListController.extend({
 
     /**
      * @private
-     * @param {FlectraEvent} e
+     * @param {OdooEvent} e
      */
     _onDashboardOpenAction: function (e) {
         return this.do_action(e.data.action_name,
@@ -245,7 +245,7 @@ var PurchaseKanbanDashboardController = KanbanController.extend({
 
     /**
      * @private
-     * @param {FlectraEvent} e
+     * @param {OdooEvent} e
      */
     _onDashboardOpenAction: function (e) {
         return this.do_action(e.data.action_name,

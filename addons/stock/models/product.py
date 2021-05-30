@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import operator as py_operator
 from ast import literal_eval
 from collections import defaultdict
 
-from flectra import _, api, fields, models, SUPERUSER_ID
-from flectra.exceptions import UserError
-from flectra.osv import expression
-from flectra.tools import pycompat,float_is_zero
-from flectra.tools.float_utils import float_round
+from odoo import _, api, fields, models, SUPERUSER_ID
+from odoo.exceptions import UserError
+from odoo.osv import expression
+from odoo.tools import pycompat,float_is_zero
+from odoo.tools.float_utils import float_round
 
 OPERATORS = {
     '<': py_operator.lt,
@@ -641,7 +641,7 @@ class ProductTemplate(models.Model):
         'product_variant_ids.stock_move_ids.product_qty',
         'product_variant_ids.stock_move_ids.state',
     )
-    @api.depends_context('company')
+    @api.depends_context('company', 'location', 'warehouse')
     def _compute_quantities(self):
         res = self._compute_quantities_dict()
         for template in self:

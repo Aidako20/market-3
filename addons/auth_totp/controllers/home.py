@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import re
 
-import flectra.addons.web.controllers.main
-from flectra import http, _
-from flectra.exceptions import AccessDenied
-from flectra.http import request
+import odoo.addons.web.controllers.main
+from odoo import http, _
+from odoo.exceptions import AccessDenied
+from odoo.http import request
 
 
-class Home(flectra.addons.web.controllers.main.Home):
+class Home(odoo.addons.web.controllers.main.Home):
     @http.route(
         '/web/login/totp',
         type='http', auth='public', methods=['GET', 'POST'], sitemap=False,

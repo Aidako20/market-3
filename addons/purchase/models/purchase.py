@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 from datetime import datetime, time
 from dateutil.relativedelta import relativedelta
 from itertools import groupby
 from pytz import timezone, UTC
 from werkzeug.urls import url_encode
 
-from flectra import api, fields, models, _
-from flectra.osv import expression
-from flectra.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from flectra.tools.float_utils import float_is_zero
-from flectra.exceptions import AccessError, UserError, ValidationError
-from flectra.tools.misc import formatLang, get_lang
+from odoo import api, fields, models, _
+from odoo.osv import expression
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.tools.float_utils import float_is_zero
+from odoo.exceptions import AccessError, UserError, ValidationError
+from odoo.tools.misc import formatLang, get_lang
 
 
 class PurchaseOrder(models.Model):
@@ -709,7 +709,7 @@ class PurchaseOrder(models.Model):
             if order.state in ['purchase', 'done'] and not order.mail_reminder_confirmed:
                 order.mail_reminder_confirmed = True
                 date = confirmed_date or self.date_planned.date()
-                order.message_post(body="%s confirmed the receipt will take place on %s." % (order.partner_id.name, date))
+                order.message_post(body=_("%(name)s confirmed the receipt will take place on %(date)s.", name=order.partner_id.name, date=date))
 
     def _approval_allowed(self):
         """Returns whether the order qualifies to be approved by the current user"""
@@ -726,7 +726,7 @@ class PurchaseOrder(models.Model):
         for order in self:
             if order.state in ['purchase', 'done'] and not order.mail_reception_confirmed:
                 order.mail_reception_confirmed = True
-                order.message_post(body="The order receipt has been acknowledged by %s." % order.partner_id.name)
+                order.message_post(body=_("The order receipt has been acknowledged by %(name)s.", name=order.partner_id.name))
 
     def _update_date_planned_for_lines(self, updated_dates):
         # create or update the activity

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from contextlib import closing
 from datetime import datetime, timedelta
 
-from flectra.addons.mail.tests.common import mail_new_test_user
-from flectra.exceptions import ValidationError
-from flectra.tests.common import SavepointCase
-from flectra.exceptions import AccessError, UserError
+from odoo.addons.mail.tests.common import mail_new_test_user
+from odoo.exceptions import ValidationError
+from odoo.tests.common import SavepointCase
+from odoo.exceptions import AccessError, UserError
 
 
 class StockQuant(SavepointCase):
@@ -636,7 +636,7 @@ class StockQuant(SavepointCase):
             'company_id': self.env.company.id,
         })
 
-        from flectra.fields import Datetime
+        from odoo.fields import Datetime
         in_date1 = Datetime.now()
         self.env['stock.quant']._update_available_quantity(self.product_lot, self.stock_location, 1.0, lot_id=lot1, in_date=in_date1)
 

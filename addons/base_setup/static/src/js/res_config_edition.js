@@ -1,4 +1,4 @@
-flectra.define('base_setup.ResConfigEdition', function (require) {
+odoo.define('base_setup.ResConfigEdition', function (require) {
     "use strict";
 
     var Widget = require('web.Widget');

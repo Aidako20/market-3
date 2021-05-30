@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import logging
 import random
@@ -8,8 +8,8 @@ import string
 
 import requests
 
-from flectra import api, models, _
-from flectra.exceptions import UserError
+from odoo import api, models, _
+from odoo.exceptions import UserError
 
 from ..py_etherpad import EtherpadLiteClient
 
@@ -65,10 +65,12 @@ class PadCommon(models.AbstractModel):
             field = model._fields[self.env.context['field_name']]
             real_field = field.pad_content_field
 
+            res_id = self.env.context.get("object_id")
+            record = model.browse(res_id)
             # get content of the real field
-            for record in model.browse(self.env.context.get("object_id")):
-                    if record[real_field]:
-                        myPad.setHtmlFallbackText(path, record[real_field])
+            real_field_value = record[real_field] or self.env.context.get('record', {}).get(real_field, '')
+            if real_field_value:
+                myPad.setHtmlFallbackText(path, real_field_value)
 
         return {
             "server": pad["server"],

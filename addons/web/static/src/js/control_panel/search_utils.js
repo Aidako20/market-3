@@ -1,4 +1,4 @@
-flectra.define('web.searchUtils', function (require) {
+odoo.define('web.searchUtils', function (require) {
     "use strict";
 
     const { _lt, _t } = require('web.core');
@@ -47,6 +47,8 @@ flectra.define('web.searchUtils', function (require) {
         ],
         id: [
             { symbol: "=", description: _lt("is") },
+            { symbol: "<=", description: _lt("less than or equal to")},
+            { symbol: ">", description: _lt("greater than")},
         ],
         number: [
             { symbol: "=", description: _lt("is equal to") },

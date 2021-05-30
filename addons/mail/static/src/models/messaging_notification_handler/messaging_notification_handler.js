@@ -1,4 +1,4 @@
-flectra.define('mail/static/src/models/messaging_notification_handler/messaging_notification_handler.js', function (require) {
+odoo.define('mail/static/src/models/messaging_notification_handler/messaging_notification_handler.js', function (require) {
 'use strict';
 
 const { registerNewModel } = require('mail/static/src/model/model_core.js');
@@ -233,7 +233,7 @@ function factory(dependencies) {
             }
 
             // Message from mailing channel should not make a notification in
-            // Flectra for users with notification "Handled by Email".
+            // Odoo for users with notification "Handled by Email".
             // Channel has been marked as read server-side in this case, so
             // it should not display a notification by incrementing the
             // unread counter.
@@ -241,20 +241,24 @@ function factory(dependencies) {
                 channel.mass_mailing &&
                 this.env.session.notification_type === 'email'
             ) {
+                this._handleNotificationChannelSeen(channelId, {
+                    last_message_id: messageData.id,
+                    partner_id: this.env.messaging.currentPartner.id,
+                });
                 return;
             }
             // In all other cases: update counter and notify if necessary
 
-            // Chat from FlectraBot is considered disturbing and should only be
+            // Chat from OdooBot is considered disturbing and should only be
             // shown on the menu, but no notification and no thread open.
-            const isChatWithFlectraBot = (
+            const isChatWithOdooBot = (
                 channel.correspondent &&
                 channel.correspondent === this.env.messaging.partnerRoot
             );
-            if (!isChatWithFlectraBot) {
-                const isFlectraFocused = this.env.services['bus_service'].isFlectraFocused();
+            if (!isChatWithOdooBot) {
+                const isOdooFocused = this.env.services['bus_service'].isOdooFocused();
                 // Notify if out of focus
-                if (!isFlectraFocused && channel.isChatChannel) {
+                if (!isOdooFocused && channel.isChatChannel) {
                     this._notifyNewChannelMessageWhileOutOfFocus({
                         channel,
                         message,
@@ -265,8 +269,8 @@ function factory(dependencies) {
                     // on `channel` channels for performance reasons
                     channel.markAsFetched();
                 }
-                // (re)open chat on receiving new message
-                if (channel.channel_type !== 'channel' && !this.env.messaging.device.isMobile) {
+                // open chat on receiving new message if it was not already opened or folded
+                if (channel.channel_type !== 'channel' && !this.env.messaging.device.isMobile && !channel.chatWindow) {
                     this.env.messaging.chatWindowManager.openThread(channel);
                 }
             }

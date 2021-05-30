@@ -1,4 +1,4 @@
-flectra.define('pad.pad', function (require) {
+odoo.define('pad.pad', function (require) {
 "use strict";
 
 var AbstractField = require('web.AbstractField');
@@ -125,7 +125,8 @@ var FieldPad = AbstractField.extend({
                 context: {
                     model: this.model,
                     field_name: this.name,
-                    object_id: this.res_id
+                    object_id: this.res_id,
+                    record: this.recordData,
                 },
             }, {
                 shadow: true

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<flectra>
+<odoo>
     <data>
         <record id="res_users_view_form_simple_modif" model="ir.ui.view">
             <field name="name">res.users.preferences.form.simplified.inherit</field>
@@ -16,7 +16,7 @@
             <field name="model">res.users</field>
             <field name="inherit_id" ref="hr.res_users_view_form_profile" />
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='flectrabot_state']" position="attributes">
+                <xpath expr="//field[@name='odoobot_state']" position="attributes">
                     <attribute name="attrs">{'readonly': [('can_edit', '=', False)]}</attribute>
                 </xpath>
                 <sheet position="before">
@@ -25,4 +25,4 @@
             </field>
         </record>
     </data>
-</flectra>
+</odoo>

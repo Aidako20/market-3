@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra import _, api, fields, models
-from flectra.addons.base.models.ir_model import MODULE_UNINSTALL_FLAG
-from flectra.exceptions import UserError, ValidationError
-from flectra.osv import expression
-from flectra.tools import float_compare, float_is_zero
+from odoo import _, api, fields, models
+from odoo.addons.base.models.ir_model import MODULE_UNINSTALL_FLAG
+from odoo.exceptions import UserError, ValidationError
+from odoo.osv import expression
+from odoo.tools import float_compare, float_is_zero
 
 
 class Inventory(models.Model):

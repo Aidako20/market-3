@@ -1,12 +1,12 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import base64
 
 from dateutil.relativedelta import relativedelta
-from flectra import tests
-from flectra.fields import Datetime
-from flectra.modules.module import get_module_resource
-from flectra.addons.base.tests.common import HttpCaseWithUserDemo, HttpCaseWithUserPortal
+from odoo import tests
+from odoo.fields import Datetime
+from odoo.modules.module import get_module_resource
+from odoo.addons.base.tests.common import HttpCaseWithUserDemo, HttpCaseWithUserPortal
 
 
 class TestUICommon(HttpCaseWithUserDemo, HttpCaseWithUserPortal):
@@ -107,8 +107,8 @@ class TestUi(TestUICommon):
 
         self.browser_js(
             '/slides',
-            'flectra.__DEBUG__.services["web_tour.tour"].run("course_member")',
-            'flectra.__DEBUG__.services["web_tour.tour"].tours.course_member.ready',
+            'odoo.__DEBUG__.services["web_tour.tour"].run("course_member")',
+            'odoo.__DEBUG__.services["web_tour.tour"].tours.course_member.ready',
             login=user_demo.login)
 
     def test_course_member_elearning_officer(self):
@@ -120,8 +120,8 @@ class TestUi(TestUICommon):
 
         self.browser_js(
             '/slides',
-            'flectra.__DEBUG__.services["web_tour.tour"].run("course_member")',
-            'flectra.__DEBUG__.services["web_tour.tour"].tours.course_member.ready',
+            'odoo.__DEBUG__.services["web_tour.tour"].run("course_member")',
+            'odoo.__DEBUG__.services["web_tour.tour"].tours.course_member.ready',
             login=user_demo.login)
 
     def test_course_member_portal(self):
@@ -130,9 +130,23 @@ class TestUi(TestUICommon):
 
         self.browser_js(
             '/slides',
-            'flectra.__DEBUG__.services["web_tour.tour"].run("course_member")',
-            'flectra.__DEBUG__.services["web_tour.tour"].tours.course_member.ready',
+            'odoo.__DEBUG__.services["web_tour.tour"].run("course_member")',
+            'odoo.__DEBUG__.services["web_tour.tour"].tours.course_member.ready',
             login=user_portal.login)
+
+    def test_full_screen_edition_website_publisher(self):
+        # group_website_designer
+        user_demo = self.env.ref('base.user_demo')
+        user_demo.flush()
+        user_demo.write({
+            'groups_id': [(5, 0), (4, self.env.ref('base.group_user').id), (4, self.env.ref('website.group_website_publisher').id)]
+        })
+
+        self.browser_js(
+            '/slides',
+            'odoo.__DEBUG__.services["web_tour.tour"].run("full_screen_web_editor")',
+            'odoo.__DEBUG__.services["web_tour.tour"].tours.full_screen_web_editor.ready',
+            login=user_demo.login)
 
 
 @tests.common.tagged('external', 'post_install', '-standard', '-at_install')
@@ -149,8 +163,8 @@ class TestUiYoutube(HttpCaseWithUserDemo):
 
         self.browser_js(
             '/slides',
-            'flectra.__DEBUG__.services["web_tour.tour"].run("course_member_youtube")',
-            'flectra.__DEBUG__.services["web_tour.tour"].tours.course_member_youtube.ready',
+            'odoo.__DEBUG__.services["web_tour.tour"].run("course_member_youtube")',
+            'odoo.__DEBUG__.services["web_tour.tour"].tours.course_member_youtube.ready',
             login=user_demo.login)
 
     def test_course_publisher_elearning_manager(self):
@@ -162,6 +176,6 @@ class TestUiYoutube(HttpCaseWithUserDemo):
 
         self.browser_js(
             '/slides',
-            'flectra.__DEBUG__.services["web_tour.tour"].run("course_publisher")',
-            'flectra.__DEBUG__.services["web_tour.tour"].tours.course_publisher.ready',
+            'odoo.__DEBUG__.services["web_tour.tour"].run("course_publisher")',
+            'odoo.__DEBUG__.services["web_tour.tour"].tours.course_publisher.ready',
             login=user_demo.login)

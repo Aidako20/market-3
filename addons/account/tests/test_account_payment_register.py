@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from flectra.addons.account.tests.common import AccountTestInvoicingCommon
-from flectra.exceptions import UserError
-from flectra.tests import tagged
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
+from odoo.exceptions import UserError
+from odoo.tests import tagged
 
 
 @tagged('post_install', '-at_install')

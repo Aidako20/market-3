@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from flectra import api, exceptions, fields, models, _
-from flectra.exceptions import UserError, ValidationError
+from odoo import api, exceptions, fields, models, _
+from odoo.exceptions import UserError, ValidationError
 
 from dateutil.relativedelta import relativedelta
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import api, fields, models
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+from odoo import api, fields, models
 
 
 class SaleOrderLine(models.Model):
@@ -29,7 +29,8 @@ class SaleOrderLine(models.Model):
                 # If the standard_price is 0
                 # Avoid unnecessary computations
                 # and currency conversions
-                line.purchase_price = 0.0
+                if not line.purchase_price:
+                    line.purchase_price = 0.0
                 continue
             fro_cur = product.cost_currency_id
             to_cur = line.currency_id or line.order_id.currency_id

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra import models, _
-from flectra.tools import html2plaintext, html_escape
+from odoo import models, _
+from odoo.tools import html2plaintext, html_escape
 
 
 class MailChannel(models.Model):
@@ -39,7 +39,7 @@ class MailChannel(models.Model):
         # anonymous user whatever the participants. Otherwise keep only share
         # partners (no user or portal user) to link to the lead.
         customers = self.env['res.partner']
-        for customer in channel_partners.partner_id.filtered('partner_share'):
+        for customer in channel_partners.partner_id.filtered('partner_share').with_context(active_test=False):
             if customer.user_ids and all(user._is_public() for user in customer.user_ids):
                 customers = self.env['res.partner']
                 break

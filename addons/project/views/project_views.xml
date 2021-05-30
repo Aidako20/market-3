@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<flectra>
+<odoo>
 
         <!-- Top menu item -->
         <menuitem name="Project"
@@ -774,6 +774,7 @@
             <field name="view_mode">form</field>
             <field name="target">new</field>
             <field name="binding_model_id" ref="model_project_task"/>
+            <field name="binding_view_types">form</field>
         </record>
 
         <record id="unlink_project_action" model="ir.actions.server">
@@ -1151,4 +1152,4 @@
             groups="project.group_project_rating"
             sequence="40"/>
 
-</flectra>
+</odoo>

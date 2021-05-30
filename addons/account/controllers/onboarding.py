@@ -1,5 +1,5 @@
-from flectra import http
-from flectra.http import request
+from odoo import http
+from odoo.http import request
 
 
 class OnboardingController(http.Controller):

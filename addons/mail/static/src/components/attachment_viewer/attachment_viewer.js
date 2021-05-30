@@ -1,4 +1,4 @@
-flectra.define('mail/static/src/components/attachment_viewer/attachment_viewer.js', function (require) {
+odoo.define('mail/static/src/components/attachment_viewer/attachment_viewer.js', function (require) {
 'use strict';
 
 const useRefs = require('mail/static/src/component_hooks/use_refs/use_refs.js');
@@ -160,7 +160,7 @@ class AttachmentViewer extends Component {
         const image = refs[`image_${this.attachmentViewer.attachment.id}`];
         if (
             this.attachmentViewer.attachment.fileType === 'image' &&
-            !image.complete
+            (!image || !image.complete)
         ) {
             this.attachmentViewer.update({ isImageLoading: true });
         }

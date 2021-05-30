@@ -1,6 +1,6 @@
 var onYouTubeIframeAPIReady = undefined;
 
-flectra.define('website_slides.fullscreen', function (require) {
+odoo.define('website_slides.fullscreen', function (require) {
     'use strict';
 
     var publicWidget = require('web.public.widget');
@@ -508,7 +508,7 @@ flectra.define('website_slides.fullscreen', function (require) {
                 slideData.hasNext = index < slidesDataList.length-1;
                 // compute embed url
                 if (slideData.type === 'video') {
-                    slideData.embedCode = $(slideData.embedCode).attr('src') || ""; // embedCode contains an iframe tag, where src attribute is the url (youtube or embed document from flectra)
+                    slideData.embedCode = $(slideData.embedCode).attr('src') || ""; // embedCode contains an iframe tag, where src attribute is the url (youtube or embed document from odoo)
                     var separator = slideData.embedCode.indexOf("?") !== -1 ? "&" : "?";
                     var scheme = slideData.embedCode.indexOf('//') === 0 ? 'https:' : '';
                     var params = { rel: 0, enablejsapi: 1, origin: window.location.origin };
@@ -711,11 +711,32 @@ flectra.define('website_slides.fullscreen', function (require) {
         selector: '.o_wslides_fs_main',
         xmlDependencies: ['/website_slides/static/src/xml/website_slides_fullscreen.xml', '/website_slides/static/src/xml/website_slides_share.xml'],
         start: function (){
+            var self = this;
             var proms = [this._super.apply(this, arguments)];
             var fullscreen = new Fullscreen(this, this._getSlides(), this._getCurrentSlideID(), this._extractChannelData());
             proms.push(fullscreen.attachTo(".o_wslides_fs_main"));
-            return Promise.all(proms);
+            return Promise.all(proms).then(function () {
+                $('#edit-page-menu a[data-action="edit"]').on('click', self._onWebEditorClick.bind(self));
+            });
         },
+
+        /**
+         * The web editor does not work well with the e-learning fullscreen view.
+         * It actually completely closes the fullscreen view and opens the edition on a blank page.
+         *
+         * To avoid this, we intercept the click on the 'edit' button and redirect to the
+         * non-fullscreen view of this slide with the editor enabled, which is more suited to edit
+         * in-place anyway.
+         *
+         * @param {MouseEvent} e
+         */
+        _onWebEditorClick: function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.location = `${window.location.pathname}?fullscreen=0&enable_editor=1`;
+        },
+
         _extractChannelData: function (){
             return this.$el.data();
         },

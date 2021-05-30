@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import ast
 import base64
 import re
 
-from flectra import _, api, fields, models, tools
-from flectra.exceptions import UserError
+from odoo import _, api, fields, models, tools
+from odoo.exceptions import UserError
 
 
 # main mako-like expression pattern
@@ -136,7 +136,7 @@ class MailComposer(models.TransientModel):
     # mass mode options
     notify = fields.Boolean('Notify followers', help='Notify followers of the document (mass post only)')
     auto_delete = fields.Boolean('Delete Emails',
-        help='This option permanently removes any track of email after it\'s been sent, including from the Technical menu in the Settings, in order to preserve storage space of your Flectra database.')
+        help='This option permanently removes any track of email after it\'s been sent, including from the Technical menu in the Settings, in order to preserve storage space of your Odoo database.')
     auto_delete_message = fields.Boolean('Delete Message Copy', help='Do not keep a copy of the email in the document communication history (mass mailing only)')
     mail_server_id = fields.Many2one('ir.mail_server', 'Outgoing mail server')
 
@@ -282,7 +282,7 @@ class MailComposer(models.TransientModel):
         blacklisted_rec_ids = set()
         if mass_mail_mode and issubclass(type(self.env[self.model]), self.pool['mail.thread.blacklist']):
             self.env['mail.blacklist'].flush(['email'])
-            self._cr.execute("SELECT email FROM mail_blacklist")
+            self._cr.execute("SELECT email FROM mail_blacklist WHERE active=true")
             blacklist = {x[0] for x in self._cr.fetchall()}
             if blacklist:
                 targets = self.env[self.model].browse(res_ids).read(['email_normalized'])

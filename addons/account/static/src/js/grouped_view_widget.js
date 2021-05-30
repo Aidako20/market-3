@@ -1,4 +1,4 @@
-flectra.define('account.ShowGroupedList', function (require) {
+odoo.define('account.ShowGroupedList', function (require) {
 "use strict";
 
 const { Component } = owl;

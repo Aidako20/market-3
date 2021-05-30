@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from flectra import api, fields, models, _
-from flectra.exceptions import ValidationError
-from flectra.tools.misc import format_date
+from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
+from odoo.tools.misc import format_date
 
 import re
 from psycopg2 import sql

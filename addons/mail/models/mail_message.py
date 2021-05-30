@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import logging
 import re
@@ -8,11 +8,11 @@ from binascii import Error as binascii_error
 from collections import defaultdict
 from operator import itemgetter
 
-from flectra import _, api, fields, models, modules, tools
-from flectra.exceptions import AccessError, UserError
-from flectra.http import request
-from flectra.osv import expression
-from flectra.tools import groupby
+from odoo import _, api, fields, models, modules, tools
+from odoo.exceptions import AccessError, UserError
+from odoo.http import request
+from odoo.osv import expression
+from odoo.tools import groupby
 
 _logger = logging.getLogger(__name__)
 _image_dataurl = re.compile(r'(data:image/[a-z]+?);base64,([a-z0-9+/\n]{3,}=*)\n*([\'"])(?: data-filename="([^"]*)")?', re.I)
@@ -80,7 +80,7 @@ class Message(models.Model):
     author_id = fields.Many2one(
         'res.partner', 'Author', index=True, ondelete='set null',
         help="Author of the message. If not set, email_from may hold an email address that did not match any partner.")
-    author_avatar = fields.Binary("Author's avatar", related='author_id.image_128', readonly=False)
+    author_avatar = fields.Binary("Author's avatar", related='author_id.image_128', depends=['author_id'], readonly=False)
     # recipients: include inactive partners (they may have been archived after
     # the message was sent, but they should remain visible in the relation)
     partner_ids = fields.Many2many('res.partner', string='Recipients', context={'active_test': False})
@@ -111,7 +111,7 @@ class Message(models.Model):
     tracking_value_ids = fields.One2many(
         'mail.tracking.value', 'mail_message_id',
         string='Tracking values',
-        groups="base.group_no_one",
+        groups="base.group_system",
         help='Tracked values are stored in a separate model. This field allow to reconstruct '
              'the tracking and to generate statistics on the model.')
     # mail gateway
@@ -701,11 +701,11 @@ class Message(models.Model):
             limit=limit, orderby=orderby, lazy=lazy,
         )
 
-    def export_data(self, fields_to_export, raw_data=False):
+    def export_data(self, fields_to_export):
         if not self.env.is_admin():
             raise AccessError(_("Only administrators are allowed to export mail message"))
 
-        return super(Message, self).export_data(fields_to_export, raw_data)
+        return super(Message, self).export_data(fields_to_export)
 
     # ------------------------------------------------------
     # DISCUSS API

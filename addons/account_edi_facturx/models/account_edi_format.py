@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from flectra import api, models, fields, tools, _
-from flectra.tools import DEFAULT_SERVER_DATE_FORMAT, float_repr
-from flectra.tests.common import Form
-from flectra.exceptions import UserError
+from odoo import api, models, fields, tools, _
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT, float_repr
+from odoo.tests.common import Form
+from odoo.exceptions import UserError
 
 from datetime import datetime
 from lxml import etree
@@ -44,6 +44,12 @@ class AccountEdiFormat(models.Model):
         # OVERRIDE
         self.ensure_one()
         return True if self.code == 'facturx_1_0_05' else super()._is_embedding_to_invoice_pdf_needed()
+
+    def _get_embedding_to_invoice_pdf_values(self, invoice):
+        values = super()._get_embedding_to_invoice_pdf_values(invoice)
+        if values and self.code == 'facturx_1_0_05':
+            values['name'] = 'factur-x.xml'
+        return values
 
     def _export_facturx(self, invoice):
 

@@ -1,4 +1,4 @@
-flectra.define('web.field_one_to_many_tests', function (require) {
+odoo.define('web.field_one_to_many_tests', function (require) {
 "use strict";
 
 var AbstractField = require('web.AbstractField');
@@ -1707,7 +1707,7 @@ QUnit.module('fields', {}, function () {
             var positions = [
                 [6, 0, 'top', ['3', '6', '1', '2', '5', '7', '4']], // move the last to the first line
                 [5, 1, 'top', ['7', '6', '1', '2', '5']], // move the penultimate to the second line
-                [2, 5, 'center', ['1', '2', '5', '6']], // move the third to the penultimate line
+                [2, 5, 'bottom', ['1', '2', '5', '6']], // move the third to the penultimate line
             ];
             async function dragAndDrop() {
                 var pos = positions.shift();
@@ -8215,7 +8215,7 @@ QUnit.module('fields', {}, function () {
             // on_close handler, executed because the python method does not return
             // any action, or an ir.action.act_window_close) ; this test ensures that
             // it reloads the fields of the opened view (i.e. the form in this case).
-            // See https://github.com/flectra/flectra/issues/24189
+            // See https://github.com/odoo/odoo/issues/24189
             assert.expect(7);
 
             var data = this.data;

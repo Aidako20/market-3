@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra.addons.account.tests.common import AccountTestInvoicingHttpCommon
-from flectra.tests.common import tagged
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+from odoo.addons.account.tests.common import AccountTestInvoicingHttpCommon
+from odoo.tests.common import tagged
 
 import json
 
-from flectra import http
-from flectra.tools import mute_logger
+from odoo import http
+from odoo.tools import mute_logger
 
 
 @tagged('post_install', '-at_install')
@@ -28,7 +28,7 @@ class TestPortalAttachment(AccountTestInvoicingHttpCommon):
 
         cls.base_url = cls.env['ir.config_parameter'].sudo().get_param('web.base.url')
 
-    @mute_logger('flectra.addons.http_routing.models.ir_http', 'flectra.http')
+    @mute_logger('odoo.addons.http_routing.models.ir_http', 'odoo.http')
     def test_01_portal_attachment(self):
         """Test the portal chatter attachment route."""
 

@@ -1,4 +1,4 @@
-flectra.define('web.jquery.extensions', function () {
+odoo.define('web.jquery.extensions', function () {
 'use strict';
 
 /**
@@ -91,11 +91,11 @@ $.fn.extend({
         return o;
     },
     /**
-     * Makes DOM elements bounce the way Flectra decided it.
+     * Makes DOM elements bounce the way Odoo decided it.
      *
      * @param {string} [extraClass]
      */
-    flectraBounce: function (extraClass) {
+    odooBounce: function (extraClass) {
         for (const el of this) {
             el.classList.add('o_catch_attention', extraClass);
             setTimeout(() => el.classList.remove('o_catch_attention', extraClass), 400);
@@ -171,7 +171,7 @@ $.fn.extend({
             // Search for a body child which is at least as tall as the body
             // and which has the ability to scroll if enough content in it. If
             // found, suppose this is the top scrolling element.
-            if (bodyHeight - el.scrollHeight > 1) {
+            if (bodyHeight - el.scrollHeight > 1.5) {
                 continue;
             }
             const $el = $(el);

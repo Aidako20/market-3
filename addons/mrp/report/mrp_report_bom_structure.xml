@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<flectra>
+<odoo>
     <template id="report_mrp_bom">
         <div class="container o_mrp_bom_report_page">
             <t t-if="data.get('components') or data.get('lines')">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1>BoM Structure &amp; Cost</h1>
+                        <h1 style="display:inline;">BoM Structure </h1>
+                        <h1 style="display:inline;" t-if="data['report_structure'] != 'bom_structure'" class="o_mrp_prod_cost">&amp; Cost</h1>
                         <h3>
                             <a href="#" t-if="data['report_type'] == 'html'" t-att-data-res-id="data['product'].id" t-att-data-model="data['product']._name" class="o_mrp_bom_action">
                                 <t t-esc="data['bom_prod_name']"/>
@@ -217,4 +218,4 @@
             </t>
         </t>
     </template>
-</flectra>
+</odoo>

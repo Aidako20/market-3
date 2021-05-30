@@ -1,4 +1,4 @@
-flectra.define('web.WebClient', function (require) {
+odoo.define('web.WebClient', function (require) {
 "use strict";
 
 var AbstractWebClient = require('web.AbstractWebClient');
@@ -28,7 +28,7 @@ return AbstractWebClient.extend({
         this._super.apply(this, arguments);
 
         /*
-            Small patch to allow having a link with a href towards an anchor. Since flectra use hashtag
+            Small patch to allow having a link with a href towards an anchor. Since odoo use hashtag
             to represent the current state of the view, we can't easily distinguish between a link
             towards an anchor and a link towards anoter view/state. If we want to navigate towards an
             anchor, we must not change the hash of the url otherwise we will be redirected to the app
@@ -55,7 +55,7 @@ return AbstractWebClient.extend({
         });
     },
     load_menus: function () {
-        return (flectra.loadMenusPromise || flectra.reloadMenus())
+        return (odoo.loadMenusPromise || odoo.reloadMenus())
             .then(function (menuData) {
                 // Compute action_id if not defined on a top menu item
                 for (var i = 0; i < menuData.children.length; i++) {
@@ -70,40 +70,35 @@ return AbstractWebClient.extend({
                         }
                     }
                 }
-                flectra.loadMenusPromise = null;
+                odoo.loadMenusPromise = null;
                 return menuData;
             });
     },
-    show_application: function () {
-        var self = this;
+    async show_application() {
         this.set_title();
 
-        return this.menu_dp.add(this.instanciate_menu_widgets()).then(function () {
-            $(window).bind('hashchange', self.on_hashchange);
+        await this.menu_dp.add(this.instanciate_menu_widgets());
+        $(window).bind('hashchange', this.on_hashchange);
 
-            // If the url's state is empty, we execute the user's home action if there is one (we
-            // show the first app if not)
-            var state = $.bbq.getState(true);
-            if (_.keys(state).length === 1 && _.keys(state)[0] === "cids") {
-                return self.menu_dp.add(self._rpc({
-                        model: 'res.users',
-                        method: 'read',
-                        args: [session.uid, ["action_id"]],
-                    }))
-                    .then(function (result) {
-                        var data = result[0];
-                        if (data.action_id) {
-                            return self.do_action(data.action_id[0]).then(function () {
-                                self.menu.change_menu_section(self.menu.action_id_to_primary_menu_id(data.action_id[0]));
-                            });
-                        } else {
-                            self.menu.openFirstApp();
-                        }
-                    });
-            } else {
-                return self.on_hashchange();
-            }
-        });
+        const state = $.bbq.getState(true);
+        if (!_.isEqual(_.keys(state), ["cids"])) {
+            return this.on_hashchange();
+        }
+
+        const [data] = await this.menu_dp.add(this._rpc({
+            model: 'res.users',
+            method: 'read',
+            args: [session.uid, ["action_id"]],
+        }));
+        if (data.action_id) {
+            await this.do_action(data.action_id[0]);
+            this.menu.change_menu_section(this.menu.action_id_to_primary_menu_id(data.action_id[0]));
+            return;
+        }
+
+        if (!this.menu.openFirstApp()) {
+            this.trigger_up('webclient_started');
+        }
     },
 
     instanciate_menu_widgets: function () {
