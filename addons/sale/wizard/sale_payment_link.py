@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from werkzeug import urls
 
-from flectra import api, models
+from odoo import api, models
 
 
 class SalePaymentLink(models.TransientModel):
@@ -46,4 +46,4 @@ class SalePaymentLink(models.TransientModel):
                                         payment_link.access_token
                                     )
             else:
-                super(SalePaymentLink, payment_link)._generate_link() 
+                super(SalePaymentLink, payment_link)._generate_link()

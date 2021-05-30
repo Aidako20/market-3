@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra.addons.website_sale.tests.test_website_sale_product_attribute_value_config import TestWebsiteSaleProductAttributeValueConfig
+from odoo.addons.website_sale.tests.test_website_sale_product_attribute_value_config import TestWebsiteSaleProductAttributeValueConfig
 
 
 class TestWebsiteSaleStockProductWarehouse(TestWebsiteSaleProductAttributeValueConfig):

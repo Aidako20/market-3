@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import logging
 from collections import namedtuple
 
-from flectra import _, _lt, api, fields, models
-from flectra.exceptions import UserError
+from odoo import _, _lt, api, fields, models
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -909,12 +909,12 @@ class Warehouse(models.Model):
                 'barcode': self.code.replace(" ", "").upper() + "-DELIVERY",
             },
             'pick_type_id': {
-                'active': self.delivery_steps != 'ship_only',
+                'active': self.delivery_steps != 'ship_only' and self.active,
                 'default_location_dest_id': output_loc.id if self.delivery_steps == 'pick_ship' else self.wh_pack_stock_loc_id.id,
                 'barcode': self.code.replace(" ", "").upper() + "-PICK",
             },
             'pack_type_id': {
-                'active': self.delivery_steps == 'pick_pack_ship',
+                'active': self.delivery_steps == 'pick_pack_ship' and self.active,
                 'barcode': self.code.replace(" ", "").upper() + "-PACK",
             },
             'int_type_id': {

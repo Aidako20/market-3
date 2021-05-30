@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import base64
 import logging
 import re
 from uuid import uuid4
 
-from flectra import _, api, fields, models, modules, tools
-from flectra.exceptions import UserError, ValidationError
-from flectra.osv import expression
-from flectra.tools import ormcache, formataddr
-from flectra.exceptions import AccessError
-from flectra.addons.base.models.ir_model import MODULE_UNINSTALL_FLAG
+from odoo import _, api, fields, models, modules, tools
+from odoo.exceptions import UserError, ValidationError
+from odoo.osv import expression
+from odoo.tools import ormcache, formataddr
+from odoo.exceptions import AccessError
+from odoo.addons.base.models.ir_model import MODULE_UNINSTALL_FLAG
 
 MODERATION_FIELDS = ['moderation', 'moderator_ids', 'moderation_ids', 'moderation_notify', 'moderation_notify_msg', 'moderation_guidelines', 'moderation_guidelines_msg']
 _logger = logging.getLogger(__name__)
@@ -25,7 +25,7 @@ class ChannelPartner(models.Model):
 
     custom_channel_name = fields.Char('Custom channel name')
     partner_id = fields.Many2one('res.partner', string='Recipient', ondelete='cascade')
-    partner_email = fields.Char('Email', related='partner_id.email', readonly=False)
+    partner_email = fields.Char('Email', related='partner_id.email', depends=['partner_id'], readonly=False)
     channel_id = fields.Many2one('mail.channel', string='Channel', ondelete='cascade')
     fetched_message_id = fields.Many2one('mail.message', string='Last Fetched')
     seen_message_id = fields.Many2one('mail.message', string='Last Seen')
@@ -775,7 +775,7 @@ class Channel(models.Model):
         """ Hook for website_livechat channel unpin and cleaning """
         self.ensure_one()
         channel_partners = self.env['mail.channel.partner'].search(
-            [('partner_id', '=', self.env.user.partner_id.id), ('channel_id', '=', self.id)])
+            [('partner_id', '=', self.env.user.partner_id.id), ('channel_id', '=', self.id), ('is_pinned', '!=', pinned)])
         self.env['bus.bus'].sendone((self._cr.dbname, 'res.partner', self.env.user.partner_id.id), self.channel_info('unsubscribe' if not pinned else False)[0])
         if channel_partners:
             channel_partners.write({'is_pinned': pinned})

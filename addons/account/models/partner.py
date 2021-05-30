@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import time
 import logging
 
 from psycopg2 import sql, DatabaseError
 
-from flectra import api, fields, models, _
-from flectra.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from flectra.exceptions import ValidationError
-from flectra.addons.base.models.res_partner import WARNING_MESSAGE, WARNING_HELP
+from odoo import api, fields, models, _
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.exceptions import ValidationError
+from odoo.addons.base.models.res_partner import WARNING_MESSAGE, WARNING_HELP
 
 _logger = logging.getLogger(__name__)
 
@@ -56,7 +56,7 @@ class AccountFiscalPosition(models.Model):
             return taxes
         result = self.env['account.tax']
         for tax in taxes:
-            taxes_correspondance = self.tax_ids.filtered(lambda t: t.tax_src_id == tax)
+            taxes_correspondance = self.tax_ids.filtered(lambda t: t.tax_src_id == tax._origin)
             result |= taxes_correspondance.tax_dest_id if taxes_correspondance else tax
         return result
 

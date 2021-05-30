@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from lxml import etree
 import re
 
-from flectra import api, fields, models, _
-from flectra.exceptions import UserError, AccessError
-from flectra.osv import expression
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError, AccessError
+from odoo.osv import expression
 
 class AccountAnalyticLine(models.Model):
     _inherit = 'account.analytic.line'
@@ -152,7 +152,7 @@ class AccountAnalyticLine(models.Model):
         if vals.get('project_id') and not vals.get('account_id'):
             project = self.env['project.project'].browse(vals.get('project_id'))
             vals['account_id'] = project.analytic_account_id.id
-            vals['company_id'] = project.analytic_account_id.company_id.id
+            vals['company_id'] = project.analytic_account_id.company_id.id or project.company_id.id
             if not project.analytic_account_id.active:
                 raise UserError(_('The project you are timesheeting on is not linked to an active analytic account. Set one on the project configuration.'))
         # employee implies user

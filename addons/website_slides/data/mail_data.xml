@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<flectra>
+<odoo>
     <data noupdate="1">
          <record id="slide_template_published" model="mail.template">
             <field name="name">Slide Published</field>
@@ -119,7 +119,7 @@
             <t t-raw="message.body"/>
             <div style="margin: 32px 0px 32px 0px; text-align: center;">
                 <a t-att-href="record.channel_id.website_url"
-                    style="background-color: #009EFB; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                    style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
                     Click here to start the course
                 </a>
             </div>
@@ -155,10 +155,10 @@
 </td></tr>
 <!-- POWERED BY -->
 <tr><td align="center" style="min-width: 590px;">
-        Powered by <a target="_blank" href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=email" style="color: #009EFB;">Flectra</a>
+        Powered by <a target="_blank" href="https://www.odoo.com?utm_source=db&amp;utm_medium=email" style="color: #875A7B;">Odoo</a>
 </td></tr>
 </table>
         </template>
 
     </data>
-</flectra>
+</odoo>

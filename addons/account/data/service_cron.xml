@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<flectra>
+<odoo>
     <record id="ir_cron_auto_post_draft_entry" model="ir.cron">
         <field name="name">Account; Post draft entries with auto_post set to True up to today</field>
         <field name="interval_number">1</field>
@@ -11,4 +11,4 @@
         <field name="code">model._autopost_draft_entries()</field>
         <field name="state">code</field>
     </record>
-</flectra>
+</odoo>

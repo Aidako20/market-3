@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import logging
 
-from flectra import _, api, fields, models
+from odoo import _, api, fields, models
 
 _logger = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ class AliasMixin(models.AbstractModel):
     _name = 'mail.alias.mixin'
     _inherits = {'mail.alias': 'alias_id'}
     _description = 'Email Aliases Mixin'
-    ALIAS_WRITEABLE_FIELDS = ['alias_name', 'alias_contact', 'alias_defaults']
+    ALIAS_WRITEABLE_FIELDS = ['alias_name', 'alias_contact', 'alias_defaults', 'alias_bounced_content']
 
     alias_id = fields.Many2one('mail.alias', string='Alias', ondelete="restrict", required=True)
 

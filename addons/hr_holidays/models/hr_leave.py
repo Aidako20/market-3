@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 # Copyright (c) 2005-2006 Axelor SARL. (http://www.axelor.com)
 
@@ -12,14 +12,14 @@ from datetime import datetime, date, timedelta, time
 from dateutil.rrule import rrule, DAILY
 from pytz import timezone, UTC
 
-from flectra import api, fields, models, SUPERUSER_ID, tools
-from flectra.addons.base.models.res_partner import _tz_get
-from flectra.addons.resource.models.resource import float_to_time, HOURS_PER_DAY
-from flectra.exceptions import AccessError, UserError, ValidationError
-from flectra.tools import float_compare
-from flectra.tools.float_utils import float_round
-from flectra.tools.translate import _
-from flectra.osv import expression
+from odoo import api, fields, models, SUPERUSER_ID, tools
+from odoo.addons.base.models.res_partner import _tz_get
+from odoo.addons.resource.models.resource import float_to_time, HOURS_PER_DAY
+from odoo.exceptions import AccessError, UserError, ValidationError
+from odoo.tools import float_compare
+from odoo.tools.float_utils import float_round
+from odoo.tools.translate import _
+from odoo.osv import expression
 
 _logger = logging.getLogger(__name__)
 
@@ -594,7 +594,10 @@ class HolidaysRequest(models.Model):
         """ Returns a float equals to the timedelta between two dates given as string."""
         if employee_id:
             employee = self.env['hr.employee'].browse(employee_id)
-            return employee._get_work_days_data_batch(date_from, date_to)[employee.id]
+            result = employee._get_work_days_data_batch(date_from, date_to)[employee.id]
+            if self.request_unit_half:
+                result['days'] = 0.5
+            return result
 
         today_hours = self.env.company.resource_calendar_id.get_work_hours_count(
             datetime.combine(date_from.date(), time.min),
@@ -602,8 +605,8 @@ class HolidaysRequest(models.Model):
             False)
 
         hours = self.env.company.resource_calendar_id.get_work_hours_count(date_from, date_to)
-
-        return {'days': hours / (today_hours or HOURS_PER_DAY), 'hours': hours}
+        days = hours / (today_hours or HOURS_PER_DAY) if not self.request_unit_half else 0.5
+        return {'days': days, 'hours': hours}
 
     def _adjust_date_based_on_tz(self, leave_date, hour):
         """ request_date_{from,to} are local to the user's tz but hour_{from,to} are in UTC.
@@ -784,7 +787,7 @@ class HolidaysRequest(models.Model):
                     # Automatic validation should be done in sudo, because user might not have the rights to do it by himself
                     holiday_sudo.action_validate()
                     holiday_sudo.message_subscribe(partner_ids=[holiday._get_responsible_for_approval().partner_id.id])
-                    holiday_sudo.message_post(body=_("The time off has been automatically approved"), subtype_xmlid="mail.mt_comment") # Message from FlectraBot (sudo)
+                    holiday_sudo.message_post(body=_("The time off has been automatically approved"), subtype_xmlid="mail.mt_comment") # Message from OdooBot (sudo)
                 elif not self._context.get('import_file'):
                     holiday_sudo.activity_update()
         return holidays
@@ -1220,15 +1223,15 @@ class HolidaysRequest(models.Model):
         """ Handle HR users and officers recipients that can validate or refuse holidays
         directly from email. """
         groups = super(HolidaysRequest, self)._notify_get_groups(msg_vals=msg_vals)
-        msg_vals = msg_vals or {}
+        local_msg_vals = dict(msg_vals or {})
 
         self.ensure_one()
         hr_actions = []
         if self.state == 'confirm':
-            app_action = self._notify_get_action_link('controller', controller='/leave/validate', **msg_vals)
+            app_action = self._notify_get_action_link('controller', controller='/leave/validate', **local_msg_vals)
             hr_actions += [{'url': app_action, 'title': _('Approve')}]
         if self.state in ['confirm', 'validate', 'validate1']:
-            ref_action = self._notify_get_action_link('controller', controller='/leave/refuse', **msg_vals)
+            ref_action = self._notify_get_action_link('controller', controller='/leave/refuse', **local_msg_vals)
             hr_actions += [{'url': ref_action, 'title': _('Refuse')}]
 
         holiday_user_group_id = self.env.ref('hr_holidays.group_hr_holidays_user').id

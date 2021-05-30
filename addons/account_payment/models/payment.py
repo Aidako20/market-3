@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import logging
 
-from flectra import fields, models, _
-from flectra.tools import float_compare
+from odoo import fields, models, _
+from odoo.tools import float_compare
 
 _logger = logging.getLogger(__name__)
 
@@ -15,6 +15,7 @@ class PaymentTransaction(models.Model):
     def render_invoice_button(self, invoice, submit_txt=None, render_values=None):
         values = {
             'partner_id': invoice.partner_id.id,
+            'type': self.type,
         }
         if render_values:
             values.update(render_values)

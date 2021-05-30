@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import email
 import email.policy
@@ -12,14 +12,14 @@ from lxml import html
 from unittest.mock import patch
 from smtplib import SMTPServerDisconnected
 
-from flectra import exceptions
-from flectra.addons.base.models.ir_mail_server import IrMailServer, MailDeliveryException
-from flectra.addons.bus.models.bus import ImBus, json_dump
-from flectra.addons.mail.models.mail_mail import MailMail
-from flectra.addons.mail.models.mail_message import Message
-from flectra.addons.mail.models.mail_notification import MailNotification
-from flectra.tests import common, new_test_user
-from flectra.tools import formataddr, pycompat
+from odoo import exceptions
+from odoo.addons.base.models.ir_mail_server import IrMailServer, MailDeliveryException
+from odoo.addons.bus.models.bus import ImBus, json_dump
+from odoo.addons.mail.models.mail_mail import MailMail
+from odoo.addons.mail.models.mail_message import Message
+from odoo.addons.mail.models.mail_notification import MailNotification
+from odoo.tests import common, new_test_user
+from odoo.tools import formataddr, pycompat
 
 mail_new_test_user = partial(new_test_user, context={'mail_create_nolog': True, 'mail_create_nosubscribe': True, 'mail_notrack': True, 'no_reset_password': True})
 
@@ -128,7 +128,8 @@ class MockEmail(common.BaseCase):
         """ Deprecated, remove in 14.4 """
         return self.gateway_mail_reply_wrecord(template, record, use_in_reply_to=use_in_reply_to)
 
-    def gateway_mail_reply_wrecord(self, template, record, use_in_reply_to=True):
+    def gateway_mail_reply_wrecord(self, template, record, use_in_reply_to=True,
+                                   target_model=None, target_field=None):
         """ Simulate a reply through the mail gateway. Usage: giving a record,
         find an email sent to him and use its message-ID to simulate a reply.
 
@@ -148,8 +149,32 @@ class MockEmail(common.BaseCase):
             subject='Re: %s' % mail_mail.subject,
             extra=extra,
             msg_id='<123456.%s.%d@test.example.com>' % (record._name, record.id),
-            target_model=record._name,
-            target_field=record._rec_name,
+            target_model=target_model or record._name,
+            target_field=target_field or record._rec_name,
+        )
+
+    def gateway_mail_reply_wemail(self, template, email_to, use_in_reply_to=True,
+                                  target_model=None, target_field=None):
+        """ Simulate a reply through the mail gateway. Usage: giving a record,
+        find an email sent to him and use its message-ID to simulate a reply.
+
+        Some noise is added in References just to test some robustness. """
+        sent_mail = self._find_sent_mail_wemail(email_to)
+
+        if use_in_reply_to:
+            extra = 'In-Reply-To:\r\n\t%s\n' % sent_mail['message_id']
+        else:
+            disturbing_other_msg_id = '<123456.654321@another.host.com>'
+            extra = 'References:\r\n\t%s\n\r%s' % (sent_mail['message_id'], disturbing_other_msg_id)
+
+        return self.format_and_process(
+            template,
+            sent_mail['email_to'],
+            sent_mail['reply_to'],
+            subject='Re: %s' % sent_mail['subject'],
+            extra=extra,
+            target_model=target_model,
+            target_field=target_field or 'name',
         )
 
     def from_string(self, text):

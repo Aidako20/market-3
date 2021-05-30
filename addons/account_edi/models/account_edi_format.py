@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra import models, fields, api
-from flectra.exceptions import UserError
-from flectra.tools.pdf import FlectraPdfFileReader, FlectraPdfFileWriter
-from flectra.osv import expression
+from odoo import models, fields, api
+from odoo.exceptions import UserError
+from odoo.tools.pdf import OdooPdfFileReader, OdooPdfFileWriter
+from odoo.osv import expression
 
 from lxml import etree
 import base64
@@ -97,6 +97,20 @@ class AccountEdiFormat(models.Model):
         """
         # TO OVERRIDE
         return False
+
+    def _get_embedding_to_invoice_pdf_values(self, invoice):
+        """ Get the values to embed to pdf.
+
+        :returns:   A dictionary {'name': name, 'datas': datas} or False if there are no values to embed.
+        * name:     The name of the file.
+        * datas:    The bytes ot the file.
+        """
+        self.ensure_one()
+        attachment = invoice._get_edi_attachment(self)
+        if not attachment or not self._is_embedding_to_invoice_pdf_needed():
+            return False
+        datas = base64.b64decode(attachment.with_context(bin_size=False).datas)
+        return {'name': attachment.name, 'datas': datas}
 
     def _support_batching(self, move=None, state=None, company=None):
         """ Indicate if we can send multiple documents in the same time to the web services.
@@ -215,7 +229,7 @@ class AccountEdiFormat(models.Model):
         """ Create a new invoice with the data inside a pdf.
 
         :param filename: The name of the pdf.
-        :param reader:   The FlectraPdfFileReader of the pdf to import.
+        :param reader:   The OdooPdfFileReader of the pdf to import.
         :returns:        The created invoice.
         """
         # TO OVERRIDE
@@ -227,7 +241,7 @@ class AccountEdiFormat(models.Model):
         """ Update an existing invoice with the data inside the pdf.
 
         :param filename: The name of the pdf.
-        :param reader:   The FlectraPdfFileReader of the pdf to import.
+        :param reader:   The OdooPdfFileReader of the pdf to import.
         :param invoice:  The invoice to update.
         :returns:        The updated invoice.
         """
@@ -247,17 +261,16 @@ class AccountEdiFormat(models.Model):
         :returns: the same pdf_content with the EDI of the invoice embed in it.
         """
         attachments = []
-        for edi_format in self:
-            attachment = invoice._get_edi_attachment(edi_format)
-            if attachment and edi_format._is_embedding_to_invoice_pdf_needed():
-                datas = base64.b64decode(attachment.with_context(bin_size=False).datas)
-                attachments.append({'name': attachment.name, 'datas': datas})
+        for edi_format in self.filtered(lambda edi_format: edi_format._is_embedding_to_invoice_pdf_needed()):
+            attach = edi_format._get_embedding_to_invoice_pdf_values(invoice)
+            if attach:
+                attachments.append(attach)
 
         if attachments:
             # Add the attachments to the pdf file
             reader_buffer = io.BytesIO(pdf_content)
-            reader = FlectraPdfFileReader(reader_buffer, strict=False)
-            writer = FlectraPdfFileWriter()
+            reader = OdooPdfFileReader(reader_buffer, strict=False)
+            writer = OdooPdfFileWriter()
             writer.cloneReaderDocumentRoot(reader)
             for vals in attachments:
                 writer.addAttachment(vals['name'], vals['datas'])
@@ -314,7 +327,7 @@ class AccountEdiFormat(models.Model):
         to_process = []
         try:
             buffer = io.BytesIO(content)
-            pdf_reader = FlectraPdfFileReader(buffer, strict=False)
+            pdf_reader = OdooPdfFileReader(buffer, strict=False)
         except Exception as e:
             # Malformed pdf
             _logger.exception("Error when reading the pdf: %s" % e)

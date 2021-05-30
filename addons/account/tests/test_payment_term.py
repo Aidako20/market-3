@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from flectra.addons.account.tests.common import AccountTestInvoicingCommon
-from flectra.tests import tagged
-from flectra import fields
-from flectra.tests.common import Form
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
+from odoo.tests import tagged
+from odoo import fields
+from odoo.tests.common import Form
 
 
 @tagged('post_install', '-at_install')

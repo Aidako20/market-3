@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 {
     'name': 'Lead Generation',
@@ -27,5 +27,5 @@
     'qweb': [
         'static/src/xml/leads_tree_generate_leads_views.xml',
     ],
-    'auto_install': False,
+    'auto_install': True,
 }

@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import base64
 import logging
 
 
-from flectra import _, api, fields, models, tools
-from flectra.exceptions import UserError
+from odoo import _, api, fields, models, tools
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -61,7 +61,7 @@ class MailTemplate(models.Model):
     scheduled_date = fields.Char('Scheduled Date', help="If set, the queue manager will send the email after the date. If not set, the email will be send as soon as possible. Jinja2 placeholders may be used.")
     auto_delete = fields.Boolean(
         'Auto Delete', default=True,
-        help="This option permanently removes any track of email after it's been sent, including from the Technical menu in the Settings, in order to preserve storage space of your Flectra database.")
+        help="This option permanently removes any track of email after it's been sent, including from the Technical menu in the Settings, in order to preserve storage space of your Odoo database.")
     # contextual action
     ref_ir_act_window = fields.Many2one('ir.actions.act_window', 'Sidebar action', readonly=True, copy=False,
                                         help="Sidebar action to make this template available on records "
@@ -261,9 +261,16 @@ class MailTemplate(models.Model):
                 _logger.warning('QWeb template %s not found when sending template %s. Sending without layouting.' % (notif_layout, self.name))
             else:
                 record = self.env[self.model].browse(res_id)
+                model = self.env['ir.model']._get(record._name)
+
+                if self.lang:
+                    lang = self._render_lang([res_id])[res_id]
+                    template = template.with_context(lang=lang)
+                    model = model.with_context(lang=lang)
+
                 template_ctx = {
                     'message': self.env['mail.message'].sudo().new(dict(body=values['body_html'], record_name=record.display_name)),
-                    'model_description': self.env['ir.model']._get(record._name).display_name,
+                    'model_description': model.display_name,
                     'company': 'company_id' in record and record['company_id'] or self.env.company,
                     'record': record,
                 }

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from collections import defaultdict
 
-from flectra import fields, models
-from flectra.tools import float_is_zero
+from odoo import fields, models
+from odoo.tools import float_is_zero
 
 
 class AccountMove(models.Model):

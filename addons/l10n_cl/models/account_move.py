@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra.exceptions import ValidationError
-from flectra import models, fields, api, _
-from flectra.osv import expression
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+from odoo.exceptions import ValidationError
+from odoo import models, fields, api, _
+from odoo.osv import expression
 
 SII_VAT = '60805000-0'
 
@@ -91,7 +91,7 @@ class AccountMove(models.Model):
                                             'the country should be different from Chile to register purchases.'))
 
     @api.onchange('journal_id')
-    def _onchange_journal(self):
+    def _l10n_cl_onchange_journal(self):
         self.l10n_latam_document_type_id = False
 
     def _post(self, soft=True):

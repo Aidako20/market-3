@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from ast import literal_eval
 from collections import defaultdict
 
-from flectra import fields, models, _
-from flectra.osv import expression
+from odoo import fields, models, _
+from odoo.osv import expression
 
 
 class EventLeadRule(models.Model):
@@ -180,7 +180,7 @@ class EventLeadRule(models.Model):
                                 'description': "%s\n%s" % (lead.description, additionnal_description),
                                 'registration_ids': [(4, reg.id) for reg in group_registrations],
                             })
-                    else:
+                    elif group_registrations:
                         lead_vals_list.append(group_registrations._get_lead_values(rule))
 
         return self.env['crm.lead'].create(lead_vals_list)

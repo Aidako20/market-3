@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra import api, fields, models, _
-from flectra.exceptions import UserError
-from flectra.tools import float_compare, float_is_zero
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
+from odoo.tools import float_compare, float_is_zero
 
 
 class AccountMove(models.Model):
@@ -72,6 +72,8 @@ class AccountMoveLine(models.Model):
             For Vendor Bill flow, if the product has a 'erinvoice policy' and is a cost, then we will find the SO on which reinvoice the AAL
         """
         self.ensure_one()
+        if self.sale_line_ids:
+            return False
         uom_precision_digits = self.env['decimal.precision'].precision_get('Product Unit of Measure')
         return float_compare(self.credit or 0.0, self.debit or 0.0, precision_digits=uom_precision_digits) != 1 and self.product_id.expense_policy not in [False, 'no']
 

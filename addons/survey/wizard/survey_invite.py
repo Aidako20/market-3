@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import logging
 import re
 import werkzeug
 
-from flectra import api, fields, models, tools, _
-from flectra.exceptions import UserError
+from odoo import api, fields, models, tools, _
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -209,7 +209,7 @@ class SurveyInvite(models.TransientModel):
 
     def _send_mail(self, answer):
         """ Create mail specific for recipient containing notably its access token """
-        subject = self.env['mail.render.mixin']._render_template(self.subject, 'survey.user_input', answer.ids, post_process=True)[answer.id]
+        subject = self.env['mail.render.mixin'].with_context(safe=True)._render_template(self.subject, 'survey.user_input', answer.ids, post_process=True)[answer.id]
         body = self.env['mail.render.mixin']._render_template(self.body, 'survey.user_input', answer.ids, post_process=True)[answer.id]
         # post the message
         mail_values = {

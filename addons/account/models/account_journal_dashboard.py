@@ -2,11 +2,11 @@ import json
 from datetime import datetime, timedelta
 
 from babel.dates import format_datetime, format_date
-from flectra import models, api, _, fields
-from flectra.osv import expression
-from flectra.release import version
-from flectra.tools import DEFAULT_SERVER_DATE_FORMAT as DF
-from flectra.tools.misc import formatLang, format_date as flectra_format_date, get_lang
+from odoo import models, api, _, fields
+from odoo.osv import expression
+from odoo.release import version
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DF
+from odoo.tools.misc import formatLang, format_date as odoo_format_date, get_lang
 import random
 
 import ast
@@ -58,7 +58,7 @@ class account_journal(models.Model):
                     'status': activity.get('status'),
                     'name': (activity.get('summary') or activity.get('act_type_name')),
                     'activity_category': activity.get('activity_category'),
-                    'date': flectra_format_date(self.env, activity.get('date_deadline'))
+                    'date': odoo_format_date(self.env, activity.get('date_deadline'))
                 }
                 if activity.get('activity_category') == 'tax_report' and activity.get('res_model') == 'account.move':
                     act['name'] = activity.get('ref')
@@ -131,7 +131,7 @@ class account_journal(models.Model):
             data[:0] = [build_graph_data(last_month, amount)]
 
         [graph_title, graph_key] = self._graph_title_and_key()
-        color = '#009EFB' if 'e' in version else '#7c7bad'
+        color = '#875A7B' if 'e' in version else '#7c7bad'
 
         is_sample_data = not last_stmt and len(query_result) == 0
         if is_sample_data:

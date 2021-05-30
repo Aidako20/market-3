@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import logging
 import threading
 from datetime import date, datetime, timedelta
 from psycopg2 import sql
 
-from flectra import api, fields, models, tools, SUPERUSER_ID
-from flectra.osv import expression
-from flectra.tools.translate import _
-from flectra.tools import email_re, email_split
-from flectra.exceptions import UserError, AccessError
-from flectra.addons.phone_validation.tools import phone_validation
+from odoo import api, fields, models, tools, SUPERUSER_ID
+from odoo.osv import expression
+from odoo.tools.translate import _
+from odoo.tools import email_re, email_split
+from odoo.exceptions import UserError, AccessError
+from odoo.addons.phone_validation.tools import phone_validation
 from collections import OrderedDict, defaultdict
 
 from . import crm_stage
@@ -68,7 +68,7 @@ PARTNER_ADDRESS_FIELDS_TO_SYNC = [
 
 # Those values have been determined based on benchmark to minimise
 # computation time, number of transaction and transaction time.
-PLS_COMPUTE_BATCH_STEP = 50000  # flectra.models.PREFETCH_MAX = 1000 but larger cluster can speed up global computation
+PLS_COMPUTE_BATCH_STEP = 50000  # odoo.models.PREFETCH_MAX = 1000 but larger cluster can speed up global computation
 PLS_UPDATE_BATCH_STEP = 5000
 
 
@@ -493,7 +493,8 @@ class Lead(models.Model):
         # searching on +32485112233 should also finds 00485112233 (00 / + prefix are both valid)
         # we therefore remove it from input value and search for both of them in db
         if value.startswith('+') or value.startswith('00'):
-            value = value.replace('+', '').replace('00', '', 1)
+            if value.startswith('00'):
+                value = value[2:]
             starts_with = '00|\+'
         else:
             starts_with = '%'
@@ -1401,21 +1402,21 @@ class Lead(models.Model):
         """ Handle salesman recipients that can convert leads into opportunities
         and set opportunities as won / lost. """
         groups = super(Lead, self)._notify_get_groups(msg_vals=msg_vals)
-        msg_vals = msg_vals or {}
+        local_msg_vals = dict(msg_vals or {})
 
         self.ensure_one()
         if self.type == 'lead':
-            convert_action = self._notify_get_action_link('controller', controller='/lead/convert', **msg_vals)
+            convert_action = self._notify_get_action_link('controller', controller='/lead/convert', **local_msg_vals)
             salesman_actions = [{'url': convert_action, 'title': _('Convert to opportunity')}]
         else:
-            won_action = self._notify_get_action_link('controller', controller='/lead/case_mark_won', **msg_vals)
-            lost_action = self._notify_get_action_link('controller', controller='/lead/case_mark_lost', **msg_vals)
+            won_action = self._notify_get_action_link('controller', controller='/lead/case_mark_won', **local_msg_vals)
+            lost_action = self._notify_get_action_link('controller', controller='/lead/case_mark_lost', **local_msg_vals)
             salesman_actions = [
                 {'url': won_action, 'title': _('Won')},
                 {'url': lost_action, 'title': _('Lost')}]
 
         if self.team_id:
-            custom_params = dict(msg_vals, res_id=self.team_id.id, model=self.team_id._name)
+            custom_params = dict(local_msg_vals, res_id=self.team_id.id, model=self.team_id._name)
             salesman_actions.append({
                 'url': self._notify_get_action_link('view', **custom_params),
                 'title': _('Sales Team Settings')
@@ -1514,6 +1515,10 @@ class Lead(models.Model):
                     partner_info['full_name'] = tools.formataddr((self.contact_name or self.partner_name, email))
                     break
         return result
+
+    def _phone_get_number_fields(self):
+        """ Use mobile or phone fields to compute sanitized phone number """
+        return ['mobile', 'phone']
 
     @api.model
     def get_import_templates(self):

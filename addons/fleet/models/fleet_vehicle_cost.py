@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra import api, fields, models, _
-from flectra.exceptions import UserError
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 
 from dateutil.relativedelta import relativedelta
 
@@ -59,7 +59,7 @@ class FleetVehicleLogContract(models.Model):
     def _compute_contract_name(self):
         for record in self:
             name = record.vehicle_id.name
-            if record.cost_subtype_id.name:
+            if name and record.cost_subtype_id.name:
                 name = record.cost_subtype_id.name + ' ' + name
             record.name = name
 

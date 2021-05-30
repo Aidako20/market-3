@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<flectra>
+<odoo>
     <data>
         <record id="view_account_move_reversal" model="ir.ui.view">
             <field name="name">account.move.reversal.form</field>
@@ -57,4 +57,4 @@
             <field name="binding_view_types">list</field>
         </record>
     </data>
-</flectra>
+</odoo>

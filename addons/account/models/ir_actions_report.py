@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from flectra import models, api, _
-from flectra.exceptions import UserError
+from odoo import models, api, _
+from odoo.exceptions import UserError
 
 class IrActionsReport(models.Model):
     _inherit = 'ir.actions.report'

@@ -1,4 +1,4 @@
-flectra.define('account.tax_group', function (require) {
+odoo.define('account.tax_group', function (require) {
     "use strict";
 
     var core = require('web.core');

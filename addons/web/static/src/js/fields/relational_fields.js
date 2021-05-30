@@ -1,4 +1,4 @@
-flectra.define('web.relational_fields', function (require) {
+odoo.define('web.relational_fields', function (require) {
 "use strict";
 
 /**
@@ -453,7 +453,7 @@ var FieldMany2One = AbstractField.extend({
      * has been trigerred. This allows to detect that all changes have been
      * acknowledged by the environment.
      *
-     * @param {FlectraEvent} event 'field_changed' event
+     * @param {OdooEvent} event 'field_changed' event
      */
     _onFieldChanged: function (event) {
         this.lastChangeEvent = event;
@@ -778,7 +778,7 @@ var FieldMany2One = AbstractField.extend({
     /**
      * @private
      *
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onInputKeyup: function (ev) {
         if (ev.which === $.ui.keyCode.ENTER || ev.which === $.ui.keyCode.TAB) {
@@ -810,7 +810,7 @@ var FieldMany2One = AbstractField.extend({
      * user is selecting text.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onNavigationMove: function (ev) {
         // TODO Maybe this should be done in a mixin or, better, the m2o field
@@ -822,14 +822,14 @@ var FieldMany2One = AbstractField.extend({
     },
     /**
      * @private
-     * @param {FlectraEvent} event
+     * @param {OdooEvent} event
      */
     _onQuickCreate: function (event) {
         this._quickCreate(event.data.value);
     },
     /**
      * @private
-     * @param {FlectraEvent} event
+     * @param {OdooEvent} event
      */
     _onSearchCreatePopup: function (event) {
         var data = event.data;
@@ -1174,7 +1174,7 @@ var FieldX2Many = AbstractField.extend(WidgetAdapterMixin, {
     /**
      * @override
      * @param {Object} record
-     * @param {FlectraEvent} [ev] an event that triggered the reset action
+     * @param {OdooEvent} [ev] an event that triggered the reset action
      * @param {Boolean} [fieldChanged] if true, the widget field has changed
      * @returns {Promise}
      */
@@ -1527,7 +1527,7 @@ var FieldX2Many = AbstractField.extend(WidgetAdapterMixin, {
      * by the parent controller.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onRemoveRecord: function (ev) {
         ev.stopPropagation();
@@ -1544,7 +1544,7 @@ var FieldX2Many = AbstractField.extend(WidgetAdapterMixin, {
      * know which field needs to be handled.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onDiscardChanges: function (ev) {
         if (ev.target !== this) {
@@ -1557,7 +1557,7 @@ var FieldX2Many = AbstractField.extend(WidgetAdapterMixin, {
      * him back to toggle the mode of this row.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onEditLine: function (ev) {
         ev.stopPropagation();
@@ -1569,7 +1569,7 @@ var FieldX2Many = AbstractField.extend(WidgetAdapterMixin, {
      * Updates the given record with the changes.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onFieldChanged: function (ev) {
         if (ev.target === this) {
@@ -1641,7 +1641,7 @@ var FieldX2Many = AbstractField.extend(WidgetAdapterMixin, {
      * @see field_manager_mixin for concurrency handling.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onPagerChanged: function (ev) {
         ev.stopPropagation();
@@ -1674,7 +1674,7 @@ var FieldX2Many = AbstractField.extend(WidgetAdapterMixin, {
      * executed in the mutex.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      * @param {string} ev.recordID
      * @param {function} ev.onSuccess success callback (see '_saveLine')
      * @param {function} ev.onFailure fail callback (see '_saveLine')
@@ -1696,7 +1696,7 @@ var FieldX2Many = AbstractField.extend(WidgetAdapterMixin, {
      * Add necessary key parts for the basic controller to compute the local
      * storage key. The event will be properly handled by the basic controller.
      *
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      * @private
      */
     _onSaveOrLoadOptionalFields: function (ev) {
@@ -1708,7 +1708,7 @@ var FieldX2Many = AbstractField.extend(WidgetAdapterMixin, {
      * Forces a resequencing of the records.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      * @param {string[]} ev.data.recordIds
      * @param {integer} ev.data.offset
      * @param {string} ev.data.handleField
@@ -1762,7 +1762,7 @@ var FieldX2Many = AbstractField.extend(WidgetAdapterMixin, {
      * aware of which widgets it has to redraw.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onToggleColumnOrder: function (ev) {
         ev.data.field = this.name;
@@ -1855,7 +1855,7 @@ var FieldOne2Many = FieldX2Many.extend({
     /**
      * @override
      * @param {Object} record
-     * @param {FlectraEvent} [ev] an event that triggered the reset action
+     * @param {OdooEvent} [ev] an event that triggered the reset action
      * @returns {Promise}
      */
     reset: function (record, ev) {
@@ -1940,7 +1940,7 @@ var FieldOne2Many = FieldX2Many.extend({
      *
      * @override
      * @private
-     * @param {FlectraEvent|MouseEvent} ev this event comes either from the 'Add
+     * @param {OdooEvent|MouseEvent} ev this event comes either from the 'Add
      *   record' link in the list editable renderer, or from the 'Create' button
      *   in the kanban view
      * @param {Array} ev.data.context additional context for the added records,
@@ -2002,7 +2002,7 @@ var FieldOne2Many = FieldX2Many.extend({
      * form view.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onOpenRecord: function (ev) {
         // we don't want interference with the components upstream.
@@ -2100,7 +2100,7 @@ var FieldMany2Many = FieldX2Many.extend({
      *
      * @override
      * @private
-     * @param {FlectraEvent|MouseEvent} ev this event comes either from the 'Add
+     * @param {OdooEvent|MouseEvent} ev this event comes either from the 'Add
      *   record' link in the list editable renderer, or from the 'Create' button
      *   in the kanban view
      */
@@ -2114,7 +2114,7 @@ var FieldMany2Many = FieldX2Many.extend({
      * to the form view.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onOpenRecord: function (ev) {
         var self = this;
@@ -2540,7 +2540,7 @@ var FieldMany2ManyTags = AbstractField.extend({
      * Controls the changes made in the internal m2o field.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onFieldChanged: function (ev) {
         if (ev.target !== this.many2one) {
@@ -2571,7 +2571,7 @@ var FieldMany2ManyTags = AbstractField.extend({
     },
     /**
      * @private
-     * @param {FlectraEvent} event
+     * @param {OdooEvent} event
      */
     _onQuickCreate: function (event) {
         this._quickCreate(event.data.value);

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 """ Implementation of "INVENTORY VALUATION TESTS (With valuation layers)" spreadsheet. """
 
-from flectra.addons.stock_account.tests.test_stockvaluation import _create_accounting_data
-from flectra.tests import Form, tagged
-from flectra.tests.common import SavepointCase, TransactionCase
+from odoo.addons.stock_account.tests.test_stockvaluation import _create_accounting_data
+from odoo.tests import Form, tagged
+from odoo.tests.common import SavepointCase, TransactionCase
 
 
 class TestStockValuationCommon(SavepointCase):
@@ -848,7 +848,7 @@ class TestStockValuationChangeValuation(TestStockValuationCommon):
 
         # Try to change the product category with a `default_type` key in the context and
         # check it doesn't break the account move generation.
-        self.product1.with_context(default_name='product1').categ_id = cat2
+        self.product1.with_context(default_type='product').categ_id = cat2
         self.assertEqual(self.product1.categ_id, cat2)
 
         self.assertEqual(self.product1.value_svl, 100)

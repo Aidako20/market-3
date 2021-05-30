@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from datetime import timedelta
 
-from flectra.addons.stock.tests.common import TestStockCommon
-from flectra.exceptions import UserError
+from odoo.addons.stock.tests.common import TestStockCommon
+from odoo.exceptions import UserError
 
-from flectra.tests import Form
-from flectra.tools import float_is_zero, float_compare
+from odoo.tests import Form
+from odoo.tools import float_is_zero, float_compare
 
-from flectra.tests.common import Form
+from odoo.tests.common import Form
 
 class TestPickShip(TestStockCommon):
     def create_pick_ship(self):

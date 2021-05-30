@@ -1,4 +1,4 @@
-flectra.define('wysiwyg.widgets.ImageCropWidget', function (require) {
+odoo.define('wysiwyg.widgets.ImageCropWidget', function (require) {
 'use strict';
 
 const core = require('web.core');
@@ -61,7 +61,7 @@ const ImageCropWidget = Widget.extend({
             this.displayNotification({
               type: 'warning',
               title: _t("This image is an external image"),
-              message: _t("This type of image is not supported for cropping.<br/>If you want to crop it, please first download it from the original source and upload it in Flectra."),
+              message: _t("This type of image is not supported for cropping.<br/>If you want to crop it, please first download it from the original source and upload it in Odoo."),
             });
             return this.destroy();
         }

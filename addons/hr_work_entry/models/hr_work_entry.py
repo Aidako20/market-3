@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from contextlib import contextmanager
 from dateutil.relativedelta import relativedelta
 from psycopg2 import OperationalError
 
-from flectra import api, fields, models
+from odoo import api, fields, models
 
 
 class HrWorkEntry(models.Model):
@@ -19,7 +19,7 @@ class HrWorkEntry(models.Model):
     date_start = fields.Datetime(required=True, string='From')
     date_stop = fields.Datetime(compute='_compute_date_stop', store=True, readonly=False, string='To')
     duration = fields.Float(compute='_compute_duration', store=True, string="Period")
-    work_entry_type_id = fields.Many2one('hr.work.entry.type')
+    work_entry_type_id = fields.Many2one('hr.work.entry.type', index=True)
     color = fields.Integer(related='work_entry_type_id.color', readonly=True)
     state = fields.Selection([
         ('draft', 'Draft'),

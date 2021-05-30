@@ -1,4 +1,4 @@
-flectra.define('web.action_manager_tests', function (require) {
+odoo.define('web.action_manager_tests', function (require) {
 "use strict";
 
 var ActionManager = require('web.ActionManager');
@@ -1335,6 +1335,26 @@ QUnit.module('ActionManager', {
             '/web/dataset/search_read', // loaded action
             'setItem', // loaded action
         ]);
+
+        actionManager.destroy();
+    });
+
+    QUnit.test('state with integer active_ids should not crash', async function (assert) {
+        assert.expect(0);
+
+        var actionManager = await createActionManager({
+            actions: this.actions,
+            mockRPC: function (route, args) {
+                if (route === '/web/action/run') {
+                    return Promise.resolve();
+                }
+                return this._super.apply(this, arguments);
+            },
+        });
+        await actionManager.loadState({
+            action: 2,
+            active_ids: 3,
+        });
 
         actionManager.destroy();
     });

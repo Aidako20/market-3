@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import unittest
 from itertools import zip_longest
 from lxml import etree as ET, html
 from lxml.html import builder as h
 
-from flectra.tests import common, HttpCase, tagged
+from odoo.tests import common, HttpCase, tagged
 
 
 def attrs(**kwargs):
@@ -1130,9 +1130,7 @@ class Crawler(HttpCase):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
 
         # Simulate website 2 (that use only generic views)
-        url = base_url + '/website/force_website'
-        json = {'params': {'website_id': website_2.id}}
-        self.opener.post(url=url, json=json)
+        self.url_open(base_url + '/website/force/%s' % website_2.id)
 
         # Test controller
         url = base_url + '/website/get_switchable_related_views'
@@ -1170,9 +1168,7 @@ class Crawler(HttpCase):
         #       | Filter By Country
 
         # Simulate website 1 (that has specific views)
-        url = base_url + '/website/force_website'
-        json = {'params': {'website_id': website_1.id}}
-        self.opener.post(url=url, json=json)
+        self.url_open(base_url + '/website/force/%s' % website_1.id)
 
         # Test controller
         url = base_url + '/website/get_switchable_related_views'
@@ -1345,9 +1341,7 @@ class Crawler(HttpCase):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
 
         # Simulate website 2
-        url = base_url + '/website/force_website'
-        json = {'params': {'website_id': website_2.id}}
-        self.opener.post(url=url, json=json)
+        self.url_open(base_url + '/website/force/%s' % website_2.id)
 
         # Test controller
         url = base_url + '/website/get_switchable_related_views'
@@ -1358,9 +1352,7 @@ class Crawler(HttpCase):
         self.assertEqual(response.json()['result'][0]['key'], '_theme_kea_sale.products', "Only '_theme_kea_sale.products' should be returned")
 
         # Simulate website 1
-        url = base_url + '/website/force_website'
-        json = {'params': {'website_id': website_1.id}}
-        self.opener.post(url=url, json=json)
+        self.url_open(base_url + '/website/force/%s' % website_1.id)
 
         # Test controller
         url = base_url + '/website/get_switchable_related_views'
@@ -1421,18 +1413,18 @@ class TestThemeViews(common.TransactionCase):
         self.assertEqual(specific_main_view_children.website_id, website_1, "..and the website is the correct one.")
 
         # 4. Simulate theme update. Do it 2 time to make sure it was not interpreted as a user change the first time.
-        new_arch = '<xpath expr="//body" position="replace"><span>Flectra Change01</span></xpath>'
+        new_arch = '<xpath expr="//body" position="replace"><span>Odoo Change01</span></xpath>'
         theme_view.arch = new_arch
         test_theme_module.with_context(load_all_views=True)._theme_load(website_1)
         self.assertEqual(specific_main_view_children.arch, new_arch, "First time: View arch should receive theme updates.")
         self.assertFalse(specific_main_view_children.arch_updated)
-        new_arch = '<xpath expr="//body" position="replace"><span>Flectra Change02</span></xpath>'
+        new_arch = '<xpath expr="//body" position="replace"><span>Odoo Change02</span></xpath>'
         theme_view.arch = new_arch
         test_theme_module.with_context(load_all_views=True)._theme_load(website_1)
         self.assertEqual(specific_main_view_children.arch, new_arch, "Second time: View arch should still receive theme updates.")
 
         # 5. Keep User arch changes
-        new_arch = '<xpath expr="//body" position="replace"><span>Flectra</span></xpath>'
+        new_arch = '<xpath expr="//body" position="replace"><span>Odoo</span></xpath>'
         specific_main_view_children.arch = new_arch
         theme_view.name = 'Test Child View modified'
         test_theme_module.with_context(load_all_views=True)._theme_load(website_1)

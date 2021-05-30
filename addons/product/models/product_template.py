@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import itertools
 import logging
 from collections import defaultdict
 
-from flectra import api, fields, models, tools, _, SUPERUSER_ID
-from flectra.exceptions import ValidationError, RedirectWarning, UserError
-from flectra.osv import expression
+from odoo import api, fields, models, tools, _, SUPERUSER_ID
+from odoo.exceptions import ValidationError, RedirectWarning, UserError
+from odoo.osv import expression
 
 _logger = logging.getLogger(__name__)
 
@@ -110,7 +110,7 @@ class ProductTemplate(models.Model):
     packaging_ids = fields.One2many(
         'product.packaging', string="Product Packages", compute="_compute_packaging_ids", inverse="_set_packaging_ids",
         help="Gives the different ways to package the same product.")
-    seller_ids = fields.One2many('product.supplierinfo', 'product_tmpl_id', 'Vendors', help="Define vendor pricelists.")
+    seller_ids = fields.One2many('product.supplierinfo', 'product_tmpl_id', 'Vendors', depends_context=('company',), help="Define vendor pricelists.")
     variant_seller_ids = fields.One2many('product.supplierinfo', 'product_tmpl_id')
 
     active = fields.Boolean('Active', default=True, help="If unchecked, it will allow you to hide the product without removing it.")

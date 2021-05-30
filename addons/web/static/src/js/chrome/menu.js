@@ -1,4 +1,4 @@
-flectra.define('web.Menu', function (require) {
+odoo.define('web.Menu', function (require) {
 "use strict";
 
 var AppsMenu = require('web.AppsMenu');
@@ -197,10 +197,12 @@ var Menu = Widget.extend({
         return this.current_primary_menu;
     },
     /**
-     * Open the first app
+     * Open the first app, returns whether an application was found.
+     *
+     * @returns {Boolean}
      */
     openFirstApp: function () {
-        this._appsMenu.openFirstApp();
+        return this._appsMenu.openFirstApp();
     },
 
     //--------------------------------------------------------------------------

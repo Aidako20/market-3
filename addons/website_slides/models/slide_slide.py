@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import base64
 import datetime
@@ -13,12 +13,12 @@ from dateutil.relativedelta import relativedelta
 from PIL import Image
 from werkzeug import urls
 
-from flectra import api, fields, models, _
-from flectra.addons.http_routing.models.ir_http import slug
-from flectra.exceptions import Warning, UserError, AccessError
-from flectra.http import request
-from flectra.addons.http_routing.models.ir_http import url_for
-from flectra.tools import sql
+from odoo import api, fields, models, _
+from odoo.addons.http_routing.models.ir_http import slug
+from odoo.exceptions import Warning, UserError, AccessError
+from odoo.http import request
+from odoo.addons.http_routing.models.ir_http import url_for
+from odoo.tools import sql
 
 
 class SlidePartnerRelation(models.Model):
@@ -707,10 +707,9 @@ class Slide(models.Model):
                 'quiz_attempts_count': 0,  # number of attempts
             }
             slide_partner = slide_partners_map.get(slide.id)
-            if slide.question_ids and slide_partner:
-                if slide_partner.quiz_attempts_count:
-                    result[slide.id]['quiz_karma_gain'] = gains[slide_partner.quiz_attempts_count] if slide_partner.quiz_attempts_count < len(gains) else gains[-1]
-                    result[slide.id]['quiz_attempts_count'] = slide_partner.quiz_attempts_count
+            if slide.question_ids and slide_partner and slide_partner.quiz_attempts_count:
+                result[slide.id]['quiz_karma_gain'] = gains[slide_partner.quiz_attempts_count] if slide_partner.quiz_attempts_count < len(gains) else gains[-1]
+                result[slide.id]['quiz_attempts_count'] = slide_partner.quiz_attempts_count
                 if quiz_done or slide_partner.completed:
                     result[slide.id]['quiz_karma_won'] = gains[slide_partner.quiz_attempts_count-1] if slide_partner.quiz_attempts_count < len(gains) else gains[-1]
         return result
@@ -781,9 +780,10 @@ class Slide(models.Model):
         youtube_duration = youtube_values.get('contentDetails', {}).get('duration')
         if youtube_duration:
             parsed_duration = re.search(r'^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$', youtube_duration)
-            values['completion_time'] = (int(parsed_duration.group(1) or 0)) + \
-                                        (int(parsed_duration.group(2) or 0) / 60) + \
-                                        (int(parsed_duration.group(3) or 0) / 3600)
+            if parsed_duration:
+                values['completion_time'] = (int(parsed_duration.group(1) or 0)) + \
+                                            (int(parsed_duration.group(2) or 0) / 60) + \
+                                            (int(parsed_duration.group(3) or 0) / 3600)
 
         if youtube_values.get('snippet'):
             snippet = youtube_values['snippet']

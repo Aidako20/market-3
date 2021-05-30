@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from flectra.addons.account.tests.common import AccountTestInvoicingCommon
-from flectra.tests import tagged
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
+from odoo.tests import tagged
 
 
 @tagged('post_install', '-at_install')
@@ -212,8 +212,11 @@ class TestAccountMoveReconcile(AccountTestInvoicingCommon):
             FROM account_account_tag_account_move_line_rel rel
             JOIN account_move_line line ON line.id = rel.account_move_line_id
             WHERE line.tax_exigible IS TRUE
+            AND line.company_id IN %(company_ids)s
             GROUP BY rel.account_account_tag_id
-        ''')
+        ''', {
+            'company_ids': tuple(self.env.companies.ids),
+        })
 
         for tag_id, total_balance in self.cr.fetchall():
             tag, expected_balance = expected_values[tag_id]

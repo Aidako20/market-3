@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import base64
 import logging
@@ -9,10 +9,10 @@ import werkzeug.wrappers
 
 from werkzeug.urls import url_encode
 
-from flectra import api, http, registry, SUPERUSER_ID, _
-from flectra.exceptions import AccessError
-from flectra.http import request
-from flectra.tools import consteq
+from odoo import api, http, registry, SUPERUSER_ID, _
+from odoo.exceptions import AccessError
+from odoo.http import request
+from odoo.tools import consteq
 
 _logger = logging.getLogger(__name__)
 
@@ -143,6 +143,7 @@ class MailController(http.Controller):
                 'partner_id': follower.partner_id.id,
                 'channel_id': follower.channel_id.id,
                 'name': follower.name,
+                'display_name': follower.display_name,
                 'email': follower.email,
                 'is_active': follower.is_active,
                 # When editing the followers, the "pencil" icon that leads to the edition of subtypes

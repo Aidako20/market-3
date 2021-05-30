@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import logging
 from contextlib import contextmanager
@@ -8,14 +8,14 @@ import requests
 import pytz
 from dateutil.parser import parse
 
-from flectra import api, fields, models, registry, _
-from flectra.tools import ormcache_context
-from flectra.exceptions import UserError
-from flectra.osv import expression
+from odoo import api, fields, models, registry, _
+from odoo.tools import ormcache_context
+from odoo.exceptions import UserError
+from odoo.osv import expression
 
-from flectra.addons.microsoft_calendar.utils.microsoft_event import MicrosoftEvent
-from flectra.addons.microsoft_calendar.utils.microsoft_calendar import MicrosoftCalendarService
-from flectra.addons.microsoft_account.models.microsoft_service import TIMEOUT
+from odoo.addons.microsoft_calendar.utils.microsoft_event import MicrosoftEvent
+from odoo.addons.microsoft_calendar.utils.microsoft_calendar import MicrosoftCalendarService
+from odoo.addons.microsoft_account.models.microsoft_service import TIMEOUT
 
 _logger = logging.getLogger(__name__)
 
@@ -23,9 +23,9 @@ MAX_RECURRENT_EVENT = 720
 
 
 # API requests are sent to Microsoft Calendar after the current transaction ends.
-# This ensures changes are sent to Microsoft only if they really happened in the Flectra database.
+# This ensures changes are sent to Microsoft only if they really happened in the Odoo database.
 # It is particularly important for event creation , otherwise the event might be created
-# twice in Microsoft if the first creation crashed in Flectra.
+# twice in Microsoft if the first creation crashed in Odoo.
 def after_commit(func):
     @wraps(func)
     def wrapped(self, *args, **kwargs):
@@ -122,7 +122,7 @@ class MicrosoftSync(models.AbstractModel):
             return self.browse()
         return self.search([('microsoft_id', 'in', microsoft_ids)])
 
-    def _sync_flectra2microsoft(self, microsoft_service: MicrosoftCalendarService):
+    def _sync_odoo2microsoft(self, microsoft_service: MicrosoftCalendarService):
         if not self:
             return
         if self._active_name:
@@ -153,7 +153,7 @@ class MicrosoftSync(models.AbstractModel):
         self.microsoft_id = False
         self.unlink()
 
-    def _sync_recurrence_microsoft2flectra(self, microsoft_events: MicrosoftEvent):
+    def _sync_recurrence_microsoft2odoo(self, microsoft_events: MicrosoftEvent):
         recurrent_masters = microsoft_events.filter(lambda e: e.is_recurrence())
         recurrents = microsoft_events.filter(lambda e: e.is_recurrent_not_master())
         default_values = {'need_sync_m': False}
@@ -161,34 +161,34 @@ class MicrosoftSync(models.AbstractModel):
         new_recurrence = self.env['calendar.recurrence']
 
         for recurrent_master in recurrent_masters:
-            new_calendar_recurrence = dict(self.env['calendar.recurrence']._microsoft_to_flectra_values(recurrent_master, (), default_values), need_sync_m=False)
+            new_calendar_recurrence = dict(self.env['calendar.recurrence']._microsoft_to_odoo_values(recurrent_master, (), default_values), need_sync_m=False)
             to_create = recurrents.filter(lambda e: e.seriesMasterId == new_calendar_recurrence['microsoft_id'])
             recurrents -= to_create
-            base_values = dict(self.env['calendar.event']._microsoft_to_flectra_values(recurrent_master, (), default_values), need_sync_m=False)
+            base_values = dict(self.env['calendar.event']._microsoft_to_odoo_values(recurrent_master, (), default_values), need_sync_m=False)
             to_create_values = []
             if new_calendar_recurrence.get('end_type', False) in ['count', 'forever']:
                 to_create = list(to_create)[:MAX_RECURRENT_EVENT]
             for recurrent_event in to_create:
                 if recurrent_event.type == 'occurrence':
-                    value = self.env['calendar.event']._microsoft_to_flectra_recurrence_values(recurrent_event, (), base_values)
+                    value = self.env['calendar.event']._microsoft_to_odoo_recurrence_values(recurrent_event, (), base_values)
                 else:
-                    value = self.env['calendar.event']._microsoft_to_flectra_values(recurrent_event, (), default_values)
+                    value = self.env['calendar.event']._microsoft_to_odoo_values(recurrent_event, (), default_values)
 
                 to_create_values += [dict(value, need_sync_m=False)]
 
             new_calendar_recurrence['calendar_event_ids'] = [(0, 0, to_create_value) for to_create_value in to_create_values]
-            new_recurrence_flectra = self.env['calendar.recurrence'].create(new_calendar_recurrence)
-            new_recurrence_flectra.base_event_id = new_recurrence_flectra.calendar_event_ids[0] if new_recurrence_flectra.calendar_event_ids else False
-            new_recurrence |= new_recurrence_flectra
+            new_recurrence_odoo = self.env['calendar.recurrence'].create(new_calendar_recurrence)
+            new_recurrence_odoo.base_event_id = new_recurrence_odoo.calendar_event_ids[0] if new_recurrence_odoo.calendar_event_ids else False
+            new_recurrence |= new_recurrence_odoo
 
         for recurrent_master_id in set([x.seriesMasterId for x in recurrents]):
             recurrence_id = self.env['calendar.recurrence'].search([('microsoft_id', '=', recurrent_master_id)])
             to_update = recurrents.filter(lambda e: e.seriesMasterId == recurrent_master_id)
             for recurrent_event in to_update:
                 if recurrent_event.type == 'occurrence':
-                    value = self.env['calendar.event']._microsoft_to_flectra_recurrence_values(recurrent_event, (), {'need_sync_m': False})
+                    value = self.env['calendar.event']._microsoft_to_odoo_recurrence_values(recurrent_event, (), {'need_sync_m': False})
                 else:
-                    value = self.env['calendar.event']._microsoft_to_flectra_values(recurrent_event, (), default_values)
+                    value = self.env['calendar.event']._microsoft_to_odoo_values(recurrent_event, (), default_values)
                 existing_event = recurrence_id.calendar_event_ids.filtered(lambda e: e._range() == (value['start'], value['stop']))
                 if not existing_event:
                     continue
@@ -199,7 +199,7 @@ class MicrosoftSync(models.AbstractModel):
         return new_recurrence
 
     def _update_microsoft_recurrence(self, recurrence_event, events):
-        vals = dict(self.base_event_id._microsoft_to_flectra_values(recurrence_event, ()), need_sync_m=False)
+        vals = dict(self.base_event_id._microsoft_to_odoo_values(recurrence_event, ()), need_sync_m=False)
         vals['microsoft_recurrence_master_id'] = vals.pop('microsoft_id')
         self.base_event_id.write(vals)
         values = {}
@@ -212,11 +212,11 @@ class MicrosoftSync(models.AbstractModel):
 
         for recurrent_event in events_to_update:
             if recurrent_event.type == 'occurrence':
-                value = self.env['calendar.event']._microsoft_to_flectra_recurrence_values(recurrent_event, (), default_values)
-                normal_events += [recurrent_event.flectra_id(self.env)]
+                value = self.env['calendar.event']._microsoft_to_odoo_recurrence_values(recurrent_event, (), default_values)
+                normal_events += [recurrent_event.odoo_id(self.env)]
             else:
-                value = self.env['calendar.event']._microsoft_to_flectra_values(recurrent_event, (), default_values)
-                self.env['calendar.event'].browse(recurrent_event.flectra_id(self.env)).with_context(no_mail_to_attendees=True, mail_create_nolog=True).write(dict(value, need_sync_m=False))
+                value = self.env['calendar.event']._microsoft_to_odoo_values(recurrent_event, (), default_values)
+                self.env['calendar.event'].browse(recurrent_event.odoo_id(self.env)).with_context(no_mail_to_attendees=True, mail_create_nolog=True).write(dict(value, need_sync_m=False))
             values[(self.id, value.get('start'), value.get('stop'))] = dict(value, need_sync_m=False)
 
         if (self.id, vals.get('start'), vals.get('stop')) in values:
@@ -240,11 +240,11 @@ class MicrosoftSync(models.AbstractModel):
             self.base_event_id = self._get_first_event(include_outliers=False)
 
     @api.model
-    def _sync_microsoft2flectra(self, microsoft_events: MicrosoftEvent, default_reminders=()):
-        """Synchronize Microsoft recurrences in Flectra. Creates new recurrences, updates
+    def _sync_microsoft2odoo(self, microsoft_events: MicrosoftEvent, default_reminders=()):
+        """Synchronize Microsoft recurrences in Odoo. Creates new recurrences, updates
         existing ones.
 
-        :return: synchronized flectra
+        :return: synchronized odoo
         """
         existing = microsoft_events.exists(self.env)
         new = microsoft_events - existing - microsoft_events.cancelled()
@@ -252,44 +252,44 @@ class MicrosoftSync(models.AbstractModel):
 
         default_values = {}
 
-        flectra_values = [
-            dict(self._microsoft_to_flectra_values(e, default_reminders, default_values), need_sync_m=False)
+        odoo_values = [
+            dict(self._microsoft_to_odoo_values(e, default_reminders, default_values), need_sync_m=False)
             for e in (new - new_recurrent)
         ]
-        new_flectra = self.with_context(dont_notify=True).create(flectra_values)
+        new_odoo = self.with_context(dont_notify=True).create(odoo_values)
 
-        synced_recurrent_records = self.with_context(dont_notify=True)._sync_recurrence_microsoft2flectra(new_recurrent)
+        synced_recurrent_records = self.with_context(dont_notify=True)._sync_recurrence_microsoft2odoo(new_recurrent)
         if not self._context.get("dont_notify"):
-            new_flectra._notify_attendees()
+            new_odoo._notify_attendees()
             synced_recurrent_records._notify_attendees()
 
         cancelled = existing.cancelled()
-        cancelled_flectra = self.browse(cancelled.flectra_ids(self.env))
-        cancelled_flectra._cancel_microsoft()
+        cancelled_odoo = self.browse(cancelled.odoo_ids(self.env))
+        cancelled_odoo._cancel_microsoft()
 
         recurrent_cancelled = self.env['calendar.recurrence'].search([
             ('microsoft_id', 'in', (microsoft_events.cancelled() - cancelled).microsoft_ids())])
         recurrent_cancelled._cancel_microsoft()
 
-        synced_records = new_flectra + cancelled_flectra + synced_recurrent_records.calendar_event_ids
+        synced_records = new_odoo + cancelled_odoo + synced_recurrent_records.calendar_event_ids
 
         for mevent in (existing - cancelled).filter(lambda e: e.lastModifiedDateTime and not e.seriesMasterId):
             # Last updated wins.
-            # This could be dangerous if microsoft server time and flectra server time are different
+            # This could be dangerous if microsoft server time and odoo server time are different
             if mevent.is_recurrence():
-                flectra_record = self.env['calendar.recurrence'].browse(mevent.flectra_id(self.env))
+                odoo_record = self.env['calendar.recurrence'].browse(mevent.odoo_id(self.env))
             else:
-                flectra_record = self.browse(mevent.flectra_id(self.env))
-            flectra_record_updated = pytz.utc.localize(flectra_record.write_date)
-            updated = parse(mevent.lastModifiedDateTime or str(flectra_record_updated))
-            if updated >= flectra_record_updated:
-                vals = dict(flectra_record._microsoft_to_flectra_values(mevent, default_reminders), need_sync_m=False)
-                flectra_record.write(vals)
-                if flectra_record._name == 'calendar.recurrence':
-                    flectra_record._update_microsoft_recurrence(mevent, microsoft_events)
-                    synced_recurrent_records |= flectra_record
+                odoo_record = self.browse(mevent.odoo_id(self.env))
+            odoo_record_updated = pytz.utc.localize(odoo_record.write_date)
+            updated = parse(mevent.lastModifiedDateTime or str(odoo_record_updated))
+            if updated >= odoo_record_updated:
+                vals = dict(odoo_record._microsoft_to_odoo_values(mevent, default_reminders), need_sync_m=False)
+                odoo_record.write(vals)
+                if odoo_record._name == 'calendar.recurrence':
+                    odoo_record._update_microsoft_recurrence(mevent, microsoft_events)
+                    synced_recurrent_records |= odoo_record
                 else:
-                    synced_records |= flectra_record
+                    synced_records |= odoo_record
 
         return synced_records, synced_recurrent_records
 
@@ -321,7 +321,7 @@ class MicrosoftSync(models.AbstractModel):
                 })
 
     def _get_microsoft_records_to_sync(self, full_sync=False):
-        """Return records that should be synced from Flectra to Microsoft
+        """Return records that should be synced from Odoo to Microsoft
 
         :param full_sync: If True, all events attended by the user are returned
         :return: events
@@ -337,10 +337,10 @@ class MicrosoftSync(models.AbstractModel):
         return self.with_context(active_test=False).search(domain)
 
     @api.model
-    def _microsoft_to_flectra_values(self, microsoft_event: MicrosoftEvent, default_reminders=()):
-        """Implements this method to return a dict of Flectra values corresponding
+    def _microsoft_to_odoo_values(self, microsoft_event: MicrosoftEvent, default_reminders=()):
+        """Implements this method to return a dict of Odoo values corresponding
         to the Microsoft event given as parameter
-        :return: dict of Flectra formatted values
+        :return: dict of Odoo formatted values
         """
         raise NotImplementedError()
 
@@ -368,8 +368,8 @@ class MicrosoftSync(models.AbstractModel):
 
     def _notify_attendees(self):
         """ Notify calendar event partners.
-        This is called when creating new calendar events in _sync_microsoft2flectra.
-        At the initialization of a synced calendar, Flectra requests all events for a specific
+        This is called when creating new calendar events in _sync_microsoft2odoo.
+        At the initialization of a synced calendar, Odoo requests all events for a specific
         MicrosoftCalendar. Among those there will probably be lots of events that will never triggers a notification
         (e.g. single events that occured in the past). Processing all these events through the notification procedure
         of calendar.event.create is a possible performance bottleneck. This method aimed at alleviating that.

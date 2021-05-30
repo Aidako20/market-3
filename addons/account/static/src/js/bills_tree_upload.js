@@ -1,4 +1,4 @@
-flectra.define('account.upload.bill.mixin', function (require) {
+odoo.define('account.upload.bill.mixin', function (require) {
 "use strict";
 
     var core = require('web.core');
@@ -61,7 +61,7 @@ flectra.define('account.upload.bill.mixin', function (require) {
 });
 
 
-flectra.define('account.bills.tree', function (require) {
+odoo.define('account.bills.tree', function (require) {
 "use strict";
     var core = require('web.core');
     var ListController = require('web.ListController');
@@ -86,7 +86,7 @@ flectra.define('account.bills.tree', function (require) {
     viewRegistry.add('account_tree', BillsListView);
 });
 
-flectra.define('account.dashboard.kanban', function (require) {
+odoo.define('account.dashboard.kanban', function (require) {
 "use strict";
     var core = require('web.core');
     var KanbanController = require('web.KanbanController');

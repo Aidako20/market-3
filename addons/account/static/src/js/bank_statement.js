@@ -1,4 +1,4 @@
-flectra.define('account.bank_statement', function(require) {
+odoo.define('account.bank_statement', function(require) {
     "use strict";
 
     var KanbanController = require("web.KanbanController");
@@ -18,4 +18,4 @@ flectra.define('account.bank_statement', function(require) {
 
     KanbanController.include(includeDict);
     ListController.include(includeDict);
-}); 
+});

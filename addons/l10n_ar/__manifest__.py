@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name': 'Argentina - Accounting',
-    'version': "3.2",
+    'version': "3.3",
     'description': """
 Functional
 ----------
@@ -32,7 +32,7 @@ Demo data for testing:
   * Gritti (Monotributo)
   * Cerro Castor. IVA Liberado in Zona Franca
   * Expresso (Cliente del Exterior)
-  * Flectra (Proveedor del Exterior)
+  * Odoo (Proveedor del Exterior)
 
 Highlights:
 

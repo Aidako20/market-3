@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from datetime import datetime as dt
 from datetime import timedelta as td
 
-from flectra import SUPERUSER_ID
-from flectra.tests import Form
-from flectra.tests.common import SavepointCase
+from odoo import SUPERUSER_ID
+from odoo.tests import Form
+from odoo.tests.common import SavepointCase
 
 
 class TestReorderingRule(SavepointCase):
