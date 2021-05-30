@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra import models, fields, api, _
-from flectra.exceptions import UserError, ValidationError, RedirectWarning
-from flectra.tools.misc import formatLang, format_date
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError, ValidationError, RedirectWarning
+from odoo.tools.misc import formatLang, format_date
 
 INV_LINES_PER_STUB = 9
 
@@ -84,7 +84,7 @@ class AccountPayment(models.Model):
     def _inverse_check_number(self):
         for payment in self:
             if payment.check_number:
-                sequence = payment.journal_id.check_sequence_id
+                sequence = payment.journal_id.check_sequence_id.sudo()
                 sequence.padding = len(payment.check_number)
 
     @api.depends('payment_type', 'journal_id', 'partner_id')

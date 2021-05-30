@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import datetime
 
-from flectra.addons.test_mass_mailing.tests import common
-from flectra.tests.common import users
+from odoo.addons.test_mass_mailing.tests import common
+from odoo.tests.common import users
 
 
 class TestAutoBlacklist(common.TestMassMailCommon):

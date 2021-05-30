@@ -1,4 +1,4 @@
-flectra.define('account.AccountPortalSidebar', function (require) {
+odoo.define('account.AccountPortalSidebar', function (require) {
 'use strict';
 
 const dom = require('web.dom');

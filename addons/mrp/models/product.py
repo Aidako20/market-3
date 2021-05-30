@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from datetime import timedelta
-from flectra import api, fields, models
-from flectra.tools.float_utils import float_round, float_is_zero
+from odoo import api, fields, models
+from odoo.tools.float_utils import float_round, float_is_zero
 
 
 class ProductTemplate(models.Model):
@@ -205,4 +205,5 @@ class ProductProduct(models.Model):
         res = super(ProductProduct, components).action_open_quants()
         if bom_kits:
             res['context']['single_product'] = False
+            res['context'].pop('default_product_tmpl_id', None)
         return res

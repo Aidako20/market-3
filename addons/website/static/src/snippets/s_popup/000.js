@@ -1,4 +1,4 @@
-flectra.define('website.s_popup', function (require) {
+odoo.define('website.s_popup', function (require) {
 'use strict';
 
 const config = require('web.config');
@@ -28,6 +28,7 @@ const PopupWidget = publicWidget.Widget.extend({
     destroy: function () {
         this._super.apply(this, arguments);
         $(document).off('mouseleave.open_popup');
+        this.$target.find('.modal').modal('hide');
         clearTimeout(this.timeout);
     },
 

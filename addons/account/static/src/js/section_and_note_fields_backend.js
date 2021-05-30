@@ -1,5 +1,5 @@
 
-flectra.define('account.section_and_note_backend', function (require) {
+odoo.define('account.section_and_note_backend', function (require) {
 // The goal of this file is to contain JS hacks related to allowing
 // section and note on sale order and invoice.
 

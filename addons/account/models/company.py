@@ -4,11 +4,11 @@ from datetime import timedelta, datetime, date
 import calendar
 from dateutil.relativedelta import relativedelta
 
-from flectra import fields, models, api, _
-from flectra.exceptions import ValidationError, UserError, RedirectWarning
-from flectra.tools.misc import format_date
-from flectra.tools.float_utils import float_round, float_is_zero
-from flectra.tests.common import Form
+from odoo import fields, models, api, _
+from odoo.exceptions import ValidationError, UserError, RedirectWarning
+from odoo.tools.misc import format_date
+from odoo.tools.float_utils import float_round, float_is_zero
+from odoo.tests.common import Form
 
 
 MONTH_SELECTION = [

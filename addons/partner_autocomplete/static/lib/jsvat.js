@@ -1335,4 +1335,4 @@ var checkVATNumber = (function (){
     }
 
     return checkVATNumber;
-})(); 
+})();

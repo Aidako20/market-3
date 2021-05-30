@@ -1,4 +1,4 @@
-flectra.define('website_sale.backend', function (require) {
+odoo.define('website_sale.backend', function (require) {
 "use strict";
 
 var WebsiteBackend = require('website.backend.dashboard');

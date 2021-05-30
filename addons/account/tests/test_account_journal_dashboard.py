@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from freezegun import freeze_time
 
-from flectra.addons.account.tests.common import AccountTestInvoicingCommon
-from flectra.tests import tagged
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
+from odoo.tests import tagged
 
 @tagged('post_install', '-at_install')
 class TestAccountJournalDashboard(AccountTestInvoicingCommon):

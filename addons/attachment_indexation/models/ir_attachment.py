@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 import io
 import logging
 import xml.dom.minidom
 import zipfile
 
-from flectra import api, models
+from odoo import api, models
 
 _logger = logging.getLogger(__name__)
 
@@ -125,6 +125,6 @@ class IrAttachment(models.Model):
         for ftype in FTYPES:
             buf = getattr(self, '_index_%s' % ftype)(bin_data)
             if buf:
-                return buf
+                return buf.replace('\x00', '')
 
         return super(IrAttachment, self)._index(bin_data, mimetype)

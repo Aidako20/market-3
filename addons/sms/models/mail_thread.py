@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import logging
 
-from flectra import api, models, fields
-from flectra.addons.phone_validation.tools import phone_validation
-from flectra.tools import html2plaintext, plaintext2html
+from odoo import api, models, fields
+from odoo.addons.phone_validation.tools import phone_validation
+from odoo.tools import html2plaintext, plaintext2html
 
 _logger = logging.getLogger(__name__)
 
@@ -53,13 +53,15 @@ class MailThread(models.AbstractModel):
         """
         partners = self.env['res.partner']
         for fname in self._sms_get_partner_fields():
-            partners |= self.mapped(fname)
+            partners = partners.union(*self.mapped(fname))  # ensure ordering
         return partners
 
     def _sms_get_number_fields(self):
         """ This method returns the fields to use to find the number to use to
         send an SMS on a record. """
-        return ['mobile']
+        if 'mobile' in self:
+            return ['mobile']
+        return []
 
     def _sms_get_recipients_info(self, force_field=False, partner_fallback=True):
         """" Get SMS recipient information on current record set. This method

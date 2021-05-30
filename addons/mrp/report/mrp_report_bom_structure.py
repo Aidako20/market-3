@@ -2,8 +2,8 @@
 
 import json
 
-from flectra import api, models, _
-from flectra.tools import float_round
+from odoo import api, models, _
+from odoo.tools import float_round
 
 class ReportBomStructure(models.AbstractModel):
     _name = 'report.mrp.report_bom_structure'
@@ -14,7 +14,8 @@ class ReportBomStructure(models.AbstractModel):
         docs = []
         for bom_id in docids:
             bom = self.env['mrp.bom'].browse(bom_id)
-            candidates = bom.product_id or bom.product_tmpl_id.product_variant_ids
+            variant = data.get('variant')
+            candidates = variant and self.env['product.product'].browse(variant) or bom.product_id or bom.product_tmpl_id.product_variant_ids
             quantity = float(data.get('quantity', 1))
             for product_variant_id in candidates.ids:
                 if data and data.get('childs'):

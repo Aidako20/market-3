@@ -1,4 +1,4 @@
-flectra.define('web_editor.snippet.editor', function (require) {
+odoo.define('web_editor.snippet.editor', function (require) {
 'use strict';
 
 var concurrency = require('web.concurrency');
@@ -783,7 +783,7 @@ var SnippetEditor = Widget.extend({
      * specific action/react to a specific event.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onOptionUpdate: function (ev) {
         var self = this;
@@ -830,7 +830,7 @@ var SnippetEditor = Widget.extend({
     },
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onSnippetOptionUpdate: async function (ev) {
         if (ev.target === this) {
@@ -863,7 +863,7 @@ var SnippetEditor = Widget.extend({
     },
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onSnippetOptionVisibilityUpdate: function (ev) {
         ev.data.show = this._toggleVisibilityStatus(ev.data.show);
@@ -1074,7 +1074,7 @@ var SnippetsMenu = Widget.extend({
             if ($oeStructure.length && !$oeStructure.children().length && this.$snippets) {
                 // If empty oe_structure, encourage using snippets in there by
                 // making them "wizz" in the panel.
-                this.$snippets.flectraBounce();
+                this.$snippets.odooBounce();
                 return;
             }
             this._activateSnippet($target);
@@ -2279,7 +2279,7 @@ var SnippetsMenu = Widget.extend({
      * Called when a child editor asks for insertion zones to be enabled.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onActivateInsertionZones: function (ev) {
         this._activateInsertionZones(ev.data.$selectorSiblings, ev.data.$selectorChildren);
@@ -2298,7 +2298,7 @@ var SnippetsMenu = Widget.extend({
      * snippet of a DOM element.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onCallForEachChildSnippet: function (ev) {
         this._callForEachChildSnippet(ev.data.$snippet, ev.data.callback);
@@ -2318,7 +2318,7 @@ var SnippetsMenu = Widget.extend({
      * call the _onClone methods if the element's editor has one.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onCloneSnippet: async function (ev) {
         ev.stopPropagation();
@@ -2341,7 +2341,7 @@ var SnippetsMenu = Widget.extend({
      * Called when a snippet has moved in the page.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onDragAndDropStop: async function (ev) {
         const $modal = ev.data.$snippet.closest('.modal');
@@ -2356,7 +2356,7 @@ var SnippetsMenu = Widget.extend({
      * parent instead.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onGoToParent: function (ev) {
         ev.stopPropagation();
@@ -2503,7 +2503,7 @@ var SnippetsMenu = Widget.extend({
     },
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onGetSnippetVersions: function (ev) {
         const snippet = this.el.querySelector(`.oe_snippet > [data-snippet="${ev.data.snippetName}"]`);
@@ -2540,7 +2540,7 @@ var SnippetsMenu = Widget.extend({
     },
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onRemoveSnippet: async function (ev) {
         ev.stopPropagation();
@@ -2584,13 +2584,13 @@ var SnippetsMenu = Widget.extend({
         const $els = this.getEditableArea().find('.oe_structure.oe_empty').addBack('.oe_structure.oe_empty');
         for (const el of $els) {
             if (!el.children.length) {
-                $(el).flectraBounce('o_we_snippet_area_animation');
+                $(el).odooBounce('o_we_snippet_area_animation');
             }
         }
     },
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      * @param {Object} ev.data
      * @param {function} ev.data.exec
      */
@@ -2599,7 +2599,7 @@ var SnippetsMenu = Widget.extend({
     },
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onSnippetEditorDestroyed(ev) {
         ev.stopPropagation();
@@ -2624,7 +2624,7 @@ var SnippetsMenu = Widget.extend({
     },
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onSnippetOptionUpdate: function (ev) {
         ev.stopPropagation();
@@ -2632,7 +2632,7 @@ var SnippetsMenu = Widget.extend({
     },
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onSnippetOptionVisibilityUpdate: async function (ev) {
         if (!ev.data.show) {
@@ -2642,7 +2642,7 @@ var SnippetsMenu = Widget.extend({
     },
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onSnippetThumbnailURLRequest(ev) {
         const $snippet = this.$snippets.has(`[data-snippet="${ev.data.key}"]`);
@@ -2679,13 +2679,15 @@ var SnippetsMenu = Widget.extend({
         // make text tools visible only on that specific tab). Also do it with
         // a slight delay to avoid flickering doing it twice.
         clearTimeout(this._textToolsSwitchingTimeout);
-        this._textToolsSwitchingTimeout = setTimeout(() => {
-            this._updateLeftPanelContent({tab: this.tabs.OPTIONS});
-        }, 250);
+        if (!this.$('#o_scroll').hasClass('d-none')) {
+            this._textToolsSwitchingTimeout = setTimeout(() => {
+                this._updateLeftPanelContent({tab: this.tabs.OPTIONS});
+            }, 250);
+        }
     },
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onUpdateCustomizeElements: function (ev) {
         this._updateLeftPanelContent({

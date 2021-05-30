@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 # Copyright (c) 2005-2006 Axelor SARL. (http://www.axelor.com)
 
@@ -8,12 +8,12 @@ import logging
 from datetime import datetime, time
 from dateutil.relativedelta import relativedelta
 
-from flectra import api, fields, models
-from flectra.addons.resource.models.resource import HOURS_PER_DAY
-from flectra.exceptions import AccessError, UserError, ValidationError
-from flectra.tools.translate import _
-from flectra.tools.float_utils import float_round
-from flectra.osv import expression
+from odoo import api, fields, models
+from odoo.addons.resource.models.resource import HOURS_PER_DAY
+from odoo.exceptions import AccessError, UserError, ValidationError
+from odoo.tools.translate import _
+from odoo.tools.float_utils import float_round
+from odoo.osv import expression
 
 _logger = logging.getLogger(__name__)
 
@@ -670,15 +670,15 @@ class HolidaysAllocation(models.Model):
         """ Handle HR users and officers recipients that can validate or refuse holidays
         directly from email. """
         groups = super(HolidaysAllocation, self)._notify_get_groups(msg_vals=msg_vals)
-        msg_vals = msg_vals or {}
+        local_msg_vals = dict(msg_vals or {})
 
         self.ensure_one()
         hr_actions = []
         if self.state == 'confirm':
-            app_action = self._notify_get_action_link('controller', controller='/allocation/validate', **msg_vals)
+            app_action = self._notify_get_action_link('controller', controller='/allocation/validate', **local_msg_vals)
             hr_actions += [{'url': app_action, 'title': _('Approve')}]
         if self.state in ['confirm', 'validate', 'validate1']:
-            ref_action = self._notify_get_action_link('controller', controller='/allocation/refuse', **msg_vals)
+            ref_action = self._notify_get_action_link('controller', controller='/allocation/refuse', **local_msg_vals)
             hr_actions += [{'url': ref_action, 'title': _('Refuse')}]
 
         holiday_user_group_id = self.env.ref('hr_holidays.group_hr_holidays_user').id

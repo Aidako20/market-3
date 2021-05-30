@@ -1,4 +1,4 @@
-flectra.define('website_slides.quiz', function (require) {
+odoo.define('website_slides.quiz', function (require) {
     'use strict';
 
     var publicWidget = require('web.public.widget');
@@ -417,7 +417,7 @@ flectra.define('website_slides.quiz', function (require) {
          * When clicking on an answer, this one should be marked as "checked".
          *
          * @private
-         * @param FlectraEvent ev
+         * @param OdooEvent ev
          */
         _onAnswerClick: function (ev) {
             ev.preventDefault();
@@ -430,7 +430,7 @@ flectra.define('website_slides.quiz', function (require) {
          * Triggering a event to switch to next slide
          *
          * @private
-         * @param FlectraEvent ev
+         * @param OdooEvent ev
          */
         _onClickNext: function (ev) {
             if (this.slide.hasNext) {
@@ -700,7 +700,7 @@ flectra.define('website_slides.quiz', function (require) {
                     questions: self._extractQuestionsAndAnswers(),
                     sessionAnswers: slideData.sessionAnswers || [],
                     quizKarmaMax: slideData.quizKarmaMax,
-                    quizKarmaWon: slideData.quizKarmaWon,
+                    quizKarmaWon: slideData.quizKarmaWon || 0,
                     quizKarmaGain: slideData.quizKarmaGain,
                     quizAttemptsCount: slideData.quizAttemptsCount,
                 };

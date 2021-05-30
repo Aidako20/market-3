@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from unittest.mock import patch
 
-from flectra.addons.mail.tests.common import MailCase, mail_new_test_user
-from flectra.addons.sales_team.tests.common import TestSalesCommon
-from flectra.fields import Datetime
-from flectra import tools
+from odoo.addons.mail.tests.common import MailCase, mail_new_test_user
+from odoo.addons.sales_team.tests.common import TestSalesCommon
+from odoo.fields import Datetime
+from odoo import tools
 
 INCOMING_EMAIL = """Return-Path: {return_path}
 X-Original-To: {to}
@@ -129,12 +129,12 @@ class TestCrmCommon(TestSalesCommon, MailCase):
             'philip.j.fry@test.example.com',
             'turanga.leela@test.example.com',
         ]
-        cls.test_pĥone_data = [
+        cls.test_phone_data = [
             '+1 202 555 0122',  # formatted US number
             '202 555 0999',  # local US number
             '202 555 0888',  # local US number
         ]
-        cls.test_pĥone_data_sanitized = [
+        cls.test_phone_data_sanitized = [
             '+12025550122',
             '+12025550999',
             '+12025550888',
@@ -153,7 +153,7 @@ class TestCrmCommon(TestSalesCommon, MailCase):
         cls.contact_1 = cls.env['res.partner'].create({
             'name': 'Philip J Fry',
             'email': cls.test_email_data[1],
-            'mobile': cls.test_pĥone_data[0],
+            'mobile': cls.test_phone_data[0],
             'title': cls.env.ref('base.res_partner_title_mister').id,
             'function': 'Delivery Boy',
             'phone': False,
@@ -167,8 +167,8 @@ class TestCrmCommon(TestSalesCommon, MailCase):
         cls.contact_2 = cls.env['res.partner'].create({
             'name': 'Turanga Leela',
             'email': cls.test_email_data[2],
-            'mobile': cls.test_pĥone_data[1],
-            'phone': cls.test_pĥone_data[2],
+            'mobile': cls.test_phone_data[1],
+            'phone': cls.test_phone_data[2],
             'parent_id': False,
             'is_company': False,
             'street': 'Cookieville Minimum-Security Orphanarium',
@@ -304,7 +304,7 @@ class TestLeadConvertCommon(TestCrmCommon):
 
         cls.lead_1.write({'date_open': Datetime.from_string('2020-01-15 11:30:00')})
 
-        cls.crm_lead_dt_patcher = patch('flectra.addons.crm.models.crm_lead.fields.Datetime', wraps=Datetime)
+        cls.crm_lead_dt_patcher = patch('odoo.addons.crm.models.crm_lead.fields.Datetime', wraps=Datetime)
         cls.crm_lead_dt_mock = cls.crm_lead_dt_patcher.start()
 
     @classmethod

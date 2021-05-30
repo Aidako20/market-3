@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from collections import defaultdict
 
-from flectra import api, fields, models, _
-from flectra.exceptions import ValidationError
+from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
 
 
 # YTI PLEASE SPLIT ME
@@ -349,7 +349,7 @@ class ProjectTask(models.Model):
         self.ensure_one()
         if not self.commercial_partner_id or not self.allow_billable:
             return False
-        domain = [('is_service', '=', True), ('order_partner_id', 'child_of', self.commercial_partner_id.id), ('is_expense', '=', False), ('state', 'in', ['sale', 'done'])]
+        domain = [('company_id', '=', self.company_id.id), ('is_service', '=', True), ('order_partner_id', 'child_of', self.commercial_partner_id.id), ('is_expense', '=', False), ('state', 'in', ['sale', 'done'])]
         if self.project_id.bill_type == 'customer_project' and self.project_sale_order_id:
             domain.append(('order_id', '=?', self.project_sale_order_id.id))
         sale_lines = self.env['sale.order.line'].search(domain)

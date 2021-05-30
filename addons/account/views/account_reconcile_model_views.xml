@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<flectra>
+<odoo>
     <data>
 
         <record id="view_account_reconcile_model_line_form" model="ir.ui.view">
@@ -238,4 +238,4 @@
         </record>
 
     </data>
-</flectra>
+</odoo>

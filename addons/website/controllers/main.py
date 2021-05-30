@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 import base64
 import datetime
 import json
@@ -12,17 +12,18 @@ import werkzeug.utils
 import werkzeug.wrappers
 
 from itertools import islice
+from werkzeug import urls
 from xml.etree import ElementTree as ET
 
-import flectra
+import odoo
 
-from flectra import http, models, fields, _
-from flectra.http import request
-from flectra.tools import OrderedSet
-from flectra.addons.http_routing.models.ir_http import slug, slugify, _guess_mimetype
-from flectra.addons.web.controllers.main import Binary
-from flectra.addons.portal.controllers.portal import pager as portal_pager
-from flectra.addons.portal.controllers.web import Home
+from odoo import http, models, fields, _
+from odoo.http import request
+from odoo.tools import OrderedSet
+from odoo.addons.http_routing.models.ir_http import slug, slugify, _guess_mimetype
+from odoo.addons.web.controllers.main import Binary
+from odoo.addons.portal.controllers.portal import pager as portal_pager
+from odoo.addons.portal.controllers.web import Home
 
 logger = logging.getLogger(__name__)
 
@@ -85,10 +86,37 @@ class Website(Home):
 
         raise request.not_found()
 
-    @http.route('/website/force_website', type='json', auth="user")
-    def force_website(self, website_id):
-        request.env['website']._force_website(website_id)
-        return True
+    @http.route('/website/force/<int:website_id>', type='http', auth="user", website=True, sitemap=False, multilang=False)
+    def website_force(self, website_id, path='/', isredir=False, **kw):
+        """ To switch from a website to another, we need to force the website in
+        session, AFTER landing on that website domain (if set) as this will be a
+        different session.
+        """
+        parse = werkzeug.urls.url_parse
+        safe_path = parse(path).path
+
+        if not (request.env.user.has_group('website.group_multi_website')
+           and request.env.user.has_group('website.group_website_publisher')):
+            # The user might not be logged in on the forced website, so he won't
+            # have rights. We just redirect to the path as the user is already
+            # on the domain (basically a no-op as it won't change domain or
+            # force website).
+            # Website 1 : 127.0.0.1 (admin)
+            # Website 2 : 127.0.0.2 (not logged in)
+            # Click on "Website 2" from Website 1
+            return request.redirect(safe_path)
+
+        website = request.env['website'].browse(website_id)
+
+        if not isredir and website.domain:
+            domain_from = request.httprequest.environ.get('HTTP_HOST', '')
+            domain_to = parse(website._get_http_domain()).netloc
+            if domain_from != domain_to:
+                # redirect to correct domain for a correct routing map
+                url_to = urls.url_join(website._get_http_domain(), '/website/force/%s?isredir=1&path=%s' % (website.id, safe_path))
+                return request.redirect(url_to)
+        website._force()
+        return request.redirect(safe_path)
 
     # ------------------------------------------------------
     # Login - overwrite of the web login so that regular users are redirected to the backend
@@ -219,7 +247,7 @@ class Website(Home):
         values = {
             'apps': apps,
             'l10n': l10n,
-            'version': flectra.service.common.exp_version()
+            'version': odoo.service.common.exp_version()
         }
         return request.render('website.website_info', values)
 

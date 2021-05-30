@@ -1,4 +1,4 @@
-flectra.define('website_sale_comparison.comparison', function (require) {
+odoo.define('website_sale_comparison.comparison', function (require) {
 'use strict';
 
 var concurrency = require('web.concurrency');
@@ -287,4 +287,5 @@ publicWidget.registry.ProductComparison = publicWidget.Widget.extend({
         $target.find('.fa-chevron-circle-down, .fa-chevron-circle-right').toggleClass('fa-chevron-circle-down fa-chevron-circle-right');
     },
 });
+return ProductComparison;
 });

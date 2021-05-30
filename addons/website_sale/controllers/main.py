@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 import json
 import logging
 from datetime import datetime
 from werkzeug.exceptions import Forbidden, NotFound
 
-from flectra import fields, http, SUPERUSER_ID, tools, _
-from flectra.http import request
-from flectra.addons.base.models.ir_qweb_fields import nl2br
-from flectra.addons.http_routing.models.ir_http import slug
-from flectra.addons.payment.controllers.portal import PaymentProcessing
-from flectra.addons.website.controllers.main import QueryURL
-from flectra.addons.website.models.ir_http import sitemap_qs2dom
-from flectra.exceptions import ValidationError
-from flectra.addons.portal.controllers.portal import _build_url_w_params
-from flectra.addons.website.controllers.main import Website
-from flectra.addons.website_form.controllers.main import WebsiteForm
-from flectra.osv import expression
+from odoo import fields, http, SUPERUSER_ID, tools, _
+from odoo.http import request
+from odoo.addons.base.models.ir_qweb_fields import nl2br
+from odoo.addons.http_routing.models.ir_http import slug
+from odoo.addons.payment.controllers.portal import PaymentProcessing
+from odoo.addons.website.controllers.main import QueryURL
+from odoo.addons.website.models.ir_http import sitemap_qs2dom
+from odoo.exceptions import ValidationError
+from odoo.addons.portal.controllers.portal import _build_url_w_params
+from odoo.addons.website.controllers.main import Website
+from odoo.addons.website_form.controllers.main import WebsiteForm
+from odoo.osv import expression
 _logger = logging.getLogger(__name__)
 
 
@@ -491,6 +491,15 @@ class WebsiteSale(http.Controller):
     # Checkout
     # ------------------------------------------------------
 
+    def checkout_check_address(self, order):
+        billing_fields_required = self._get_mandatory_fields_billing(order.partner_id.country_id.id)
+        if not all(order.partner_id.read(billing_fields_required)[0].values()):
+            return request.redirect('/shop/address?partner_id=%d' % order.partner_id.id)
+
+        shipping_fields_required = self._get_mandatory_fields_shipping(order.partner_shipping_id.country_id.id)
+        if not all(order.partner_shipping_id.read(shipping_fields_required)[0].values()):
+            return request.redirect('/shop/address?partner_id=%d' % order.partner_shipping_id.id)
+
     def checkout_redirection(self, order):
         # must have a draft sales order with lines at this point, otherwise reset
         if not order or order.state != 'draft':
@@ -782,13 +791,9 @@ class WebsiteSale(http.Controller):
         if order.partner_id.id == request.website.user_id.sudo().partner_id.id:
             return request.redirect('/shop/address')
 
-        billing_fields_required = self._get_mandatory_fields_billing(order.partner_id.country_id.id)
-        if not all(order.partner_id.read(billing_fields_required)[0].values()):
-            return request.redirect('/shop/address?partner_id=%d' % order.partner_id.id)
-
-        shipping_fields_required = self._get_mandatory_fields_shipping(order.partner_shipping_id.country_id.id)
-        if not all(order.partner_shipping_id.read(shipping_fields_required)[0].values()):
-            return request.redirect('/shop/address?partner_id=%d' % order.partner_shipping_id.id)
+        redirection = self.checkout_check_address(order)
+        if redirection:
+            return redirection
 
         values = self.checkout_values(**post)
 
@@ -806,7 +811,7 @@ class WebsiteSale(http.Controller):
     def confirm_order(self, **post):
         order = request.website.sale_get_order()
 
-        redirection = self.checkout_redirection(order)
+        redirection = self.checkout_redirection(order) or self.checkout_check_address(order)
         if redirection:
             return redirection
 
@@ -901,7 +906,7 @@ class WebsiteSale(http.Controller):
            paying / canceling
         """
         order = request.website.sale_get_order()
-        redirection = self.checkout_redirection(order)
+        redirection = self.checkout_redirection(order) or self.checkout_check_address(order)
         if redirection:
             return redirection
 

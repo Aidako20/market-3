@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from random import randint
 
-from flectra import api, fields, models, tools, SUPERUSER_ID
-from flectra.tools.translate import _
-from flectra.exceptions import UserError
+from odoo import api, fields, models, tools, SUPERUSER_ID
+from odoo.tools.translate import _
+from odoo.exceptions import UserError
 
 AVAILABLE_PRIORITIES = [
     ('0', 'Normal'),
@@ -515,7 +515,8 @@ class Applicant(models.Model):
                 ], order='sequence asc', limit=1).id
         for applicant in self:
             applicant.write(
-                {'stage_id': default_stage[applicant.job_id.id], 'refuse_reason_id': False})
+                {'stage_id': applicant.job_id.id and default_stage[applicant.job_id.id],
+                 'refuse_reason_id': False})
 
     def toggle_active(self):
         res = super(Applicant, self).toggle_active()

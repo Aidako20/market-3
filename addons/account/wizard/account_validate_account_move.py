@@ -1,5 +1,5 @@
-from flectra import models, fields, _
-from flectra.exceptions import UserError
+from odoo import models, fields, _
+from odoo.exceptions import UserError
 
 
 class ValidateAccountMove(models.TransientModel):

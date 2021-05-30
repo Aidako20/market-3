@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra import models, _
+from odoo import models, _
 
 
 class ImLivechatChannel(models.Model):
@@ -18,6 +18,6 @@ class ImLivechatChannel(models.Model):
             # TODO DBE : Move this into the proper method (open or init mail channel)
             chat_request_channel = self.env['mail.channel'].sudo().search([('livechat_visitor_id', '=', visitor_sudo.id), ('livechat_active', '=', True)])
             for mail_channel in chat_request_channel:
-                mail_channel._close_livechat_session(cancel=True, speaking_with=operator.name)
+                mail_channel._close_livechat_session(cancel=True, operator=operator.name)
 
         return mail_channel_vals

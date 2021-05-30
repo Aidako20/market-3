@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra import api, fields, models, _
-from flectra.addons.phone_validation.tools import phone_validation
-from flectra.exceptions import AccessError, UserError
+from odoo import api, fields, models, _
+from odoo.addons.phone_validation.tools import phone_validation
+from odoo.exceptions import AccessError, UserError
 
 
 class PhoneMixin(models.AbstractModel):
@@ -43,7 +43,7 @@ class PhoneMixin(models.AbstractModel):
         help="Indicates if a blacklisted sanitized phone number is a mobile number. Helps distinguish which number is blacklisted \
             when there is both a mobile and phone field in a model.")
 
-    @api.depends(lambda self: self._phone_get_number_fields())
+    @api.depends(lambda self: self._phone_get_sanitize_triggers())
     def _compute_phone_sanitized(self):
         self._assert_phone_field()
         number_fields = self._phone_get_number_fields()
@@ -112,6 +112,11 @@ class PhoneMixin(models.AbstractModel):
             raise UserError(_('Invalid primary phone field on model %s', self._name))
         if not any(fname in self and self._fields[fname].type == 'char' for fname in self._phone_get_number_fields()):
             raise UserError(_('Invalid primary phone field on model %s', self._name))
+
+    def _phone_get_sanitize_triggers(self):
+        """ Tool method to get all triggers for sanitize """
+        res = [self._phone_get_country_field()] if self._phone_get_country_field() else []
+        return res + self._phone_get_number_fields()
 
     def _phone_get_number_fields(self):
         """ This method returns the fields to use to find the number to use to

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import json
 
-from flectra import http
-from flectra.addons.website_form.controllers.main import WebsiteForm
-from flectra.http import request
+from odoo import http
+from odoo.addons.website_form.controllers.main import WebsiteForm
+from odoo.http import request
 
 
 class ContactController(WebsiteForm):

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import json
 import werkzeug
 
-from flectra import http
-from flectra.http import request
-from flectra.addons.portal.controllers.web import Home
-from flectra.exceptions import UserError, ValidationError, AccessError, MissingError, AccessDenied
+from odoo import http
+from odoo.http import request
+from odoo.addons.portal.controllers.web import Home
+from odoo.exceptions import UserError, ValidationError, AccessError, MissingError, AccessDenied
 
 
 class WebsiteTest(Home):
@@ -43,6 +43,10 @@ class WebsiteTest(Home):
     @http.route('/multi_company_website', type='http', auth="public", website=True, sitemap=False)
     def test_company_context(self):
         return request.make_response(json.dumps(request.context.get('allowed_company_ids')))
+
+    @http.route('/test_lang_url/<model("res.country"):country>', type='http', auth='public', website=True, sitemap=False)
+    def test_lang_url(self, **kwargs):
+        return request.render('test_website.test_view')
 
     # Test Session
 

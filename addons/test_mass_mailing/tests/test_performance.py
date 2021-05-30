@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra.addons.mail.tests.common import mail_new_test_user
-from flectra.tests.common import TransactionCase, users, warmup
-from flectra.tests import tagged
-from flectra.tools import mute_logger
+from odoo.addons.mail.tests.common import mail_new_test_user
+from odoo.tests.common import TransactionCase, users, warmup
+from odoo.tests import tagged
+from odoo.tools import mute_logger
 
 
 class TestMassMailPerformanceBase(TransactionCase):
@@ -39,7 +39,7 @@ class TestMassMailPerformance(TestMassMailPerformanceBase):
 
     @users('__system__', 'marketing')
     @warmup
-    @mute_logger('flectra.addons.mail.models.mail_mail', 'flectra.models.unlink', 'flectra.tests')
+    @mute_logger('odoo.addons.mail.models.mail_mail', 'odoo.models.unlink', 'odoo.tests')
     def test_send_mailing(self):
         mailing = self.env['mailing.mailing'].create({
             'name': 'Test',
@@ -50,8 +50,8 @@ class TestMassMailPerformance(TestMassMailPerformanceBase):
             'mailing_domain': [('id', 'in', self.mm_recs.ids)],
         })
 
-        # runbot needs +50 compared to local
-        with self.assertQueryCount(__system__=1714, marketing=1715):
+        # runbot needs +51 compared to local
+        with self.assertQueryCount(__system__=1714, marketing=1715):  # test_mass_mailing_only: 1663 - 1664
             mailing.action_send_mail()
 
         self.assertEqual(mailing.sent, 50)
@@ -79,7 +79,7 @@ class TestMassMailBlPerformance(TestMassMailPerformanceBase):
 
     @users('__system__', 'marketing')
     @warmup
-    @mute_logger('flectra.addons.mail.models.mail_mail', 'flectra.models.unlink', 'flectra.tests')
+    @mute_logger('odoo.addons.mail.models.mail_mail', 'odoo.models.unlink', 'odoo.tests')
     def test_send_mailing_w_bl(self):
         mailing = self.env['mailing.mailing'].create({
             'name': 'Test',
@@ -90,8 +90,8 @@ class TestMassMailBlPerformance(TestMassMailPerformanceBase):
             'mailing_domain': [('id', 'in', self.mm_recs.ids)],
         })
 
-        # runbot needs +62 compared to local
-        with self.assertQueryCount(__system__=1993, marketing=1994):
+        # runbot needs +63 compared to local
+        with self.assertQueryCount(__system__=1992, marketing=1993):  # test_mass_mailing only: 1929 - 1930
             mailing.action_send_mail()
 
         self.assertEqual(mailing.sent, 50)

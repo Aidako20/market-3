@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flectra import api, fields, models, _
+from odoo import api, fields, models, _
 
 ACCOUNT_DOMAIN = "['&', '&', '&', ('deprecated', '=', False), ('internal_type','=','other'), ('company_id', '=', current_company_id), ('is_off_balance', '=', False)]"
 

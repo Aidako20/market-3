@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra.addons.crm.tests.common import TestCrmCommon
-from flectra.addons.mail.tests.common import mail_new_test_user
-from flectra.tests.common import users
+from odoo.addons.crm.tests.common import TestCrmCommon
+from odoo.addons.mail.tests.common import mail_new_test_user
+from odoo.tests.common import users
 
 
 class TestLivechatLead(TestCrmCommon):
@@ -40,6 +40,23 @@ class TestLivechatLead(TestCrmCommon):
         self.assertEqual(
             channel.channel_last_seen_partner_ids.partner_id,
             self.user_sales_leads.partner_id | self.user_anonymous.partner_id
+        )
+        self.assertEqual(lead.name, 'TestLead command')
+        self.assertEqual(lead.partner_id, self.env['res.partner'])
+
+        # public user: should not be set as customer
+        # 'base.public_user' is archived by default
+        self.assertFalse(self.env.ref('base.public_user').active)
+
+        channel = self.env['mail.channel'].create({
+            'name': 'Chat with Visitor',
+            'channel_partner_ids': [(4, self.env.ref('base.public_partner').id)]
+        })
+        lead = channel._convert_visitor_to_lead(self.env.user.partner_id, channel.channel_last_seen_partner_ids, '/lead TestLead command')
+
+        self.assertEqual(
+            channel.channel_last_seen_partner_ids.partner_id,
+            self.user_sales_leads.partner_id | self.env.ref('base.public_partner')
         )
         self.assertEqual(lead.name, 'TestLead command')
         self.assertEqual(lead.partner_id, self.env['res.partner'])

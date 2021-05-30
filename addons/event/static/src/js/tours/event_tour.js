@@ -1,4 +1,4 @@
-flectra.define('event.event_steps', function (require) {
+odoo.define('event.event_steps', function (require) {
 "use strict";
 
 var core = require('web.core');
@@ -15,7 +15,7 @@ return EventAdditionalTourSteps;
 
 });
 
-flectra.define('event.event_tour', function (require) {
+odoo.define('event.event_tour', function (require) {
 "use strict";
 
 var core = require('web.core');
@@ -46,7 +46,7 @@ tour.register('event_tour', {
 }, {
     trigger: '.o_event_form_view input[name="name"]',
     content: _t("This is the <b>name</b> your guests will see when registering."),
-    run: 'text Flectra Experience 2020',
+    run: 'text Odoo Experience 2020',
 }, {
     trigger: '.o_event_form_view input[name="date_end"]',
     content: _t("When will your event take place? <b>Select</b> the start and end dates <b>and click Apply</b>."),
@@ -57,20 +57,14 @@ tour.register('event_tour', {
 }, {
     trigger: '.o_event_form_view div[name="event_ticket_ids"] .o_field_x2many_list_row_add a',
     content: _t("Ticket types allow you to distinguish your attendees. Let's <b>create</b> a new one."),
-}, {
-    trigger: '.o_form_button_save',
-    extra_trigger: '.o_event_form_view',
-    content: _t("Awesome! Now, let's <b>save</b> your changes."),
-    position: 'bottom',
-    width: 250,
 }, ...new EventAdditionalTourSteps()._get_website_event_steps(), {
-    trigger: '.o_event_form_view div[name="stage_id"] button:contains("Booked")',
+    trigger: '.o_event_form_view div[name="stage_id"]',
     extra_trigger: 'div.o_form_buttons_view:not(.o_hidden)',
     content: _t("Now that your event is ready, click here to move it to another stage."),
     position: 'bottom',
 }, {
     trigger: 'ol.breadcrumb li.breadcrumb-item:first',
-    extra_trigger: '.o_event_form_view div[name="stage_id"] button.disabled:contains("Booked")',
+    extra_trigger: '.o_event_form_view div[name="stage_id"]',
     content: _t("Use the <b>breadcrumbs</b> to go back to your kanban overview."),
     position: 'bottom',
     run: 'click',

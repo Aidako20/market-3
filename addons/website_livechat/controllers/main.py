@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra import http, _
-from flectra.http import request
-from flectra.addons.im_livechat.controllers.main import LivechatController
+from odoo import http, _
+from odoo.http import request
+from odoo.addons.im_livechat.controllers.main import LivechatController
 
 
 class WebsiteLivechat(LivechatController):
@@ -64,5 +64,5 @@ class WebsiteLivechat(LivechatController):
         """ Override to use visitor name instead of 'Visitor' whenever a visitor start a livechat session. """
         visitor_sudo = request.env['website.visitor']._get_visitor_from_request()
         if visitor_sudo:
-            anonymous_name = visitor_sudo.display_name
+            anonymous_name = visitor_sudo.with_context(lang=visitor_sudo.lang_id.code).display_name
         return super(WebsiteLivechat, self).get_session(channel_id, anonymous_name, previous_operator_id=previous_operator_id, **kwargs)

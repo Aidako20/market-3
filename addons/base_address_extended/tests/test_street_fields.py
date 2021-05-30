@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra import models
-from flectra.tests.common import SavepointCase
+from odoo import models
+from odoo.tests.common import SavepointCase
 
 
 class TestStreetFields(SavepointCase):
@@ -35,6 +35,7 @@ class TestStreetFields(SavepointCase):
             {'country_id': us_id, 'street': '40 Chaussee de Namur'},
             {'country_id': us_id, 'street': 'Chaussee de Namur'},
             {'country_id': mx_id, 'street': 'Av. Miguel Hidalgo y Costilla 601'},
+            {'country_id': mx_id, 'street': 'Av. Miguel Hidalgo y Costilla 601/40'},
             {'country_id': ch_id, 'street': 'header Chaussee de Namur, 40 - 2b trailer'},
             {'country_id': ch_id, 'street': 'header Chaussee de Namur, 40 trailer'},
             {'country_id': ch_id, 'street': 'header Chaussee de Namur trailer'},
@@ -43,7 +44,8 @@ class TestStreetFields(SavepointCase):
             {'street_name': 'Chaussee de Namur', 'street_number': '40', 'street_number2': '2b'},
             {'street_name': 'Chaussee de Namur', 'street_number': '40', 'street_number2': False},
             {'street_name': 'de Namur', 'street_number': 'Chaussee', 'street_number2': False},
-            {'street_name': 'Av.', 'street_number': 'Miguel Hidalgo y Costilla 601', 'street_number2': False},
+            {'street_name': 'Av. Miguel Hidalgo y Costilla', 'street_number': '601', 'street_number2': False},
+            {'street_name': 'Av. Miguel Hidalgo y Costilla', 'street_number': '601', 'street_number2': '40'},
             {'street_name': 'Chaussee de Namur', 'street_number': '40', 'street_number2': '2b'},
             {'street_name': 'Chaussee de Namur', 'street_number': '40', 'street_number2': False},
             {'street_name': 'Chaussee de Namur', 'street_number': False, 'street_number2': False}
@@ -108,6 +110,7 @@ class TestStreetFields(SavepointCase):
             {'country_id': us_id, 'street': '40 Chaussee de Namur'},
             {'country_id': us_id, 'street': 'Chaussee de Namur'},
             {'country_id': mx_id, 'street': 'Av. Miguel Hidalgo y Costilla 601'},
+            {'country_id': mx_id, 'street': 'Av. Miguel Hidalgo y Costilla 601/40'},
             {'country_id': ch_id, 'street': 'header Chaussee de Namur, 40 - 2b trailer'},
             {'country_id': ch_id, 'street': 'header Chaussee de Namur, 40 trailer'},
             {'country_id': ch_id, 'street': 'header Chaussee de Namur trailer'},
@@ -116,7 +119,8 @@ class TestStreetFields(SavepointCase):
             {'street_name': 'Chaussee de Namur', 'street_number': '40', 'street_number2': '2b'},
             {'street_name': 'Chaussee de Namur', 'street_number': '40', 'street_number2': False},
             {'street_name': 'de Namur', 'street_number': 'Chaussee', 'street_number2': False},
-            {'street_name': 'Av.', 'street_number': 'Miguel Hidalgo y Costilla 601', 'street_number2': False},
+            {'street_name': 'Av. Miguel Hidalgo y Costilla', 'street_number': '601', 'street_number2': False},
+            {'street_name': 'Av. Miguel Hidalgo y Costilla', 'street_number': '601', 'street_number2': '40'},
             {'street_name': 'Chaussee de Namur', 'street_number': '40', 'street_number2': '2b'},
             {'street_name': 'Chaussee de Namur', 'street_number': '40', 'street_number2': False},
             {'street_name': 'Chaussee de Namur', 'street_number': False, 'street_number2': False}

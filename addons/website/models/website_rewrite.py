@@ -1,5 +1,5 @@
-from flectra import models, fields, api, _
-from flectra.exceptions import AccessDenied, ValidationError
+from odoo import models, fields, api, _
+from odoo.exceptions import AccessDenied, ValidationError
 
 import logging
 _logger = logging.getLogger(__name__)

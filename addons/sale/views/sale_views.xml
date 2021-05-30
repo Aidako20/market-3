@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<flectra>
+<odoo>
 
         <!-- Top menu item -->
         <menuitem id="sale_menu_root"
@@ -582,6 +582,7 @@
                                     <field name="product_uom_qty"/>
                                     <field name="product_uom" groups="uom.group_uom"/>
                                     <field name="price_subtotal"/>
+                                    <field name="price_total"/>
                                     <field name="price_tax" invisible="1"/>
                                     <field name="price_total" invisible="1"/>
                                     <field name="price_unit"/>
@@ -603,7 +604,9 @@
                                                         <div class="col-4">
                                                             <strong>
                                                                 <span class="float-right text-right">
-                                                                    <t t-esc="record.price_subtotal.value"/>
+                                                                    <t t-set="line_price" t-value="record.price_subtotal.value" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                                                    <t t-set="line_price" t-value="record.price_total.value" groups="account.group_show_line_subtotals_tax_included"/>
+                                                                    <t t-esc="line_price"/>
                                                                 </span>
                                                             </strong>
                                                         </div>
@@ -910,7 +913,7 @@
                 An order is to upsell when delivered quantities are above initially
                 ordered quantities, and the invoicing policy is based on ordered quantities.
               </p><p>
-                As an example, if you sell pre-paid hours of services, Flectra recommends you
+                As an example, if you sell pre-paid hours of services, Odoo recommends you
                 to sell extra hours when all ordered hours have been consumed.
               </p>
             </field>
@@ -1349,4 +1352,4 @@
             <field name="context">{'search_default_month':1, 'search_default_team_id': [active_id]}</field>
             <field name="help">From this report, you can have an overview of the amount invoiced to your customer. The search tool can also be used to personalise your Invoices reports and so, match this analysis to your needs.</field>
         </record>
-</flectra>
+</odoo>

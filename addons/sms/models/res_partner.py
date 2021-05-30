@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra import models
+from odoo import models
 
 
 class ResPartner(models.Model):
@@ -17,4 +17,5 @@ class ResPartner(models.Model):
     def _sms_get_number_fields(self):
         """ This method returns the fields to use to find the number to use to
         send an SMS on a record. """
+        # TDE note: should override _phone_get_number_fields but ok as sms override it
         return ['mobile', 'phone']

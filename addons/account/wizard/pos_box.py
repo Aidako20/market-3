@@ -1,5 +1,5 @@
-from flectra import models, fields, api, _
-from flectra.exceptions import UserError
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 
 class CashBox(models.TransientModel):
     _register = False

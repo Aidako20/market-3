@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from flectra import api, fields, models, _
-from flectra.tools.misc import get_lang
+from odoo import api, fields, models, _
+from odoo.tools.misc import get_lang
 
 
 class AccountCommonReport(models.TransientModel):

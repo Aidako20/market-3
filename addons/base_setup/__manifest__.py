@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name': 'Initial Setup Tools',
     'version': '1.0',
@@ -20,7 +20,7 @@ Shows you a list of applications features to install from.
     ],
     'demo': [],
     'installable': True,
-    'auto_install': True,
+    'auto_install': False,
 
     'qweb': [
         'static/src/xml/res_config_dev_tool.xml',

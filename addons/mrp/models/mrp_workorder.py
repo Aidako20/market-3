@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from collections import defaultdict
 import json
 
-from flectra import api, fields, models, _, SUPERUSER_ID
-from flectra.exceptions import UserError
-from flectra.tools import float_compare, float_round, format_datetime
+from odoo import api, fields, models, _, SUPERUSER_ID
+from odoo.exceptions import UserError
+from odoo.tools import float_compare, float_round, format_datetime
 
 
 class MrpWorkorder(models.Model):
@@ -457,6 +457,8 @@ class MrpWorkorder(models.Model):
                     })
 
             for workorders in workorders_by_bom.values():
+                if not workorders:
+                    continue
                 if workorders[0].state == 'pending':
                     workorders[0].state = 'ready'
                 for workorder in workorders:
@@ -515,6 +517,8 @@ class MrpWorkorder(models.Model):
 
         if self.product_tracking == 'serial':
             self.qty_producing = 1.0
+        else:
+            self.qty_producing = self.qty_remaining
 
         self.env['mrp.workcenter.productivity'].create(
             self._prepare_timeline_vals(self.duration, datetime.now())

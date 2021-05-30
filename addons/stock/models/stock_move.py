@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import json
 from collections import defaultdict
@@ -11,11 +11,11 @@ from re import split as regex_split
 
 from dateutil import relativedelta
 
-from flectra import SUPERUSER_ID, _, api, fields, models
-from flectra.exceptions import UserError
-from flectra.osv import expression
-from flectra.tools.float_utils import float_compare, float_is_zero, float_repr, float_round
-from flectra.tools.misc import format_date, OrderedSet
+from odoo import SUPERUSER_ID, _, api, fields, models
+from odoo.exceptions import UserError
+from odoo.osv import expression
+from odoo.tools.float_utils import float_compare, float_is_zero, float_repr, float_round
+from odoo.tools.misc import format_date, OrderedSet
 
 PROCUREMENT_PRIORITIES = [('0', 'Normal'), ('1', 'Urgent')]
 
@@ -552,7 +552,9 @@ class StockMove(models.Model):
         # Handle the write on the initial demand by updating the reserved quantity and logging
         # messages according to the state of the stock.move records.
         receipt_moves_to_reassign = self.env['stock.move']
+        move_to_recompute_state = self.env['stock.move']
         if 'product_uom_qty' in vals:
+            move_to_unreserve = self.env['stock.move']
             for move in self.filtered(lambda m: m.state not in ('done', 'draft') and m.picking_id):
                 if float_compare(vals['product_uom_qty'], move.product_uom_qty, precision_rounding=move.product_uom.rounding):
                     self.env['stock.move.line']._log_message(move.picking_id, move, 'stock.track_move_template', vals)
@@ -565,9 +567,12 @@ class StockMove(models.Model):
                 # When editing the initial demand, directly run again action assign on receipt moves.
                 receipt_moves_to_reassign |= move_to_unreserve.filtered(lambda m: m.location_id.usage == 'supplier')
                 receipt_moves_to_reassign |= (self - move_to_unreserve).filtered(lambda m: m.location_id.usage == 'supplier' and m.state in ('partially_available', 'assigned'))
+                move_to_recompute_state |= self - move_to_unreserve - receipt_moves_to_reassign
         if 'date_deadline' in vals:
             self._set_date_deadline(vals.get('date_deadline'))
         res = super(StockMove, self).write(vals)
+        if move_to_recompute_state:
+            move_to_recompute_state._recompute_state()
         if receipt_moves_to_reassign:
             receipt_moves_to_reassign._action_assign()
         return res
@@ -599,8 +604,8 @@ class StockMove(models.Model):
             # Avoids to write the exact same message multiple times.
             if last_message and last_message.subject == msg_subject:
                 continue
-            flectrabot_id = self.env['ir.model.data'].xmlid_to_res_id("base.partner_root")
-            doc.message_post(body=msg, author_id=flectrabot_id, subject=msg_subject)
+            odoobot_id = self.env['ir.model.data'].xmlid_to_res_id("base.partner_root")
+            doc.message_post(body=msg, author_id=odoobot_id, subject=msg_subject)
 
     def action_show_details(self):
         """ Returns an action that will open a form view (in a popup) allowing to work on all the

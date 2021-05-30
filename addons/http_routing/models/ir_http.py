@@ -15,13 +15,13 @@ try:
 except ImportError:
     slugify_lib = None
 
-import flectra
-from flectra import api, models, registry, exceptions, tools
-from flectra.addons.base.models.ir_http import RequestUID, ModelConverter
-from flectra.addons.base.models.qweb import QWebException
-from flectra.http import request
-from flectra.osv import expression
-from flectra.tools import config, ustr, pycompat
+import odoo
+from odoo import api, models, registry, exceptions, tools
+from odoo.addons.base.models.ir_http import RequestUID, ModelConverter
+from odoo.addons.base.models.qweb import QWebException
+from odoo.http import request
+from odoo.osv import expression
+from odoo.tools import config, ustr, pycompat
 
 from ..geoipresolver import GeoIPResolver
 
@@ -29,7 +29,7 @@ _logger = logging.getLogger(__name__)
 
 # global resolver (GeoIP API is thread-safe, for multithreaded workers)
 # This avoids blowing up open files limit
-flectra._geoip_resolver = None
+odoo._geoip_resolver = None
 
 # ------------------------------------------------------------
 # Slug API
@@ -359,11 +359,11 @@ class IrHttp(models.AbstractModel):
     @classmethod
     def _geoip_setup_resolver(cls):
         # Lazy init of GeoIP resolver
-        if flectra._geoip_resolver is not None:
+        if odoo._geoip_resolver is not None:
             return
         geofile = config.get('geoip_database')
         try:
-            flectra._geoip_resolver = GeoIPResolver.open(geofile) or False
+            odoo._geoip_resolver = GeoIPResolver.open(geofile) or False
         except Exception as e:
             _logger.warning('Cannot load GeoIP: %s', ustr(e))
 
@@ -371,8 +371,8 @@ class IrHttp(models.AbstractModel):
     def _geoip_resolve(cls):
         if 'geoip' not in request.session:
             record = {}
-            if flectra._geoip_resolver and request.httprequest.remote_addr:
-                record = flectra._geoip_resolver.resolve(request.httprequest.remote_addr) or {}
+            if odoo._geoip_resolver and request.httprequest.remote_addr:
+                record = odoo._geoip_resolver.resolve(request.httprequest.remote_addr) or {}
             request.session['geoip'] = record
 
     @classmethod
@@ -536,7 +536,7 @@ class IrHttp(models.AbstractModel):
         try:
             _, path = rule.build(arguments)
             assert path is not None
-        except flectra.exceptions.MissingError:
+        except odoo.exceptions.MissingError:
             return cls._handle_exception(werkzeug.exceptions.NotFound())
         except Exception as e:
             return cls._handle_exception(e)

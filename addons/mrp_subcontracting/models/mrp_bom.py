@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra import fields, models
-from flectra.osv.expression import AND
+from odoo import fields, models
+from odoo.osv.expression import AND
 
 class MrpBom(models.Model):
     _inherit = 'mrp.bom'

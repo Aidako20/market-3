@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from flectra import api, models, fields, _
-from flectra.exceptions import UserError
+from odoo import api, models, fields, _
+from odoo.exceptions import UserError
 
 class ResPartnerBank(models.Model):
     _inherit = 'res.partner.bank'
@@ -93,4 +93,4 @@ class ResPartnerBank(models.Model):
         Returns None if no error was found, or a string describing the first error encountered
         so that it can be reported to the user.
         """
-        return None 
+        return None

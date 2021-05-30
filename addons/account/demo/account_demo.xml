@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<flectra>
+<odoo>
     <data>
 
         <!-- TAGS FOR RETRIEVING THE DEMO ACCOUNTS -->
@@ -47,4 +47,4 @@
             <field name="property_supplier_payment_term_id" ref="account.account_payment_term_end_following_month"/>
         </record>
     </data>
-</flectra>
+</odoo>

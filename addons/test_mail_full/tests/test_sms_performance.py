@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from flectra.addons.sms.tests import common as sms_common
-from flectra.addons.test_mail.tests.test_performance import BaseMailPerformance
-from flectra.tests.common import users, warmup
-from flectra.tests import tagged
-from flectra.tools import mute_logger
+from odoo.addons.sms.tests import common as sms_common
+from odoo.addons.test_mail.tests.test_performance import BaseMailPerformance
+from odoo.tests.common import users, warmup
+from odoo.tests import tagged
+from odoo.tools import mute_logger
 
 
 @tagged('mail_performance')
@@ -45,13 +45,13 @@ class TestSMSPerformance(BaseMailPerformance, sms_common.SMSCase):
         # patch registry to simulate a ready environment
         self.patch(self.env.registry, 'ready', True)
 
-    @mute_logger('flectra.addons.sms.models.sms_sms')
+    @mute_logger('odoo.addons.sms.models.sms_sms')
     @users('employee')
     @warmup
     def test_message_sms_record_1_partner(self):
         record = self.test_record.with_user(self.env.user)
         pids = self.customer.ids
-        with self.mockSMSGateway(sms_allow_unlink=True), self.assertQueryCount(employee=23):  # test_mail_enterprise: 25
+        with self.mockSMSGateway(sms_allow_unlink=True), self.assertQueryCount(employee=23):  # test_mail_enterprise: 18
             messages = record._message_sms(
                 body='Performance Test',
                 partner_ids=pids,
@@ -60,13 +60,13 @@ class TestSMSPerformance(BaseMailPerformance, sms_common.SMSCase):
         self.assertEqual(record.message_ids[0].body, '<p>Performance Test</p>')
         self.assertSMSNotification([{'partner': self.customer}], 'Performance Test', messages, sent_unlink=True)
 
-    @mute_logger('flectra.addons.sms.models.sms_sms')
+    @mute_logger('odoo.addons.sms.models.sms_sms')
     @users('employee')
     @warmup
     def test_message_sms_record_10_partners(self):
         record = self.test_record.with_user(self.env.user)
         pids = self.partners.ids
-        with self.mockSMSGateway(sms_allow_unlink=True), self.assertQueryCount(employee=41):  # test_mail_enterprise: 43
+        with self.mockSMSGateway(sms_allow_unlink=True), self.assertQueryCount(employee=41):
             messages = record._message_sms(
                 body='Performance Test',
                 partner_ids=pids,
@@ -75,12 +75,12 @@ class TestSMSPerformance(BaseMailPerformance, sms_common.SMSCase):
         self.assertEqual(record.message_ids[0].body, '<p>Performance Test</p>')
         self.assertSMSNotification([{'partner': partner} for partner in self.partners], 'Performance Test', messages, sent_unlink=True)
 
-    @mute_logger('flectra.addons.sms.models.sms_sms')
+    @mute_logger('odoo.addons.sms.models.sms_sms')
     @users('employee')
     @warmup
     def test_message_sms_record_default(self):
         record = self.test_record.with_user(self.env.user)
-        with self.mockSMSGateway(sms_allow_unlink=True), self.assertQueryCount(employee=26):  # test_mail_enterprise: 28
+        with self.mockSMSGateway(sms_allow_unlink=True), self.assertQueryCount(employee=26):
             messages = record._message_sms(
                 body='Performance Test',
             )
@@ -128,7 +128,7 @@ class TestSMSMassPerformance(BaseMailPerformance, sms_common.MockSMS):
             'body': 'Dear ${object.display_name} this is an SMS.',
         })
 
-    @mute_logger('flectra.addons.sms.models.sms_sms')
+    @mute_logger('odoo.addons.sms.models.sms_sms')
     @users('employee')
     @warmup
     def test_composer_mass_active_domain(self):
@@ -145,7 +145,7 @@ class TestSMSMassPerformance(BaseMailPerformance, sms_common.MockSMS):
         with self.mockSMSGateway(sms_allow_unlink=True), self.assertQueryCount(employee=106):
                 composer.action_send_sms()
 
-    @mute_logger('flectra.addons.sms.models.sms_sms')
+    @mute_logger('odoo.addons.sms.models.sms_sms')
     @users('employee')
     @warmup
     def test_composer_mass_active_domain_w_log(self):

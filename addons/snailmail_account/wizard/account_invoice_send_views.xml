@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<flectra>
+<odoo>
     <data>
         <record model="ir.ui.view" id="account_invoice_send_inherit_account_wizard_form">
             <field name="name">account.invoice.send.form.inherited.snailmail</field>
@@ -23,7 +23,7 @@
                                     <i class="fa fa-info-circle" role="img" aria-label="Warning" title="Make sure you have enough Stamps on your account."/>
                                 )</b>
                             </span>
-                            <span attrs="{'invisible': ['|', ('composition_mode', '=', 'mass_mail'), ('partner_id', '=', False)]}">
+                            <span attrs="{'invisible': [('composition_mode', '=', 'mass_mail')]}">
                                 <span attrs="{'invisible': [('invalid_addresses', '!=', 0)]}">
                                     <div class="text-right text-muted d-inline-block" name="address">
                                         <span> to: </span>
@@ -62,4 +62,4 @@
         </record>
 
     </data>
-</flectra>
+</odoo>

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from flectra import api, fields, models, _
-from flectra.exceptions import UserError
-from flectra.tools.date_utils import get_month, get_fiscal_year
-from flectra.tools.misc import format_date
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
+from odoo.tools.date_utils import get_month, get_fiscal_year
+from odoo.tools.misc import format_date
 
 import re
 from collections import defaultdict

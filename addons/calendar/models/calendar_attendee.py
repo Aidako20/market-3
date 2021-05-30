@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 import uuid
 import base64
 import logging
 
-from flectra import api, fields, models, _
-from flectra.exceptions import UserError
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -109,7 +109,7 @@ class Attendee(models.Model):
             'ignore_recurrence': ignore_recurrence,
             'action_id': self.env['ir.actions.act_window'].sudo().search([('view_id', '=', calendar_view.id)], limit=1).id,
             'dbname': self._cr.dbname,
-            'base_url': self.env['ir.config_parameter'].sudo().get_param('web.base.url', default='http://localhost:7073'),
+            'base_url': self.env['ir.config_parameter'].sudo().get_param('web.base.url', default='http://localhost:8069'),
         })
 
         for attendee in self:
@@ -125,11 +125,18 @@ class Attendee(models.Model):
                                 'mimetype': 'text/calendar',
                                 'datas': base64.b64encode(ics_file)})
                     ]
-                body = invitation_template.with_context(rendering_context)._render_field(
-                    'body_html',
-                    attendee.ids,
-                    compute_lang=True,
-                    post_process=True)[attendee.id]
+                try:
+                    body = invitation_template.with_context(rendering_context)._render_field(
+                        'body_html',
+                        attendee.ids,
+                        compute_lang=True,
+                        post_process=True)[attendee.id]
+                except UserError:   #TO BE REMOVED IN MASTER
+                    body = invitation_template.sudo().with_context(rendering_context)._render_field(
+                        'body_html',
+                        attendee.ids,
+                        compute_lang=True,
+                        post_process=True)[attendee.id]
                 subject = invitation_template._render_field(
                     'subject',
                     attendee.ids,

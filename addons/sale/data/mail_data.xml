@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<flectra>
+<odoo>
     <data noupdate="1">
         <!-- Activities -->
         <record id="mail_act_sale_upsell" model="mail.activity.type">
@@ -56,7 +56,8 @@
     </data>
     <!-- Template and notification section -->
     <data noupdate="1">
-        <template id="mail_notification_paynow_online" inherit_id="mail.mail_notification_paynow" name="Quotation: Sign and Pay mail notification template">
+        <template id="mail_notification_paynow_online" inherit_id="mail.mail_notification_paynow"
+            name="Quotation: Sign and Pay mail notification template">
             <xpath expr="//t[@t-set='access_name']" position="after">
                 <t t-if="record._name == 'sale.order'">
                     <t t-set="is_transaction_pending" t-value="record.get_portal_last_transaction().state == 'pending'"/>
@@ -297,4 +298,4 @@
             <field name="auto_delete" eval="True"/>
         </record>
     </data>
-</flectra>
+</odoo>

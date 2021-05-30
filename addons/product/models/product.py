@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import logging
 import re
 
-from flectra import api, fields, models, tools, _
-from flectra.exceptions import UserError, ValidationError
-from flectra.osv import expression
+from odoo import api, fields, models, tools, _
+from odoo.exceptions import UserError, ValidationError
+from odoo.osv import expression
 
 
-from flectra.tools import float_compare
+from odoo.tools import float_compare
 
 _logger = logging.getLogger(__name__)
 
@@ -396,7 +396,7 @@ class ProductProduct(models.Model):
             self = to_unlink
 
         try:
-            with self.env.cr.savepoint(), tools.mute_logger('flectra.sql_db'):
+            with self.env.cr.savepoint(), tools.mute_logger('odoo.sql_db'):
                 self.unlink()
         except Exception:
             # We catch all kind of exceptions to be sure that the operation
@@ -427,6 +427,12 @@ class ProductProduct(models.Model):
         if self._context.get('search_default_categ_id'):
             args.append((('categ_id', 'child_of', self._context['search_default_categ_id'])))
         return super(ProductProduct, self)._search(args, offset=offset, limit=limit, order=order, count=count, access_rights_uid=access_rights_uid)
+
+    @api.depends_context('display_default_code')
+    def _compute_display_name(self):
+        # `display_name` is calling `name_get()`` which is overidden on product
+        # to depend on `display_default_code`
+        return super()._compute_display_name()
 
     def name_get(self):
         # TDE: this could be cleaned a bit I think
@@ -591,9 +597,7 @@ class ProductProduct(models.Model):
                 'target': 'new'}
 
     def _prepare_sellers(self, params=False):
-        # This search is made to avoid retrieving seller_ids from the cache.
-        return self.env['product.supplierinfo'].search([('product_tmpl_id', '=', self.product_tmpl_id.id),
-                                                        ('name.active', '=', True)]).sorted(lambda s: (s.sequence, -s.min_qty, s.price, s.id))
+        return self.seller_ids.filtered(lambda s: s.name.active).sorted(lambda s: (s.sequence, -s.min_qty, s.price, s.id))
 
     def _select_seller(self, partner_id=False, quantity=0.0, date=None, uom_id=False, params=False):
         self.ensure_one()
@@ -727,7 +731,7 @@ class ProductPackaging(models.Model):
 class SupplierInfo(models.Model):
     _name = "product.supplierinfo"
     _description = "Supplier Pricelist"
-    _order = 'sequence, min_qty desc, price'
+    _order = 'sequence, min_qty DESC, price, id'
 
     name = fields.Many2one(
         'res.partner', 'Vendor',

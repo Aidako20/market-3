@@ -1,4 +1,4 @@
-flectra.define('mrp.mrp_state', function (require) {
+odoo.define('mrp.mrp_state', function (require) {
 "use strict";
 
 var AbstractField = require('web.AbstractField');
@@ -261,6 +261,8 @@ field_registry
     .add('bullet_state', SetBulletStatus)
     .add('mrp_time_counter', TimeCounter)
     .add('embed_viewer', FieldEmbedURLViewer);
+
+fieldUtils.format.mrp_time_counter = fieldUtils.format.float_time;
 
 return FieldEmbedURLViewer;
 });

@@ -1,4 +1,4 @@
-flectra.define('web.domain_tests', function (require) {
+odoo.define('web.domain_tests', function (require) {
 "use strict";
 
 var Domain = require('web.Domain');
@@ -157,6 +157,30 @@ QUnit.module('core', {}, function () {
         assert.strictEqual(arrayToString([['name', '=', 'true']]), '[["name","=","true"]]');
 
         assert.strictEqual(arrayToString(), '[]');
+    });
+
+    QUnit.test("like, =like, ilike and =ilike", function (assert) {
+        assert.expect(16);
+
+        assert.ok(new Domain([['a', 'like', 'value']]).compute({ a: 'value' }));
+        assert.ok(new Domain([['a', 'like', 'value']]).compute({ a: 'some value' }));
+        assert.notOk(new Domain([['a', 'like', 'value']]).compute({ a: 'Some Value' }));
+        assert.notOk(new Domain([['a', 'like', 'value']]).compute({ a: false }));
+
+        assert.ok(new Domain([['a', '=like', '%value']]).compute({ a: 'value' }));
+        assert.ok(new Domain([['a', '=like', '%value']]).compute({ a: 'some value' }));
+        assert.notOk(new Domain([['a', '=like', '%value']]).compute({ a: 'Some Value' }));
+        assert.notOk(new Domain([['a', '=like', '%value']]).compute({ a: false }));
+
+        assert.ok(new Domain([['a', 'ilike', 'value']]).compute({ a: 'value' }));
+        assert.ok(new Domain([['a', 'ilike', 'value']]).compute({ a: 'some value' }));
+        assert.ok(new Domain([['a', 'ilike', 'value']]).compute({ a: 'Some Value' }));
+        assert.notOk(new Domain([['a', 'ilike', 'value']]).compute({ a: false }));
+
+        assert.ok(new Domain([['a', '=ilike', '%value']]).compute({ a: 'value' }));
+        assert.ok(new Domain([['a', '=ilike', '%value']]).compute({ a: 'some value' }));
+        assert.ok(new Domain([['a', '=ilike', '%value']]).compute({ a: 'Some Value' }));
+        assert.notOk(new Domain([['a', '=ilike', '%value']]).compute({ a: false }));
     });
 });
 });
