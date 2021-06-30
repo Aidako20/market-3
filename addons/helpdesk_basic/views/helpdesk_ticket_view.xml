@@ -11,8 +11,7 @@
                     <field name="stage_id" widget="statusbar"
                            options="{'clickable': '1', 'fold_field': 'fold'}"/>
                     <button type="object" name="action_assign_to_me" 
-                        class="btn btn-primary" string="Assign To Me" 
-                        attrs="{'invisible': [('user_id', '!=', False)]}"/>     
+                        class="btn btn-primary" string="Assign To Me"/>     
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">

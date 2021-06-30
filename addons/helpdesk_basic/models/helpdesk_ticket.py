@@ -201,11 +201,6 @@ class HelpdeskTicket(models.Model):
             if not vals.get('ticket_seq') or vals['ticket_seq'] == _('New'):
                 vals['ticket_seq'] = self.env['ir.sequence'].next_by_code('helpdesk.ticket') or _('New')
 
-            if not vals.get('team_id'):
-                teams = self.env['helpdesk.team'].search([])
-                for team in teams:
-                    vals['team_id'] = team.id
-
             partner_id = vals.get('partner_id', False)
             partner_name = vals.get('email', False)
             partner_email = vals.get('email', False)
