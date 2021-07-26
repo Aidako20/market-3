@@ -60,7 +60,7 @@ class Partner(models.Model):
                 partners = self.search([('email_normalized', '=', email_normalized)], limit=1)
                 if partners:
                     return partners
-
+        print(assert_valid_email,"::::::::::::::::assert_valid_email:::::::::")
         return super(Partner, self).find_or_create(email, assert_valid_email=assert_valid_email)
 
     def mail_partner_format(self):

@@ -200,6 +200,52 @@ class HelpdeskTicket(models.Model):
                 emails_list+= [eml]
         return emails_list
  
+    # @api.model_create_multi 
+    # def create(self, values):
+    #     for vals in values:
+    #         if not vals.get('ticket_seq') or vals['ticket_seq'] == _('New'):
+    #             vals['ticket_seq'] = self.env['ir.sequence'].next_by_code('helpdesk.ticket') or _('New')
+
+    #         partner_id = vals.get('partner_id', False)
+    #         partner_name = vals.get('email', False)
+    #         partner_email = vals.get('email', False)
+    #         if partner_email and partner_name and not partner_id:
+    #             try:
+    #                 vals['partner_id'] = self.env['res.partner'].find_or_create(
+    #                     self.get_valid_email({'to': partner_email, 'cc':''})[0]).id
+    #             except UnicodeEncodeError:
+                    
+    #                 vals['partner_id'] = self.env['res.partner'].create({
+    #                     'name': partner_name,
+    #                     'email': partner_email,
+    #                 }).id
+
+    #     partners = self.env['res.partner'].browse([vals['partner_id'] for vals in values if 'partner_id' in vals and vals.get('partner_id') and 'email' not in vals])
+    #     partner_email_map = {partner.id: partner.email for partner in partners}
+    #     partner_name_map = {partner.id: partner.name for partner in partners}
+
+    #     for vals in values:
+    #         if vals.get('issue_type_id'):
+    #             team = self.env['helpdesk.team'].search([('issue_type_ids', '=', int(vals.get('issue_type_id')))])
+    #             if team:
+    #                 vals.update({'team_id': team.id})
+    #         if vals.get('partner_id') in partner_name_map:
+    #             vals['partner_name'] = partner_name_map.get(vals['partner_id'])
+
+    #         if vals.get('team_id'):
+    #             team = self.team_id.browse(vals.get('team_id'))
+    #             vals.update(
+    #                 {'stage_id': team.stage_ids and team.stage_ids[0].id or False})
+    #         if not self.stage_id and self.team_id and self.team_id.stage_ids:
+    #             self.stage_id = self.team_id.stage_ids[0]
+
+    #     tickets = super(HelpdeskTicket, self).create(values)
+    #     for ticket in tickets:
+    #         if ticket.partner_id:
+    #             ticket.message_subscribe(partner_ids=ticket.partner_id.ids)
+
+    #     return tickets
+
     @api.model_create_multi 
     def create(self, values):
         for vals in values:
@@ -223,7 +269,8 @@ class HelpdeskTicket(models.Model):
         partners = self.env['res.partner'].browse([vals['partner_id'] for vals in values if 'partner_id' in vals and vals.get('partner_id') and 'email' not in vals])
         partner_email_map = {partner.id: partner.email for partner in partners}
         partner_name_map = {partner.id: partner.name for partner in partners}
-
+        tickets = super(HelpdeskTicket, self).create(values)
+        
         for vals in values:
             if vals.get('issue_type_id'):
                 team = self.env['helpdesk.team'].search([('issue_type_ids', '=', int(vals.get('issue_type_id')))])
@@ -232,34 +279,40 @@ class HelpdeskTicket(models.Model):
             if vals.get('partner_id') in partner_name_map:
                 vals['partner_name'] = partner_name_map.get(vals['partner_id'])
 
+        for ticket in tickets:
             if vals.get('team_id'):
-                team = self.team_id.browse(vals.get('team_id'))
+                print("-----iffffffff\n\n", vals.get('team_id'))
+                team = ticket.team_id.browse(vals.get('team_id'))
+                print("--------teammmmm\n", team)
                 vals.update(
                     {'stage_id': team.stage_ids and team.stage_ids[0].id or False})
-            if not self.stage_id and self.team_id and self.team_id.stage_ids:
-                self.stage_id = self.team_id.stage_ids[0]
-
-        tickets = super(HelpdeskTicket, self).create(values)
-        for ticket in tickets:
+                print("-----valssss\n", vals)
+            if not ticket.stage_id and ticket.team_id and ticket.team_id.stage_ids:
+                ticket.stage_id = ticket.team_id.stage_ids[0]
+            
             if ticket.partner_id:
                 ticket.message_subscribe(partner_ids=ticket.partner_id.ids)
-
         return tickets
 
     def _track_template(self, changes):
+        print("------changes", changes)
         res = super(HelpdeskTicket, self)._track_template(changes)
         stage_id = self.env['helpdesk.stage'].search([])
         ticket = self[0]
-        if ticket.stage_id.stage_type == 'draft':
-            if 'stage_id' in changes and ticket.team_id.mail_template_id:
-                res['team_id'] = (ticket.team_id.mail_template_id, {
-                    'auto_delete_message': True,
-                    'subtype_id': self.env['ir.model.data'].xmlid_to_res_id('mail.mt_note'),
-                    'email_layout_xmlid': 'mail.mail_notification_light'
-                }
-            )
+        for rec in self:
+            for stage in stage_id:
+                print(self,"------sssssstage", stage)
+                if stage.stage_type == 'draft':
+                    print("--------in ifff stage")
+                    if ticket.team_id.mail_template_id:
+                        res['team_id'] = (ticket.team_id.mail_template_id, {
+                            'auto_delete_message': True,
+                            'subtype_id': self.env['ir.model.data'].xmlid_to_res_id('mail.mt_note'),
+                            'email_layout_xmlid': 'mail.mail_notification_light'
+                        }
+                    )
         if ticket.stage_id.stage_type == 'done':
-            if 'stage_id' in changes and ticket.team_id.mail_close_tmpl_id:
+            if 'stage_id' in changes or ticket.team_id.mail_close_tmpl_id:
                 res['team_id'] = (ticket.team_id.mail_close_tmpl_id, {
                     'auto_delete_message': True,
                     'subtype_id': self.env['ir.model.data'].xmlid_to_res_id('mail.mt_note'),

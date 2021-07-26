@@ -33,3 +33,4 @@ class HelpdeskTicket(models.Model):
                     'res_id': record.id,
                     'no_auto_thread': True,
                 })
+                print("----------self.env['mail.message']", self.env['mail.message'])
