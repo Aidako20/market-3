@@ -2,7 +2,7 @@
 
 from collections import OrderedDict
 from flectra import http, _
-from flectra.http import request
+from flectra.http import request, Response
 from flectra.addons.portal.controllers.portal import CustomerPortal
 from flectra.addons.portal.controllers.portal import get_records_pager
 from flectra.addons.portal.controllers.portal import pager as portal_pager
@@ -242,17 +242,18 @@ class CustomerPortal(CustomerPortal):
         user = request.env.user
         ticket = request.env['helpdesk.ticket'].sudo().search(
             [('id', '=', ticket_id)])
-        rating = request.env['rating.rating'].sudo().search(
-            [('res_model', '=', 'helpdesk.ticket'),
-             ('res_id', '=', ticket.id),
-             ('write_uid', '=', request.session.uid)])
-        display_rating = False
-        if ticket.stage_id and ticket.stage_id.stage_type == 'done':
-            display_rating = True
-        values.update({'ticket': ticket, 'rating': rating,
-                       'priority': int(ticket.priority),
-                       'page_name': 'ticket',
-                       'display_rating': display_rating})
-        history = request.session.get('my_tickets_history', [])
-        values.update(get_records_pager(history, ticket))
-        return request.render("website_helpdesk.portal_my_ticket", values)
+        if ticket.user_id == user:
+            rating = request.env['rating.rating'].sudo().search(
+                [('res_model', '=', 'helpdesk.ticket'),
+                 ('res_id', '=', ticket.id),
+                 ('write_uid', '=', request.session.uid)])
+            display_rating = False
+            if ticket.stage_id and ticket.stage_id.stage_type == 'done':
+                display_rating = True
+            values.update({'ticket': ticket, 'rating': rating,
+                           'priority': int(ticket.priority),
+                           'page_name': 'ticket',
+                           'display_rating': display_rating})
+            history = request.session.get('my_tickets_history', [])
+            values.update(get_records_pager(history, ticket))
+            return request.render("website_helpdesk.portal_my_ticket", values)
