@@ -1,6 +1,6 @@
 # Part of flectra See LICENSE file for full copyright and licensing details.
 
-from flectra import models
+from flectra import models, fields
 
 
 class HelpdeskTicket(models.Model):

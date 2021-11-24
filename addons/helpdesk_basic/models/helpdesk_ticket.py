@@ -48,6 +48,7 @@ class HelpdeskTicket(models.Model):
                                  ('3', 'High')], default='1')
     partner_id = fields.Many2one('res.partner', string='Related Partner',
         tracking=True)
+    created_by = fields.Many2one("res.users")
     partner_name = fields.Char('Customer Name')
     email = fields.Char(string='Email')
     issue_type_id = fields.Many2one('issue.type', string='Issue Type', store=True)
@@ -64,7 +65,7 @@ class HelpdeskTicket(models.Model):
                                  compute='_compute_is_accessible')
     stage_id = fields.Many2one('helpdesk.stage', string='Stage', index=True, tracking=True,
         readonly=False, store=True,copy=False, ondelete='restrict')
-    
+
     feedback = fields.Text('Comment', help="Reason of the rating")
 
     rating_last_value = fields.Float('Rating Last Value', groups='base.group_user', compute='_compute_rating_last_value', compute_sudo=True, store=True)
@@ -119,7 +120,7 @@ class HelpdeskTicket(models.Model):
             'partner_id': msg_dict.get('author_id', False),
             'team_id': custom_values.get('team_id', False),
         }
-        
+
         if 'company_id' not in defaults and 'team_id' in defaults:
             defaults['company_id'] = self.env['helpdesk.team'].browse(defaults['team_id']).company_id.id
         return super(HelpdeskTicket, self).message_new(msg_dict, custom_values=defaults)
@@ -130,7 +131,7 @@ class HelpdeskTicket(models.Model):
 
     access_token = fields.Char('Access Token', default=_default_access_token)
 
-    
+
     @api.model
     def default_get(self, default_fields):
         vals = super(HelpdeskTicket, self).default_get(default_fields)
@@ -138,7 +139,7 @@ class HelpdeskTicket(models.Model):
             team_id = self._default_team_id()
             vals.update({'team_id': team_id})
         if 'team_id' in vals:
-            user_dict = {}  
+            user_dict = {}
             team_id = self.env['helpdesk.team'].search(
                 [("id", "=", vals['team_id'])])
             if team_id.assignment_method == 'balanced':
@@ -159,10 +160,10 @@ class HelpdeskTicket(models.Model):
     def onchange_end_date(self):
         if self.stage_id.stage_type == 'done':
             self.end_date = datetime.today()
-            
+
     def _creation_subtype(self):
         return self.env.ref('helpdesk_basic.mt_ticket_new')
-    
+
     def _track_subtype(self, init_values):
         self.ensure_one()
         if 'user_id' in init_values and self.user_id:
@@ -194,8 +195,8 @@ class HelpdeskTicket(models.Model):
             if eml.split('@')[0] not in team_aliases:
                 emails_list+= [eml]
         return emails_list
- 
-    @api.model_create_multi 
+
+    @api.model_create_multi
     def create(self, values):
         for vals in values:
             if not vals.get('ticket_seq') or vals['ticket_seq'] == _('New'):
@@ -209,7 +210,7 @@ class HelpdeskTicket(models.Model):
                     vals['partner_id'] = self.env['res.partner'].find_or_create(
                         self.get_valid_email({'to': partner_email, 'cc':''})[0]).id
                 except UnicodeEncodeError:
-                    
+
                     vals['partner_id'] = self.env['res.partner'].create({
                         'name': partner_name,
                         'email': partner_email,
@@ -279,9 +280,9 @@ class HelpdeskTicket(models.Model):
         has_group = self.env.user.has_group('base.group_no_one')
         for ticket in self:
             if self.env.user.partner_id.id == ticket.partner_id.id or \
-                    has_group:
+                    has_group or self.env.user.id == ticket.partner_id.user_id.id:
                 ticket.is_accessible = True
-            if self.env.user.id == ticket.user_id.id or has_group:
+            if self.env.user.id == ticket.user_id.id or has_group or self.env.user.id == ticket.partner_id.user_id.id:
                 ticket.is_assigned = True
 
     def _compute_attachments(self):

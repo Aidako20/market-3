@@ -44,6 +44,9 @@ class HelpdeskTicket(http.Controller):
         for k in post:
             if k=='file' or 'file_data_' in k:
                 post_data.pop(k)
+        post_data.update({
+            'created_by': request.env.user.id
+        })
         ticket = request.env['helpdesk.ticket'].sudo().create(post_data)
         for rec in team:
             if rec:
@@ -242,7 +245,7 @@ class CustomerPortal(CustomerPortal):
         user = request.env.user
         ticket = request.env['helpdesk.ticket'].sudo().search(
             [('id', '=', ticket_id)])
-        if ticket.user_id == user:
+        if ticket.created_by == user or ticket.partner_id.user_id == user:
             rating = request.env['rating.rating'].sudo().search(
                 [('res_model', '=', 'helpdesk.ticket'),
                  ('res_id', '=', ticket.id),
@@ -257,3 +260,5 @@ class CustomerPortal(CustomerPortal):
             history = request.session.get('my_tickets_history', [])
             values.update(get_records_pager(history, ticket))
             return request.render("website_helpdesk.portal_my_ticket", values)
+        else:
+            return Response("You have not rights to acsess this data.", status=404)
