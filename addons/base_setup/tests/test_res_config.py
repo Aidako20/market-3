@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from unittest.mock import patch
-from flectra.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase
 
 
 def just_raise(*args):
@@ -79,7 +79,7 @@ class TestResConfig(TransactionCase):
                 self.assertTrue(module.state != 'uninstalled',
                                 "All set modules should already be installed.")
         # if we try to install something, raise; so nothing should be installed
-        with patch('flectra.addons.base.models.ir_module.Module._button_immediate_function', new=just_raise):
+        with patch('odoo.addons.base.models.ir_module.Module._button_immediate_function', new=just_raise):
             self.config.execute()
 
     def test_install(self):
@@ -91,6 +91,6 @@ class TestResConfig(TransactionCase):
         module_to_install = next(filter(lambda m: m[1].state == 'uninstalled', config_fields['module']))
         self.config[module_to_install[0]] = True
 
-        with patch('flectra.addons.base.models.ir_module.Module._button_immediate_function', new=just_raise):
+        with patch('odoo.addons.base.models.ir_module.Module._button_immediate_function', new=just_raise):
             with self.assertRaisesRegex(Exception, "We should not be here."):
                 self.config.execute()
