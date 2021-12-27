@@ -1,4 +1,4 @@
-flectra.define('crm_iap_lead.generate_leads_steps', function (require) {
+odoo.define('crm_iap_lead.generate_leads_steps', function (require) {
 "use strict";
 
 var tour = require('web_tour.tour');
@@ -38,4 +38,4 @@ tour.tours.crm_tour.steps.splice(DragOppToWonStepIndex + 1, 0, {
 }
 });
 
-}); 
+});

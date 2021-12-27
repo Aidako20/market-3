@@ -1,4 +1,4 @@
-<flectra>
+<odoo>
     <record id="ir_cron_partner_autocomplete" model="ir.cron">
         <field name="name">Partner Autocomplete : Sync with remote DB</field>
         <field name="model_id" ref="model_res_partner_autocomplete_sync"/>
@@ -9,4 +9,4 @@
         <field name="numbercall">-1</field>
         <field eval="False" name="doall"/>
     </record>
-</flectra>
+</odoo>

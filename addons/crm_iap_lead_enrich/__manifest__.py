@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 {
     'name': 'Lead Enrichment',
@@ -19,6 +19,6 @@
         'views/res_config_settings_view.xml',
     ],
     'post_init_hook': '_synchronize_cron',
-    'auto_install': False,
+    'auto_install': True,
     'license': 'LGPL-3',
 }

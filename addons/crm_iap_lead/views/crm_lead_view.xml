@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<flectra>
+<odoo>
     <record id="crm_iap_opportunity_tree" model="ir.ui.view">
         <field name="name">crm.opportunity.inherited.tree</field>
         <field name="model">crm.lead</field>
@@ -44,4 +44,4 @@
             </xpath>
         </field>
     </record>
-</flectra>
+</odoo>

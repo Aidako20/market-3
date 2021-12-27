@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import datetime
 from dateutil.relativedelta import relativedelta
-from flectra import api, fields, models
+from odoo import api, fields, models
 
 DEFAULT_REVEAL_VIEW_WEEKS_VALID = 5
 
@@ -54,4 +54,4 @@ class CRMRevealView(models.Model):
                 rules_excluded.append(str(rule['id']))
             self.env.cr.execute(query, params)
             return rules_excluded
-        return False 
+        return False
