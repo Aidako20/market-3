@@ -58,7 +58,7 @@ const UrlPickerUserValueWidget = InputUserValueWidget.extend({
      * Called when the autocomplete change the input value.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onWebsiteURLChosen: function (ev) {
         this._value = this.inputEl.value;
@@ -646,7 +646,7 @@ options.Class.include({
 
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onGoogleFontsCustoRequest: function (ev) {
         const values = ev.data.values ? _.clone(ev.data.values) : {};

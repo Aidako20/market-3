@@ -23,11 +23,11 @@ import xmlrpclib
 
 def main():
     op = optparse.OptionParser(usage='usage: %prog [options]', version='%prog v1.2')
-    op.add_option("-d", "--database", dest="database", help="Flectra database name (default: %default)", default='flectra')
-    op.add_option("-u", "--userid", dest="userid", help="Flectra user id to connect with (default: %default)", default=1, type=int)
-    op.add_option("-p", "--password", dest="password", help="Flectra user password (default: %default)", default='admin')
-    op.add_option("--host", dest="host", help="Flectra host (default: %default)", default='localhost')
-    op.add_option("--port", dest="port", help="Flectra port (default: %default)", default=7073, type=int)
+    op.add_option("-d", "--database", dest="database", help="Odoo database name (default: %default)", default='flectra')
+    op.add_option("-u", "--userid", dest="userid", help="Odoo user id to connect with (default: %default)", default=1, type=int)
+    op.add_option("-p", "--password", dest="password", help="Odoo user password (default: %default)", default='admin')
+    op.add_option("--host", dest="host", help="Odoo host (default: %default)", default='localhost')
+    op.add_option("--port", dest="port", help="Odoo port (default: %default)", default=7073, type=int)
     (o, args) = op.parse_args()
 
     try:

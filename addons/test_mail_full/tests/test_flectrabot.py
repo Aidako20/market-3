@@ -9,11 +9,11 @@ from flectra.tools import mute_logger
 
 
 @tagged("flectrabot")
-class TestFlectrabot(TestMailCommon, TestRecipients):
+class TestOdoobot(TestMailCommon, TestRecipients):
 
     @classmethod
     def setUpClass(cls):
-        super(TestFlectrabot, cls).setUpClass()
+        super(TestOdoobot, cls).setUpClass()
         cls.test_record = cls.env['mail.test.simple'].with_context(cls._test_context).create({'name': 'Test', 'email_from': 'ignasse@example.com'})
 
         cls.flectrabot = cls.env.ref("base.partner_root")
@@ -24,7 +24,7 @@ class TestFlectrabot(TestMailCommon, TestRecipients):
             'partner_ids': [],
             'subtype_xmlid': 'mail.mt_comment'
         }
-        cls.flectrabot_ping_body = '<a href="http://flectrahq.com/web#model=res.partner&amp;id=%s" class="o_mail_redirect" data-oe-id="%s" data-oe-model="res.partner" target="_blank">@FlectraBot</a>' % (cls.flectrabot.id, cls.flectrabot.id)
+        cls.flectrabot_ping_body = '<a href="http://flectra.com/web#model=res.partner&amp;id=%s" class="o_mail_redirect" data-oe-id="%s" data-oe-model="res.partner" target="_blank">@OdooBot</a>' % (cls.flectrabot.id, cls.flectrabot.id)
         cls.test_record_employe = cls.test_record.with_user(cls.user_employee)
 
     @mute_logger('flectra.addons.mail.models.mail_mail')
@@ -46,7 +46,7 @@ class TestFlectrabot(TestMailCommon, TestRecipients):
                 sender=self.flectrabot,
                 answer=False
             )
-        # Flectrabot should not be a follower but user_employee and user_admin should
+        # Odoobot should not be a follower but user_employee and user_admin should
         follower = self.test_record.message_follower_ids.mapped('partner_id')
         self.assertNotIn(self.flectrabot, follower)
         self.assertIn(self.user_employee.partner_id, follower)
@@ -67,7 +67,7 @@ class TestFlectrabot(TestMailCommon, TestRecipients):
         self.assertNextMessage(
             last_message,  # no message will be post with command help, use last flectrabot message instead
             sender=self.flectrabot,
-            answer=("@FlectraBot",)
+            answer=("@OdooBot",)
         )
         kwargs['body'] = ''
         kwargs['partner_ids'] = [self.env['ir.model.data'].xmlid_to_res_id("base.partner_root")]

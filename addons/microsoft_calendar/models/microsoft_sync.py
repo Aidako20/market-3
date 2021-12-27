@@ -23,9 +23,9 @@ MAX_RECURRENT_EVENT = 720
 
 
 # API requests are sent to Microsoft Calendar after the current transaction ends.
-# This ensures changes are sent to Microsoft only if they really happened in the Flectra database.
+# This ensures changes are sent to Microsoft only if they really happened in the Odoo database.
 # It is particularly important for event creation , otherwise the event might be created
-# twice in Microsoft if the first creation crashed in Flectra.
+# twice in Microsoft if the first creation crashed in Odoo, Flectra.
 def after_commit(func):
     @wraps(func)
     def wrapped(self, *args, **kwargs):
@@ -242,7 +242,7 @@ class MicrosoftSync(models.AbstractModel):
 
     @api.model
     def _sync_microsoft2flectra(self, microsoft_events: MicrosoftEvent, default_reminders=()):
-        """Synchronize Microsoft recurrences in Flectra. Creates new recurrences, updates
+        """Synchronize Microsoft recurrences in Odoo, Flectra. Creates new recurrences, updates
         existing ones.
 
         :return: synchronized flectra
@@ -330,7 +330,7 @@ class MicrosoftSync(models.AbstractModel):
                 })
 
     def _get_microsoft_records_to_sync(self, full_sync=False):
-        """Return records that should be synced from Flectra to Microsoft
+        """Return records that should be synced from Odoo to Microsoft
 
         :param full_sync: If True, all events attended by the user are returned
         :return: events
@@ -347,9 +347,9 @@ class MicrosoftSync(models.AbstractModel):
 
     @api.model
     def _microsoft_to_flectra_values(self, microsoft_event: MicrosoftEvent, default_reminders=()):
-        """Implements this method to return a dict of Flectra values corresponding
+        """Implements this method to return a dict of Odoo values corresponding
         to the Microsoft event given as parameter
-        :return: dict of Flectra formatted values
+        :return: dict of Odoo formatted values
         """
         raise NotImplementedError()
 

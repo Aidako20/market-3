@@ -88,7 +88,7 @@ class AccountMove(models.Model):
                             valuation_total_qty += layers_qty
 
                         if float_is_zero(valuation_total_qty, precision_rounding=line.product_uom_id.rounding or line.product_id.uom_id.rounding):
-                            raise UserError(_('Flectra is not able to generate the anglo saxon entries. The total valuation of %s is zero.') % line.product_id.display_name)
+                            raise UserError(_('Odoo is not able to generate the anglo saxon entries. The total valuation of %s is zero.') % line.product_id.display_name)
                         valuation_price_unit = valuation_price_unit_total / valuation_total_qty
                         valuation_price_unit = line.product_id.uom_id._compute_price(valuation_price_unit, line.product_uom_id)
 

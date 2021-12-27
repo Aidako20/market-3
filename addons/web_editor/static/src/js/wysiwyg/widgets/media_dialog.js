@@ -244,7 +244,7 @@ var MediaDialog = Dialog.extend({
      * smaller modal would be displayed on top.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onHideRequest: function (ev) {
         this.$modal.addClass('d-none');
@@ -256,7 +256,7 @@ var MediaDialog = Dialog.extend({
      * click on the modal button, such as double clicking a media to select it.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onSaveRequest: function (ev) {
         ev.stopPropagation();
@@ -268,7 +268,7 @@ var MediaDialog = Dialog.extend({
      * This is for usability, it is the counterpart of @see _onHideRequest.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onShowRequest: function (ev) {
         this.$modal.removeClass('d-none');

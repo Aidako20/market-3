@@ -267,7 +267,7 @@ var GeneratePriceList = AbstractAction.extend(StandaloneFieldManagerMixin, {
      * Reload report when quantities changed.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      * @param {integer[]} event.data.quantities
      */
     _onQtyChanged: function (ev) {

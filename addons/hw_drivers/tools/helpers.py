@@ -58,7 +58,7 @@ def check_certificate():
                 for key in cert.get_subject().get_components():
                     if key[0] == b'CN':
                         cn = key[1].decode('utf-8')
-                if cn == 'FlectraTempIoTBoxCertificate' or datetime.datetime.now() > cert_end_date:
+                if cn == 'OdooTempIoTBoxCertificate' or datetime.datetime.now() > cert_end_date:
                     _logger.info(_('Your certificate %s must be updated') % (cn))
                     load_certificate()
                 else:
@@ -68,7 +68,7 @@ def check_certificate():
 
 def check_git_branch():
     """
-    Check if the local branch is the same than the connected Flectra DB and
+    Check if the local branch is the same than the connected Odoo DB and
     checkout to match it if needed.
     """
     server = get_flectra_server_url()
@@ -110,7 +110,7 @@ def check_image():
     """
     Check if the current image of IoT Box is up to date
     """
-    url = 'https://nightly.flectrahq.com/master/iotbox/SHA1SUMS.txt'
+    url = 'https://nightly.flectra.com/master/iotbox/SHA1SUMS.txt'
     urllib3.disable_warnings()
     http = urllib3.PoolManager(cert_reqs='CERT_NONE')
     response = http.request('GET', url)
@@ -195,12 +195,12 @@ def get_wifi_essid():
 
 def load_certificate():
     """
-    Send a request to Flectra with customer db_uuid and enterprise_code to get a true certificate
+    Send a request to Odoo with customer db_uuid and enterprise_code to get a true certificate
     """
     db_uuid = read_file_first_line('flectra-db-uuid.conf')
     enterprise_code = read_file_first_line('flectra-enterprise-code.conf')
     if db_uuid and enterprise_code:
-        url = 'https://www.flectrahq.com/flectra-enterprise/iot/x509'
+        url = 'https://www.flectra.com/flectra-enterprise/iot/x509'
         data = {
             'params': {
                 'db_uuid': db_uuid,
@@ -231,7 +231,7 @@ def load_certificate():
 
 def download_iot_handlers(auto=True):
     """
-    Get the drivers from the configured Flectra server
+    Get the drivers from the configured Odoo server
     """
     server = get_flectra_server_url()
     if server:

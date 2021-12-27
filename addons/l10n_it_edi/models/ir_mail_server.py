@@ -358,7 +358,7 @@ class FetchmailServer(models.Model):
             # This is the file sent by the ES to the addressee together with the invoice file,
             # containing the main reference data of the file useful for processing, including
             # the IdentificativoSDI.
-            # Useless for Flectra
+            # Useless for Odoo
 
         elif receipt_type == 'DT':
             # Deadline passed notice

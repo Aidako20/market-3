@@ -90,7 +90,7 @@ class TestSaleExpectedDate(ValuationReconciliationTestCommon):
 
     def test_sale_order_commitment_date(self):
 
-        # In order to test the Commitment Date feature in Sales Orders in Flectra,
+        # In order to test the Commitment Date feature in Sales Orders in Odoo,
         # I copy a demo Sales Order with committed Date on 2010-07-12
         new_order = self.env['sale.order'].create({
             'partner_id': self.env['res.partner'].create({'name': 'A Partner'}).id,

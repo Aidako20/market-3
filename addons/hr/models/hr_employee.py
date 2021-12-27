@@ -105,7 +105,7 @@ class HrEmployeePrivate(models.Model):
         string='Tags')
     # misc
     notes = fields.Text('Notes', groups="hr.group_hr_user")
-    color = fields.Integer('Color Index', default=0, groups="hr.group_hr_user")
+    color = fields.Integer('Color Index', default=0)
     barcode = fields.Char(string="Badge ID", help="ID used for employee identification.", groups="hr.group_hr_user", copy=False)
     pin = fields.Char(string="PIN", groups="hr.group_hr_user", copy=False,
         help="PIN used to Check In/Out in Kiosk Mode (if enabled in Configuration).")
@@ -315,7 +315,7 @@ class HrEmployeePrivate(models.Model):
     def _post_author(self):
         """
         When a user updates his own employee's data, all operations are performed
-        by super user. However, tracking messages should not be posted as FlectraBot
+        by super user. However, tracking messages should not be posted as OdooBot
         but as the actual user.
         This method is used in the overrides of `_message_log` and `message_post`
         to post messages as the correct user.

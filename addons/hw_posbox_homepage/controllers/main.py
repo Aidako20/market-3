@@ -111,7 +111,7 @@ class IoTboxHomepage(web.Home):
             if interface != '__pycache__':
                 interfaces_list.append(interface)
         return handler_list_template.render({
-            'title': "Flectra's IoT Box - Handlers list",
+            'title': "Odoo's IoT Box - Handlers list",
             'breadcrumb': 'Handlers list',
             'drivers_list': drivers_list,
             'interfaces_list': interfaces_list,
@@ -127,7 +127,7 @@ class IoTboxHomepage(web.Home):
     @http.route('/list_credential', type='http', auth='none', website=True)
     def list_credential(self):
         return list_credential_template.render({
-            'title': "Flectra's IoT Box - List credential",
+            'title': "Odoo's IoT Box - List credential",
             'breadcrumb': 'List credential',
             'db_uuid': helpers.read_file_first_line('flectra-db-uuid.conf'),
             'enterprise_code': helpers.read_file_first_line('flectra-enterprise-code.conf'),
@@ -170,7 +170,7 @@ class IoTboxHomepage(web.Home):
         if server:
             res_payload['server'] = {
                 'url': server,
-                'message': 'Redirect to Flectra Server'
+                'message': 'Redirect to Odoo Server'
             }
         else:
             res_payload['server'] = {
@@ -241,8 +241,8 @@ class IoTboxHomepage(web.Home):
     @http.route('/server', type='http', auth='none', website=True)
     def server(self):
         return server_config_template.render({
-            'title': 'IoT -> Flectra server configuration',
-            'breadcrumb': 'Configure Flectra Server',
+            'title': 'IoT -> Odoo server configuration',
+            'breadcrumb': 'Configure Odoo Server',
             'hostname': subprocess.check_output('hostname').decode('utf-8').strip('\n'),
             'server_status': helpers.get_flectra_server_url() or 'Not configured yet',
             'loading_message': 'Configure Domain Server'
@@ -298,7 +298,7 @@ class IoTboxHomepage(web.Home):
         if flashToVersion:
             flashToVersion = '%s.%s' % (flashToVersion.get('major', ''), flashToVersion.get('minor', ''))
         return upgrade_page_template.render({
-            'title': "Flectra's IoTBox - Software Upgrade",
+            'title': "Odoo's IoTBox - Software Upgrade",
             'breadcrumb': 'IoT Box Software Upgrade',
             'loading_message': 'Updating IoT box',
             'commit': commit,

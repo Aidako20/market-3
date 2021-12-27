@@ -156,7 +156,7 @@ var EditPageMenu = websiteNavbarData.WebsiteNavbarActionWidget.extend({
      * WebsiteRoot that is should stop the public widgets.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onContentWillBeDestroyed: function (ev) {
         this.trigger_up('widgets_stop_request', {
@@ -168,7 +168,7 @@ var EditPageMenu = websiteNavbarData.WebsiteNavbarActionWidget.extend({
      * WebsiteRoot that is should start the public widgets.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onContentWasRecreated: function (ev) {
         this.trigger_up('widgets_start_request', {
@@ -181,7 +181,7 @@ var EditPageMenu = websiteNavbarData.WebsiteNavbarActionWidget.extend({
      * WebsiteRoot that is should stop the public widgets.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onEditionWillStop: function (ev) {
         this.$editorMessageElements && this.$editorMessageElements.removeAttr('data-editor-message');
@@ -194,7 +194,7 @@ var EditPageMenu = websiteNavbarData.WebsiteNavbarActionWidget.extend({
      * WebsiteRoot that is should start the public widgets.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onEditionWasStopped: function (ev) {
         this.trigger_up('widgets_start_request', {
@@ -207,7 +207,7 @@ var EditPageMenu = websiteNavbarData.WebsiteNavbarActionWidget.extend({
      * WebsiteRoot that is should destroy the animations for this snippet.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onSnippetWillBeCloned: function (ev) {
         this.trigger_up('widgets_stop_request', {
@@ -220,7 +220,7 @@ var EditPageMenu = websiteNavbarData.WebsiteNavbarActionWidget.extend({
      * was cloned from.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onSnippetCloned: function (ev) {
         this.trigger_up('widgets_start_request', {
@@ -241,7 +241,7 @@ var EditPageMenu = websiteNavbarData.WebsiteNavbarActionWidget.extend({
      * editor messages.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onSnippetDropped: function (ev) {
         this.trigger_up('widgets_start_request', {

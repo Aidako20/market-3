@@ -40,7 +40,7 @@ var QuickCreateFormRenderer = FormRenderer.extend({
     /**
      * @override
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onNavigationMove: function (ev) {
         var direction = ev.data.direction;

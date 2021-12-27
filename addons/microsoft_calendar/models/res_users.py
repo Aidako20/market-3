@@ -82,11 +82,11 @@ class User(models.Model):
                 full_sync = True
         self.microsoft_calendar_sync_token = next_sync_token
 
-        # Microsoft -> Flectra
+        # Microsoft -> Odoo
         recurrences = events.filter(lambda e: e.is_recurrent())
         synced_events, synced_recurrences = self.env['calendar.event']._sync_microsoft2flectra(events, default_reminders=default_reminders) if events else (self.env['calendar.event'], self.env['calendar.recurrence'])
 
-        # Flectra -> Microsoft
+        # Odoo -> Microsoft
         recurrences = self.env['calendar.recurrence']._get_microsoft_records_to_sync(full_sync=full_sync)
         recurrences -= synced_recurrences
         recurrences._sync_flectra2microsoft(calendar_service)

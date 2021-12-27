@@ -91,7 +91,7 @@ $.fn.extend({
         return o;
     },
     /**
-     * Makes DOM elements bounce the way Flectra decided it.
+     * Makes DOM elements bounce the way Odoo decided it.
      *
      * @param {string} [extraClass]
      */

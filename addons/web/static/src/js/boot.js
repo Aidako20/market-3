@@ -1,6 +1,6 @@
 /**
  *------------------------------------------------------------------------------
- * Flectra Web Boostrap Code
+ * Odoo Web Boostrap Code
  *------------------------------------------------------------------------------
  *
  * Each module can return a promise. In that case, the module is marked as loaded

@@ -23,7 +23,7 @@ var LongpollingBus = Bus.extend(ServicesMixin, {
     // properties
     _isActive: null,
     _lastNotificationID: 0,
-    _isFlectraFocused: true,
+    _isOdooFocused: true,
     _pollRetryTimeout: null,
 
     /**
@@ -105,8 +105,8 @@ var LongpollingBus = Bus.extend(ServicesMixin, {
      *
      * @returns {boolean}
      */
-    isFlectraFocused: function () {
-        return this._isFlectraFocused;
+    isOdooFocused: function () {
+        return this._isOdooFocused;
     },
     /**
      * Start a long polling, i.e. it continually opens a long poll
@@ -220,10 +220,10 @@ var LongpollingBus = Bus.extend(ServicesMixin, {
      * @param {Boolean} params.focus
      */
     _onFocusChange: function (params) {
-        this._isFlectraFocused = params.focus;
+        this._isOdooFocused = params.focus;
         if (params.focus) {
             this._lastPresenceTime = new Date().getTime();
-            this.trigger('window_focus', this._isFlectraFocused);
+            this.trigger('window_focus', this._isOdooFocused);
         }
     },
     /**

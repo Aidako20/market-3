@@ -136,7 +136,7 @@ weSnippetEditor.Class.include({
     },
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      * @param {string} gmapRequestEventName
      */
     async _handleGMapRequest(ev, gmapRequestEventName) {
@@ -165,14 +165,14 @@ weSnippetEditor.Class.include({
 
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onGMapAPIRequest(ev) {
         this._handleGMapRequest(ev, 'gmap_api_request');
     },
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onGMapAPIKeyRequest(ev) {
         this._handleGMapRequest(ev, 'gmap_api_key_request');

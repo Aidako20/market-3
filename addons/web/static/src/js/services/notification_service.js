@@ -92,7 +92,7 @@ var NotificationService = AbstractService.extend({
 
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onCloseNotification: function (ev) {
         ev.stopPropagation();

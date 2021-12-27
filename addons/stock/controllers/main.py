@@ -31,7 +31,7 @@ class StockReportController(http.Controller):
             se = _serialize_exception(e)
             error = {
                 'code': 200,
-                'message': 'Flectra Server Error',
+                'message': 'Odoo Server Error',
                 'data': se
             }
             return request.make_response(html_escape(json.dumps(error)))

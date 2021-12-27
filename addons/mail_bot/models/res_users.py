@@ -15,7 +15,7 @@ class Users(models.Model):
             ('onboarding_ping', 'Onboarding ping'),
             ('idle', 'Idle'),
             ('disabled', 'Disabled'),
-        ], string="FlectraBot Status", readonly=True, required=False)  # keep track of the state: correspond to the code of the last message sent
+        ], string="OdooBot Status", readonly=True, required=False)  # keep track of the state: correspond to the code of the last message sent
     flectrabot_failed = fields.Boolean(readonly=True)
 
     def __init__(self, pool, cr):

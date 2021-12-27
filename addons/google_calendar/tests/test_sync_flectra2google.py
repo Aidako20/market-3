@@ -14,7 +14,7 @@ from flectra.addons.google_calendar.tests.test_sync_common import TestSyncGoogle
 
 
 @patch.object(User, '_get_google_calendar_token', lambda user: 'dummy-token')
-class TestSyncFlectra2Google(TestSyncGoogle):
+class TestSyncOdoo2Google(TestSyncGoogle):
 
     def setUp(self):
         super().setUp()

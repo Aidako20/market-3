@@ -15,7 +15,7 @@ class ResConfigSettings(models.TransientModel):
 
     fail_counter = fields.Integer('Fail Mail', readonly=True)
     alias_domain = fields.Char('Alias Domain', help="If you have setup a catch-all email domain redirected to "
-                               "the Flectra server, enter the domain name here.", config_parameter='mail.catchall.domain')
+                               "the Odoo server, enter the domain name here.", config_parameter='mail.catchall.domain')
 
     @api.model
     def get_values(self):

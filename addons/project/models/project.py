@@ -1324,11 +1324,11 @@ class Task(models.Model):
     def _notify_email_header_dict(self):
         headers = super(Task, self)._notify_email_header_dict()
         if self.project_id:
-            current_objects = [h for h in headers.get('X-Flectra-Objects', '').split(',') if h]
+            current_objects = [h for h in headers.get('X-Odoo-Objects', '').split(',') if h]
             current_objects.insert(0, 'project.project-%s, ' % self.project_id.id)
-            headers['X-Flectra-Objects'] = ','.join(current_objects)
+            headers['X-Odoo-Objects'] = ','.join(current_objects)
         if self.tag_ids:
-            headers['X-Flectra-Tags'] = ','.join(self.tag_ids.mapped('name'))
+            headers['X-Odoo-Tags'] = ','.join(self.tag_ids.mapped('name'))
         return headers
 
     def _message_post_after_hook(self, message, msg_vals):

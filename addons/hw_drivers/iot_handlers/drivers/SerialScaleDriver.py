@@ -16,7 +16,7 @@ from flectra.addons.hw_drivers.iot_handlers.drivers.SerialBaseDriver import Seri
 
 _logger = logging.getLogger(__name__)
 
-# Only needed to ensure compatibility with older versions of Flectra
+# Only needed to ensure compatibility with older versions of Odoo
 ACTIVE_SCALE = None
 new_weight_event = threading.Event()
 
@@ -80,7 +80,7 @@ ADAMEquipmentProtocol = ScaleProtocol(
 )
 
 
-# Ensures compatibility with older versions of Flectra
+# Ensures compatibility with older versions of Odoo
 class ScaleReadOldRoute(http.Controller):
     @http.route('/hw_proxy/scale_read', type='json', auth='none', cors='*')
     def scale_read(self):
@@ -99,13 +99,13 @@ class ScaleDriver(SerialDriver):
         self._set_actions()
         self._is_reading = True
 
-        # Ensures compatibility with older versions of Flectra
+        # Ensures compatibility with older versions of Odoo
         # Only the last scale connected is kept
         global ACTIVE_SCALE
         ACTIVE_SCALE = self
         proxy_drivers['scale'] = ACTIVE_SCALE
 
-    # Ensures compatibility with older versions of Flectra
+    # Ensures compatibility with older versions of Odoo
     # and allows using the `ProxyDevice` in the point of sale to retrieve the status
     def get_status(self):
         """Allows `hw_proxy.Proxy` to retrieve the status of the scales"""
@@ -189,7 +189,7 @@ class ScaleDriver(SerialDriver):
                 'status': self._status
             }
 
-    # Ensures compatibility with older versions of Flectra
+    # Ensures compatibility with older versions of Odoo
     def _scale_read_old_route(self):
         """Used when the iot app is not installed"""
         with self._device_lock:
@@ -282,7 +282,7 @@ class AdamEquipmentDriver(ScaleDriver):
         else:
             time.sleep(0.5)
 
-    # Ensures compatibility with older versions of Flectra
+    # Ensures compatibility with older versions of Odoo
     def _scale_read_old_route(self):
         """Used when the iot app is not installed"""
 

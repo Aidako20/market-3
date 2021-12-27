@@ -147,7 +147,7 @@ var Apps = AbstractAction.extend({
 
                 resolve();
             }, function() {
-                self.do_warn(_t('Flectra Apps will be available soon'), _t('Showing locally available modules'), true);
+                self.do_warn(_t('Odoo Apps will be available soon'), _t('Showing locally available modules'), true);
                 return self._rpc({
                     route: '/web/action/load',
                     params: {action_id: self.failback_action_id},

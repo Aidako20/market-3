@@ -5,7 +5,7 @@ var AbstractAction = require('web.AbstractAction');
 var core = require('web.core');
 
 
-var IapFlectraCreditRedirect = AbstractAction.extend({
+var IapOdooCreditRedirect = AbstractAction.extend({
     template: 'iap.redirect_to_flectra_credit',
     events : {
         "click .redirect_confirm" : "flectra_redirect",
@@ -22,5 +22,5 @@ var IapFlectraCreditRedirect = AbstractAction.extend({
     },
 
 });
-core.action_registry.add('iap_flectra_credit_redirect', IapFlectraCreditRedirect);
+core.action_registry.add('iap_flectra_credit_redirect', IapOdooCreditRedirect);
 });

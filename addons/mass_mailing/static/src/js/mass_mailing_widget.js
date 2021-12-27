@@ -333,7 +333,7 @@ var MassMailingFieldHtml = FieldHtml.extend({
     },
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onSnippetsLoaded: function (ev) {
         var self = this;

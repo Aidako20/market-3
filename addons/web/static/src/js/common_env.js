@@ -3,7 +3,7 @@ flectra.define("web.commonEnv", function (require) {
 
     /**
      * This file defines the common environment, which contains everything that
-     * is needed in the env for both the backend and the frontend (Flectra
+     * is needed in the env for both the backend and the frontend (Odoo
      * terminology). This module shouldn't be used as is. It should only be
      * imported by the module defining the final env to use (in the frontend or
      * in the backend). For instance, module 'web.env' imports it, adds stuff to

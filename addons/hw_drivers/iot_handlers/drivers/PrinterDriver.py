@@ -156,7 +156,7 @@ class PrinterDriver(Driver):
             self.send_status()
 
     def send_status(self):
-        """ Sends the current status of the printer to the connected Flectra instance.
+        """ Sends the current status of the printer to the connected Odoo instance.
         """
         self.data = {
             'value': '',

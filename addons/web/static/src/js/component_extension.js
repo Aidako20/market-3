@@ -1,6 +1,6 @@
 (function () {
     /**
-     * Symbol used in ComponentWrapper to redirect Owl events to Flectra legacy
+     * Symbol used in ComponentWrapper to redirect Owl events to Odoo legacy
      * events.
      */
     flectra.widgetSymbol = Symbol('widget');

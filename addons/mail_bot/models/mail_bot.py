@@ -44,7 +44,7 @@ class MailBot(models.AbstractModel):
             elif flectrabot_state == 'onboarding_command' and command == 'help':
                 self.env.user.flectrabot_state = "onboarding_ping"
                 self.env.user.flectrabot_failed = False
-                return _("Wow you are a natural!<br/>Ping someone with @username to grab their attention. <b>Try to ping me using</b> <span class=\"o_flectrabot_command\">@FlectraBot</span> in a sentence.")
+                return _("Wow you are a natural!<br/>Ping someone with @username to grab their attention. <b>Try to ping me using</b> <span class=\"o_flectrabot_command\">@OdooBot</span> in a sentence.")
             elif flectrabot_state == 'onboarding_ping' and self._is_bot_pinged(values):
                 self.env.user.flectrabot_state = "onboarding_attachement"
                 self.env.user.flectrabot_failed = False
@@ -52,7 +52,7 @@ class MailBot(models.AbstractModel):
             elif flectrabot_state == 'onboarding_attachement' and values.get("attachment_ids"):
                 self.env.user.flectrabot_state = "idle"
                 self.env.user.flectrabot_failed = False
-                return _("I am a simple bot, but if that's a dog, he is the cutest 😊 <br/>Congratulations, you finished this tour. You can now <b>close this chat window</b>. Enjoy discovering Flectra.")
+                return _("I am a simple bot, but if that's a dog, he is the cutest 😊 <br/>Congratulations, you finished this tour. You can now <b>close this chat window</b>. Enjoy discovering Odoo, Flectra.")
             elif flectrabot_state in (False, "idle", "not_initialized") and (_('start the tour') in body.lower()):
                 self.env.user.flectrabot_state = "onboarding_emoji"
                 return _("To start, try to send me an emoji :)")
@@ -64,8 +64,8 @@ class MailBot(models.AbstractModel):
             # help message
             elif self._is_help_requested(body) or flectrabot_state == 'idle':
                 return _("Unfortunately, I'm just a bot 😞 I don't understand! If you need help discovering our product, please check "
-                         "<a href=\"https://www.flectrahq.com/page/docs\" target=\"_blank\">our documentation</a> or "
-                         "<a href=\"https://www.flectrahq.com/slides\" target=\"_blank\">our videos</a>.")
+                         "<a href=\"https://www.flectra.com/page/docs\" target=\"_blank\">our documentation</a> or "
+                         "<a href=\"https://www.flectra.com/slides\" target=\"_blank\">our videos</a>.")
             else:
                 # repeat question
                 if flectrabot_state == 'onboarding_emoji':
@@ -79,7 +79,7 @@ class MailBot(models.AbstractModel):
                     return _("Not sure what you are doing. Please, type <span class=\"o_flectrabot_command\">/</span> and wait for the propositions. Select <span class=\"o_flectrabot_command\">help</span> and press enter")
                 elif flectrabot_state == 'onboarding_ping':
                     self.env.user.flectrabot_failed = True
-                    return _("Sorry, I am not listening. To get someone's attention, <b>ping him</b>. Write <span class=\"o_flectrabot_command\">@FlectraBot</span> and select me.")
+                    return _("Sorry, I am not listening. To get someone's attention, <b>ping him</b>. Write <span class=\"o_flectrabot_command\">@OdooBot</span> and select me.")
                 return random.choice([
                     _("I'm not smart enough to answer your question.<br/>To follow my guide, ask: <span class=\"o_flectrabot_command\">start the tour</span>."),
                     _("Hmmm..."),
