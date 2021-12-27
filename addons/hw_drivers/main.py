@@ -22,7 +22,7 @@ iot_devices = {}
 class Manager(Thread):
     def send_alldevices(self):
         """
-        This method send IoT Box and devices informations to Flectra database
+        This method send IoT Box and devices informations to Odoo database
         """
         server = helpers.get_flectra_server_url()
         if server:
@@ -65,7 +65,7 @@ class Manager(Thread):
                 _logger.error('Could not reach configured server')
                 _logger.error('A error encountered : %s ' % e)
         else:
-            _logger.warning('Flectra server not set')
+            _logger.warning('Odoo server not set')
 
     def run(self):
         """

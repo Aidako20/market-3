@@ -9,16 +9,16 @@ from werkzeug import urls
 
 from flectra import _, api, fields, models
 from flectra.exceptions import ValidationError
-from flectra.addons.payment_odoo_by_adyen.controllers.main import FlectraByAdyenController
+from flectra.addons.payment_flectra_by_adyen.controllers.main import OdooByAdyenController
 
 _logger = logging.getLogger(__name__)
 
 
-class AcquirerFlectraByAdyen(models.Model):
+class AcquirerOdooByAdyen(models.Model):
     _inherit = 'payment.acquirer'
 
     provider = fields.Selection(selection_add=[
-       ('flectra_adyen', 'Flectra Payments by Adyen')
+       ('flectra_adyen', 'Odoo Payments by Adyen')
     ], ondelete={'flectra_adyen': 'set default'})
     flectra_adyen_account_id = fields.Many2one('adyen.account', required_if_provider='flectra_adyen', related='company_id.adyen_account_id')
     flectra_adyen_payout_id = fields.Many2one('adyen.payout', required_if_provider='flectra_adyen', string='Adyen Payout', domain="[('adyen_account_id', '=', flectra_adyen_account_id)]")
@@ -27,10 +27,10 @@ class AcquirerFlectraByAdyen(models.Model):
     def _check_flectra_adyen_test(self):
         for payment_acquirer in self:
             if payment_acquirer.provider == 'flectra_adyen' and payment_acquirer.state == 'test':
-                raise ValidationError(_('Flectra Payments by Adyen is not available in test mode.'))
+                raise ValidationError(_('Odoo Payments by Adyen is not available in test mode.'))
 
     def _get_feature_support(self):
-        res = super(AcquirerFlectraByAdyen, self)._get_feature_support()
+        res = super(AcquirerOdooByAdyen, self)._get_feature_support()
         res['tokenize'].append('flectra_adyen')
         return res
 
@@ -64,7 +64,7 @@ class AcquirerFlectraByAdyen(models.Model):
             'shopperLocale': values.get('partner_lang'),
             'metadata': {
                 'merchant_signature': self._flectra_adyen_compute_signature(values['amount'],values['currency'],values['reference']),
-                'notification_url': urls.url_join(base_url, FlectraByAdyenController._notification_url),
+                'notification_url': urls.url_join(base_url, OdooByAdyenController._notification_url),
             },
             'returnUrl': urls.url_join(self.get_base_url(), '/payment/process'),
         }
@@ -89,7 +89,7 @@ class AcquirerFlectraByAdyen(models.Model):
     def flectra_adyen_create_account(self):
         return self.env['adyen.account'].action_create_redirect()
 
-class TxFlectraByAdyen(models.Model):
+class TxOdooByAdyen(models.Model):
     _inherit = 'payment.transaction'
 
     def flectra_adyen_s2s_do_transaction(self, **kwargs):
@@ -110,7 +110,7 @@ class TxFlectraByAdyen(models.Model):
             'shopperInteraction': 'ContAuth',
             'metadata': {
                 'merchant_signature': self.acquirer_id._flectra_adyen_compute_signature(self.amount, self.currency_id, self.reference),
-                'notification_url': urls.url_join(base_url, FlectraByAdyenController._notification_url),
+                'notification_url': urls.url_join(base_url, OdooByAdyenController._notification_url),
             },
             'returnUrl': urls.url_join(self.get_base_url(), '/payment/process'),
         }
@@ -120,13 +120,13 @@ class TxFlectraByAdyen(models.Model):
     def _flectra_adyen_form_get_tx_from_data(self, data):
         reference = data.get('merchantReference')
         if not reference:
-            error_msg = _('Flectra Payments by Adyen: received data with missing reference (%s)', reference)
+            error_msg = _('Odoo Payments by Adyen: received data with missing reference (%s)', reference)
             _logger.info(error_msg)
             raise ValidationError(error_msg)
 
         tx = self.env['payment.transaction'].search([('reference', '=', reference)])
         if not tx or len(tx) > 1:
-            error_msg = _('Flectra Payments by Adyen: received data for reference %s') % (reference)
+            error_msg = _('Odoo Payments by Adyen: received data for reference %s') % (reference)
             if not tx:
                 error_msg += _('; no order found')
             else:
@@ -173,7 +173,7 @@ class TxFlectraByAdyen(models.Model):
             self._set_transaction_done()
             return True
         else:
-            error = _('Flectra Payment by Adyen: feedback error')
+            error = _('Odoo Payment by Adyen: feedback error')
             _logger.info(error)
             self.write({'state_message': error})
             self._set_transaction_cancel()

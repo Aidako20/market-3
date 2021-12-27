@@ -108,7 +108,7 @@ var RootWidget = Widget.extend({
      * Get the curuent session module.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onGetSession: function (event) {
         if (event.data.callback) {
@@ -119,7 +119,7 @@ var RootWidget = Widget.extend({
      * Called when the linked registry is updated after this `RootWidget`
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onRegistryUpdate: function (ev) {
         ev.stopPropagation();

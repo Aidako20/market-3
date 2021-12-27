@@ -9,7 +9,7 @@ from flectra.tests.common import new_test_user
 from flectra.addons.google_calendar.tests.test_sync_common import TestSyncGoogle, patch_api
 
 
-class TestSyncGoogle2Flectra(TestSyncGoogle):
+class TestSyncGoogle2Odoo(TestSyncGoogle):
 
     @property
     def now(self):

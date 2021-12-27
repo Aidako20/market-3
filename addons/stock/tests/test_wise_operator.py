@@ -130,7 +130,7 @@ class TestWiseOperator(TransactionCase):
         delivery_order_wise2.action_assign()
         self.assertEqual(delivery_order_wise2.state, 'assigned')
 
-        # The operator is a wise guy and decides to do the opposite of what Flectra proposes.
+        # The operator is a wise guy and decides to do the opposite of what Odoo proposes.
         # He uses the products reserved on picking 1 on picking 2 and vice versa
         move1 = delivery_order_wise1.move_lines[0]
         move2 = delivery_order_wise2.move_lines[0]

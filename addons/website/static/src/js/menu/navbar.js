@@ -243,7 +243,7 @@ var WebsiteNavbar = publicWidget.RootWidget.extend({
      * children have something to save.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onSave: function (ev) {
         ev.data.defs.push(this._handleAction('on_save'));

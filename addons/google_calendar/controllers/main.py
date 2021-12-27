@@ -10,11 +10,11 @@ class GoogleCalendarController(http.Controller):
 
     @http.route('/google_calendar/sync_data', type='json', auth='user')
     def sync_data(self, model, **kw):
-        """ This route/function is called when we want to synchronize Flectra
+        """ This route/function is called when we want to synchronize Odoo
             calendar with Google Calendar.
             Function return a dictionary with the status :  need_config_from_admin, need_auth,
             need_refresh, success if not calendar_event
-            The dictionary may contains an url, to allow Flectra Client to redirect user on
+            The dictionary may contains an url, to allow Odoo Client to redirect user on
             this URL for authorization for example
         """
         if model == 'calendar.event':
@@ -33,7 +33,7 @@ class GoogleCalendarController(http.Controller):
                     "action": action_id
                 }
 
-            # Checking that user have already accepted Flectra to access his calendar !
+            # Checking that user have already accepted Odoo to access his calendar !
             if not GoogleCal.is_authorized(request.env.user):
                 url = GoogleCal._google_authentication_url(from_url=kw.get('fromurl'))
                 return {

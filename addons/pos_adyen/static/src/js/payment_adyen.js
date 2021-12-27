@@ -38,7 +38,7 @@ var PaymentAdyen = PaymentInterface.extend({
         if (line) {
             line.set_payment_status('retry');
         }
-        this._show_error(_t('Could not connect to the Flectra server, please check your internet connection and try again.'));
+        this._show_error(_t('Could not connect to the Odoo server, please check your internet connection and try again.'));
 
         return Promise.reject(data); // prevent subsequent onFullFilled's from being called
     },
@@ -51,7 +51,7 @@ var PaymentAdyen = PaymentInterface.extend({
         }, {
             // When a payment terminal is disconnected it takes Adyen
             // a while to return an error (~6s). So wait 10 seconds
-            // before concluding Flectra is unreachable.
+            // before concluding Odoo is unreachable.
             timeout: 10000,
             shadow: true,
         }).catch(this._handle_flectra_connection_failure.bind(this));

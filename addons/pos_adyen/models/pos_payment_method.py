@@ -17,14 +17,14 @@ class PosPaymentMethod(models.Model):
     _inherit = 'pos.payment.method'
 
     def _get_payment_terminal_selection(self):
-        return super(PosPaymentMethod, self)._get_payment_terminal_selection() + [('flectra_adyen', 'Flectra Payments by Adyen'), ('adyen', 'Adyen')]
+        return super(PosPaymentMethod, self)._get_payment_terminal_selection() + [('flectra_adyen', 'Odoo Payments by Adyen'), ('adyen', 'Adyen')]
 
     # Adyen
     adyen_api_key = fields.Char(string="Adyen API key", help='Used when connecting to Adyen: https://docs.adyen.com/user-management/how-to-get-the-api-key/#description', copy=False)
     adyen_terminal_identifier = fields.Char(help='[Terminal model]-[Serial number], for example: P400Plus-123456789', copy=False)
     adyen_test_mode = fields.Boolean(help='Run transactions in the test environment.')
 
-    # Flectra Payments by Adyen
+    # Odoo Payments by Adyen
     adyen_account_id = fields.Many2one('adyen.account', related='company_id.adyen_account_id')
     adyen_payout_id = fields.Many2one('adyen.payout', string='Adyen Payout', domain="[('adyen_account_id', '=', adyen_account_id)]")
     adyen_terminal_id = fields.Many2one('adyen.terminal', string='Adyen Terminal', domain="[('adyen_account_id', '=', adyen_account_id)]")

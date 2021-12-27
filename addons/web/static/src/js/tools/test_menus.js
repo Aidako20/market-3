@@ -65,13 +65,13 @@
         // finding applications menus
         let appMenuItems;
         if (isEnterprise) {
-            console.log("Flectra flavor: Enterprise");
+            console.log("Odoo flavor: Enterprise");
             appMenuItems = document.querySelectorAll(xmlId ?
                 `a.o_app.o_menuitem[data-menu-xmlid="${xmlId}"]` :
                 'a.o_app.o_menuitem'
             );
         } else {
-            console.log("Flectra flavor: Community");
+            console.log("Odoo flavor: Community");
             appMenuItems = document.querySelectorAll(xmlId ?
                 `a.o_app[data-menu-xmlid="${xmlId}"]` :
                 'a.o_app'

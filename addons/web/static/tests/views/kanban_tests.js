@@ -1803,7 +1803,7 @@ QUnit.module('Views', {
                         message: {
                             code: 200,
                             data: {},
-                            message: "Flectra server error",
+                            message: "Odoo server error",
                         },
                         event: $.Event()
                     });
@@ -1868,7 +1868,7 @@ QUnit.module('Views', {
                         message: {
                             code: 200,
                             data: {},
-                            message: "Flectra server error",
+                            message: "Odoo server error",
                         },
                         event: $.Event()
                     });
@@ -1918,7 +1918,7 @@ QUnit.module('Views', {
                         message: {
                             code: 200,
                             data: {},
-                            message: "Flectra server error",
+                            message: "Odoo server error",
                         },
                         event: $.Event()
                     });
@@ -1977,7 +1977,7 @@ QUnit.module('Views', {
                         message: {
                             code: 200,
                             data: {},
-                            message: "Flectra server error",
+                            message: "Odoo server error",
                         },
                         event: $.Event()
                     });

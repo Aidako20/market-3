@@ -200,7 +200,7 @@ const ProgressBarMixin = {
     },
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      * @param {integer} ev.data.fileUploadId
      */
     _onProgressBarAbort(ev) {

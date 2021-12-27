@@ -13,7 +13,7 @@ MockServer.include({
      */
     async _performRpc(route, args) {
         if (args.model === 'mail.channel' && args.method === 'init_flectrabot') {
-            return this._mockMailChannelInitFlectraBot();
+            return this._mockMailChannelInitOdooBot();
         }
         return this._super(...arguments);
     },
@@ -27,9 +27,9 @@ MockServer.include({
      *
      * @private
      */
-    _mockMailChannelInitFlectraBot() {
+    _mockMailChannelInitOdooBot() {
         // TODO implement this mock task-2300480
-        // and improve test "FlectraBot initialized after 2 minutes"
+        // and improve test "OdooBot initialized after 2 minutes"
     },
 });
 

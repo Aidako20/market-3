@@ -109,7 +109,7 @@ const GoogleCalendarController = CalendarController.include({
      * mean of a dialog.
      *
      * @private
-     * @returns {FlectraEvent} event
+     * @returns {OdooEvent} event
      */
     _onGoogleSyncCalendar: function (event) {
         var self = this;

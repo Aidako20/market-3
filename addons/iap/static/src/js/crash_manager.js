@@ -20,7 +20,7 @@ CrashManager.include({
      */
     _getButtonMessage: function (isTrial){
         var isEnterprise = _.last(flectra.session_info.server_version_info) === 'e';
-        return isTrial && isEnterprise ? _t('Start a Trial at Flectra') : _t('Buy credits');
+        return isTrial && isEnterprise ? _t('Start a Trial at Odoo') : _t('Buy credits');
     },
     /**
      * @override

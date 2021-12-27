@@ -421,7 +421,7 @@ publicWidget.registry.WebsiteSale = publicWidget.Widget.extend(VariantMixin, {
             _.each($('.ecom-zoomable img[data-zoom]'), function (el) {
                 onImageLoaded(el, function () {
                     var $img = $(el);
-                    $img.zoomFlectra({event: autoZoom ? 'mouseenter' : 'click', attach: attach});
+                    $img.zoomOdoo({event: autoZoom ? 'mouseenter' : 'click', attach: attach});
                     $img.attr('data-zoom', 1);
                 });
             });

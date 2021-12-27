@@ -29,4 +29,4 @@ class PosAdyenController(http.Controller):
             else:
                 payment_method.adyen_latest_response = json.dumps(data)
         else:
-            _logger.error('received a message for a terminal not registered in Flectra: %s', terminal_identifier)
+            _logger.error('received a message for a terminal not registered in Odoo: %s', terminal_identifier)

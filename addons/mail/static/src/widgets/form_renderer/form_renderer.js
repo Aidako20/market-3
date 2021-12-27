@@ -177,7 +177,7 @@ FormRenderer.include({
     /**
      * @abstract
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      * @param {Object} ev.data
      * @param {mail.attachment[]} ev.data.attachments
      * @param {mail.thread} ev.data.thread

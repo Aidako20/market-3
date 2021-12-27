@@ -1138,7 +1138,7 @@ var FormRenderer = BasicRenderer.extend({
 
     /**
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onActivateNextWidget: function (ev) {
         ev.stopPropagation();
@@ -1148,7 +1148,7 @@ var FormRenderer = BasicRenderer.extend({
     /**
      * @override
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onNavigationMove: function (ev) {
         ev.stopPropagation();

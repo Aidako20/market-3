@@ -89,7 +89,7 @@ class DeliveryCarrier(models.Model):
             'domain': [['name', '=like', 'delivery_%'], ['name', '!=', 'delivery_barcode']],
             'type': 'ir.actions.act_window',
             'help': _('''<p class="o_view_nocontent">
-                    Buy Flectra Enterprise now to get more providers.
+                    Buy Odoo Enterprise now to get more providers.
                 </p>'''),
         }
 

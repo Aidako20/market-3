@@ -248,7 +248,7 @@ class TestAr(AccountTestInvoicingCommon):
         })
         cls.product_iva_exento = cls.env['product.product'].create({
             # demo product_product_exento
-            'name': 'Book: Development in Flectra (VAT Exempt)',
+            'name': 'Book: Development in Odoo (VAT Exempt)',
             'uom_id': uom_unit.id,
             'uom_po_id': uom_unit.id,
             "list_price": 80.0,

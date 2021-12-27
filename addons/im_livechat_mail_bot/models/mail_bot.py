@@ -17,7 +17,7 @@ class MailBot(models.AbstractModel):
             elif flectrabot_state == "onboarding_canned" and values.get("canned_response_ids"):
                 self.env.user.flectrabot_failed = False
                 self.env.user.flectrabot_state = "idle"
-                return _("Good, you can customize canned responses in the live chat application.<br/><br/><b>It's the end of this overview</b>, enjoy discovering Flectra!")
+                return _("Good, you can customize canned responses in the live chat application.<br/><br/><b>It's the end of this overview</b>, enjoy discovering Odoo!")
             # repeat question if needed
             elif flectrabot_state == 'onboarding_canned' and not self._is_help_requested(body):
                 self.env.user.flectrabot_failed = True

@@ -154,7 +154,7 @@ class AccountEdiFormat(models.Model):
         res = invoice.invoice_generate_xml()
         if len(invoice.commercial_partner_id.l10n_it_pa_index or '') == 6:
             invoice.message_post(
-                body=(_("Invoices for PA are not managed by Flectra, you can download the document and send it on your own."))
+                body=(_("Invoices for PA are not managed by Odoo, you can download the document and send it on your own."))
             )
         else:
             invoice.l10n_it_send_state = 'to_send'

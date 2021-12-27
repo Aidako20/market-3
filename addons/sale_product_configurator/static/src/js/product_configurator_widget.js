@@ -26,7 +26,7 @@ ProductConfiguratorWidget.include({
      * Saves the optional products in the widget for future application
      * post-line configuration.
      *
-     * {FlectraEvent ev}
+     * {OdooEvent ev}
      *    {Array} ev.data.optionalProducts the various selected optional products
      *     with their configuration
      *

@@ -17,7 +17,7 @@ _logger = logging.getLogger(__name__)
 
 class GoogleEvent(abc.Set):
     """This helper class holds the values of a Google event.
-    Inspired by Flectra recordset, one instance can be a single Google event or a
+    Inspired by Odoo recordset, one instance can be a single Google event or a
     (immutable) set of Google events.
     All usual set operations are supported (union, intersection, etc).
 
@@ -76,7 +76,7 @@ class GoogleEvent(abc.Set):
         return self._flectra_id
 
     def _meta_flectra_id(self, dbname):
-        """Returns the Flectra id stored in the Google Event metadata.
+        """Returns the Odoo id stored in the Google Event metadata.
         This id might not actually exists in the database.
         """
         properties = self.extendedProperties and (self.extendedProperties.get('shared', {}) or self.extendedProperties.get('private', {})) or {}
@@ -101,8 +101,8 @@ class GoogleEvent(abc.Set):
         flectra_events = model.browse(_id for _id in unsure_flectra_ids if _id)
 
         # Extended properties are copied when splitting a recurrence Google side.
-        # Hence, we may have two Google recurrences linked to the same Flectra id.
-        # Therefore, we only consider Flectra records without google id when trying
+        # Hence, we may have two Google recurrences linked to the same Odoo id.
+        # Therefore, we only consider Odoo records without google id when trying
         # to match events.
         o_ids = flectra_events.exists().filtered(lambda e: not e.google_id).ids
         for e in self:
@@ -122,12 +122,12 @@ class GoogleEvent(abc.Set):
 
 
     def owner(self, env):
-        # Owner/organizer could be desynchronised between Google and Flectra.
+        # Owner/organizer could be desynchronised between Google and Odoo, Flectra.
         # Let userA, userB be two new users (never synced to Google before).
-        # UserA creates an event in Flectra (he is the owner) but userB syncs first.
+        # UserA creates an event in Odoo (he is the owner) but userB syncs first.
         # There is no way to insert the event into userA's calendar since we don't have
         # any authentication access. The event is therefore inserted into userB's calendar
-        # (he is the organizer in Google). The "real" owner (in Flectra) is stored as an
+        # (he is the organizer in Google). The "real" owner (in Odoo) is stored as an
         # extended property. There is currently no support to "transfert" ownership when
         # userA syncs his calendar the first time.
         real_owner_id = self.extendedProperties and self.extendedProperties.get('shared', {}).get('%s_owner_id' % env.cr.dbname)
@@ -143,7 +143,7 @@ class GoogleEvent(abc.Set):
         elif self.organizer and self.organizer.get('self'):
             return env.user
         elif self.organizer and self.organizer.get('email'):
-            # In Google: 1 email = 1 user; but in Flectra several users might have the same email :/
+            # In Google: 1 email = 1 user; but in Odoo several users might have the same email :/
             return env['res.users'].search([('email', '=', self.organizer.get('email'))], limit=1)
         else:
             return env['res.users']

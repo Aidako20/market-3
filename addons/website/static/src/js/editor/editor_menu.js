@@ -214,7 +214,7 @@ var EditorMenu = Widget.extend({
      * Get the cleaned value of the editable element.
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      */
     _onGetCleanHTML: function (ev) {
         ev.data.callback(this.wysiwyg.getValue({$layout: ev.data.$layout}));
@@ -223,7 +223,7 @@ var EditorMenu = Widget.extend({
      * Snippet (menu_data) can request to save the document to leave the page
      *
      * @private
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      * @param {object} ev.data
      * @param {function} ev.data.onSuccess
      * @param {function} ev.data.onFailure

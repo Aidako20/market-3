@@ -2,7 +2,7 @@ flectra.define('web.SwitchCompanyMenu', function(require) {
 "use strict";
 
 /**
- * When Flectra is configured in multi-company mode, users should obviously be able
+ * When Odoo is configured in multi-company mode, users should obviously be able
  * to switch their interface from one company to the other.  This is the purpose
  * of this widget, by displaying a dropdown menu in the systray.
  */

@@ -225,7 +225,7 @@ var Quiz = publicWidget.Widget.extend({
      * When clicking on an answer, this one should be marked as "checked".
      *
      * @private
-     * @param FlectraEvent ev
+     * @param OdooEvent ev
      */
     _onAnswerClick: function (ev) {
         ev.preventDefault();

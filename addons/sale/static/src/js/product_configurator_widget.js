@@ -108,7 +108,7 @@ var ProductConfiguratorWidget = relationalFields.FieldMany2One.extend({
      * before calling super.
      *
      * @override
-     * @param {FlectraEvent} ev
+     * @param {OdooEvent} ev
      * @param {boolean} ev.data.preventProductIdCheck prevent the product configurator widget
      *     from looping forever when it needs to change the 'product_template_id'
      *

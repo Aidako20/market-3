@@ -4,25 +4,25 @@ flectra.define('web.KeyboardNavigationMixin', function (require) {
     const core = require('web.core');
 
     /**
-     * list of the key that should not be used as accesskeys. Either because we want to reserve them for a specific behavior in Flectra or
+     * list of the key that should not be used as accesskeys. Either because we want to reserve them for a specific behavior in Odoo or
      * because they will not work in certain browser/OS
      */
     var knownUnusableAccessKeys = [' ',
-        'A', // reserved for Flectra Edit
-        'B', // reserved for Flectra Previous Breadcrumb (Back)
-        'C', // reserved for Flectra Create
-        'H', // reserved for Flectra Home
-        'J', // reserved for Flectra Discard
-        'K', // reserved for Flectra Kanban view
-        'L', // reserved for Flectra List view
-        'N', // reserved for Flectra pager Next
-        'P', // reserved for Flectra pager Previous
-        'S', // reserved for Flectra Save
-        'Q', // reserved for Flectra Search
+        'A', // reserved for Odoo Edit
+        'B', // reserved for Odoo Previous Breadcrumb (Back)
+        'C', // reserved for Odoo Create
+        'H', // reserved for Odoo Home
+        'J', // reserved for Odoo Discard
+        'K', // reserved for Odoo Kanban view
+        'L', // reserved for Odoo List view
+        'N', // reserved for Odoo pager Next
+        'P', // reserved for Odoo pager Previous
+        'S', // reserved for Odoo Save
+        'Q', // reserved for Odoo Search
         'E', // chrome does not support 'E' access key --> go to address bar to search google
         'F', // chrome does not support 'F' access key --> go to menu
         'D', // chrome does not support 'D' access key --> go to address bar
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' // reserved for Flectra menus
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' // reserved for Odoo menus
     ];
 
     var KeyboardNavigationMixin = {

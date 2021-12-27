@@ -4096,7 +4096,7 @@ QUnit.test('receive new chat message: out of flectra focus (notification, channe
                 _beep() {}, // Do nothing
                 _poll() {}, // Do nothing
                 _registerWindowUnload() {}, // Do nothing
-                isFlectraFocused: () => false,
+                isOdooFocused: () => false,
                 updateOption() {},
             }),
         },
@@ -4135,7 +4135,7 @@ QUnit.test('receive new chat message: out of flectra focus (notification, chat)'
                 _beep() {}, // Do nothing
                 _poll() {}, // Do nothing
                 _registerWindowUnload() {}, // Do nothing
-                isFlectraFocused: () => false,
+                isOdooFocused: () => false,
                 updateOption() {},
             }),
         },
@@ -4187,7 +4187,7 @@ QUnit.test('receive new chat messages: out of flectra focus (tab title)', async 
                 _beep() {}, // Do nothing
                 _poll() {}, // Do nothing
                 _registerWindowUnload() {}, // Do nothing
-                isFlectraFocused: () => false,
+                isOdooFocused: () => false,
                 updateOption() {},
             }),
         },

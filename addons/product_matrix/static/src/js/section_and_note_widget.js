@@ -43,7 +43,7 @@ SectionAndNoteFieldOne2Many.include({
     /**
      * Catches the event asking for matrix opening
      *
-     * @param {FlectraEvent} ev various values needed to open the matrix
+     * @param {OdooEvent} ev various values needed to open the matrix
      *  {integer} data.product_template_id product.template id
      *  {list} data.editedCellAttributes list of product.template.attribute.value ids
      *  {bool} data.edit whether the line source should be deleted or not.

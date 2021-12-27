@@ -24,9 +24,9 @@ QUnit.module('messaging_initializer_tests.js', {
 });
 
 
-QUnit.test('FlectraBot initialized at init', async function (assert) {
+QUnit.test('OdooBot initialized at init', async function (assert) {
     // TODO this test should be completed in combination with
-    // implementing _mockMailChannelInitFlectraBot task-2300480
+    // implementing _mockMailChannelInitOdooBot task-2300480
     assert.expect(2);
 
     await this.start({
@@ -45,7 +45,7 @@ QUnit.test('FlectraBot initialized at init', async function (assert) {
 
     assert.verifySteps(
         ['init_flectrabot'],
-        "should have initialized FlectraBot at init"
+        "should have initialized OdooBot at init"
     );
 });
 

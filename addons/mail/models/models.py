@@ -206,5 +206,5 @@ class BaseModel(models.AbstractModel):
 
     def _notify_email_header_dict(self):
         return {
-            'X-Flectra-Objects': "%s-%s" % (self._name, self.id),
+            'X-Odoo-Objects': "%s-%s" % (self._name, self.id),
         }

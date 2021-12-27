@@ -79,7 +79,7 @@ var ServiceProviderMixin = {
      * the target so that it can call back the caller.
      *
      * @private
-     * @param  {FlectraEvent} event
+     * @param  {OdooEvent} event
      */
     _call_service: function (event) {
         var args = event.data.args || [];
