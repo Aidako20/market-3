@@ -4,10 +4,10 @@ from contextlib import contextmanager
 from functools import partial
 from unittest.mock import patch
 
-from flectra import exceptions
-from flectra.addons.iap.tools import iap_tools
-from flectra.addons.crm_iap_lead_enrich.models.iap_enrich_api import IapEnrichAPI
-from flectra.tests import common
+from odoo import exceptions
+from odoo.addons.iap.tools import iap_tools
+from odoo.addons.crm_iap_lead_enrich.models.iap_enrich_api import IapEnrichAPI
+from odoo.tests import common
 
 
 class MockIAPEnrich(common.BaseCase):
