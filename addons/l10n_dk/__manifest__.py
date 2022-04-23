@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 {
     'name': 'Denmark - Accounting',
     'version': '1.0',
-    'author': 'Flectra House ApS, VK DATA ApS',
+    'author': 'Odoo House ApS, VK DATA ApS',
     'website': 'http://odoodanmark.dk',
     'category': 'Accounting/Localizations/Account Charts',
     'description': """

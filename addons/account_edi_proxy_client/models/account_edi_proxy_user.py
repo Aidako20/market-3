@@ -18,8 +18,8 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-DEFAULT_SERVER_URL = 'https://l10n-it-edi.api.flectrahq.com'
-DEFAULT_TEST_SERVER_URL = 'https://iap-services-test.flectrahq.com'
+DEFAULT_SERVER_URL = 'https://l10n-it-edi.api.flectra.com'
+DEFAULT_TEST_SERVER_URL = 'https://iap-services-test.flectra.com'
 TIMEOUT = 30
 
 
