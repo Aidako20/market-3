@@ -242,6 +242,10 @@ class CustomerPortal(CustomerPortal):
         user = request.env.user
         ticket = request.env['helpdesk.ticket'].sudo().search(
             [('id', '=', ticket_id)])
+        try:
+            self._document_check_access('helpdesk.ticket', ticket.id, access_token=None)
+        except (AccessError, MissingError):
+            return request.redirect('/my')
         rating = request.env['rating.rating'].sudo().search(
             [('res_model', '=', 'helpdesk.ticket'),
              ('res_id', '=', ticket.id),
