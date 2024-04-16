@@ -1,15 +1,15 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.tests.common import HttpSavepointCase
-from flectra.addons.sale_product_configurator.tests.common import TestProductConfiguratorCommon
-from flectra.tests import tagged
+fromflectra.tests.commonimportHttpSavepointCase
+fromflectra.addons.sale_product_configurator.tests.commonimportTestProductConfiguratorCommon
+fromflectra.testsimporttagged
 
 
-@tagged('post_install', '-at_install')
-class TestUi(HttpSavepointCase, TestProductConfiguratorCommon):
+@tagged('post_install','-at_install')
+classTestUi(HttpSavepointCase,TestProductConfiguratorCommon):
 
-    def test_01_admin_shop_custom_attribute_value_tour(self):
-        # fix runbot, sometimes one pricelist is chosen, sometimes the other...
-        pricelists = self.env['website'].get_current_website().get_current_pricelist() | self.env.ref('product.list0')
+    deftest_01_admin_shop_custom_attribute_value_tour(self):
+        #fixrunbot,sometimesonepricelistischosen,sometimestheother...
+        pricelists=self.env['website'].get_current_website().get_current_pricelist()|self.env.ref('product.list0')
         self._create_pricelist(pricelists)
-        self.start_tour("/", 'a_shop_custom_attribute_value', login="admin")
+        self.start_tour("/",'a_shop_custom_attribute_value',login="admin")

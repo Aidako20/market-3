@@ -1,207 +1,207 @@
-flectra.define('point_of_sale.tests.PaymentScreen', function (require) {
-    'use strict';
+flectra.define('point_of_sale.tests.PaymentScreen',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const { useListener } = require('web.custom_hooks');
-    const testUtils = require('web.test_utils');
-    const makePosTestEnv = require('point_of_sale.test_env');
-    const { xml } = owl.tags;
-    const { useState } = owl;
+    constPosComponent=require('point_of_sale.PosComponent');
+    const{useListener}=require('web.custom_hooks');
+    consttestUtils=require('web.test_utils');
+    constmakePosTestEnv=require('point_of_sale.test_env');
+    const{xml}=owl.tags;
+    const{useState}=owl;
 
-    QUnit.module('unit tests for PaymentScreen components', {});
+    QUnit.module('unittestsforPaymentScreencomponents',{});
 
-    QUnit.test('PaymentMethodButton', async function (assert) {
+    QUnit.test('PaymentMethodButton',asyncfunction(assert){
         assert.expect(2);
 
-        class Parent extends PosComponent {
-            constructor() {
+        classParentextendsPosComponent{
+            constructor(){
                 super(...arguments);
-                useListener('new-payment-line', this._newPaymentLine);
+                useListener('new-payment-line',this._newPaymentLine);
             }
-            _newPaymentLine() {
+            _newPaymentLine(){
                 assert.step('new-payment-line');
             }
         }
-        Parent.env = makePosTestEnv();
-        Parent.template = xml/* html */ `
+        Parent.env=makePosTestEnv();
+        Parent.template=xml/*html*/`
             <div>
-                <PaymentMethodButton paymentMethod="{ name: 'Cash', id: 1 }" />
+                <PaymentMethodButtonpaymentMethod="{name:'Cash',id:1}"/>
             </div>
         `;
 
-        const parent = new Parent();
-        await parent.mount(testUtils.prepareTarget());
+        constparent=newParent();
+        awaitparent.mount(testUtils.prepareTarget());
 
-        const button = parent.el.querySelector('.paymentmethod');
-        await testUtils.dom.click(button);
+        constbutton=parent.el.querySelector('.paymentmethod');
+        awaittestUtils.dom.click(button);
         assert.verifySteps(['new-payment-line']);
 
         parent.unmount();
         parent.destroy();
     });
 
-    QUnit.test('PSNumpadInputButton', async function (assert) {
+    QUnit.test('PSNumpadInputButton',asyncfunction(assert){
         assert.expect(15);
 
-        class Parent extends PosComponent {
-            constructor({ value, text, changeClassTo }) {
+        classParentextendsPosComponent{
+            constructor({value,text,changeClassTo}){
                 super();
-                this.state = useState({ value, text, changeClassTo });
-                useListener('input-from-numpad', this._inputFromNumpad);
+                this.state=useState({value,text,changeClassTo});
+                useListener('input-from-numpad',this._inputFromNumpad);
             }
-            _inputFromNumpad({ detail: { key } }) {
+            _inputFromNumpad({detail:{key}}){
                 assert.step(`${key}-input`);
             }
-            setState(obj) {
-                Object.assign(this.state, obj);
+            setState(obj){
+                Object.assign(this.state,obj);
             }
         }
-        Parent.env = makePosTestEnv();
-        Parent.template = xml/* html */ `
+        Parent.env=makePosTestEnv();
+        Parent.template=xml/*html*/`
             <div>
-                <PSNumpadInputButton value="state.value" text="state.text" changeClassTo="state.changeClassTo" />
+                <PSNumpadInputButtonvalue="state.value"text="state.text"changeClassTo="state.changeClassTo"/>
             </div>
         `;
 
-        let parent = new Parent({ value: '1' });
-        await parent.mount(testUtils.prepareTarget());
+        letparent=newParent({value:'1'});
+        awaitparent.mount(testUtils.prepareTarget());
 
-        let button = parent.el.querySelector('button');
+        letbutton=parent.el.querySelector('button');
         assert.ok(button.textContent.includes('1'));
         assert.ok(button.classList.contains('number-char'));
-        await testUtils.dom.click(button);
-        await testUtils.nextTick();
+        awaittestUtils.dom.click(button);
+        awaittestUtils.nextTick();
         assert.verifySteps(['1-input']);
 
-        parent.setState({ value: '2', text: 'Two' });
-        await testUtils.nextTick();
+        parent.setState({value:'2',text:'Two'});
+        awaittestUtils.nextTick();
         assert.ok(button.textContent.includes('Two'));
-        await testUtils.dom.click(button);
-        await testUtils.nextTick();
+        awaittestUtils.dom.click(button);
+        awaittestUtils.nextTick();
         assert.verifySteps(['2-input']);
 
-        parent.setState({ value: '+12', text: null, changeClassTo: 'not-number-char' });
-        await testUtils.nextTick();
+        parent.setState({value:'+12',text:null,changeClassTo:'not-number-char'});
+        awaittestUtils.nextTick();
         assert.ok(button.textContent.includes('+12'));
         assert.ok(button.classList.contains('not-number-char'));
-        // class number-char should have been replaced
+        //classnumber-charshouldhavebeenreplaced
         assert.notOk(button.classList.contains('number-char'));
-        await testUtils.dom.click(button);
-        await testUtils.nextTick();
+        awaittestUtils.dom.click(button);
+        awaittestUtils.nextTick();
         assert.verifySteps(['+12-input']);
 
         parent.unmount();
         parent.destroy();
 
-        // using the slot should ignore value and text props of the component
-        Parent.template = xml/* html */ `
+        //usingtheslotshouldignorevalueandtextpropsofthecomponent
+        Parent.template=xml/*html*/`
             <div>
-                <PSNumpadInputButton value="state.value" text="state.text" changeClassTo="state.changeClassTo">
+                <PSNumpadInputButtonvalue="state.value"text="state.text"changeClassTo="state.changeClassTo">
                     <span>UseSlot</span>
                 </PSNumpadInputButton>
             </div>
         `;
-        parent = new Parent({ value: 'slotted', text: 'Text' });
-        await parent.mount(testUtils.prepareTarget());
+        parent=newParent({value:'slotted',text:'Text'});
+        awaitparent.mount(testUtils.prepareTarget());
 
-        button = parent.el.querySelector('button');
+        button=parent.el.querySelector('button');
         assert.ok(button.textContent.includes('UseSlot'));
-        await testUtils.dom.click(button);
-        await testUtils.nextTick();
+        awaittestUtils.dom.click(button);
+        awaittestUtils.nextTick();
         assert.verifySteps(['slotted-input']);
 
         parent.unmount();
         parent.destroy();
     });
 
-    QUnit.test('PaymentScreenPaymentLines', async function (assert) {
+    QUnit.test('PaymentScreenPaymentLines',asyncfunction(assert){
         assert.expect(12);
 
-        class Parent extends PosComponent {
-            constructor() {
+        classParentextendsPosComponent{
+            constructor(){
                 super();
-                useListener('delete-payment-line', this._onDeletePaymentLine);
-                useListener('select-payment-line', this._onSelectPaymentLine);
+                useListener('delete-payment-line',this._onDeletePaymentLine);
+                useListener('select-payment-line',this._onSelectPaymentLine);
             }
-            get paymentLines() {
-                return this.order.get_paymentlines();
+            getpaymentLines(){
+                returnthis.order.get_paymentlines();
             }
-            get order() {
-                return this.env.pos.get_order();
+            getorder(){
+                returnthis.env.pos.get_order();
             }
-            mounted() {
-                this.order.paymentlines.on('change', this.render, this);
+            mounted(){
+                this.order.paymentlines.on('change',this.render,this);
             }
-            willUnmount() {
-                this.order.paymentlines.off('change', null, this);
+            willUnmount(){
+                this.order.paymentlines.off('change',null,this);
             }
-            _onDeletePaymentLine() {
+            _onDeletePaymentLine(){
                 assert.step('delete-click');
             }
-            _onSelectPaymentLine() {
+            _onSelectPaymentLine(){
                 assert.step('select-click');
             }
         }
-        Parent.env = makePosTestEnv();
-        Parent.template = xml/* html */ `
+        Parent.env=makePosTestEnv();
+        Parent.template=xml/*html*/`
             <div>
-                <PaymentScreenPaymentLines paymentLines="paymentLines" />
+                <PaymentScreenPaymentLinespaymentLines="paymentLines"/>
             </div>
         `;
 
-        let parent = new Parent();
-        await parent.mount(testUtils.prepareTarget());
+        letparent=newParent();
+        awaitparent.mount(testUtils.prepareTarget());
 
-        const order = parent.env.pos.get_order();
-        const cashPM = { id: 0, name: 'Cash', is_cash_count: true, use_payment_terminal: false };
-        const bankPM = { id: 0, name: 'Bank', is_cash_count: false, use_payment_terminal: false };
+        constorder=parent.env.pos.get_order();
+        constcashPM={id:0,name:'Cash',is_cash_count:true,use_payment_terminal:false};
+        constbankPM={id:0,name:'Bank',is_cash_count:false,use_payment_terminal:false};
 
-        let paymentline1 = order.add_paymentline(cashPM);
-        await testUtils.nextTick();
+        letpaymentline1=order.add_paymentline(cashPM);
+        awaittestUtils.nextTick();
 
-        let statusContainer = parent.el.querySelector('.payment-status-container');
-        let linesEl = parent.el.querySelector('.paymentlines');
-        assert.ok(linesEl, 'payment lines are shown');
-        let newLine = linesEl.querySelector('.selected');
-        assert.ok(newLine, 'the new line is automatically selected');
+        letstatusContainer=parent.el.querySelector('.payment-status-container');
+        letlinesEl=parent.el.querySelector('.paymentlines');
+        assert.ok(linesEl,'paymentlinesareshown');
+        letnewLine=linesEl.querySelector('.selected');
+        assert.ok(newLine,'thenewlineisautomaticallyselected');
 
-        let paymentline2 = order.add_paymentline(bankPM);
-        await testUtils.nextTick();
+        letpaymentline2=order.add_paymentline(bankPM);
+        awaittestUtils.nextTick();
         assert.notOk(
-            linesEl.querySelector('.selected') === newLine,
-            'the previously added paymentline should not be selected anymore'
+            linesEl.querySelector('.selected')===newLine,
+            'thepreviouslyaddedpaymentlineshouldnotbeselectedanymore'
         );
         assert.ok(
-            linesEl.querySelectorAll('.paymentline:not(.heading)').length === 2,
-            'there should be two paymentlines'
+            linesEl.querySelectorAll('.paymentline:not(.heading)').length===2,
+            'thereshouldbetwopaymentlines'
         );
 
-        let paymentline3 = order.add_paymentline(cashPM);
-        await testUtils.nextTick();
+        letpaymentline3=order.add_paymentline(cashPM);
+        awaittestUtils.nextTick();
         assert.ok(
-            linesEl.querySelectorAll('.paymentline:not(.heading)').length === 3,
-            'there should be three paymentlines'
+            linesEl.querySelectorAll('.paymentline:not(.heading)').length===3,
+            'thereshouldbethreepaymentlines'
         );
         assert.ok(
-            linesEl.querySelectorAll('.paymentline.selected').length === 1,
-            'there should only be one selected paymentline'
+            linesEl.querySelectorAll('.paymentline.selected').length===1,
+            'thereshouldonlybeoneselectedpaymentline'
         );
 
-        await testUtils.dom.click(linesEl.querySelector('.paymentline.selected .delete-button'));
-        await testUtils.nextTick();
-        assert.verifySteps(['delete-click', 'select-click']);
+        awaittestUtils.dom.click(linesEl.querySelector('.paymentline.selected.delete-button'));
+        awaittestUtils.nextTick();
+        assert.verifySteps(['delete-click','select-click']);
 
-        // click the 2nd payment line
-        await testUtils.dom.click(linesEl.querySelectorAll('.paymentline:not(.heading)')[1]);
-        await testUtils.nextTick();
+        //clickthe2ndpaymentline
+        awaittestUtils.dom.click(linesEl.querySelectorAll('.paymentline:not(.heading)')[1]);
+        awaittestUtils.nextTick();
         assert.verifySteps(['select-click']);
 
-        // remove paymentline3 (the selected)
+        //removepaymentline3(theselected)
         order.remove_paymentline(paymentline3);
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
         assert.notOk(
             linesEl.querySelector('.paymentline.selected'),
-            'no more selected payment line'
+            'nomoreselectedpaymentline'
         );
 
         order.remove_paymentline(paymentline1);
@@ -211,96 +211,96 @@ flectra.define('point_of_sale.tests.PaymentScreen', function (require) {
         parent.destroy();
     });
 
-    QUnit.test('PaymentScreenElectronicPayment', async function (assert) {
+    QUnit.test('PaymentScreenElectronicPayment',asyncfunction(assert){
         assert.expect(17);
 
-        class SimulatedPaymentLine extends Backbone.Model {
-            constructor() {
+        classSimulatedPaymentLineextendsBackbone.Model{
+            constructor(){
                 super();
-                this.payment_status = 'pending';
-                this.can_be_reversed = false;
+                this.payment_status='pending';
+                this.can_be_reversed=false;
             }
-            canBeAdjusted() {
-                return false;
+            canBeAdjusted(){
+                returnfalse;
             }
-            setPaymentStatus(status) {
-                this.payment_status = status;
+            setPaymentStatus(status){
+                this.payment_status=status;
                 this.trigger('change');
             }
-            toggleCanBeReversed() {
-                this.can_be_reversed = !this.can_be_reversed;
+            toggleCanBeReversed(){
+                this.can_be_reversed=!this.can_be_reversed;
                 this.trigger('change');
             }
         }
 
-        class Parent extends PosComponent {
-            constructor() {
+        classParentextendsPosComponent{
+            constructor(){
                 super();
-                this.line = new SimulatedPaymentLine();
-                useListener('send-payment-request', () => assert.step('send-payment-request'));
-                useListener('send-force-done', () => assert.step('send-force-done'));
-                useListener('send-payment-cancel', () => assert.step('send-payment-cancel'));
-                useListener('send-payment-reverse', () => assert.step('send-payment-reverse'));
+                this.line=newSimulatedPaymentLine();
+                useListener('send-payment-request',()=>assert.step('send-payment-request'));
+                useListener('send-force-done',()=>assert.step('send-force-done'));
+                useListener('send-payment-cancel',()=>assert.step('send-payment-cancel'));
+                useListener('send-payment-reverse',()=>assert.step('send-payment-reverse'));
             }
         }
-        Parent.env = makePosTestEnv();
-        Parent.template = xml/* html */ `
+        Parent.env=makePosTestEnv();
+        Parent.template=xml/*html*/`
             <div>
-                <PaymentScreenElectronicPayment line="line" />
+                <PaymentScreenElectronicPaymentline="line"/>
             </div>
         `;
 
-        let parent = new Parent();
-        await parent.mount(testUtils.prepareTarget());
+        letparent=newParent();
+        awaitparent.mount(testUtils.prepareTarget());
 
-        assert.ok(parent.el.querySelector('.paymentline .send_payment_request'));
-        await testUtils.dom.click(parent.el.querySelector('.paymentline .send_payment_request'));
-        await testUtils.nextTick();
+        assert.ok(parent.el.querySelector('.paymentline.send_payment_request'));
+        awaittestUtils.dom.click(parent.el.querySelector('.paymentline.send_payment_request'));
+        awaittestUtils.nextTick();
         assert.verifySteps(['send-payment-request']);
 
         parent.line.setPaymentStatus('retry');
-        await testUtils.nextTick();
-        await testUtils.dom.click(parent.el.querySelector('.paymentline .send_payment_request'));
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
+        awaittestUtils.dom.click(parent.el.querySelector('.paymentline.send_payment_request'));
+        awaittestUtils.nextTick();
         assert.verifySteps(['send-payment-request']);
 
         parent.line.setPaymentStatus('force_done');
-        await testUtils.nextTick();
-        await testUtils.dom.click(parent.el.querySelector('.paymentline .send_force_done'));
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
+        awaittestUtils.dom.click(parent.el.querySelector('.paymentline.send_force_done'));
+        awaittestUtils.nextTick();
         assert.verifySteps(['send-force-done']);
 
         parent.line.setPaymentStatus('waitingCard');
-        await testUtils.nextTick();
-        await testUtils.dom.click(parent.el.querySelector('.paymentline .send_payment_cancel'));
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
+        awaittestUtils.dom.click(parent.el.querySelector('.paymentline.send_payment_cancel'));
+        awaittestUtils.nextTick();
         assert.verifySteps(['send-payment-cancel']);
 
         parent.line.setPaymentStatus('waiting');
-        await testUtils.nextTick();
-        assert.ok(parent.el.querySelector('.paymentline i.fa-spinner'));
+        awaittestUtils.nextTick();
+        assert.ok(parent.el.querySelector('.paymentlinei.fa-spinner'));
 
         parent.line.setPaymentStatus('waitingCancel');
-        await testUtils.nextTick();
-        assert.ok(parent.el.querySelector('.paymentline i.fa-spinner'));
+        awaittestUtils.nextTick();
+        assert.ok(parent.el.querySelector('.paymentlinei.fa-spinner'));
 
         parent.line.setPaymentStatus('reversing');
-        await testUtils.nextTick();
-        assert.ok(parent.el.querySelector('.paymentline i.fa-spinner'));
+        awaittestUtils.nextTick();
+        assert.ok(parent.el.querySelector('.paymentlinei.fa-spinner'));
 
         parent.line.setPaymentStatus('done');
-        await testUtils.nextTick();
-        assert.notOk(parent.el.querySelector('.paymentline .send_payment_reversal'));
+        awaittestUtils.nextTick();
+        assert.notOk(parent.el.querySelector('.paymentline.send_payment_reversal'));
 
         parent.line.toggleCanBeReversed();
-        await testUtils.nextTick();
-        assert.ok(parent.el.querySelector('.paymentline .send_payment_reversal'));
-        await testUtils.dom.click(parent.el.querySelector('.paymentline .send_payment_reversal'));
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
+        assert.ok(parent.el.querySelector('.paymentline.send_payment_reversal'));
+        awaittestUtils.dom.click(parent.el.querySelector('.paymentline.send_payment_reversal'));
+        awaittestUtils.nextTick();
         assert.verifySteps(['send-payment-reverse']);
 
         parent.line.setPaymentStatus('reversed');
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
         assert.ok(parent.el.querySelector('.paymentline'));
 
         parent.unmount();

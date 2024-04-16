@@ -1,81 +1,81 @@
-flectra.define('im_livechat/static/src/components/composer/composer_tests.js', function (require) {
-'use strict';
+flectra.define('im_livechat/static/src/components/composer/composer_tests.js',function(require){
+'usestrict';
 
-const components = {
-    Composer: require('mail/static/src/components/composer/composer.js'),
+constcomponents={
+    Composer:require('mail/static/src/components/composer/composer.js'),
 };
-const {
+const{
     afterEach,
     afterNextRender,
     beforeEach,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+}=require('mail/static/src/utils/test_utils.js');
 
-QUnit.module('im_livechat', {}, function () {
-QUnit.module('components', {}, function () {
-QUnit.module('composer', {}, function () {
-QUnit.module('composer_tests.js', {
-    beforeEach() {
+QUnit.module('im_livechat',{},function(){
+QUnit.module('components',{},function(){
+QUnit.module('composer',{},function(){
+QUnit.module('composer_tests.js',{
+    beforeEach(){
         beforeEach(this);
 
-        this.createComposerComponent = async (composer, otherProps) => {
-            const ComposerComponent = components.Composer;
-            ComposerComponent.env = this.env;
-            this.component = new ComposerComponent(null, Object.assign({
-                composerLocalId: composer.localId,
-            }, otherProps));
-            delete ComposerComponent.env;
-            await afterNextRender(() => this.component.mount(this.widget.el));
+        this.createComposerComponent=async(composer,otherProps)=>{
+            constComposerComponent=components.Composer;
+            ComposerComponent.env=this.env;
+            this.component=newComposerComponent(null,Object.assign({
+                composerLocalId:composer.localId,
+            },otherProps));
+            deleteComposerComponent.env;
+            awaitafterNextRender(()=>this.component.mount(this.widget.el));
         };
 
-        this.start = async params => {
-            const { env, widget } = await start(Object.assign({}, params, {
-                data: this.data,
+        this.start=asyncparams=>{
+            const{env,widget}=awaitstart(Object.assign({},params,{
+                data:this.data,
             }));
-            this.env = env;
-            this.widget = widget;
+            this.env=env;
+            this.widget=widget;
         };
     },
-    afterEach() {
+    afterEach(){
         afterEach(this);
     },
 });
 
-QUnit.test('livechat: no add attachment button', async function (assert) {
-    // Attachments are not yet supported in livechat, especially from livechat
-    // visitor PoV. This may likely change in the future with task-2029065.
+QUnit.test('livechat:noaddattachmentbutton',asyncfunction(assert){
+    //Attachmentsarenotyetsupportedinlivechat,especiallyfromlivechat
+    //visitorPoV.Thismaylikelychangeinthefuturewithtask-2029065.
     assert.expect(2);
 
-    await this.start();
-    const thread = this.env.models['mail.thread'].create({
-        channel_type: 'livechat',
-        id: 10,
-        model: 'mail.channel',
+    awaitthis.start();
+    constthread=this.env.models['mail.thread'].create({
+        channel_type:'livechat',
+        id:10,
+        model:'mail.channel',
     });
-    await this.createComposerComponent(thread.composer);
-    assert.containsOnce(document.body, '.o_Composer', "should have a composer");
+    awaitthis.createComposerComponent(thread.composer);
+    assert.containsOnce(document.body,'.o_Composer',"shouldhaveacomposer");
     assert.containsNone(
         document.body,
         '.o_Composer_buttonAttachment',
-        "composer linked to livechat should not have a 'Add attachment' button"
+        "composerlinkedtolivechatshouldnothavea'Addattachment'button"
     );
 });
 
-QUnit.test('livechat: disable attachment upload via drag and drop', async function (assert) {
+QUnit.test('livechat:disableattachmentuploadviadraganddrop',asyncfunction(assert){
     assert.expect(2);
 
-    await this.start();
-    const thread = this.env.models['mail.thread'].create({
-        channel_type: 'livechat',
-        id: 10,
-        model: 'mail.channel',
+    awaitthis.start();
+    constthread=this.env.models['mail.thread'].create({
+        channel_type:'livechat',
+        id:10,
+        model:'mail.channel',
     });
-    await this.createComposerComponent(thread.composer);
-    assert.containsOnce(document.body, '.o_Composer', "should have a composer");
+    awaitthis.createComposerComponent(thread.composer);
+    assert.containsOnce(document.body,'.o_Composer',"shouldhaveacomposer");
     assert.containsNone(
         document.body,
         '.o_Composer_dropZone',
-        "composer linked to livechat should not have a dropzone"
+        "composerlinkedtolivechatshouldnothaveadropzone"
     );
 });
 

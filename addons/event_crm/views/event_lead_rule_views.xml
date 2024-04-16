@@ -1,95 +1,95 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 <data>
-    <record id="event_lead_rule_view_search" model="ir.ui.view">
-        <field name="name">event.lead.rule.view.search</field>
-        <field name="model">event.lead.rule</field>
-        <field name="arch" type="xml">
-            <search string="Search Lead Generation Rules">
-                <field name="name" string="Name"/>
+    <recordid="event_lead_rule_view_search"model="ir.ui.view">
+        <fieldname="name">event.lead.rule.view.search</field>
+        <fieldname="model">event.lead.rule</field>
+        <fieldname="arch"type="xml">
+            <searchstring="SearchLeadGenerationRules">
+                <fieldname="name"string="Name"/>
                 <separator/>
-                <filter string="Archived" name="filter_inactive" domain="[('active', '=', False)]"/>
-                <filter string="Creation Type" name="filter_lead_creation_basis" context="{'group_by': 'lead_creation_basis'}"/>
-                <filter string="Trigger Type" name="filter_lead_creation_trigger" context="{'group_by': 'lead_creation_trigger'}"/>
+                <filterstring="Archived"name="filter_inactive"domain="[('active','=',False)]"/>
+                <filterstring="CreationType"name="filter_lead_creation_basis"context="{'group_by':'lead_creation_basis'}"/>
+                <filterstring="TriggerType"name="filter_lead_creation_trigger"context="{'group_by':'lead_creation_trigger'}"/>
             </search>
         </field>
     </record>
 
-    <record id="event_lead_rule_view_tree" model="ir.ui.view">
-        <field name="name">event.lead.rule.view.tree</field>
-        <field name="model">event.lead.rule</field>
-        <field name="arch" type="xml">
-            <tree string="Lead Generation Rules">
-                <field name="name"/>
-                <field name="lead_creation_basis" string="Lead Creation Type" invisible="1"/>
-                <field name="lead_creation_trigger"/>
-                <field name="event_type_ids" widget="many2many_tags"/>
-                <field name="event_id"/>
-                <field name="company_id" groups="base.group_multi_company"/>
+    <recordid="event_lead_rule_view_tree"model="ir.ui.view">
+        <fieldname="name">event.lead.rule.view.tree</field>
+        <fieldname="model">event.lead.rule</field>
+        <fieldname="arch"type="xml">
+            <treestring="LeadGenerationRules">
+                <fieldname="name"/>
+                <fieldname="lead_creation_basis"string="LeadCreationType"invisible="1"/>
+                <fieldname="lead_creation_trigger"/>
+                <fieldname="event_type_ids"widget="many2many_tags"/>
+                <fieldname="event_id"/>
+                <fieldname="company_id"groups="base.group_multi_company"/>
             </tree>
         </field>
     </record>
 
-    <record id="event_lead_rule_view_form" model="ir.ui.view">
-        <field name="name">event.lead.rule.view.form</field>
-        <field name="model">event.lead.rule</field>
-        <field name="arch" type="xml">
-            <form string="Lead Generation Rule">
+    <recordid="event_lead_rule_view_form"model="ir.ui.view">
+        <fieldname="name">event.lead.rule.view.form</field>
+        <fieldname="model">event.lead.rule</field>
+        <fieldname="arch"type="xml">
+            <formstring="LeadGenerationRule">
                 <sheet>
-                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
-                    <div class="oe_title">
-                        <label for="name" class="oe_edit_only"/>
-                        <h1><field name="name" placeholder="e.g. B2B Fairs"/></h1>
+                    <widgetname="web_ribbon"title="Archived"bg_color="bg-danger"attrs="{'invisible':[('active','=',True)]}"/>
+                    <divclass="oe_title">
+                        <labelfor="name"class="oe_edit_only"/>
+                        <h1><fieldname="name"placeholder="e.g.B2BFairs"/></h1>
                     </div>
-                    <field name="active" invisible="1"/>
-                    <group name="lead_creation_configuration">
-                        <group name="lead_creation_basis" invisible="1">
-                            <field name="lead_creation_basis" widget="radio"/>
+                    <fieldname="active"invisible="1"/>
+                    <groupname="lead_creation_configuration">
+                        <groupname="lead_creation_basis"invisible="1">
+                            <fieldname="lead_creation_basis"widget="radio"/>
                         </group>
                         <group>
-                            <field name="lead_creation_trigger" widget="radio"/>
+                            <fieldname="lead_creation_trigger"widget="radio"/>
                         </group>
                     </group>
-                    <group string="For any of these Events">
+                    <groupstring="ForanyoftheseEvents">
                         <group>
-                            <field name="event_type_ids" widget="many2many_tags"/>
-                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                            <fieldname="event_type_ids"widget="many2many_tags"/>
+                            <fieldname="company_id"groups="base.group_multi_company"options="{'no_create':True}"/>
                         </group>
                         <group>
-                            <field name="event_id" options="{'no_create': True}"/>
+                            <fieldname="event_id"options="{'no_create':True}"/>
                         </group>
                     </group>
-                    <group string="If the Attendees meet these Conditions">
-                        <field name="event_registration_filter" widget="domain" options="{'model': 'event.registration'}" nolabel="1"/>
+                    <groupstring="IftheAttendeesmeettheseConditions">
+                        <fieldname="event_registration_filter"widget="domain"options="{'model':'event.registration'}"nolabel="1"/>
                     </group>
-                    <group string="Lead Default Values">
-                        <group class="col">
-                            <field name="lead_type" groups="crm.group_use_lead"/>
-                            <field name="lead_sales_team_id"/>
-                            <field name="lead_user_id"/>
+                    <groupstring="LeadDefaultValues">
+                        <groupclass="col">
+                            <fieldname="lead_type"groups="crm.group_use_lead"/>
+                            <fieldname="lead_sales_team_id"/>
+                            <fieldname="lead_user_id"/>
                         </group>
-                        <group class="col">
-                            <field name="lead_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                        </group>                         
+                        <groupclass="col">
+                            <fieldname="lead_tag_ids"widget="many2many_tags"options="{'color_field':'color'}"/>
+                        </group>                        
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="event_lead_rule_action" model="ir.actions.act_window">
-        <field name="name">Lead Generation Rule</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">event.lead.rule</field>
-        <field name="view_mode">tree,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">Create a Lead Generation Rule</p>
-            <p>Those automatically create leads when attendees register.</p>
+    <recordid="event_lead_rule_action"model="ir.actions.act_window">
+        <fieldname="name">LeadGenerationRule</field>
+        <fieldname="type">ir.actions.act_window</field>
+        <fieldname="res_model">event.lead.rule</field>
+        <fieldname="view_mode">tree,form</field>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_smiling_face">CreateaLeadGenerationRule</p>
+            <p>Thoseautomaticallycreateleadswhenattendeesregister.</p>
         </field>
     </record>
 
-    <menuitem name="Lead Generation"
-        id="event_lead_rule_menu" 
+    <menuitemname="LeadGeneration"
+        id="event_lead_rule_menu"
         action="event_lead_rule_action"
         parent="event.menu_event_configuration"
         sequence="10"

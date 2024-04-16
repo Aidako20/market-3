@@ -1,13 +1,13 @@
-flectra.define('point_of_sale.PaymentMethodButton', function(require) {
-    'use strict';
+flectra.define('point_of_sale.PaymentMethodButton',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
 
-    class PaymentMethodButton extends PosComponent {}
-    PaymentMethodButton.template = 'PaymentMethodButton';
+    classPaymentMethodButtonextendsPosComponent{}
+    PaymentMethodButton.template='PaymentMethodButton';
 
     Registries.Component.add(PaymentMethodButton);
 
-    return PaymentMethodButton;
+    returnPaymentMethodButton;
 });

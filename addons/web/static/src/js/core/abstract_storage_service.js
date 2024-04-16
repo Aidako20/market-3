@@ -1,88 +1,88 @@
-flectra.define('web.AbstractStorageService', function (require) {
-'use strict';
+flectra.define('web.AbstractStorageService',function(require){
+'usestrict';
 
 /**
- * This module defines an abstraction for services that write into Storage
- * objects (e.g. localStorage or sessionStorage).
+ *ThismoduledefinesanabstractionforservicesthatwriteintoStorage
+ *objects(e.g.localStorageorsessionStorage).
  */
 
-var AbstractService = require('web.AbstractService');
+varAbstractService=require('web.AbstractService');
 
-var AbstractStorageService = AbstractService.extend({
-    // the 'storage' attribute must be set by actual StorageServices extending
-    // this abstraction
-    storage: null,
+varAbstractStorageService=AbstractService.extend({
+    //the'storage'attributemustbesetbyactualStorageServicesextending
+    //thisabstraction
+    storage:null,
 
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
-        // storage can be permanent or transient, destroy transient ones
-        if ((this.storage || {}).destroy) {
+    destroy:function(){
+        //storagecanbepermanentortransient,destroytransientones
+        if((this.storage||{}).destroy){
             this.storage.destroy();
         }
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Removes all data from the storage
+     *Removesalldatafromthestorage
      */
-    clear: function() {
+    clear:function(){
         this.storage.clear();
     },
     /**
-     * Returns the value associated with a given key in the storage
+     *Returnsthevalueassociatedwithagivenkeyinthestorage
      *
-     * @param {string} key
-     * @returns {string}
+     *@param{string}key
+     *@returns{string}
      */
-    getItem: function(key, defaultValue) {
-        var val = this.storage.getItem(key);
-        return val ? JSON.parse(val) : defaultValue;
+    getItem:function(key,defaultValue){
+        varval=this.storage.getItem(key);
+        returnval?JSON.parse(val):defaultValue;
     },
     /**
-     * @param {integer} index
-     * @return {string}
+     *@param{integer}index
+     *@return{string}
      */
-    key: function (index) {
-        return this.storage.key(index);
+    key:function(index){
+        returnthis.storage.key(index);
     },
     /**
-     * @return {integer}
+     *@return{integer}
      */
-    length: function () {
-        return this.storage.length;
+    length:function(){
+        returnthis.storage.length;
     },
     /**
-     * Removes the given key from the storage
+     *Removesthegivenkeyfromthestorage
      *
-     * @param {string} key
+     *@param{string}key
      */
-    removeItem: function(key) {
+    removeItem:function(key){
         this.storage.removeItem(key);
     },
     /**
-     * Sets the value of a given key in the storage
+     *Setsthevalueofagivenkeyinthestorage
      *
-     * @param {string} key
-     * @param {string} value
+     *@param{string}key
+     *@param{string}value
      */
-    setItem: function(key, value) {
-        this.storage.setItem(key, JSON.stringify(value));
+    setItem:function(key,value){
+        this.storage.setItem(key,JSON.stringify(value));
     },
     /**
-     * Add an handler on storage event
+     *Addanhandleronstorageevent
      *
      */
-    onStorage: function () {
-        this.storage.on.apply(this.storage, ["storage"].concat(Array.prototype.slice.call(arguments)));
+    onStorage:function(){
+        this.storage.on.apply(this.storage,["storage"].concat(Array.prototype.slice.call(arguments)));
     },
 });
 
-return AbstractStorageService;
+returnAbstractStorageService;
 
 });

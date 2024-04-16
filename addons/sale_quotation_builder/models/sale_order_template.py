@@ -1,61 +1,61 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
-from flectra.tools.translate import html_translate
+fromflectraimportapi,fields,models
+fromflectra.tools.translateimporthtml_translate
 
 
-class SaleOrderTemplate(models.Model):
-    _inherit = "sale.order.template"
+classSaleOrderTemplate(models.Model):
+    _inherit="sale.order.template"
 
-    website_description = fields.Html('Website Description', translate=html_translate, sanitize_attributes=False, sanitize_form=False)
+    website_description=fields.Html('WebsiteDescription',translate=html_translate,sanitize_attributes=False,sanitize_form=False)
 
-    def open_template(self):
+    defopen_template(self):
         self.ensure_one()
-        return {
-            'type': 'ir.actions.act_url',
-            'target': 'self',
-            'url': '/sale_quotation_builder/template/%d' % self.id
+        return{
+            'type':'ir.actions.act_url',
+            'target':'self',
+            'url':'/sale_quotation_builder/template/%d'%self.id
         }
 
 
-class SaleOrderTemplateLine(models.Model):
-    _inherit = "sale.order.template.line"
+classSaleOrderTemplateLine(models.Model):
+    _inherit="sale.order.template.line"
 
-    website_description = fields.Html('Website Description', related='product_id.product_tmpl_id.quotation_only_description', translate=html_translate, readonly=False, sanitize_form=False)
+    website_description=fields.Html('WebsiteDescription',related='product_id.product_tmpl_id.quotation_only_description',translate=html_translate,readonly=False,sanitize_form=False)
 
     @api.onchange('product_id')
-    def _onchange_product_id(self):
-        ret = super(SaleOrderTemplateLine, self)._onchange_product_id()
-        if self.product_id:
-            self.website_description = self.product_id.quotation_description
-        return ret
+    def_onchange_product_id(self):
+        ret=super(SaleOrderTemplateLine,self)._onchange_product_id()
+        ifself.product_id:
+            self.website_description=self.product_id.quotation_description
+        returnret
 
     @api.model
-    def create(self, values):
-        values = self._inject_quotation_description(values)
-        return super(SaleOrderTemplateLine, self).create(values)
+    defcreate(self,values):
+        values=self._inject_quotation_description(values)
+        returnsuper(SaleOrderTemplateLine,self).create(values)
 
-    def write(self, values):
-        values = self._inject_quotation_description(values)
-        return super(SaleOrderTemplateLine, self).write(values)
+    defwrite(self,values):
+        values=self._inject_quotation_description(values)
+        returnsuper(SaleOrderTemplateLine,self).write(values)
 
-    def _inject_quotation_description(self, values):
-        values = dict(values or {})
-        if not values.get('website_description') and values.get('product_id'):
-            product = self.env['product.product'].browse(values['product_id'])
-            values['website_description'] = product.quotation_description
-        return values
+    def_inject_quotation_description(self,values):
+        values=dict(valuesor{})
+        ifnotvalues.get('website_description')andvalues.get('product_id'):
+            product=self.env['product.product'].browse(values['product_id'])
+            values['website_description']=product.quotation_description
+        returnvalues
 
 
-class SaleOrderTemplateOption(models.Model):
-    _inherit = "sale.order.template.option"
+classSaleOrderTemplateOption(models.Model):
+    _inherit="sale.order.template.option"
 
-    website_description = fields.Html('Website Description', translate=html_translate, sanitize_attributes=False)
+    website_description=fields.Html('WebsiteDescription',translate=html_translate,sanitize_attributes=False)
 
     @api.onchange('product_id')
-    def _onchange_product_id(self):
-        ret = super(SaleOrderTemplateOption, self)._onchange_product_id()
-        if self.product_id:
-            self.website_description = self.product_id.quotation_description
-        return ret
+    def_onchange_product_id(self):
+        ret=super(SaleOrderTemplateOption,self)._onchange_product_id()
+        ifself.product_id:
+            self.website_description=self.product_id.quotation_description
+        returnret

@@ -1,43 +1,43 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
 
-        <!-- mail.shortcode -->
-        <record id="mail_shortcode_action" model="ir.actions.act_window">
-            <field name="name">Chat Shortcode</field>
-            <field name="res_model">mail.shortcode</field>
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-              <p class="o_view_nocontent_smiling_face">
-                Define a new chat shortcode
+        <!--mail.shortcode-->
+        <recordid="mail_shortcode_action"model="ir.actions.act_window">
+            <fieldname="name">ChatShortcode</field>
+            <fieldname="res_model">mail.shortcode</field>
+            <fieldname="view_mode">tree,form</field>
+            <fieldname="help"type="html">
+              <pclass="o_view_nocontent_smiling_face">
+                Defineanewchatshortcode
               </p><p>
-                A shortcode is a keyboard shortcut. For instance, you type #gm and it will be transformed into "Good Morning".
+                Ashortcodeisakeyboardshortcut.Forinstance,youtype#gmanditwillbetransformedinto"GoodMorning".
               </p>
             </field>
         </record>
 
-        <record id="mail_shortcode_view_tree" model="ir.ui.view">
-            <field name="name">mail.shortcode.tree</field>
-            <field name="model">mail.shortcode</field>
-            <field name="arch" type="xml">
-                <tree string="Shortcodes">
-                    <field name="source"/>
-                    <field name="substitution"/>
-                    <field name="description"/>
+        <recordid="mail_shortcode_view_tree"model="ir.ui.view">
+            <fieldname="name">mail.shortcode.tree</field>
+            <fieldname="model">mail.shortcode</field>
+            <fieldname="arch"type="xml">
+                <treestring="Shortcodes">
+                    <fieldname="source"/>
+                    <fieldname="substitution"/>
+                    <fieldname="description"/>
                 </tree>
             </field>
         </record>
 
-        <record id="mail_shortcode_view_form" model="ir.ui.view">
-            <field name="name">mail.shortcode.form</field>
-            <field name="model">mail.shortcode</field>
-            <field name="arch" type="xml">
-                <form string="Shortcodes">
+        <recordid="mail_shortcode_view_form"model="ir.ui.view">
+            <fieldname="name">mail.shortcode.form</field>
+            <fieldname="model">mail.shortcode</field>
+            <fieldname="arch"type="xml">
+                <formstring="Shortcodes">
                     <sheet>
                        <group>
-                            <field name="source"/>
-                            <field name="substitution"/>
-                            <field name="description"/>
+                            <fieldname="source"/>
+                            <fieldname="substitution"/>
+                            <fieldname="description"/>
                         </group>
                     </sheet>
                 </form>

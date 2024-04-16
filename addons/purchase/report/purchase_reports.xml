@@ -1,28 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="action_report_purchase_order" model="ir.actions.report">
-            <field name="name">Purchase Order</field>
-            <field name="model">purchase.order</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">purchase.report_purchaseorder</field>
-            <field name="report_file">purchase.report_purchaseorder</field>
-            <field name="print_report_name">
-                (object.state in ('draft', 'sent') and 'Request for Quotation - %s' % (object.name) or
-                'Purchase Order - %s' % (object.name))</field>
-            <field name="binding_model_id" ref="model_purchase_order"/>
-            <field name="binding_type">report</field>
+        <recordid="action_report_purchase_order"model="ir.actions.report">
+            <fieldname="name">PurchaseOrder</field>
+            <fieldname="model">purchase.order</field>
+            <fieldname="report_type">qweb-pdf</field>
+            <fieldname="report_name">purchase.report_purchaseorder</field>
+            <fieldname="report_file">purchase.report_purchaseorder</field>
+            <fieldname="print_report_name">
+                (object.statein('draft','sent')and'RequestforQuotation-%s'%(object.name)or
+                'PurchaseOrder-%s'%(object.name))</field>
+            <fieldname="binding_model_id"ref="model_purchase_order"/>
+            <fieldname="binding_type">report</field>
         </record>
 
-        <record id="report_purchase_quotation" model="ir.actions.report">
-            <field name="name">Request for Quotation</field>
-            <field name="model">purchase.order</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">purchase.report_purchasequotation</field>
-            <field name="report_file">purchase.report_purchasequotation</field>
-            <field name="print_report_name">'Request for Quotation - %s' % (object.name)</field>
-            <field name="binding_model_id" ref="model_purchase_order"/>
-            <field name="binding_type">report</field>
+        <recordid="report_purchase_quotation"model="ir.actions.report">
+            <fieldname="name">RequestforQuotation</field>
+            <fieldname="model">purchase.order</field>
+            <fieldname="report_type">qweb-pdf</field>
+            <fieldname="report_name">purchase.report_purchasequotation</field>
+            <fieldname="report_file">purchase.report_purchasequotation</field>
+            <fieldname="print_report_name">'RequestforQuotation-%s'%(object.name)</field>
+            <fieldname="binding_model_id"ref="model_purchase_order"/>
+            <fieldname="binding_type">report</field>
         </record>
     </data>
 </flectra>

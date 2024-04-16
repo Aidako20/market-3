@@ -1,18 +1,18 @@
-flectra.define('lunch.LunchKanbanController', function (require) {
-"use strict";
+flectra.define('lunch.LunchKanbanController',function(require){
+"usestrict";
 
 /**
- * This file defines the Controller for the Lunch Kanban view, which is an
- * override of the KanbanController.
+ *ThisfiledefinestheControllerfortheLunchKanbanview,whichisan
+ *overrideoftheKanbanController.
  */
 
-var KanbanController = require('web.KanbanController');
-var LunchControllerCommon = require('lunch.LunchControllerCommon');
+varKanbanController=require('web.KanbanController');
+varLunchControllerCommon=require('lunch.LunchControllerCommon');
 
-var LunchKanbanController = KanbanController.extend(LunchControllerCommon , {
-    custom_events: _.extend({}, KanbanController.prototype.custom_events, LunchControllerCommon.custom_events),
+varLunchKanbanController=KanbanController.extend(LunchControllerCommon,{
+    custom_events:_.extend({},KanbanController.prototype.custom_events,LunchControllerCommon.custom_events),
 });
 
-return LunchKanbanController;
+returnLunchKanbanController;
 
 });

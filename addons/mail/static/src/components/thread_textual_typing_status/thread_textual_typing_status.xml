@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="mail.ThreadTextualTypingStatus" owl="1">
-        <div class="o_ThreadTextualTypingStatus">
-            <t t-if="thread and thread.orderedOtherTypingMembers.length > 0">
-                <ThreadTypingIcon animation="'pulse'" size="'medium'"/>
-                <span class="o_ThreadTextualTypingStatus_separator"/>
-                <span t-esc="thread.typingStatusText"/>
+    <tt-name="mail.ThreadTextualTypingStatus"owl="1">
+        <divclass="o_ThreadTextualTypingStatus">
+            <tt-if="threadandthread.orderedOtherTypingMembers.length>0">
+                <ThreadTypingIconanimation="'pulse'"size="'medium'"/>
+                <spanclass="o_ThreadTextualTypingStatus_separator"/>
+                <spant-esc="thread.typingStatusText"/>
             </t>
         </div>
     </t>

@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <record id="email_template_form_simplified" model="ir.ui.view">
-            <field name="name">mail.template.form.simplified</field>
-            <field name="model">mail.template</field>
-            <field name="priority">100</field>
-            <field name="arch" type="xml">
-                <form string="Email Template">
+        <recordid="email_template_form_simplified"model="ir.ui.view">
+            <fieldname="name">mail.template.form.simplified</field>
+            <fieldname="model">mail.template</field>
+            <fieldname="priority">100</field>
+            <fieldname="arch"type="xml">
+                <formstring="EmailTemplate">
                     <group>
-                        <field name="subject" invisible="1"/>
-                        <field name="name" invisible="1"/>
-                        <field name="model" invisible="1"/>
-                        <h3 colspan="2">Body</h3>
-                        <field name="body_html" nolabel="1" colspan="2" widget="html"
-                            options="{'style-inline': true}" />
-                        <field name="attachment_ids" nolabel="1" colspan="2"
+                        <fieldname="subject"invisible="1"/>
+                        <fieldname="name"invisible="1"/>
+                        <fieldname="model"invisible="1"/>
+                        <h3colspan="2">Body</h3>
+                        <fieldname="body_html"nolabel="1"colspan="2"widget="html"
+                            options="{'style-inline':true}"/>
+                        <fieldname="attachment_ids"nolabel="1"colspan="2"
                             widget="many2many_binary"/>
                     </group>
                 </form>

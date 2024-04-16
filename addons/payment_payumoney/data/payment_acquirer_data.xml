@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record id="payment.payment_acquirer_payu" model="payment.acquirer">
-            <field name="name">PayUmoney</field>
-            <field name="image_128" type="base64" file="payment_payumoney/static/src/img/payumoney_icon.png"/>
-            <field name="provider">payumoney</field>
-            <field name="company_id" ref="base.main_company"/>
-            <field name="view_template_id" ref="payumoney_form"/>
+    <datanoupdate="1">
+        <recordid="payment.payment_acquirer_payu"model="payment.acquirer">
+            <fieldname="name">PayUmoney</field>
+            <fieldname="image_128"type="base64"file="payment_payumoney/static/src/img/payumoney_icon.png"/>
+            <fieldname="provider">payumoney</field>
+            <fieldname="company_id"ref="base.main_company"/>
+            <fieldname="view_template_id"ref="payumoney_form"/>
         </record>
     </data>
 </flectra>

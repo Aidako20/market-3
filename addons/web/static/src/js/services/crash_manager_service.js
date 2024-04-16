@@ -1,9 +1,9 @@
-flectra.define('crash_manager.service', function (require) {
-'use strict';
+flectra.define('crash_manager.service',function(require){
+'usestrict';
 
-const core = require('web.core');
-const CrashManager = require('web.CrashManager').CrashManager;
+constcore=require('web.core');
+constCrashManager=require('web.CrashManager').CrashManager;
 
-core.serviceRegistry.add('crash_manager', CrashManager);
+core.serviceRegistry.add('crash_manager',CrashManager);
 
 });

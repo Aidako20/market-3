@@ -1,185 +1,185 @@
-flectra.define('sms.sms_widget', function (require) {
-"use strict";
+flectra.define('sms.sms_widget',function(require){
+"usestrict";
 
-var core = require('web.core');
-var fieldRegistry = require('web.field_registry');
-var FieldTextEmojis = require('mail.field_text_emojis');
+varcore=require('web.core');
+varfieldRegistry=require('web.field_registry');
+varFieldTextEmojis=require('mail.field_text_emojis');
 
-var _t = core._t;
+var_t=core._t;
 /**
- * SmsWidget is a widget to display a textarea (the body) and a text representing
- * the number of SMS and the number of characters. This text is computed every
- * time the user changes the body.
+ *SmsWidgetisawidgettodisplayatextarea(thebody)andatextrepresenting
+ *thenumberofSMSandthenumberofcharacters.Thistextiscomputedevery
+ *timetheuserchangesthebody.
  */
-var SmsWidget = FieldTextEmojis.extend({
-    className: 'o_field_text',
-    enableEmojis: false,
+varSmsWidget=FieldTextEmojis.extend({
+    className:'o_field_text',
+    enableEmojis:false,
     /**
-     * @constructor
+     *@constructor
      */
-    init: function () {
-        this._super.apply(this, arguments);
-        this.nbrChar = 0;
-        this.nbrSMS = 0;
-        this.encoding = 'GSM7';
-        this.enableEmojis = !!this.nodeOptions.enable_emojis;
+    init:function(){
+        this._super.apply(this,arguments);
+        this.nbrChar=0;
+        this.nbrSMS=0;
+        this.encoding='GSM7';
+        this.enableEmojis=!!this.nodeOptions.enable_emojis;
     },
     
     /**
-     * @override
-     *"This will add the emoji dropdown to a target field (controlled by the "enableEmojis" attribute)
+     *@override
+     *"Thiswilladdtheemojidropdowntoatargetfield(controlledbythe"enableEmojis"attribute)
      */
-    on_attach_callback: function () {
-        if (this.enableEmojis) {
-            this._super.apply(this, arguments);
+    on_attach_callback:function(){
+        if(this.enableEmojis){
+            this._super.apply(this,arguments);
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private: override widget
+    //Private:overridewidget
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @override
+     *@private
+     *@override
      */
-    _renderEdit: function () {
-        var def = this._super.apply(this, arguments);
+    _renderEdit:function(){
+        vardef=this._super.apply(this,arguments);
 
         this._compute();
         $('.o_sms_container').remove();
-        var $sms_container = $('<div class="o_sms_container"/>');
+        var$sms_container=$('<divclass="o_sms_container"/>');
         $sms_container.append(this._renderSMSInfo());
         $sms_container.append(this._renderIAPButton());
-        this.$el = this.$el.add($sms_container);
+        this.$el=this.$el.add($sms_container);
 
-        return def;
+        returndef;
     },
 
     //--------------------------------------------------------------------------
-    // Private: SMS
+    //Private:SMS
     //--------------------------------------------------------------------------
 
     /**
-     * Compute the number of characters and sms
-     * @private
+     *Computethenumberofcharactersandsms
+     *@private
      */
-    _compute: function () {
-        var content = this._getValue();
-        this.encoding = this._extractEncoding(content);
-        this.nbrChar = content.length;
-        this.nbrChar += (content.match(/\n/g) || []).length;
-        this.nbrSMS = this._countSMS(this.nbrChar, this.encoding);
+    _compute:function(){
+        varcontent=this._getValue();
+        this.encoding=this._extractEncoding(content);
+        this.nbrChar=content.length;
+        this.nbrChar+=(content.match(/\n/g)||[]).length;
+        this.nbrSMS=this._countSMS(this.nbrChar,this.encoding);
     },
 
     /**
-     * Count the number of SMS of the content
-     * @private
-     * @returns {integer} Number of SMS
+     *CountthenumberofSMSofthecontent
+     *@private
+     *@returns{integer}NumberofSMS
      */
-    _countSMS: function () {
-        if (this.nbrChar === 0) {
-            return 0;
+    _countSMS:function(){
+        if(this.nbrChar===0){
+            return0;
         }
-        if (this.encoding === 'UNICODE') {
-            if (this.nbrChar <= 70) {
-                return 1;
+        if(this.encoding==='UNICODE'){
+            if(this.nbrChar<=70){
+                return1;
             }
-            return Math.ceil(this.nbrChar / 67);
+            returnMath.ceil(this.nbrChar/67);
         }
-        if (this.nbrChar <= 160) {
-            return 1;
+        if(this.nbrChar<=160){
+            return1;
         }
-        return Math.ceil(this.nbrChar / 153);
+        returnMath.ceil(this.nbrChar/153);
     },
 
     /**
-     * Extract the encoding depending on the characters in the content
-     * @private
-     * @param {String} content Content of the SMS
-     * @returns {String} Encoding of the content (GSM7 or UNICODE)
+     *Extracttheencodingdependingonthecharactersinthecontent
+     *@private
+     *@param{String}contentContentoftheSMS
+     *@returns{String}Encodingofthecontent(GSM7orUNICODE)
      */
-    _extractEncoding: function (content) {
-        if (String(content).match(RegExp("^[@£$¥èéùìòÇ\\nØø\\rÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ !\\\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà]*$"))) {
-            return 'GSM7';
+    _extractEncoding:function(content){
+        if(String(content).match(RegExp("^[@£$¥èéùìòÇ\\nØø\\rÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ!\\\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà]*$"))){
+            return'GSM7';
         }
-        return 'UNICODE';
+        return'UNICODE';
     },
 
     /**
-     * Render the IAP button to redirect to IAP pricing
-     * @private
+     *RendertheIAPbuttontoredirecttoIAPpricing
+     *@private
      */
-    _renderIAPButton: function () {
-        return $('<a>', {
-            'href': 'https://iap-services.flectrahq.com/iap/sms/pricing',
-            'target': '_blank',
-            'title': _t('SMS Pricing'),
-            'aria-label': _t('SMS Pricing'),
-            'class': 'fa fa-lg fa-info-circle',
+    _renderIAPButton:function(){
+        return$('<a>',{
+            'href':'https://iap-services.flectrahq.com/iap/sms/pricing',
+            'target':'_blank',
+            'title':_t('SMSPricing'),
+            'aria-label':_t('SMSPricing'),
+            'class':'fafa-lgfa-info-circle',
         });
     },
 
     /**
-     * Render the number of characters, sms and the encoding.
-     * @private
+     *Renderthenumberofcharacters,smsandtheencoding.
+     *@private
      */
-    _renderSMSInfo: function () {
-        var string = _.str.sprintf(_t('%s characters, fits in %s SMS (%s) '), this.nbrChar, this.nbrSMS, this.encoding);
-        var $span = $('<span>', {
-            'class': 'text-muted o_sms_count',
+    _renderSMSInfo:function(){
+        varstring=_.str.sprintf(_t('%scharacters,fitsin%sSMS(%s)'),this.nbrChar,this.nbrSMS,this.encoding);
+        var$span=$('<span>',{
+            'class':'text-mutedo_sms_count',
         });
         $span.text(string);
-        return $span;
+        return$span;
     },
 
     /**
-     * Update widget SMS information with re-computed info about length, ...
-     * @private
+     *UpdatewidgetSMSinformationwithre-computedinfoaboutlength,...
+     *@private
      */
-    _updateSMSInfo: function ()  {
+    _updateSMSInfo:function() {
         this._compute();
-        var string = _.str.sprintf(_t('%s characters, fits in %s SMS (%s) '), this.nbrChar, this.nbrSMS, this.encoding);
+        varstring=_.str.sprintf(_t('%scharacters,fitsin%sSMS(%s)'),this.nbrChar,this.nbrSMS,this.encoding);
         this.$('.o_sms_count').text(string);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onBlur: function () {
-        var content = this._getValue();
-        if( !content.trim().length && content.length > 0) {
-            this.do_warn(_t("Your SMS Text Message must include at least one non-whitespace character"));
+    _onBlur:function(){
+        varcontent=this._getValue();
+        if(!content.trim().length&&content.length>0){
+            this.do_warn(_t("YourSMSTextMessagemustincludeatleastonenon-whitespacecharacter"));
             this.$input.val(content.trim());
             this._updateSMSInfo();
         }
     },
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onChange: function () {
-        this._super.apply(this, arguments);
+    _onChange:function(){
+        this._super.apply(this,arguments);
         this._updateSMSInfo();
     },
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onInput: function () {
-        this._super.apply(this, arguments);
+    _onInput:function(){
+        this._super.apply(this,arguments);
         this._updateSMSInfo();
     },
 });
 
-fieldRegistry.add('sms_widget', SmsWidget);
+fieldRegistry.add('sms_widget',SmsWidget);
 
-return SmsWidget;
+returnSmsWidget;
 });

@@ -1,173 +1,173 @@
-flectra.define('lunch.lunchListTests', function (require) {
-"use strict";
+flectra.define('lunch.lunchListTests',function(require){
+"usestrict";
 
-const LunchListView = require('lunch.LunchListView');
+constLunchListView=require('lunch.LunchListView');
 
-const testUtils = require('web.test_utils');
-const {createLunchView, mockLunchRPC} = require('lunch.test_utils');
+consttestUtils=require('web.test_utils');
+const{createLunchView,mockLunchRPC}=require('lunch.test_utils');
 
 QUnit.module('Views');
 
-QUnit.module('LunchListView', {
-    beforeEach() {
-        const PORTAL_GROUP_ID = 1234;
+QUnit.module('LunchListView',{
+    beforeEach(){
+        constPORTAL_GROUP_ID=1234;
 
-        this.data = {
-            'product': {
-                fields: {
-                    is_available_at: {string: 'Product Availability', type: 'many2one', relation: 'lunch.location'},
-                    category_id: {string: 'Product Category', type: 'many2one', relation: 'lunch.product.category'},
-                    supplier_id: {string: 'Vendor', type: 'many2one', relation: 'lunch.supplier'},
+        this.data={
+            'product':{
+                fields:{
+                    is_available_at:{string:'ProductAvailability',type:'many2one',relation:'lunch.location'},
+                    category_id:{string:'ProductCategory',type:'many2one',relation:'lunch.product.category'},
+                    supplier_id:{string:'Vendor',type:'many2one',relation:'lunch.supplier'},
                 },
-                records: [
-                    {id: 1, name: 'Tuna sandwich', is_available_at: 1},
+                records:[
+                    {id:1,name:'Tunasandwich',is_available_at:1},
                 ],
             },
-            'lunch.order': {
-                fields: {},
-                update_quantity() {
-                    return Promise.resolve();
+            'lunch.order':{
+                fields:{},
+                update_quantity(){
+                    returnPromise.resolve();
                 },
             },
-            'lunch.product.category': {
-                fields: {},
-                records: [],
+            'lunch.product.category':{
+                fields:{},
+                records:[],
             },
-            'lunch.supplier': {
-                fields: {},
-                records: [],
+            'lunch.supplier':{
+                fields:{},
+                records:[],
             },
-            'ir.model.data': {
-                fields: {},
-                xmlid_to_res_id() {
-                    return Promise.resolve(PORTAL_GROUP_ID);
+            'ir.model.data':{
+                fields:{},
+                xmlid_to_res_id(){
+                    returnPromise.resolve(PORTAL_GROUP_ID);
                 },
             },
-            'lunch.location': {
-                fields: {
-                    name: {string: 'Name', type: 'char'},
+            'lunch.location':{
+                fields:{
+                    name:{string:'Name',type:'char'},
                 },
-                records: [
-                    {id: 1, name: "Office 1"},
-                    {id: 2, name: "Office 2"},
+                records:[
+                    {id:1,name:"Office1"},
+                    {id:2,name:"Office2"},
                 ],
             },
-            'res.users': {
-                fields: {
-                    name: {string: 'Name', type: 'char'},
-                    groups_id: {string: 'Groups', type: 'many2many'},
+            'res.users':{
+                fields:{
+                    name:{string:'Name',type:'char'},
+                    groups_id:{string:'Groups',type:'many2many'},
                 },
-                records: [
-                    {id: 1, name: "Mitchell Admin", groups_id: []},
-                    {id: 2, name: "Marc Demo", groups_id: []},
-                    {id: 3, name: "Jean-Luc Portal", groups_id: [PORTAL_GROUP_ID]},
+                records:[
+                    {id:1,name:"MitchellAdmin",groups_id:[]},
+                    {id:2,name:"MarcDemo",groups_id:[]},
+                    {id:3,name:"Jean-LucPortal",groups_id:[PORTAL_GROUP_ID]},
                 ],
             },
         };
-        this.regularInfos = {
-            username: "Marc Demo",
-            wallet: 36.5,
-            is_manager: false,
-            currency: {
-                symbol: "\u20ac",
-                position: "after"
+        this.regularInfos={
+            username:"MarcDemo",
+            wallet:36.5,
+            is_manager:false,
+            currency:{
+                symbol:"\u20ac",
+                position:"after"
             },
-            user_location: [2, "Office 2"],
+            user_location:[2,"Office2"],
         };
     },
-}, function () {
-    QUnit.test('basic rendering', async function (assert) {
+},function(){
+    QUnit.test('basicrendering',asyncfunction(assert){
         assert.expect(6);
 
-        const list = await createLunchView({
-            View: LunchListView,
-            model: 'product',
-            data: this.data,
-            arch: `
+        constlist=awaitcreateLunchView({
+            View:LunchListView,
+            model:'product',
+            data:this.data,
+            arch:`
                 <tree>
-                    <field name="name"/>
+                    <fieldname="name"/>
                 </tree>
             `,
-            mockRPC: mockLunchRPC({
-                infos: this.regularInfos,
-                userLocation: this.data['lunch.location'].records[0].id,
+            mockRPC:mockLunchRPC({
+                infos:this.regularInfos,
+                userLocation:this.data['lunch.location'].records[0].id,
             }),
         });
 
-        // check view layout
-        assert.containsN(list, '.o_content > div', 2,
-            "should have 2 columns");
-        assert.containsOnce(list, '.o_content > div.o_search_panel',
-            "should have a 'lunch filters' column");
-        assert.containsOnce(list, '.o_content > .o_lunch_content',
-            "should have a 'lunch wrapper' column");
-        assert.containsOnce(list, '.o_lunch_content > .o_list_view',
-            "should have a 'classical list view' column");
-        assert.hasClass(list.$('.o_list_view'), 'o_lunch_list_view',
-            "should have classname 'o_lunch_list_view'");
-        assert.containsOnce(list, '.o_lunch_content > span > .o_lunch_banner',
-            "should have a 'lunch' banner");
+        //checkviewlayout
+        assert.containsN(list,'.o_content>div',2,
+            "shouldhave2columns");
+        assert.containsOnce(list,'.o_content>div.o_search_panel',
+            "shouldhavea'lunchfilters'column");
+        assert.containsOnce(list,'.o_content>.o_lunch_content',
+            "shouldhavea'lunchwrapper'column");
+        assert.containsOnce(list,'.o_lunch_content>.o_list_view',
+            "shouldhavea'classicallistview'column");
+        assert.hasClass(list.$('.o_list_view'),'o_lunch_list_view',
+            "shouldhaveclassname'o_lunch_list_view'");
+        assert.containsOnce(list,'.o_lunch_content>span>.o_lunch_banner',
+            "shouldhavea'lunch'banner");
 
         list.destroy();
     });
 
-    QUnit.module('LunchWidget', function () {
+    QUnit.module('LunchWidget',function(){
 
-        QUnit.test('search panel domain location', async function (assert) {
+        QUnit.test('searchpaneldomainlocation',asyncfunction(assert){
             assert.expect(20);
-            let expectedLocation = 1;
-            let locationId = this.data['lunch.location'].records[0].id;
-            const regularInfos = _.extend({}, this.regularInfos);
+            letexpectedLocation=1;
+            letlocationId=this.data['lunch.location'].records[0].id;
+            constregularInfos=_.extend({},this.regularInfos);
 
-            const list = await createLunchView({
-                View: LunchListView,
-                model: 'product',
-                data: this.data,
-                arch: `
+            constlist=awaitcreateLunchView({
+                View:LunchListView,
+                model:'product',
+                data:this.data,
+                arch:`
                     <tree>
-                        <field name="name"/>
+                        <fieldname="name"/>
                     </tree>
                 `,
-                mockRPC: function (route, args) {
+                mockRPC:function(route,args){
                     assert.step(route);
 
-                    if (route.startsWith('/lunch')) {
-                        if (route === '/lunch/user_location_set') {
-                            locationId = args.location_id;
-                            return Promise.resolve(true);
+                    if(route.startsWith('/lunch')){
+                        if(route==='/lunch/user_location_set'){
+                            locationId=args.location_id;
+                            returnPromise.resolve(true);
                         }
-                        return mockLunchRPC({
-                            infos: regularInfos,
-                            userLocation: locationId,
-                        }).apply(this, arguments);
+                        returnmockLunchRPC({
+                            infos:regularInfos,
+                            userLocation:locationId,
+                        }).apply(this,arguments);
                     }
-                    if (args.method === 'search_panel_select_multi_range') {
-                        assert.deepEqual(args.kwargs.search_domain, [["is_available_at", "in", [expectedLocation]]],
-                            'The initial domain of the search panel must contain the user location');
+                    if(args.method==='search_panel_select_multi_range'){
+                        assert.deepEqual(args.kwargs.search_domain,[["is_available_at","in",[expectedLocation]]],
+                            'Theinitialdomainofthesearchpanelmustcontaintheuserlocation');
                     }
-                    if (route === '/web/dataset/search_read') {
-                        assert.deepEqual(args.domain, [["is_available_at", "in", [expectedLocation]]],
-                            'The domain for fetching actual data should be correct');
+                    if(route==='/web/dataset/search_read'){
+                        assert.deepEqual(args.domain,[["is_available_at","in",[expectedLocation]]],
+                            'Thedomainforfetchingactualdatashouldbecorrect');
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            expectedLocation = 2;
-            await testUtils.fields.many2one.clickOpenDropdown('locations');
-            await testUtils.fields.many2one.clickItem('locations', "Office 2");
+            expectedLocation=2;
+            awaittestUtils.fields.many2one.clickOpenDropdown('locations');
+            awaittestUtils.fields.many2one.clickItem('locations',"Office2");
 
             assert.verifySteps([
-                // Initial state
+                //Initialstate
                 '/lunch/user_location_get',
                 '/web/dataset/call_kw/product/search_panel_select_multi_range',
                 '/web/dataset/call_kw/product/search_panel_select_multi_range',
                 '/web/dataset/search_read',
                 '/lunch/infos',
                 '/web/dataset/call_kw/ir.model.data/xmlid_to_res_id',
-                // Click m2o
+                //Clickm2o
                 '/web/dataset/call_kw/lunch.location/name_search',
-                // Click new location
+                //Clicknewlocation
                 '/lunch/user_location_set',
                 '/web/dataset/call_kw/product/search_panel_select_multi_range',
                 '/web/dataset/call_kw/product/search_panel_select_multi_range',
@@ -179,37 +179,37 @@ QUnit.module('LunchListView', {
             list.destroy();
         });
 
-        QUnit.test('search panel domain location false: fetch products in all locations', async function (assert) {
+        QUnit.test('searchpaneldomainlocationfalse:fetchproductsinalllocations',asyncfunction(assert){
             assert.expect(10);
-            const regularInfos = _.extend({}, this.regularInfos);
+            constregularInfos=_.extend({},this.regularInfos);
 
-            const list = await createLunchView({
-                View: LunchListView,
-                model: 'product',
-                data: this.data,
-                arch: `
+            constlist=awaitcreateLunchView({
+                View:LunchListView,
+                model:'product',
+                data:this.data,
+                arch:`
                     <tree>
-                        <field name="name"/>
+                        <fieldname="name"/>
                     </tree>
                 `,
-                mockRPC: function (route, args) {
+                mockRPC:function(route,args){
                     assert.step(route);
 
-                    if (route.startsWith('/lunch')) {
-                        return mockLunchRPC({
-                            infos: regularInfos,
-                            userLocation: false,
-                        }).apply(this, arguments);
+                    if(route.startsWith('/lunch')){
+                        returnmockLunchRPC({
+                            infos:regularInfos,
+                            userLocation:false,
+                        }).apply(this,arguments);
                     }
-                    if (args.method === 'search_panel_select_multi_range') {
-                        assert.deepEqual(args.kwargs.search_domain, [],
-                            'The domain should not exist since the location is false.');
+                    if(args.method==='search_panel_select_multi_range'){
+                        assert.deepEqual(args.kwargs.search_domain,[],
+                            'Thedomainshouldnotexistsincethelocationisfalse.');
                     }
-                    if (route === '/web/dataset/search_read') {
-                        assert.deepEqual(args.domain, [],
-                            'The domain for fetching actual data should be correct');
+                    if(route==='/web/dataset/search_read'){
+                        assert.deepEqual(args.domain,[],
+                            'Thedomainforfetchingactualdatashouldbecorrect');
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 }
             });
             assert.verifySteps([
@@ -224,40 +224,40 @@ QUnit.module('LunchListView', {
             list.destroy();
         });
 
-        QUnit.test('add a product', async function (assert) {
+        QUnit.test('addaproduct',asyncfunction(assert){
             assert.expect(1);
 
-            const list = await createLunchView({
-                View: LunchListView,
-                model: 'product',
-                data: this.data,
-                arch: `
+            constlist=awaitcreateLunchView({
+                View:LunchListView,
+                model:'product',
+                data:this.data,
+                arch:`
                     <tree>
-                        <field name="name"/>
+                        <fieldname="name"/>
                     </tree>
                 `,
-                mockRPC: mockLunchRPC({
-                    infos: this.regularInfos,
-                    userLocation: this.data['lunch.location'].records[0].id,
+                mockRPC:mockLunchRPC({
+                    infos:this.regularInfos,
+                    userLocation:this.data['lunch.location'].records[0].id,
                 }),
-                intercepts: {
-                    do_action: function (ev) {
-                        assert.deepEqual(ev.data.action, {
-                            name: "Configure Your Order",
-                            res_model: 'lunch.order',
-                            type: 'ir.actions.act_window',
-                            views: [[false, 'form']],
-                            target: 'new',
-                            context: {
-                                default_product_id: 1,
+                intercepts:{
+                    do_action:function(ev){
+                        assert.deepEqual(ev.data.action,{
+                            name:"ConfigureYourOrder",
+                            res_model:'lunch.order',
+                            type:'ir.actions.act_window',
+                            views:[[false,'form']],
+                            target:'new',
+                            context:{
+                                default_product_id:1,
                             },
                         },
-                        "should open the wizard");
+                        "shouldopenthewizard");
                     },
                 },
             });
 
-            await testUtils.dom.click(list.$('.o_data_row:first'));
+            awaittestUtils.dom.click(list.$('.o_data_row:first'));
 
             list.destroy();
         });

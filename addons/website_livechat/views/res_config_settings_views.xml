@@ -1,23 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="res_config_settings_view_form" model="ir.ui.view">
-        <field name="name">res.config.settings.view.form.inherit.website.livechat</field>
-        <field name="model">res.config.settings</field>
-        <field name="inherit_id" ref="website.res_config_settings_view_form"/>
-        <field name="arch" type="xml">
-            <div id="google_maps_setting" position="after">
-                <div class="col-12 col-lg-6 o_setting_box" id="live_chat_install_setting">
-                    <div class="o_setting_right_pane">
-                        <span class="o_form_label">Live Chat</span>
-                        <span class="fa fa-lg fa-globe" title="Values set here are website-specific." groups="website.group_multi_website"/>
-                        <div class="text-muted">
-                            Live chat channel of your website
+    <recordid="res_config_settings_view_form"model="ir.ui.view">
+        <fieldname="name">res.config.settings.view.form.inherit.website.livechat</field>
+        <fieldname="model">res.config.settings</field>
+        <fieldname="inherit_id"ref="website.res_config_settings_view_form"/>
+        <fieldname="arch"type="xml">
+            <divid="google_maps_setting"position="after">
+                <divclass="col-12col-lg-6o_setting_box"id="live_chat_install_setting">
+                    <divclass="o_setting_right_pane">
+                        <spanclass="o_form_label">LiveChat</span>
+                        <spanclass="fafa-lgfa-globe"title="Valuessetherearewebsite-specific."groups="website.group_multi_website"/>
+                        <divclass="text-muted">
+                            Livechatchannelofyourwebsite
                         </div>
-                        <div class="content-group mt16">
-                            <div class="row">
-                                <label class="col-lg-3 o_light_label" string="Channel" for="channel_id"/>
-                                <field name="channel_id" class="oe_inline"/>
+                        <divclass="content-groupmt16">
+                            <divclass="row">
+                                <labelclass="col-lg-3o_light_label"string="Channel"for="channel_id"/>
+                                <fieldname="channel_id"class="oe_inline"/>
                             </div>
                         </div>
                     </div>

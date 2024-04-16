@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models
+fromflectraimportapi,models
 
 
-class SaleOrderLine(models.Model):
-    _inherit = "sale.order.line"
+classSaleOrderLine(models.Model):
+    _inherit="sale.order.line"
 
-    def _action_launch_stock_rule(self, previous_product_uom_qty=False):
-        res = super(SaleOrderLine, self)._action_launch_stock_rule(previous_product_uom_qty=previous_product_uom_qty)
-        orders = list(set(x.order_id for x in self))
-        for order in orders:
-            reassign = order.picking_ids.filtered(lambda x: x.state=='confirmed' or (x.state in ['waiting', 'assigned'] and not x.printed))
-            if reassign:
-                # Trigger the Scheduler for Pickings
+    def_action_launch_stock_rule(self,previous_product_uom_qty=False):
+        res=super(SaleOrderLine,self)._action_launch_stock_rule(previous_product_uom_qty=previous_product_uom_qty)
+        orders=list(set(x.order_idforxinself))
+        fororderinorders:
+            reassign=order.picking_ids.filtered(lambdax:x.state=='confirmed'or(x.statein['waiting','assigned']andnotx.printed))
+            ifreassign:
+                #TriggertheSchedulerforPickings
                 reassign.action_confirm()
                 reassign.action_assign()
-        return res
+        returnres

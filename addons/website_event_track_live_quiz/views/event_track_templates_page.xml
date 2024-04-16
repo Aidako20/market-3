@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template id="event_track_content"
-    name="Main Description: tweak quiz"
+<templateid="event_track_content"
+    name="MainDescription:tweakquiz"
     inherit_id="website_event_track_quiz.event_track_content">
-    <xpath expr="//div[hasclass('o_we_track_quiz_button')]" position="attributes">
-        <attribute name="t-if">track.quiz_id and not track.is_quiz_completed and not track.is_track_upcoming and (not track.is_track_live or track.is_youtube_replay or not track.youtube_video_id)</attribute>
+    <xpathexpr="//div[hasclass('o_we_track_quiz_button')]"position="attributes">
+        <attributename="t-if">track.quiz_idandnottrack.is_quiz_completedandnottrack.is_track_upcomingand(nottrack.is_track_liveortrack.is_youtube_replayornottrack.youtube_video_id)</attribute>
     </xpath>
 </template>
 

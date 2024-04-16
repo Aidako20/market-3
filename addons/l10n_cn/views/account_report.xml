@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <!-- QWeb Reports -->
-        <record id="account_voucher_cn" model="ir.actions.report">
-            <field name="name">Voucher</field>
-            <field name="model">account.move</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">l10n_cn.report_voucher</field>
-            <field name="report_file">l10n_cn.report_voucher</field>
-            <field name="print_report_name">'Voucher_%s' % (object.name)</field>
-            <field name="binding_view_types">form</field>
-            <field name="binding_model_id" ref="model_account_move"/>
+        <!--QWebReports-->
+        <recordid="account_voucher_cn"model="ir.actions.report">
+            <fieldname="name">Voucher</field>
+            <fieldname="model">account.move</field>
+            <fieldname="report_type">qweb-pdf</field>
+            <fieldname="report_name">l10n_cn.report_voucher</field>
+            <fieldname="report_file">l10n_cn.report_voucher</field>
+            <fieldname="print_report_name">'Voucher_%s'%(object.name)</field>
+            <fieldname="binding_view_types">form</field>
+            <fieldname="binding_model_id"ref="model_account_move"/>
         </record>
     </data>
 </flectra>

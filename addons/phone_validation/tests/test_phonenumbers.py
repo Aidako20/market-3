@@ -1,23 +1,23 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.addons.phone_validation.tools import phone_validation
-from flectra.exceptions import UserError
-from flectra.tests import tagged
-from flectra.tests.common import BaseCase
+fromflectra.addons.phone_validation.toolsimportphone_validation
+fromflectra.exceptionsimportUserError
+fromflectra.testsimporttagged
+fromflectra.tests.commonimportBaseCase
 
 
 @tagged('phone_validation')
-class TestPhonenumbers(BaseCase):
+classTestPhonenumbers(BaseCase):
 
-    def test_country_code_falsy(self):
+    deftest_country_code_falsy(self):
         self.assertEqual(
-            phone_validation.phone_format('0456998877', 'BE', '32', force_format='E164'),
+            phone_validation.phone_format('0456998877','BE','32',force_format='E164'),
             '+32456998877'
         )
-        # no country code -> UserError, no internal traceback
-        with self.assertRaises(UserError):
+        #nocountrycode->UserError,nointernaltraceback
+        withself.assertRaises(UserError):
             self.assertEqual(
-                phone_validation.phone_format('0456998877', None, '32', force_format='E164'),
+                phone_validation.phone_format('0456998877',None,'32',force_format='E164'),
                 '+32456998877'
             )

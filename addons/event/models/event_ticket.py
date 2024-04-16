@@ -1,152 +1,152 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
-from flectra.exceptions import ValidationError, UserError
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportValidationError,UserError
 
 
-class EventTemplateTicket(models.Model):
-    _name = 'event.type.ticket'
-    _description = 'Event Template Ticket'
+classEventTemplateTicket(models.Model):
+    _name='event.type.ticket'
+    _description='EventTemplateTicket'
 
-    # description
-    name = fields.Char(
-        string='Name', default=lambda self: _('Registration'),
-        required=True, translate=True)
-    description = fields.Text(
-        'Description', translate=True,
-        help="A description of the ticket that you want to communicate to your customers.")
-    event_type_id = fields.Many2one(
-        'event.type', string='Event Category', ondelete='cascade', required=True)
-    # seats
-    seats_limited = fields.Boolean(string='Seats Limit', readonly=True, store=True,
+    #description
+    name=fields.Char(
+        string='Name',default=lambdaself:_('Registration'),
+        required=True,translate=True)
+    description=fields.Text(
+        'Description',translate=True,
+        help="Adescriptionoftheticketthatyouwanttocommunicatetoyourcustomers.")
+    event_type_id=fields.Many2one(
+        'event.type',string='EventCategory',ondelete='cascade',required=True)
+    #seats
+    seats_limited=fields.Boolean(string='SeatsLimit',readonly=True,store=True,
                                    compute='_compute_seats_limited')
-    seats_max = fields.Integer(
-        string='Maximum Seats',
-        help="Define the number of available tickets. If you have too many registrations you will "
-             "not be able to sell tickets anymore. Set 0 to ignore this rule set as unlimited.")
+    seats_max=fields.Integer(
+        string='MaximumSeats',
+        help="Definethenumberofavailabletickets.Ifyouhavetoomanyregistrationsyouwill"
+             "notbeabletosellticketsanymore.Set0toignorethisrulesetasunlimited.")
 
     @api.depends('seats_max')
-    def _compute_seats_limited(self):
-        for ticket in self:
-            ticket.seats_limited = ticket.seats_max
+    def_compute_seats_limited(self):
+        forticketinself:
+            ticket.seats_limited=ticket.seats_max
 
     @api.model
-    def _get_event_ticket_fields_whitelist(self):
-        """ Whitelist of fields that are copied from event_type_ticket_ids to event_ticket_ids when
-        changing the event_type_id field of event.event """
-        return ['name', 'description', 'seats_max']
+    def_get_event_ticket_fields_whitelist(self):
+        """Whitelistoffieldsthatarecopiedfromevent_type_ticket_idstoevent_ticket_idswhen
+        changingtheevent_type_idfieldofevent.event"""
+        return['name','description','seats_max']
 
 
-class EventTicket(models.Model):
-    """ Ticket model allowing to have differnt kind of registrations for a given
-    event. Ticket are based on ticket type as they share some common fields
-    and behavior. Those models come from <= v13 Flectra event.event.ticket that
-    modeled both concept: tickets for event templates, and tickets for events. """
-    _name = 'event.event.ticket'
-    _inherit = 'event.type.ticket'
-    _description = 'Event Ticket'
+classEventTicket(models.Model):
+    """Ticketmodelallowingtohavedifferntkindofregistrationsforagiven
+    event.Ticketarebasedontickettypeastheysharesomecommonfields
+    andbehavior.Thosemodelscomefrom<=v13Flectraevent.event.ticketthat
+    modeledbothconcept:ticketsforeventtemplates,andticketsforevents."""
+    _name='event.event.ticket'
+    _inherit='event.type.ticket'
+    _description='EventTicket'
 
     @api.model
-    def default_get(self, fields):
-        res = super(EventTicket, self).default_get(fields)
-        if 'name' in fields and (not res.get('name') or res['name'] == _('Registration')) and self.env.context.get('default_event_name'):
-            res['name'] = _('Registration for %s', self.env.context['default_event_name'])
-        return res
+    defdefault_get(self,fields):
+        res=super(EventTicket,self).default_get(fields)
+        if'name'infieldsand(notres.get('name')orres['name']==_('Registration'))andself.env.context.get('default_event_name'):
+            res['name']=_('Registrationfor%s',self.env.context['default_event_name'])
+        returnres
 
-    # description
-    event_type_id = fields.Many2one(ondelete='set null', required=False)
-    event_id = fields.Many2one(
-        'event.event', string="Event",
-        ondelete='cascade', required=True)
-    company_id = fields.Many2one('res.company', related='event_id.company_id')
-    # sale
-    start_sale_date = fields.Date(string="Registration Start")
-    end_sale_date = fields.Date(string="Registration End")
-    is_expired = fields.Boolean(string='Is Expired', compute='_compute_is_expired')
-    sale_available = fields.Boolean(string='Is Available', compute='_compute_sale_available', compute_sudo=True)
-    registration_ids = fields.One2many('event.registration', 'event_ticket_id', string='Registrations')
-    # seats
-    seats_reserved = fields.Integer(string='Reserved Seats', compute='_compute_seats', store=True)
-    seats_available = fields.Integer(string='Available Seats', compute='_compute_seats', store=True)
-    seats_unconfirmed = fields.Integer(string='Unconfirmed Seats', compute='_compute_seats', store=True)
-    seats_used = fields.Integer(string='Used Seats', compute='_compute_seats', store=True)
+    #description
+    event_type_id=fields.Many2one(ondelete='setnull',required=False)
+    event_id=fields.Many2one(
+        'event.event',string="Event",
+        ondelete='cascade',required=True)
+    company_id=fields.Many2one('res.company',related='event_id.company_id')
+    #sale
+    start_sale_date=fields.Date(string="RegistrationStart")
+    end_sale_date=fields.Date(string="RegistrationEnd")
+    is_expired=fields.Boolean(string='IsExpired',compute='_compute_is_expired')
+    sale_available=fields.Boolean(string='IsAvailable',compute='_compute_sale_available',compute_sudo=True)
+    registration_ids=fields.One2many('event.registration','event_ticket_id',string='Registrations')
+    #seats
+    seats_reserved=fields.Integer(string='ReservedSeats',compute='_compute_seats',store=True)
+    seats_available=fields.Integer(string='AvailableSeats',compute='_compute_seats',store=True)
+    seats_unconfirmed=fields.Integer(string='UnconfirmedSeats',compute='_compute_seats',store=True)
+    seats_used=fields.Integer(string='UsedSeats',compute='_compute_seats',store=True)
 
-    @api.depends('end_sale_date', 'event_id.date_tz')
-    def _compute_is_expired(self):
-        for ticket in self:
-            ticket = ticket._set_tz_context()
-            current_date = fields.Date.context_today(ticket)
-            if ticket.end_sale_date:
-                ticket.is_expired = ticket.end_sale_date < current_date
+    @api.depends('end_sale_date','event_id.date_tz')
+    def_compute_is_expired(self):
+        forticketinself:
+            ticket=ticket._set_tz_context()
+            current_date=fields.Date.context_today(ticket)
+            ifticket.end_sale_date:
+                ticket.is_expired=ticket.end_sale_date<current_date
             else:
-                ticket.is_expired = False
+                ticket.is_expired=False
 
-    @api.depends('is_expired', 'start_sale_date', 'event_id.date_tz', 'seats_available', 'seats_max')
-    def _compute_sale_available(self):
-        for ticket in self:
-            if not ticket.is_launched() or ticket.is_expired or (ticket.seats_max and ticket.seats_available <= 0):
-                ticket.sale_available = False
+    @api.depends('is_expired','start_sale_date','event_id.date_tz','seats_available','seats_max')
+    def_compute_sale_available(self):
+        forticketinself:
+            ifnotticket.is_launched()orticket.is_expiredor(ticket.seats_maxandticket.seats_available<=0):
+                ticket.sale_available=False
             else:
-                ticket.sale_available = True
+                ticket.sale_available=True
 
-    @api.depends('seats_max', 'registration_ids.state')
-    def _compute_seats(self):
-        """ Determine reserved, available, reserved but unconfirmed and used seats. """
-        # initialize fields to 0 + compute seats availability
-        for ticket in self:
-            ticket.seats_unconfirmed = ticket.seats_reserved = ticket.seats_used = ticket.seats_available = 0
-        # aggregate registrations by ticket and by state
-        results = {}
-        if self.ids:
-            state_field = {
-                'draft': 'seats_unconfirmed',
-                'open': 'seats_reserved',
-                'done': 'seats_used',
+    @api.depends('seats_max','registration_ids.state')
+    def_compute_seats(self):
+        """Determinereserved,available,reservedbutunconfirmedandusedseats."""
+        #initializefieldsto0+computeseatsavailability
+        forticketinself:
+            ticket.seats_unconfirmed=ticket.seats_reserved=ticket.seats_used=ticket.seats_available=0
+        #aggregateregistrationsbyticketandbystate
+        results={}
+        ifself.ids:
+            state_field={
+                'draft':'seats_unconfirmed',
+                'open':'seats_reserved',
+                'done':'seats_used',
             }
-            query = """ SELECT event_ticket_id, state, count(event_id)
-                        FROM event_registration
-                        WHERE event_ticket_id IN %s AND state IN ('draft', 'open', 'done')
-                        GROUP BY event_ticket_id, state
+            query="""SELECTevent_ticket_id,state,count(event_id)
+                        FROMevent_registration
+                        WHEREevent_ticket_idIN%sANDstateIN('draft','open','done')
+                        GROUPBYevent_ticket_id,state
                     """
-            self.env['event.registration'].flush(['event_id', 'event_ticket_id', 'state'])
-            self.env.cr.execute(query, (tuple(self.ids),))
-            for event_ticket_id, state, num in self.env.cr.fetchall():
-                results.setdefault(event_ticket_id, {})[state_field[state]] = num
+            self.env['event.registration'].flush(['event_id','event_ticket_id','state'])
+            self.env.cr.execute(query,(tuple(self.ids),))
+            forevent_ticket_id,state,numinself.env.cr.fetchall():
+                results.setdefault(event_ticket_id,{})[state_field[state]]=num
 
-        # compute seats_available
-        for ticket in self:
-            ticket.update(results.get(ticket._origin.id or ticket.id, {}))
-            if ticket.seats_max > 0:
-                ticket.seats_available = ticket.seats_max - (ticket.seats_reserved + ticket.seats_used)
+        #computeseats_available
+        forticketinself:
+            ticket.update(results.get(ticket._origin.idorticket.id,{}))
+            ifticket.seats_max>0:
+                ticket.seats_available=ticket.seats_max-(ticket.seats_reserved+ticket.seats_used)
 
-    @api.constrains('start_sale_date', 'end_sale_date')
-    def _constrains_dates_coherency(self):
-        for ticket in self:
-            if ticket.start_sale_date and ticket.end_sale_date and ticket.start_sale_date > ticket.end_sale_date:
-                raise UserError(_('The stop date cannot be earlier than the start date.'))
+    @api.constrains('start_sale_date','end_sale_date')
+    def_constrains_dates_coherency(self):
+        forticketinself:
+            ifticket.start_sale_dateandticket.end_sale_dateandticket.start_sale_date>ticket.end_sale_date:
+                raiseUserError(_('Thestopdatecannotbeearlierthanthestartdate.'))
 
-    @api.constrains('seats_available', 'seats_max')
-    def _constrains_seats_available(self):
-        if any(record.seats_max and record.seats_available < 0 for record in self):
-            raise ValidationError(_('No more available seats for this ticket.'))
+    @api.constrains('seats_available','seats_max')
+    def_constrains_seats_available(self):
+        ifany(record.seats_maxandrecord.seats_available<0forrecordinself):
+            raiseValidationError(_('Nomoreavailableseatsforthisticket.'))
 
-    def _get_ticket_multiline_description(self):
-        """ Compute a multiline description of this ticket. It is used when ticket
-        description are necessary without having to encode it manually, like sales
-        information. """
-        return '%s\n%s' % (self.display_name, self.event_id.display_name)
+    def_get_ticket_multiline_description(self):
+        """Computeamultilinedescriptionofthisticket.Itisusedwhenticket
+        descriptionarenecessarywithouthavingtoencodeitmanually,likesales
+        information."""
+        return'%s\n%s'%(self.display_name,self.event_id.display_name)
 
-    def _set_tz_context(self):
+    def_set_tz_context(self):
         self.ensure_one()
-        return self.with_context(tz=self.event_id.date_tz or 'UTC')
+        returnself.with_context(tz=self.event_id.date_tzor'UTC')
 
-    def is_launched(self):
-        # TDE FIXME: in master, make a computed field, easier to use
+    defis_launched(self):
+        #TDEFIXME:inmaster,makeacomputedfield,easiertouse
         self.ensure_one()
-        if self.start_sale_date:
-            ticket = self._set_tz_context()
-            current_date = fields.Date.context_today(ticket)
-            return ticket.start_sale_date <= current_date
+        ifself.start_sale_date:
+            ticket=self._set_tz_context()
+            current_date=fields.Date.context_today(ticket)
+            returnticket.start_sale_date<=current_date
         else:
-            return True
+            returnTrue

@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="adyen_account_view_form" model="ir.ui.view">
-        <field name="name">adyen.account.view.form.inherit.pos.adyen</field>
-        <field name="model">adyen.account</field>
-        <field name="inherit_id" ref="adyen_platforms.adyen_account_view_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//header" position="inside">
-                <button name="action_order_terminal" string="Order a Terminal" class="oe_highlight" type="object" attrs="{'invisible': [('adyen_uuid', '=', False)]}"/>
+    <recordid="adyen_account_view_form"model="ir.ui.view">
+        <fieldname="name">adyen.account.view.form.inherit.pos.adyen</field>
+        <fieldname="model">adyen.account</field>
+        <fieldname="inherit_id"ref="adyen_platforms.adyen_account_view_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//header"position="inside">
+                <buttonname="action_order_terminal"string="OrderaTerminal"class="oe_highlight"type="object"attrs="{'invisible':[('adyen_uuid','=',False)]}"/>
             </xpath>
-            <xpath expr="//notebook" position="inside">
-                <page string="Stores">
-                    <field name="store_ids">
+            <xpathexpr="//notebook"position="inside">
+                <pagestring="Stores">
+                    <fieldname="store_ids">
                         <tree>
-                            <field name="name"/>
-                            <field name="store_uuid"/>
+                            <fieldname="name"/>
+                            <fieldname="store_uuid"/>
                         </tree>
                     </field>
                 </page>
@@ -22,27 +22,27 @@
     </record>
 
 
-    <record id="adyen_store_view_form" model="ir.ui.view">
-        <field name="name">adyen.store.view.form</field>
-        <field name="model">adyen.store</field>
-        <field name="arch" type="xml">
-            <form string="Adyen Store">
+    <recordid="adyen_store_view_form"model="ir.ui.view">
+        <fieldname="name">adyen.store.view.form</field>
+        <fieldname="model">adyen.store</field>
+        <fieldname="arch"type="xml">
+            <formstring="AdyenStore">
                 <sheet>
                     <group>
-                        <field name="store_uuid" attrs="{'invisible': [('id', '=', False)]}"/>
-                        <field name="name" attrs="{'readonly': [('id', '!=', False)]}"/>
-                        <field name="phone_number" attrs="{'readonly': [('id', '!=', False)]}"/>
-                        <label for="street" string="Address"/>
-                        <div class="o_address_format">
-                            <field name="street" placeholder="Street" class="o_address_street" attrs="{'readonly': [('id', '!=', False)]}"/>
-                            <field name="house_number_or_name" placeholder="House number or name" class="o_address_street" attrs="{'readonly': [('id', '!=', False)]}"/>
-                            <field name="city" placeholder="City" class="o_address_city" attrs="{'readonly': [('id', '!=', False)]}"/>
-                            <field name="state_id" class="o_address_state" placeholder="State" options="{'no_open': True, 'no_quick_create': True}"
-                                attrs="{'required': [('country_code', 'in', ['AU', 'CA', 'IT', 'US'])], 'readonly': [('id', '!=', False)]}"/>
-                            <field name="zip" placeholder="ZIP" class="o_address_zip" attrs="{'readonly': [('id', '!=', False)]}"/>
-                            <field name="country_id" placeholder="Country" class="o_address_country" options="{'no_open': True, 'no_create': True}" attrs="{'readonly': [('id', '!=', False)]}"/>
-                            <field name="country_code" invisible="1"/>
-                            <field name="terminal_ids" attrs="{'invisible': [('terminal_ids', '=', [])]}"/>
+                        <fieldname="store_uuid"attrs="{'invisible':[('id','=',False)]}"/>
+                        <fieldname="name"attrs="{'readonly':[('id','!=',False)]}"/>
+                        <fieldname="phone_number"attrs="{'readonly':[('id','!=',False)]}"/>
+                        <labelfor="street"string="Address"/>
+                        <divclass="o_address_format">
+                            <fieldname="street"placeholder="Street"class="o_address_street"attrs="{'readonly':[('id','!=',False)]}"/>
+                            <fieldname="house_number_or_name"placeholder="Housenumberorname"class="o_address_street"attrs="{'readonly':[('id','!=',False)]}"/>
+                            <fieldname="city"placeholder="City"class="o_address_city"attrs="{'readonly':[('id','!=',False)]}"/>
+                            <fieldname="state_id"class="o_address_state"placeholder="State"options="{'no_open':True,'no_quick_create':True}"
+                                attrs="{'required':[('country_code','in',['AU','CA','IT','US'])],'readonly':[('id','!=',False)]}"/>
+                            <fieldname="zip"placeholder="ZIP"class="o_address_zip"attrs="{'readonly':[('id','!=',False)]}"/>
+                            <fieldname="country_id"placeholder="Country"class="o_address_country"options="{'no_open':True,'no_create':True}"attrs="{'readonly':[('id','!=',False)]}"/>
+                            <fieldname="country_code"invisible="1"/>
+                            <fieldname="terminal_ids"attrs="{'invisible':[('terminal_ids','=',[])]}"/>
                         </div>
                     </group>
                 </sheet>
@@ -50,16 +50,16 @@
         </field>
     </record>
 
-    <record id="action_pos_adyen_account" model="ir.actions.server">
-        <field name="name">Adyen Account</field>
-        <field name="model_id" ref="model_adyen_account"/>
-        <field name="state">code</field>
-        <field name="code">
-            action = model.action_create_redirect()
+    <recordid="action_pos_adyen_account"model="ir.actions.server">
+        <fieldname="name">AdyenAccount</field>
+        <fieldname="model_id"ref="model_adyen_account"/>
+        <fieldname="state">code</field>
+        <fieldname="code">
+            action=model.action_create_redirect()
         </field>
     </record>
 
-    <menuitem id="menu_pos_adyen_account"
+    <menuitemid="menu_pos_adyen_account"
         parent="point_of_sale.menu_point_config_product"
         action="action_pos_adyen_account"
         sequence="5"

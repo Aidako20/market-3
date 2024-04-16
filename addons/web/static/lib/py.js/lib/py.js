@@ -1,1477 +1,1477 @@
-var py = {};
-(function (py) {
-    var create = function (o, props) {
-        function F() {}
-        F.prototype = o;
-        var inst = new F;
-        if (props) {
-            for(var name in props) {
-                if(!props.hasOwnProperty(name)) { continue; }
-                inst[name] = props[name];
+varpy={};
+(function(py){
+    varcreate=function(o,props){
+        functionF(){}
+        F.prototype=o;
+        varinst=newF;
+        if(props){
+            for(varnameinprops){
+                if(!props.hasOwnProperty(name)){continue;}
+                inst[name]=props[name];
             }
         }
-        return inst;
+        returninst;
     };
 
-    var symbols = {};
-    var comparators = {};
-    var Base = {
-        nud: function () { throw new Error(this.id + " undefined as prefix"); },
-        led: function (led) { throw new Error(this.id + " undefined as infix"); },
-        toString: function () {
-            if (this.id === '(constant)' || this.id === '(number)' || this.id === '(name)' || this.id === '(string)') {
-                return [this.id.slice(0, this.id.length-1), ' ', this.value, ')'].join('');
-            } else if (this.id === '(end)') {
-                return '(end)';
-            } else if (this.id === '(comparator)' ) {
-                var repr = ['(comparator', this.expressions[0]];
-                for (var i=0;i<this.operators.length; ++i) {
-                    repr.push(this.operators[i], this.expressions[i+1]);
+    varsymbols={};
+    varcomparators={};
+    varBase={
+        nud:function(){thrownewError(this.id+"undefinedasprefix");},
+        led:function(led){thrownewError(this.id+"undefinedasinfix");},
+        toString:function(){
+            if(this.id==='(constant)'||this.id==='(number)'||this.id==='(name)'||this.id==='(string)'){
+                return[this.id.slice(0,this.id.length-1),'',this.value,')'].join('');
+            }elseif(this.id==='(end)'){
+                return'(end)';
+            }elseif(this.id==='(comparator)'){
+                varrepr=['(comparator',this.expressions[0]];
+                for(vari=0;i<this.operators.length;++i){
+                    repr.push(this.operators[i],this.expressions[i+1]);
                 }
-                return repr.join(' ') + ')';
+                returnrepr.join('')+')';
             }
-            var out = [this.id, this.first, this.second, this.third]
-                .filter(function (r){return r}).join(' ');
-            return '(' + out + ')';
+            varout=[this.id,this.first,this.second,this.third]
+                .filter(function(r){returnr}).join('');
+            return'('+out+')';
         }
     };
-    function symbol(id, bp) {
-        bp = bp || 0;
-        var s = symbols[id];
-        if (s) {
-            if (bp > s.lbp) {
-                s.lbp = bp;
+    functionsymbol(id,bp){
+        bp=bp||0;
+        vars=symbols[id];
+        if(s){
+            if(bp>s.lbp){
+                s.lbp=bp;
             }
-            return s;
+            returns;
         }
-        return symbols[id] = create(Base, {
-            id: id,
-            lbp: bp
+        returnsymbols[id]=create(Base,{
+            id:id,
+            lbp:bp
         });
     }
-    function constant(id) {
-        var s = symbol(id);
-        s.id = '(constant)';
-        s.value = id;
-        s.nud = function () {
-            return this;
+    functionconstant(id){
+        vars=symbol(id);
+        s.id='(constant)';
+        s.value=id;
+        s.nud=function(){
+            returnthis;
         };
     }
-    function prefix(id, bp, nud) {
-        symbol(id).nud = nud || function () {
-            this.first = expression(bp);
-            return this
+    functionprefix(id,bp,nud){
+        symbol(id).nud=nud||function(){
+            this.first=expression(bp);
+            returnthis
         }
     }
-    function infix(id, bp, led) {
-        symbol(id, bp).led = led || function (left) {
-            this.first = left;
-            this.second = expression(bp);
-            return this;
+    functioninfix(id,bp,led){
+        symbol(id,bp).led=led||function(left){
+            this.first=left;
+            this.second=expression(bp);
+            returnthis;
         }
     }
-    function infixr(id, bp) {
-        symbol(id, bp).led = function (left) {
-            this.first = left;
-            this.second = expression(bp - 1);
-            return this;
+    functioninfixr(id,bp){
+        symbol(id,bp).led=function(left){
+            this.first=left;
+            this.second=expression(bp-1);
+            returnthis;
         }
     }
-    function comparator(id) {
-        comparators[id] = true;
-        var bp = 60;
-        infix(id, bp, function (left) {
-            this.id = '(comparator)';
-            this.operators = [id];
-            this.expressions = [left, expression(bp)];
-            while (token.id in comparators) {
+    functioncomparator(id){
+        comparators[id]=true;
+        varbp=60;
+        infix(id,bp,function(left){
+            this.id='(comparator)';
+            this.operators=[id];
+            this.expressions=[left,expression(bp)];
+            while(token.idincomparators){
                 this.operators.push(token.id);
                 advance();
                 this.expressions.push(
                     expression(bp));
             }
-            return this;
+            returnthis;
         });
     }
 
-    constant('None'); constant('False'); constant('True');
+    constant('None');constant('False');constant('True');
 
-    symbol('(number)').nud = function () { return this; };
-    symbol('(name)').nud = function () { return this; };
-    symbol('(string)').nud = function () { return this; };
+    symbol('(number)').nud=function(){returnthis;};
+    symbol('(name)').nud=function(){returnthis;};
+    symbol('(string)').nud=function(){returnthis;};
     symbol('(end)');
 
-    symbol(':'); symbol(')'); symbol(']'); symbol('}'); symbol(',');
+    symbol(':');symbol(')');symbol(']');symbol('}');symbol(',');
     symbol('else');
 
-    infix('=', 10, function (left) {
-        if (left.id !== '(name)') {
-            throw new Error("Expected keyword argument name, got " + token.id);
+    infix('=',10,function(left){
+        if(left.id!=='(name)'){
+            thrownewError("Expectedkeywordargumentname,got"+token.id);
         }
-        this.first = left;
-        this.second = expression();
-        return this;
+        this.first=left;
+        this.second=expression();
+        returnthis;
     });
 
-    symbol('lambda', 20).nud = function () {
-        this.first = [];
-        if (token.id !== ':') {
-            for(;;) {
-                if (token.id !== '(name)') {
-                    throw new Error('Excepted an argument name');
+    symbol('lambda',20).nud=function(){
+        this.first=[];
+        if(token.id!==':'){
+            for(;;){
+                if(token.id!=='(name)'){
+                    thrownewError('Exceptedanargumentname');
                 }
                 this.first.push(token);
                 advance();
-                if (token.id !== ',') {
+                if(token.id!==','){
                     break;
                 }
                 advance(',');
             }
         }
         advance(':');
-        this.second = expression();
-        return this;
+        this.second=expression();
+        returnthis;
     };
-    infix('if', 20, function (left) {
-        this.ifTrue = left;
-        this.condition = expression();
+    infix('if',20,function(left){
+        this.ifTrue=left;
+        this.condition=expression();
         advance('else');
-        this.ifFalse = expression();
-        return this;
+        this.ifFalse=expression();
+        returnthis;
     });
 
-    infixr('or', 30); infixr('and', 40); prefix('not', 50);
+    infixr('or',30);infixr('and',40);prefix('not',50);
 
-    comparator('in'); comparator('not in');
-    comparator('is'); comparator('is not');
-    comparator('<'); comparator('<=');
-    comparator('>'); comparator('>=');
-    comparator('<>'); comparator('!='); comparator('==');
+    comparator('in');comparator('notin');
+    comparator('is');comparator('isnot');
+    comparator('<');comparator('<=');
+    comparator('>');comparator('>=');
+    comparator('<>');comparator('!=');comparator('==');
 
-    infix('|', 70); infix('^', 80); infix('&', 90);
+    infix('|',70);infix('^',80);infix('&',90);
 
-    infix('<<', 100); infix('>>', 100);
+    infix('<<',100);infix('>>',100);
 
-    infix('+', 110); infix('-', 110);
+    infix('+',110);infix('-',110);
 
-    infix('*', 120); infix('/', 120);
-    infix('//', 120); infix('%', 120);
+    infix('*',120);infix('/',120);
+    infix('//',120);infix('%',120);
 
-    prefix('-', 130); prefix('+', 130); prefix('~', 130);
+    prefix('-',130);prefix('+',130);prefix('~',130);
 
-    infixr('**', 140);
+    infixr('**',140);
 
-    infix('.', 150, function (left) {
-        if (token.id !== '(name)') {
-            throw new Error('Expected attribute name, got ' + token.id);
+    infix('.',150,function(left){
+        if(token.id!=='(name)'){
+            thrownewError('Expectedattributename,got'+token.id);
         }
-        this.first = left;
-        this.second = token;
+        this.first=left;
+        this.second=token;
         advance();
-        return this;
+        returnthis;
     });
-    symbol('(', 150).nud = function () {
-        this.first = [];
-        var comma = false;
-        if (token.id !== ')') {
-            while (true) {
-                if (token.id === ')') {
+    symbol('(',150).nud=function(){
+        this.first=[];
+        varcomma=false;
+        if(token.id!==')'){
+            while(true){
+                if(token.id===')'){
                     break;
                 }
                 this.first.push(expression());
-                if (token.id !== ',') {
+                if(token.id!==','){
                     break;
                 }
-                comma = true;
+                comma=true;
                 advance(',');
             }
         }
         advance(')');
-        if (!this.first.length || comma) {
-            return this;
-        } else {
-            return this.first[0];
+        if(!this.first.length||comma){
+            returnthis;
+        }else{
+            returnthis.first[0];
         }
     };
-    symbol('(').led = function (left) {
-        this.first = left;
-        this.second = [];
-        if (token.id !== ")") {
-            for(;;) {
+    symbol('(').led=function(left){
+        this.first=left;
+        this.second=[];
+        if(token.id!==")"){
+            for(;;){
                 this.second.push(expression());
-                if (token.id !== ',') {
+                if(token.id!==','){
                     break;
                 }
                 advance(',');
             }
         }
         advance(")");
-        return this;
+        returnthis;
 
     };
-    infix('[', 150, function (left) {
-        this.first = left;
-        this.second = expression();
+    infix('[',150,function(left){
+        this.first=left;
+        this.second=expression();
         advance("]");
-        return this;
+        returnthis;
     });
-    symbol('[').nud = function () {
-        this.first = [];
-        if (token.id !== ']') {
-            for (;;) {
-                if (token.id === ']') {
+    symbol('[').nud=function(){
+        this.first=[];
+        if(token.id!==']'){
+            for(;;){
+                if(token.id===']'){
                     break;
                 }
                 this.first.push(expression());
-                if (token.id !== ',') {
+                if(token.id!==','){
                     break;
                 }
                 advance(',');
             }
         }
         advance(']');
-        return this;
+        returnthis;
     };
 
-    symbol('{').nud = function () {
-        this.first = [];
-        if (token.id !== '}') {
-            for(;;) {
-                if (token.id === '}') {
+    symbol('{').nud=function(){
+        this.first=[];
+        if(token.id!=='}'){
+            for(;;){
+                if(token.id==='}'){
                     break;
                 }
-                var key = expression();
+                varkey=expression();
                 advance(':');
-                var value = expression();
-                this.first.push([key, value]);
-                if (token.id !== ',') {
+                varvalue=expression();
+                this.first.push([key,value]);
+                if(token.id!==','){
                     break;
                 }
                 advance(',');
             }
         }
         advance('}');
-        return this;
+        returnthis;
     };
 
-    py.tokenize = (function () {
-        function group() { return '(' + Array.prototype.join.call(arguments, '|') + ')'; }
+    py.tokenize=(function(){
+        functiongroup(){return'('+Array.prototype.join.call(arguments,'|')+')';}
 
-        var Whitespace = '[ \\f\\t]*';
+        varWhitespace='[\\f\\t]*';
 
-        var Name = '[a-zA-Z_]\\w*';
+        varName='[a-zA-Z_]\\w*';
 
-        var DecNumber = '\\d+(L|l)?';
-        var IntNumber = DecNumber;
-        var PointFloat = group('\\d+\\.\\d*', '\\.\\d+');
-        var FloatNumber = PointFloat;
-        var Number = group(FloatNumber, IntNumber);
+        varDecNumber='\\d+(L|l)?';
+        varIntNumber=DecNumber;
+        varPointFloat=group('\\d+\\.\\d*','\\.\\d+');
+        varFloatNumber=PointFloat;
+        varNumber=group(FloatNumber,IntNumber);
 
-        var Operator = group("\\*\\*=?", ">>=?", "<<=?", "<>", "!=",
-                             "//=?", "[+\\-*/%&|^=<>]=?", "~");
-        var Bracket = '[\\[\\]\\(\\)\\{\\}]';
-        var Special = '[:;.,`@]';
-        var Funny = group(Operator, Bracket, Special);
+        varOperator=group("\\*\\*=?",">>=?","<<=?","<>","!=",
+                             "//=?","[+\\-*/%&|^=<>]=?","~");
+        varBracket='[\\[\\]\\(\\)\\{\\}]';
+        varSpecial='[:;.,`@]';
+        varFunny=group(Operator,Bracket,Special);
 
-        var ContStr = group("([uU])?'([^\n'\\\\]*(?:\\\\.[^\n'\\\\]*)*)'", '([uU])?"([^\n"\\\\]*(?:\\\\.[^\n"\\\\]*)*)"');
-        var PseudoToken = Whitespace + group(Number, Funny, ContStr, Name);
+        varContStr=group("([uU])?'([^\n'\\\\]*(?:\\\\.[^\n'\\\\]*)*)'",'([uU])?"([^\n"\\\\]*(?:\\\\.[^\n"\\\\]*)*)"');
+        varPseudoToken=Whitespace+group(Number,Funny,ContStr,Name);
 
-        var number_pattern = new RegExp('^' + Number + '$');
-        var string_pattern = new RegExp('^' + ContStr + '$');
-        var name_pattern = new RegExp('^' + Name + '$');
-        var strip = new RegExp('^' + Whitespace);
-        return function tokenize(s) {
-            var max=s.length, tokens = [], start, end;
-            // /g flag makes repeated exec() have memory
-            var pseudoprog = new RegExp(PseudoToken, 'g');
+        varnumber_pattern=newRegExp('^'+Number+'$');
+        varstring_pattern=newRegExp('^'+ContStr+'$');
+        varname_pattern=newRegExp('^'+Name+'$');
+        varstrip=newRegExp('^'+Whitespace);
+        returnfunctiontokenize(s){
+            varmax=s.length,tokens=[],start,end;
+            ///gflagmakesrepeatedexec()havememory
+            varpseudoprog=newRegExp(PseudoToken,'g');
 
-            while(pseudoprog.lastIndex < max) {
-                var pseudomatch = pseudoprog.exec(s);
-                if (!pseudomatch) {
-                    // if match failed on trailing whitespace, end tokenizing
-                    if (/^\s+$/.test(s.slice(end))) {
+            while(pseudoprog.lastIndex<max){
+                varpseudomatch=pseudoprog.exec(s);
+                if(!pseudomatch){
+                    //ifmatchfailedontrailingwhitespace,endtokenizing
+                    if(/^\s+$/.test(s.slice(end))){
                         break;
                     }
-                    throw new Error('Failed to tokenize <<' + s
-                                    + '>> at index ' + (end || 0)
-                                    + '; parsed so far: ' + tokens);
+                    thrownewError('Failedtotokenize<<'+s
+                                    +'>>atindex'+(end||0)
+                                    +';parsedsofar:'+tokens);
                 }
 
-                start = pseudomatch.index;
-                end = pseudoprog.lastIndex;
-                // strip leading space caught by Whitespace
-                var token = s.slice(start, end).replace(strip, '');
+                start=pseudomatch.index;
+                end=pseudoprog.lastIndex;
+                //stripleadingspacecaughtbyWhitespace
+                vartoken=s.slice(start,end).replace(strip,'');
 
-                if (number_pattern.test(token)) {
-                    tokens.push(create(symbols['(number)'], {
-                        value: parseFloat(token)
+                if(number_pattern.test(token)){
+                    tokens.push(create(symbols['(number)'],{
+                        value:parseFloat(token)
                     }));
-                } else if (string_pattern.test(token)) {
-                    var m = string_pattern.exec(token);
-                    tokens.push(create(symbols['(string)'], {
-                        value: PY_decode_string_literal(
-                            m[3] !== undefined ? m[3] : m[5],
-                            !!(m[2] || m[4])
+                }elseif(string_pattern.test(token)){
+                    varm=string_pattern.exec(token);
+                    tokens.push(create(symbols['(string)'],{
+                        value:PY_decode_string_literal(
+                            m[3]!==undefined?m[3]:m[5],
+                            !!(m[2]||m[4])
                         )
                     }));
-                } else if (token in symbols) {
-                    var symbol;
-                    // transform 'not in' and 'is not' in a single token
-                    if (token === 'in' && tokens.length > 1 && tokens[tokens.length-1].id === 'not') {
-                        symbol = symbols['not in'];
+                }elseif(tokeninsymbols){
+                    varsymbol;
+                    //transform'notin'and'isnot'inasingletoken
+                    if(token==='in'&&tokens.length>1&&tokens[tokens.length-1].id==='not'){
+                        symbol=symbols['notin'];
                         tokens.pop();
-                    } else if (token === 'not' && tokens.length > 1 && tokens[tokens.length-1].id === 'is') {
-                        symbol = symbols['is not'];
+                    }elseif(token==='not'&&tokens.length>1&&tokens[tokens.length-1].id==='is'){
+                        symbol=symbols['isnot'];
                         tokens.pop();
-                    } else {
-                        symbol = symbols[token];
+                    }else{
+                        symbol=symbols[token];
                     }
                     tokens.push(create(symbol));
-                } else if (name_pattern.test(token)) {
-                    tokens.push(create(symbols['(name)'], {
-                        value: token
+                }elseif(name_pattern.test(token)){
+                    tokens.push(create(symbols['(name)'],{
+                        value:token
                     }));
-                } else {
-                     throw new Error("Tokenizing failure of <<" + s + ">> at index " + start
-                                     + " for token [[" + token + "]]"
-                                     + "; parsed so far: " + tokens);
+                }else{
+                     thrownewError("Tokenizingfailureof<<"+s+">>atindex"+start
+                                     +"fortoken[["+token+"]]"
+                                     +";parsedsofar:"+tokens);
 
                 }
             }
             tokens.push(create(symbols['(end)']));
-            return tokens;
+            returntokens;
         }
     })();
 
-    var token, next;
-    function expression(rbp) {
-        rbp = rbp || 0;
-        var t = token;
-        token = next();
-        var left = t.nud();
-        while (rbp < token.lbp) {
-            t = token;
-            token = next();
-            left = t.led(left);
+    vartoken,next;
+    functionexpression(rbp){
+        rbp=rbp||0;
+        vart=token;
+        token=next();
+        varleft=t.nud();
+        while(rbp<token.lbp){
+            t=token;
+            token=next();
+            left=t.led(left);
         }
-        return left;
+        returnleft;
     }
-    function advance(id) {
-        if (id && token.id !== id) {
-            throw new Error(
-                'Expected "' + id + '", got "' + token.id + '"');
+    functionadvance(id){
+        if(id&&token.id!==id){
+            thrownewError(
+                'Expected"'+id+'",got"'+token.id+'"');
         }
-        token = next();
+        token=next();
     }
 
-    function PY_ensurepy(val, name) {
-        switch (val) {
-        case undefined:
-            throw new Error("NameError: name '" + name + "' is not defined");
-        case null:
-            return py.None;
-        case true:
-            return py.True;
-        case false:
-            return py.False;
+    functionPY_ensurepy(val,name){
+        switch(val){
+        caseundefined:
+            thrownewError("NameError:name'"+name+"'isnotdefined");
+        casenull:
+            returnpy.None;
+        casetrue:
+            returnpy.True;
+        casefalse:
+            returnpy.False;
         }
 
-        var fn = function () {};
-        fn.prototype = py.object;
-        if (py.PY_isInstance(val, py.object)
-            || py.PY_isSubclass(val, py.object)) {
-            return val;
+        varfn=function(){};
+        fn.prototype=py.object;
+        if(py.PY_isInstance(val,py.object)
+            ||py.PY_isSubclass(val,py.object)){
+            returnval;
         }
 
-        switch (typeof val) {
-        case 'number':
-            return py.float.fromJSON(val);
-        case 'string':
-            return py.str.fromJSON(val);
-        case 'function':
-            return py.PY_def.fromJSON(val);
+        switch(typeofval){
+        case'number':
+            returnpy.float.fromJSON(val);
+        case'string':
+            returnpy.str.fromJSON(val);
+        case'function':
+            returnpy.PY_def.fromJSON(val);
         }
 
-        switch(val.constructor) {
-        case Object:
-            // TODO: why py.object instead of py.dict?
-            var o = py.PY_call(py.object);
-            for (var prop in val) {
-                if (val.hasOwnProperty(prop)) {
-                    o[prop] = val[prop];
+        switch(val.constructor){
+        caseObject:
+            //TODO:whypy.objectinsteadofpy.dict?
+            varo=py.PY_call(py.object);
+            for(varpropinval){
+                if(val.hasOwnProperty(prop)){
+                    o[prop]=val[prop];
                 }
             }
-            return o;
-        case Array:
-            return py.list.fromJSON(val);
+            returno;
+        caseArray:
+            returnpy.list.fromJSON(val);
         }
 
-        throw new Error("Could not convert " + val + " to a pyval");
+        thrownewError("Couldnotconvert"+val+"toapyval");
     }
 
-    var typename = function (obj) {
-        if (obj.__class__) { // py type
-            return obj.__class__.__name__;
-        } else if(typeof obj !== 'object') { // JS primitive
-            return typeof obj;
-        } else { // JS object
-            return obj.constructor.name;
+    vartypename=function(obj){
+        if(obj.__class__){//pytype
+            returnobj.__class__.__name__;
+        }elseif(typeofobj!=='object'){//JSprimitive
+            returntypeofobj;
+        }else{//JSobject
+            returnobj.constructor.name;
         }
     };
-    // JSAPI, JS-level utility functions for implementing new py.js
-    // types
-    py.py = {};
+    //JSAPI,JS-levelutilityfunctionsforimplementingnewpy.js
+    //types
+    py.py={};
 
-    py.PY_parseArgs = function PY_parseArgs(argument, format) {
-        var out = {};
-        var args = argument[0];
-        var kwargs = {};
-        for (var k in argument[1]) {
-            if (!argument[1].hasOwnProperty(k)) { continue; }
-            kwargs[k] = argument[1][k];
+    py.PY_parseArgs=functionPY_parseArgs(argument,format){
+        varout={};
+        varargs=argument[0];
+        varkwargs={};
+        for(varkinargument[1]){
+            if(!argument[1].hasOwnProperty(k)){continue;}
+            kwargs[k]=argument[1][k];
         }
-        if (typeof format === 'string') {
-            format = format.split(/\s+/);
+        if(typeofformat==='string'){
+            format=format.split(/\s+/);
         }
-        var name = function (spec) {
-            if (typeof spec === 'string') {
-                return spec;
-            } else if (spec instanceof Array && spec.length === 2) {
-                return spec[0];
+        varname=function(spec){
+            if(typeofspec==='string'){
+                returnspec;
+            }elseif(specinstanceofArray&&spec.length===2){
+                returnspec[0];
             }
-            throw new Error(
-                "TypeError: unknown format specification " +
+            thrownewError(
+                "TypeError:unknownformatspecification"+
                     JSON.stringify(spec));
         };
-        var spec;
-        // TODO: ensure all format arg names are actual names?
-        for(var i=0; i<args.length; ++i) {
-            spec = format[i];
-            // spec list ended, or specs switching to keyword-only
-            if (!spec || spec === '*') {
-                throw new Error(
-                    "TypeError: function takes exactly " + (i-1) +
-                    " positional arguments (" + args.length +
-                    " given")
-            } else if(/^\*\w/.test(spec)) {
-                // *args, final
-                out[name(spec.slice(1))] = args.slice(i);
+        varspec;
+        //TODO:ensureallformatargnamesareactualnames?
+        for(vari=0;i<args.length;++i){
+            spec=format[i];
+            //speclistended,orspecsswitchingtokeyword-only
+            if(!spec||spec==='*'){
+                thrownewError(
+                    "TypeError:functiontakesexactly"+(i-1)+
+                    "positionalarguments("+args.length+
+                    "given")
+            }elseif(/^\*\w/.test(spec)){
+                //*args,final
+                out[name(spec.slice(1))]=args.slice(i);
                 break;
             }
 
-            out[name(spec)] = args[i];
+            out[name(spec)]=args[i];
         }
-        for(var j=i; j<format.length; ++j) {
-            spec = format[j];
-            var n = name(spec);
+        for(varj=i;j<format.length;++j){
+            spec=format[j];
+            varn=name(spec);
 
-            if (n in out) {
-                throw new Error(
-                    "TypeError: function got multiple values " + 
-                    "for keyword argument '" + kwarg + "'");
+            if(ninout){
+                thrownewError(
+                    "TypeError:functiongotmultiplevalues"+
+                    "forkeywordargument'"+kwarg+"'");
             }
-            if (/^\*\*\w/.test(n)) {
-                // **kwarg
-                out[n.slice(2)] = kwargs;
-                kwargs = {};
+            if(/^\*\*\w/.test(n)){
+                //**kwarg
+                out[n.slice(2)]=kwargs;
+                kwargs={};
                 break;
             }
-            if (n in kwargs) {
-                out[n] = kwargs[n];
-                // Remove from args map
-                delete kwargs[n];
+            if(ninkwargs){
+                out[n]=kwargs[n];
+                //Removefromargsmap
+                deletekwargs[n];
             }
         }
-        // Ensure all keyword arguments were consumed
-        for (var key in kwargs) {
-            throw new Error(
-                "TypeError: function got an unexpected keyword argument '"
-                    + key + "'");
+        //Ensureallkeywordargumentswereconsumed
+        for(varkeyinkwargs){
+            thrownewError(
+                "TypeError:functiongotanunexpectedkeywordargument'"
+                    +key+"'");
         }
 
-        // Fixup args count if there's a kwonly flag (or an *args)
-        var kwonly = 0;
-        for(var k = 0; k < format.length; ++k) {
-            if (/^\*/.test(format[k])) { kwonly = 1; break; }
+        //Fixupargscountifthere'sakwonlyflag(oran*args)
+        varkwonly=0;
+        for(vark=0;k<format.length;++k){
+            if(/^\*/.test(format[k])){kwonly=1;break;}
         }
-        // Check that all required arguments have been matched, add
-        // optional values
-        for(var k = 0; k < format.length; ++k) {
-            spec = format[k];
-            var n = name(spec);
-            // kwonly, va_arg or matched argument
-            if (/^\*/.test(n) || n in out) { continue; }
-            // Unmatched required argument
-            if (!(spec instanceof Array)) {
-                throw new Error(
-                    "TypeError: function takes exactly " + (format.length - kwonly)
-                    + " arguments");
+        //Checkthatallrequiredargumentshavebeenmatched,add
+        //optionalvalues
+        for(vark=0;k<format.length;++k){
+            spec=format[k];
+            varn=name(spec);
+            //kwonly,va_argormatchedargument
+            if(/^\*/.test(n)||ninout){continue;}
+            //Unmatchedrequiredargument
+            if(!(specinstanceofArray)){
+                thrownewError(
+                    "TypeError:functiontakesexactly"+(format.length-kwonly)
+                    +"arguments");
             }
-            // Set default value
-            out[n] = spec[1];
+            //Setdefaultvalue
+            out[n]=spec[1];
         }
         
-        return out;
+        returnout;
     };
 
-    py.PY_hasAttr = function (o, attr_name) {
-        try {
-            py.PY_getAttr(o, attr_name);
-            return true;
-        } catch (e) {
-            return false;
+    py.PY_hasAttr=function(o,attr_name){
+        try{
+            py.PY_getAttr(o,attr_name);
+            returntrue;
+        }catch(e){
+            returnfalse;
         }
     };
-    py.PY_getAttr = function (o, attr_name) {
-        return PY_ensurepy(o.__getattribute__(attr_name));
+    py.PY_getAttr=function(o,attr_name){
+        returnPY_ensurepy(o.__getattribute__(attr_name));
     };
-    py.PY_str = function (o) {
-        var v = o.__str__();
-        if (py.PY_isInstance(v, py.str)) {
-            return v;
+    py.PY_str=function(o){
+        varv=o.__str__();
+        if(py.PY_isInstance(v,py.str)){
+            returnv;
         }
-        throw new Error(
-            'TypeError: __str__ returned non-string (type '
-                + typename(v)
+        thrownewError(
+            'TypeError:__str__returnednon-string(type'
+                +typename(v)
                 +')');
     };
-    py.PY_isInstance = function (inst, cls) {
-        var fn = function () {};
-        fn.prototype = cls;
-        return inst instanceof fn;
+    py.PY_isInstance=function(inst,cls){
+        varfn=function(){};
+        fn.prototype=cls;
+        returninstinstanceoffn;
     };
-    py.PY_isSubclass = function (derived, cls) {
-        var fn = function () {};
-        fn.prototype = cls;
-        return derived === cls || derived instanceof fn;
+    py.PY_isSubclass=function(derived,cls){
+        varfn=function(){};
+        fn.prototype=cls;
+        returnderived===cls||derivedinstanceoffn;
     };
-    py.PY_call = function (callable, args, kwargs) {
-        if (!args) {
-            args = [];
+    py.PY_call=function(callable,args,kwargs){
+        if(!args){
+            args=[];
         }
-        if (typeof args === 'object' && !(args instanceof Array)) {
-            kwargs = args;
-            args = [];
+        if(typeofargs==='object'&&!(argsinstanceofArray)){
+            kwargs=args;
+            args=[];
         }
-        if (!kwargs) {
-            kwargs = {};
+        if(!kwargs){
+            kwargs={};
         }
-        if (callable.__is_type) {
-            // class hack
-            var instance = callable.__new__.call(callable, args, kwargs);
-            var typ = function () {};
-            typ.prototype = callable;
-            if (instance instanceof typ) {
-                instance.__init__.call(instance, args, kwargs);
+        if(callable.__is_type){
+            //classhack
+            varinstance=callable.__new__.call(callable,args,kwargs);
+            vartyp=function(){};
+            typ.prototype=callable;
+            if(instanceinstanceoftyp){
+                instance.__init__.call(instance,args,kwargs);
             }
-            return instance
+            returninstance
         }
-        return callable.__call__(args, kwargs);
+        returncallable.__call__(args,kwargs);
     };
-    py.PY_isTrue = function (o) {
-        var res = o.__nonzero__();
-        if (res === py.True) {
-            return true;
+    py.PY_isTrue=function(o){
+        varres=o.__nonzero__();
+        if(res===py.True){
+            returntrue;
         }
-        if (res === py.False) {
-            return false;
+        if(res===py.False){
+            returnfalse;
         }
-        throw new Error(
-            "TypeError: __nonzero__ should return bool, returned "
-                + typename(res));
+        thrownewError(
+            "TypeError:__nonzero__shouldreturnbool,returned"
+                +typename(res));
     };
-    py.PY_not = function (o) {
-        return !py.PY_isTrue(o);
+    py.PY_not=function(o){
+        return!py.PY_isTrue(o);
     };
-    py.PY_size = function (o) {
-        if (!o.__len__) {
-            throw new Error(
-                "TypeError: object of type '" +
-                    typename(o) +
-                    "' has no len()");
+    py.PY_size=function(o){
+        if(!o.__len__){
+            thrownewError(
+                "TypeError:objectoftype'"+
+                    typename(o)+
+                    "'hasnolen()");
         }
-        var v = o.__len__();
-        if (typeof v !== 'number') {
-            throw new Error("TypeError: a number is required");
+        varv=o.__len__();
+        if(typeofv!=='number'){
+            thrownewError("TypeError:anumberisrequired");
         }
-        return v;
+        returnv;
     };
-    py.PY_getItem = function (o, key) {
-        if (!('__getitem__' in o)) {
-            throw new Error(
-                "TypeError: '" + typename(o) +
-                    "' object is unsubscriptable")
+    py.PY_getItem=function(o,key){
+        if(!('__getitem__'ino)){
+            thrownewError(
+                "TypeError:'"+typename(o)+
+                    "'objectisunsubscriptable")
         }
-        if (!py.PY_isInstance(key, py.object)) {
-            throw new Error(
-                "TypeError: '" + typename(key) +
-                    "' is not a py.js object");
+        if(!py.PY_isInstance(key,py.object)){
+            thrownewError(
+                "TypeError:'"+typename(key)+
+                    "'isnotapy.jsobject");
         }
-        var res = o.__getitem__(key);
-        if (!py.PY_isInstance(key, py.object)) {
-            throw new Error(
-                "TypeError: __getitem__ must return a py.js object, got "
-                    + typename(res));
+        varres=o.__getitem__(key);
+        if(!py.PY_isInstance(key,py.object)){
+            thrownewError(
+                "TypeError:__getitem__mustreturnapy.jsobject,got"
+                    +typename(res));
         }
-        return res;
+        returnres;
     };
-    py.PY_setItem = function (o, key, v) {
-        if (!('__setitem__' in o)) {
-            throw new Error(
-                "TypeError: '" + typename(o) +
-                    "' object does not support item assignment");
+    py.PY_setItem=function(o,key,v){
+        if(!('__setitem__'ino)){
+            thrownewError(
+                "TypeError:'"+typename(o)+
+                    "'objectdoesnotsupportitemassignment");
         }
-        if (!py.PY_isInstance(key, py.object)) {
-            throw new Error(
-                "TypeError: '" + typename(key) +
-                    "' is not a py.js object");
+        if(!py.PY_isInstance(key,py.object)){
+            thrownewError(
+                "TypeError:'"+typename(key)+
+                    "'isnotapy.jsobject");
         }
-        if (!py.PY_isInstance(v, py.object)) {
-            throw new Error(
-                "TypeError: '" + typename(v) +
-                    "' is not a py.js object");
+        if(!py.PY_isInstance(v,py.object)){
+            thrownewError(
+                "TypeError:'"+typename(v)+
+                    "'isnotapy.jsobject");
         }
-        o.__setitem__(key, v);
+        o.__setitem__(key,v);
     };
 
-    py.PY_add = function (o1, o2) {
-        return PY_op(o1, o2, '+');
+    py.PY_add=function(o1,o2){
+        returnPY_op(o1,o2,'+');
     };
-    py.PY_subtract = function (o1, o2) {
-        return PY_op(o1, o2, '-');
+    py.PY_subtract=function(o1,o2){
+        returnPY_op(o1,o2,'-');
     };
-    py.PY_multiply = function (o1, o2) {
-        return PY_op(o1, o2, '*');
+    py.PY_multiply=function(o1,o2){
+        returnPY_op(o1,o2,'*');
     };
-    py.PY_divide = function (o1, o2) {
-        return PY_op(o1, o2, '/');
+    py.PY_divide=function(o1,o2){
+        returnPY_op(o1,o2,'/');
     };
-    py.PY_negative = function (o) {
-        if (!o.__neg__) {
-            throw new Error(
-                "TypeError: bad operand for unary -: '"
-                    + typename(o)
-                    + "'");
+    py.PY_negative=function(o){
+        if(!o.__neg__){
+            thrownewError(
+                "TypeError:badoperandforunary-:'"
+                    +typename(o)
+                    +"'");
         }
-        return o.__neg__();
+        returno.__neg__();
     };
-    py.PY_positive = function (o) {
-        if (!o.__pos__) {
-            throw new Error(
-                "TypeError: bad operand for unary +: '"
-                    + typename(o)
-                    + "'");
+    py.PY_positive=function(o){
+        if(!o.__pos__){
+            thrownewError(
+                "TypeError:badoperandforunary+:'"
+                    +typename(o)
+                    +"'");
         }
-        return o.__pos__();
+        returno.__pos__();
     };
 
-    // Builtins
-    py.type = function type(name, bases, dict) {
-        if (typeof name !== 'string') {
-            throw new Error("ValueError: a class name should be a string");
+    //Builtins
+    py.type=functiontype(name,bases,dict){
+        if(typeofname!=='string'){
+            thrownewError("ValueError:aclassnameshouldbeastring");
         }
-        if (!bases || bases.length === 0) {
-            bases = [py.object];
-        } else if (bases.length > 1) {
-            throw new Error("ValueError: can't provide multiple bases for a "
-                          + "new type");
+        if(!bases||bases.length===0){
+            bases=[py.object];
+        }elseif(bases.length>1){
+            thrownewError("ValueError:can'tprovidemultiplebasesfora"
+                          +"newtype");
         }
-        var base = bases[0];
-        var ClassObj = create(base);
-        if (dict) {
-            for (var k in dict) {
-                if (!dict.hasOwnProperty(k)) { continue; }
-                ClassObj[k] = dict[k];
+        varbase=bases[0];
+        varClassObj=create(base);
+        if(dict){
+            for(varkindict){
+                if(!dict.hasOwnProperty(k)){continue;}
+                ClassObj[k]=dict[k];
             }
         }
-        ClassObj.__class__ = ClassObj;
-        ClassObj.__name__ = name;
-        ClassObj.__bases__ = bases;
-        ClassObj.__is_type = true;
+        ClassObj.__class__=ClassObj;
+        ClassObj.__name__=name;
+        ClassObj.__bases__=bases;
+        ClassObj.__is_type=true;
 
-        return ClassObj;
+        returnClassObj;
     };
-    py.type.__call__ = function () {
-        var args = py.PY_parseArgs(arguments, ['object']);
-        return args.object.__class__;
+    py.type.__call__=function(){
+        varargs=py.PY_parseArgs(arguments,['object']);
+        returnargs.object.__class__;
     };
 
-    var hash_counter = 0;
-    py.object = py.type('object', [{}], {
-        __new__: function () {
-            // If ``this`` isn't the class object, this is going to be
-            // beyond fucked up
-            var inst = create(this);
-            inst.__is_type = false;
-            return inst;
+    varhash_counter=0;
+    py.object=py.type('object',[{}],{
+        __new__:function(){
+            //If``this``isn'ttheclassobject,thisisgoingtobe
+            //beyondfuckedup
+            varinst=create(this);
+            inst.__is_type=false;
+            returninst;
         },
-        __init__: function () {},
-        // Basic customization
-        __hash__: function () {
-            if (this._hash) {
-                return this._hash;
+        __init__:function(){},
+        //Basiccustomization
+        __hash__:function(){
+            if(this._hash){
+                returnthis._hash;
             }
-            // tagged counter, to avoid collisions with e.g. number hashes
-            return this._hash = '\0\0\0' + String(hash_counter++);
+            //taggedcounter,toavoidcollisionswithe.g.numberhashes
+            returnthis._hash='\0\0\0'+String(hash_counter++);
         },
-        __eq__: function (other) {
-            return (this === other) ? py.True : py.False;
+        __eq__:function(other){
+            return(this===other)?py.True:py.False;
         },
-        __ne__: function (other) {
-            if (py.PY_isTrue(this.__eq__(other))) {
-                return py.False;
-            } else {
-                return py.True;
+        __ne__:function(other){
+            if(py.PY_isTrue(this.__eq__(other))){
+                returnpy.False;
+            }else{
+                returnpy.True;
             }
         },
-        __lt__: function () { return py.NotImplemented; },
-        __le__: function () { return py.NotImplemented; },
-        __ge__: function () { return py.NotImplemented; },
-        __gt__: function () { return py.NotImplemented; },
-        __str__: function () {
-            return this.__unicode__();
+        __lt__:function(){returnpy.NotImplemented;},
+        __le__:function(){returnpy.NotImplemented;},
+        __ge__:function(){returnpy.NotImplemented;},
+        __gt__:function(){returnpy.NotImplemented;},
+        __str__:function(){
+            returnthis.__unicode__();
         },
-        __unicode__: function () {
-            return py.str.fromJSON('<' + typename(this) + ' object>');
+        __unicode__:function(){
+            returnpy.str.fromJSON('<'+typename(this)+'object>');
         },
-        __nonzero__: function () {
-            return py.True;
+        __nonzero__:function(){
+            returnpy.True;
         },
-        // Attribute access
-        __getattribute__: function (name) {
-            if (name in this) {
-                var val = this[name];
-                if (typeof val === 'object' && '__get__' in val) {
-                    // TODO: second argument should be class
-                    return val.__get__(this, py.PY_call(py.type, [this]));
+        //Attributeaccess
+        __getattribute__:function(name){
+            if(nameinthis){
+                varval=this[name];
+                if(typeofval==='object'&&'__get__'inval){
+                    //TODO:secondargumentshouldbeclass
+                    returnval.__get__(this,py.PY_call(py.type,[this]));
                 }
-                if (typeof val === 'function' && !this.hasOwnProperty(name)) {
-                    // val is a method from the class
-                    return PY_instancemethod.fromJSON(val, this);
+                if(typeofval==='function'&&!this.hasOwnProperty(name)){
+                    //valisamethodfromtheclass
+                    returnPY_instancemethod.fromJSON(val,this);
                 }
-                return val;
+                returnval;
             }
-            if ('__getattr__' in this) {
-                return this.__getattr__(name);
+            if('__getattr__'inthis){
+                returnthis.__getattr__(name);
             }
-            throw new Error("AttributeError: object has no attribute '" + name +"'");
+            thrownewError("AttributeError:objecthasnoattribute'"+name+"'");
         },
-        __setattr__: function (name, value) {
-            if (name in this && '__set__' in this[name]) {
-                this[name].__set__(this, value);
+        __setattr__:function(name,value){
+            if(nameinthis&&'__set__'inthis[name]){
+                this[name].__set__(this,value);
             }
-            this[name] = value;
+            this[name]=value;
         },
-        // no delattr, because no 'del' statement
+        //nodelattr,becauseno'del'statement
 
-        // Conversion
-        toJSON: function () {
-            throw new Error(this.constructor.name + ' can not be converted to JSON');
+        //Conversion
+        toJSON:function(){
+            thrownewError(this.constructor.name+'cannotbeconvertedtoJSON');
         }
     });
-    var NoneType = py.type('NoneType', null, {
-        __nonzero__: function () { return py.False; },
-        toJSON: function () { return null; }
+    varNoneType=py.type('NoneType',null,{
+        __nonzero__:function(){returnpy.False;},
+        toJSON:function(){returnnull;}
     });
-    py.None = py.PY_call(NoneType);
-    var NotImplementedType = py.type('NotImplementedType', null, {});
-    py.NotImplemented = py.PY_call(NotImplementedType);
-    var booleans_initialized = false;
-    py.bool = py.type('bool', null, {
-        __new__: function () {
-            if (!booleans_initialized) {
-                return py.object.__new__.apply(this);
+    py.None=py.PY_call(NoneType);
+    varNotImplementedType=py.type('NotImplementedType',null,{});
+    py.NotImplemented=py.PY_call(NotImplementedType);
+    varbooleans_initialized=false;
+    py.bool=py.type('bool',null,{
+        __new__:function(){
+            if(!booleans_initialized){
+                returnpy.object.__new__.apply(this);
             }
 
-            var ph = {};
-            var args = py.PY_parseArgs(arguments, [['value', ph]]);
-            if (args.value === ph) {
-                return py.False;
+            varph={};
+            varargs=py.PY_parseArgs(arguments,[['value',ph]]);
+            if(args.value===ph){
+                returnpy.False;
             }
-            return py.PY_isTrue(args.value) ? py.True : py.False;
+            returnpy.PY_isTrue(args.value)?py.True:py.False;
         },
-        __str__: function () {
-            return py.str.fromJSON((this === py.True) ? "True" : "False");
+        __str__:function(){
+            returnpy.str.fromJSON((this===py.True)?"True":"False");
         },
-        __nonzero__: function () { return this; },
-        fromJSON: function (val) { return val ? py.True : py.False },
-        toJSON: function () { return this === py.True; }
+        __nonzero__:function(){returnthis;},
+        fromJSON:function(val){returnval?py.True:py.False},
+        toJSON:function(){returnthis===py.True;}
     });
-    py.True = py.PY_call(py.bool);
-    py.False = py.PY_call(py.bool);
-    booleans_initialized = true;
-    py.float = py.type('float', null, {
-        __init__: function () {
-            var placeholder = {};
-            var args = py.PY_parseArgs(arguments, [['value', placeholder]]);
-            var value = args.value;
-            if (value === placeholder) {
-                this._value = 0; return;
+    py.True=py.PY_call(py.bool);
+    py.False=py.PY_call(py.bool);
+    booleans_initialized=true;
+    py.float=py.type('float',null,{
+        __init__:function(){
+            varplaceholder={};
+            varargs=py.PY_parseArgs(arguments,[['value',placeholder]]);
+            varvalue=args.value;
+            if(value===placeholder){
+                this._value=0;return;
             }
-            if (py.PY_isInstance(value, py.float)) {
-                this._value = value._value;
+            if(py.PY_isInstance(value,py.float)){
+                this._value=value._value;
             }
-            if (py.PY_isInstance(value, py.object) && '__float__' in value) {
-                var res = value.__float__();
-                if (py.PY_isInstance(res, py.float)) {
-                    this._value = res._value;
+            if(py.PY_isInstance(value,py.object)&&'__float__'invalue){
+                varres=value.__float__();
+                if(py.PY_isInstance(res,py.float)){
+                    this._value=res._value;
                     return;
                 }
-                throw new Error('TypeError: __float__ returned non-float (type ' +
-                                typename(res) + ')');
+                thrownewError('TypeError:__float__returnednon-float(type'+
+                                typename(res)+')');
             }
-            throw new Error('TypeError: float() argument must be a string or a number');
+            thrownewError('TypeError:float()argumentmustbeastringoranumber');
         },
-        __str__: function () {
-            return py.str.fromJSON(String(this._value));
+        __str__:function(){
+            returnpy.str.fromJSON(String(this._value));
         },
-        __eq__: function (other) {
-            return this._value === other._value ? py.True : py.False;
+        __eq__:function(other){
+            returnthis._value===other._value?py.True:py.False;
         },
-        __lt__: function (other) {
-            if (!py.PY_isInstance(other, py.float)) {
-                return py.NotImplemented;
+        __lt__:function(other){
+            if(!py.PY_isInstance(other,py.float)){
+                returnpy.NotImplemented;
             }
-            return this._value < other._value ? py.True : py.False;
+            returnthis._value<other._value?py.True:py.False;
         },
-        __le__: function (other) {
-            if (!py.PY_isInstance(other, py.float)) {
-                return py.NotImplemented;
+        __le__:function(other){
+            if(!py.PY_isInstance(other,py.float)){
+                returnpy.NotImplemented;
             }
-            return this._value <= other._value ? py.True : py.False;
+            returnthis._value<=other._value?py.True:py.False;
         },
-        __gt__: function (other) {
-            if (!py.PY_isInstance(other, py.float)) {
-                return py.NotImplemented;
+        __gt__:function(other){
+            if(!py.PY_isInstance(other,py.float)){
+                returnpy.NotImplemented;
             }
-            return this._value > other._value ? py.True : py.False;
+            returnthis._value>other._value?py.True:py.False;
         },
-        __ge__: function (other) {
-            if (!py.PY_isInstance(other, py.float)) {
-                return py.NotImplemented;
+        __ge__:function(other){
+            if(!py.PY_isInstance(other,py.float)){
+                returnpy.NotImplemented;
             }
-            return this._value >= other._value ? py.True : py.False;
+            returnthis._value>=other._value?py.True:py.False;
         },
-        __abs__: function () {
-            return py.float.fromJSON(
+        __abs__:function(){
+            returnpy.float.fromJSON(
                 Math.abs(this._value));
         },
-        __add__: function (other) {
-            if (!py.PY_isInstance(other, py.float)) {
-                return py.NotImplemented;
+        __add__:function(other){
+            if(!py.PY_isInstance(other,py.float)){
+                returnpy.NotImplemented;
             }
-            return py.float.fromJSON(this._value + other._value);
+            returnpy.float.fromJSON(this._value+other._value);
         },
-        __mod__: function (other) {
-            if (!py.PY_isInstance(other, py.float)) {
-                return py.NotImplemented;
+        __mod__:function(other){
+            if(!py.PY_isInstance(other,py.float)){
+                returnpy.NotImplemented;
             }
-            return py.float.fromJSON(this._value % other._value);
+            returnpy.float.fromJSON(this._value%other._value);
         },
-        __neg__: function () {
-            return py.float.fromJSON(-this._value);
+        __neg__:function(){
+            returnpy.float.fromJSON(-this._value);
         },
-        __sub__: function (other) {
-            if (!py.PY_isInstance(other, py.float)) {
-                return py.NotImplemented;
+        __sub__:function(other){
+            if(!py.PY_isInstance(other,py.float)){
+                returnpy.NotImplemented;
             }
-            return py.float.fromJSON(this._value - other._value);
+            returnpy.float.fromJSON(this._value-other._value);
         },
-        __mul__: function (other) {
-            if (!py.PY_isInstance(other, py.float)) {
-                return py.NotImplemented;
+        __mul__:function(other){
+            if(!py.PY_isInstance(other,py.float)){
+                returnpy.NotImplemented;
             }
-            return py.float.fromJSON(this._value * other._value);
+            returnpy.float.fromJSON(this._value*other._value);
         },
-        __pow__: function (other) {
-            if (!py.PY_isInstance(other, py.float)) {
-                return py.NotImplemented;
+        __pow__:function(other){
+            if(!py.PY_isInstance(other,py.float)){
+                returnpy.NotImplemented;
             }
-            return py.float.fromJSON(this._value ** other._value);
+            returnpy.float.fromJSON(this._value**other._value);
         },
-        __div__: function (other) {
-            if (!py.PY_isInstance(other, py.float)) {
-                return py.NotImplemented;
+        __div__:function(other){
+            if(!py.PY_isInstance(other,py.float)){
+                returnpy.NotImplemented;
             }
-            return py.float.fromJSON(this._value / other._value);
+            returnpy.float.fromJSON(this._value/other._value);
         },
-        __nonzero__: function () {
-            return this._value ? py.True : py.False;
+        __nonzero__:function(){
+            returnthis._value?py.True:py.False;
         },
-        fromJSON: function (v) {
-            if (!(typeof v === 'number')) {
-                throw new Error('py.float.fromJSON can only take numbers');
+        fromJSON:function(v){
+            if(!(typeofv==='number')){
+                thrownewError('py.float.fromJSONcanonlytakenumbers');
             }
-            var instance = py.PY_call(py.float);
-            instance._value = v;
-            return instance;
+            varinstance=py.PY_call(py.float);
+            instance._value=v;
+            returninstance;
         },
-        toJSON: function () {
-            return this._value;
+        toJSON:function(){
+            returnthis._value;
         }
     });
-    py.str = py.type('str', null, {
-        __init__: function () {
-            var placeholder = {};
-            var args = py.PY_parseArgs(arguments, [['value', placeholder]]);
-            var s = args.value;
-            if (s === placeholder) { this._value = ''; return; }
-            this._value = py.PY_str(s)._value;
+    py.str=py.type('str',null,{
+        __init__:function(){
+            varplaceholder={};
+            varargs=py.PY_parseArgs(arguments,[['value',placeholder]]);
+            vars=args.value;
+            if(s===placeholder){this._value='';return;}
+            this._value=py.PY_str(s)._value;
         },
-        __hash__: function () {
-            return '\1\0\1' + this._value;
+        __hash__:function(){
+            return'\1\0\1'+this._value;
         },
-        __str__: function () {
-            return this;
+        __str__:function(){
+            returnthis;
         },
-        __eq__: function (other) {
-            if (py.PY_isInstance(other, py.str)
-                    && this._value === other._value) {
-                return py.True;
+        __eq__:function(other){
+            if(py.PY_isInstance(other,py.str)
+                    &&this._value===other._value){
+                returnpy.True;
             }
-            return py.False;
+            returnpy.False;
         },
-        __lt__: function (other) {
-            if (py.PY_not(py.PY_call(py.isinstance, [other, py.str]))) {
-                return py.NotImplemented;
+        __lt__:function(other){
+            if(py.PY_not(py.PY_call(py.isinstance,[other,py.str]))){
+                returnpy.NotImplemented;
             }
-            return this._value < other._value ? py.True : py.False;
+            returnthis._value<other._value?py.True:py.False;
         },
-        __le__: function (other) {
-            if (!py.PY_isInstance(other, py.str)) {
-                return py.NotImplemented;
+        __le__:function(other){
+            if(!py.PY_isInstance(other,py.str)){
+                returnpy.NotImplemented;
             }
-            return this._value <= other._value ? py.True : py.False;
+            returnthis._value<=other._value?py.True:py.False;
         },
-        __gt__: function (other) {
-            if (!py.PY_isInstance(other, py.str)) {
-                return py.NotImplemented;
+        __gt__:function(other){
+            if(!py.PY_isInstance(other,py.str)){
+                returnpy.NotImplemented;
             }
-            return this._value > other._value ? py.True : py.False;
+            returnthis._value>other._value?py.True:py.False;
         },
-        __ge__: function (other) {
-            if (!py.PY_isInstance(other, py.str)) {
-                return py.NotImplemented;
+        __ge__:function(other){
+            if(!py.PY_isInstance(other,py.str)){
+                returnpy.NotImplemented;
             }
-            return this._value >= other._value ? py.True : py.False;
+            returnthis._value>=other._value?py.True:py.False;
         },
-        __add__: function (other) {
-            if (!py.PY_isInstance(other, py.str)) {
-                return py.NotImplemented;
+        __add__:function(other){
+            if(!py.PY_isInstance(other,py.str)){
+                returnpy.NotImplemented;
             }
-            return py.str.fromJSON(this._value + other._value);
+            returnpy.str.fromJSON(this._value+other._value);
         },
-        __nonzero__: function () {
-            return this._value.length ? py.True : py.False;
+        __nonzero__:function(){
+            returnthis._value.length?py.True:py.False;
         },
-        __contains__: function (s) {
-            return (this._value.indexOf(s._value) !== -1) ? py.True : py.False;
+        __contains__:function(s){
+            return(this._value.indexOf(s._value)!==-1)?py.True:py.False;
         },
-        fromJSON: function (s) {
-            if (typeof s === 'string') {
-                var instance = py.PY_call(py.str);
-                instance._value = s;
-                return instance;
+        fromJSON:function(s){
+            if(typeofs==='string'){
+                varinstance=py.PY_call(py.str);
+                instance._value=s;
+                returninstance;
             }
-            throw new Error("str.fromJSON can only take strings");
+            thrownewError("str.fromJSONcanonlytakestrings");
         },
-        toJSON: function () {
-            return this._value;
+        toJSON:function(){
+            returnthis._value;
         }
     });
-    py.tuple = py.type('tuple', null, {
-        __init__: function () {
-            this._values = [];
+    py.tuple=py.type('tuple',null,{
+        __init__:function(){
+            this._values=[];
         },
-        __len__: function () {
-            return this._values.length;
+        __len__:function(){
+            returnthis._values.length;
         },
-        __nonzero__: function () {
-            return py.PY_size(this) > 0 ? py.True : py.False;
+        __nonzero__:function(){
+            returnpy.PY_size(this)>0?py.True:py.False;
         },
-        __contains__: function (value) {
-            for(var i=0, len=this._values.length; i<len; ++i) {
-                if (py.PY_isTrue(this._values[i].__eq__(value))) {
-                    return py.True;
+        __contains__:function(value){
+            for(vari=0,len=this._values.length;i<len;++i){
+                if(py.PY_isTrue(this._values[i].__eq__(value))){
+                    returnpy.True;
                 }
             }
-            return py.False;
+            returnpy.False;
         },
-        __getitem__: function (index) {
-            return this._values[index.toJSON()];
+        __getitem__:function(index){
+            returnthis._values[index.toJSON()];
         },
-        toJSON: function () {
-            var out = [];
-            for (var i=0; i<this._values.length; ++i) {
+        toJSON:function(){
+            varout=[];
+            for(vari=0;i<this._values.length;++i){
                 out.push(this._values[i].toJSON());
             }
-            return out;
+            returnout;
         },
-        fromJSON: function (ar) {
-            if (!(ar instanceof Array)) {
-                throw new Error("Can only create a py.tuple from an Array");
+        fromJSON:function(ar){
+            if(!(arinstanceofArray)){
+                thrownewError("Canonlycreateapy.tuplefromanArray");
             }
-            var t = py.PY_call(py.tuple);
-            for(var i=0; i<ar.length; ++i) {
+            vart=py.PY_call(py.tuple);
+            for(vari=0;i<ar.length;++i){
                 t._values.push(PY_ensurepy(ar[i]));
             }
-            return t;
+            returnt;
         }
     });
-    py.list = py.type('list', null, {
-        __nonzero__: function () {
-            return this.__len__ > 0 ? py.True : py.False;
+    py.list=py.type('list',null,{
+        __nonzero__:function(){
+            returnthis.__len__>0?py.True:py.False;
         },
     });
-    _.defaults(py.list, py.tuple) // Copy attributes not redefined in type list
-    py.dict = py.type('dict', null, {
-        __init__: function () {
-            this._store = {};
+    _.defaults(py.list,py.tuple)//Copyattributesnotredefinedintypelist
+    py.dict=py.type('dict',null,{
+        __init__:function(){
+            this._store={};
         },
-        __getitem__: function (key) {
-            var h = key.__hash__();
-            if (!(h in this._store)) {
-                throw new Error("KeyError: '" + key.toJSON() + "'");
+        __getitem__:function(key){
+            varh=key.__hash__();
+            if(!(hinthis._store)){
+                thrownewError("KeyError:'"+key.toJSON()+"'");
             }
-            return this._store[h][1];
+            returnthis._store[h][1];
         },
-        __setitem__: function (key, value) {
-            this._store[key.__hash__()] = [key, value];
+        __setitem__:function(key,value){
+            this._store[key.__hash__()]=[key,value];
         },
-        __len__: function () {
-            return Object.keys(this._store).length
+        __len__:function(){
+            returnObject.keys(this._store).length
         },
-        __nonzero__: function () {
-            return py.PY_size(this) > 0 ? py.True : py.False;
+        __nonzero__:function(){
+            returnpy.PY_size(this)>0?py.True:py.False;
         },
-        get: function () {
-            var args = py.PY_parseArgs(arguments, ['k', ['d', py.None]]);
-            var h = args.k.__hash__();
-            if (!(h in this._store)) {
-                return args.d;
+        get:function(){
+            varargs=py.PY_parseArgs(arguments,['k',['d',py.None]]);
+            varh=args.k.__hash__();
+            if(!(hinthis._store)){
+                returnargs.d;
             }
-            return this._store[h][1];
+            returnthis._store[h][1];
         },
-        fromJSON: function (d) {
-            var instance = py.PY_call(py.dict);
-            for (var k in (d || {})) {
-                if (!d.hasOwnProperty(k)) { continue; }
+        fromJSON:function(d){
+            varinstance=py.PY_call(py.dict);
+            for(varkin(d||{})){
+                if(!d.hasOwnProperty(k)){continue;}
                 instance.__setitem__(
                     py.str.fromJSON(k),
                     PY_ensurepy(d[k]));
             }
-            return instance;
+            returninstance;
         },
-        toJSON: function () {
-            var out = {};
-            for(var k in this._store) {
-                var item = this._store[k];
-                out[item[0].toJSON()] = item[1].toJSON();
+        toJSON:function(){
+            varout={};
+            for(varkinthis._store){
+                varitem=this._store[k];
+                out[item[0].toJSON()]=item[1].toJSON();
             }
-            return out;
+            returnout;
         }
     });
-    py.PY_def = py.type('function', null, {
-        __call__: function () {
-            // don't want to rewrite __call__ for instancemethod
-            return this._func.apply(this._inst, arguments);
+    py.PY_def=py.type('function',null,{
+        __call__:function(){
+            //don'twanttorewrite__call__forinstancemethod
+            returnthis._func.apply(this._inst,arguments);
         },
-        fromJSON: function (nativefunc) {
-            var instance = py.PY_call(py.PY_def);
-            instance._inst = null;
-            instance._func = nativefunc;
-            return instance;
+        fromJSON:function(nativefunc){
+            varinstance=py.PY_call(py.PY_def);
+            instance._inst=null;
+            instance._func=nativefunc;
+            returninstance;
         },
-        toJSON: function () {
-            return this._func;
+        toJSON:function(){
+            returnthis._func;
         }
     });
-    py.classmethod = py.type('classmethod', null, {
-        __init__: function () {
-            var args = py.PY_parseArgs(arguments, 'function');
-            this._func = args['function'];
+    py.classmethod=py.type('classmethod',null,{
+        __init__:function(){
+            varargs=py.PY_parseArgs(arguments,'function');
+            this._func=args['function'];
         },
-        __get__: function (obj, type) {
-            return PY_instancemethod.fromJSON(this._func, type);
+        __get__:function(obj,type){
+            returnPY_instancemethod.fromJSON(this._func,type);
         },
-        fromJSON: function (func) {
-            return py.PY_call(py.classmethod, [func]);
+        fromJSON:function(func){
+            returnpy.PY_call(py.classmethod,[func]);
         }
     });
-    var PY_instancemethod = py.type('instancemethod', [py.PY_def], {
-        fromJSON: function (nativefunc, instance) {
-            var inst = py.PY_call(PY_instancemethod);
-            // could also use bind?
-            inst._inst = instance;
-            inst._func = nativefunc;
-            return inst;
+    varPY_instancemethod=py.type('instancemethod',[py.PY_def],{
+        fromJSON:function(nativefunc,instance){
+            varinst=py.PY_call(PY_instancemethod);
+            //couldalsousebind?
+            inst._inst=instance;
+            inst._func=nativefunc;
+            returninst;
         }
     });
 
-    py.abs = new py.PY_def.fromJSON(function abs() {
-        var args = py.PY_parseArgs(arguments, ['number']);
-        if (!args.number.__abs__) {
-            throw new Error(
-                "TypeError: bad operand type for abs(): '"
-                    + typename(args.number)
-                    + "'");
+    py.abs=newpy.PY_def.fromJSON(functionabs(){
+        varargs=py.PY_parseArgs(arguments,['number']);
+        if(!args.number.__abs__){
+            thrownewError(
+                "TypeError:badoperandtypeforabs():'"
+                    +typename(args.number)
+                    +"'");
         }
-        return  args.number.__abs__();
+        return args.number.__abs__();
     });
-    py.len = new py.PY_def.fromJSON(function len() {
-        var args = py.PY_parseArgs(arguments, ['object']);
-        return py.float.fromJSON(py.PY_size(args.object));
+    py.len=newpy.PY_def.fromJSON(functionlen(){
+        varargs=py.PY_parseArgs(arguments,['object']);
+        returnpy.float.fromJSON(py.PY_size(args.object));
     });
-    py.isinstance = new py.PY_def.fromJSON(function isinstance() {
-        var args = py.PY_parseArgs(arguments, ['object', 'class']);
-        return py.PY_isInstance(args.object, args['class'])
-            ? py.True : py.False;
+    py.isinstance=newpy.PY_def.fromJSON(functionisinstance(){
+        varargs=py.PY_parseArgs(arguments,['object','class']);
+        returnpy.PY_isInstance(args.object,args['class'])
+            ?py.True:py.False;
     });
-    py.issubclass = new py.PY_def.fromJSON(function issubclass() {
-        var args = py.PY_parseArgs(arguments, ['C', 'B']);
-        return py.PY_isSubclass(args.C, args.B)
-            ? py.True : py.False;
+    py.issubclass=newpy.PY_def.fromJSON(functionissubclass(){
+        varargs=py.PY_parseArgs(arguments,['C','B']);
+        returnpy.PY_isSubclass(args.C,args.B)
+            ?py.True:py.False;
     });
 
 
     /**
-     * Implements the decoding of Python string literals (embedded in
-     * JS strings) into actual JS strings. This includes the decoding
-     * of escapes into their corresponding JS
-     * characters/codepoints/whatever.
+     *ImplementsthedecodingofPythonstringliterals(embeddedin
+     *JSstrings)intoactualJSstrings.Thisincludesthedecoding
+     *ofescapesintotheircorrespondingJS
+     *characters/codepoints/whatever.
      *
-     * The ``unicode`` flags notes whether the literal should be
-     * decoded as a bytestring literal or a unicode literal, which
-     * pretty much only impacts decoding (or not) of unicode escapes
-     * at this point since bytestrings are not technically handled
-     * (everything is decoded to JS "unicode" strings)
+     *The``unicode``flagsnoteswhethertheliteralshouldbe
+     *decodedasabytestringliteraloraunicodeliteral,which
+     *prettymuchonlyimpactsdecoding(ornot)ofunicodeescapes
+     *atthispointsincebytestringsarenottechnicallyhandled
+     *(everythingisdecodedtoJS"unicode"strings)
      *
-     * Eventurally, ``str`` could eventually use typed arrays, that'd
-     * be interesting...
+     *Eventurally,``str``couldeventuallyusetypedarrays,that'd
+     *beinteresting...
      */
-    var PY_decode_string_literal = function (str, unicode) {
-        var out = [], code;
-        // Directly maps a single escape code to an output
-        // character
-        var direct_map = {
-            '\\': '\\',
-            '"': '"',
-            "'": "'",
-            'a': '\x07',
-            'b': '\x08',
-            'f': '\x0c',
-            'n': '\n',
-            'r': '\r',
-            't': '\t',
-            'v': '\v'
+    varPY_decode_string_literal=function(str,unicode){
+        varout=[],code;
+        //Directlymapsasingleescapecodetoanoutput
+        //character
+        vardirect_map={
+            '\\':'\\',
+            '"':'"',
+            "'":"'",
+            'a':'\x07',
+            'b':'\x08',
+            'f':'\x0c',
+            'n':'\n',
+            'r':'\r',
+            't':'\t',
+            'v':'\v'
         };
 
-        for (var i=0; i<str.length; ++i) {
-            if (str[i] !== '\\') {
+        for(vari=0;i<str.length;++i){
+            if(str[i]!=='\\'){
                 out.push(str[i]);
                 continue;
             }
-            var escape = str[i+1];
-            if (escape in direct_map) {
+            varescape=str[i+1];
+            if(escapeindirect_map){
                 out.push(direct_map[escape]);
                 ++i;
                 continue;
             }
 
-            switch (escape) {
-            // Ignored
-            case '\n': ++i; continue;
-            // Character named name in the Unicode database (Unicode only)
-            case 'N':
-                if (!unicode) { break; }
-                throw Error("SyntaxError: \\N{} escape not implemented");
-            case 'u':
-                if (!unicode) { break; }
-                var uni = str.slice(i+2, i+6);
-                if (!/[0-9a-f]{4}/i.test(uni)) {
-                    throw new Error([
-                        "SyntaxError: (unicode error) 'unicodeescape' codec",
-                        " can't decode bytes in position ",
-                        i, "-", i+4,
-                        ": truncated \\uXXXX escape"
+            switch(escape){
+            //Ignored
+            case'\n':++i;continue;
+            //CharacternamednameintheUnicodedatabase(Unicodeonly)
+            case'N':
+                if(!unicode){break;}
+                throwError("SyntaxError:\\N{}escapenotimplemented");
+            case'u':
+                if(!unicode){break;}
+                varuni=str.slice(i+2,i+6);
+                if(!/[0-9a-f]{4}/i.test(uni)){
+                    thrownewError([
+                        "SyntaxError:(unicodeerror)'unicodeescape'codec",
+                        "can'tdecodebytesinposition",
+                        i,"-",i+4,
+                        ":truncated\\uXXXXescape"
                     ].join(''));
                 }
-                code = parseInt(uni, 16);
+                code=parseInt(uni,16);
                 out.push(String.fromCharCode(code));
-                // escape + 4 hex digits
-                i += 5;
+                //escape+4hexdigits
+                i+=5;
                 continue;
-            case 'U':
-                if (!unicode) { break; }
-                // TODO: String.fromCodePoint
-                throw Error("SyntaxError: \\U escape not implemented");
-            case 'x':
-                // get 2 hex digits
-                var hex = str.slice(i+2, i+4);
-                if (!/[0-9a-f]{2}/i.test(hex)) {
-                    if (!unicode) {
-                        throw new Error('ValueError: invalid \\x escape');
+            case'U':
+                if(!unicode){break;}
+                //TODO:String.fromCodePoint
+                throwError("SyntaxError:\\Uescapenotimplemented");
+            case'x':
+                //get2hexdigits
+                varhex=str.slice(i+2,i+4);
+                if(!/[0-9a-f]{2}/i.test(hex)){
+                    if(!unicode){
+                        thrownewError('ValueError:invalid\\xescape');
                     }
-                    throw new Error([
-                        "SyntaxError: (unicode error) 'unicodeescape'",
-                        " codec can't decode bytes in position ",
-                        i, '-', i+2,
-                        ": truncated \\xXX escape"
+                    thrownewError([
+                        "SyntaxError:(unicodeerror)'unicodeescape'",
+                        "codeccan'tdecodebytesinposition",
+                        i,'-',i+2,
+                        ":truncated\\xXXescape"
                     ].join(''))
                 }
-                code = parseInt(hex, 16);
+                code=parseInt(hex,16);
                 out.push(String.fromCharCode(code));
-                // skip escape + 2 hex digits
-                i += 3;
+                //skipescape+2hexdigits
+                i+=3;
                 continue;
             default:
-                // Check if octal
-                if (!/[0-8]/.test(escape)) { break; }
-                var r = /[0-8]{1,3}/g;
-                r.lastIndex = i+1;
-                var m = r.exec(str);
-                var oct = m[0];
-                code = parseInt(oct, 8);
+                //Checkifoctal
+                if(!/[0-8]/.test(escape)){break;}
+                varr=/[0-8]{1,3}/g;
+                r.lastIndex=i+1;
+                varm=r.exec(str);
+                varoct=m[0];
+                code=parseInt(oct,8);
                 out.push(String.fromCharCode(code));
-                // skip matchlength
-                i += oct.length;
+                //skipmatchlength
+                i+=oct.length;
                 continue;
             }
             out.push('\\');
         }
 
-        return out.join('');
+        returnout.join('');
     };
-    // All binary operators with fallbacks, so they can be applied generically
-    var PY_operators = {
-        '==': ['eq', 'eq', function (a, b) { return a === b; }],
-        '!=': ['ne', 'ne', function (a, b) { return a !== b; }],
-        '<>': ['ne', 'ne', function (a, b) { return a !== b; }],
-        '<': ['lt', 'gt', function (a, b) {return a.__class__.__name__ < b.__class__.__name__;}],
-        '<=': ['le', 'ge', function (a, b) {return a.__class__.__name__ <= b.__class__.__name__;}],
-        '>': ['gt', 'lt', function (a, b) {return a.__class__.__name__ > b.__class__.__name__;}],
-        '>=': ['ge', 'le', function (a, b) {return a.__class__.__name__ >= b.__class__.__name__;}],
+    //Allbinaryoperatorswithfallbacks,sotheycanbeappliedgenerically
+    varPY_operators={
+        '==':['eq','eq',function(a,b){returna===b;}],
+        '!=':['ne','ne',function(a,b){returna!==b;}],
+        '<>':['ne','ne',function(a,b){returna!==b;}],
+        '<':['lt','gt',function(a,b){returna.__class__.__name__<b.__class__.__name__;}],
+        '<=':['le','ge',function(a,b){returna.__class__.__name__<=b.__class__.__name__;}],
+        '>':['gt','lt',function(a,b){returna.__class__.__name__>b.__class__.__name__;}],
+        '>=':['ge','le',function(a,b){returna.__class__.__name__>=b.__class__.__name__;}],
 
-        '+': ['add', 'radd'],
-        '-': ['sub', 'rsub'],
-        '*': ['mul', 'rmul'],
-        '/': ['div', 'rdiv'],
-        '//': ['floordiv', 'rfloordiv'],
-        '%': ['mod', 'rmod'],
-        '**': ['pow', 'rpow'],
-        '<<': ['lshift', 'rlshift'],
-        '>>': ['rshift', 'rrshift'],
-        '&': ['and', 'rand'],
-        '^': ['xor', 'rxor'],
-        '|': ['or', 'ror']
+        '+':['add','radd'],
+        '-':['sub','rsub'],
+        '*':['mul','rmul'],
+        '/':['div','rdiv'],
+        '//':['floordiv','rfloordiv'],
+        '%':['mod','rmod'],
+        '**':['pow','rpow'],
+        '<<':['lshift','rlshift'],
+        '>>':['rshift','rrshift'],
+        '&':['and','rand'],
+        '^':['xor','rxor'],
+        '|':['or','ror']
     };
     /**
-      * Implements operator fallback/reflection.
+      *Implementsoperatorfallback/reflection.
       *
-      * First two arguments are the objects to apply the operator on,
-      * in their actual order (ltr).
+      *Firsttwoargumentsaretheobjectstoapplytheoperatoron,
+      *intheiractualorder(ltr).
       *
-      * Third argument is the actual operator.
+      *Thirdargumentistheactualoperator.
       *
-      * If the operator methods raise exceptions, those exceptions are
-      * not intercepted.
+      *Iftheoperatormethodsraiseexceptions,thoseexceptionsare
+      *notintercepted.
       */
-    var PY_op = function (o1, o2, op) {
-        var r;
-        var methods = PY_operators[op];
-        var forward = '__' + methods[0] + '__', reverse = '__' + methods[1] + '__';
-        var otherwise = methods[2];
+    varPY_op=function(o1,o2,op){
+        varr;
+        varmethods=PY_operators[op];
+        varforward='__'+methods[0]+'__',reverse='__'+methods[1]+'__';
+        varotherwise=methods[2];
 
-        if (forward in o1 && (r = o1[forward](o2)) !== py.NotImplemented) {
-            return r;
+        if(forwardino1&&(r=o1[forward](o2))!==py.NotImplemented){
+            returnr;
         }
-        if (reverse in o2 && (r = o2[reverse](o1)) !== py.NotImplemented) {
-            return r;
+        if(reverseino2&&(r=o2[reverse](o1))!==py.NotImplemented){
+            returnr;
         }
-        if (otherwise) {
-            return PY_ensurepy(otherwise(o1, o2));
+        if(otherwise){
+            returnPY_ensurepy(otherwise(o1,o2));
         }
-        throw new Error(
-            "TypeError: unsupported operand type(s) for " + op + ": '"
-                + typename(o1) + "' and '" + typename(o2) + "'");
+        thrownewError(
+            "TypeError:unsupportedoperandtype(s)for"+op+":'"
+                +typename(o1)+"'and'"+typename(o2)+"'");
     };
 
-    var PY_builtins = {
-        type: py.type,
+    varPY_builtins={
+        type:py.type,
 
-        None: py.None,
-        True: py.True,
-        False: py.False,
-        NotImplemented: py.NotImplemented,
+        None:py.None,
+        True:py.True,
+        False:py.False,
+        NotImplemented:py.NotImplemented,
 
-        object: py.object,
-        bool: py.bool,
-        float: py.float,
-        str: py.str,
-        unicode: py.unicode,
-        tuple: py.tuple,
-        list: py.list,
-        dict: py.dict,
+        object:py.object,
+        bool:py.bool,
+        float:py.float,
+        str:py.str,
+        unicode:py.unicode,
+        tuple:py.tuple,
+        list:py.list,
+        dict:py.dict,
 
-        abs: py.abs,
-        len: py.len,
-        isinstance: py.isinstance,
-        issubclass: py.issubclass,
-        classmethod: py.classmethod,
+        abs:py.abs,
+        len:py.len,
+        isinstance:py.isinstance,
+        issubclass:py.issubclass,
+        classmethod:py.classmethod,
     };
 
-    py.parse = function (toks) {
-        var index = 0;
-        token = toks[0];
-        next = function () { return toks[++index]; };
-        return expression();
+    py.parse=function(toks){
+        varindex=0;
+        token=toks[0];
+        next=function(){returntoks[++index];};
+        returnexpression();
     };
-    var evaluate_operator = function (operator, a, b) {
-        switch (operator) {
-        case 'is': return a === b ? py.True : py.False;
-        case 'is not': return a !== b ? py.True : py.False;
-        case 'in':
-            return b.__contains__(a);
-        case 'not in':
-            return py.PY_isTrue(b.__contains__(a)) ? py.False : py.True;
-        case '==': case '!=': case '<>':
-        case '<': case '<=':
-        case '>': case '>=':
-            return PY_op(a, b, operator);
+    varevaluate_operator=function(operator,a,b){
+        switch(operator){
+        case'is':returna===b?py.True:py.False;
+        case'isnot':returna!==b?py.True:py.False;
+        case'in':
+            returnb.__contains__(a);
+        case'notin':
+            returnpy.PY_isTrue(b.__contains__(a))?py.False:py.True;
+        case'==':case'!=':case'<>':
+        case'<':case'<=':
+        case'>':case'>=':
+            returnPY_op(a,b,operator);
         }
-        throw new Error('SyntaxError: unknown comparator [[' + operator + ']]');
+        thrownewError('SyntaxError:unknowncomparator[['+operator+']]');
     };
-    py.evaluate = function (expr, context) {
-        context = context || {};
-        switch (expr.id) {
-        case '(name)':
-            var val = context[expr.value];
-            if (val === undefined && expr.value in PY_builtins) {
-                return PY_builtins[expr.value];
+    py.evaluate=function(expr,context){
+        context=context||{};
+        switch(expr.id){
+        case'(name)':
+            varval=context[expr.value];
+            if(val===undefined&&expr.valueinPY_builtins){
+                returnPY_builtins[expr.value];
             }
-            return PY_ensurepy(val, expr.value);
-        case '(string)':
-            return py.str.fromJSON(expr.value);
-        case '(number)':
-            return py.float.fromJSON(expr.value);
-        case '(constant)':
-            switch (expr.value) {
-            case 'None': return py.None;
-            case 'False': return py.False;
-            case 'True': return py.True;
+            returnPY_ensurepy(val,expr.value);
+        case'(string)':
+            returnpy.str.fromJSON(expr.value);
+        case'(number)':
+            returnpy.float.fromJSON(expr.value);
+        case'(constant)':
+            switch(expr.value){
+            case'None':returnpy.None;
+            case'False':returnpy.False;
+            case'True':returnpy.True;
             }
-            throw new Error("SyntaxError: unknown constant '" + expr.value + "'");
-        case '(comparator)':
-            var result, left = py.evaluate(expr.expressions[0], context);
-            for(var i=0; i<expr.operators.length; ++i) {
-                result = evaluate_operator(
+            thrownewError("SyntaxError:unknownconstant'"+expr.value+"'");
+        case'(comparator)':
+            varresult,left=py.evaluate(expr.expressions[0],context);
+            for(vari=0;i<expr.operators.length;++i){
+                result=evaluate_operator(
                     expr.operators[i],
                     left,
-                    left = py.evaluate(expr.expressions[i+1], context));
-                if (py.PY_not(result)) { return py.False; }
+                    left=py.evaluate(expr.expressions[i+1],context));
+                if(py.PY_not(result)){returnpy.False;}
             }
-            return py.True;
-        case 'not':
-            return py.PY_isTrue(py.evaluate(expr.first, context)) ? py.False : py.True;
-        case 'and':
-            var and_first = py.evaluate(expr.first, context);
-            if (py.PY_isTrue(and_first.__nonzero__())) {
-                return py.evaluate(expr.second, context);
+            returnpy.True;
+        case'not':
+            returnpy.PY_isTrue(py.evaluate(expr.first,context))?py.False:py.True;
+        case'and':
+            varand_first=py.evaluate(expr.first,context);
+            if(py.PY_isTrue(and_first.__nonzero__())){
+                returnpy.evaluate(expr.second,context);
             }
-            return and_first;
-        case 'or':
-            var or_first = py.evaluate(expr.first, context);
-            if (py.PY_isTrue(or_first.__nonzero__())) {
-                return or_first
+            returnand_first;
+        case'or':
+            varor_first=py.evaluate(expr.first,context);
+            if(py.PY_isTrue(or_first.__nonzero__())){
+                returnor_first
             }
-            return py.evaluate(expr.second, context);
-        case 'if':
-            var cond = py.evaluate(expr.condition, context);
-            if (py.PY_isTrue(cond)) {
-                return py.evaluate(expr.ifTrue, context);
-            } else {
-                return py.evaluate(expr.ifFalse, context);
+            returnpy.evaluate(expr.second,context);
+        case'if':
+            varcond=py.evaluate(expr.condition,context);
+            if(py.PY_isTrue(cond)){
+                returnpy.evaluate(expr.ifTrue,context);
+            }else{
+                returnpy.evaluate(expr.ifFalse,context);
             }
-        case '(':
-            if (expr.second) {
-                var callable = py.evaluate(expr.first, context);
-                var args = [], kwargs = {};
-                for (var jj=0; jj<expr.second.length; ++jj) {
-                    var arg = expr.second[jj];
-                    if (arg.id !== '=') {
-                        // arg
-                        args.push(py.evaluate(arg, context));
-                    } else {
-                        // kwarg
-                        kwargs[arg.first.value] =
-                            py.evaluate(arg.second, context);
+        case'(':
+            if(expr.second){
+                varcallable=py.evaluate(expr.first,context);
+                varargs=[],kwargs={};
+                for(varjj=0;jj<expr.second.length;++jj){
+                    vararg=expr.second[jj];
+                    if(arg.id!=='='){
+                        //arg
+                        args.push(py.evaluate(arg,context));
+                    }else{
+                        //kwarg
+                        kwargs[arg.first.value]=
+                            py.evaluate(arg.second,context);
                     }
                 }
-                return py.PY_call(callable, args, kwargs);
+                returnpy.PY_call(callable,args,kwargs);
             }
-            var tuple_exprs = expr.first,
-                tuple_values = [];
-            for (var j=0, len=tuple_exprs.length; j<len; ++j) {
+            vartuple_exprs=expr.first,
+                tuple_values=[];
+            for(varj=0,len=tuple_exprs.length;j<len;++j){
                 tuple_values.push(py.evaluate(
-                    tuple_exprs[j], context));
+                    tuple_exprs[j],context));
             }
-            return py.tuple.fromJSON(tuple_values);
-        case '[':
-            if (expr.second) {
-                return py.PY_getItem(
-                    py.evaluate(expr.first, context),
-                    py.evaluate(expr.second, context));
+            returnpy.tuple.fromJSON(tuple_values);
+        case'[':
+            if(expr.second){
+                returnpy.PY_getItem(
+                    py.evaluate(expr.first,context),
+                    py.evaluate(expr.second,context));
             }
-            var list_exprs = expr.first, list_values = [];
-            for (var k=0; k<list_exprs.length; ++k) {
+            varlist_exprs=expr.first,list_values=[];
+            for(vark=0;k<list_exprs.length;++k){
                 list_values.push(py.evaluate(
-                    list_exprs[k], context));
+                    list_exprs[k],context));
             }
-            return py.list.fromJSON(list_values);
-        case '{':
-            var dict_exprs = expr.first, dict = py.PY_call(py.dict);
-            for(var l=0; l<dict_exprs.length; ++l) {
+            returnpy.list.fromJSON(list_values);
+        case'{':
+            vardict_exprs=expr.first,dict=py.PY_call(py.dict);
+            for(varl=0;l<dict_exprs.length;++l){
                 py.PY_setItem(dict,
-                    py.evaluate(dict_exprs[l][0], context),
-                    py.evaluate(dict_exprs[l][1], context));
+                    py.evaluate(dict_exprs[l][0],context),
+                    py.evaluate(dict_exprs[l][1],context));
             }
-            return dict;
-        case '.':
-            if (expr.second.id !== '(name)') {
-                throw new Error('SyntaxError: ' + expr);
+            returndict;
+        case'.':
+            if(expr.second.id!=='(name)'){
+                thrownewError('SyntaxError:'+expr);
             }
-            return py.PY_getAttr(py.evaluate(expr.first, context),
+            returnpy.PY_getAttr(py.evaluate(expr.first,context),
                                  expr.second.value);
-        // numerical operators
-        case '~':
-            return (py.evaluate(expr.first, context)).__invert__();
-        case '+':
-            if (!expr.second) {
-                return py.PY_positive(py.evaluate(expr.first, context));
+        //numericaloperators
+        case'~':
+            return(py.evaluate(expr.first,context)).__invert__();
+        case'+':
+            if(!expr.second){
+                returnpy.PY_positive(py.evaluate(expr.first,context));
             }
-        case '-':
-            if (!expr.second) {
-                return py.PY_negative(py.evaluate(expr.first, context));
+        case'-':
+            if(!expr.second){
+                returnpy.PY_negative(py.evaluate(expr.first,context));
             }
-        case '*': case '/': case '//':
-        case '%':
-        case '**':
-        case '<<': case '>>':
-        case '&': case '^': case '|':
-            return PY_op(
-                py.evaluate(expr.first, context),
-                py.evaluate(expr.second, context),
+        case'*':case'/':case'//':
+        case'%':
+        case'**':
+        case'<<':case'>>':
+        case'&':case'^':case'|':
+            returnPY_op(
+                py.evaluate(expr.first,context),
+                py.evaluate(expr.second,context),
                 expr.id);
 
         default:
-            throw new Error('SyntaxError: Unknown node [[' + expr.id + ']]');
+            thrownewError('SyntaxError:Unknownnode[['+expr.id+']]');
         }
     };
-    py.eval = function (str, context) {
-        return py.evaluate(
+    py.eval=function(str,context){
+        returnpy.evaluate(
             py.parse(
                 py.tokenize(
                     str)),
             context).toJSON();
     }
-})(typeof exports === 'undefined' ? py : exports);
+})(typeofexports==='undefined'?py:exports);

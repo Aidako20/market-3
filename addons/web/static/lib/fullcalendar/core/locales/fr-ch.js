@@ -1,31 +1,31 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales['fr-ch'] = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales['fr-ch']=factory()));
+}(this,function(){'usestrict';
 
-    var frCh = {
-        code: "fr-ch",
-        week: {
-            dow: 1,
-            doy: 4 // The week that contains Jan 4th is the first week of the year.
+    varfrCh={
+        code:"fr-ch",
+        week:{
+            dow:1,
+            doy:4//TheweekthatcontainsJan4thisthefirstweekoftheyear.
         },
-        buttonText: {
-            prev: "Précédent",
-            next: "Suivant",
-            today: "Courant",
-            year: "Année",
-            month: "Mois",
-            week: "Semaine",
-            day: "Jour",
-            list: "Mon planning"
+        buttonText:{
+            prev:"Précédent",
+            next:"Suivant",
+            today:"Courant",
+            year:"Année",
+            month:"Mois",
+            week:"Semaine",
+            day:"Jour",
+            list:"Monplanning"
         },
-        weekLabel: "Sm",
-        allDayHtml: "Toute la<br/>journée",
-        eventLimitText: "en plus",
-        noEventsMessage: "Aucun événement à afficher"
+        weekLabel:"Sm",
+        allDayHtml:"Toutela<br/>journée",
+        eventLimitText:"enplus",
+        noEventsMessage:"Aucunévénementàafficher"
     };
 
-    return frCh;
+    returnfrCh;
 
 }));

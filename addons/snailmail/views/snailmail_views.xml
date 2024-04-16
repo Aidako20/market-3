@@ -1,61 +1,61 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record model="ir.ui.view" id="snailmail_letter_list">
-        <field name="name">snailmail.letter.tree</field>
-        <field name="model">snailmail.letter</field>
-        <field name="arch" type="xml">
-            <tree decoration-danger="state=='error'" decoration-muted="state=='sent'" string="Letters">
-                <field name="attachment_id" string="Document"/>
-                <field name="partner_id"/>
-                <field name="user_id"/>
-                <field name="state" invisible="1"/>
-                <field name="info_msg" widget="html"/>
-                <field name="company_id" groups="base.group_multi_company"/>
+    <recordmodel="ir.ui.view"id="snailmail_letter_list">
+        <fieldname="name">snailmail.letter.tree</field>
+        <fieldname="model">snailmail.letter</field>
+        <fieldname="arch"type="xml">
+            <treedecoration-danger="state=='error'"decoration-muted="state=='sent'"string="Letters">
+                <fieldname="attachment_id"string="Document"/>
+                <fieldname="partner_id"/>
+                <fieldname="user_id"/>
+                <fieldname="state"invisible="1"/>
+                <fieldname="info_msg"widget="html"/>
+                <fieldname="company_id"groups="base.group_multi_company"/>
             </tree>
         </field>
     </record>
 
-    <record model="ir.ui.view" id="snailmail_letter_form">
-        <field name="name">snailmail.letter.form</field>
-        <field name="model">snailmail.letter</field>
-        <field name="arch" type="xml">
+    <recordmodel="ir.ui.view"id="snailmail_letter_form">
+        <fieldname="name">snailmail.letter.form</field>
+        <fieldname="model">snailmail.letter</field>
+        <fieldname="arch"type="xml">
             <form>
                 <header>
-                    <button name="snailmail_print" string="Send Now" type="object" states="pending,error" class="oe_highlight"/>
-                    <button name="cancel" string="Cancel" type="object" states="pending,error"/>
-                    <field name="state" widget="statusbar" statusbar_visible="pending,sent,canceled"/>
+                    <buttonname="snailmail_print"string="SendNow"type="object"states="pending,error"class="oe_highlight"/>
+                    <buttonname="cancel"string="Cancel"type="object"states="pending,error"/>
+                    <fieldname="state"widget="statusbar"statusbar_visible="pending,sent,canceled"/>
                 </header>
                 <sheet>
-                    <div class="oe_title">
-                        <h1><field name="display_name"/></h1>
+                    <divclass="oe_title">
+                        <h1><fieldname="display_name"/></h1>
                     </div>
                     <group>
-                        <field name="reference" widget="reference"/>
-                        <field name="attachment_datas" filename="attachment_fname"/>
-                        <field name="attachment_fname" invisible="1"/>
-                        <field name="partner_id"/>
-                        <field name="user_id"/>
-                        <field name="info_msg" widget="html"/>
+                        <fieldname="reference"widget="reference"/>
+                        <fieldname="attachment_datas"filename="attachment_fname"/>
+                        <fieldname="attachment_fname"invisible="1"/>
+                        <fieldname="partner_id"/>
+                        <fieldname="user_id"/>
+                        <fieldname="info_msg"widget="html"/>
                     </group>
-                    <group groups="base.group_no_one">
-                        <field name="model"/>
-                        <field name="res_id"/>
-                        <field name="color"/>
-                        <field name="duplex"/>
+                    <groupgroups="base.group_no_one">
+                        <fieldname="model"/>
+                        <fieldname="res_id"/>
+                        <fieldname="color"/>
+                        <fieldname="duplex"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record model="ir.actions.act_window" id="action_mail_letters">
-        <field name="name">Snailmail Letters</field>
-        <field name="res_model">snailmail.letter</field>
-        <field name="view_mode">form,tree</field>
-        <field name="domain">[('state', '!=', 'draft')]</field>
-        <field name="view_id" ref="snailmail_letter_list" />
+    <recordmodel="ir.actions.act_window"id="action_mail_letters">
+        <fieldname="name">SnailmailLetters</field>
+        <fieldname="res_model">snailmail.letter</field>
+        <fieldname="view_mode">form,tree</field>
+        <fieldname="domain">[('state','!=','draft')]</field>
+        <fieldname="view_id"ref="snailmail_letter_list"/>
     </record>
 
-    <menuitem id="menu_snailmail_letters" parent="base.menu_email" action="action_mail_letters"
+    <menuitemid="menu_snailmail_letters"parent="base.menu_email"action="action_mail_letters"
               sequence="50"/>
 </flectra>

@@ -1,1571 +1,1571 @@
-flectra.define('web.pivot_tests', function (require) {
-"use strict";
+flectra.define('web.pivot_tests',function(require){
+"usestrict";
 
-var core = require('web.core');
-var PivotView = require('web.PivotView');
-const PivotController = require("web.PivotController");
-var testUtils = require('web.test_utils');
-var testUtilsDom = require('web.test_utils_dom');
+varcore=require('web.core');
+varPivotView=require('web.PivotView');
+constPivotController=require("web.PivotController");
+vartestUtils=require('web.test_utils');
+vartestUtilsDom=require('web.test_utils_dom');
 
-var _t = core._t;
-const cpHelpers = testUtils.controlPanel;
-var createActionManager = testUtils.createActionManager;
-var createView = testUtils.createView;
-var patchDate = testUtils.mock.patchDate;
+var_t=core._t;
+constcpHelpers=testUtils.controlPanel;
+varcreateActionManager=testUtils.createActionManager;
+varcreateView=testUtils.createView;
+varpatchDate=testUtils.mock.patchDate;
 
 /**
- * Helper function that returns, given a pivot instance, the values of the
- * table, separated by ','.
+ *Helperfunctionthatreturns,givenapivotinstance,thevaluesofthe
+ *table,separatedby','.
  *
- * @returns {string}
+ *@returns{string}
  */
-var getCurrentValues = function (pivot) {
-    return pivot.$('.o_pivot_cell_value div').map(function () {
-        return $(this).text();
+vargetCurrentValues=function(pivot){
+    returnpivot.$('.o_pivot_cell_valuediv').map(function(){
+        return$(this).text();
     }).get().join();
 };
 
 
-QUnit.module('Views', {
-    beforeEach: function () {
-        this.data = {
-            partner: {
-                fields: {
-                    foo: {string: "Foo", type: "integer", searchable: true, group_operator: 'sum'},
-                    bar: {string: "bar", type: "boolean", store: true, sortable: true},
-                    date: {string: "Date", type: "date", store: true, sortable: true},
-                    product_id: {string: "Product", type: "many2one", relation: 'product', store: true},
-                    other_product_id: {string: "Other Product", type: "many2one", relation: 'product', store: true},
-                    non_stored_m2o: {string: "Non Stored M2O", type: "many2one", relation: 'product'},
-                    customer: {string: "Customer", type: "many2one", relation: 'customer', store: true},
-                    computed_field: {string: "Computed and not stored", type: 'integer', compute: true, group_operator: 'sum'},
-                    company_type: {
-                        string: "Company Type", type: "selection",
-                        selection: [["company", "Company"], ["individual", "individual"]],
-                        searchable: true, sortable: true, store: true,
+QUnit.module('Views',{
+    beforeEach:function(){
+        this.data={
+            partner:{
+                fields:{
+                    foo:{string:"Foo",type:"integer",searchable:true,group_operator:'sum'},
+                    bar:{string:"bar",type:"boolean",store:true,sortable:true},
+                    date:{string:"Date",type:"date",store:true,sortable:true},
+                    product_id:{string:"Product",type:"many2one",relation:'product',store:true},
+                    other_product_id:{string:"OtherProduct",type:"many2one",relation:'product',store:true},
+                    non_stored_m2o:{string:"NonStoredM2O",type:"many2one",relation:'product'},
+                    customer:{string:"Customer",type:"many2one",relation:'customer',store:true},
+                    computed_field:{string:"Computedandnotstored",type:'integer',compute:true,group_operator:'sum'},
+                    company_type:{
+                        string:"CompanyType",type:"selection",
+                        selection:[["company","Company"],["individual","individual"]],
+                        searchable:true,sortable:true,store:true,
                     },
                 },
-                records: [
+                records:[
                     {
-                        id: 1,
-                        foo: 12,
-                        bar: true,
-                        date: '2016-12-14',
-                        product_id: 37,
-                        customer: 1,
-                        computed_field: 19,
-                        company_type: 'company',
-                    }, {
-                        id: 2,
-                        foo: 1,
-                        bar: true,
-                        date: '2016-10-26',
-                        product_id: 41,
-                        customer: 2,
-                        computed_field: 23,
-                        company_type: 'individual',
-                    }, {
-                        id: 3,
-                        foo: 17,
-                        bar: true,
-                        date: '2016-12-15',
-                        product_id: 41,
-                        customer: 2,
-                        computed_field: 26,
-                        company_type: 'company',
-                    }, {
-                        id: 4,
-                        foo: 2,
-                        bar: false,
-                        date: '2016-04-11',
-                        product_id: 41,
-                        customer: 1,
-                        computed_field: 19,
-                        company_type: 'individual',
+                        id:1,
+                        foo:12,
+                        bar:true,
+                        date:'2016-12-14',
+                        product_id:37,
+                        customer:1,
+                        computed_field:19,
+                        company_type:'company',
+                    },{
+                        id:2,
+                        foo:1,
+                        bar:true,
+                        date:'2016-10-26',
+                        product_id:41,
+                        customer:2,
+                        computed_field:23,
+                        company_type:'individual',
+                    },{
+                        id:3,
+                        foo:17,
+                        bar:true,
+                        date:'2016-12-15',
+                        product_id:41,
+                        customer:2,
+                        computed_field:26,
+                        company_type:'company',
+                    },{
+                        id:4,
+                        foo:2,
+                        bar:false,
+                        date:'2016-04-11',
+                        product_id:41,
+                        customer:1,
+                        computed_field:19,
+                        company_type:'individual',
                     },
                 ]
             },
-            product: {
-                fields: {
-                    name: {string: "Product Name", type: "char"}
+            product:{
+                fields:{
+                    name:{string:"ProductName",type:"char"}
                 },
-                records: [{
-                    id: 37,
-                    display_name: "xphone",
-                }, {
-                    id: 41,
-                    display_name: "xpad",
+                records:[{
+                    id:37,
+                    display_name:"xphone",
+                },{
+                    id:41,
+                    display_name:"xpad",
                 }]
             },
-            customer: {
-                fields: {
-                    name: {string: "Customer Name", type: "char"}
+            customer:{
+                fields:{
+                    name:{string:"CustomerName",type:"char"}
                 },
-                records: [{
-                    id: 1,
-                    display_name: "First",
-                }, {
-                    id: 2,
-                    display_name: "Second",
+                records:[{
+                    id:1,
+                    display_name:"First",
+                },{
+                    id:2,
+                    display_name:"Second",
                 }]
             },
         };
     },
-}, function () {
+},function(){
     QUnit.module('PivotView');
 
-    QUnit.test('simple pivot rendering', async function (assert) {
+    QUnit.test('simplepivotrendering',asyncfunction(assert){
         assert.expect(3);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot string="Partners">' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivotstring="Partners">'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            mockRPC: function (route, args) {
-                assert.strictEqual(args.kwargs.lazy, false,
-                    "the read_group should be done with the lazy=false option");
-                return this._super.apply(this, arguments);
+            mockRPC:function(route,args){
+                assert.strictEqual(args.kwargs.lazy,false,
+                    "theread_groupshouldbedonewiththelazy=falseoption");
+                returnthis._super.apply(this,arguments);
             },
         });
 
-        assert.hasClass(pivot.$('table'), 'o_enable_linking',
-            "table should have classname 'o_enable_linking'");
-        assert.strictEqual(pivot.$('td.o_pivot_cell_value:contains(32)').length, 1,
-                    "should contain a pivot cell with the sum of all records");
+        assert.hasClass(pivot.$('table'),'o_enable_linking',
+            "tableshouldhaveclassname'o_enable_linking'");
+        assert.strictEqual(pivot.$('td.o_pivot_cell_value:contains(32)').length,1,
+                    "shouldcontainapivotcellwiththesumofallrecords");
         pivot.destroy();
     });
 
-    QUnit.test('pivot rendering with widget', async function (assert) {
+    QUnit.test('pivotrenderingwithwidget',asyncfunction(assert){
         assert.expect(1);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot string="Partners">' +
-                        '<field name="foo" type="measure" widget="float_time"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivotstring="Partners">'+
+                        '<fieldname="foo"type="measure"widget="float_time"/>'+
                 '</pivot>',
         });
 
-        assert.strictEqual(pivot.$('td.o_pivot_cell_value:contains(32:00)').length, 1,
-                    "should contain a pivot cell with the sum of all records");
+        assert.strictEqual(pivot.$('td.o_pivot_cell_value:contains(32:00)').length,1,
+                    "shouldcontainapivotcellwiththesumofallrecords");
         pivot.destroy();
     });
 
-    QUnit.test('pivot rendering with string attribute on field', async function (assert) {
+    QUnit.test('pivotrenderingwithstringattributeonfield',asyncfunction(assert){
         assert.expect(1);
 
-        this.data.partner.fields.foo = {string: "Foo", type: "integer", store: true, group_operator: 'sum'};
+        this.data.partner.fields.foo={string:"Foo",type:"integer",store:true,group_operator:'sum'};
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot string="Partners">' +
-                        '<field name="foo" string="BAR" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivotstring="Partners">'+
+                        '<fieldname="foo"string="BAR"type="measure"/>'+
                 '</pivot>',
         });
 
-        assert.strictEqual(pivot.$('.o_pivot_measure_row').text(), "BAR",
-                    "the displayed name should be the one set in the string attribute");
+        assert.strictEqual(pivot.$('.o_pivot_measure_row').text(),"BAR",
+                    "thedisplayednameshouldbetheonesetinthestringattribute");
         pivot.destroy();
     });
 
-    QUnit.test('pivot rendering with string attribute on non stored field', async function (assert) {
+    QUnit.test('pivotrenderingwithstringattributeonnonstoredfield',asyncfunction(assert){
         assert.expect(1);
 
-        this.data.partner.fields.fubar = {string: "Fubar", type: "integer", store: false, group_operator: 'sum'};
+        this.data.partner.fields.fubar={string:"Fubar",type:"integer",store:false,group_operator:'sum'};
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot string="Partners">' +
-                        '<field name="fubar" string="fubar" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivotstring="Partners">'+
+                        '<fieldname="fubar"string="fubar"type="measure"/>'+
                 '</pivot>',
         });
-        assert.containsOnce(pivot, '.o_pivot', 'Non stored fields can have a string attribute');
+        assert.containsOnce(pivot,'.o_pivot','Nonstoredfieldscanhaveastringattribute');
         pivot.destroy();
     });
 
-    QUnit.test('pivot rendering with invisible attribute on field', async function (assert) {
+    QUnit.test('pivotrenderingwithinvisibleattributeonfield',asyncfunction(assert){
         assert.expect(3);
-        // when invisible, a field should neither be an active measure,
-        // nor be a selectable measure.
-        _.extend(this.data.partner.fields, {
-            foo: {string: "Foo", type: "integer", store: true, group_operator: 'sum'},
-            foo2: {string: "Foo2", type: "integer", store: true, group_operator: 'sum'}
+        //wheninvisible,afieldshouldneitherbeanactivemeasure,
+        //norbeaselectablemeasure.
+        _.extend(this.data.partner.fields,{
+            foo:{string:"Foo",type:"integer",store:true,group_operator:'sum'},
+            foo2:{string:"Foo2",type:"integer",store:true,group_operator:'sum'}
         });
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot string="Partners">' +
-                        '<field name="foo" type="measure"/>' +
-                        '<field name="foo2" type="measure" invisible="True"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivotstring="Partners">'+
+                        '<fieldname="foo"type="measure"/>'+
+                        '<fieldname="foo2"type="measure"invisible="True"/>'+
                 '</pivot>',
         });
 
-        // there should be only one displayed measure as the other one is invisible
-        assert.containsOnce(pivot, '.o_pivot_measure_row');
-        // there should be only one measure besides count, as the other one is invisible
-        assert.containsN(pivot, '.o_cp_bottom_left .dropdown-item', 2);
-        // the invisible field souldn't be in the groupable fields neither
-        await testUtils.dom.click(pivot.$('.o_pivot_header_cell_closed:first'));
-        assert.containsNone(pivot, '.o_pivot_field_menu a[data-field="foo2"]');
+        //thereshouldbeonlyonedisplayedmeasureastheotheroneisinvisible
+        assert.containsOnce(pivot,'.o_pivot_measure_row');
+        //thereshouldbeonlyonemeasurebesidescount,astheotheroneisinvisible
+        assert.containsN(pivot,'.o_cp_bottom_left.dropdown-item',2);
+        //theinvisiblefieldsouldn'tbeinthegroupablefieldsneither
+        awaittestUtils.dom.click(pivot.$('.o_pivot_header_cell_closed:first'));
+        assert.containsNone(pivot,'.o_pivot_field_menua[data-field="foo2"]');
 
         pivot.destroy();
     });
 
-    QUnit.test('pivot view without "string" attribute', async function (assert) {
+    QUnit.test('pivotviewwithout"string"attribute',asyncfunction(assert){
         assert.expect(1);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
         });
 
-        // this is important for export functionality.
-        assert.strictEqual(pivot.title, _t("Untitled"), "should have a valid title");
+        //thisisimportantforexportfunctionality.
+        assert.strictEqual(pivot.title,_t("Untitled"),"shouldhaveavalidtitle");
         pivot.destroy();
     });
 
-    QUnit.test('group headers should have a tooltip', async function (assert) {
+    QUnit.test('groupheadersshouldhaveatooltip',asyncfunction(assert){
         assert.expect(2);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id" type="col"/>' +
-                        '<field name="date" type="row"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"type="col"/>'+
+                        '<fieldname="date"type="row"/>'+
                 '</pivot>',
         });
 
-        assert.strictEqual(pivot.$('tbody .o_pivot_header_cell_closed:first').attr('data-original-title'), 'Date');
-        assert.strictEqual(pivot.$('thead .o_pivot_header_cell_closed:first').attr('data-original-title'), 'Product');
+        assert.strictEqual(pivot.$('tbody.o_pivot_header_cell_closed:first').attr('data-original-title'),'Date');
+        assert.strictEqual(pivot.$('thead.o_pivot_header_cell_closed:first').attr('data-original-title'),'Product');
 
         pivot.destroy();
     });
 
-    QUnit.test('pivot view add computed fields explicitly defined as measure', async function (assert) {
+    QUnit.test('pivotviewaddcomputedfieldsexplicitlydefinedasmeasure',asyncfunction(assert){
         assert.expect(1);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="computed_field" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="computed_field"type="measure"/>'+
                 '</pivot>',
         });
 
-        assert.ok(pivot.measures.computed_field, "measures contains the field 'computed_field'");
+        assert.ok(pivot.measures.computed_field,"measurescontainsthefield'computed_field'");
         pivot.destroy();
     });
 
-    QUnit.test('clicking on a cell triggers a do_action', async function (assert) {
+    QUnit.test('clickingonacelltriggersado_action',asyncfunction(assert){
         assert.expect(2);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id" type="row"/>' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"type="row"/>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            intercepts: {
-                do_action: function (ev) {
-                    assert.deepEqual(ev.data.action, {
-                        context: {someKey: true, userContextKey: true},
-                        domain: [['product_id', '=', 37]],
-                        name: 'Partners',
-                        res_model: 'partner',
-                        target: 'current',
-                        type: 'ir.actions.act_window',
-                        view_mode: 'list',
-                        views: [[false, 'list'], [2, 'form']],
-                    }, "should trigger do_action with the correct args");
+            intercepts:{
+                do_action:function(ev){
+                    assert.deepEqual(ev.data.action,{
+                        context:{someKey:true,userContextKey:true},
+                        domain:[['product_id','=',37]],
+                        name:'Partners',
+                        res_model:'partner',
+                        target:'current',
+                        type:'ir.actions.act_window',
+                        view_mode:'list',
+                        views:[[false,'list'],[2,'form']],
+                    },"shouldtriggerdo_actionwiththecorrectargs");
                 },
             },
-            session: {
-                user_context: {userContextKey: true},
+            session:{
+                user_context:{userContextKey:true},
             },
-            viewOptions: {
-                action: {
-                    views: [
-                        { viewID: 2, type: 'form' },
-                        { viewID: 5, type: 'kanban' },
-                        { viewID: false, type: 'list' },
-                        { viewID: false, type: 'pivot' },
+            viewOptions:{
+                action:{
+                    views:[
+                        {viewID:2,type:'form'},
+                        {viewID:5,type:'kanban'},
+                        {viewID:false,type:'list'},
+                        {viewID:false,type:'pivot'},
                     ],
                 },
-                context: {someKey: true, search_default_test: 3},
-                title: 'Partners',
+                context:{someKey:true,search_default_test:3},
+                title:'Partners',
             }
         });
 
-        assert.hasClass(pivot.$('table'), 'o_enable_linking',
-            "table should have classname 'o_enable_linking'");
-        await testUtils.dom.click(pivot.$('.o_pivot_cell_value:contains(12)')); // should trigger a do_action
+        assert.hasClass(pivot.$('table'),'o_enable_linking',
+            "tableshouldhaveclassname'o_enable_linking'");
+        awaittestUtils.dom.click(pivot.$('.o_pivot_cell_value:contains(12)'));//shouldtriggerado_action
 
         pivot.destroy();
     });
 
-    QUnit.test('row and column are highlighted when hovering a cell', async function (assert) {
+    QUnit.test('rowandcolumnarehighlightedwhenhoveringacell',asyncfunction(assert){
         assert.expect(11);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot string="Partners">' +
-                        '<field name="foo" type="col"/>' +
-                        '<field name="product_id" type="row"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivotstring="Partners">'+
+                        '<fieldname="foo"type="col"/>'+
+                        '<fieldname="product_id"type="row"/>'+
                 '</pivot>',
         });
 
-        // check row highlighting
-        assert.hasClass(pivot.$('table'), 'table-hover',
-            "with className 'table-hover', rows are highlighted (bootstrap)");
+        //checkrowhighlighting
+        assert.hasClass(pivot.$('table'),'table-hover',
+            "withclassName'table-hover',rowsarehighlighted(bootstrap)");
 
-        // check column highlighting
-        // hover third measure
-        await testUtils.dom.triggerEvents(pivot.$('th.o_pivot_measure_row:nth(2)'), 'mouseover');
-        assert.containsN(pivot, '.o_cell_hover', 3);
-        for (var i = 0; i < 3; i++) {
-            assert.hasClass(pivot.$('tbody tr:nth(' + i + ') td:nth(2)'), 'o_cell_hover');
+        //checkcolumnhighlighting
+        //hoverthirdmeasure
+        awaittestUtils.dom.triggerEvents(pivot.$('th.o_pivot_measure_row:nth(2)'),'mouseover');
+        assert.containsN(pivot,'.o_cell_hover',3);
+        for(vari=0;i<3;i++){
+            assert.hasClass(pivot.$('tbodytr:nth('+i+')td:nth(2)'),'o_cell_hover');
         }
-        await testUtils.dom.triggerEvents(pivot.$('th.o_pivot_measure_row:nth(2)'), 'mouseout');
-        assert.containsNone(pivot, '.o_cell_hover');
+        awaittestUtils.dom.triggerEvents(pivot.$('th.o_pivot_measure_row:nth(2)'),'mouseout');
+        assert.containsNone(pivot,'.o_cell_hover');
 
-        // hover second cell, second row
-        await testUtils.dom.triggerEvents(pivot.$('tbody tr:nth(1) td:nth(1)'), 'mouseover');
-        assert.containsN(pivot, '.o_cell_hover', 3);
-        for (i = 0; i < 3; i++) {
-            assert.hasClass(pivot.$('tbody tr:nth(' + i + ') td:nth(1)'), 'o_cell_hover');
+        //hoversecondcell,secondrow
+        awaittestUtils.dom.triggerEvents(pivot.$('tbodytr:nth(1)td:nth(1)'),'mouseover');
+        assert.containsN(pivot,'.o_cell_hover',3);
+        for(i=0;i<3;i++){
+            assert.hasClass(pivot.$('tbodytr:nth('+i+')td:nth(1)'),'o_cell_hover');
         }
-        await testUtils.dom.triggerEvents(pivot.$('tbody tr:nth(1) td:nth(1)'), 'mouseout');
-        assert.containsNone(pivot, '.o_cell_hover');
+        awaittestUtils.dom.triggerEvents(pivot.$('tbodytr:nth(1)td:nth(1)'),'mouseout');
+        assert.containsNone(pivot,'.o_cell_hover');
 
         pivot.destroy();
     });
 
-    QUnit.test('pivot view with disable_linking="True"', async function (assert) {
+    QUnit.test('pivotviewwithdisable_linking="True"',asyncfunction(assert){
         assert.expect(2);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot disable_linking="True">' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivotdisable_linking="True">'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            intercepts: {
-                do_action: function () {
-                    assert.ok(false, "should not trigger do_action");
+            intercepts:{
+                do_action:function(){
+                    assert.ok(false,"shouldnottriggerdo_action");
                 },
             },
         });
 
-        assert.doesNotHaveClass(pivot.$('table'), 'o_enable_linking',
-            "table should not have classname 'o_enable_linking'");
-        assert.containsOnce(pivot, '.o_pivot_cell_value',
-            "should have one cell");
-        await testUtils.dom.click(pivot.$('.o_pivot_cell_value')); // should not trigger a do_action
+        assert.doesNotHaveClass(pivot.$('table'),'o_enable_linking',
+            "tableshouldnothaveclassname'o_enable_linking'");
+        assert.containsOnce(pivot,'.o_pivot_cell_value',
+            "shouldhaveonecell");
+        awaittestUtils.dom.click(pivot.$('.o_pivot_cell_value'));//shouldnottriggerado_action
 
         pivot.destroy();
     });
 
-    QUnit.test('clicking on the "Total" Cell with time range activated gives the right action domain', async function (assert) {
+    QUnit.test('clickingonthe"Total"Cellwithtimerangeactivatedgivestherightactiondomain',asyncfunction(assert){
         assert.expect(2);
 
-        var unpatchDate = patchDate(2016, 11, 20, 1, 0, 0);
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot/>',
-            archs: {
-                'partner,false,search': `
+        varunpatchDate=patchDate(2016,11,20,1,0,0);
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot/>',
+            archs:{
+                'partner,false,search':`
                     <search>
-                        <filter name="date_filter" date="date" domain="[]" default_period='this_month'/>
+                        <filtername="date_filter"date="date"domain="[]"default_period='this_month'/>
                     </search>
                 `,
             },
-            intercepts: {
-                do_action: function (ev) {
+            intercepts:{
+                do_action:function(ev){
                     assert.deepEqual(
                         ev.data.action.domain,
                         ["&",["date",">=","2016-12-01"],["date","<=","2016-12-31"]],
-                        "should trigger do_action with the correct action domain"
+                        "shouldtriggerdo_actionwiththecorrectactiondomain"
                     );
                 },
             },
-            viewOptions: {
-                context: { search_default_date_filter: true, },
-                title: 'Partners',
+            viewOptions:{
+                context:{search_default_date_filter:true,},
+                title:'Partners',
             },
         });
 
-        assert.hasClass(pivot.$('table'), 'o_enable_linking',
-            "root node should have classname 'o_enable_linking'");
-        await testUtilsDom.click(pivot.$('.o_pivot_cell_value'));
+        assert.hasClass(pivot.$('table'),'o_enable_linking',
+            "rootnodeshouldhaveclassname'o_enable_linking'");
+        awaittestUtilsDom.click(pivot.$('.o_pivot_cell_value'));
 
         unpatchDate();
         pivot.destroy();
     });
 
-    QUnit.test('clicking on a fake cell value ("empty group") in comparison mode gives an action domain equivalent to [[0,"=",1]]', async function (assert) {
+    QUnit.test('clickingonafakecellvalue("emptygroup")incomparisonmodegivesanactiondomainequivalentto[[0,"=",1]]',asyncfunction(assert){
         assert.expect(3);
 
-        var unpatchDate = patchDate(2016, 11, 20, 1, 0, 0);
+        varunpatchDate=patchDate(2016,11,20,1,0,0);
 
-        this.data.partner.records[0].date = '2016-11-15';
-        this.data.partner.records[1].date = '2016-11-17';
-        this.data.partner.records[2].date = '2016-11-22';
-        this.data.partner.records[3].date = '2016-11-03';
+        this.data.partner.records[0].date='2016-11-15';
+        this.data.partner.records[1].date='2016-11-17';
+        this.data.partner.records[2].date='2016-11-22';
+        this.data.partner.records[3].date='2016-11-03';
 
-        var first_do_action = true;
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id" type="row"/>' +
+        varfirst_do_action=true;
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"type="row"/>'+
                     '</pivot>',
-            intercepts: {
-                do_action: function (ev) {
-                    if (first_do_action) {
+            intercepts:{
+                do_action:function(ev){
+                    if(first_do_action){
                         assert.deepEqual(
                             ev.data.action.domain,
                             ["&",["date",">=","2016-12-01"],["date","<=","2016-12-31"]],
-                            "should trigger do_action with the correct action domain"
+                            "shouldtriggerdo_actionwiththecorrectactiondomain"
                         );
-                    } else {
+                    }else{
                         assert.deepEqual(
                             ev.data.action.domain,
-                            [[0, "=", 1]],
-                            "should trigger do_action with the correct action domain"
+                            [[0,"=",1]],
+                            "shouldtriggerdo_actionwiththecorrectactiondomain"
                         );
                     }
-                    first_do_action = false;
+                    first_do_action=false;
                 },
             },
-            archs: {
-                'partner,false,search': `
+            archs:{
+                'partner,false,search':`
                     <search>
-                        <filter name="date_filter" date="date" domain="[]" default_period='this_month'/>
+                        <filtername="date_filter"date="date"domain="[]"default_period='this_month'/>
                     </search>
                 `,
             },
-            viewOptions: {
-                context: { search_default_date_filter: true, },
-                title: 'Partners',
+            viewOptions:{
+                context:{search_default_date_filter:true,},
+                title:'Partners',
             },
         });
 
-        await cpHelpers.toggleComparisonMenu(pivot);
-        await cpHelpers.toggleMenuItem(pivot, 'Date: Previous period');
+        awaitcpHelpers.toggleComparisonMenu(pivot);
+        awaitcpHelpers.toggleMenuItem(pivot,'Date:Previousperiod');
 
-        assert.hasClass(pivot.$('table'), 'o_enable_linking',
-            "root node should have classname 'o_enable_linking'");
-        // here we click on the group corresponding to Total/Total/This Month
-        pivot.$('.o_pivot_cell_value').eq(1).click(); // should trigger a do_action with appropriate domain
-        // here we click on the group corresponding to xphone/Total/This Month
-        pivot.$('.o_pivot_cell_value').eq(4).click(); // should trigger a do_action with appropriate domain
+        assert.hasClass(pivot.$('table'),'o_enable_linking',
+            "rootnodeshouldhaveclassname'o_enable_linking'");
+        //hereweclickonthegroupcorrespondingtoTotal/Total/ThisMonth
+        pivot.$('.o_pivot_cell_value').eq(1).click();//shouldtriggerado_actionwithappropriatedomain
+        //hereweclickonthegroupcorrespondingtoxphone/Total/ThisMonth
+        pivot.$('.o_pivot_cell_value').eq(4).click();//shouldtriggerado_actionwithappropriatedomain
 
         unpatchDate();
         pivot.destroy();
     });
 
-    QUnit.test('pivot view grouped by date field', async function (assert) {
+    QUnit.test('pivotviewgroupedbydatefield',asyncfunction(assert){
         assert.expect(2);
 
-        var data = this.data;
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="date" interval="month" type="col"/>' +
-                        '<field name="foo" type="measure"/>' +
+        vardata=this.data;
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="date"interval="month"type="col"/>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            mockRPC: function (route, params) {
-                var wrong_fields = _.filter(params.kwargs.fields, function (field) {
-                    return !(field.split(':')[0] in data.partner.fields);
+            mockRPC:function(route,params){
+                varwrong_fields=_.filter(params.kwargs.fields,function(field){
+                    return!(field.split(':')[0]indata.partner.fields);
                 });
-                assert.ok(!wrong_fields.length, 'fields given to read_group should exist on the model');
-                return this._super.apply(this, arguments);
+                assert.ok(!wrong_fields.length,'fieldsgiventoread_groupshouldexistonthemodel');
+                returnthis._super.apply(this,arguments);
             },
         });
         pivot.destroy();
     });
 
-    QUnit.test('without measures, pivot view uses __count by default', async function (assert) {
+    QUnit.test('withoutmeasures,pivotviewuses__countbydefault',asyncfunction(assert){
         assert.expect(2);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot></pivot>',
-            mockRPC: function (route, args) {
-                if (args.method === 'read_group') {
-                    assert.deepEqual(args.kwargs.fields, ['__count'],
-                        "should make a read_group with no valid fields");
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot></pivot>',
+            mockRPC:function(route,args){
+                if(args.method==='read_group'){
+                    assert.deepEqual(args.kwargs.fields,['__count'],
+                        "shouldmakearead_groupwithnovalidfields");
                 }
-                return this._super(route, args);
+                returnthis._super(route,args);
             }
         });
 
-        var $countMeasure = pivot.$buttons.find('.dropdown-item[data-field=__count]:first');
-        assert.hasClass($countMeasure, 'selected', "The count measure should be activated");
+        var$countMeasure=pivot.$buttons.find('.dropdown-item[data-field=__count]:first');
+        assert.hasClass($countMeasure,'selected',"Thecountmeasureshouldbeactivated");
         pivot.destroy();
     });
 
-    QUnit.test('pivot view can be reloaded', async function (assert) {
+    QUnit.test('pivotviewcanbereloaded',asyncfunction(assert){
         assert.expect(4);
-        var readGroupCount = 0;
+        varreadGroupCount=0;
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot></pivot>',
-            mockRPC: function (route, args) {
-                if (args.method === 'read_group') {
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot></pivot>',
+            mockRPC:function(route,args){
+                if(args.method==='read_group'){
                     readGroupCount++;
                 }
-                return this._super(route, args);
+                returnthis._super(route,args);
             }
         });
 
-        assert.strictEqual(pivot.$('td.o_pivot_cell_value:contains(4)').length, 1,
-                    "should contain a pivot cell with the number of all records");
-        assert.strictEqual(readGroupCount, 1, "should have done 1 rpc");
+        assert.strictEqual(pivot.$('td.o_pivot_cell_value:contains(4)').length,1,
+                    "shouldcontainapivotcellwiththenumberofallrecords");
+        assert.strictEqual(readGroupCount,1,"shouldhavedone1rpc");
 
-        await testUtils.pivot.reload(pivot, {domain: [['foo', '>', 10]]});
-        assert.strictEqual(pivot.$('td.o_pivot_cell_value:contains(2)').length, 1,
-                    "should contain a pivot cell with the number of remaining records");
-        assert.strictEqual(readGroupCount, 2, "should have done 2 rpcs");
+        awaittestUtils.pivot.reload(pivot,{domain:[['foo','>',10]]});
+        assert.strictEqual(pivot.$('td.o_pivot_cell_value:contains(2)').length,1,
+                    "shouldcontainapivotcellwiththenumberofremainingrecords");
+        assert.strictEqual(readGroupCount,2,"shouldhavedone2rpcs");
         pivot.destroy();
     });
 
-    QUnit.test('pivot view grouped by many2one field', async function (assert) {
+    QUnit.test('pivotviewgroupedbymany2onefield',asyncfunction(assert){
         assert.expect(3);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id" type="row"/>' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"type="row"/>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
         });
 
-        assert.containsOnce(pivot, '.o_pivot_header_cell_opened',
-            "should have one opened header");
-        assert.strictEqual(pivot.$('.o_pivot_header_cell_closed:contains(xphone)').length, 1,
-            "should display one header with 'xphone'");
-        assert.strictEqual(pivot.$('.o_pivot_header_cell_closed:contains(xpad)').length, 1,
-            "should display one header with 'xpad'");
+        assert.containsOnce(pivot,'.o_pivot_header_cell_opened',
+            "shouldhaveoneopenedheader");
+        assert.strictEqual(pivot.$('.o_pivot_header_cell_closed:contains(xphone)').length,1,
+            "shoulddisplayoneheaderwith'xphone'");
+        assert.strictEqual(pivot.$('.o_pivot_header_cell_closed:contains(xpad)').length,1,
+            "shoulddisplayoneheaderwith'xpad'");
         pivot.destroy();
     });
 
-    QUnit.test('basic folding/unfolding', async function (assert) {
+    QUnit.test('basicfolding/unfolding',asyncfunction(assert){
         assert.expect(7);
 
-        var rpcCount = 0;
+        varrpcCount=0;
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id" type="row"/>' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"type="row"/>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            mockRPC: function () {
+            mockRPC:function(){
                 rpcCount++;
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
         });
-        assert.containsN(pivot, 'tbody tr', 3,
-            "should have 3 rows: 1 for the opened header, and 2 for data");
+        assert.containsN(pivot,'tbodytr',3,
+            "shouldhave3rows:1fortheopenedheader,and2fordata");
 
-        // click on the opened header to close it
-        await testUtils.dom.click(pivot.$('.o_pivot_header_cell_opened'));
+        //clickontheopenedheadertocloseit
+        awaittestUtils.dom.click(pivot.$('.o_pivot_header_cell_opened'));
 
-        assert.containsOnce(pivot, 'tbody tr', "should have 1 row");
+        assert.containsOnce(pivot,'tbodytr',"shouldhave1row");
 
-        // click on closed header to open dropdown
-        await testUtils.dom.click(pivot.$('tbody .o_pivot_header_cell_closed'));
-        assert.containsN(pivot, '.o_pivot_field_menu .dropdown-item[data-field="date"]', 6,
-            "should have the date field as proposition (Date, Day, Week, Month, Quarter and Year)");
-        assert.containsOnce(pivot, '.o_pivot_field_menu .dropdown-item[data-field="product_id"]',
-            "should have the product_id field as proposition");
-        assert.containsNone(pivot, '.o_pivot_field_menu .dropdown-item[data-field="non_stored_m2o"]',
-            "should not have the non_stored_m2o field as proposition");
+        //clickonclosedheadertoopendropdown
+        awaittestUtils.dom.click(pivot.$('tbody.o_pivot_header_cell_closed'));
+        assert.containsN(pivot,'.o_pivot_field_menu.dropdown-item[data-field="date"]',6,
+            "shouldhavethedatefieldasproposition(Date,Day,Week,Month,QuarterandYear)");
+        assert.containsOnce(pivot,'.o_pivot_field_menu.dropdown-item[data-field="product_id"]',
+            "shouldhavetheproduct_idfieldasproposition");
+        assert.containsNone(pivot,'.o_pivot_field_menu.dropdown-item[data-field="non_stored_m2o"]',
+            "shouldnothavethenon_stored_m2ofieldasproposition");
 
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field="date"]:first'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field="date"]:first'));
 
-        assert.containsN(pivot, 'tbody tr', 4,
-            "should have 4 rows: one for header, 3 for data");
-        assert.strictEqual(rpcCount, 3,
-            "should have done 3 rpcs (initial load) + open header with different groupbys");
+        assert.containsN(pivot,'tbodytr',4,
+            "shouldhave4rows:oneforheader,3fordata");
+        assert.strictEqual(rpcCount,3,
+            "shouldhavedone3rpcs(initialload)+openheaderwithdifferentgroupbys");
 
         pivot.destroy();
     });
 
-    QUnit.test('more folding/unfolding', async function (assert) {
+    QUnit.test('morefolding/unfolding',asyncfunction(assert){
         assert.expect(1);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id" type="row"/>' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"type="row"/>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
         });
 
-        // open dropdown to zoom into first row
-        await testUtils.dom.clickFirst(pivot.$('tbody .o_pivot_header_cell_closed'));
-        // click on date by day
-        pivot.$('.dropdown-menu.show .o_inline_dropdown .dropdown-menu').toggle(); // unfold inline dropdown
-        await testUtils.nextTick();
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field="date"]:contains("Day")'));
+        //opendropdowntozoomintofirstrow
+        awaittestUtils.dom.clickFirst(pivot.$('tbody.o_pivot_header_cell_closed'));
+        //clickondatebyday
+        pivot.$('.dropdown-menu.show.o_inline_dropdown.dropdown-menu').toggle();//unfoldinlinedropdown
+        awaittestUtils.nextTick();
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field="date"]:contains("Day")'));
 
-        // open dropdown to zoom into second row
-        await testUtils.dom.clickLast(pivot.$('tbody th.o_pivot_header_cell_closed'));
+        //opendropdowntozoomintosecondrow
+        awaittestUtils.dom.clickLast(pivot.$('tbodyth.o_pivot_header_cell_closed'));
 
-        assert.containsN(pivot, 'tbody tr', 7,
-            "should have 7 rows (1 for total, 1 for xphone, 1 for xpad, 4 for data)");
+        assert.containsN(pivot,'tbodytr',7,
+            "shouldhave7rows(1fortotal,1forxphone,1forxpad,4fordata)");
 
         pivot.destroy();
     });
 
-    QUnit.test('fold and unfold header group', async function (assert) {
+    QUnit.test('foldandunfoldheadergroup',asyncfunction(assert){
         assert.expect(3);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id" type="col"/>' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"type="col"/>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
         });
 
-        assert.containsN(pivot, 'thead tr', 3);
+        assert.containsN(pivot,'theadtr',3);
 
-        // fold opened col group
-        await testUtils.dom.click(pivot.$('thead .o_pivot_header_cell_opened'));
-        assert.containsN(pivot, 'thead tr', 2);
+        //foldopenedcolgroup
+        awaittestUtils.dom.click(pivot.$('thead.o_pivot_header_cell_opened'));
+        assert.containsN(pivot,'theadtr',2);
 
-        // unfold it
-        await testUtils.dom.click(pivot.$('thead .o_pivot_header_cell_closed'));
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field="product_id"]'));
-        assert.containsN(pivot, 'thead tr', 3);
+        //unfoldit
+        awaittestUtils.dom.click(pivot.$('thead.o_pivot_header_cell_closed'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field="product_id"]'));
+        assert.containsN(pivot,'theadtr',3);
 
         pivot.destroy();
     });
 
-    QUnit.test('unfold second header group', async function (assert) {
+    QUnit.test('unfoldsecondheadergroup',asyncfunction(assert){
         assert.expect(4);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id" type="col"/>' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"type="col"/>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
         });
 
-        assert.containsN(pivot, 'thead tr', 3);
-        var values = ['12', '20', '32'];
-        assert.strictEqual(getCurrentValues(pivot), values.join(','));
+        assert.containsN(pivot,'theadtr',3);
+        varvalues=['12','20','32'];
+        assert.strictEqual(getCurrentValues(pivot),values.join(','));
 
-        // unfold it
-        await testUtils.dom.click(pivot.$('thead .o_pivot_header_cell_closed:nth(1)'));
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field="company_type"]'));
-        assert.containsN(pivot, 'thead tr', 4);
-        values = ['12', '3', '17', '32'];
-        assert.strictEqual(getCurrentValues(pivot), values.join(','));
+        //unfoldit
+        awaittestUtils.dom.click(pivot.$('thead.o_pivot_header_cell_closed:nth(1)'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field="company_type"]'));
+        assert.containsN(pivot,'theadtr',4);
+        values=['12','3','17','32'];
+        assert.strictEqual(getCurrentValues(pivot),values.join(','));
 
         pivot.destroy();
     });
 
-    QUnit.test('can toggle extra measure', async function (assert) {
+    QUnit.test('cantoggleextrameasure',asyncfunction(assert){
         assert.expect(8);
 
-        var rpcCount = 0;
+        varrpcCount=0;
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id" type="row"/>' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"type="row"/>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            mockRPC: function () {
+            mockRPC:function(){
                 rpcCount++;
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
         });
 
-        assert.containsN(pivot, '.o_pivot_cell_value', 3,
-            "should have 3 cells: 1 for the open header, and 2 for data");
-        assert.doesNotHaveClass(pivot.$buttons.find('.dropdown-item[data-field=__count]:first'), 'selected',
-            "the __count measure should not be selected");
+        assert.containsN(pivot,'.o_pivot_cell_value',3,
+            "shouldhave3cells:1fortheopenheader,and2fordata");
+        assert.doesNotHaveClass(pivot.$buttons.find('.dropdown-item[data-field=__count]:first'),'selected',
+            "the__countmeasureshouldnotbeselected");
 
-        rpcCount = 0;
-        await testUtils.pivot.toggleMeasuresDropdown(pivot);
-        await testUtils.pivot.clickMeasure(pivot, '__count');
+        rpcCount=0;
+        awaittestUtils.pivot.toggleMeasuresDropdown(pivot);
+        awaittestUtils.pivot.clickMeasure(pivot,'__count');
 
-        assert.hasClass(pivot.$buttons.find('.dropdown-item[data-field=__count]:first'), 'selected',
-            "the __count measure should be selected");
-        assert.containsN(pivot, '.o_pivot_cell_value', 6,
-            "should have 6 cells: 2 for the open header, and 4 for data");
-        assert.strictEqual(rpcCount, 2,
-            "should have done 2 rpcs to reload data");
+        assert.hasClass(pivot.$buttons.find('.dropdown-item[data-field=__count]:first'),'selected',
+            "the__countmeasureshouldbeselected");
+        assert.containsN(pivot,'.o_pivot_cell_value',6,
+            "shouldhave6cells:2fortheopenheader,and4fordata");
+        assert.strictEqual(rpcCount,2,
+            "shouldhavedone2rpcstoreloaddata");
 
-        await testUtils.pivot.clickMeasure(pivot, '__count');
+        awaittestUtils.pivot.clickMeasure(pivot,'__count');
 
-        assert.doesNotHaveClass(pivot.$buttons.find('.dropdown-item[data-field=__count]:first'), 'selected',
-            "the __count measure should not be selected");
-        assert.containsN(pivot, '.o_pivot_cell_value', 3,
-            "should have 3 cells: 1 for the open header, and 2 for data");
-        assert.strictEqual(rpcCount, 2,
-            "should not have done any extra rpcs");
+        assert.doesNotHaveClass(pivot.$buttons.find('.dropdown-item[data-field=__count]:first'),'selected',
+            "the__countmeasureshouldnotbeselected");
+        assert.containsN(pivot,'.o_pivot_cell_value',3,
+            "shouldhave3cells:1fortheopenheader,and2fordata");
+        assert.strictEqual(rpcCount,2,
+            "shouldnothavedoneanyextrarpcs");
 
         pivot.destroy();
     });
 
-    QUnit.test('no content helper when no active measure', async function (assert) {
+    QUnit.test('nocontenthelperwhennoactivemeasure',asyncfunction(assert){
         assert.expect(4);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot string="Partners">' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivotstring="Partners">'+
                 '</pivot>',
         });
 
-        assert.containsNone(pivot, '.o_view_nocontent',
-            "should not have a no_content_helper");
-        assert.containsOnce(pivot, 'table',
-            "should have a table in DOM");
+        assert.containsNone(pivot,'.o_view_nocontent',
+            "shouldnothaveano_content_helper");
+        assert.containsOnce(pivot,'table',
+            "shouldhaveatableinDOM");
 
-        await testUtils.pivot.toggleMeasuresDropdown(pivot);
-        await testUtils.pivot.clickMeasure(pivot, '__count');
+        awaittestUtils.pivot.toggleMeasuresDropdown(pivot);
+        awaittestUtils.pivot.clickMeasure(pivot,'__count');
 
-        assert.containsOnce(pivot, '.o_view_nocontent',
-            "should have a no_content_helper");
-        assert.containsNone(pivot, 'table',
-            "should not have a table in DOM");
+        assert.containsOnce(pivot,'.o_view_nocontent',
+            "shouldhaveano_content_helper");
+        assert.containsNone(pivot,'table',
+            "shouldnothaveatableinDOM");
         pivot.destroy();
     });
 
-    QUnit.test('no content helper when no data', async function (assert) {
+    QUnit.test('nocontenthelperwhennodata',asyncfunction(assert){
         assert.expect(4);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot string="Partners">' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivotstring="Partners">'+
                 '</pivot>',
         });
 
-        assert.containsNone(pivot, '.o_view_nocontent',
-            "should not have a no_content_helper");
-        assert.containsOnce(pivot, 'table',
-            "should have a table in DOM");
+        assert.containsNone(pivot,'.o_view_nocontent',
+            "shouldnothaveano_content_helper");
+        assert.containsOnce(pivot,'table',
+            "shouldhaveatableinDOM");
 
-        await testUtils.pivot.reload(pivot, {domain: [['foo', '=', 12345]]});
+        awaittestUtils.pivot.reload(pivot,{domain:[['foo','=',12345]]});
 
-        assert.containsOnce(pivot, '.o_view_nocontent',
-            "should have a no_content_helper");
-        assert.containsNone(pivot, 'table',
-            "should not have a table in DOM");
+        assert.containsOnce(pivot,'.o_view_nocontent',
+            "shouldhaveano_content_helper");
+        assert.containsNone(pivot,'table',
+            "shouldnothaveatableinDOM");
         pivot.destroy();
     });
 
-    QUnit.test('no content helper when no data, part 2', async function (assert) {
+    QUnit.test('nocontenthelperwhennodata,part2',asyncfunction(assert){
         assert.expect(1);
 
-        this.data.partner.records = [];
+        this.data.partner.records=[];
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot string="Partners"></pivot>',
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivotstring="Partners"></pivot>',
         });
 
-        assert.containsOnce(pivot, '.o_view_nocontent',
-            "should have a no_content_helper");
+        assert.containsOnce(pivot,'.o_view_nocontent',
+            "shouldhaveano_content_helper");
         pivot.destroy();
     });
 
-    QUnit.test('no content helper when no data, part 3', async function (assert) {
+    QUnit.test('nocontenthelperwhennodata,part3',asyncfunction(assert){
         assert.expect(4);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot string="Partners"></pivot>',
-            viewOptions: {
-                domain: [['foo', '=', 12345]]
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivotstring="Partners"></pivot>',
+            viewOptions:{
+                domain:[['foo','=',12345]]
             },
         });
 
-        assert.containsOnce(pivot, '.o_view_nocontent',
-            "should have a no_content_helper");
-        await testUtils.pivot.reload(pivot, {domain: [['foo', '=', 12345]]});
-        assert.containsOnce(pivot, '.o_view_nocontent',
-            "should still have a no_content_helper");
-        await testUtils.pivot.reload(pivot, {domain: []});
-        assert.containsNone(pivot, '.o_view_nocontent',
-            "should not have a no_content_helper");
+        assert.containsOnce(pivot,'.o_view_nocontent',
+            "shouldhaveano_content_helper");
+        awaittestUtils.pivot.reload(pivot,{domain:[['foo','=',12345]]});
+        assert.containsOnce(pivot,'.o_view_nocontent',
+            "shouldstillhaveano_content_helper");
+        awaittestUtils.pivot.reload(pivot,{domain:[]});
+        assert.containsNone(pivot,'.o_view_nocontent',
+            "shouldnothaveano_content_helper");
 
-        // tries to open a field selection menu, to make sure it was not
-        // removed from the dom.
-        await testUtils.dom.clickFirst(pivot.$('.o_pivot_header_cell_closed'));
-        assert.containsOnce(pivot, '.o_pivot_field_menu',
-            "the field selector menu exists");
+        //triestoopenafieldselectionmenu,tomakesureitwasnot
+        //removedfromthedom.
+        awaittestUtils.dom.clickFirst(pivot.$('.o_pivot_header_cell_closed'));
+        assert.containsOnce(pivot,'.o_pivot_field_menu',
+            "thefieldselectormenuexists");
         pivot.destroy();
     });
 
-    QUnit.test('tries to restore previous state after domain change', async function (assert) {
+    QUnit.test('triestorestorepreviousstateafterdomainchange',asyncfunction(assert){
         assert.expect(5);
 
-        var rpcCount = 0;
+        varrpcCount=0;
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id" type="row"/>' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"type="row"/>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            mockRPC: function () {
+            mockRPC:function(){
                 rpcCount++;
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
         });
 
-        assert.containsN(pivot, '.o_pivot_cell_value', 3,
-            "should have 3 cells: 1 for the open header, and 2 for data");
-        assert.strictEqual(pivot.$('.o_pivot_measure_row:contains(Foo)').length, 1,
-            "should have 1 row for measure Foo");
+        assert.containsN(pivot,'.o_pivot_cell_value',3,
+            "shouldhave3cells:1fortheopenheader,and2fordata");
+        assert.strictEqual(pivot.$('.o_pivot_measure_row:contains(Foo)').length,1,
+            "shouldhave1rowformeasureFoo");
 
-        await testUtils.pivot.reload(pivot, {domain: [['foo', '=', 12345]]});
+        awaittestUtils.pivot.reload(pivot,{domain:[['foo','=',12345]]});
 
-        rpcCount = 0;
-        await testUtils.pivot.reload(pivot, {domain: []});
+        rpcCount=0;
+        awaittestUtils.pivot.reload(pivot,{domain:[]});
 
-        assert.equal(rpcCount, 2, "should have reloaded data");
-        assert.containsN(pivot, '.o_pivot_cell_value', 3,
-            "should still have 3 cells: 1 for the open header, and 2 for data");
-        assert.strictEqual(pivot.$('.o_pivot_measure_row:contains(Foo)').length, 1,
-            "should still have 1 row for measure Foo");
+        assert.equal(rpcCount,2,"shouldhavereloadeddata");
+        assert.containsN(pivot,'.o_pivot_cell_value',3,
+            "shouldstillhave3cells:1fortheopenheader,and2fordata");
+        assert.strictEqual(pivot.$('.o_pivot_measure_row:contains(Foo)').length,1,
+            "shouldstillhave1rowformeasureFoo");
         pivot.destroy();
     });
 
-    QUnit.test('can be grouped with the update function', async function (assert) {
+    QUnit.test('canbegroupedwiththeupdatefunction',asyncfunction(assert){
         assert.expect(4);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
         });
 
-        assert.containsOnce(pivot, '.o_pivot_cell_value',
-            "should have only 1 cell");
-        assert.containsOnce(pivot, 'tbody tr',
-            "should have 1 rows");
+        assert.containsOnce(pivot,'.o_pivot_cell_value',
+            "shouldhaveonly1cell");
+        assert.containsOnce(pivot,'tbodytr',
+            "shouldhave1rows");
 
-        await testUtils.pivot.reload(pivot, {groupBy: ['product_id']});
+        awaittestUtils.pivot.reload(pivot,{groupBy:['product_id']});
 
-        assert.containsN(pivot, '.o_pivot_cell_value', 3,
-            "should have 3 cells");
-        assert.containsN(pivot, 'tbody tr', 3,
-            "should have 3 rows");
+        assert.containsN(pivot,'.o_pivot_cell_value',3,
+            "shouldhave3cells");
+        assert.containsN(pivot,'tbodytr',3,
+            "shouldhave3rows");
         pivot.destroy();
     });
 
-    QUnit.test('can sort data in a column by clicking on header', async function (assert) {
+    QUnit.test('cansortdatainacolumnbyclickingonheader',asyncfunction(assert){
         assert.expect(3);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="foo" type="measure"/>' +
-                        '<field name="product_id" type="row"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="foo"type="measure"/>'+
+                        '<fieldname="product_id"type="row"/>'+
                 '</pivot>',
         });
 
-        assert.strictEqual($('td.o_pivot_cell_value').text(), "321220",
-            "should have proper values in cells (total, result 1, result 2");
+        assert.strictEqual($('td.o_pivot_cell_value').text(),"321220",
+            "shouldhavepropervaluesincells(total,result1,result2");
 
-        await testUtils.dom.click(pivot.$('th.o_pivot_measure_row'));
+        awaittestUtils.dom.click(pivot.$('th.o_pivot_measure_row'));
 
-        assert.strictEqual($('td.o_pivot_cell_value').text(), "321220",
-            "should have proper values in cells (total, result 1, result 2");
+        assert.strictEqual($('td.o_pivot_cell_value').text(),"321220",
+            "shouldhavepropervaluesincells(total,result1,result2");
 
-        await testUtils.dom.click(pivot.$('th.o_pivot_measure_row'));
+        awaittestUtils.dom.click(pivot.$('th.o_pivot_measure_row'));
 
-        assert.strictEqual($('td.o_pivot_cell_value').text(), "322012",
-            "should have proper values in cells (total, result 2, result 1");
+        assert.strictEqual($('td.o_pivot_cell_value').text(),"322012",
+            "shouldhavepropervaluesincells(total,result2,result1");
 
         pivot.destroy();
     });
 
-    QUnit.test('can expand all rows', async function (assert) {
+    QUnit.test('canexpandallrows',asyncfunction(assert){
         assert.expect(7);
 
-        var nbReadGroups = 0;
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="foo" type="measure"/>' +
-                        '<field name="product_id" type="row"/>' +
+        varnbReadGroups=0;
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="foo"type="measure"/>'+
+                        '<fieldname="product_id"type="row"/>'+
                 '</pivot>',
-            mockRPC: function (route, args) {
-                if (args.method === 'read_group') {
+            mockRPC:function(route,args){
+                if(args.method==='read_group'){
                     nbReadGroups++;
                 }
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
         });
 
-        assert.strictEqual(nbReadGroups, 2, "should have done 2 read_group RPCS");
-        assert.strictEqual(pivot.$('td.o_pivot_cell_value').text(), "321220",
-            "should have proper values in cells (total, result 1, result 2)");
+        assert.strictEqual(nbReadGroups,2,"shouldhavedone2read_groupRPCS");
+        assert.strictEqual(pivot.$('td.o_pivot_cell_value').text(),"321220",
+            "shouldhavepropervaluesincells(total,result1,result2)");
 
-        // expand on date:days, product
-        nbReadGroups = 0;
-        await testUtils.pivot.reload(pivot, {groupBy: ['date:days', 'product_id']});
+        //expandondate:days,product
+        nbReadGroups=0;
+        awaittestUtils.pivot.reload(pivot,{groupBy:['date:days','product_id']});
 
-        assert.strictEqual(nbReadGroups, 3, "should have done 3 read_group RPCS");
-        assert.containsN(pivot, 'tbody tr', 8,
-            "should have 7 rows (total + 3 for December and 2 for October and April)");
+        assert.strictEqual(nbReadGroups,3,"shouldhavedone3read_groupRPCS");
+        assert.containsN(pivot,'tbodytr',8,
+            "shouldhave7rows(total+3forDecemberand2forOctoberandApril)");
 
-        // collapse the last two rows
-        await testUtils.dom.clickLast(pivot.$('.o_pivot_header_cell_opened'));
-        await testUtils.dom.clickLast(pivot.$('.o_pivot_header_cell_opened'));
+        //collapsethelasttworows
+        awaittestUtils.dom.clickLast(pivot.$('.o_pivot_header_cell_opened'));
+        awaittestUtils.dom.clickLast(pivot.$('.o_pivot_header_cell_opened'));
 
-        assert.containsN(pivot, 'tbody tr', 6,
-            "should have 6 rows now");
+        assert.containsN(pivot,'tbodytr',6,
+            "shouldhave6rowsnow");
 
-        // expand all
-        nbReadGroups = 0;
-        await testUtils.dom.click(pivot.$buttons.find('.o_pivot_expand_button'));
+        //expandall
+        nbReadGroups=0;
+        awaittestUtils.dom.click(pivot.$buttons.find('.o_pivot_expand_button'));
 
-        assert.strictEqual(nbReadGroups, 3, "should have done 3 read_group RPCS");
-        assert.containsN(pivot, 'tbody tr', 8,
-            "should have 8 rows again");
+        assert.strictEqual(nbReadGroups,3,"shouldhavedone3read_groupRPCS");
+        assert.containsN(pivot,'tbodytr',8,
+            "shouldhave8rowsagain");
 
         pivot.destroy();
     });
 
-    QUnit.test('expand all with a delay', async function (assert) {
+    QUnit.test('expandallwithadelay',asyncfunction(assert){
         assert.expect(3);
 
-        var def;
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="foo" type="measure"/>' +
-                        '<field name="product_id" type="row"/>' +
+        vardef;
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="foo"type="measure"/>'+
+                        '<fieldname="product_id"type="row"/>'+
                 '</pivot>',
-            mockRPC: function (route, args) {
-                var result = this._super.apply(this, arguments);
-                if (args.method === 'read_group') {
-                    return Promise.resolve(def).then(_.constant(result));
+            mockRPC:function(route,args){
+                varresult=this._super.apply(this,arguments);
+                if(args.method==='read_group'){
+                    returnPromise.resolve(def).then(_.constant(result));
                 }
-                return result;
+                returnresult;
             },
         });
 
-        // expand on date:days, product
-        await testUtils.pivot.reload(pivot, {groupBy: ['date:days', 'product_id']});
-        assert.containsN(pivot, 'tbody tr', 8,
-            "should have 7 rows (total + 3 for December and 2 for October and April)");
+        //expandondate:days,product
+        awaittestUtils.pivot.reload(pivot,{groupBy:['date:days','product_id']});
+        assert.containsN(pivot,'tbodytr',8,
+            "shouldhave7rows(total+3forDecemberand2forOctoberandApril)");
 
-        // collapse the last two rows
-        await testUtils.dom.clickLast(pivot.$('.o_pivot_header_cell_opened'));
-        await testUtils.dom.clickLast(pivot.$('.o_pivot_header_cell_opened'));
+        //collapsethelasttworows
+        awaittestUtils.dom.clickLast(pivot.$('.o_pivot_header_cell_opened'));
+        awaittestUtils.dom.clickLast(pivot.$('.o_pivot_header_cell_opened'));
 
-        assert.containsN(pivot, 'tbody tr', 6,
-            "should have 6 rows now");
+        assert.containsN(pivot,'tbodytr',6,
+            "shouldhave6rowsnow");
 
-        // expand all
-        def = testUtils.makeTestPromise();
-        await testUtils.dom.click(pivot.$buttons.find('.o_pivot_expand_button'));
-        await testUtils.nextTick();
+        //expandall
+        def=testUtils.makeTestPromise();
+        awaittestUtils.dom.click(pivot.$buttons.find('.o_pivot_expand_button'));
+        awaittestUtils.nextTick();
         def.resolve();
-        // await testUtils.returnAfterNextAnimationFrame();
-        await testUtils.nextTick();
-        assert.containsN(pivot, 'tbody tr', 8,
-            "should have 8 rows again");
+        //awaittestUtils.returnAfterNextAnimationFrame();
+        awaittestUtils.nextTick();
+        assert.containsN(pivot,'tbodytr',8,
+            "shouldhave8rowsagain");
 
        pivot.destroy();
     });
 
-    QUnit.test('can download a file', async function (assert) {
+    QUnit.test('candownloadafile',asyncfunction(assert){
         assert.expect(1);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="date" interval="month" type="col"/>' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="date"interval="month"type="col"/>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            session: {
-                get_file: function (args) {
-                    assert.strictEqual(args.url, '/web/pivot/export_xlsx',
-                        "should call get_file with correct parameters");
+            session:{
+                get_file:function(args){
+                    assert.strictEqual(args.url,'/web/pivot/export_xlsx',
+                        "shouldcallget_filewithcorrectparameters");
                     args.complete();
                 },
             },
         });
 
-        await testUtils.dom.click(pivot.$buttons.find('.o_pivot_download'));
+        awaittestUtils.dom.click(pivot.$buttons.find('.o_pivot_download'));
         pivot.destroy();
     });
 
-    QUnit.test('download a file with single measure, measure row displayed in table', async function (assert) {
+    QUnit.test('downloadafilewithsinglemeasure,measurerowdisplayedintable',asyncfunction(assert){
         assert.expect(1);
 
-        const pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                '<field name="date" interval="month" type="col"/>' +
-                '<field name="foo" type="measure"/>' +
+        constpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                '<fieldname="date"interval="month"type="col"/>'+
+                '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            session: {
-                get_file: function (args) {
-                    const data = JSON.parse(args.data.data);
-                    assert.strictEqual(data.measure_headers.length, 4,
-                        "should have measure_headers in data");
+            session:{
+                get_file:function(args){
+                    constdata=JSON.parse(args.data.data);
+                    assert.strictEqual(data.measure_headers.length,4,
+                        "shouldhavemeasure_headersindata");
                     args.complete();
                 },
             },
         });
 
-        await testUtils.dom.click(pivot.$buttons.find('.o_pivot_download'));
+        awaittestUtils.dom.click(pivot.$buttons.find('.o_pivot_download'));
         pivot.destroy();
     });
 
-    QUnit.test('download button is disabled when there is no data', async function (assert) {
+    QUnit.test('downloadbuttonisdisabledwhenthereisnodata',asyncfunction(assert){
         assert.expect(1);
 
-        this.data.partner.records = [];
+        this.data.partner.records=[];
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="date" interval="month" type="col"/>' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="date"interval="month"type="col"/>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
         });
 
-        assert.hasAttrValue(pivot.$buttons.find('.o_pivot_download'), 'disabled', 'disabled',
-            "download button should be disabled");
+        assert.hasAttrValue(pivot.$buttons.find('.o_pivot_download'),'disabled','disabled',
+            "downloadbuttonshouldbedisabled");
         pivot.destroy();
     });
 
-    QUnit.test('getOwnedQueryParams correctly returns measures and groupbys', async function (assert) {
+    QUnit.test('getOwnedQueryParamscorrectlyreturnsmeasuresandgroupbys',asyncfunction(assert){
         assert.expect(3);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="date" interval="day" type="col"/>' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="date"interval="day"type="col"/>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
         });
 
-        assert.deepEqual(pivot.getOwnedQueryParams(), {
-            context: {
-                pivot_column_groupby: ['date:day'],
-                pivot_measures: ['foo'],
-                pivot_row_groupby: [],
+        assert.deepEqual(pivot.getOwnedQueryParams(),{
+            context:{
+                pivot_column_groupby:['date:day'],
+                pivot_measures:['foo'],
+                pivot_row_groupby:[],
             },
-        }, "context should be correct");
+        },"contextshouldbecorrect");
 
-        // expand header on field customer
-        await testUtils.dom.click(pivot.$('thead .o_pivot_header_cell_closed:nth(1)'));
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field="customer"]:first'));
-        assert.deepEqual(pivot.getOwnedQueryParams(), {
-            context: {
-                pivot_column_groupby: ['date:day', 'customer'],
-                pivot_measures: ['foo'],
-                pivot_row_groupby: [],
+        //expandheaderonfieldcustomer
+        awaittestUtils.dom.click(pivot.$('thead.o_pivot_header_cell_closed:nth(1)'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field="customer"]:first'));
+        assert.deepEqual(pivot.getOwnedQueryParams(),{
+            context:{
+                pivot_column_groupby:['date:day','customer'],
+                pivot_measures:['foo'],
+                pivot_row_groupby:[],
             },
-        }, "context should be correct");
+        },"contextshouldbecorrect");
 
-        // expand row on field product_id
-        await testUtils.dom.click(pivot.$('tbody .o_pivot_header_cell_closed'));
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field="product_id"]:first'));
-        assert.deepEqual(pivot.getOwnedQueryParams(), {
-            context: {
-                pivot_column_groupby: ['date:day', 'customer'],
-                pivot_measures: ['foo'],
-                pivot_row_groupby: ['product_id'],
+        //expandrowonfieldproduct_id
+        awaittestUtils.dom.click(pivot.$('tbody.o_pivot_header_cell_closed'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field="product_id"]:first'));
+        assert.deepEqual(pivot.getOwnedQueryParams(),{
+            context:{
+                pivot_column_groupby:['date:day','customer'],
+                pivot_measures:['foo'],
+                pivot_row_groupby:['product_id'],
             },
-        }, "context should be correct");
+        },"contextshouldbecorrect");
 
         pivot.destroy();
     });
 
-    QUnit.test('correctly remove pivot_ keys from the context', async function (assert) {
+    QUnit.test('correctlyremovepivot_keysfromthecontext',asyncfunction(assert){
         assert.expect(5);
 
-        this.data.partner.fields.amount = {string: "Amount", type: "float", group_operator: 'sum'};
+        this.data.partner.fields.amount={string:"Amount",type:"float",group_operator:'sum'};
 
-        // Equivalent to loading with default filter
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="date" interval="day" type="col"/>' +
-                        '<field name="amount" type="measure"/>' +
+        //Equivalenttoloadingwithdefaultfilter
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="date"interval="day"type="col"/>'+
+                        '<fieldname="amount"type="measure"/>'+
                 '</pivot>',
-            viewOptions: {
-                context: {
-                    pivot_measures: ['foo'],
-                    pivot_column_groupby: ['customer'],
-                    pivot_row_groupby: ['product_id'],
+            viewOptions:{
+                context:{
+                    pivot_measures:['foo'],
+                    pivot_column_groupby:['customer'],
+                    pivot_row_groupby:['product_id'],
                 },
             },
         });
 
-        // Equivalent to unload the filter
-        var reloadParams = {
-            context: {},
+        //Equivalenttounloadthefilter
+        varreloadParams={
+            context:{},
         };
-        await pivot.reload(reloadParams);
+        awaitpivot.reload(reloadParams);
 
-        assert.deepEqual(pivot.getOwnedQueryParams(), {
-            context: {
-                pivot_column_groupby: ['customer'],
-                pivot_measures: ['foo'],
-                pivot_row_groupby: ['product_id'],
+        assert.deepEqual(pivot.getOwnedQueryParams(),{
+            context:{
+                pivot_column_groupby:['customer'],
+                pivot_measures:['foo'],
+                pivot_row_groupby:['product_id'],
             },
-        }, "context should be correct");
+        },"contextshouldbecorrect");
 
-        // Let's get rid of the rows groupBy
-        await testUtils.dom.click(pivot.$('tbody .o_pivot_header_cell_opened'));
+        //Let'sgetridoftherowsgroupBy
+        awaittestUtils.dom.click(pivot.$('tbody.o_pivot_header_cell_opened'));
 
-        assert.deepEqual(pivot.getOwnedQueryParams(), {
-            context: {
-                pivot_column_groupby: ['customer'],
-                pivot_measures: ['foo'],
-                pivot_row_groupby: [],
+        assert.deepEqual(pivot.getOwnedQueryParams(),{
+            context:{
+                pivot_column_groupby:['customer'],
+                pivot_measures:['foo'],
+                pivot_row_groupby:[],
             },
-        }, "context should be correct");
+        },"contextshouldbecorrect");
 
-        // And now, get rid of the col groupby
-        await testUtils.dom.click(pivot.$('thead .o_pivot_header_cell_opened'));
+        //Andnow,getridofthecolgroupby
+        awaittestUtils.dom.click(pivot.$('thead.o_pivot_header_cell_opened'));
 
-        assert.deepEqual(pivot.getOwnedQueryParams(), {
-            context: {
-                pivot_column_groupby: [],
-                pivot_measures: ['foo'],
-                pivot_row_groupby: [],
+        assert.deepEqual(pivot.getOwnedQueryParams(),{
+            context:{
+                pivot_column_groupby:[],
+                pivot_measures:['foo'],
+                pivot_row_groupby:[],
             },
-        }, "context should be correct");
+        },"contextshouldbecorrect");
 
-        await testUtils.dom.click(pivot.$('tbody .o_pivot_header_cell_closed'));
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field="product_id"]:first'));
+        awaittestUtils.dom.click(pivot.$('tbody.o_pivot_header_cell_closed'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field="product_id"]:first'));
 
-        assert.deepEqual(pivot.getOwnedQueryParams(), {
-            context: {
-                pivot_column_groupby: [],
-                pivot_measures: ['foo'],
-                pivot_row_groupby: ['product_id'],
+        assert.deepEqual(pivot.getOwnedQueryParams(),{
+            context:{
+                pivot_column_groupby:[],
+                pivot_measures:['foo'],
+                pivot_row_groupby:['product_id'],
             },
-        }, "context should be correct");
+        },"contextshouldbecorrect");
 
-        await testUtils.dom.click(pivot.$('thead .o_pivot_header_cell_closed'));
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field="customer"]:first'));
+        awaittestUtils.dom.click(pivot.$('thead.o_pivot_header_cell_closed'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field="customer"]:first'));
 
-        assert.deepEqual(pivot.getOwnedQueryParams(), {
-            context: {
-                pivot_column_groupby: ['customer'],
-                pivot_measures: ['foo'],
-                pivot_row_groupby: ['product_id'],
+        assert.deepEqual(pivot.getOwnedQueryParams(),{
+            context:{
+                pivot_column_groupby:['customer'],
+                pivot_measures:['foo'],
+                pivot_row_groupby:['product_id'],
             },
-        }, "context should be correct");
+        },"contextshouldbecorrect");
 
         pivot.destroy();
     });
 
-    QUnit.test('Unload Filter, reset display, load another filter', async function (assert) {
+    QUnit.test('UnloadFilter,resetdisplay,loadanotherfilter',asyncfunction(assert){
         assert.expect(18);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            viewOptions: {
-                context: {
-                    pivot_measures: ['foo'],
-                    pivot_column_groupby: ['customer'],
-                    pivot_row_groupby: ['product_id'],
+            viewOptions:{
+                context:{
+                    pivot_measures:['foo'],
+                    pivot_column_groupby:['customer'],
+                    pivot_row_groupby:['product_id'],
                 },
             },
         });
 
-        // Check Columns
-        assert.strictEqual(pivot.$('thead .o_pivot_header_cell_opened').length, 1,
-            'The column should be grouped');
-        assert.strictEqual(pivot.$('thead tr:contains("First")').length, 1,
-            'There should be a column "First"');
-        assert.strictEqual(pivot.$('thead tr:contains("Second")').length, 1,
-            'There should be a column "Second"');
+        //CheckColumns
+        assert.strictEqual(pivot.$('thead.o_pivot_header_cell_opened').length,1,
+            'Thecolumnshouldbegrouped');
+        assert.strictEqual(pivot.$('theadtr:contains("First")').length,1,
+            'Thereshouldbeacolumn"First"');
+        assert.strictEqual(pivot.$('theadtr:contains("Second")').length,1,
+            'Thereshouldbeacolumn"Second"');
 
-        // Check Rows
-        assert.strictEqual(pivot.$('tbody .o_pivot_header_cell_opened').length, 1,
-            'The row should be grouped');
-        assert.strictEqual(pivot.$('tbody tr:contains("xphone")').length, 1,
-            'There should be a row "xphone"');
-        assert.strictEqual(pivot.$('tbody tr:contains("xpad")').length, 1,
-            'There should be a row "xpad"');
+        //CheckRows
+        assert.strictEqual(pivot.$('tbody.o_pivot_header_cell_opened').length,1,
+            'Therowshouldbegrouped');
+        assert.strictEqual(pivot.$('tbodytr:contains("xphone")').length,1,
+            'Thereshouldbearow"xphone"');
+        assert.strictEqual(pivot.$('tbodytr:contains("xpad")').length,1,
+            'Thereshouldbearow"xpad"');
 
-        // Equivalent to unload the filter
-        var reloadParams = {
-            context: {},
+        //Equivalenttounloadthefilter
+        varreloadParams={
+            context:{},
         };
-        await pivot.reload(reloadParams);
-        // collapse all headers
-        await testUtils.dom.click(pivot.$('.o_pivot_header_cell_opened:first'));
-        await testUtils.dom.click(pivot.$('.o_pivot_header_cell_opened'));
+        awaitpivot.reload(reloadParams);
+        //collapseallheaders
+        awaittestUtils.dom.click(pivot.$('.o_pivot_header_cell_opened:first'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_header_cell_opened'));
 
-        // Check Columns
-        assert.strictEqual(pivot.$('thead .o_pivot_header_cell_closed').length, 1,
-            'The column should not be grouped');
-        assert.strictEqual(pivot.$('thead tr:contains("First")').length, 0,
-            'There should not be a column "First"');
-        assert.strictEqual(pivot.$('thead tr:contains("Second")').length, 0,
-            'There should not be a column "Second"');
+        //CheckColumns
+        assert.strictEqual(pivot.$('thead.o_pivot_header_cell_closed').length,1,
+            'Thecolumnshouldnotbegrouped');
+        assert.strictEqual(pivot.$('theadtr:contains("First")').length,0,
+            'Thereshouldnotbeacolumn"First"');
+        assert.strictEqual(pivot.$('theadtr:contains("Second")').length,0,
+            'Thereshouldnotbeacolumn"Second"');
 
-        // Check Rows
-        assert.strictEqual(pivot.$('tbody .o_pivot_header_cell_closed').length, 1,
-            'The row should not be grouped');
-        assert.strictEqual(pivot.$('tbody tr:contains("xphone")').length, 0,
-            'There should not be a row "xphone"');
-        assert.strictEqual(pivot.$('tbody tr:contains("xpad")').length, 0,
-            'There should not be a row "xpad"');
+        //CheckRows
+        assert.strictEqual(pivot.$('tbody.o_pivot_header_cell_closed').length,1,
+            'Therowshouldnotbegrouped');
+        assert.strictEqual(pivot.$('tbodytr:contains("xphone")').length,0,
+            'Thereshouldnotbearow"xphone"');
+        assert.strictEqual(pivot.$('tbodytr:contains("xpad")').length,0,
+            'Thereshouldnotbearow"xpad"');
 
-        // Equivalent to load another filter
-        reloadParams = {
-            context: {
-                pivot_measures: ['foo'],
-                pivot_column_groupby: ['customer'],
-                pivot_row_groupby: ['product_id'],
+        //Equivalenttoloadanotherfilter
+        reloadParams={
+            context:{
+                pivot_measures:['foo'],
+                pivot_column_groupby:['customer'],
+                pivot_row_groupby:['product_id'],
             },
         };
-        await pivot.reload(reloadParams);
+        awaitpivot.reload(reloadParams);
 
-        // Check Columns
-        assert.strictEqual(pivot.$('thead .o_pivot_header_cell_opened').length, 1,
-            'The column should be grouped');
-        assert.strictEqual(pivot.$('thead tr:contains("First")').length, 1,
-            'There should be a column "First"');
-        assert.strictEqual(pivot.$('thead tr:contains("Second")').length, 1,
-            'There should be a column "Second"');
+        //CheckColumns
+        assert.strictEqual(pivot.$('thead.o_pivot_header_cell_opened').length,1,
+            'Thecolumnshouldbegrouped');
+        assert.strictEqual(pivot.$('theadtr:contains("First")').length,1,
+            'Thereshouldbeacolumn"First"');
+        assert.strictEqual(pivot.$('theadtr:contains("Second")').length,1,
+            'Thereshouldbeacolumn"Second"');
 
-        // Check Rows
-        assert.strictEqual(pivot.$('tbody .o_pivot_header_cell_opened').length, 1,
-            'The row should be grouped');
-        assert.strictEqual(pivot.$('tbody tr:contains("xphone")').length, 1,
-            'There should be a row "xphone"');
-        assert.strictEqual(pivot.$('tbody tr:contains("xpad")').length, 1,
-            'There should be a row "xpad"');
+        //CheckRows
+        assert.strictEqual(pivot.$('tbody.o_pivot_header_cell_opened').length,1,
+            'Therowshouldbegrouped');
+        assert.strictEqual(pivot.$('tbodytr:contains("xphone")').length,1,
+            'Thereshouldbearow"xphone"');
+        assert.strictEqual(pivot.$('tbodytr:contains("xpad")').length,1,
+            'Thereshouldbearow"xpad"');
 
         pivot.destroy();
     });
 
-    QUnit.test('Reload, group by columns, reload', async function (assert) {
+    QUnit.test('Reload,groupbycolumns,reload',asyncfunction(assert){
         assert.expect(2);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot/>',
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot/>',
         });
 
-        // Set a column groupby
-        await testUtils.dom.click(pivot.$('thead .o_pivot_header_cell_closed'));
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field=customer]'));
+        //Setacolumngroupby
+        awaittestUtils.dom.click(pivot.$('thead.o_pivot_header_cell_closed'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field=customer]'));
 
-        // Set a domain
-        await pivot.update({domain: [['product_id', '=', 37]], groupBy: [], context: {}});
+        //Setadomain
+        awaitpivot.update({domain:[['product_id','=',37]],groupBy:[],context:{}});
 
-        var expectedContext = {pivot_column_groupby: ['customer'],
-                               pivot_measures: ['__count'],
-                               pivot_row_groupby: []};
+        varexpectedContext={pivot_column_groupby:['customer'],
+                               pivot_measures:['__count'],
+                               pivot_row_groupby:[]};
 
-        // Check that column groupbys were not lost
-        assert.deepEqual(pivot.getOwnedQueryParams(), {context: expectedContext},
-            'Column groupby not lost after first reload');
+        //Checkthatcolumngroupbyswerenotlost
+        assert.deepEqual(pivot.getOwnedQueryParams(),{context:expectedContext},
+            'Columngroupbynotlostafterfirstreload');
 
-        // Set a column groupby
-        await testUtils.dom.click(pivot.$('thead .o_pivot_header_cell_closed'));
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field=product_id]'));
+        //Setacolumngroupby
+        awaittestUtils.dom.click(pivot.$('thead.o_pivot_header_cell_closed'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field=product_id]'));
 
-        // Set a domain
-        await pivot.update({domain: [['product_id', '=', 41]], groupBy: [], context: {}});
+        //Setadomain
+        awaitpivot.update({domain:[['product_id','=',41]],groupBy:[],context:{}});
 
-        expectedContext = {pivot_column_groupby: ['customer', 'product_id'],
-                           pivot_measures: ['__count'],
-                           pivot_row_groupby: []};
+        expectedContext={pivot_column_groupby:['customer','product_id'],
+                           pivot_measures:['__count'],
+                           pivot_row_groupby:[]};
 
-        assert.deepEqual(pivot.getOwnedQueryParams(), {context: expectedContext},
-            'Column groupby not lost after second reload');
+        assert.deepEqual(pivot.getOwnedQueryParams(),{context:expectedContext},
+            'Columngroupbynotlostaftersecondreload');
 
         pivot.destroy();
     });
 
-    QUnit.test('folded groups remain folded at reload', async function (assert) {
+    QUnit.test('foldedgroupsremainfoldedatreload',asyncfunction(assert){
         assert.expect(5);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id" type="row"/>' +
-                        '<field name="company_type" type="col"/>' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"type="row"/>'+
+                        '<fieldname="company_type"type="col"/>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
         });
 
-        var values = [
-            "29", "3", "32",
-            "12",      "12",
-            "17", "3", "20",
+        varvalues=[
+            "29","3","32",
+            "12",     "12",
+            "17","3","20",
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join(','));
+        assert.strictEqual(getCurrentValues(pivot),values.join(','));
 
-        // expand a col group
-        await testUtils.dom.click(pivot.$('thead .o_pivot_header_cell_closed:nth(1)'));
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field="customer"]'));
+        //expandacolgroup
+        awaittestUtils.dom.click(pivot.$('thead.o_pivot_header_cell_closed:nth(1)'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field="customer"]'));
 
-        values = [
-            "29", "1", "2", "32",
-            "12",           "12",
-            "17", "1", "2", "20",
+        values=[
+            "29","1","2","32",
+            "12",          "12",
+            "17","1","2","20",
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join(','));
+        assert.strictEqual(getCurrentValues(pivot),values.join(','));
 
-        // expand a row group
-        await testUtils.dom.click(pivot.$('tbody .o_pivot_header_cell_closed:nth(1)'));
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field="other_product_id"]'));
+        //expandarowgroup
+        awaittestUtils.dom.click(pivot.$('tbody.o_pivot_header_cell_closed:nth(1)'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field="other_product_id"]'));
 
-        values = [
-            "29", "1", "2", "32",
-            "12",           "12",
-            "17", "1", "2", "20",
-            "17", "1", "2", "20",
+        values=[
+            "29","1","2","32",
+            "12",          "12",
+            "17","1","2","20",
+            "17","1","2","20",
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join(','));
+        assert.strictEqual(getCurrentValues(pivot),values.join(','));
 
-        // reload (should keep folded groups folded as col/row groupbys didn't change)
-        await testUtils.pivot.reload(pivot, {context: {}, domain: [], groupBy: []});
+        //reload(shouldkeepfoldedgroupsfoldedascol/rowgroupbysdidn'tchange)
+        awaittestUtils.pivot.reload(pivot,{context:{},domain:[],groupBy:[]});
 
-        assert.strictEqual(getCurrentValues(pivot), values.join(','));
+        assert.strictEqual(getCurrentValues(pivot),values.join(','));
 
-        await testUtils.dom.click(pivot.$('.o_pivot_expand_button'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_expand_button'));
 
-        // sanity check of what the table should look like if all groups are
-        // expanded, to ensure that the former asserts are pertinent
-        values = [
-            "12", "17", "1", "2", "32",
-            "12",                 "12",
-            "12",                 "12",
-                  "17", "1", "2", "20",
-                  "17", "1", "2", "20",
+        //sanitycheckofwhatthetableshouldlooklikeifallgroupsare
+        //expanded,toensurethattheformerassertsarepertinent
+        values=[
+            "12","17","1","2","32",
+            "12",                "12",
+            "12",                "12",
+                  "17","1","2","20",
+                  "17","1","2","20",
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join(','));
+        assert.strictEqual(getCurrentValues(pivot),values.join(','));
 
         pivot.destroy();
     });
 
-    QUnit.test('Empty results keep groupbys', async function (assert) {
+    QUnit.test('Emptyresultskeepgroupbys',asyncfunction(assert){
         assert.expect(2);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot/>',
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot/>',
         });
 
-        // Set a column groupby
-        await testUtils.dom.click(pivot.$('thead .o_pivot_header_cell_closed'));
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field=customer]'));
+        //Setacolumngroupby
+        awaittestUtils.dom.click(pivot.$('thead.o_pivot_header_cell_closed'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field=customer]'));
 
-        // Set a domain for empty results
-        await pivot.update({domain: [['id', '=', false]]});
+        //Setadomainforemptyresults
+        awaitpivot.update({domain:[['id','=',false]]});
 
-        var expectedContext = {pivot_column_groupby: ['customer'],
-                               pivot_measures: ['__count'],
-                               pivot_row_groupby: []};
-        assert.deepEqual(pivot.getOwnedQueryParams(), {context: expectedContext},
-            'Column groupby not lost after empty results');
+        varexpectedContext={pivot_column_groupby:['customer'],
+                               pivot_measures:['__count'],
+                               pivot_row_groupby:[]};
+        assert.deepEqual(pivot.getOwnedQueryParams(),{context:expectedContext},
+            'Columngroupbynotlostafteremptyresults');
 
-        // Set a domain for not empty results
-        await pivot.update({domain: [['product_id', '=', 37]]});
+        //Setadomainfornotemptyresults
+        awaitpivot.update({domain:[['product_id','=',37]]});
 
-        assert.deepEqual(pivot.getOwnedQueryParams(), {context: expectedContext},
-            'Column groupby not lost after reload after empty results');
+        assert.deepEqual(pivot.getOwnedQueryParams(),{context:expectedContext},
+            'Columngroupbynotlostafterreloadafteremptyresults');
 
         pivot.destroy();
     });
 
-    QUnit.test('correctly uses pivot_ keys from the context', async function (assert) {
+    QUnit.test('correctlyusespivot_keysfromthecontext',asyncfunction(assert){
         assert.expect(7);
 
-        this.data.partner.fields.amount = {string: "Amount", type: "float", group_operator: 'sum'};
+        this.data.partner.fields.amount={string:"Amount",type:"float",group_operator:'sum'};
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="date" interval="day" type="col"/>' +
-                        '<field name="amount" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="date"interval="day"type="col"/>'+
+                        '<fieldname="amount"type="measure"/>'+
                 '</pivot>',
-            viewOptions: {
-                context: {
-                    pivot_measures: ['foo'],
-                    pivot_column_groupby: ['customer'],
-                    pivot_row_groupby: ['product_id'],
+            viewOptions:{
+                context:{
+                    pivot_measures:['foo'],
+                    pivot_column_groupby:['customer'],
+                    pivot_row_groupby:['product_id'],
                 },
             },
         });
 
-        assert.containsOnce(pivot, 'thead .o_pivot_header_cell_opened',
-            "column: should have one opened header");
-        assert.strictEqual(pivot.$('thead .o_pivot_header_cell_closed:contains(First)').length, 1,
-            "column: should display one closed header with 'First'");
-        assert.strictEqual(pivot.$('thead .o_pivot_header_cell_closed:contains(Second)').length, 1,
-            "column: should display one closed header with 'Second'");
+        assert.containsOnce(pivot,'thead.o_pivot_header_cell_opened',
+            "column:shouldhaveoneopenedheader");
+        assert.strictEqual(pivot.$('thead.o_pivot_header_cell_closed:contains(First)').length,1,
+            "column:shoulddisplayoneclosedheaderwith'First'");
+        assert.strictEqual(pivot.$('thead.o_pivot_header_cell_closed:contains(Second)').length,1,
+            "column:shoulddisplayoneclosedheaderwith'Second'");
 
-        assert.containsOnce(pivot, 'tbody .o_pivot_header_cell_opened',
-            "row: should have one opened header");
-        assert.strictEqual(pivot.$('tbody .o_pivot_header_cell_closed:contains(xphone)').length, 1,
-            "row: should display one closed header with 'xphone'");
-        assert.strictEqual(pivot.$('tbody .o_pivot_header_cell_closed:contains(xpad)').length, 1,
-            "row: should display one closed header with 'xpad'");
+        assert.containsOnce(pivot,'tbody.o_pivot_header_cell_opened',
+            "row:shouldhaveoneopenedheader");
+        assert.strictEqual(pivot.$('tbody.o_pivot_header_cell_closed:contains(xphone)').length,1,
+            "row:shoulddisplayoneclosedheaderwith'xphone'");
+        assert.strictEqual(pivot.$('tbody.o_pivot_header_cell_closed:contains(xpad)').length,1,
+            "row:shoulddisplayoneclosedheaderwith'xpad'");
 
-        assert.strictEqual(pivot.$('tbody tr:first td:nth(2)').text(), '32',
-            "selected measure should be foo, with total 32");
+        assert.strictEqual(pivot.$('tbodytr:firsttd:nth(2)').text(),'32',
+            "selectedmeasureshouldbefoo,withtotal32");
 
         pivot.destroy();
     });
 
-    QUnit.test('clear table cells data after closeGroup', async function (assert) {
+    QUnit.test('cleartablecellsdataaftercloseGroup',asyncfunction(assert){
         assert.expect(2);
 
-        const pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot/>',
-            groupBy: ['product_id'],
+        constpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot/>',
+            groupBy:['product_id'],
         });
 
-        await testUtils.dom.click(pivot.el.querySelector('thead .o_pivot_header_cell_closed'));
-        await testUtils.dom.click(pivot.el.querySelectorAll('.o_pivot_field_menu .dropdown-item[data-field="date"]')[0]);
+        awaittestUtils.dom.click(pivot.el.querySelector('thead.o_pivot_header_cell_closed'));
+        awaittestUtils.dom.click(pivot.el.querySelectorAll('.o_pivot_field_menu.dropdown-item[data-field="date"]')[0]);
 
-        // close and reopen row groupings after changing value
-        this.data.partner.records.find(r => r.product_id === 37).date = '2016-10-27';
-        await testUtils.dom.click(pivot.el.querySelector('tbody .o_pivot_header_cell_opened'));
-        await testUtils.dom.click(pivot.el.querySelector('tbody .o_pivot_header_cell_closed'));
-        await testUtils.dom.click(pivot.el.querySelector('.o_pivot_field_menu .dropdown-item[data-field="product_id"]'));
-        assert.strictEqual(pivot.el.querySelectorAll('.o_pivot_cell_value')[4].innerText, ''); // xphone December 2016
+        //closeandreopenrowgroupingsafterchangingvalue
+        this.data.partner.records.find(r=>r.product_id===37).date='2016-10-27';
+        awaittestUtils.dom.click(pivot.el.querySelector('tbody.o_pivot_header_cell_opened'));
+        awaittestUtils.dom.click(pivot.el.querySelector('tbody.o_pivot_header_cell_closed'));
+        awaittestUtils.dom.click(pivot.el.querySelector('.o_pivot_field_menu.dropdown-item[data-field="product_id"]'));
+        assert.strictEqual(pivot.el.querySelectorAll('.o_pivot_cell_value')[4].innerText,'');//xphoneDecember2016
 
-        // invert axis, and reopen column groupings
-        await testUtils.dom.click(pivot.el.querySelector('.o_cp_buttons .o_pivot_flip_button'));
-        await testUtils.dom.click(pivot.el.querySelector('thead .o_pivot_header_cell_opened'));
-        await testUtils.dom.click(pivot.el.querySelector('thead .o_pivot_header_cell_closed'));
-        await testUtils.dom.click(pivot.el.querySelector('.o_pivot_field_menu .dropdown-item[data-field="product_id"]'));
-        assert.strictEqual(pivot.el.querySelectorAll('.o_pivot_cell_value')[3].innerText, ''); // December 2016 xphone
+        //invertaxis,andreopencolumngroupings
+        awaittestUtils.dom.click(pivot.el.querySelector('.o_cp_buttons.o_pivot_flip_button'));
+        awaittestUtils.dom.click(pivot.el.querySelector('thead.o_pivot_header_cell_opened'));
+        awaittestUtils.dom.click(pivot.el.querySelector('thead.o_pivot_header_cell_closed'));
+        awaittestUtils.dom.click(pivot.el.querySelector('.o_pivot_field_menu.dropdown-item[data-field="product_id"]'));
+        assert.strictEqual(pivot.el.querySelectorAll('.o_pivot_cell_value')[3].innerText,'');//December2016xphone
 
         pivot.destroy();
     });
 
-    QUnit.test('correctly group data after flip (1)', async function (assert) {
+    QUnit.test('correctlygroupdataafterflip(1)',asyncfunction(assert){
         assert.expect(4);
-        const actionManager = await createActionManager({
-            data: this.data,
-            archs: {
-                'partner,false,pivot': "<pivot/>",
-                'partner,false,search': `<search><filter name="bayou" string="Bayou" domain="[(1,'=',1)]"/></search>`,
-                'partner,false,list': '<tree><field name="foo"/></tree>',
-                'partner,false,form': '<form><field name="foo"/></form>',
+        constactionManager=awaitcreateActionManager({
+            data:this.data,
+            archs:{
+                'partner,false,pivot':"<pivot/>",
+                'partner,false,search':`<search><filtername="bayou"string="Bayou"domain="[(1,'=',1)]"/></search>`,
+                'partner,false,list':'<tree><fieldname="foo"/></tree>',
+                'partner,false,form':'<form><fieldname="foo"/></form>',
             },
         });
 
-        await actionManager.doAction({
-            res_model: 'partner',
-            type: 'ir.actions.act_window',
-            views: [[false, 'pivot']],
-            context: { group_by: ["product_id"] },
+        awaitactionManager.doAction({
+            res_model:'partner',
+            type:'ir.actions.act_window',
+            views:[[false,'pivot']],
+            context:{group_by:["product_id"]},
         });
 
         assert.deepEqual(
-            [...actionManager.el.querySelectorAll("tbody th")].map(e => e.innerText),
+            [...actionManager.el.querySelectorAll("tbodyth")].map(e=>e.innerText),
             [
                 "Total",
                     "xphone",
@@ -1573,24 +1573,24 @@ QUnit.module('Views', {
             ]
         );
 
-        // flip axis
-        await testUtils.dom.click(actionManager.el.querySelector('.o_cp_buttons .o_pivot_flip_button'));
-        await testUtils.nextTick();
+        //flipaxis
+        awaittestUtils.dom.click(actionManager.el.querySelector('.o_cp_buttons.o_pivot_flip_button'));
+        awaittestUtils.nextTick();
 
         assert.deepEqual(
-            [...actionManager.el.querySelectorAll("tbody th")].map(e => e.innerText),
+            [...actionManager.el.querySelectorAll("tbodyth")].map(e=>e.innerText),
             [
                 "Total",
             ]
         );
 
-        // select filter "Bayou" in control panel
-        await cpHelpers.toggleFilterMenu(actionManager);
-        await cpHelpers.toggleMenuItem(actionManager, "Bayou");
-        await testUtils.nextTick();
+        //selectfilter"Bayou"incontrolpanel
+        awaitcpHelpers.toggleFilterMenu(actionManager);
+        awaitcpHelpers.toggleMenuItem(actionManager,"Bayou");
+        awaittestUtils.nextTick();
 
         assert.deepEqual(
-            [...actionManager.el.querySelectorAll("tbody th")].map(e => e.innerText),
+            [...actionManager.el.querySelectorAll("tbodyth")].map(e=>e.innerText),
             [
                 "Total",
                     "xphone",
@@ -1598,12 +1598,12 @@ QUnit.module('Views', {
             ]
         );
 
-        // close row header "Total"
-        await testUtils.dom.click(actionManager.el.querySelector('tbody .o_pivot_header_cell_opened'));
-        await testUtils.nextTick();
+        //closerowheader"Total"
+        awaittestUtils.dom.click(actionManager.el.querySelector('tbody.o_pivot_header_cell_opened'));
+        awaittestUtils.nextTick();
 
         assert.deepEqual(
-            [...actionManager.el.querySelectorAll("tbody th")].map(e => e.innerText),
+            [...actionManager.el.querySelectorAll("tbodyth")].map(e=>e.innerText),
             [
                 "Total"
             ]
@@ -1612,27 +1612,27 @@ QUnit.module('Views', {
         actionManager.destroy();
     });
 
-    QUnit.test('correctly group data after flip (2)', async function (assert) {
+    QUnit.test('correctlygroupdataafterflip(2)',asyncfunction(assert){
         assert.expect(5);
-        const actionManager = await createActionManager({
-            data: this.data,
-            archs: {
-                'partner,false,pivot': "<pivot/>",
-                'partner,false,search': `<search><filter name="bayou" string="Bayou" domain="[(1,'=',1)]"/></search>`,
-                'partner,false,list': '<tree><field name="foo"/></tree>',
-                'partner,false,form': '<form><field name="foo"/></form>',
+        constactionManager=awaitcreateActionManager({
+            data:this.data,
+            archs:{
+                'partner,false,pivot':"<pivot/>",
+                'partner,false,search':`<search><filtername="bayou"string="Bayou"domain="[(1,'=',1)]"/></search>`,
+                'partner,false,list':'<tree><fieldname="foo"/></tree>',
+                'partner,false,form':'<form><fieldname="foo"/></form>',
             },
         });
 
-        await actionManager.doAction({
-            res_model: 'partner',
-            type: 'ir.actions.act_window',
-            views: [[false, 'pivot']],
-            context: { group_by: ["product_id"] },
+        awaitactionManager.doAction({
+            res_model:'partner',
+            type:'ir.actions.act_window',
+            views:[[false,'pivot']],
+            context:{group_by:["product_id"]},
         });
 
         assert.deepEqual(
-            [...actionManager.el.querySelectorAll("tbody th")].map(e => e.innerText),
+            [...actionManager.el.querySelectorAll("tbodyth")].map(e=>e.innerText),
             [
                 "Total",
                     "xphone",
@@ -1640,12 +1640,12 @@ QUnit.module('Views', {
             ]
         );
 
-        // select filter "Bayou" in control panel
-        await cpHelpers.toggleFilterMenu(actionManager);
-        await cpHelpers.toggleMenuItem(actionManager, "Bayou");
+        //selectfilter"Bayou"incontrolpanel
+        awaitcpHelpers.toggleFilterMenu(actionManager);
+        awaitcpHelpers.toggleMenuItem(actionManager,"Bayou");
 
         assert.deepEqual(
-            [...actionManager.el.querySelectorAll("tbody th")].map(e => e.innerText),
+            [...actionManager.el.querySelectorAll("tbodyth")].map(e=>e.innerText),
             [
                 "Total",
                     "xphone",
@@ -1653,37 +1653,37 @@ QUnit.module('Views', {
             ]
         );
 
-        // flip axis
-        await testUtils.dom.click(actionManager.el.querySelector('.o_cp_buttons .o_pivot_flip_button'));
-        await testUtils.nextTick();
+        //flipaxis
+        awaittestUtils.dom.click(actionManager.el.querySelector('.o_cp_buttons.o_pivot_flip_button'));
+        awaittestUtils.nextTick();
 
         assert.deepEqual(
-            [...actionManager.el.querySelectorAll("tbody th")].map(e => e.innerText),
+            [...actionManager.el.querySelectorAll("tbodyth")].map(e=>e.innerText),
             [
                 "Total"
             ]
         );
 
-        // unselect filter "Bayou" in control panel
-        await cpHelpers.toggleFilterMenu(actionManager);
-        await cpHelpers.toggleMenuItem(actionManager, "Bayou");
-        await testUtils.nextTick();
+        //unselectfilter"Bayou"incontrolpanel
+        awaitcpHelpers.toggleFilterMenu(actionManager);
+        awaitcpHelpers.toggleMenuItem(actionManager,"Bayou");
+        awaittestUtils.nextTick();
 
         assert.deepEqual(
-            [...actionManager.el.querySelectorAll("tbody th")].map(e => e.innerText),
+            [...actionManager.el.querySelectorAll("tbodyth")].map(e=>e.innerText),
             [
                 "Total",
                     "xphone",
-                    "xpad" 
+                    "xpad"
             ]
         );
 
-        // close row header "Total"
-        await testUtils.dom.click(actionManager.el.querySelector('tbody .o_pivot_header_cell_opened'));
-        await testUtils.nextTick();
+        //closerowheader"Total"
+        awaittestUtils.dom.click(actionManager.el.querySelector('tbody.o_pivot_header_cell_opened'));
+        awaittestUtils.nextTick();
 
         assert.deepEqual(
-            [...actionManager.el.querySelectorAll("tbody th")].map(e => e.innerText),
+            [...actionManager.el.querySelectorAll("tbodyth")].map(e=>e.innerText),
             [
                 "Total"
             ]
@@ -1692,34 +1692,34 @@ QUnit.module('Views', {
         actionManager.destroy();
     });
 
-    QUnit.test('correctly group data after flip (3))', async function (assert) {
+    QUnit.test('correctlygroupdataafterflip(3))',asyncfunction(assert){
         assert.expect(10);
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: `
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:`
                 <pivot>
-                    <field name="product_id" type="row"/>
-                    <field name="company_type" type="col"/>
+                    <fieldname="product_id"type="row"/>
+                    <fieldname="company_type"type="col"/>
                 </pivot>
             `,
-            archs: {
-                'partner,false,search': `<search><filter name="bayou" string="Bayou" domain="[(1,'=',1)]"/></search>`,
+            archs:{
+                'partner,false,search':`<search><filtername="bayou"string="Bayou"domain="[(1,'=',1)]"/></search>`,
             }
         });
 
         assert.deepEqual(
-            [...pivot.el.querySelectorAll("thead th")].map(e => e.innerText),
+            [...pivot.el.querySelectorAll("theadth")].map(e=>e.innerText),
             [
-                "", "Total",                 "",
-                    "Company", "individual",
-                    "Count",   "Count",      "Count"
+                "","Total",                "",
+                    "Company","individual",
+                    "Count",  "Count",     "Count"
             ]
         );
 
         assert.deepEqual(
-            [...pivot.el.querySelectorAll("tbody th")].map(e => e.innerText),
+            [...pivot.el.querySelectorAll("tbodyth")].map(e=>e.innerText),
             [
                 "Total",
                     "xphone",
@@ -1727,19 +1727,19 @@ QUnit.module('Views', {
             ]
         );
 
-        // close col header "Total"
-        await testUtils.dom.click(pivot.el.querySelector('thead .o_pivot_header_cell_opened'));
-        await testUtils.nextTick();
+        //closecolheader"Total"
+        awaittestUtils.dom.click(pivot.el.querySelector('thead.o_pivot_header_cell_opened'));
+        awaittestUtils.nextTick();
 
         assert.deepEqual(
-            [...pivot.el.querySelectorAll("thead th")].map(e => e.innerText),
+            [...pivot.el.querySelectorAll("theadth")].map(e=>e.innerText),
             [
-                "", "Total",
+                "","Total",
                     "Count"
               ]
         );
         assert.deepEqual(
-            [...pivot.el.querySelectorAll("tbody th")].map(e => e.innerText),
+            [...pivot.el.querySelectorAll("tbodyth")].map(e=>e.innerText),
             [
                 "Total",
                     "xphone",
@@ -1747,40 +1747,40 @@ QUnit.module('Views', {
             ]
         );
 
-        // flip axis
-        await testUtils.dom.click(pivot.el.querySelector('.o_cp_buttons .o_pivot_flip_button'));
-        await testUtils.nextTick();
+        //flipaxis
+        awaittestUtils.dom.click(pivot.el.querySelector('.o_cp_buttons.o_pivot_flip_button'));
+        awaittestUtils.nextTick();
 
         assert.deepEqual(
-            [...pivot.el.querySelectorAll("thead th")].map(e => e.innerText),
+            [...pivot.el.querySelectorAll("theadth")].map(e=>e.innerText),
             [
-                "", "Total",           "",
-                    "xphone", "xpad",
-                    "Count",  "Count", "Count"
+                "","Total",          "",
+                    "xphone","xpad",
+                    "Count", "Count","Count"
             ]
         );
         assert.deepEqual(
-            [...pivot.el.querySelectorAll("tbody th")].map(e => e.innerText),
+            [...pivot.el.querySelectorAll("tbodyth")].map(e=>e.innerText),
             [
                 "Total"
             ]
         );
 
-        // select filter "Bayou" in control panel
-        await cpHelpers.toggleFilterMenu(pivot);
-        await cpHelpers.toggleMenuItem(pivot, "Bayou");
-        await testUtils.nextTick();
+        //selectfilter"Bayou"incontrolpanel
+        awaitcpHelpers.toggleFilterMenu(pivot);
+        awaitcpHelpers.toggleMenuItem(pivot,"Bayou");
+        awaittestUtils.nextTick();
 
         assert.deepEqual(
-            [...pivot.el.querySelectorAll("thead th")].map(e => e.innerText),
+            [...pivot.el.querySelectorAll("theadth")].map(e=>e.innerText),
             [
-                "", "Total",           "",
-                    "xphone", "xpad",
-                    "Count",  "Count", "Count"
+                "","Total",          "",
+                    "xphone","xpad",
+                    "Count", "Count","Count"
             ]
         );
         assert.deepEqual(
-            [...pivot.el.querySelectorAll("tbody th")].map(e => e.innerText),
+            [...pivot.el.querySelectorAll("tbodyth")].map(e=>e.innerText),
             [
                 "Total",
                     "xphone",
@@ -1788,20 +1788,20 @@ QUnit.module('Views', {
             ]
         );
 
-        // close row header "Total"
-        await testUtils.dom.click(pivot.el.querySelector('tbody .o_pivot_header_cell_opened'));
-        await testUtils.nextTick();
+        //closerowheader"Total"
+        awaittestUtils.dom.click(pivot.el.querySelector('tbody.o_pivot_header_cell_opened'));
+        awaittestUtils.nextTick();
 
         assert.deepEqual(
-            [...pivot.el.querySelectorAll("thead th")].map(e => e.innerText),
+            [...pivot.el.querySelectorAll("theadth")].map(e=>e.innerText),
             [
-                "", "Total",           "",
-                    "xphone", "xpad",
-                    "Count",  "Count", "Count"
+                "","Total",          "",
+                    "xphone","xpad",
+                    "Count", "Count","Count"
             ]
         );
         assert.deepEqual(
-            [...pivot.el.querySelectorAll("tbody th")].map(e => e.innerText),
+            [...pivot.el.querySelectorAll("tbodyth")].map(e=>e.innerText),
             [
                 "Total"
             ]
@@ -1810,491 +1810,491 @@ QUnit.module('Views', {
         pivot.destroy();
     });
 
-    QUnit.test('correctly uses pivot_ keys from the context (at reload)', async function (assert) {
+    QUnit.test('correctlyusespivot_keysfromthecontext(atreload)',asyncfunction(assert){
         assert.expect(8);
 
-        this.data.partner.fields.amount = {string: "Amount", type: "float", group_operator: 'sum'};
+        this.data.partner.fields.amount={string:"Amount",type:"float",group_operator:'sum'};
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="date" interval="day" type="col"/>' +
-                        '<field name="amount" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="date"interval="day"type="col"/>'+
+                        '<fieldname="amount"type="measure"/>'+
                 '</pivot>',
         });
 
-        assert.strictEqual(pivot.$('tbody tr:first td.o_pivot_cell_value:last').text(), '0.00',
-            "the active measure should be amount");
+        assert.strictEqual(pivot.$('tbodytr:firsttd.o_pivot_cell_value:last').text(),'0.00',
+            "theactivemeasureshouldbeamount");
 
-        var reloadParams = {
-            context: {
-                pivot_measures: ['foo'],
-                pivot_column_groupby: ['customer'],
-                pivot_row_groupby: ['product_id'],
+        varreloadParams={
+            context:{
+                pivot_measures:['foo'],
+                pivot_column_groupby:['customer'],
+                pivot_row_groupby:['product_id'],
             },
         };
-        await testUtils.pivot.reload(pivot, reloadParams);
+        awaittestUtils.pivot.reload(pivot,reloadParams);
 
-        assert.containsOnce(pivot, 'thead .o_pivot_header_cell_opened',
-            "column: should have one opened header");
-        assert.strictEqual(pivot.$('thead .o_pivot_header_cell_closed:contains(First)').length, 1,
-            "column: should display one closed header with 'First'");
-        assert.strictEqual(pivot.$('thead .o_pivot_header_cell_closed:contains(Second)').length, 1,
-            "column: should display one closed header with 'Second'");
+        assert.containsOnce(pivot,'thead.o_pivot_header_cell_opened',
+            "column:shouldhaveoneopenedheader");
+        assert.strictEqual(pivot.$('thead.o_pivot_header_cell_closed:contains(First)').length,1,
+            "column:shoulddisplayoneclosedheaderwith'First'");
+        assert.strictEqual(pivot.$('thead.o_pivot_header_cell_closed:contains(Second)').length,1,
+            "column:shoulddisplayoneclosedheaderwith'Second'");
 
-        assert.containsOnce(pivot, 'tbody .o_pivot_header_cell_opened',
-            "row: should have one opened header");
-        assert.strictEqual(pivot.$('tbody .o_pivot_header_cell_closed:contains(xphone)').length, 1,
-            "row: should display one closed header with 'xphone'");
-        assert.strictEqual(pivot.$('tbody .o_pivot_header_cell_closed:contains(xpad)').length, 1,
-            "row: should display one closed header with 'xpad'");
+        assert.containsOnce(pivot,'tbody.o_pivot_header_cell_opened',
+            "row:shouldhaveoneopenedheader");
+        assert.strictEqual(pivot.$('tbody.o_pivot_header_cell_closed:contains(xphone)').length,1,
+            "row:shoulddisplayoneclosedheaderwith'xphone'");
+        assert.strictEqual(pivot.$('tbody.o_pivot_header_cell_closed:contains(xpad)').length,1,
+            "row:shoulddisplayoneclosedheaderwith'xpad'");
 
-        assert.strictEqual(pivot.$('tbody tr:first td:nth(2)').text(), '32',
-            "selected measure should be foo, with total 32");
+        assert.strictEqual(pivot.$('tbodytr:firsttd:nth(2)').text(),'32',
+            "selectedmeasureshouldbefoo,withtotal32");
 
         pivot.destroy();
     });
 
-    QUnit.test('correctly use group_by key from the context', async function (assert) {
+    QUnit.test('correctlyusegroup_bykeyfromthecontext',asyncfunction(assert){
         assert.expect(7);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: 'partner',
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="customer" type="col" />' +
-                        '<field name="foo" type="measure" />' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:'partner',
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="customer"type="col"/>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            groupBy: ['product_id'],
+            groupBy:['product_id'],
         });
 
-        assert.containsOnce(pivot, 'thead .o_pivot_header_cell_opened',
-            'column: should have one opened header');
-        assert.strictEqual(pivot.$('thead .o_pivot_header_cell_closed:contains(First)').length, 1,
-            'column: should display one closed header with "First"');
-        assert.strictEqual(pivot.$('thead .o_pivot_header_cell_closed:contains(Second)').length, 1,
-            'column: should display one closed header with "Second"');
+        assert.containsOnce(pivot,'thead.o_pivot_header_cell_opened',
+            'column:shouldhaveoneopenedheader');
+        assert.strictEqual(pivot.$('thead.o_pivot_header_cell_closed:contains(First)').length,1,
+            'column:shoulddisplayoneclosedheaderwith"First"');
+        assert.strictEqual(pivot.$('thead.o_pivot_header_cell_closed:contains(Second)').length,1,
+            'column:shoulddisplayoneclosedheaderwith"Second"');
 
-        assert.containsOnce(pivot, 'tbody .o_pivot_header_cell_opened',
-            'row: should have one opened header');
-        assert.strictEqual(pivot.$('tbody .o_pivot_header_cell_closed:contains(xphone)').length, 1,
-            'row: should display one closed header with "xphone"');
-        assert.strictEqual(pivot.$('tbody .o_pivot_header_cell_closed:contains(xpad)').length, 1,
-            'row: should display one closed header with "xpad"');
+        assert.containsOnce(pivot,'tbody.o_pivot_header_cell_opened',
+            'row:shouldhaveoneopenedheader');
+        assert.strictEqual(pivot.$('tbody.o_pivot_header_cell_closed:contains(xphone)').length,1,
+            'row:shoulddisplayoneclosedheaderwith"xphone"');
+        assert.strictEqual(pivot.$('tbody.o_pivot_header_cell_closed:contains(xpad)').length,1,
+            'row:shoulddisplayoneclosedheaderwith"xpad"');
 
-        assert.strictEqual(pivot.$('tbody tr:first td:nth(2)').text(), '32',
-            'selected measure should be foo, with total 32');
+        assert.strictEqual(pivot.$('tbodytr:firsttd:nth(2)').text(),'32',
+            'selectedmeasureshouldbefoo,withtotal32');
 
         pivot.destroy();
     });
 
-    QUnit.test('correctly uses pivot_row_groupby key with default groupBy from the context', async function (assert) {
+    QUnit.test('correctlyusespivot_row_groupbykeywithdefaultgroupByfromthecontext',asyncfunction(assert){
         assert.expect(6);
 
-        this.data.partner.fields.amount = {string: "Amount", type: "float", group_operator: 'sum'};
+        this.data.partner.fields.amount={string:"Amount",type:"float",group_operator:'sum'};
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="customer" type="col"/>' +
-                        '<field name="date" interval="day" type="row"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="customer"type="col"/>'+
+                        '<fieldname="date"interval="day"type="row"/>'+
                 '</pivot>',
-            groupBy: ['customer'],
-            viewOptions: {
-                context: {
-                    pivot_row_groupby: ['product_id'],
+            groupBy:['customer'],
+            viewOptions:{
+                context:{
+                    pivot_row_groupby:['product_id'],
                 },
             },
         });
 
-        assert.strictEqual(pivot.$('thead .o_pivot_header_cell_opened').length, 1,
-            "column: should have one opened header");
-        assert.strictEqual(pivot.$('thead .o_pivot_header_cell_closed:contains(First)').length, 1,
-            "column: should display one closed header with 'First'");
-        assert.strictEqual(pivot.$('thead .o_pivot_header_cell_closed:contains(Second)').length, 1,
-            "column: should display one closed header with 'Second'");
+        assert.strictEqual(pivot.$('thead.o_pivot_header_cell_opened').length,1,
+            "column:shouldhaveoneopenedheader");
+        assert.strictEqual(pivot.$('thead.o_pivot_header_cell_closed:contains(First)').length,1,
+            "column:shoulddisplayoneclosedheaderwith'First'");
+        assert.strictEqual(pivot.$('thead.o_pivot_header_cell_closed:contains(Second)').length,1,
+            "column:shoulddisplayoneclosedheaderwith'Second'");
 
-        // With pivot_row_groupby, groupBy customer should replace and eventually display product_id
-        assert.strictEqual(pivot.$('tbody .o_pivot_header_cell_opened').length, 1,
-            "row: should have one opened header");
-        assert.strictEqual(pivot.$('tbody .o_pivot_header_cell_closed:contains(xphone)').length, 1,
-            "row: should display one closed header with 'xphone'");
-        assert.strictEqual(pivot.$('tbody .o_pivot_header_cell_closed:contains(xpad)').length, 1,
-            "row: should display one closed header with 'xpad'");
+        //Withpivot_row_groupby,groupBycustomershouldreplaceandeventuallydisplayproduct_id
+        assert.strictEqual(pivot.$('tbody.o_pivot_header_cell_opened').length,1,
+            "row:shouldhaveoneopenedheader");
+        assert.strictEqual(pivot.$('tbody.o_pivot_header_cell_closed:contains(xphone)').length,1,
+            "row:shoulddisplayoneclosedheaderwith'xphone'");
+        assert.strictEqual(pivot.$('tbody.o_pivot_header_cell_closed:contains(xpad)').length,1,
+            "row:shoulddisplayoneclosedheaderwith'xpad'");
 
         pivot.destroy();
     });
 
-    QUnit.test('pivot still handles __count__ measure', async function (assert) {
-        // for retro-compatibility reasons, the pivot view still handles
-        // '__count__' measure.
+    QUnit.test('pivotstillhandles__count__measure',asyncfunction(assert){
+        //forretro-compatibilityreasons,thepivotviewstillhandles
+        //'__count__'measure.
         assert.expect(2);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot></pivot>',
-            mockRPC: function (route, args) {
-                if (args.method === 'read_group') {
-                    assert.deepEqual(args.kwargs.fields, ['__count'],
-                        "should make a read_group with field __count");
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot></pivot>',
+            mockRPC:function(route,args){
+                if(args.method==='read_group'){
+                    assert.deepEqual(args.kwargs.fields,['__count'],
+                        "shouldmakearead_groupwithfield__count");
                 }
-                return this._super(route, args);
+                returnthis._super(route,args);
             },
-            viewOptions: {
-                context: {
-                    pivot_measures: ['__count__'],
+            viewOptions:{
+                context:{
+                    pivot_measures:['__count__'],
                 },
             },
         });
 
-        var $countMeasure = pivot.$buttons.find('.dropdown-item[data-field=__count]:first');
-        assert.hasClass($countMeasure,'selected', "The count measure should be activated");
+        var$countMeasure=pivot.$buttons.find('.dropdown-item[data-field=__count]:first');
+        assert.hasClass($countMeasure,'selected',"Thecountmeasureshouldbeactivated");
 
         pivot.destroy();
     });
 
-    QUnit.test('not use a many2one as a measure by default', async function (assert) {
+    QUnit.test('notuseamany2oneasameasurebydefault',asyncfunction(assert){
         assert.expect(1);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id"/>' +
-                        '<field name="date" interval="month" type="col"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"/>'+
+                        '<fieldname="date"interval="month"type="col"/>'+
                 '</pivot>',
         });
         assert.notOk(pivot.measures.product_id,
-            "should not have product_id as measure");
+            "shouldnothaveproduct_idasmeasure");
         pivot.destroy();
     });
 
-    QUnit.test('use a many2one as a measure with specified additional measure', async function (assert) {
+    QUnit.test('useamany2oneasameasurewithspecifiedadditionalmeasure',asyncfunction(assert){
         assert.expect(1);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id"/>' +
-                        '<field name="date" interval="month" type="col"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"/>'+
+                        '<fieldname="date"interval="month"type="col"/>'+
                 '</pivot>',
-            viewOptions: {
-                additionalMeasures: ['product_id'],
+            viewOptions:{
+                additionalMeasures:['product_id'],
             },
         });
         assert.ok(pivot.measures.product_id,
-            "should have product_id as measure");
+            "shouldhaveproduct_idasmeasure");
         pivot.destroy();
     });
 
-    QUnit.test('pivot view with many2one field as a measure', async function (assert) {
+    QUnit.test('pivotviewwithmany2onefieldasameasure',asyncfunction(assert){
         assert.expect(1);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id" type="measure"/>' +
-                        '<field name="date" interval="month" type="col"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"type="measure"/>'+
+                        '<fieldname="date"interval="month"type="col"/>'+
                 '</pivot>',
         });
 
-        assert.strictEqual(pivot.$('table tbody tr').text().trim(), "Total2112",
-            "should display product_id count as measure");
+        assert.strictEqual(pivot.$('tabletbodytr').text().trim(),"Total2112",
+            "shoulddisplayproduct_idcountasmeasure");
         pivot.destroy();
     });
 
-    QUnit.test('m2o as measure, drilling down into data', async function (assert) {
+    QUnit.test('m2oasmeasure,drillingdownintodata',asyncfunction(assert){
         assert.expect(1);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"type="measure"/>'+
                 '</pivot>',
         });
-        await testUtils.dom.click(pivot.$('tbody .o_pivot_header_cell_closed'));
-        // click on date by month
-        pivot.$('.dropdown-menu.show .o_inline_dropdown .dropdown-menu').toggle(); // unfold inline dropdown
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field="date"]:contains("Month")'));
+        awaittestUtils.dom.click(pivot.$('tbody.o_pivot_header_cell_closed'));
+        //clickondatebymonth
+        pivot.$('.dropdown-menu.show.o_inline_dropdown.dropdown-menu').toggle();//unfoldinlinedropdown
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field="date"]:contains("Month")'));
 
-        assert.strictEqual(pivot.$('.o_pivot_cell_value').text(), '2211',
-            'should have loaded the proper data');
+        assert.strictEqual(pivot.$('.o_pivot_cell_value').text(),'2211',
+            'shouldhaveloadedtheproperdata');
         pivot.destroy();
     });
 
-    QUnit.test('pivot view with same many2one field as a measure and grouped by', async function (assert) {
+    QUnit.test('pivotviewwithsamemany2onefieldasameasureandgroupedby',asyncfunction(assert){
         assert.expect(1);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id" type="row"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"type="row"/>'+
                 '</pivot>',
-            viewOptions: {
-                additionalMeasures: ['product_id'],
+            viewOptions:{
+                additionalMeasures:['product_id'],
             },
         });
 
-        await testUtils.pivot.toggleMeasuresDropdown(pivot);
-        await testUtils.pivot.clickMeasure(pivot, 'product_id');
-        assert.strictEqual(pivot.$('.o_pivot_cell_value').text(), '421131',
-            'should have loaded the proper data');
+        awaittestUtils.pivot.toggleMeasuresDropdown(pivot);
+        awaittestUtils.pivot.clickMeasure(pivot,'product_id');
+        assert.strictEqual(pivot.$('.o_pivot_cell_value').text(),'421131',
+            'shouldhaveloadedtheproperdata');
         pivot.destroy();
     });
 
-    QUnit.test('pivot view with same many2one field as a measure and grouped by (and drill down)', async function (assert) {
+    QUnit.test('pivotviewwithsamemany2onefieldasameasureandgroupedby(anddrilldown)',asyncfunction(assert){
         assert.expect(1);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"type="measure"/>'+
                 '</pivot>',
         });
 
-        await testUtils.dom.click(pivot.$('tbody .o_pivot_header_cell_closed'));
+        awaittestUtils.dom.click(pivot.$('tbody.o_pivot_header_cell_closed'));
 
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field="product_id"]:first'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field="product_id"]:first'));
 
-        assert.strictEqual(pivot.$('.o_pivot_cell_value').text(), '211',
-            'should have loaded the proper data');
+        assert.strictEqual(pivot.$('.o_pivot_cell_value').text(),'211',
+            'shouldhaveloadedtheproperdata');
         pivot.destroy();
     });
 
-    QUnit.test('Row and column groupbys plus a domain', async function (assert) {
+    QUnit.test('Rowandcolumngroupbysplusadomain',asyncfunction(assert){
         assert.expect(3);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
         });
 
-        // Set a column groupby
-        await testUtils.dom.click(pivot.$('thead .o_pivot_header_cell_closed'));
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field=customer]:first'));
+        //Setacolumngroupby
+        awaittestUtils.dom.click(pivot.$('thead.o_pivot_header_cell_closed'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field=customer]:first'));
 
-        // Set a Row groupby
-        await testUtils.dom.click(pivot.$('tbody .o_pivot_header_cell_closed'));
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field=product_id]:first'));
+        //SetaRowgroupby
+        awaittestUtils.dom.click(pivot.$('tbody.o_pivot_header_cell_closed'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field=product_id]:first'));
 
-        // Set a domain
-        await testUtils.pivot.reload(pivot, {domain: [['product_id', '=', 41]]});
+        //Setadomain
+        awaittestUtils.pivot.reload(pivot,{domain:[['product_id','=',41]]});
 
-        var expectedContext = {
-            context: {
-                pivot_column_groupby: ['customer'],
-                pivot_measures: ['foo'],
-                pivot_row_groupby: ['product_id'],
+        varexpectedContext={
+            context:{
+                pivot_column_groupby:['customer'],
+                pivot_measures:['foo'],
+                pivot_row_groupby:['product_id'],
             },
         };
 
-        // Mock 'save as favorite'
-        assert.deepEqual(pivot.getOwnedQueryParams(), expectedContext,
-            'The pivot view should have the right context');
+        //Mock'saveasfavorite'
+        assert.deepEqual(pivot.getOwnedQueryParams(),expectedContext,
+            'Thepivotviewshouldhavetherightcontext');
 
-        var $xpadHeader = pivot.$('tbody .o_pivot_header_cell_closed[data-original-title=Product]');
-        assert.equal($xpadHeader.length, 1,
-            'There should be only one product line because of the domain');
+        var$xpadHeader=pivot.$('tbody.o_pivot_header_cell_closed[data-original-title=Product]');
+        assert.equal($xpadHeader.length,1,
+            'Thereshouldbeonlyoneproductlinebecauseofthedomain');
 
-        assert.equal($xpadHeader.text(), 'xpad',
-            'The product should be the right one');
+        assert.equal($xpadHeader.text(),'xpad',
+            'Theproductshouldbetherightone');
 
         pivot.destroy();
     });
 
-    QUnit.test('parallel data loading should discard all but the last one', async function (assert) {
+    QUnit.test('paralleldataloadingshoulddiscardallbutthelastone',asyncfunction(assert){
         assert.expect(2);
 
-        var def;
+        vardef;
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                      '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                      '<fieldname="foo"type="measure"/>'+
                   '</pivot>',
-            mockRPC: function (route, args) {
-                var result = this._super.apply(this, arguments);
-                if (args.method === 'read_group') {
-                    return Promise.resolve(def).then(_.constant(result));
+            mockRPC:function(route,args){
+                varresult=this._super.apply(this,arguments);
+                if(args.method==='read_group'){
+                    returnPromise.resolve(def).then(_.constant(result));
                 }
-                return result;
+                returnresult;
             },
         });
 
-        def = testUtils.makeTestPromise();
-        testUtils.pivot.reload(pivot, {groupBy: ['product_id']});
-        testUtils.pivot.reload(pivot, {groupBy: ['product_id', 'customer']});
-        await def.resolve();
-        await testUtils.nextTick();
-        assert.containsN(pivot, '.o_pivot_cell_value', 6,
-            "should have 6 cells");
-        assert.containsN(pivot, 'tbody tr', 6,
-            "should have 6 rows");
+        def=testUtils.makeTestPromise();
+        testUtils.pivot.reload(pivot,{groupBy:['product_id']});
+        testUtils.pivot.reload(pivot,{groupBy:['product_id','customer']});
+        awaitdef.resolve();
+        awaittestUtils.nextTick();
+        assert.containsN(pivot,'.o_pivot_cell_value',6,
+            "shouldhave6cells");
+        assert.containsN(pivot,'tbodytr',6,
+            "shouldhave6rows");
         pivot.destroy();
     });
 
-    QUnit.test('pivot measures should be alphabetically sorted', async function (assert) {
+    QUnit.test('pivotmeasuresshouldbealphabeticallysorted',asyncfunction(assert){
         assert.expect(2);
 
-        var data = this.data;
-        // It's important to compare capitalized and lowercased words
-        // to be sure the sorting is effective with both of them
-        data.partner.fields.bouh = {string: "bouh", type: "integer", group_operator: 'sum'};
-        data.partner.fields.modd = {string: "modd", type: "integer", group_operator: 'sum'};
-        data.partner.fields.zip = {string: "Zip", type: "integer", group_operator: 'sum'};
+        vardata=this.data;
+        //It'simportanttocomparecapitalizedandlowercasedwords
+        //tobesurethesortingiseffectivewithbothofthem
+        data.partner.fields.bouh={string:"bouh",type:"integer",group_operator:'sum'};
+        data.partner.fields.modd={string:"modd",type:"integer",group_operator:'sum'};
+        data.partner.fields.zip={string:"Zip",type:"integer",group_operator:'sum'};
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: data,
-            arch: '<pivot>' +
-                        '<field name="zip" type="measure"/>' +
-                        '<field name="foo" type="measure"/>' +
-                        '<field name="bouh" type="measure"/>' +
-                        '<field name="modd" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:data,
+            arch:'<pivot>'+
+                        '<fieldname="zip"type="measure"/>'+
+                        '<fieldname="foo"type="measure"/>'+
+                        '<fieldname="bouh"type="measure"/>'+
+                        '<fieldname="modd"type="measure"/>'+
                   '</pivot>',
         });
-        assert.strictEqual(pivot.$buttons.find('.o_pivot_measures_list .dropdown-item:first').data('field'), 'bouh',
-            "Bouh should be the first measure");
-        assert.strictEqual(pivot.$buttons.find('.o_pivot_measures_list .dropdown-item:last').data('field'), '__count',
-            "Count should be the last measure");
+        assert.strictEqual(pivot.$buttons.find('.o_pivot_measures_list.dropdown-item:first').data('field'),'bouh',
+            "Bouhshouldbethefirstmeasure");
+        assert.strictEqual(pivot.$buttons.find('.o_pivot_measures_list.dropdown-item:last').data('field'),'__count',
+            "Countshouldbethelastmeasure");
 
         pivot.destroy();
     });
 
-    QUnit.test('pivot view should use default order for auto sorting', async function (assert) {
+    QUnit.test('pivotviewshouldusedefaultorderforautosorting',asyncfunction(assert){
         assert.expect(1);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot default_order="foo asc">' +
-                        '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivotdefault_order="fooasc">'+
+                        '<fieldname="foo"type="measure"/>'+
                   '</pivot>',
         });
 
-        assert.hasClass(pivot.$('thead tr:last th:last'), 'o_pivot_sort_order_asc',
-                        "Last thead should be sorted in ascending order");
+        assert.hasClass(pivot.$('theadtr:lastth:last'),'o_pivot_sort_order_asc',
+                        "Lasttheadshouldbesortedinascendingorder");
 
         pivot.destroy();
     });
 
-    QUnit.test('pivot view can be flipped', async function (assert) {
+    QUnit.test('pivotviewcanbeflipped',asyncfunction(assert){
         assert.expect(5);
 
-        var rpcCount = 0;
+        varrpcCount=0;
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="product_id" type="row"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="product_id"type="row"/>'+
                 '</pivot>',
-            mockRPC: function () {
+            mockRPC:function(){
                 rpcCount++;
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
         });
 
-        assert.containsN(pivot, 'tbody tr', 3,
-            "should have 3 rows: 1 for the open header, and 2 for data");
-        var values = [
+        assert.containsN(pivot,'tbodytr',3,
+            "shouldhave3rows:1fortheopenheader,and2fordata");
+        varvalues=[
             "4",
             "1",
             "3"
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
-        rpcCount = 0;
-        await testUtils.dom.click(pivot.$buttons.find('.o_pivot_flip_button'));
+        rpcCount=0;
+        awaittestUtils.dom.click(pivot.$buttons.find('.o_pivot_flip_button'));
 
-        assert.strictEqual(rpcCount, 0, "should not have done any rpc");
-        assert.containsOnce(pivot, 'tbody tr',
-            "should have 1 rows: 1 for the main header");
+        assert.strictEqual(rpcCount,0,"shouldnothavedoneanyrpc");
+        assert.containsOnce(pivot,'tbodytr',
+            "shouldhave1rows:1forthemainheader");
 
-        values = [
-            "1", "3", "4"
+        values=[
+            "1","3","4"
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
         pivot.destroy();
     });
 
-    QUnit.test('rendering of pivot view with comparison', async function (assert) {
+    QUnit.test('renderingofpivotviewwithcomparison',asyncfunction(assert){
         assert.expect(8);
 
-        this.data.partner.records[0].date = '2016-12-15';
-        this.data.partner.records[1].date = '2016-12-17';
-        this.data.partner.records[2].date = '2016-11-22';
-        this.data.partner.records[3].date = '2016-11-03';
+        this.data.partner.records[0].date='2016-12-15';
+        this.data.partner.records[1].date='2016-12-17';
+        this.data.partner.records[2].date='2016-11-22';
+        this.data.partner.records[3].date='2016-11-03';
 
 
-        var unpatchDate = patchDate(2016, 11, 20, 1, 0, 0);
+        varunpatchDate=patchDate(2016,11,20,1,0,0);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: 'partner',
-            data: this.data,
-            arch: '<pivot>' +
-                    '<field name="date" interval="month" type="col"/>' +
-                    '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:'partner',
+            data:this.data,
+            arch:'<pivot>'+
+                    '<fieldname="date"interval="month"type="col"/>'+
+                    '<fieldname="foo"type="measure"/>'+
               '</pivot>',
-            archs: {
-                'partner,false,search': `
+            archs:{
+                'partner,false,search':`
                     <search>
-                        <filter name="date_filter" date="date" domain="[]" default_period='last_year'/>
+                        <filtername="date_filter"date="date"domain="[]"default_period='last_year'/>
                     </search>
                 `,
             },
-            viewOptions: {
-                additionalMeasures: ['product_id'],
-                context: { search_default_date_filter: 1 },
+            viewOptions:{
+                additionalMeasures:['product_id'],
+                context:{search_default_date_filter:1},
             },
-            mockRPC: function () {
-                return this._super.apply(this, arguments);
+            mockRPC:function(){
+                returnthis._super.apply(this,arguments);
             },
-            env: {
-                dataManager: {
-                    create_filter: async function (filter) {
-                        assert.deepEqual(filter.context, {
-                            pivot_measures: ['__count'],
-                            pivot_column_groupby: [],
-                            pivot_row_groupby: ['product_id'],
-                            group_by: [],
-                            comparison: {
-                                comparisonId: "previous_period",
-                                comparisonRange: "[\"&\", [\"date\", \">=\", \"2016-11-01\"], [\"date\", \"<=\", \"2016-11-30\"]]",
-                                comparisonRangeDescription: "November 2016",
-                                fieldDescription: "Date",
-                                fieldName: "date",
-                                range: "[\"&\", [\"date\", \">=\", \"2016-12-01\"], [\"date\", \"<=\", \"2016-12-31\"]]",
-                                rangeDescription: "December 2016"
+            env:{
+                dataManager:{
+                    create_filter:asyncfunction(filter){
+                        assert.deepEqual(filter.context,{
+                            pivot_measures:['__count'],
+                            pivot_column_groupby:[],
+                            pivot_row_groupby:['product_id'],
+                            group_by:[],
+                            comparison:{
+                                comparisonId:"previous_period",
+                                comparisonRange:"[\"&\",[\"date\",\">=\",\"2016-11-01\"],[\"date\",\"<=\",\"2016-11-30\"]]",
+                                comparisonRangeDescription:"November2016",
+                                fieldDescription:"Date",
+                                fieldName:"date",
+                                range:"[\"&\",[\"date\",\">=\",\"2016-12-01\"],[\"date\",\"<=\",\"2016-12-31\"]]",
+                                rangeDescription:"December2016"
                               },
                         });
                     }
@@ -2302,163 +2302,163 @@ QUnit.module('Views', {
             },
         });
 
-        // with no data
-        await cpHelpers.toggleComparisonMenu(pivot);
-        await cpHelpers.toggleMenuItem(pivot, 'Date: Previous period');
+        //withnodata
+        awaitcpHelpers.toggleComparisonMenu(pivot);
+        awaitcpHelpers.toggleMenuItem(pivot,'Date:Previousperiod');
 
-        assert.strictEqual(pivot.$('.o_pivot p.o_view_nocontent_empty_folder').length, 1);
+        assert.strictEqual(pivot.$('.o_pivotp.o_view_nocontent_empty_folder').length,1);
 
-        await cpHelpers.toggleFilterMenu(pivot);
-        await cpHelpers.toggleMenuItem(pivot, 'Date');
-        await cpHelpers.toggleMenuItemOption(pivot, 'Date', 'December');
-        await cpHelpers.toggleMenuItemOption(pivot, 'Date', '2016');
-        await cpHelpers.toggleMenuItemOption(pivot, 'Date', '2015');
+        awaitcpHelpers.toggleFilterMenu(pivot);
+        awaitcpHelpers.toggleMenuItem(pivot,'Date');
+        awaitcpHelpers.toggleMenuItemOption(pivot,'Date','December');
+        awaitcpHelpers.toggleMenuItemOption(pivot,'Date','2016');
+        awaitcpHelpers.toggleMenuItemOption(pivot,'Date','2015');
 
-        assert.containsN(pivot, '.o_pivot thead tr:last th', 9,
-            "last header row should contains 9 cells (3*[December 2016, November 2016, Variation]");
-        var values = [
-            "19", "0", "-100%", "0", "13", "100%", "19", "13", "-31.58%"
+        assert.containsN(pivot,'.o_pivottheadtr:lastth',9,
+            "lastheaderrowshouldcontains9cells(3*[December2016,November2016,Variation]");
+        varvalues=[
+            "19","0","-100%","0","13","100%","19","13","-31.58%"
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
-        // with data, with row groupby
-        await testUtils.dom.click(pivot.$('.o_pivot .o_pivot_header_cell_closed').eq(2));
-        await testUtils.dom.click(pivot.$('.o_pivot .o_pivot_field_menu a[data-field="product_id"]'));
-        values = [
-            "19", "0", "-100%", "0", "13", "100%", "19", "13", "-31.58%",
-            "19", "0", "-100%", "0", "1" , "100%", "19", "1", "-94.74%",
-                                "0", "12", "100%", "0" , "12", "100%"
+        //withdata,withrowgroupby
+        awaittestUtils.dom.click(pivot.$('.o_pivot.o_pivot_header_cell_closed').eq(2));
+        awaittestUtils.dom.click(pivot.$('.o_pivot.o_pivot_field_menua[data-field="product_id"]'));
+        values=[
+            "19","0","-100%","0","13","100%","19","13","-31.58%",
+            "19","0","-100%","0","1","100%","19","1","-94.74%",
+                                "0","12","100%","0","12","100%"
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
-        await testUtils.pivot.toggleMeasuresDropdown(pivot);
-        await testUtils.dom.click(pivot.$('.o_control_panel div.o_pivot_measures_list a[data-field="foo"]'));
-        await testUtils.dom.click(pivot.$('.o_control_panel div.o_pivot_measures_list a[data-field="product_id"]'));
-        values = [
-            "1", "0", "-100%", "0", "2", "100%", "1", "2", "100%",
-            "1", "0", "-100%", "0", "1", "100%", "1", "1", "0%",
-                               "0", "1", "100%", "0", "1", "100%"
+        awaittestUtils.pivot.toggleMeasuresDropdown(pivot);
+        awaittestUtils.dom.click(pivot.$('.o_control_paneldiv.o_pivot_measures_lista[data-field="foo"]'));
+        awaittestUtils.dom.click(pivot.$('.o_control_paneldiv.o_pivot_measures_lista[data-field="product_id"]'));
+        values=[
+            "1","0","-100%","0","2","100%","1","2","100%",
+            "1","0","-100%","0","1","100%","1","1","0%",
+                               "0","1","100%","0","1","100%"
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
-        await testUtils.dom.click(pivot.$('.o_control_panel div.o_pivot_measures_list a[data-field="__count"]'));
-        await testUtils.dom.click(pivot.$('.o_control_panel div.o_pivot_measures_list a[data-field="product_id"]'));
-        values = [
-            "2", "0", "-100%", "0", "2", "100%", "2", "2", "0%",
-            "2", "0", "-100%", "0", "1", "100%", "2", "1", "-50%",
-                               "0", "1", "100%", "0", "1", "100%"
+        awaittestUtils.dom.click(pivot.$('.o_control_paneldiv.o_pivot_measures_lista[data-field="__count"]'));
+        awaittestUtils.dom.click(pivot.$('.o_control_paneldiv.o_pivot_measures_lista[data-field="product_id"]'));
+        values=[
+            "2","0","-100%","0","2","100%","2","2","0%",
+            "2","0","-100%","0","1","100%","2","1","-50%",
+                               "0","1","100%","0","1","100%"
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
-        await testUtils.dom.clickFirst(pivot.$('.o_pivot .o_pivot_header_cell_opened'));
-        values = [
-            "2", "2", "0%",
-            "2", "1", "-50%",
-            "0", "1", "100%"
+        awaittestUtils.dom.clickFirst(pivot.$('.o_pivot.o_pivot_header_cell_opened'));
+        values=[
+            "2","2","0%",
+            "2","1","-50%",
+            "0","1","100%"
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
-        await cpHelpers.toggleFavoriteMenu(pivot);
-        await cpHelpers.toggleSaveFavorite(pivot);
-        await cpHelpers.editFavoriteName(pivot, 'Fav');
-        await cpHelpers.saveFavorite(pivot);
+        awaitcpHelpers.toggleFavoriteMenu(pivot);
+        awaitcpHelpers.toggleSaveFavorite(pivot);
+        awaitcpHelpers.editFavoriteName(pivot,'Fav');
+        awaitcpHelpers.saveFavorite(pivot);
 
         unpatchDate();
         pivot.destroy();
     });
 
-    QUnit.test('export data in excel with comparison', async function (assert) {
+    QUnit.test('exportdatainexcelwithcomparison',asyncfunction(assert){
         assert.expect(11);
 
-        this.data.partner.records[0].date = '2016-12-15';
-        this.data.partner.records[1].date = '2016-12-17';
-        this.data.partner.records[2].date = '2016-11-22';
-        this.data.partner.records[3].date = '2016-11-03';
+        this.data.partner.records[0].date='2016-12-15';
+        this.data.partner.records[1].date='2016-12-17';
+        this.data.partner.records[2].date='2016-11-22';
+        this.data.partner.records[3].date='2016-11-03';
 
-        var unpatchDate = patchDate(2016, 11, 20, 1, 0, 0);
+        varunpatchDate=patchDate(2016,11,20,1,0,0);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: 'partner',
-            data: this.data,
-            arch: '<pivot>' +
-                    '<field name="date" interval="month" type="col"/>' +
-                    '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:'partner',
+            data:this.data,
+            arch:'<pivot>'+
+                    '<fieldname="date"interval="month"type="col"/>'+
+                    '<fieldname="foo"type="measure"/>'+
               '</pivot>',
-            archs: {
-                'partner,false,search': `
+            archs:{
+                'partner,false,search':`
                     <search>
-                        <filter name="date_filter" date="date" domain="[]" default_period='antepenultimate_month'/>
+                        <filtername="date_filter"date="date"domain="[]"default_period='antepenultimate_month'/>
                     </search>
                 `,
             },
-            viewOptions: {
-                context: { search_default_date_filter: 1 },
+            viewOptions:{
+                context:{search_default_date_filter:1},
             },
-            session: {
-                get_file: function (args) {
-                    var data = JSON.parse(args.data.data);
-                    _.each(data.col_group_headers, function (l) {
-                        var titles = l.map(function (o) {
-                            return o.title;
+            session:{
+                get_file:function(args){
+                    vardata=JSON.parse(args.data.data);
+                    _.each(data.col_group_headers,function(l){
+                        vartitles=l.map(function(o){
+                            returno.title;
                         });
                         assert.step(JSON.stringify(titles));
                     });
-                    var measures = data.measure_headers.map(function (o) {
-                        return o.title;
+                    varmeasures=data.measure_headers.map(function(o){
+                        returno.title;
                     });
                     assert.step(JSON.stringify(measures));
-                    var origins = data.origin_headers.map(function (o) {
-                        return o.title;
+                    varorigins=data.origin_headers.map(function(o){
+                        returno.title;
                     });
                     assert.step(JSON.stringify(origins));
                     assert.step(String(data.measure_count));
                     assert.step(String(data.origin_count));
-                    var valuesLength = data.rows.map(function (o) {
-                        return o.values.length;
+                    varvaluesLength=data.rows.map(function(o){
+                        returno.values.length;
                     });
                     assert.step(JSON.stringify(valuesLength));
-                    assert.strictEqual(args.url, '/web/pivot/export_xlsx',
-                        "should call get_file with correct parameters");
+                    assert.strictEqual(args.url,'/web/pivot/export_xlsx',
+                        "shouldcallget_filewithcorrectparameters");
                     args.complete();
                 },
             },
         });
 
-        // open comparison menu
-        await cpHelpers.toggleComparisonMenu(pivot);
-        // compare October 2016 to September 2016
-        await cpHelpers.toggleMenuItem(pivot, 'Date: Previous period');
+        //opencomparisonmenu
+        awaitcpHelpers.toggleComparisonMenu(pivot);
+        //compareOctober2016toSeptember2016
+        awaitcpHelpers.toggleMenuItem(pivot,'Date:Previousperiod');
 
-        // With the data above, the time ranges contain no record.
-        assert.strictEqual(pivot.$('.o_pivot p.o_view_nocontent_empty_folder').length, 1, "there should be no data");
-        // export data should be impossible since the pivot buttons
-        // are deactivated (exception: the 'Measures' button).
-        assert.ok(pivot.$('.o_control_panel button.o_pivot_download').prop('disabled'));
+        //Withthedataabove,thetimerangescontainnorecord.
+        assert.strictEqual(pivot.$('.o_pivotp.o_view_nocontent_empty_folder').length,1,"thereshouldbenodata");
+        //exportdatashouldbeimpossiblesincethepivotbuttons
+        //aredeactivated(exception:the'Measures'button).
+        assert.ok(pivot.$('.o_control_panelbutton.o_pivot_download').prop('disabled'));
 
-        await cpHelpers.toggleFilterMenu(pivot);
-        await cpHelpers.toggleMenuItem(pivot, 'Date');
-        await cpHelpers.toggleMenuItemOption(pivot, 'Date', 'December');
-        await cpHelpers.toggleMenuItemOption(pivot, 'Date', 'October');
+        awaitcpHelpers.toggleFilterMenu(pivot);
+        awaitcpHelpers.toggleMenuItem(pivot,'Date');
+        awaitcpHelpers.toggleMenuItemOption(pivot,'Date','December');
+        awaitcpHelpers.toggleMenuItemOption(pivot,'Date','October');
 
-        // With the data above, the time ranges contain some records.
-        // export data. Should execute 'get_file'
-        await testUtils.dom.click(pivot.$('.o_control_panel button.o_pivot_download'));
+        //Withthedataabove,thetimerangescontainsomerecords.
+        //exportdata.Shouldexecute'get_file'
+        awaittestUtils.dom.click(pivot.$('.o_control_panelbutton.o_pivot_download'));
 
         assert.verifySteps([
-            // col group headers
+            //colgroupheaders
             '["Total",""]',
-            '["November 2016","December 2016"]',
-            // measure headers
+            '["November2016","December2016"]',
+            //measureheaders
             '["Foo","Foo","Foo"]',
-            // origin headers
-            '["November 2016","December 2016","Variation","November 2016","December 2016"' +
-                ',"Variation","November 2016","December 2016","Variation"]',
-            // number of 'measures'
+            //originheaders
+            '["November2016","December2016","Variation","November2016","December2016"'+
+                ',"Variation","November2016","December2016","Variation"]',
+            //numberof'measures'
             '1',
-            // number of 'origins'
+            //numberof'origins'
             '2',
-            // rows values length
+            //rowsvalueslength
             '[9]',
         ]);
 
@@ -2466,366 +2466,366 @@ QUnit.module('Views', {
         pivot.destroy();
     });
 
-    QUnit.test('rendering of pivot view with comparison and count measure', async function (assert) {
+    QUnit.test('renderingofpivotviewwithcomparisonandcountmeasure',asyncfunction(assert){
         assert.expect(2);
 
-        var mockMock = false;
-        var nbReadGroup = 0;
+        varmockMock=false;
+        varnbReadGroup=0;
 
-        this.data.partner.records[0].date = '2016-12-15';
-        this.data.partner.records[1].date = '2016-12-17';
-        this.data.partner.records[2].date = '2016-12-22';
-        this.data.partner.records[3].date = '2016-12-03';
+        this.data.partner.records[0].date='2016-12-15';
+        this.data.partner.records[1].date='2016-12-17';
+        this.data.partner.records[2].date='2016-12-22';
+        this.data.partner.records[3].date='2016-12-03';
 
-        var unpatchDate = patchDate(2016, 11, 20, 1, 0, 0);
+        varunpatchDate=patchDate(2016,11,20,1,0,0);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: 'partner',
-            data: this.data,
-            arch: '<pivot><field name="customer" type="row"/></pivot>',
-            archs: {
-                'partner,false,search': `
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:'partner',
+            data:this.data,
+            arch:'<pivot><fieldname="customer"type="row"/></pivot>',
+            archs:{
+                'partner,false,search':`
                     <search>
-                        <filter name="date_filter" date="date" domain="[]" default_period='this_month'/>
+                        <filtername="date_filter"date="date"domain="[]"default_period='this_month'/>
                     </search>
                 `,
             },
-            viewOptions: {
-                context: { search_default_date_filter: 1 },
+            viewOptions:{
+                context:{search_default_date_filter:1},
             },
-            mockRPC: function (route, args) {
-                var result = this._super.apply(this, arguments);
-                if (args.method === 'read_group' && mockMock) {
+            mockRPC:function(route,args){
+                varresult=this._super.apply(this,arguments);
+                if(args.method==='read_group'&&mockMock){
                     nbReadGroup++;
-                    if (nbReadGroup === 4) {
-                        // this modification is necessary because mockReadGroup does not
-                        // properly reflect the server response when there is no record
-                        // and a groupby list of length at least one.
-                        return Promise.resolve([{}]);
+                    if(nbReadGroup===4){
+                        //thismodificationisnecessarybecausemockReadGroupdoesnot
+                        //properlyreflecttheserverresponsewhenthereisnorecord
+                        //andagroupbylistoflengthatleastone.
+                        returnPromise.resolve([{}]);
                     }
                 }
-                return result;
+                returnresult;
             },
         });
 
-        mockMock = true;
+        mockMock=true;
 
-        // compare December 2016 to November 2016
-        await cpHelpers.toggleComparisonMenu(pivot);
-        await cpHelpers.toggleMenuItem(pivot, 'Date: Previous period');
+        //compareDecember2016toNovember2016
+        awaitcpHelpers.toggleComparisonMenu(pivot);
+        awaitcpHelpers.toggleMenuItem(pivot,'Date:Previousperiod');
 
-        var values = [
-            "0", "4", "100%",
-            "0", "2", "100%",
-            "0", "2", "100%"
+        varvalues=[
+            "0","4","100%",
+            "0","2","100%",
+            "0","2","100%"
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join(','));
-        assert.strictEqual(pivot.$('.o_pivot_header_cell_closed').length, 3,
-            "there should be exactly three closed header ('Total','First', 'Second')");
+        assert.strictEqual(getCurrentValues(pivot),values.join(','));
+        assert.strictEqual(pivot.$('.o_pivot_header_cell_closed').length,3,
+            "thereshouldbeexactlythreeclosedheader('Total','First','Second')");
 
         unpatchDate();
         pivot.destroy();
     });
 
-    QUnit.test('can sort a pivot view with comparison by clicking on header', async function (assert) {
+    QUnit.test('cansortapivotviewwithcomparisonbyclickingonheader',asyncfunction(assert){
         assert.expect(6);
 
-        this.data.partner.records[0].date = '2016-12-15';
-        this.data.partner.records[1].date = '2016-12-17';
-        this.data.partner.records[2].date = '2016-11-22';
-        this.data.partner.records[3].date = '2016-11-03';
+        this.data.partner.records[0].date='2016-12-15';
+        this.data.partner.records[1].date='2016-12-17';
+        this.data.partner.records[2].date='2016-11-22';
+        this.data.partner.records[3].date='2016-11-03';
 
-        var unpatchDate = patchDate(2016, 11, 20, 1, 0, 0);
-        var pivot = await createView({
-            View: PivotView,
-            model: 'partner',
-            data: this.data,
-            arch: '<pivot>' +
-                    '<field name="date" interval="day" type="row"/>' +
-                    '<field name="company_type" type="col"/>' +
-                    '<field name="foo" type="measure"/>' +
+        varunpatchDate=patchDate(2016,11,20,1,0,0);
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:'partner',
+            data:this.data,
+            arch:'<pivot>'+
+                    '<fieldname="date"interval="day"type="row"/>'+
+                    '<fieldname="company_type"type="col"/>'+
+                    '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            archs: {
-                'partner,false,search': `
+            archs:{
+                'partner,false,search':`
                     <search>
-                        <filter name="date_filter" date="date" domain="[]" default_period='this_month'/>
+                        <filtername="date_filter"date="date"domain="[]"default_period='this_month'/>
                     </search>
                 `,
             },
-            viewOptions: {
-                additionalMeasures: ['product_id'],
-                context: { search_default_date_filter: 1 },
+            viewOptions:{
+                additionalMeasures:['product_id'],
+                context:{search_default_date_filter:1},
             },
         });
 
-        // compare December 2016 to November 2016
-        await cpHelpers.toggleComparisonMenu(pivot);
-        await cpHelpers.toggleMenuItem(pivot, 'Date: Previous period');
+        //compareDecember2016toNovember2016
+        awaitcpHelpers.toggleComparisonMenu(pivot);
+        awaitcpHelpers.toggleMenuItem(pivot,'Date:Previousperiod');
 
-        // initial sanity check
-        var values = [
-            "17", "12", "-29.41%", "2", "1", "-50%", "19", "13", "-31.58%",
-            "17", "0", "-100%",                      "17", "0", "-100%",
-                                   "2", "0", "-100%", "2", "0", "-100%",
-            "0", "12" , "100%",                       "0", "12" , "100%",
-                                   "0", "1", "100%" , "0" , "1" , "100%"
+        //initialsanitycheck
+        varvalues=[
+            "17","12","-29.41%","2","1","-50%","19","13","-31.58%",
+            "17","0","-100%",                     "17","0","-100%",
+                                   "2","0","-100%","2","0","-100%",
+            "0","12","100%",                      "0","12","100%",
+                                   "0","1","100%","0","1","100%"
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
-        // click on 'Foo' in column Total/Company (should sort by the period of interest, ASC)
-        await testUtils.dom.click(pivot.$('.o_pivot_measure_row').eq(0));
-        values = [
-            "17", "12", "-29.41%", "2", "1", "-50%" , "19", "13", "-31.58%",
-                                   "2", "0", "-100%", "2", "0", "-100%",
-            "0", "12", "100%",                        "0", "12", "100%",
-                                   "0", "1", "100%", "0", "1", "100%",
-            "17", "0", "-100%",                      "17", "0", "-100%"
+        //clickon'Foo'incolumnTotal/Company(shouldsortbytheperiodofinterest,ASC)
+        awaittestUtils.dom.click(pivot.$('.o_pivot_measure_row').eq(0));
+        values=[
+            "17","12","-29.41%","2","1","-50%","19","13","-31.58%",
+                                   "2","0","-100%","2","0","-100%",
+            "0","12","100%",                       "0","12","100%",
+                                   "0","1","100%","0","1","100%",
+            "17","0","-100%",                     "17","0","-100%"
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
-        // click again on 'Foo' in column Total/Company (should sort by the period of interest, DESC)
-        await testUtils.dom.click(pivot.$('.o_pivot_measure_row').eq(0));
-        values = [
-            "17", "12", "-29.41%", "2", "1", "-50%", "19", "13", "-31.58%",
-            "17", "0", "-100%",                      "17", "0", "-100%",
-                                   "2", "0", "-100%", "2", "0", "-100%",
-            "0", "12", "100%",                       "0", "12", "100%",
-                                   "0", "1", "100%", "0", "1", "100%"
+        //clickagainon'Foo'incolumnTotal/Company(shouldsortbytheperiodofinterest,DESC)
+        awaittestUtils.dom.click(pivot.$('.o_pivot_measure_row').eq(0));
+        values=[
+            "17","12","-29.41%","2","1","-50%","19","13","-31.58%",
+            "17","0","-100%",                     "17","0","-100%",
+                                   "2","0","-100%","2","0","-100%",
+            "0","12","100%",                      "0","12","100%",
+                                   "0","1","100%","0","1","100%"
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
-        // click on 'This Month' in column Total/Individual/Foo
-        await testUtils.dom.click(pivot.$('.o_pivot_origin_row').eq(3));
-        values = [
-            "17", "12", "-29.41%", "2", "1", "-50%", "19", "13", "-31.58%",
-            "17", "0", "-100%",                      "17", "0", "-100%",
-            "0", "12", "100%",                       "0", "12" , "100%",
-                                   "0", "1", "100%", "0", "1", "100%",
-                                   "2", "0", "-100%",  "2", "0",  "-100%"
+        //clickon'ThisMonth'incolumnTotal/Individual/Foo
+        awaittestUtils.dom.click(pivot.$('.o_pivot_origin_row').eq(3));
+        values=[
+            "17","12","-29.41%","2","1","-50%","19","13","-31.58%",
+            "17","0","-100%",                     "17","0","-100%",
+            "0","12","100%",                      "0","12","100%",
+                                   "0","1","100%","0","1","100%",
+                                   "2","0","-100%", "2","0", "-100%"
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
-        // click on 'Previous Period' in column Total/Individual/Foo
-        await testUtils.dom.click(pivot.$('.o_pivot_origin_row').eq(4));
-        values = [
-            "17", "12", "-29.41%", "2", "1", "-50%", "19", "13", "-31.58%",
-            "17", "0", "-100%",                      "17", "0", "-100%",
-                                   "2", "0", "-100%", "2", "0", "-100%",
-            "0", "12", "100%",                       "0", "12", "100%",
-                                   "0", "1", "100%", "0", "1", "100%"
+        //clickon'PreviousPeriod'incolumnTotal/Individual/Foo
+        awaittestUtils.dom.click(pivot.$('.o_pivot_origin_row').eq(4));
+        values=[
+            "17","12","-29.41%","2","1","-50%","19","13","-31.58%",
+            "17","0","-100%",                     "17","0","-100%",
+                                   "2","0","-100%","2","0","-100%",
+            "0","12","100%",                      "0","12","100%",
+                                   "0","1","100%","0","1","100%"
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
-        // click on 'Variation' in column Total/Foo
-        await testUtils.dom.click(pivot.$('.o_pivot_origin_row').eq(8));
-        values = [
-            "17", "12", "-29.41%", "2", "1", "-50%",  "19", "13", "-31.58%",
-            "17",  "0", "-100%",                      "17",  "0", "-100%",
-                                   "2", "0", "-100%", "2" , "0" , "-100%",
-            "0", "12",  "100%",                       "0", "12" , "100%",
-                                   "0", "1", "100%",  "0" , "1",  "100%"
+        //clickon'Variation'incolumnTotal/Foo
+        awaittestUtils.dom.click(pivot.$('.o_pivot_origin_row').eq(8));
+        values=[
+            "17","12","-29.41%","2","1","-50%", "19","13","-31.58%",
+            "17", "0","-100%",                     "17", "0","-100%",
+                                   "2","0","-100%","2","0","-100%",
+            "0","12", "100%",                      "0","12","100%",
+                                   "0","1","100%", "0","1", "100%"
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
         unpatchDate();
         pivot.destroy();
     });
 
-    QUnit.test('Click on the measure list but not on a menu item', async function (assert) {
+    QUnit.test('Clickonthemeasurelistbutnotonamenuitem',asyncfunction(assert){
         assert.expect(2);
 
-        const pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: `<pivot/>`,
+        constpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:`<pivot/>`,
         });
 
-        // open the "Measures" menu
-        await testUtils.dom.click(pivot.el.querySelector('.o_cp_buttons button'));
+        //openthe"Measures"menu
+        awaittestUtils.dom.click(pivot.el.querySelector('.o_cp_buttonsbutton'));
 
-        // click on the divider in the "Measures" menu does not crash
-        await testUtils.dom.click(pivot.el.querySelector('.o_pivot_measures_list .dropdown-divider'));
-        // the menu should still be open
+        //clickonthedividerinthe"Measures"menudoesnotcrash
+        awaittestUtils.dom.click(pivot.el.querySelector('.o_pivot_measures_list.dropdown-divider'));
+        //themenushouldstillbeopen
         assert.isVisible(pivot.el.querySelector('.o_pivot_measures_list'));
 
-        // click on the measure list but not on a menu item or the separator
-        await testUtils.dom.click(pivot.el.querySelector('.o_pivot_measures_list'));
-        // the menu should still be open
+        //clickonthemeasurelistbutnotonamenuitemortheseparator
+        awaittestUtils.dom.click(pivot.el.querySelector('.o_pivot_measures_list'));
+        //themenushouldstillbeopen
         assert.isVisible(pivot.el.querySelector('.o_pivot_measures_list'));
 
         pivot.destroy();
     });
 
-    QUnit.test('Navigation list view for a group and back with breadcrumbs', async function (assert) {
+    QUnit.test('Navigationlistviewforagroupandbackwithbreadcrumbs',asyncfunction(assert){
         assert.expect(16);
-        // create an action manager to test the interactions with the search view
-        var readGroupCount = 0;
+        //createanactionmanagertotesttheinteractionswiththesearchview
+        varreadGroupCount=0;
 
-        var actionManager = await createActionManager({
-            data: this.data,
-            archs: {
-                'partner,false,pivot': '<pivot>' +
-                        '<field name="customer" type="row"/>' +
+        varactionManager=awaitcreateActionManager({
+            data:this.data,
+            archs:{
+                'partner,false,pivot':'<pivot>'+
+                        '<fieldname="customer"type="row"/>'+
                   '</pivot>',
-                'partner,false,search': '<search><filter name="bayou" string="Bayou" domain="[(\'foo\',\'=\', 12)]"/></search>',
-                'partner,false,list': '<tree><field name="foo"/></tree>',
-                'partner,false,form': '<form><field name="foo"/></form>',
+                'partner,false,search':'<search><filtername="bayou"string="Bayou"domain="[(\'foo\',\'=\',12)]"/></search>',
+                'partner,false,list':'<tree><fieldname="foo"/></tree>',
+                'partner,false,form':'<form><fieldname="foo"/></form>',
             },
-            intercepts: {
-                do_action: function (event) {
-                    var action = event.data.action;
+            intercepts:{
+                do_action:function(event){
+                    varaction=event.data.action;
                     actionManager.doAction(action);
                 }
             },
-            mockRPC: function (route, args) {
-                if (args.method === 'read_group') {
+            mockRPC:function(route,args){
+                if(args.method==='read_group'){
                     assert.step('read_group');
-                    const domain = args.kwargs.domain;
-                    if ([0,1].indexOf(readGroupCount) !== -1) {
-                        assert.deepEqual(domain, [], 'domain empty');
-                    } else if ([2,3,4,5].indexOf(readGroupCount) !== -1) {
-                        assert.deepEqual(domain, [['foo', '=', 12]],
-                            'domain conserved when back with breadcrumbs');
+                    constdomain=args.kwargs.domain;
+                    if([0,1].indexOf(readGroupCount)!==-1){
+                        assert.deepEqual(domain,[],'domainempty');
+                    }elseif([2,3,4,5].indexOf(readGroupCount)!==-1){
+                        assert.deepEqual(domain,[['foo','=',12]],
+                            'domainconservedwhenbackwithbreadcrumbs');
                     }
                     readGroupCount++;
                 }
-                if (route === '/web/dataset/search_read') {
+                if(route==='/web/dataset/search_read'){
                     assert.step('search_read');
-                    const domain = args.domain;
-                    assert.deepEqual(domain, ['&', ['customer', '=', 1], ['foo', '=', 12]],
-                        'list domain is correct');
+                    constdomain=args.domain;
+                    assert.deepEqual(domain,['&',['customer','=',1],['foo','=',12]],
+                        'listdomainiscorrect');
                 }
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
         });
 
-        await actionManager.doAction({
-            res_model: 'partner',
-            type: 'ir.actions.act_window',
-            views: [[false, 'pivot']],
+        awaitactionManager.doAction({
+            res_model:'partner',
+            type:'ir.actions.act_window',
+            views:[[false,'pivot']],
         });
 
 
-        await cpHelpers.toggleFilterMenu(actionManager);
-        await cpHelpers.toggleMenuItem(actionManager, 0);
-        await testUtils.nextTick();
+        awaitcpHelpers.toggleFilterMenu(actionManager);
+        awaitcpHelpers.toggleMenuItem(actionManager,0);
+        awaittestUtils.nextTick();
 
-        await testUtilsDom.click(actionManager.$('.o_pivot_cell_value:nth(1)'));
-        await testUtils.nextTick();
+        awaittestUtilsDom.click(actionManager.$('.o_pivot_cell_value:nth(1)'));
+        awaittestUtils.nextTick();
 
-        assert.containsOnce(actionManager, '.o_list_view');
+        assert.containsOnce(actionManager,'.o_list_view');
 
-        await testUtilsDom.click(actionManager.$('.o_control_panel ol.breadcrumb li.breadcrumb-item').eq(0));
+        awaittestUtilsDom.click(actionManager.$('.o_control_panelol.breadcrumbli.breadcrumb-item').eq(0));
 
         assert.verifySteps([
-            'read_group', 'read_group',
-            'read_group', 'read_group',
+            'read_group','read_group',
+            'read_group','read_group',
             'search_read',
-            'read_group', 'read_group']);
+            'read_group','read_group']);
         actionManager.destroy();
     });
 
-    QUnit.test('Cell values are kept when flippin a pivot view in comparison mode', async function (assert) {
+    QUnit.test('Cellvaluesarekeptwhenflippinapivotviewincomparisonmode',asyncfunction(assert){
         assert.expect(2);
 
-        this.data.partner.records[0].date = '2016-12-15';
-        this.data.partner.records[1].date = '2016-12-17';
-        this.data.partner.records[2].date = '2016-11-22';
-        this.data.partner.records[3].date = '2016-11-03';
+        this.data.partner.records[0].date='2016-12-15';
+        this.data.partner.records[1].date='2016-12-17';
+        this.data.partner.records[2].date='2016-11-22';
+        this.data.partner.records[3].date='2016-11-03';
 
-        var unpatchDate = patchDate(2016, 11, 20, 1, 0, 0);
-        var pivot = await createView({
-            View: PivotView,
-            model: 'partner',
-            data: this.data,
-            arch: '<pivot>' +
-                    '<field name="date" interval="day" type="row"/>' +
-                    '<field name="company_type" type="col"/>' +
-                    '<field name="foo" type="measure"/>' +
+        varunpatchDate=patchDate(2016,11,20,1,0,0);
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:'partner',
+            data:this.data,
+            arch:'<pivot>'+
+                    '<fieldname="date"interval="day"type="row"/>'+
+                    '<fieldname="company_type"type="col"/>'+
+                    '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            archs: {
-                'partner,false,search': `
+            archs:{
+                'partner,false,search':`
                     <search>
-                        <filter name="date_filter" date="date" domain="[]" default_period='this_month'/>
+                        <filtername="date_filter"date="date"domain="[]"default_period='this_month'/>
                     </search>
                 `,
             },
-            viewOptions: {
-                additionalMeasures: ['product_id'],
-                context: { search_default_date_filter: 1 },
+            viewOptions:{
+                additionalMeasures:['product_id'],
+                context:{search_default_date_filter:1},
             },
         });
 
-        // compare December 2016 to November 2016
-        await cpHelpers.toggleComparisonMenu(pivot);
-        await cpHelpers.toggleMenuItem(pivot, 'Date: Previous period');
+        //compareDecember2016toNovember2016
+        awaitcpHelpers.toggleComparisonMenu(pivot);
+        awaitcpHelpers.toggleMenuItem(pivot,'Date:Previousperiod');
 
-        // initial sanity check
-        var values = [
-            "17", "12", "-29.41%", "2", "1", "-50%", "19", "13", "-31.58%",
-            "17", "0", "-100%",                      "17", "0", "-100%",
-                                   "2", "0", "-100%", "2", "0", "-100%",
-            "0", "12", "100%",                       "0", "12", "100%",
-                                   "0", "1", "100%", "0", "1", "100%",
+        //initialsanitycheck
+        varvalues=[
+            "17","12","-29.41%","2","1","-50%","19","13","-31.58%",
+            "17","0","-100%",                     "17","0","-100%",
+                                   "2","0","-100%","2","0","-100%",
+            "0","12","100%",                      "0","12","100%",
+                                   "0","1","100%","0","1","100%",
 
 
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
-        // flip table
-        await testUtils.dom.click(pivot.$buttons.find('.o_pivot_flip_button'));
+        //fliptable
+        awaittestUtils.dom.click(pivot.$buttons.find('.o_pivot_flip_button'));
 
-        values = [
-            "17", "0", "-100%", "2", "0", "-100%", "0", "12", "100%", "0", "1", "100%", "19", "13", "-31.58%",
-            "17", "0", "-100%",                    "0", "12", "100%",                   "17", "12", "-29.41%",
-                                "2", "0", "-100%",                    "0",  "1", "100%", "2",  "1",  "-50%"
+        values=[
+            "17","0","-100%","2","0","-100%","0","12","100%","0","1","100%","19","13","-31.58%",
+            "17","0","-100%",                   "0","12","100%",                  "17","12","-29.41%",
+                                "2","0","-100%",                   "0", "1","100%","2", "1", "-50%"
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
         unpatchDate();
         pivot.destroy();
     });
 
-    QUnit.test('Flip then compare, table col groupbys are kept', async function (assert) {
+    QUnit.test('Flipthencompare,tablecolgroupbysarekept',asyncfunction(assert){
         assert.expect(6);
 
-        this.data.partner.records[0].date = '2016-12-15';
-        this.data.partner.records[1].date = '2016-12-17';
-        this.data.partner.records[2].date = '2016-11-22';
-        this.data.partner.records[3].date = '2016-11-03';
+        this.data.partner.records[0].date='2016-12-15';
+        this.data.partner.records[1].date='2016-12-17';
+        this.data.partner.records[2].date='2016-11-22';
+        this.data.partner.records[3].date='2016-11-03';
 
-        var unpatchDate = patchDate(2016, 11, 20, 1, 0, 0);
-        var pivot = await createView({
-            View: PivotView,
-            model: 'partner',
-            data: this.data,
-            arch: '<pivot>' +
-                    '<field name="date" interval="day" type="row"/>' +
-                    '<field name="company_type" type="col"/>' +
-                    '<field name="foo" type="measure"/>' +
+        varunpatchDate=patchDate(2016,11,20,1,0,0);
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:'partner',
+            data:this.data,
+            arch:'<pivot>'+
+                    '<fieldname="date"interval="day"type="row"/>'+
+                    '<fieldname="company_type"type="col"/>'+
+                    '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            archs: {
-                'partner,false,search': `
+            archs:{
+                'partner,false,search':`
                     <search>
-                        <filter name="date_filter" date="date" domain="[]" default_period='this_month'/>
+                        <filtername="date_filter"date="date"domain="[]"default_period='this_month'/>
                     </search>
                 `,
             },
-            viewOptions: {
-                additionalMeasures: ['product_id'],
+            viewOptions:{
+                additionalMeasures:['product_id'],
             },
         });
 
 
         assert.strictEqual(
-            pivot.$('th').slice(0, 5).text(),
+            pivot.$('th').slice(0,5).text(),
             [
-                '', 'Total',                 '',
-                    'Company', 'individual',
+                '','Total',                '',
+                    'Company','individual',
             ].join(''),
-            "The col headers should be as expected"
+            "Thecolheadersshouldbeasexpected"
         );
         assert.strictEqual(
             pivot.$('th').slice(8).text(),
@@ -2836,19 +2836,19 @@ QUnit.module('Views', {
                     '2016-11-22',
                     '2016-11-03'
             ].join(''),
-            "The row headers should be as expected"
+            "Therowheadersshouldbeasexpected"
         );
 
-        // flip
-        await testUtils.dom.click(pivot.$buttons.find('.o_pivot_flip_button'));
+        //flip
+        awaittestUtils.dom.click(pivot.$buttons.find('.o_pivot_flip_button'));
 
         assert.strictEqual(
-            pivot.$('th').slice(0, 7).text(),
+            pivot.$('th').slice(0,7).text(),
             [
-                '', 'Total',                                                '',
-                    '2016-12-15', '2016-12-17', '2016-11-22', '2016-11-03',
+                '','Total',                                               '',
+                    '2016-12-15','2016-12-17','2016-11-22','2016-11-03',
             ].join(''),
-            "The col headers should be as expected"
+            "Thecolheadersshouldbeasexpected"
         );
         assert.strictEqual(
             pivot.$('th').slice(12).text(),
@@ -2858,25 +2858,25 @@ QUnit.module('Views', {
                     'individual'
 
             ].join(''),
-            "The row headers should be as expected"
+            "Therowheadersshouldbeasexpected"
         );
 
-        // Filter on December 2016
-        await cpHelpers.toggleFilterMenu(pivot);
-        await cpHelpers.toggleMenuItem(pivot, 'Date');
-        await cpHelpers.toggleMenuItemOption(pivot, 'Date', 'December');
+        //FilteronDecember2016
+        awaitcpHelpers.toggleFilterMenu(pivot);
+        awaitcpHelpers.toggleMenuItem(pivot,'Date');
+        awaitcpHelpers.toggleMenuItemOption(pivot,'Date','December');
 
-        // compare December 2016 to November 2016
-        await cpHelpers.toggleComparisonMenu(pivot);
-        await cpHelpers.toggleMenuItem(pivot, 'Date: Previous period');
+        //compareDecember2016toNovember2016
+        awaitcpHelpers.toggleComparisonMenu(pivot);
+        awaitcpHelpers.toggleMenuItem(pivot,'Date:Previousperiod');
 
         assert.strictEqual(
-            pivot.$('th').slice(0, 7).text(),
+            pivot.$('th').slice(0,7).text(),
             [
-                '', 'Total',                                                '',
-                    '2016-11-22', '2016-11-03', '2016-12-15', '2016-12-17',
+                '','Total',                                               '',
+                    '2016-11-22','2016-11-03','2016-12-15','2016-12-17',
             ].join(''),
-            "The col headers should be as expected"
+            "Thecolheadersshouldbeasexpected"
         );
         assert.strictEqual(
             pivot.$('th').slice(27).text(),
@@ -2886,62 +2886,62 @@ QUnit.module('Views', {
                     'individual'
 
             ].join(''),
-            "The row headers should be as expected"
+            "Therowheadersshouldbeasexpected"
         );
         unpatchDate();
         pivot.destroy();
     });
 
-    QUnit.test('correctly compute group domain when a date field has false value', async function (assert) {
+    QUnit.test('correctlycomputegroupdomainwhenadatefieldhasfalsevalue',asyncfunction(assert){
         assert.expect(1);
 
-        this.data.partner.records.forEach(r => r.date = false);
+        this.data.partner.records.forEach(r=>r.date=false);
 
-        var unpatchDate = patchDate(2016, 11, 20, 1, 0, 0);
-        var pivot = await createView({
-            View: PivotView,
-            model: 'partner',
-            data: this.data,
-            arch: '<pivot o_enable_linking="1">' +
-                    '<field name="date" interval="day" type="row"/>' +
+        varunpatchDate=patchDate(2016,11,20,1,0,0);
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:'partner',
+            data:this.data,
+            arch:'<pivoto_enable_linking="1">'+
+                    '<fieldname="date"interval="day"type="row"/>'+
                 '</pivot>',
-            intercepts: {
-                do_action: function (ev) {
-                    assert.deepEqual(ev.data.action.domain, [['date', '=', false]]);
+            intercepts:{
+                do_action:function(ev){
+                    assert.deepEqual(ev.data.action.domain,[['date','=',false]]);
                 },
             },
         });
 
-        await testUtils.dom.click($('div .o_value')[1]);
+        awaittestUtils.dom.click($('div.o_value')[1]);
 
         unpatchDate();
         pivot.destroy();
     });
-    QUnit.test('Does not identify "false" with false as keys when creating group trees', async function (assert) {
+    QUnit.test('Doesnotidentify"false"withfalseaskeyswhencreatinggrouptrees',asyncfunction(assert){
         assert.expect(2);
 
-        this.data.partner.fields.favorite_animal = {string: "Favorite animal", type: "char", store: true};
-        this.data.partner.records[0].favorite_animal = 'Dog';
-        this.data.partner.records[1].favorite_animal = 'false';
-        this.data.partner.records[2].favorite_animal = 'Undefined';
+        this.data.partner.fields.favorite_animal={string:"Favoriteanimal",type:"char",store:true};
+        this.data.partner.records[0].favorite_animal='Dog';
+        this.data.partner.records[1].favorite_animal='false';
+        this.data.partner.records[2].favorite_animal='Undefined';
 
-        var unpatchDate = patchDate(2016, 11, 20, 1, 0, 0);
-        var pivot = await createView({
-            View: PivotView,
-            model: 'partner',
-            data: this.data,
-            arch: '<pivot o_enable_linking="1">' +
-                    '<field name="favorite_animal" type="row"/>' +
+        varunpatchDate=patchDate(2016,11,20,1,0,0);
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:'partner',
+            data:this.data,
+            arch:'<pivoto_enable_linking="1">'+
+                    '<fieldname="favorite_animal"type="row"/>'+
                 '</pivot>',
 
         });
 
         assert.strictEqual(
-            pivot.$('th').slice(0, 2).text(),
+            pivot.$('th').slice(0,2).text(),
             [
-                '', 'Total',                                                '',
+                '','Total',                                               '',
             ].join(''),
-            "The col headers should be as expected"
+            "Thecolheadersshouldbeasexpected"
         );
         assert.strictEqual(
             pivot.$('th').slice(3).text(),
@@ -2953,55 +2953,55 @@ QUnit.module('Views', {
                     'Undefined'
 
             ].join(''),
-            "The row headers should be as expected"
+            "Therowheadersshouldbeasexpected"
         );
 
         unpatchDate();
         pivot.destroy();
     });
 
-    QUnit.test('group bys added via control panel and expand Header do not stack', async function (assert) {
+    QUnit.test('groupbysaddedviacontrolpanelandexpandHeaderdonotstack',asyncfunction(assert){
         assert.expect(8);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: 'partner',
-            data: this.data,
-            arch: '<pivot>' +
-                    '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:'partner',
+            data:this.data,
+            arch:'<pivot>'+
+                    '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            viewOptions: {
-                additionalMeasures: ['product_id'],
+            viewOptions:{
+                additionalMeasures:['product_id'],
             },
         });
 
         assert.strictEqual(
-            pivot.$('th').slice(0, 2).text(),
+            pivot.$('th').slice(0,2).text(),
             [
-                '', 'Total',
+                '','Total',
             ].join(''),
-            "The col headers should be as expected"
+            "Thecolheadersshouldbeasexpected"
         );
         assert.strictEqual(
             pivot.$('th').slice(3).text(),
             [
                 'Total',
             ].join(''),
-            "The row headers should be as expected"
+            "Therowheadersshouldbeasexpected"
         );
 
 
-        // open group by menu and add new groupby
-        await cpHelpers.toggleGroupByMenu(pivot);
-        await cpHelpers.toggleAddCustomGroup(pivot);
-        await cpHelpers.applyGroup(pivot);
+        //opengroupbymenuandaddnewgroupby
+        awaitcpHelpers.toggleGroupByMenu(pivot);
+        awaitcpHelpers.toggleAddCustomGroup(pivot);
+        awaitcpHelpers.applyGroup(pivot);
 
         assert.strictEqual(
-            pivot.$('th').slice(0, 2).text(),
+            pivot.$('th').slice(0,2).text(),
             [
-                '', 'Total',
+                '','Total',
             ].join(''),
-            "The col headers should be as expected"
+            "Thecolheadersshouldbeasexpected"
         );
         assert.strictEqual(
             pivot.$('th').slice(3).text(),
@@ -3010,19 +3010,19 @@ QUnit.module('Views', {
                     'Company',
                     'individual'
             ].join(''),
-            "The row headers should be as expected"
+            "Therowheadersshouldbeasexpected"
         );
 
-        // Set a Row groupby
-        await testUtils.dom.click(pivot.$('tbody .o_pivot_header_cell_closed').eq(0));
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field=product_id]:first'));
+        //SetaRowgroupby
+        awaittestUtils.dom.click(pivot.$('tbody.o_pivot_header_cell_closed').eq(0));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field=product_id]:first'));
 
         assert.strictEqual(
-            pivot.$('th').slice(0, 2).text(),
+            pivot.$('th').slice(0,2).text(),
             [
-                '', 'Total',
+                '','Total',
             ].join(''),
-            "The col headers should be as expected"
+            "Thecolheadersshouldbeasexpected"
         );
         assert.strictEqual(
             pivot.$('th').slice(3).text(),
@@ -3033,21 +3033,21 @@ QUnit.module('Views', {
                         'xpad',
                     'individual'
             ].join(''),
-            "The row headers should be as expected"
+            "Therowheadersshouldbeasexpected"
         );
 
-        // open groupby menu generator and add a new groupby
-        await cpHelpers.toggleGroupByMenu(pivot);
-        await cpHelpers.toggleAddCustomGroup(pivot);
-        await cpHelpers.selectGroup(pivot, 'bar');
-        await cpHelpers.applyGroup(pivot);
+        //opengroupbymenugeneratorandaddanewgroupby
+        awaitcpHelpers.toggleGroupByMenu(pivot);
+        awaitcpHelpers.toggleAddCustomGroup(pivot);
+        awaitcpHelpers.selectGroup(pivot,'bar');
+        awaitcpHelpers.applyGroup(pivot);
 
         assert.strictEqual(
-            pivot.$('th').slice(0, 2).text(),
+            pivot.$('th').slice(0,2).text(),
             [
-                '', 'Total',
+                '','Total',
             ].join(''),
-            "The col headers should be as expected"
+            "Thecolheadersshouldbeasexpected"
         );
         assert.strictEqual(
             pivot.$('th').slice(3).text(),
@@ -3059,125 +3059,125 @@ QUnit.module('Views', {
                         'true',
                         'Undefined'
             ].join(''),
-            "The row headers should be as expected"
+            "Therowheadersshouldbeasexpected"
         );
 
         pivot.destroy();
     });
 
-    QUnit.test('display only one dropdown menu', async function (assert) {
+    QUnit.test('displayonlyonedropdownmenu',asyncfunction(assert){
         assert.expect(1);
 
-        var pivot = await createView({
-            View: PivotView,
-            model: 'partner',
-            data: this.data,
-            arch: '<pivot>' +
-                    '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:'partner',
+            data:this.data,
+            arch:'<pivot>'+
+                    '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            viewOptions: {
-                additionalMeasures: ['product_id'],
+            viewOptions:{
+                additionalMeasures:['product_id'],
             },
         });
-        await testUtils.dom.clickFirst(pivot.$('th.o_pivot_header_cell_closed'));
-        await testUtils.dom.click(pivot.$('.o_pivot_field_menu .dropdown-item[data-field=product_id]:first'));
+        awaittestUtils.dom.clickFirst(pivot.$('th.o_pivot_header_cell_closed'));
+        awaittestUtils.dom.click(pivot.$('.o_pivot_field_menu.dropdown-item[data-field=product_id]:first'));
 
-        // Click on the two dropdown
-        await testUtils.dom.click(pivot.$('th.o_pivot_header_cell_closed')[0]);
-        await testUtils.dom.click(pivot.$('th.o_pivot_header_cell_closed')[1]);
+        //Clickonthetwodropdown
+        awaittestUtils.dom.click(pivot.$('th.o_pivot_header_cell_closed')[0]);
+        awaittestUtils.dom.click(pivot.$('th.o_pivot_header_cell_closed')[1]);
 
-        assert.containsOnce(pivot, '.o_pivot_field_menu', 'Only one dropdown should be displayed at a time');
+        assert.containsOnce(pivot,'.o_pivot_field_menu','Onlyonedropdownshouldbedisplayedatatime');
 
         pivot.destroy();
     });
 
-    QUnit.test('Server order is kept by default', async function (assert) {
+    QUnit.test('Serverorderiskeptbydefault',asyncfunction(assert){
         assert.expect(1);
 
-        let isSecondReadGroup = false;
+        letisSecondReadGroup=false;
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                    '<field name="customer" type="row"/>' +
-                    '<field name="foo" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                    '<fieldname="customer"type="row"/>'+
+                    '<fieldname="foo"type="measure"/>'+
                 '</pivot>',
-            mockRPC: function (route, args) {
-                if (args.method === 'read_group' && isSecondReadGroup) {
-                    return Promise.resolve([
+            mockRPC:function(route,args){
+                if(args.method==='read_group'&&isSecondReadGroup){
+                    returnPromise.resolve([
                         {
-                            customer: [2, 'Second'],
-                            foo: 18,
-                            __count: 2,
-                            __domain :[["customer", "=", 2]],
+                            customer:[2,'Second'],
+                            foo:18,
+                            __count:2,
+                            __domain:[["customer","=",2]],
                         },
                         {
-                            customer: [1, 'First'],
-                            foo: 14,
-                            __count: 2,
-                            __domain :[["customer", "=", 1]],
+                            customer:[1,'First'],
+                            foo:14,
+                            __count:2,
+                            __domain:[["customer","=",1]],
                         }
                     ]);
                 }
-                var result = this._super.apply(this, arguments);
-                isSecondReadGroup = true;
-                return result;
+                varresult=this._super.apply(this,arguments);
+                isSecondReadGroup=true;
+                returnresult;
             },
         });
 
-        const values = [
-            "32", // Total Value
-            "18", // Second
-            "14", // First
+        constvalues=[
+            "32",//TotalValue
+            "18",//Second
+            "14",//First
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
         pivot.destroy();
     });
 
-    QUnit.test('comparison with two groupbys: rows from reference period should be displayed', async function (assert) {
+    QUnit.test('comparisonwithtwogroupbys:rowsfromreferenceperiodshouldbedisplayed',asyncfunction(assert){
         assert.expect(3);
-        patchDate(2023, 2, 22, 1, 0, 0);
+        patchDate(2023,2,22,1,0,0);
 
-        this.data.partner.records = [
-            { id: 1, date: "2021-10-10", product_id: 1, customer: 1 },
-            { id: 2, date: "2020-10-10", product_id: 2, customer: 1 },
+        this.data.partner.records=[
+            {id:1,date:"2021-10-10",product_id:1,customer:1},
+            {id:2,date:"2020-10-10",product_id:2,customer:1},
         ]
-        this.data.product.records = [
-            { id: 1, display_name: "A" },
-            { id: 2, display_name: "B" },
+        this.data.product.records=[
+            {id:1,display_name:"A"},
+            {id:2,display_name:"B"},
         ]
-        this.data.customer.records = [
-            { id: 1, display_name: "P" },
+        this.data.customer.records=[
+            {id:1,display_name:"P"},
         ]
 
-        const pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot><field name="customer" type="row"/><field name="product_id" type="row"/></pivot>',
-            archs: {
-                "partner,false,search": "<search><filter name='date' date='date'/></search>"
+        constpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot><fieldname="customer"type="row"/><fieldname="product_id"type="row"/></pivot>',
+            archs:{
+                "partner,false,search":"<search><filtername='date'date='date'/></search>"
             },
         });
 
-        // compare 2021 to 2020
-        await cpHelpers.toggleFilterMenu(pivot);
-        await cpHelpers.toggleMenuItem(pivot, "Date");
-        await cpHelpers.toggleMenuItemOption(pivot, "Date", "2021");
-        await cpHelpers.toggleComparisonMenu(pivot);
-        await cpHelpers.toggleMenuItem(pivot, 0);
+        //compare2021to2020
+        awaitcpHelpers.toggleFilterMenu(pivot);
+        awaitcpHelpers.toggleMenuItem(pivot,"Date");
+        awaitcpHelpers.toggleMenuItemOption(pivot,"Date","2021");
+        awaitcpHelpers.toggleComparisonMenu(pivot);
+        awaitcpHelpers.toggleMenuItem(pivot,0);
 
         assert.strictEqual(
-            pivot.$('th').slice(0, 6).text(),
+            pivot.$('th').slice(0,6).text(),
             [
                         "Total",
                         "Count",
-                "2020", "2021", "Variation"
+                "2020","2021","Variation"
             ].join(''),
-            "The col headers should be as expected"
+            "Thecolheadersshouldbeasexpected"
         );
 
         assert.strictEqual(
@@ -3188,170 +3188,170 @@ QUnit.module('Views', {
                         'B',
                         'A',
             ].join(''),
-            "The row headers should be as expected"
+            "Therowheadersshouldbeasexpected"
         );
 
-        const values = [
-            "1", "1", "0%",
-            "1", "1", "0%",
-            "1", "0", "-100%",
-            "0", "1", "100%",
+        constvalues=[
+            "1","1","0%",
+            "1","1","0%",
+            "1","0","-100%",
+            "0","1","100%",
         ];
-        assert.strictEqual(getCurrentValues(pivot), values.join());
+        assert.strictEqual(getCurrentValues(pivot),values.join());
 
         pivot.destroy();
     });
 
-    QUnit.test('pivot rendering with boolean field', async function (assert) {
+    QUnit.test('pivotrenderingwithbooleanfield',asyncfunction(assert){
         assert.expect(4);
 
-        this.data.partner.fields.bar = {string: "bar", type: "boolean", store: true, searchable: true, group_operator: 'bool_or'};
-        this.data.partner.records = [{id: 1, bar: true, date: '2019-12-14'}, {id: 2, bar: false, date: '2019-05-14'}];
+        this.data.partner.fields.bar={string:"bar",type:"boolean",store:true,searchable:true,group_operator:'bool_or'};
+        this.data.partner.records=[{id:1,bar:true,date:'2019-12-14'},{id:2,bar:false,date:'2019-05-14'}];
 
-        var pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="date" type="row" interval="day"/>' +
-                        '<field name="bar" type="col"/>' +
-                        '<field name="bar" string="SLA status Failed" type="measure"/>' +
+        varpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="date"type="row"interval="day"/>'+
+                        '<fieldname="bar"type="col"/>'+
+                        '<fieldname="bar"string="SLAstatusFailed"type="measure"/>'+
                 '</pivot>',
         });
 
-        assert.strictEqual(pivot.$('tbody tr:contains("2019-12-14")').length, 1, 'There should be a first column');
-        assert.ok(pivot.$('tbody tr:contains("2019-12-14") [type="checkbox"]').is(':checked'), 'first column contains checkbox and value should be ticked');
-        assert.strictEqual(pivot.$('tbody tr:contains("2019-05-14")').length, 1, 'There should be a second column');
-        assert.notOk(pivot.$('tbody tr:contains("2019-05-14") [type="checkbox"]').is(':checked'), "second column should have checkbox that is not checked by default");
+        assert.strictEqual(pivot.$('tbodytr:contains("2019-12-14")').length,1,'Thereshouldbeafirstcolumn');
+        assert.ok(pivot.$('tbodytr:contains("2019-12-14")[type="checkbox"]').is(':checked'),'firstcolumncontainscheckboxandvalueshouldbeticked');
+        assert.strictEqual(pivot.$('tbodytr:contains("2019-05-14")').length,1,'Thereshouldbeasecondcolumn');
+        assert.notOk(pivot.$('tbodytr:contains("2019-05-14")[type="checkbox"]').is(':checked'),"secondcolumnshouldhavecheckboxthatisnotcheckedbydefault");
 
         pivot.destroy();
     });
 
-    QUnit.test('Allow to add behaviour to buttons on pivot', async function (assert) {
+    QUnit.test('Allowtoaddbehaviourtobuttonsonpivot',asyncfunction(assert){
         assert.expect(2);
 
-        let _testButtons = (ev) => {
-            if ($(ev.target).hasClass("o_pivot_flip_button")) {
+        let_testButtons=(ev)=>{
+            if($(ev.target).hasClass("o_pivot_flip_button")){
                 assert.step("o_pivot_flip_button")
             }
         }
 
         PivotController.include({
-            _addIncludedButtons: async function (ev) {
-                await this._super(...arguments);
+            _addIncludedButtons:asyncfunction(ev){
+                awaitthis._super(...arguments);
                 _testButtons(ev);
             },
         });
 
-        const pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: '<pivot>' +
-                        '<field name="date" type="row" interval="day"/>' +
-                        '<field name="bar" type="col"/>' +
+        constpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:'<pivot>'+
+                        '<fieldname="date"type="row"interval="day"/>'+
+                        '<fieldname="bar"type="col"/>'+
                 '</pivot>',
         });
-        await testUtils.dom.click(pivot.$buttons.find('.o_pivot_flip_button'));
+        awaittestUtils.dom.click(pivot.$buttons.find('.o_pivot_flip_button'));
         assert.verifySteps(["o_pivot_flip_button"]);
-        _testButtons = () => true;
+        _testButtons=()=>true;
         pivot.destroy();
     });
 
-    QUnit.test('empty pivot view with action helper', async function (assert) {
+    QUnit.test('emptypivotviewwithactionhelper',asyncfunction(assert){
         assert.expect(4);
 
-        const pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: `
+        constpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:`
                 <pivot>
-                    <field name="product_id" type="measure"/>
-                    <field name="date" interval="month" type="col"/>
+                    <fieldname="product_id"type="measure"/>
+                    <fieldname="date"interval="month"type="col"/>
                 </pivot>`,
-            domain: [['id', '<', 0]],
-            viewOptions: {
-                action: {
-                    help: '<p class="abc">click to add a foo</p>'
+            domain:[['id','<',0]],
+            viewOptions:{
+                action:{
+                    help:'<pclass="abc">clicktoaddafoo</p>'
                 }
             },
         });
 
-        assert.containsOnce(pivot, '.o_view_nocontent .abc');
-        assert.containsNone(pivot, 'table');
+        assert.containsOnce(pivot,'.o_view_nocontent.abc');
+        assert.containsNone(pivot,'table');
 
-        await pivot.reload({ domain: [] });
+        awaitpivot.reload({domain:[]});
 
-        assert.containsNone(pivot, '.o_view_nocontent .abc');
-        assert.containsOnce(pivot, 'table');
+        assert.containsNone(pivot,'.o_view_nocontent.abc');
+        assert.containsOnce(pivot,'table');
 
         pivot.destroy();
     });
 
-    QUnit.test('empty pivot view with sample data', async function (assert) {
+    QUnit.test('emptypivotviewwithsampledata',asyncfunction(assert){
         assert.expect(7);
 
-        const pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: `
-                <pivot sample="1">
-                    <field name="product_id" type="measure"/>
-                    <field name="date" interval="month" type="col"/>
+        constpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:`
+                <pivotsample="1">
+                    <fieldname="product_id"type="measure"/>
+                    <fieldname="date"interval="month"type="col"/>
                 </pivot>`,
-            domain: [['id', '<', 0]],
-            viewOptions: {
-                action: {
-                    help: '<p class="abc">click to add a foo</p>'
+            domain:[['id','<',0]],
+            viewOptions:{
+                action:{
+                    help:'<pclass="abc">clicktoaddafoo</p>'
                 }
             },
         });
 
-        assert.hasClass(pivot.el, 'o_view_sample_data');
-        assert.containsOnce(pivot, '.o_view_nocontent .abc');
-        assert.containsOnce(pivot, 'table.o_sample_data_disabled');
+        assert.hasClass(pivot.el,'o_view_sample_data');
+        assert.containsOnce(pivot,'.o_view_nocontent.abc');
+        assert.containsOnce(pivot,'table.o_sample_data_disabled');
 
-        await pivot.reload({ domain: [] });
+        awaitpivot.reload({domain:[]});
 
-        assert.doesNotHaveClass(pivot.el, 'o_view_sample_data');
-        assert.containsNone(pivot, '.o_view_nocontent .abc');
-        assert.containsOnce(pivot, 'table');
-        assert.doesNotHaveClass(pivot.$('table'), 'o_sample_data_disabled');
+        assert.doesNotHaveClass(pivot.el,'o_view_sample_data');
+        assert.containsNone(pivot,'.o_view_nocontent.abc');
+        assert.containsOnce(pivot,'table');
+        assert.doesNotHaveClass(pivot.$('table'),'o_sample_data_disabled');
 
         pivot.destroy();
     });
 
-    QUnit.test('non empty pivot view with sample data', async function (assert) {
+    QUnit.test('nonemptypivotviewwithsampledata',asyncfunction(assert){
         assert.expect(7);
 
-        const pivot = await createView({
-            View: PivotView,
-            model: "partner",
-            data: this.data,
-            arch: `
-                <pivot sample="1">
-                    <field name="product_id" type="measure"/>
-                    <field name="date" interval="month" type="col"/>
+        constpivot=awaitcreateView({
+            View:PivotView,
+            model:"partner",
+            data:this.data,
+            arch:`
+                <pivotsample="1">
+                    <fieldname="product_id"type="measure"/>
+                    <fieldname="date"interval="month"type="col"/>
                 </pivot>`,
-            viewOptions: {
-                action: {
-                    help: '<p class="abc">click to add a foo</p>'
+            viewOptions:{
+                action:{
+                    help:'<pclass="abc">clicktoaddafoo</p>'
                 }
             },
         });
 
-        assert.doesNotHaveClass(pivot.el, 'o_view_sample_data');
-        assert.containsNone(pivot, '.o_view_nocontent .abc');
-        assert.containsOnce(pivot, 'table');
-        assert.doesNotHaveClass(pivot.$('table'), 'o_sample_data_disabled');
+        assert.doesNotHaveClass(pivot.el,'o_view_sample_data');
+        assert.containsNone(pivot,'.o_view_nocontent.abc');
+        assert.containsOnce(pivot,'table');
+        assert.doesNotHaveClass(pivot.$('table'),'o_sample_data_disabled');
 
-        await pivot.reload({ domain: [['id', '<', 0]] });
+        awaitpivot.reload({domain:[['id','<',0]]});
 
-        assert.doesNotHaveClass(pivot.el, 'o_view_sample_data');
-        assert.containsOnce(pivot, '.o_view_nocontent .abc');
-        assert.containsNone(pivot, 'table');
+        assert.doesNotHaveClass(pivot.el,'o_view_sample_data');
+        assert.containsOnce(pivot,'.o_view_nocontent.abc');
+        assert.containsNone(pivot,'table');
 
         pivot.destroy();
     });

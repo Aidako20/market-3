@@ -1,50 +1,50 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-<t t-extend="WebClient.DebugManager.Backend">
-    <t t-jquery="a[data-action='select_view']" t-operation="after">
-        <t t-if="manager._is_admin">
-            <a t-if="manager.consume_tours_enabled" href="#" class="dropdown-item" data-action="consume_tours">Disable Tours</a>
-            <a href="#" class="dropdown-item" data-action="start_tour">Start Tour</a>
+<tt-extend="WebClient.DebugManager.Backend">
+    <tt-jquery="a[data-action='select_view']"t-operation="after">
+        <tt-if="manager._is_admin">
+            <at-if="manager.consume_tours_enabled"href="#"class="dropdown-item"data-action="consume_tours">DisableTours</a>
+            <ahref="#"class="dropdown-item"data-action="start_tour">StartTour</a>
         </t>
     </t>
 </t>
 
-<t t-name="web_tour.ToursDialog">
+<tt-name="web_tour.ToursDialog">
     <div>
-        <t t-call="web_tour.ToursDialog.Table">
-            <t t-set="caption" t-value="'Onboarding tours'"/>
-            <t t-set="tours" t-value="onboardingTours"/>
+        <tt-call="web_tour.ToursDialog.Table">
+            <tt-set="caption"t-value="'Onboardingtours'"/>
+            <tt-set="tours"t-value="onboardingTours"/>
         </t>
-        <t t-if="testingTours.length" t-call="web_tour.ToursDialog.Table">
-            <t t-set="caption" t-value="'Testing tours'"/>
-            <t t-set="tours" t-value="testingTours"/>
+        <tt-if="testingTours.length"t-call="web_tour.ToursDialog.Table">
+            <tt-set="caption"t-value="'Testingtours'"/>
+            <tt-set="tours"t-value="testingTours"/>
         </t>
     </div>
 </t>
 
-<t t-name="web_tour.ToursDialog.Table">
-    <div class="table-responsive">
-        <table class="table table-sm table-striped">
-            <caption style="caption-side: top; font-size: 14px">
-                <t t-esc="caption"/>
+<tt-name="web_tour.ToursDialog.Table">
+    <divclass="table-responsive">
+        <tableclass="tabletable-smtable-striped">
+            <captionstyle="caption-side:top;font-size:14px">
+                <tt-esc="caption"/>
             </caption>
             <thead>
                 <tr>
                     <th>Sequence</th>
-                    <th width="50%">Name</th>
-                    <th width="50%">Path</th>
+                    <thwidth="50%">Name</th>
+                    <thwidth="50%">Path</th>
                     <th>Start</th>
                     <th>Test</th>
                 </tr>
             </thead>
             <tbody>
-                <tr t-foreach="tours" t-as="tour">
-                    <td><t t-esc="tour.sequence"/></td>
-                    <td><t t-esc="tour.name"/></td>
-                    <td><t t-esc="tour.url"/></td>
-                    <td><button type="button" class="btn btn-primary fa fa-play o_start_tour" t-att-data-name="tour.name" aria-label="Start tour" title="Start tour"/></td>
-                    <td><button type="button" class="btn btn-primary fa fa-cogs o_test_tour" t-att-data-name="tour.name" aria-label="Test tour" title="Test tour"/></td>
+                <trt-foreach="tours"t-as="tour">
+                    <td><tt-esc="tour.sequence"/></td>
+                    <td><tt-esc="tour.name"/></td>
+                    <td><tt-esc="tour.url"/></td>
+                    <td><buttontype="button"class="btnbtn-primaryfafa-playo_start_tour"t-att-data-name="tour.name"aria-label="Starttour"title="Starttour"/></td>
+                    <td><buttontype="button"class="btnbtn-primaryfafa-cogso_test_tour"t-att-data-name="tour.name"aria-label="Testtour"title="Testtour"/></td>
                 </tr>
             </tbody>
         </table>

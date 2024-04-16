@@ -1,225 +1,225 @@
-flectra.define('web.Pager', function (require) {
-    "use strict";
+flectra.define('web.Pager',function(require){
+    "usestrict";
 
-    const { useAutofocus } = require('web.custom_hooks');
+    const{useAutofocus}=require('web.custom_hooks');
 
-    const { Component, hooks } = owl;
-    const { useState } = hooks;
+    const{Component,hooks}=owl;
+    const{useState}=hooks;
 
     /**
-     * Pager
+     *Pager
      *
-     * The pager goes from 1 to size (included).
-     * The current value is currentMinimum if limit === 1 or the interval:
-     *      [currentMinimum, currentMinimum + limit[ if limit > 1].
-     * The value can be manually changed by clicking on the pager value and giving
-     * an input matching the pattern: min[,max] (in which the comma can be a dash
-     * or a semicolon).
-     * The pager also provides two buttons to quickly change the current page (next
-     * or previous).
-     * @extends Component
+     *Thepagergoesfrom1tosize(included).
+     *ThecurrentvalueiscurrentMinimumiflimit===1ortheinterval:
+     *     [currentMinimum,currentMinimum+limit[iflimit>1].
+     *Thevaluecanbemanuallychangedbyclickingonthepagervalueandgiving
+     *aninputmatchingthepattern:min[,max](inwhichthecommacanbeadash
+     *orasemicolon).
+     *Thepageralsoprovidestwobuttonstoquicklychangethecurrentpage(next
+     *orprevious).
+     *@extendsComponent
      */
-    class Pager extends Component {
+    classPagerextendsComponent{
         /**
-         * @param {Object} [props]
-         * @param {int} [props.size] the total number of elements
-         * @param {int} [props.currentMinimum] the first element of the current_page
-         * @param {int} [props.limit] the number of elements per page
-         * @param {boolean} [props.editable] editable feature of the pager
-         * @param {function} [props.validate] callback returning a Promise to
-         *   validate changes
-         * @param {boolean} [props.withAccessKey] can be disabled, for example,
-         *   for x2m widgets
+         *@param{Object}[props]
+         *@param{int}[props.size]thetotalnumberofelements
+         *@param{int}[props.currentMinimum]thefirstelementofthecurrent_page
+         *@param{int}[props.limit]thenumberofelementsperpage
+         *@param{boolean}[props.editable]editablefeatureofthepager
+         *@param{function}[props.validate]callbackreturningaPromiseto
+         *  validatechanges
+         *@param{boolean}[props.withAccessKey]canbedisabled,forexample,
+         *  forx2mwidgets
          */
-        constructor() {
+        constructor(){
             super(...arguments);
 
-            this.state = useState({
-                disabled: false,
-                editing: false,
+            this.state=useState({
+                disabled:false,
+                editing:false,
             });
 
             useAutofocus();
         }
 
-        async willUpdateProps() {
-            this.state.editing = false;
-            this.state.disabled = false;
+        asyncwillUpdateProps(){
+            this.state.editing=false;
+            this.state.disabled=false;
         }
 
         //---------------------------------------------------------------------
-        // Getters
+        //Getters
         //---------------------------------------------------------------------
 
         /**
-         * @returns {number}
+         *@returns{number}
          */
-        get maximum() {
-            return Math.min(this.props.currentMinimum + this.props.limit - 1, this.props.size);
+        getmaximum(){
+            returnMath.min(this.props.currentMinimum+this.props.limit-1,this.props.size);
         }
 
         /**
-         * @returns {boolean} true iff there is only one page
+         *@returns{boolean}trueiffthereisonlyonepage
          */
-        get singlePage() {
-            return (1 === this.props.currentMinimum) && (this.maximum === this.props.size);
+        getsinglePage(){
+            return(1===this.props.currentMinimum)&&(this.maximum===this.props.size);
         }
 
         /**
-         * @returns {number}
+         *@returns{number}
          */
-        get value() {
-            return this.props.currentMinimum + (this.props.limit > 1 ? `-${this.maximum}` : '');
+        getvalue(){
+            returnthis.props.currentMinimum+(this.props.limit>1?`-${this.maximum}`:'');
         }
 
         //---------------------------------------------------------------------
-        // Private
+        //Private
         //---------------------------------------------------------------------
 
         /**
-         * Update the pager's state according to a pager action
-         * @private
-         * @param {number} [direction] the action (previous or next) on the pager
+         *Updatethepager'sstateaccordingtoapageraction
+         *@private
+         *@param{number}[direction]theaction(previousornext)onthepager
          */
-        async _changeSelection(direction) {
-            try {
-                await this.props.validate();
-            } catch (err) {
+        async_changeSelection(direction){
+            try{
+                awaitthis.props.validate();
+            }catch(err){
                 return;
             }
-            const { limit, size } = this.props;
+            const{limit,size}=this.props;
 
-            // Compute the new currentMinimum
-            let currentMinimum = (this.props.currentMinimum + limit * direction);
-            if (currentMinimum > size) {
-                currentMinimum = 1;
-            } else if ((currentMinimum < 1) && (limit === 1)) {
-                currentMinimum = size;
-            } else if ((currentMinimum < 1) && (limit > 1)) {
-                currentMinimum = size - ((size % limit) || limit) + 1;
+            //ComputethenewcurrentMinimum
+            letcurrentMinimum=(this.props.currentMinimum+limit*direction);
+            if(currentMinimum>size){
+                currentMinimum=1;
+            }elseif((currentMinimum<1)&&(limit===1)){
+                currentMinimum=size;
+            }elseif((currentMinimum<1)&&(limit>1)){
+                currentMinimum=size-((size%limit)||limit)+1;
             }
 
-            // The re-rendering of the pager must be done before the trigger of
-            // event 'pager-changed' as the rendering may enable the pager
-            // (and a common use is to disable the pager when this event is
-            // triggered, and to re-enable it when the data have been reloaded).
-            this._updateAndDisable(currentMinimum, limit);
+            //There-renderingofthepagermustbedonebeforethetriggerof
+            //event'pager-changed'astherenderingmayenablethepager
+            //(andacommonuseistodisablethepagerwhenthiseventis
+            //triggered,andtore-enableitwhenthedatahavebeenreloaded).
+            this._updateAndDisable(currentMinimum,limit);
         }
 
         /**
-         * Save the state from the content of the input
-         * @private
-         * @param {string} value the new raw pager value
-         * @returns {Promise}
+         *Savethestatefromthecontentoftheinput
+         *@private
+         *@param{string}valuethenewrawpagervalue
+         *@returns{Promise}
          */
-        async _saveValue(value) {
-            try {
-                await this.props.validate();
-            } catch (err) {
+        async_saveValue(value){
+            try{
+                awaitthis.props.validate();
+            }catch(err){
                 return;
             }
-            const [min, max] = value.trim().split(/\s*[\-\s,;]\s*/);
+            const[min,max]=value.trim().split(/\s*[\-\s,;]\s*/);
 
-            let currentMinimum = Math.max(Math.min(parseInt(min, 10), this.props.size), 1);
-            let maximum = max ? Math.max(Math.min(parseInt(max, 10), this.props.size), 1) : min;
+            letcurrentMinimum=Math.max(Math.min(parseInt(min,10),this.props.size),1);
+            letmaximum=max?Math.max(Math.min(parseInt(max,10),this.props.size),1):min;
 
-            if (
-                !isNaN(currentMinimum) &&
-                !isNaN(maximum) &&
-                currentMinimum <= maximum
-            ) {
-                const limit = Math.max(maximum - currentMinimum) + 1;
-                this._updateAndDisable(currentMinimum, limit);
+            if(
+                !isNaN(currentMinimum)&&
+                !isNaN(maximum)&&
+                currentMinimum<=maximum
+            ){
+                constlimit=Math.max(maximum-currentMinimum)+1;
+                this._updateAndDisable(currentMinimum,limit);
             }
         }
 
         /**
-         * Commits the current input value. There are two scenarios:
-         * - the value is the same: the pager toggles back to readonly
-         * - the value changed: the pager is disabled to prevent furtherchanges
-         * Either way the "pager-changed" event is triggered to reload the
-         * view.
-         * @private
-         * @param {number} currentMinimum
-         * @param {number} limit
+         *Commitsthecurrentinputvalue.Therearetwoscenarios:
+         *-thevalueisthesame:thepagertogglesbacktoreadonly
+         *-thevaluechanged:thepagerisdisabledtopreventfurtherchanges
+         *Eitherwaythe"pager-changed"eventistriggeredtoreloadthe
+         *view.
+         *@private
+         *@param{number}currentMinimum
+         *@param{number}limit
          */
-        _updateAndDisable(currentMinimum, limit) {
-            if (
-                currentMinimum !== this.props.currentMinimum ||
-                limit !== this.props.limit
-            ) {
-                this.state.disabled = true;
-            } else {
-                // In this case we want to trigger an update, but since it will
-                // not re-render the pager (current props === next props) we
-                // have to disable the edition manually here.
-                this.state.editing = false;
+        _updateAndDisable(currentMinimum,limit){
+            if(
+                currentMinimum!==this.props.currentMinimum||
+                limit!==this.props.limit
+            ){
+                this.state.disabled=true;
+            }else{
+                //Inthiscasewewanttotriggeranupdate,butsinceitwill
+                //notre-renderthepager(currentprops===nextprops)we
+                //havetodisabletheeditionmanuallyhere.
+                this.state.editing=false;
             }
-            this.trigger('pager-changed', { currentMinimum, limit });
+            this.trigger('pager-changed',{currentMinimum,limit});
         }
 
         //---------------------------------------------------------------------
-        // Handlers
+        //Handlers
         //---------------------------------------------------------------------
 
         /**
-         * @private
+         *@private
          */
-        _onEdit() {
-            if (
-                this.props.editable && // editable
-                !this.state.editing && // not already editing
-                !this.state.disabled // not being changed already
-            ) {
-                this.state.editing = true;
+        _onEdit(){
+            if(
+                this.props.editable&&//editable
+                !this.state.editing&&//notalreadyediting
+                !this.state.disabled//notbeingchangedalready
+            ){
+                this.state.editing=true;
             }
         }
 
         /**
-         * @private
-         * @param {InputEvent} ev
+         *@private
+         *@param{InputEvent}ev
          */
-        _onValueChange(ev) {
+        _onValueChange(ev){
             this._saveValue(ev.currentTarget.value);
-            if (!this.state.disabled) {
+            if(!this.state.disabled){
                 ev.preventDefault();
             }
         }
 
         /**
-         * @private
-         * @param {KeyboardEvent} ev
+         *@private
+         *@param{KeyboardEvent}ev
          */
-        _onValueKeydown(ev) {
-            switch (ev.key) {
-                case 'Enter':
+        _onValueKeydown(ev){
+            switch(ev.key){
+                case'Enter':
                     ev.preventDefault();
                     ev.stopPropagation();
                     this._saveValue(ev.currentTarget.value);
                     break;
-                case 'Escape':
+                case'Escape':
                     ev.preventDefault();
                     ev.stopPropagation();
-                    this.state.editing = false;
+                    this.state.editing=false;
                     break;
             }
         }
     }
 
-    Pager.defaultProps = {
-        editable: true,
-        validate: async () => { },
-        withAccessKey: true,
+    Pager.defaultProps={
+        editable:true,
+        validate:async()=>{},
+        withAccessKey:true,
     };
-    Pager.props = {
-        currentMinimum: { type: Number, optional: 1 },
-        editable: Boolean,
-        limit: { validate: l => !isNaN(l), optional: 1 },
-        size: { type: Number, optional: 1 },
-        validate: Function,
-        withAccessKey: Boolean,
+    Pager.props={
+        currentMinimum:{type:Number,optional:1},
+        editable:Boolean,
+        limit:{validate:l=>!isNaN(l),optional:1},
+        size:{type:Number,optional:1},
+        validate:Function,
+        withAccessKey:Boolean,
     };
-    Pager.template = 'web.Pager';
+    Pager.template='web.Pager';
 
-    return Pager;
+    returnPager;
 });

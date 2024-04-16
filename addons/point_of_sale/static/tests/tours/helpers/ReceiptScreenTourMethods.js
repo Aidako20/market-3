@@ -1,87 +1,87 @@
-flectra.define('point_of_sale.tour.ReceiptScreenTourMethods', function (require) {
-    'use strict';
+flectra.define('point_of_sale.tour.ReceiptScreenTourMethods',function(require){
+    'usestrict';
 
-    const { createTourMethods } = require('point_of_sale.tour.utils');
+    const{createTourMethods}=require('point_of_sale.tour.utils');
 
-    class Do {
-        clickNextOrder() {
-            return [
+    classDo{
+        clickNextOrder(){
+            return[
                 {
-                    content: 'go to next screen',
-                    trigger: '.receipt-screen .button.next.highlight',
+                    content:'gotonextscreen',
+                    trigger:'.receipt-screen.button.next.highlight',
                 },
             ];
         }
-        setEmail(email) {
-            return [
+        setEmail(email){
+            return[
                 {
-                    trigger: '.receipt-screen .input-email input',
-                    run: `text ${email}`,
+                    trigger:'.receipt-screen.input-emailinput',
+                    run:`text${email}`,
                 },
             ];
         }
-        clickSend(isHighlighted = true) {
-            return [
+        clickSend(isHighlighted=true){
+            return[
                 {
-                    trigger: `.receipt-screen .input-email .send${isHighlighted ? '.highlight' : ''}`,
-                },
-            ];
-        }
-    }
-
-    class Check {
-        isShown() {
-            return [
-                {
-                    content: 'receipt screen is shown',
-                    trigger: '.pos .receipt-screen',
-                    run: () => {},
-                },
-            ];
-        }
-
-        receiptIsThere() {
-            return [
-                {
-                    content: 'there should be the receipt',
-                    trigger: '.receipt-screen .pos-receipt',
-                    run: () => {},
-                },
-            ];
-        }
-
-        totalAmountContains(value) {
-            return [
-                {
-                    trigger: `.receipt-screen .top-content h1:contains("${value}")`,
-                    run: () => {},
-                },
-            ];
-        }
-
-        emailIsSuccessful() {
-            return [
-                {
-                    trigger: `.receipt-screen .notice.successful`,
-                    run: () => {},
-                },
-            ];
-        }
-        discountAmountIs(value) {
-            return [
-                {
-                    trigger: `.pos-receipt>div:contains("Discounts")>span:contains("${value}")`,
-                    run: () => {},
+                    trigger:`.receipt-screen.input-email.send${isHighlighted?'.highlight':''}`,
                 },
             ];
         }
     }
 
-    class Execute {
-        nextOrder() {
-            return [...this._check.isShown(), ...this._do.clickNextOrder()];
+    classCheck{
+        isShown(){
+            return[
+                {
+                    content:'receiptscreenisshown',
+                    trigger:'.pos.receipt-screen',
+                    run:()=>{},
+                },
+            ];
+        }
+
+        receiptIsThere(){
+            return[
+                {
+                    content:'thereshouldbethereceipt',
+                    trigger:'.receipt-screen.pos-receipt',
+                    run:()=>{},
+                },
+            ];
+        }
+
+        totalAmountContains(value){
+            return[
+                {
+                    trigger:`.receipt-screen.top-contenth1:contains("${value}")`,
+                    run:()=>{},
+                },
+            ];
+        }
+
+        emailIsSuccessful(){
+            return[
+                {
+                    trigger:`.receipt-screen.notice.successful`,
+                    run:()=>{},
+                },
+            ];
+        }
+        discountAmountIs(value){
+            return[
+                {
+                    trigger:`.pos-receipt>div:contains("Discounts")>span:contains("${value}")`,
+                    run:()=>{},
+                },
+            ];
         }
     }
 
-    return createTourMethods('ReceiptScreen', Do, Check, Execute);
+    classExecute{
+        nextOrder(){
+            return[...this._check.isShown(),...this._do.clickNextOrder()];
+        }
+    }
+
+    returncreateTourMethods('ReceiptScreen',Do,Check,Execute);
 });

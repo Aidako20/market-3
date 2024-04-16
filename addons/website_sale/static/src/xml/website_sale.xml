@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 
-<templates xml:space="preserve">
+<templatesxml:space="preserve">
 
-    <t t-name="productVideo">
-        <div class="embed-responsive embed-responsive-16by9 mt-2" t-if="embedCode">
-            <t t-raw="embedCode"/>
+    <tt-name="productVideo">
+        <divclass="embed-responsiveembed-responsive-16by9mt-2"t-if="embedCode">
+            <tt-raw="embedCode"/>
         </div>
     </t>
 

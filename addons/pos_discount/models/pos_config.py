@@ -1,30 +1,30 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class PosConfig(models.Model):
-    _inherit = 'pos.config'
+classPosConfig(models.Model):
+    _inherit='pos.config'
 
-    iface_discount = fields.Boolean(string='Order Discounts', help='Allow the cashier to give discounts on the whole order.')
-    discount_pc = fields.Float(string='Discount Percentage', help='The default discount percentage', default=10.0)
-    discount_product_id = fields.Many2one('product.product', string='Discount Product',
-        domain="[('sale_ok', '=', True)]", help='The product used to model the discount.')
+    iface_discount=fields.Boolean(string='OrderDiscounts',help='Allowthecashiertogivediscountsonthewholeorder.')
+    discount_pc=fields.Float(string='DiscountPercentage',help='Thedefaultdiscountpercentage',default=10.0)
+    discount_product_id=fields.Many2one('product.product',string='DiscountProduct',
+        domain="[('sale_ok','=',True)]",help='Theproductusedtomodelthediscount.')
 
     @api.onchange('company_id','module_pos_discount')
-    def _default_discount_product_id(self):
-        product = self.env.ref("point_of_sale.product_product_consumable", raise_if_not_found=False)
-        self.discount_product_id = product if self.module_pos_discount and product and (not product.company_id or product.company_id == self.company_id) else False
+    def_default_discount_product_id(self):
+        product=self.env.ref("point_of_sale.product_product_consumable",raise_if_not_found=False)
+        self.discount_product_id=productifself.module_pos_discountandproductand(notproduct.company_idorproduct.company_id==self.company_id)elseFalse
 
     @api.model
-    def _default_discount_value_on_module_install(self):
-        configs = self.env['pos.config'].search([])
-        open_configs = (
+    def_default_discount_value_on_module_install(self):
+        configs=self.env['pos.config'].search([])
+        open_configs=(
             self.env['pos.session']
-            .search(['|', ('state', '!=', 'closed'), ('rescue', '=', True)])
+            .search(['|',('state','!=','closed'),('rescue','=',True)])
             .mapped('config_id')
         )
-        # Do not modify configs where an opened session exists.
-        for conf in (configs - open_configs):
+        #Donotmodifyconfigswhereanopenedsessionexists.
+        forconfin(configs-open_configs):
             conf._default_discount_product_id()

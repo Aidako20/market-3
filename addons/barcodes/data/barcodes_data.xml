@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<flectra noupdate="1">
-    	<record id="default_barcode_nomenclature" model="barcode.nomenclature">
-            <field name="name">Default Nomenclature</field>
+<?xmlversion="1.0"encoding="utf-8"?>
+<flectranoupdate="1">
+    	<recordid="default_barcode_nomenclature"model="barcode.nomenclature">
+            <fieldname="name">DefaultNomenclature</field>
         </record>
 
-        <record id="barcode_rule_product" model="barcode.rule">
-            <field name="name">Product Barcodes</field>
-            <field name="barcode_nomenclature_id" ref="default_barcode_nomenclature"/>
-            <field name="sequence">90</field>
-            <field name="type">product</field>
-            <field name="encoding">any</field>
-            <field name="pattern">.*</field>
+        <recordid="barcode_rule_product"model="barcode.rule">
+            <fieldname="name">ProductBarcodes</field>
+            <fieldname="barcode_nomenclature_id"ref="default_barcode_nomenclature"/>
+            <fieldname="sequence">90</field>
+            <fieldname="type">product</field>
+            <fieldname="encoding">any</field>
+            <fieldname="pattern">.*</field>
         </record>
 </flectra>

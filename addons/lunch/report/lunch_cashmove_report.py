@@ -1,50 +1,50 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, tools, _
+fromflectraimportapi,fields,models,tools,_
 
 
-class CashmoveReport(models.Model):
-    _name = "lunch.cashmove.report"
-    _description = 'Cashmoves report'
-    _auto = False
-    _order = "date desc"
+classCashmoveReport(models.Model):
+    _name="lunch.cashmove.report"
+    _description='Cashmovesreport'
+    _auto=False
+    _order="datedesc"
 
-    id = fields.Integer('ID')
-    amount = fields.Float('Amount')
-    date = fields.Date('Date')
-    currency_id = fields.Many2one('res.currency', string='Currency')
-    user_id = fields.Many2one('res.users', string='User')
-    description = fields.Text('Description')
+    id=fields.Integer('ID')
+    amount=fields.Float('Amount')
+    date=fields.Date('Date')
+    currency_id=fields.Many2one('res.currency',string='Currency')
+    user_id=fields.Many2one('res.users',string='User')
+    description=fields.Text('Description')
 
-    def name_get(self):
-        return [(cashmove.id, '%s %s' % (_('Lunch Cashmove'), '#%d' % cashmove.id)) for cashmove in self]
+    defname_get(self):
+        return[(cashmove.id,'%s%s'%(_('LunchCashmove'),'#%d'%cashmove.id))forcashmoveinself]
 
-    def init(self):
-        tools.drop_view_if_exists(self._cr, self._table)
+    definit(self):
+        tools.drop_view_if_exists(self._cr,self._table)
 
         self._cr.execute("""
-            CREATE or REPLACE view %s as (
+            CREATEorREPLACEview%sas(
                 SELECT
-                    lc.id as id,
-                    lc.amount as amount,
-                    lc.date as date,
-                    lc.currency_id as currency_id,
-                    lc.user_id as user_id,
-                    lc.description as description
-                FROM lunch_cashmove lc
-                UNION ALL
+                    lc.idasid,
+                    lc.amountasamount,
+                    lc.dateasdate,
+                    lc.currency_idascurrency_id,
+                    lc.user_idasuser_id,
+                    lc.descriptionasdescription
+                FROMlunch_cashmovelc
+                UNIONALL
                 SELECT
-                    -lol.id as id,
-                    -lol.price as amount,
-                    lol.date as date,
-                    lol.currency_id as currency_id,
-                    lol.user_id as user_id,
-                    format('Order: %%s x %%s %%s', lol.quantity::text, lp.name, lol.display_toppings) as description
-                FROM lunch_order lol
-                JOIN lunch_product lp ON lp.id = lol.product_id
+                    -lol.idasid,
+                    -lol.priceasamount,
+                    lol.dateasdate,
+                    lol.currency_idascurrency_id,
+                    lol.user_idasuser_id,
+                    format('Order:%%sx%%s%%s',lol.quantity::text,lp.name,lol.display_toppings)asdescription
+                FROMlunch_orderlol
+                JOINlunch_productlpONlp.id=lol.product_id
                 WHERE
-                    lol.state in ('ordered', 'confirmed')
-                    AND lol.active = True
+                    lol.statein('ordered','confirmed')
+                    ANDlol.active=True
             );
-        """ % self._table)
+        """%self._table)

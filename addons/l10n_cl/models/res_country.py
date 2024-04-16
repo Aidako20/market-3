@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import fields, models
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportfields,models
 
 
-class ResPartner(models.Model):
-    _name = 'res.country'
-    _inherit = 'res.country'
+classResPartner(models.Model):
+    _name='res.country'
+    _inherit='res.country'
 
-    l10n_cl_customs_code = fields.Char('Customs Code')
-    l10n_cl_customs_name = fields.Char('Customs Name')
-    l10n_cl_customs_abbreviation = fields.Char('Customs Abbreviation')
+    l10n_cl_customs_code=fields.Char('CustomsCode')
+    l10n_cl_customs_name=fields.Char('CustomsName')
+    l10n_cl_customs_abbreviation=fields.Char('CustomsAbbreviation')

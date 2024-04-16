@@ -1,46 +1,46 @@
-flectra.define('website_sale.add_product', function (require) {
-'use strict';
+flectra.define('website_sale.add_product',function(require){
+'usestrict';
 
-var core = require('web.core');
-var wUtils = require('website.utils');
-var WebsiteNewMenu = require('website.newMenu');
+varcore=require('web.core');
+varwUtils=require('website.utils');
+varWebsiteNewMenu=require('website.newMenu');
 
-var _t = core._t;
+var_t=core._t;
 
 WebsiteNewMenu.include({
-    actions: _.extend({}, WebsiteNewMenu.prototype.actions || {}, {
-        new_product: '_createNewProduct',
+    actions:_.extend({},WebsiteNewMenu.prototype.actions||{},{
+        new_product:'_createNewProduct',
     }),
 
     //--------------------------------------------------------------------------
-    // Actions
+    //Actions
     //--------------------------------------------------------------------------
 
     /**
-     * Asks the user information about a new product to create, then creates it
-     * and redirects the user to this new product.
+     *Askstheuserinformationaboutanewproducttocreate,thencreatesit
+     *andredirectstheusertothisnewproduct.
      *
-     * @private
-     * @returns {Promise} Unresolved if there is a redirection
+     *@private
+     *@returns{Promise}Unresolvedifthereisaredirection
      */
-    _createNewProduct: function () {
-        var self = this;
-        return wUtils.prompt({
-            id: "editor_new_product",
-            window_title: _t("New Product"),
-            input: _t("Name"),
-        }).then(function (result) {
-            if (!result.val) {
+    _createNewProduct:function(){
+        varself=this;
+        returnwUtils.prompt({
+            id:"editor_new_product",
+            window_title:_t("NewProduct"),
+            input:_t("Name"),
+        }).then(function(result){
+            if(!result.val){
                 return;
             }
-            return self._rpc({
-                route: '/shop/add_product',
-                params: {
-                    name: result.val,
+            returnself._rpc({
+                route:'/shop/add_product',
+                params:{
+                    name:result.val,
                 },
-            }).then(function (url) {
-                window.location.href = url;
-                return new Promise(function () {});
+            }).then(function(url){
+                window.location.href=url;
+                returnnewPromise(function(){});
             });
         });
     },
@@ -49,650 +49,650 @@ WebsiteNewMenu.include({
 
 //==============================================================================
 
-flectra.define('website_sale.editor', function (require) {
-'use strict';
+flectra.define('website_sale.editor',function(require){
+'usestrict';
 
-var options = require('web_editor.snippets.options');
-var publicWidget = require('web.public.widget');
-const {Class: EditorMenuBar} = require('web_editor.editor');
-const {qweb} = require('web.core');
+varoptions=require('web_editor.snippets.options');
+varpublicWidget=require('web.public.widget');
+const{Class:EditorMenuBar}=require('web_editor.editor');
+const{qweb}=require('web.core');
 
 EditorMenuBar.include({
-    custom_events: Object.assign(EditorMenuBar.prototype.custom_events, {
-        get_ribbons: '_onGetRibbons',
-        get_ribbon_classes: '_onGetRibbonClasses',
-        delete_ribbon: '_onDeleteRibbon',
-        set_ribbon: '_onSetRibbon',
-        set_product_ribbon: '_onSetProductRibbon',
+    custom_events:Object.assign(EditorMenuBar.prototype.custom_events,{
+        get_ribbons:'_onGetRibbons',
+        get_ribbon_classes:'_onGetRibbonClasses',
+        delete_ribbon:'_onDeleteRibbon',
+        set_ribbon:'_onSetRibbon',
+        set_product_ribbon:'_onSetProductRibbon',
     }),
 
     /**
-     * @override
+     *@override
      */
-    async willStart() {
-        const _super = this._super.bind(this);
-        let ribbons = [];
-        if (this._isProductListPage()) {
-            ribbons = await this._rpc({
-                model: 'product.ribbon',
-                method: 'search_read',
-                fields: ['id', 'html', 'bg_color', 'text_color', 'html_class'],
+    asyncwillStart(){
+        const_super=this._super.bind(this);
+        letribbons=[];
+        if(this._isProductListPage()){
+            ribbons=awaitthis._rpc({
+                model:'product.ribbon',
+                method:'search_read',
+                fields:['id','html','bg_color','text_color','html_class'],
             });
         }
-        this.ribbons = Object.fromEntries(ribbons.map(ribbon => [ribbon.id, ribbon]));
-        this.originalRibbons = Object.assign({}, this.ribbons);
-        this.productTemplatesRibbons = [];
-        this.deletedRibbonClasses = '';
-        return _super(...arguments);
+        this.ribbons=Object.fromEntries(ribbons.map(ribbon=>[ribbon.id,ribbon]));
+        this.originalRibbons=Object.assign({},this.ribbons);
+        this.productTemplatesRibbons=[];
+        this.deletedRibbonClasses='';
+        return_super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    async save() {
-        const _super = this._super.bind(this);
-        await this._saveRibbons();
-        return _super(...arguments);
+    asyncsave(){
+        const_super=this._super.bind(this);
+        awaitthis._saveRibbons();
+        return_super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Saves the ribbons in the database.
+     *Savestheribbonsinthedatabase.
      *
-     * @private
+     *@private
      */
-    async _saveRibbons() {
-        if (!this._isProductListPage()) {
+    async_saveRibbons(){
+        if(!this._isProductListPage()){
             return;
         }
-        const originalIds = Object.keys(this.originalRibbons).map(id => parseInt(id));
-        const currentIds = Object.keys(this.ribbons).map(id => parseInt(id));
+        constoriginalIds=Object.keys(this.originalRibbons).map(id=>parseInt(id));
+        constcurrentIds=Object.keys(this.ribbons).map(id=>parseInt(id));
 
-        const ribbons = Object.values(this.ribbons);
-        const created = ribbons.filter(ribbon => !originalIds.includes(ribbon.id));
-        const deletedIds = originalIds.filter(id => !currentIds.includes(id));
-        const modified = ribbons.filter(ribbon => {
-            if (created.includes(ribbon)) {
-                return false;
+        constribbons=Object.values(this.ribbons);
+        constcreated=ribbons.filter(ribbon=>!originalIds.includes(ribbon.id));
+        constdeletedIds=originalIds.filter(id=>!currentIds.includes(id));
+        constmodified=ribbons.filter(ribbon=>{
+            if(created.includes(ribbon)){
+                returnfalse;
             }
-            const original = this.originalRibbons[ribbon.id];
-            return Object.entries(ribbon).some(([key, value]) => value !== original[key]);
+            constoriginal=this.originalRibbons[ribbon.id];
+            returnObject.entries(ribbon).some(([key,value])=>value!==original[key]);
         });
 
-        const proms = [];
-        let createdRibbonIds;
-        if (created.length > 0) {
+        constproms=[];
+        letcreatedRibbonIds;
+        if(created.length>0){
             proms.push(this._rpc({
-                method: 'create',
-                model: 'product.ribbon',
-                args: [created.map(ribbon => {
-                    ribbon = Object.assign({}, ribbon);
-                    delete ribbon.id;
-                    return ribbon;
+                method:'create',
+                model:'product.ribbon',
+                args:[created.map(ribbon=>{
+                    ribbon=Object.assign({},ribbon);
+                    deleteribbon.id;
+                    returnribbon;
                 })],
-            }).then(ids => createdRibbonIds = ids));
+            }).then(ids=>createdRibbonIds=ids));
         }
 
-        modified.forEach(ribbon => proms.push(this._rpc({
-            method: 'write',
-            model: 'product.ribbon',
-            args: [[ribbon.id], ribbon],
+        modified.forEach(ribbon=>proms.push(this._rpc({
+            method:'write',
+            model:'product.ribbon',
+            args:[[ribbon.id],ribbon],
         })));
 
-        if (deletedIds.length > 0) {
+        if(deletedIds.length>0){
             proms.push(this._rpc({
-                method: 'unlink',
-                model: 'product.ribbon',
-                args: [deletedIds],
+                method:'unlink',
+                model:'product.ribbon',
+                args:[deletedIds],
             }));
         }
 
-        await Promise.all(proms);
-        const localToServer = Object.assign(
+        awaitPromise.all(proms);
+        constlocalToServer=Object.assign(
             this.ribbons,
-            Object.fromEntries(created.map((ribbon, index) => [ribbon.id, {id: createdRibbonIds[index]}])),
-            {'false': {id: false}},
+            Object.fromEntries(created.map((ribbon,index)=>[ribbon.id,{id:createdRibbonIds[index]}])),
+            {'false':{id:false}},
         );
 
-        // Building the final template to ribbon-id map
-        const finalTemplateRibbons = this.productTemplatesRibbons.reduce((acc, {templateId, ribbonId}) => {
-            acc[templateId] = ribbonId;
-            return acc;
-        }, {});
-        // Inverting the relationship so that we have all templates that have the same ribbon to reduce RPCs
-        const ribbonTemplates = Object.entries(finalTemplateRibbons).reduce((acc, [templateId, ribbonId]) => {
-            if (!acc[ribbonId]) {
-                acc[ribbonId] = [];
+        //Buildingthefinaltemplatetoribbon-idmap
+        constfinalTemplateRibbons=this.productTemplatesRibbons.reduce((acc,{templateId,ribbonId})=>{
+            acc[templateId]=ribbonId;
+            returnacc;
+        },{});
+        //InvertingtherelationshipsothatwehavealltemplatesthathavethesameribbontoreduceRPCs
+        constribbonTemplates=Object.entries(finalTemplateRibbons).reduce((acc,[templateId,ribbonId])=>{
+            if(!acc[ribbonId]){
+                acc[ribbonId]=[];
             }
             acc[ribbonId].push(parseInt(templateId));
-            return acc;
-        }, {});
-        const setProductTemplateRibbons = Object.entries(ribbonTemplates)
-            // If the ribbonId that the template had no longer exists, remove the ribbon (id = false)
-            .map(([ribbonId, templateIds]) => {
-                const id = currentIds.includes(parseInt(ribbonId)) ? ribbonId : false;
-                return [id, templateIds];
-            }).map(([ribbonId, templateIds]) => this._rpc({
-                method: 'write',
-                model: 'product.template',
-                args: [templateIds, {'website_ribbon_id': localToServer[ribbonId].id}],
+            returnacc;
+        },{});
+        constsetProductTemplateRibbons=Object.entries(ribbonTemplates)
+            //IftheribbonIdthatthetemplatehadnolongerexists,removetheribbon(id=false)
+            .map(([ribbonId,templateIds])=>{
+                constid=currentIds.includes(parseInt(ribbonId))?ribbonId:false;
+                return[id,templateIds];
+            }).map(([ribbonId,templateIds])=>this._rpc({
+                method:'write',
+                model:'product.template',
+                args:[templateIds,{'website_ribbon_id':localToServer[ribbonId].id}],
             }));
-        return Promise.all(setProductTemplateRibbons);
+        returnPromise.all(setProductTemplateRibbons);
     },
     /**
-     * Checks whether the current page is the product list.
+     *Checkswhetherthecurrentpageistheproductlist.
      *
-     * @private
+     *@private
      */
-    _isProductListPage() {
-        return $('#products_grid').length !== 0;
+    _isProductListPage(){
+        return$('#products_grid').length!==0;
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Returns a copy of this.ribbons through a callback.
+     *Returnsacopyofthis.ribbonsthroughacallback.
      *
-     * @private
+     *@private
      */
-    _onGetRibbons(ev) {
-        ev.data.callback(Object.assign({}, this.ribbons));
+    _onGetRibbons(ev){
+        ev.data.callback(Object.assign({},this.ribbons));
     },
     /**
-     * Returns all ribbon classes, current and deleted, so they can be removed.
+     *Returnsallribbonclasses,currentanddeleted,sotheycanberemoved.
      *
-     * @private
+     *@private
      */
-    _onGetRibbonClasses(ev) {
-        const classes = Object.values(this.ribbons).reduce((classes, ribbon) => {
-            return classes + ` ${ribbon.html_class}`;
-        }, '') + this.deletedRibbonClasses;
+    _onGetRibbonClasses(ev){
+        constclasses=Object.values(this.ribbons).reduce((classes,ribbon)=>{
+            returnclasses+`${ribbon.html_class}`;
+        },'')+this.deletedRibbonClasses;
         ev.data.callback(classes);
     },
     /**
-     * Deletes a ribbon.
+     *Deletesaribbon.
      *
-     * @private
+     *@private
      */
-    _onDeleteRibbon(ev) {
-        this.deletedRibbonClasses += ` ${this.ribbons[ev.data.id].html_class}`;
-        delete this.ribbons[ev.data.id];
+    _onDeleteRibbon(ev){
+        this.deletedRibbonClasses+=`${this.ribbons[ev.data.id].html_class}`;
+        deletethis.ribbons[ev.data.id];
     },
     /**
-     * Sets a ribbon;
+     *Setsaribbon;
      *
-     * @private
+     *@private
      */
-    _onSetRibbon(ev) {
-        const {ribbon} = ev.data;
-        const previousRibbon = this.ribbons[ribbon.id];
-        if (previousRibbon) {
-            this.deletedRibbonClasses += ` ${previousRibbon.html_class}`;
+    _onSetRibbon(ev){
+        const{ribbon}=ev.data;
+        constpreviousRibbon=this.ribbons[ribbon.id];
+        if(previousRibbon){
+            this.deletedRibbonClasses+=`${previousRibbon.html_class}`;
         }
-        this.ribbons[ribbon.id] = ribbon;
+        this.ribbons[ribbon.id]=ribbon;
     },
     /**
-     * Sets which ribbon is used by a product template.
+     *Setswhichribbonisusedbyaproducttemplate.
      *
-     * @private
+     *@private
      */
-    _onSetProductRibbon(ev) {
-        const {templateId, ribbonId} = ev.data;
-        this.productTemplatesRibbons.push({templateId, ribbonId});
+    _onSetProductRibbon(ev){
+        const{templateId,ribbonId}=ev.data;
+        this.productTemplatesRibbons.push({templateId,ribbonId});
     },
 });
 
-publicWidget.registry.websiteSaleCurrency = publicWidget.Widget.extend({
-    selector: '.oe_website_sale',
-    disabledInEditableMode: false,
-    edit_events: {
-        'click .oe_currency_value:o_editable': '_onCurrencyValueClick',
+publicWidget.registry.websiteSaleCurrency=publicWidget.Widget.extend({
+    selector:'.oe_website_sale',
+    disabledInEditableMode:false,
+    edit_events:{
+        'click.oe_currency_value:o_editable':'_onCurrencyValueClick',
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onCurrencyValueClick: function (ev) {
+    _onCurrencyValueClick:function(ev){
         $(ev.currentTarget).selectContent();
     },
 });
 
-function reload() {
-    if (window.location.href.match(/\?enable_editor/)) {
+functionreload(){
+    if(window.location.href.match(/\?enable_editor/)){
         window.location.reload();
-    } else {
-        window.location.href = window.location.href.replace(/\?(enable_editor=1&)?|#.*|$/, '?enable_editor=1&');
+    }else{
+        window.location.href=window.location.href.replace(/\?(enable_editor=1&)?|#.*|$/,'?enable_editor=1&');
     }
 }
 
-options.registry.WebsiteSaleGridLayout = options.Class.extend({
+options.registry.WebsiteSaleGridLayout=options.Class.extend({
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        this.ppg = parseInt(this.$target.closest('[data-ppg]').data('ppg'));
-        this.ppr = parseInt(this.$target.closest('[data-ppr]').data('ppr'));
-        return this._super.apply(this, arguments);
+    start:function(){
+        this.ppg=parseInt(this.$target.closest('[data-ppg]').data('ppg'));
+        this.ppr=parseInt(this.$target.closest('[data-ppr]').data('ppr'));
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    onFocus: function () {
-        var listLayoutEnabled = this.$target.closest('#products_grid').hasClass('o_wsale_layout_list');
-        this.$el.filter('.o_wsale_ppr_submenu').toggleClass('d-none', listLayoutEnabled);
+    onFocus:function(){
+        varlistLayoutEnabled=this.$target.closest('#products_grid').hasClass('o_wsale_layout_list');
+        this.$el.filter('.o_wsale_ppr_submenu').toggleClass('d-none',listLayoutEnabled);
     },
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    setPpg: function (previewMode, widgetValue, params) {
-        const PPG_LIMIT = 10000;
-        const ppg = parseInt(widgetValue);
-        if (!ppg || ppg < 1) {
-            return false;
+    setPpg:function(previewMode,widgetValue,params){
+        constPPG_LIMIT=10000;
+        constppg=parseInt(widgetValue);
+        if(!ppg||ppg<1){
+            returnfalse;
         }
-        this.ppg = Math.min(ppg, PPG_LIMIT);
-        return this._rpc({
-            route: '/shop/change_ppg',
-            params: {
-                'ppg': this.ppg,
+        this.ppg=Math.min(ppg,PPG_LIMIT);
+        returnthis._rpc({
+            route:'/shop/change_ppg',
+            params:{
+                'ppg':this.ppg,
             },
-        }).then(() => reload());
+        }).then(()=>reload());
     },
     /**
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    setPpr: function (previewMode, widgetValue, params) {
-        this.ppr = parseInt(widgetValue);
+    setPpr:function(previewMode,widgetValue,params){
+        this.ppr=parseInt(widgetValue);
         this._rpc({
-            route: '/shop/change_ppr',
-            params: {
-                'ppr': this.ppr,
+            route:'/shop/change_ppr',
+            params:{
+                'ppr':this.ppr,
             },
         }).then(reload);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _computeWidgetState: function (methodName, params) {
-        switch (methodName) {
-            case 'setPpg': {
-                return this.ppg;
+    _computeWidgetState:function(methodName,params){
+        switch(methodName){
+            case'setPpg':{
+                returnthis.ppg;
             }
-            case 'setPpr': {
-                return this.ppr;
+            case'setPpr':{
+                returnthis.ppr;
             }
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 });
 
-options.registry.WebsiteSaleProductsItem = options.Class.extend({
-    xmlDependencies: (options.Class.prototype.xmlDependencies || []).concat(['/website_sale/static/src/xml/website_sale_utils.xml']),
-    events: _.extend({}, options.Class.prototype.events || {}, {
-        'mouseenter .o_wsale_soptions_menu_sizes table': '_onTableMouseEnter',
-        'mouseleave .o_wsale_soptions_menu_sizes table': '_onTableMouseLeave',
-        'mouseover .o_wsale_soptions_menu_sizes td': '_onTableItemMouseEnter',
-        'click .o_wsale_soptions_menu_sizes td': '_onTableItemClick',
+options.registry.WebsiteSaleProductsItem=options.Class.extend({
+    xmlDependencies:(options.Class.prototype.xmlDependencies||[]).concat(['/website_sale/static/src/xml/website_sale_utils.xml']),
+    events:_.extend({},options.Class.prototype.events||{},{
+        'mouseenter.o_wsale_soptions_menu_sizestable':'_onTableMouseEnter',
+        'mouseleave.o_wsale_soptions_menu_sizestable':'_onTableMouseLeave',
+        'mouseover.o_wsale_soptions_menu_sizestd':'_onTableItemMouseEnter',
+        'click.o_wsale_soptions_menu_sizestd':'_onTableItemClick',
     }),
 
     /**
-     * @override
+     *@override
      */
-    willStart: async function () {
-        const _super = this._super.bind(this);
-        this.ppr = this.$target.closest('[data-ppr]').data('ppr');
-        this.productTemplateID = parseInt(this.$target.find('[data-oe-model="product.template"]').data('oe-id'));
-        this.ribbons = await new Promise(resolve => this.trigger_up('get_ribbons', {callback: resolve}));
-        return _super(...arguments);
+    willStart:asyncfunction(){
+        const_super=this._super.bind(this);
+        this.ppr=this.$target.closest('[data-ppr]').data('ppr');
+        this.productTemplateID=parseInt(this.$target.find('[data-oe-model="product.template"]').data('oe-id'));
+        this.ribbons=awaitnewPromise(resolve=>this.trigger_up('get_ribbons',{callback:resolve}));
+        return_super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
+    start:function(){
         this._resetRibbonDummy();
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    onFocus: function () {
-        var listLayoutEnabled = this.$target.closest('#products_grid').hasClass('o_wsale_layout_list');
+    onFocus:function(){
+        varlistLayoutEnabled=this.$target.closest('#products_grid').hasClass('o_wsale_layout_list');
         this.$el.find('.o_wsale_soptions_menu_sizes')
-            .toggleClass('d-none', listLayoutEnabled);
-        // Ribbons may have been edited or deleted in another products' option, need to make sure they're up to date
-        this.rerender = true;
+            .toggleClass('d-none',listLayoutEnabled);
+        //Ribbonsmayhavebeeneditedordeletedinanotherproducts'option,needtomakesurethey'reuptodate
+        this.rerender=true;
     },
     /**
-     * @override
+     *@override
      */
-    onBlur: function () {
-        // Since changes will not be saved unless they are validated, reset the
-        // previewed ribbon onBlur to communicate that to the user
+    onBlur:function(){
+        //Sincechangeswillnotbesavedunlesstheyarevalidated,resetthe
+        //previewedribbononBlurtocommunicatethattotheuser
         this._resetRibbonDummy();
         this._toggleEditingUI(false);
     },
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    selectStyle(previewMode, widgetValue, params) {
-        const proms = [this._super(...arguments)];
-        if (params.cssProperty === 'background-color' && params.colorNames.includes(widgetValue)) {
-            // Reset text-color when choosing a background-color class, so it uses the automatic text-color of the class.
-            proms.push(this.selectStyle(previewMode, '', {applyTo: '.o_wsale_ribbon_dummy', cssProperty: 'color'}));
+    selectStyle(previewMode,widgetValue,params){
+        constproms=[this._super(...arguments)];
+        if(params.cssProperty==='background-color'&&params.colorNames.includes(widgetValue)){
+            //Resettext-colorwhenchoosingabackground-colorclass,soitusestheautomatictext-coloroftheclass.
+            proms.push(this.selectStyle(previewMode,'',{applyTo:'.o_wsale_ribbon_dummy',cssProperty:'color'}));
         }
-        return Promise.all(proms);
+        returnPromise.all(proms);
     },
     /**
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    async setRibbon(previewMode, widgetValue, params) {
-        if (previewMode === 'reset') {
-            widgetValue = this.prevRibbonId;
-        } else {
-            this.prevRibbonId = this.$target[0].dataset.ribbonId;
+    asyncsetRibbon(previewMode,widgetValue,params){
+        if(previewMode==='reset'){
+            widgetValue=this.prevRibbonId;
+        }else{
+            this.prevRibbonId=this.$target[0].dataset.ribbonId;
         }
-        this.$target[0].dataset.ribbonId = widgetValue;
-        this.trigger_up('set_product_ribbon', {
-            templateId: this.productTemplateID,
-            ribbonId: widgetValue || false,
+        this.$target[0].dataset.ribbonId=widgetValue;
+        this.trigger_up('set_product_ribbon',{
+            templateId:this.productTemplateID,
+            ribbonId:widgetValue||false,
         });
-        const ribbon = this.ribbons[widgetValue] || {html: '', bg_color: '', text_color: '', html_class: ''};
-        const $ribbons = $(`[data-ribbon-id="${widgetValue}"] .o_ribbon:not(.o_wsale_ribbon_dummy)`);
+        constribbon=this.ribbons[widgetValue]||{html:'',bg_color:'',text_color:'',html_class:''};
+        const$ribbons=$(`[data-ribbon-id="${widgetValue}"].o_ribbon:not(.o_wsale_ribbon_dummy)`);
         $ribbons.html(ribbon.html);
-        let htmlClasses;
-        this.trigger_up('get_ribbon_classes', {callback: classes => htmlClasses = classes});
+        lethtmlClasses;
+        this.trigger_up('get_ribbon_classes',{callback:classes=>htmlClasses=classes});
         $ribbons.removeClass(htmlClasses);
 
-        $ribbons.addClass(ribbon.html_class || '');
-        $ribbons.css('color', ribbon.text_color || '');
-        $ribbons.css('background-color', ribbon.bg_color || '');
+        $ribbons.addClass(ribbon.html_class||'');
+        $ribbons.css('color',ribbon.text_color||'');
+        $ribbons.css('background-color',ribbon.bg_color||'');
 
-        if (!this.ribbons[widgetValue]) {
-            $(`[data-ribbon-id="${widgetValue}"]`).each((index, product) => delete product.dataset.ribbonId);
+        if(!this.ribbons[widgetValue]){
+            $(`[data-ribbon-id="${widgetValue}"]`).each((index,product)=>deleteproduct.dataset.ribbonId);
         }
         this._resetRibbonDummy();
         this._toggleEditingUI(false);
     },
     /**
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    editRibbon(previewMode, widgetValue, params) {
-        this.saveMethod = 'modify';
+    editRibbon(previewMode,widgetValue,params){
+        this.saveMethod='modify';
         this._toggleEditingUI(true);
     },
     /**
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    createRibbon(previewMode, widgetValue, params) {
-        this.saveMethod = 'create';
+    createRibbon(previewMode,widgetValue,params){
+        this.saveMethod='create';
         this.setRibbon(false);
-        this.$ribbon.html('Ribbon text');
-        this.$ribbon.addClass('bg-primary o_ribbon_left');
+        this.$ribbon.html('Ribbontext');
+        this.$ribbon.addClass('bg-primaryo_ribbon_left');
         this._toggleEditingUI(true);
-        this.isCreating = true;
+        this.isCreating=true;
     },
     /**
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    async deleteRibbon(previewMode, widgetValue, params) {
-        if (this.isCreating) {
-            // Ribbon doesn't exist yet, simply discard.
-            this.isCreating = false;
+    asyncdeleteRibbon(previewMode,widgetValue,params){
+        if(this.isCreating){
+            //Ribbondoesn'texistyet,simplydiscard.
+            this.isCreating=false;
             this._resetRibbonDummy();
-            return this._toggleEditingUI(false);
+            returnthis._toggleEditingUI(false);
         }
-        const {ribbonId} = this.$target[0].dataset;
-        this.trigger_up('delete_ribbon', {id: ribbonId});
-        this.ribbons = await new Promise(resolve => this.trigger_up('get_ribbons', {callback: resolve}));
-        this.rerender = true;
-        await this.setRibbon(false, ribbonId);
+        const{ribbonId}=this.$target[0].dataset;
+        this.trigger_up('delete_ribbon',{id:ribbonId});
+        this.ribbons=awaitnewPromise(resolve=>this.trigger_up('get_ribbons',{callback:resolve}));
+        this.rerender=true;
+        awaitthis.setRibbon(false,ribbonId);
     },
     /**
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    async saveRibbon(previewMode, widgetValue, params) {
-        const text = this.$ribbon.html().trim();
-        if (!text) {
+    asyncsaveRibbon(previewMode,widgetValue,params){
+        consttext=this.$ribbon.html().trim();
+        if(!text){
             return;
         }
-        const ribbon = {
-            'html': text,
-            'bg_color': this.$ribbon[0].style.backgroundColor,
-            'text_color': this.$ribbon[0].style.color,
-            'html_class': this.$ribbon.attr('class').split(' ')
-                .filter(c => !['d-none', 'o_wsale_ribbon_dummy', 'o_ribbon'].includes(c))
-                .join(' '),
+        constribbon={
+            'html':text,
+            'bg_color':this.$ribbon[0].style.backgroundColor,
+            'text_color':this.$ribbon[0].style.color,
+            'html_class':this.$ribbon.attr('class').split('')
+                .filter(c=>!['d-none','o_wsale_ribbon_dummy','o_ribbon'].includes(c))
+                .join(''),
         };
-        ribbon.id = this.saveMethod === 'modify' ? parseInt(this.$target[0].dataset.ribbonId) : Date.now();
-        this.trigger_up('set_ribbon', {ribbon: ribbon});
-        this.ribbons = await new Promise(resolve => this.trigger_up('get_ribbons', {callback: resolve}));
-        this.rerender = true;
-        await this.setRibbon(false, ribbon.id);
+        ribbon.id=this.saveMethod==='modify'?parseInt(this.$target[0].dataset.ribbonId):Date.now();
+        this.trigger_up('set_ribbon',{ribbon:ribbon});
+        this.ribbons=awaitnewPromise(resolve=>this.trigger_up('get_ribbons',{callback:resolve}));
+        this.rerender=true;
+        awaitthis.setRibbon(false,ribbon.id);
     },
     /**
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    setRibbonHtml(previewMode, widgetValue, params) {
+    setRibbonHtml(previewMode,widgetValue,params){
         this.$ribbon.html(widgetValue);
     },
     /**
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    setRibbonMode(previewMode, widgetValue, params) {
-        this.$ribbon[0].className = this.$ribbon[0].className.replace(/o_(ribbon|tag)_(left|right)/, `o_${widgetValue}_$2`);
+    setRibbonMode(previewMode,widgetValue,params){
+        this.$ribbon[0].className=this.$ribbon[0].className.replace(/o_(ribbon|tag)_(left|right)/,`o_${widgetValue}_$2`);
     },
     /**
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    setRibbonPosition(previewMode, widgetValue, params) {
-        this.$ribbon[0].className = this.$ribbon[0].className.replace(/o_(ribbon|tag)_(left|right)/, `o_$1_${widgetValue}`);
+    setRibbonPosition(previewMode,widgetValue,params){
+        this.$ribbon[0].className=this.$ribbon[0].className.replace(/o_(ribbon|tag)_(left|right)/,`o_$1_${widgetValue}`);
     },
     /**
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    changeSequence: function (previewMode, widgetValue, params) {
+    changeSequence:function(previewMode,widgetValue,params){
         this._rpc({
-            route: '/shop/change_sequence',
-            params: {
-                id: this.productTemplateID,
-                sequence: widgetValue,
+            route:'/shop/change_sequence',
+            params:{
+                id:this.productTemplateID,
+                sequence:widgetValue,
             },
         }).then(reload);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    updateUI: async function () {
-        await this._super.apply(this, arguments);
+    updateUI:asyncfunction(){
+        awaitthis._super.apply(this,arguments);
 
-        var sizeX = parseInt(this.$target.attr('colspan') || 1);
-        var sizeY = parseInt(this.$target.attr('rowspan') || 1);
+        varsizeX=parseInt(this.$target.attr('colspan')||1);
+        varsizeY=parseInt(this.$target.attr('rowspan')||1);
 
-        var $size = this.$el.find('.o_wsale_soptions_menu_sizes');
-        $size.find('tr:nth-child(-n + ' + sizeY + ') td:nth-child(-n + ' + sizeX + ')')
+        var$size=this.$el.find('.o_wsale_soptions_menu_sizes');
+        $size.find('tr:nth-child(-n+'+sizeY+')td:nth-child(-n+'+sizeX+')')
              .addClass('selected');
 
-        // Adapt size array preview to fit ppr
-        $size.find('tr td:nth-child(n + ' + parseInt(this.ppr + 1) + ')').hide();
-        if (this.rerender) {
-            this.rerender = false;
-            return this._rerenderXML();
+        //Adaptsizearraypreviewtofitppr
+        $size.find('trtd:nth-child(n+'+parseInt(this.ppr+1)+')').hide();
+        if(this.rerender){
+            this.rerender=false;
+            returnthis._rerenderXML();
         }
     },
     /**
-     * @override
+     *@override
      */
-    updateUIVisibility: async function () {
-        // Main updateUIVisibility will remove the d-none class because there are visible widgets
-        // inside of it. TODO: update this once updateUIVisibility can be used to compute visibility
-        // of arbitrary DOM elements and not just widgets.
-        const isEditing = this.$el.find('[data-name="ribbon_options"]').hasClass('d-none');
-        await this._super(...arguments);
+    updateUIVisibility:asyncfunction(){
+        //MainupdateUIVisibilitywillremovethed-noneclassbecausetherearevisiblewidgets
+        //insideofit.TODO:updatethisonceupdateUIVisibilitycanbeusedtocomputevisibility
+        //ofarbitraryDOMelementsandnotjustwidgets.
+        constisEditing=this.$el.find('[data-name="ribbon_options"]').hasClass('d-none');
+        awaitthis._super(...arguments);
         this._toggleEditingUI(isEditing);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    async _renderCustomXML(uiFragment) {
-        const $select = $(uiFragment.querySelector('.o_wsale_ribbon_select'));
-        this.ribbons = await new Promise(resolve => this.trigger_up('get_ribbons', {callback: resolve}));
-        if (!this.$ribbon) {
+    async_renderCustomXML(uiFragment){
+        const$select=$(uiFragment.querySelector('.o_wsale_ribbon_select'));
+        this.ribbons=awaitnewPromise(resolve=>this.trigger_up('get_ribbons',{callback:resolve}));
+        if(!this.$ribbon){
             this._resetRibbonDummy();
         }
-        const classes = this.$ribbon[0].className;
-        this.$ribbon[0].className = '';
-        const defaultTextColor = window.getComputedStyle(this.$ribbon[0]).color;
-        this.$ribbon[0].className = classes;
-        Object.values(this.ribbons).forEach(ribbon => {
-            const colorClasses = ribbon.html_class
-                .split(' ')
-                .filter(className => !/^o_(ribbon|tag)_(left|right)$/.test(className))
-                .join(' ');
-            $select.append(qweb.render('website_sale.ribbonSelectItem', {
+        constclasses=this.$ribbon[0].className;
+        this.$ribbon[0].className='';
+        constdefaultTextColor=window.getComputedStyle(this.$ribbon[0]).color;
+        this.$ribbon[0].className=classes;
+        Object.values(this.ribbons).forEach(ribbon=>{
+            constcolorClasses=ribbon.html_class
+                .split('')
+                .filter(className=>!/^o_(ribbon|tag)_(left|right)$/.test(className))
+                .join('');
+            $select.append(qweb.render('website_sale.ribbonSelectItem',{
                 ribbon,
                 colorClasses,
-                isTag: /o_tag_(left|right)/.test(ribbon.html_class),
-                isLeft: /o_(tag|ribbon)_left/.test(ribbon.html_class),
-                textColor: ribbon.text_color || (colorClasses ? 'currentColor' : defaultTextColor),
+                isTag:/o_tag_(left|right)/.test(ribbon.html_class),
+                isLeft:/o_(tag|ribbon)_left/.test(ribbon.html_class),
+                textColor:ribbon.text_color||(colorClasses?'currentColor':defaultTextColor),
             }));
         });
     },
     /**
-     * @override
+     *@override
      */
-    async _computeWidgetState(methodName, params) {
-        const classList = this.$ribbon[0].classList;
-        switch (methodName) {
-            case 'setRibbon':
-                return this.$target.attr('data-ribbon-id') || '';
-            case 'setRibbonHtml':
-                return this.$ribbon.html();
-            case 'setRibbonMode': {
-                if (classList.contains('o_ribbon_left') || classList.contains('o_ribbon_right')) {
-                    return 'ribbon';
+    async_computeWidgetState(methodName,params){
+        constclassList=this.$ribbon[0].classList;
+        switch(methodName){
+            case'setRibbon':
+                returnthis.$target.attr('data-ribbon-id')||'';
+            case'setRibbonHtml':
+                returnthis.$ribbon.html();
+            case'setRibbonMode':{
+                if(classList.contains('o_ribbon_left')||classList.contains('o_ribbon_right')){
+                    return'ribbon';
                 }
-                return 'tag';
+                return'tag';
             }
-            case 'setRibbonPosition': {
-                if (classList.contains('o_tag_left') || classList.contains('o_ribbon_left')) {
-                    return 'left';
+            case'setRibbonPosition':{
+                if(classList.contains('o_tag_left')||classList.contains('o_ribbon_left')){
+                    return'left';
                 }
-                return 'right';
+                return'right';
             }
         }
-        return this._super(methodName, params);
+        returnthis._super(methodName,params);
     },
     /**
-     * Toggles the UI mode between select and create/edit mode.
+     *TogglestheUImodebetweenselectandcreate/editmode.
      *
-     * @private
-     * @param {Boolean} state true to activate editing UI, false to deactivate.
+     *@private
+     *@param{Boolean}statetruetoactivateeditingUI,falsetodeactivate.
      */
-    _toggleEditingUI(state) {
-        this.$el.find('[data-name="ribbon_options"]').toggleClass('d-none', state);
-        this.$el.find('[data-name="ribbon_customize_opt"]').toggleClass('d-none', !state);
-        this.$('.o_ribbon:not(.o_wsale_ribbon_dummy)').toggleClass('d-none', state);
-        this.$ribbon.toggleClass('d-none', !state);
+    _toggleEditingUI(state){
+        this.$el.find('[data-name="ribbon_options"]').toggleClass('d-none',state);
+        this.$el.find('[data-name="ribbon_customize_opt"]').toggleClass('d-none',!state);
+        this.$('.o_ribbon:not(.o_wsale_ribbon_dummy)').toggleClass('d-none',state);
+        this.$ribbon.toggleClass('d-none',!state);
     },
     /**
-     * Creates a copy of current ribbon to manipulate for edition/creation.
+     *Createsacopyofcurrentribbontomanipulateforedition/creation.
      *
-     * @private
+     *@private
      */
-    _resetRibbonDummy() {
-        if (this.$ribbon) {
+    _resetRibbonDummy(){
+        if(this.$ribbon){
             this.$ribbon.remove();
         }
-        const $original = this.$('.o_ribbon');
-        this.$ribbon = $original.clone().addClass('d-none o_wsale_ribbon_dummy').appendTo($original.parent());
+        const$original=this.$('.o_ribbon');
+        this.$ribbon=$original.clone().addClass('d-noneo_wsale_ribbon_dummy').appendTo($original.parent());
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onTableMouseEnter: function (ev) {
+    _onTableMouseEnter:function(ev){
         $(ev.currentTarget).addClass('oe_hover');
     },
     /**
-     * @private
+     *@private
      */
-    _onTableMouseLeave: function (ev) {
+    _onTableMouseLeave:function(ev){
         $(ev.currentTarget).removeClass('oe_hover');
     },
     /**
-     * @private
+     *@private
      */
-    _onTableItemMouseEnter: function (ev) {
-        var $td = $(ev.currentTarget);
-        var $table = $td.closest("table");
-        var x = $td.index() + 1;
-        var y = $td.parent().index() + 1;
+    _onTableItemMouseEnter:function(ev){
+        var$td=$(ev.currentTarget);
+        var$table=$td.closest("table");
+        varx=$td.index()+1;
+        vary=$td.parent().index()+1;
 
-        var tr = [];
-        for (var yi = 0; yi < y; yi++) {
-            tr.push("tr:eq(" + yi + ")");
+        vartr=[];
+        for(varyi=0;yi<y;yi++){
+            tr.push("tr:eq("+yi+")");
         }
-        var $selectTr = $table.find(tr.join(","));
-        var td = [];
-        for (var xi = 0; xi < x; xi++) {
-            td.push("td:eq(" + xi + ")");
+        var$selectTr=$table.find(tr.join(","));
+        vartd=[];
+        for(varxi=0;xi<x;xi++){
+            td.push("td:eq("+xi+")");
         }
-        var $selectTd = $selectTr.find(td.join(","));
+        var$selectTd=$selectTr.find(td.join(","));
 
         $table.find("td").removeClass("select");
         $selectTd.addClass("select");
     },
     /**
-     * @private
+     *@private
      */
-    _onTableItemClick: function (ev) {
-        var $td = $(ev.currentTarget);
-        var x = $td.index() + 1;
-        var y = $td.parent().index() + 1;
+    _onTableItemClick:function(ev){
+        var$td=$(ev.currentTarget);
+        varx=$td.index()+1;
+        vary=$td.parent().index()+1;
         this._rpc({
-            route: '/shop/change_size',
-            params: {
-                id: this.productTemplateID,
-                x: x,
-                y: y,
+            route:'/shop/change_size',
+            params:{
+                id:this.productTemplateID,
+                x:x,
+                y:y,
             },
         }).then(reload);
     },

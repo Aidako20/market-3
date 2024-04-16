@@ -1,36 +1,36 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models, _
-from flectra.exceptions import ValidationError
+fromflectraimportapi,models,_
+fromflectra.exceptionsimportValidationError
 
 
-class IrConfigParameter(models.Model):
-    _inherit = 'ir.config_parameter'
+classIrConfigParameter(models.Model):
+    _inherit='ir.config_parameter'
 
     @api.model_create_multi
-    def create(self, vals_list):
-        for vals in vals_list:
-            if vals.get('key') in ['mail.bounce.alias', 'mail.catchall.alias']:
-                vals['value'] = self.env['mail.alias']._clean_and_check_unique(vals.get('value'))
-            elif vals.get('key') == 'mail.catchall.domain.allowed':
-                vals['value'] = vals.get('value') and self._clean_and_check_mail_catchall_allowed_domains(vals['value'])
-        return super().create(vals_list)
+    defcreate(self,vals_list):
+        forvalsinvals_list:
+            ifvals.get('key')in['mail.bounce.alias','mail.catchall.alias']:
+                vals['value']=self.env['mail.alias']._clean_and_check_unique(vals.get('value'))
+            elifvals.get('key')=='mail.catchall.domain.allowed':
+                vals['value']=vals.get('value')andself._clean_and_check_mail_catchall_allowed_domains(vals['value'])
+        returnsuper().create(vals_list)
 
-    def write(self, vals):
-        for parameter in self:
-            if 'value' in vals and parameter.key in ['mail.bounce.alias', 'mail.catchall.alias'] and vals['value'] != parameter.value:
-                vals['value'] = self.env['mail.alias']._clean_and_check_unique(vals.get('value'))
-            elif 'value' in vals and parameter.key == 'mail.catchall.domain.allowed' and vals['value'] != parameter.value:
-                vals['value'] = vals['value'] and self._clean_and_check_mail_catchall_allowed_domains(vals['value'])
-        return super().write(vals)
+    defwrite(self,vals):
+        forparameterinself:
+            if'value'invalsandparameter.keyin['mail.bounce.alias','mail.catchall.alias']andvals['value']!=parameter.value:
+                vals['value']=self.env['mail.alias']._clean_and_check_unique(vals.get('value'))
+            elif'value'invalsandparameter.key=='mail.catchall.domain.allowed'andvals['value']!=parameter.value:
+                vals['value']=vals['value']andself._clean_and_check_mail_catchall_allowed_domains(vals['value'])
+        returnsuper().write(vals)
 
-    def _clean_and_check_mail_catchall_allowed_domains(self, value):
-        """ The purpose of this system parameter is to avoid the creation
-        of records from incoming emails with a domain != alias_domain
-        but that have a pattern matching an internal mail.alias . """
-        value = [domain.strip().lower() for domain in value.split(',') if domain.strip()]
-        if not value:
-            raise ValidationError(_("Value for `mail.catchall.domain.allowed` cannot be validated.\n"
-                                    "It should be a comma separated list of domains e.g. example.com,example.org."))
-        return ",".join(value)
+    def_clean_and_check_mail_catchall_allowed_domains(self,value):
+        """Thepurposeofthissystemparameteristoavoidthecreation
+        ofrecordsfromincomingemailswithadomain!=alias_domain
+        butthathaveapatternmatchinganinternalmail.alias."""
+        value=[domain.strip().lower()fordomaininvalue.split(',')ifdomain.strip()]
+        ifnotvalue:
+            raiseValidationError(_("Valuefor`mail.catchall.domain.allowed`cannotbevalidated.\n"
+                                    "Itshouldbeacommaseparatedlistofdomainse.g.example.com,example.org."))
+        return",".join(value)

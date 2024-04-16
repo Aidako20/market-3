@@ -1,202 +1,202 @@
-flectra.define('mail.systray.ActivityMenu', function (require) {
-"use strict";
+flectra.define('mail.systray.ActivityMenu',function(require){
+"usestrict";
 
-var core = require('web.core');
-var session = require('web.session');
-var SystrayMenu = require('web.SystrayMenu');
-var Widget = require('web.Widget');
-var Time = require('web.time');
-var QWeb = core.qweb;
+varcore=require('web.core');
+varsession=require('web.session');
+varSystrayMenu=require('web.SystrayMenu');
+varWidget=require('web.Widget');
+varTime=require('web.time');
+varQWeb=core.qweb;
 
-const { Component } = owl;
+const{Component}=owl;
 
 /**
- * Menu item appended in the systray part of the navbar, redirects to the next
- * activities of all app
+ *Menuitemappendedinthesystraypartofthenavbar,redirectstothenext
+ *activitiesofallapp
  */
-var ActivityMenu = Widget.extend({
-    name: 'activity_menu',
+varActivityMenu=Widget.extend({
+    name:'activity_menu',
     template:'mail.systray.ActivityMenu',
-    events: {
-        'click .o_mail_activity_action': '_onActivityActionClick',
-        'click .o_mail_preview': '_onActivityFilterClick',
-        'show.bs.dropdown': '_onActivityMenuShow',
-        'hide.bs.dropdown': '_onActivityMenuHide',
+    events:{
+        'click.o_mail_activity_action':'_onActivityActionClick',
+        'click.o_mail_preview':'_onActivityFilterClick',
+        'show.bs.dropdown':'_onActivityMenuShow',
+        'hide.bs.dropdown':'_onActivityMenuHide',
     },
-    start: function () {
-        this._$activitiesPreview = this.$('.o_mail_systray_dropdown_items');
-        Component.env.bus.on('activity_updated', this, this._updateCounter);
+    start:function(){
+        this._$activitiesPreview=this.$('.o_mail_systray_dropdown_items');
+        Component.env.bus.on('activity_updated',this,this._updateCounter);
         this._updateCounter();
         this._updateActivityPreview();
-        return this._super();
+        returnthis._super();
     },
     //--------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------
     /**
-     * Make RPC and get current user's activity details
-     * @private
+     *MakeRPCandgetcurrentuser'sactivitydetails
+     *@private
      */
-    _getActivityData: function () {
-        var self = this;
+    _getActivityData:function(){
+        varself=this;
 
-        return self._rpc({
-            model: 'res.users',
-            method: 'systray_get_activities',
-            args: [],
-            kwargs: {context: session.user_context},
-        }).then(function (data) {
-            self._activities = data;
-            self.activityCounter = _.reduce(data, function (total_count, p_data) { return total_count + p_data.total_count || 0; }, 0);
+        returnself._rpc({
+            model:'res.users',
+            method:'systray_get_activities',
+            args:[],
+            kwargs:{context:session.user_context},
+        }).then(function(data){
+            self._activities=data;
+            self.activityCounter=_.reduce(data,function(total_count,p_data){returntotal_count+p_data.total_count||0;},0);
             self.$('.o_notification_counter').text(self.activityCounter);
-            self.$el.toggleClass('o_no_notification', !self.activityCounter);
+            self.$el.toggleClass('o_no_notification',!self.activityCounter);
         });
     },
     /**
-     * Get particular model view to redirect on click of activity scheduled on that model.
-     * @private
-     * @param {string} model
+     *Getparticularmodelviewtoredirectonclickofactivityscheduledonthatmodel.
+     *@private
+     *@param{string}model
      */
-    _getActivityModelViewID: function (model) {
-        return this._rpc({
-            model: model,
-            method: 'get_activity_view_id'
+    _getActivityModelViewID:function(model){
+        returnthis._rpc({
+            model:model,
+            method:'get_activity_view_id'
         });
     },
     /**
-     * Return views to display when coming from systray depending on the model.
+     *Returnviewstodisplaywhencomingfromsystraydependingonthemodel.
      *
-     * @private
-     * @param {string} model
-     * @returns {Array[]} output the list of views to display.
+     *@private
+     *@param{string}model
+     *@returns{Array[]}outputthelistofviewstodisplay.
      */
-    _getViewsList(model) {
-        return [[false, 'kanban'], [false, 'list'], [false, 'form']];
+    _getViewsList(model){
+        return[[false,'kanban'],[false,'list'],[false,'form']];
     },
     /**
-     * Update(render) activity system tray view on activity updation.
-     * @private
+     *Update(render)activitysystemtrayviewonactivityupdation.
+     *@private
      */
-    _updateActivityPreview: function () {
-        var self = this;
-        self._getActivityData().then(function (){
-            self._$activitiesPreview.html(QWeb.render('mail.systray.ActivityMenu.Previews', {
-                widget: self,
-                Time: Time
+    _updateActivityPreview:function(){
+        varself=this;
+        self._getActivityData().then(function(){
+            self._$activitiesPreview.html(QWeb.render('mail.systray.ActivityMenu.Previews',{
+                widget:self,
+                Time:Time
             }));
         });
     },
     /**
-     * update counter based on activity status(created or Done)
-     * @private
-     * @param {Object} [data] key, value to decide activity created or deleted
-     * @param {String} [data.type] notification type
-     * @param {Boolean} [data.activity_deleted] when activity deleted
-     * @param {Boolean} [data.activity_created] when activity created
+     *updatecounterbasedonactivitystatus(createdorDone)
+     *@private
+     *@param{Object}[data]key,valuetodecideactivitycreatedordeleted
+     *@param{String}[data.type]notificationtype
+     *@param{Boolean}[data.activity_deleted]whenactivitydeleted
+     *@param{Boolean}[data.activity_created]whenactivitycreated
      */
-    _updateCounter: function (data) {
-        if (data) {
-            if (data.activity_created) {
-                this.activityCounter ++;
+    _updateCounter:function(data){
+        if(data){
+            if(data.activity_created){
+                this.activityCounter++;
             }
-            if (data.activity_deleted && this.activityCounter > 0) {
-                this.activityCounter --;
+            if(data.activity_deleted&&this.activityCounter>0){
+                this.activityCounter--;
             }
             this.$('.o_notification_counter').text(this.activityCounter);
-            this.$el.toggleClass('o_no_notification', !this.activityCounter);
+            this.$el.toggleClass('o_no_notification',!this.activityCounter);
         }
     },
 
     //------------------------------------------------------------
-    // Handlers
+    //Handlers
     //------------------------------------------------------------
 
     /**
-     * Redirect to specific action given its xml id or to the activity
-     * view of the current model if no xml id is provided
+     *Redirecttospecificactiongivenitsxmlidortotheactivity
+     *viewofthecurrentmodelifnoxmlidisprovided
      *
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onActivityActionClick: function (ev) {
+    _onActivityActionClick:function(ev){
         ev.stopPropagation();
         this.$('.dropdown-toggle').dropdown('toggle');
-        var targetAction = $(ev.currentTarget);
-        var actionXmlid = targetAction.data('action_xmlid');
-        if (actionXmlid) {
+        vartargetAction=$(ev.currentTarget);
+        varactionXmlid=targetAction.data('action_xmlid');
+        if(actionXmlid){
             this.do_action(actionXmlid);
-        } else {
-            var domain = [['activity_ids.user_id', '=', session.uid]]
-            if (targetAction.data('domain')) {
-                domain = domain.concat(targetAction.data('domain'))
+        }else{
+            vardomain=[['activity_ids.user_id','=',session.uid]]
+            if(targetAction.data('domain')){
+                domain=domain.concat(targetAction.data('domain'))
             }
             
             this.do_action({
-                type: 'ir.actions.act_window',
-                name: targetAction.data('model_name'),
-                views: [[false, 'activity'], [false, 'kanban'], [false, 'list'], [false, 'form']],
-                view_mode: 'activity',
-                res_model: targetAction.data('res_model'),
-                domain: domain,
-            }, {
-                clear_breadcrumbs: true,
+                type:'ir.actions.act_window',
+                name:targetAction.data('model_name'),
+                views:[[false,'activity'],[false,'kanban'],[false,'list'],[false,'form']],
+                view_mode:'activity',
+                res_model:targetAction.data('res_model'),
+                domain:domain,
+            },{
+                clear_breadcrumbs:true,
             });
         }
     },
 
     /**
-     * Redirect to particular model view
-     * @private
-     * @param {MouseEvent} event
+     *Redirecttoparticularmodelview
+     *@private
+     *@param{MouseEvent}event
      */
-    _onActivityFilterClick: function (event) {
-        // fetch the data from the button otherwise fetch the ones from the parent (.o_mail_preview).
-        var data = _.extend({}, $(event.currentTarget).data(), $(event.target).data());
-        var context = {};
-        if (data.filter === 'my') {
-            context['search_default_activities_overdue'] = 1;
-            context['search_default_activities_today'] = 1;
-        } else {
-            context['search_default_activities_' + data.filter] = 1;
+    _onActivityFilterClick:function(event){
+        //fetchthedatafromthebuttonotherwisefetchtheonesfromtheparent(.o_mail_preview).
+        vardata=_.extend({},$(event.currentTarget).data(),$(event.target).data());
+        varcontext={};
+        if(data.filter==='my'){
+            context['search_default_activities_overdue']=1;
+            context['search_default_activities_today']=1;
+        }else{
+            context['search_default_activities_'+data.filter]=1;
         }
-        // Necessary because activity_ids of mail.activity.mixin has auto_join
-        // So, duplicates are faking the count and "Load more" doesn't show up
-        context['force_search_count'] = 1;
+        //Necessarybecauseactivity_idsofmail.activity.mixinhasauto_join
+        //So,duplicatesarefakingthecountand"Loadmore"doesn'tshowup
+        context['force_search_count']=1;
         
-        var domain = [['activity_ids.user_id', '=', session.uid]]
-        if (data.domain) {
-            domain = domain.concat(data.domain)
+        vardomain=[['activity_ids.user_id','=',session.uid]]
+        if(data.domain){
+            domain=domain.concat(data.domain)
         }
         
         this.do_action({
-            type: 'ir.actions.act_window',
-            name: data.model_name,
-            res_model:  data.res_model,
-            views: this._getViewsList(data.res_model),
-            search_view_id: [false],
-            domain: domain,
+            type:'ir.actions.act_window',
+            name:data.model_name,
+            res_model: data.res_model,
+            views:this._getViewsList(data.res_model),
+            search_view_id:[false],
+            domain:domain,
             context:context,
-        }, {
-            clear_breadcrumbs: true,
+        },{
+            clear_breadcrumbs:true,
         });
     },
     /**
-     * @private
+     *@private
      */
-    _onActivityMenuShow: function () {
+    _onActivityMenuShow:function(){
         document.body.classList.add('modal-open');
          this._updateActivityPreview();
     },
     /**
-     * @private
+     *@private
      */
-    _onActivityMenuHide: function () {
+    _onActivityMenuHide:function(){
         document.body.classList.remove('modal-open');
     },
 });
 
 SystrayMenu.Items.push(ActivityMenu);
 
-return ActivityMenu;
+returnActivityMenu;
 
 });

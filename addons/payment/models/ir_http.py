@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class IrHttp(models.AbstractModel):
-    _inherit = 'ir.http'
+classIrHttp(models.AbstractModel):
+    _inherit='ir.http'
 
     @classmethod
-    def _get_translation_frontend_modules_name(cls):
-        mods = super(IrHttp, cls)._get_translation_frontend_modules_name()
-        return mods + ['payment']
+    def_get_translation_frontend_modules_name(cls):
+        mods=super(IrHttp,cls)._get_translation_frontend_modules_name()
+        returnmods+['payment']

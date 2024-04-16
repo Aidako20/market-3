@@ -1,21 +1,21 @@
-flectra.define('calendar.CalendarModel', function (require) {
-    "use strict";
+flectra.define('calendar.CalendarModel',function(require){
+    "usestrict";
 
-    const Model = require('web.CalendarModel');
+    constModel=require('web.CalendarModel');
 
-    const CalendarModel = Model.extend({
+    constCalendarModel=Model.extend({
 
         /**
-         * @override
-         * Transform fullcalendar event object to flectra Data object
+         *@override
+         *TransformfullcalendareventobjecttoflectraDataobject
          */
-        calendarEventToRecord(event) {
-            const data = this._super(event);
-            return _.extend({}, data, {
-                'recurrence_update': event.recurrenceUpdate,
+        calendarEventToRecord(event){
+            constdata=this._super(event);
+            return_.extend({},data,{
+                'recurrence_update':event.recurrenceUpdate,
             });
         }
     });
 
-    return CalendarModel;
+    returnCalendarModel;
 });

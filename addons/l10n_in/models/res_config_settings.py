@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+classResConfigSettings(models.TransientModel):
+    _inherit='res.config.settings'
 
-    group_l10n_in_reseller = fields.Boolean(implied_group='l10n_in.group_l10n_in_reseller', string="Manage Reseller(E-Commerce)")
+    group_l10n_in_reseller=fields.Boolean(implied_group='l10n_in.group_l10n_in_reseller',string="ManageReseller(E-Commerce)")

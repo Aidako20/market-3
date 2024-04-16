@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models
+fromflectraimportapi,models
 
 
-class PublisherWarrantyContract(models.AbstractModel):
-    _inherit = "publisher_warranty.contract"
+classPublisherWarrantyContract(models.AbstractModel):
+    _inherit="publisher_warranty.contract"
 
     @api.model
-    def _get_message(self):
-        msg = super(PublisherWarrantyContract, self)._get_message()
-        msg['website'] = True
-        return msg
+    def_get_message(self):
+        msg=super(PublisherWarrantyContract,self)._get_message()
+        msg['website']=True
+        returnmsg

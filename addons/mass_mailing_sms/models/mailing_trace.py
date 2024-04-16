@@ -1,87 +1,87 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import random
-import string
+importrandom
+importstring
 
-from flectra import api, fields, models
-from flectra.osv import expression
+fromflectraimportapi,fields,models
+fromflectra.osvimportexpression
 
 
-class MailingTrace(models.Model):
-    """ Improve statistics model to add SMS support. Main attributes of
-    statistics model are used, only some specific data is required. """
-    _inherit = 'mailing.trace'
-    CODE_SIZE = 3
+classMailingTrace(models.Model):
+    """ImprovestatisticsmodeltoaddSMSsupport.Mainattributesof
+    statisticsmodelareused,onlysomespecificdataisrequired."""
+    _inherit='mailing.trace'
+    CODE_SIZE=3
 
-    trace_type = fields.Selection(selection_add=[
-        ('sms', 'SMS')
-    ], ondelete={'sms': 'set default'})
-    sms_sms_id = fields.Many2one('sms.sms', string='SMS', index=True, ondelete='set null')
-    sms_sms_id_int = fields.Integer(
-        string='SMS ID (tech)',
-        help='ID of the related sms.sms. This field is an integer field because '
-             'the related sms.sms can be deleted separately from its statistics. '
-             'However the ID is needed for several action and controllers.',
+    trace_type=fields.Selection(selection_add=[
+        ('sms','SMS')
+    ],ondelete={'sms':'setdefault'})
+    sms_sms_id=fields.Many2one('sms.sms',string='SMS',index=True,ondelete='setnull')
+    sms_sms_id_int=fields.Integer(
+        string='SMSID(tech)',
+        help='IDoftherelatedsms.sms.Thisfieldisanintegerfieldbecause'
+             'therelatedsms.smscanbedeletedseparatelyfromitsstatistics.'
+             'HowevertheIDisneededforseveralactionandcontrollers.',
         index=True,
     )
-    sms_number = fields.Char('Number')
-    sms_code = fields.Char('Code')
-    failure_type = fields.Selection(selection_add=[
-        ('sms_number_missing', 'Missing Number'),
-        ('sms_number_format', 'Wrong Number Format'),
-        ('sms_credit', 'Insufficient Credit'),
-        ('sms_server', 'Server Error'),
-        ('sms_acc', 'Unregistered Account'),
-        # mass mode specific codes
-        ('sms_blacklist', 'Blacklisted'),
-        ('sms_duplicate', 'Duplicate'),
+    sms_number=fields.Char('Number')
+    sms_code=fields.Char('Code')
+    failure_type=fields.Selection(selection_add=[
+        ('sms_number_missing','MissingNumber'),
+        ('sms_number_format','WrongNumberFormat'),
+        ('sms_credit','InsufficientCredit'),
+        ('sms_server','ServerError'),
+        ('sms_acc','UnregisteredAccount'),
+        #massmodespecificcodes
+        ('sms_blacklist','Blacklisted'),
+        ('sms_duplicate','Duplicate'),
     ])
 
     @api.model_create_multi
-    def create(self, values_list):
-        for values in values_list:
-            if 'sms_sms_id' in values:
-                values['sms_sms_id_int'] = values['sms_sms_id']
-            if values.get('trace_type') == 'sms' and not values.get('sms_code'):
-                values['sms_code'] = self._get_random_code()
-        return super(MailingTrace, self).create(values_list)
+    defcreate(self,values_list):
+        forvaluesinvalues_list:
+            if'sms_sms_id'invalues:
+                values['sms_sms_id_int']=values['sms_sms_id']
+            ifvalues.get('trace_type')=='sms'andnotvalues.get('sms_code'):
+                values['sms_code']=self._get_random_code()
+        returnsuper(MailingTrace,self).create(values_list)
 
-    def _get_random_code(self):
-        """ Generate a random code for trace. Uniqueness is not really necessary
-        as it serves as obfuscation when unsubscribing. A valid trio
-        code / mailing_id / number will be requested. """
-        return ''.join(random.choice(string.ascii_letters + string.digits) for dummy in range(self.CODE_SIZE))
+    def_get_random_code(self):
+        """Generatearandomcodefortrace.Uniquenessisnotreallynecessary
+        asitservesasobfuscationwhenunsubscribing.Avalidtrio
+        code/mailing_id/numberwillberequested."""
+        return''.join(random.choice(string.ascii_letters+string.digits)fordummyinrange(self.CODE_SIZE))
 
-    def _get_records_from_sms(self, sms_sms_ids=None, additional_domain=None):
-        if not self.ids and sms_sms_ids:
-            domain = [('sms_sms_id_int', 'in', sms_sms_ids)]
+    def_get_records_from_sms(self,sms_sms_ids=None,additional_domain=None):
+        ifnotself.idsandsms_sms_ids:
+            domain=[('sms_sms_id_int','in',sms_sms_ids)]
         else:
-            domain = [('id', 'in', self.ids)]
-        if additional_domain:
-            domain = expression.AND([domain, additional_domain])
-        return self.search(domain)
+            domain=[('id','in',self.ids)]
+        ifadditional_domain:
+            domain=expression.AND([domain,additional_domain])
+        returnself.search(domain)
 
-    def set_failed(self, failure_type):
-        for trace in self:
-            trace.write({'exception': fields.Datetime.now(), 'failure_type': failure_type})
+    defset_failed(self,failure_type):
+        fortraceinself:
+            trace.write({'exception':fields.Datetime.now(),'failure_type':failure_type})
 
-    def set_sms_sent(self, sms_sms_ids=None):
-        statistics = self._get_records_from_sms(sms_sms_ids, [('sent', '=', False)])
-        statistics.write({'sent': fields.Datetime.now()})
-        return statistics
+    defset_sms_sent(self,sms_sms_ids=None):
+        statistics=self._get_records_from_sms(sms_sms_ids,[('sent','=',False)])
+        statistics.write({'sent':fields.Datetime.now()})
+        returnstatistics
 
-    def set_sms_clicked(self, sms_sms_ids=None):
-        statistics = self._get_records_from_sms(sms_sms_ids, [('clicked', '=', False)])
-        statistics.write({'clicked': fields.Datetime.now()})
-        return statistics
+    defset_sms_clicked(self,sms_sms_ids=None):
+        statistics=self._get_records_from_sms(sms_sms_ids,[('clicked','=',False)])
+        statistics.write({'clicked':fields.Datetime.now()})
+        returnstatistics
 
-    def set_sms_ignored(self, sms_sms_ids=None):
-        statistics = self._get_records_from_sms(sms_sms_ids, [('ignored', '=', False)])
-        statistics.write({'ignored': fields.Datetime.now()})
-        return statistics
+    defset_sms_ignored(self,sms_sms_ids=None):
+        statistics=self._get_records_from_sms(sms_sms_ids,[('ignored','=',False)])
+        statistics.write({'ignored':fields.Datetime.now()})
+        returnstatistics
 
-    def set_sms_exception(self, sms_sms_ids=None):
-        statistics = self._get_records_from_sms(sms_sms_ids, [('exception', '=', False)])
-        statistics.write({'exception': fields.Datetime.now()})
-        return statistics
+    defset_sms_exception(self,sms_sms_ids=None):
+        statistics=self._get_records_from_sms(sms_sms_ids,[('exception','=',False)])
+        statistics.write({'exception':fields.Datetime.now()})
+        returnstatistics

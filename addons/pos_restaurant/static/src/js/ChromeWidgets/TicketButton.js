@@ -1,56 +1,56 @@
-flectra.define('pos_restaurant.TicketButton', function (require) {
-    'use strict';
+flectra.define('pos_restaurant.TicketButton',function(require){
+    'usestrict';
 
-    const TicketButton = require('point_of_sale.TicketButton');
-    const Registries = require('point_of_sale.Registries');
-    const { posbus } = require('point_of_sale.utils');
+    constTicketButton=require('point_of_sale.TicketButton');
+    constRegistries=require('point_of_sale.Registries');
+    const{posbus}=require('point_of_sale.utils');
 
-    const PosResTicketButton = (TicketButton) =>
-        class extends TicketButton {
-            async onClick() {
-                if (this.env.pos.config.iface_floorplan && !this.props.isTicketScreenShown && !this.env.pos.table) {
-                    await this._syncAllFromServer();
+    constPosResTicketButton=(TicketButton)=>
+        classextendsTicketButton{
+            asynconClick(){
+                if(this.env.pos.config.iface_floorplan&&!this.props.isTicketScreenShown&&!this.env.pos.table){
+                    awaitthis._syncAllFromServer();
                     this.showScreen('TicketScreen');
-                } else {
+                }else{
                     super.onClick();
                 }
             }
-            async _syncAllFromServer() {
-                const pos = this.env.pos;
-                try {
-                    for (const floor of pos.floors) {
-                        for (const table of floor.tables) {
-                            await pos.replace_table_orders_from_server(table);
+            async_syncAllFromServer(){
+                constpos=this.env.pos;
+                try{
+                    for(constfloorofpos.floors){
+                        for(consttableoffloor.tables){
+                            awaitpos.replace_table_orders_from_server(table);
                         }
                     }
-                } catch (e) {
-                    await this.showPopup('ErrorPopup', {
-                        title: this.env._t('Connection Error'),
-                        body: this.env._t('Due to a connection error, the orders are not synchronized.'),
+                }catch(e){
+                    awaitthis.showPopup('ErrorPopup',{
+                        title:this.env._t('ConnectionError'),
+                        body:this.env._t('Duetoaconnectionerror,theordersarenotsynchronized.'),
                     });
                 }
             }
-            mounted() {
-                posbus.on('table-set', this, this.render);
+            mounted(){
+                posbus.on('table-set',this,this.render);
             }
-            willUnmount() {
-                posbus.off('table-set', this);
+            willUnmount(){
+                posbus.off('table-set',this);
             }
             /**
-             * If no table is set to pos, which means the current main screen
-             * is floor screen, then the order count should be based on all the orders.
+             *Ifnotableissettopos,whichmeansthecurrentmainscreen
+             *isfloorscreen,thentheordercountshouldbebasedonalltheorders.
              */
-            get count() {
-                if (!this.env.pos || !this.env.pos.config) return 0;
-                if (this.env.pos.config.iface_floorplan && !this.env.pos.table) {
-                    return this.env.pos.get('orders').models.length;
-                } else {
-                    return super.count;
+            getcount(){
+                if(!this.env.pos||!this.env.pos.config)return0;
+                if(this.env.pos.config.iface_floorplan&&!this.env.pos.table){
+                    returnthis.env.pos.get('orders').models.length;
+                }else{
+                    returnsuper.count;
                 }
             }
         };
 
-    Registries.Component.extend(TicketButton, PosResTicketButton);
+    Registries.Component.extend(TicketButton,PosResTicketButton);
 
-    return TicketButton;
+    returnTicketButton;
 });

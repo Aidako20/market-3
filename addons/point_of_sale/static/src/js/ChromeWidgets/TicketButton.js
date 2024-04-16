@@ -1,41 +1,41 @@
-flectra.define('point_of_sale.TicketButton', function (require) {
-    'use strict';
+flectra.define('point_of_sale.TicketButton',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
-    const { posbus } = require('point_of_sale.utils');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
+    const{posbus}=require('point_of_sale.utils');
 
-    class TicketButton extends PosComponent {
-        onClick() {
-            if (this.props.isTicketScreenShown) {
+    classTicketButtonextendsPosComponent{
+        onClick(){
+            if(this.props.isTicketScreenShown){
                 posbus.trigger('ticket-button-clicked');
-            } else {
+            }else{
                 this.showScreen('TicketScreen');
             }
         }
-        willPatch() {
-            posbus.off('order-deleted', this);
+        willPatch(){
+            posbus.off('order-deleted',this);
         }
-        patched() {
-            posbus.on('order-deleted', this, this.render);
+        patched(){
+            posbus.on('order-deleted',this,this.render);
         }
-        mounted() {
-            posbus.on('order-deleted', this, this.render);
+        mounted(){
+            posbus.on('order-deleted',this,this.render);
         }
-        willUnmount() {
-            posbus.off('order-deleted', this);
+        willUnmount(){
+            posbus.off('order-deleted',this);
         }
-        get count() {
-            if (this.env.pos) {
-                return this.env.pos.get_order_list().length;
-            } else {
-                return 0;
+        getcount(){
+            if(this.env.pos){
+                returnthis.env.pos.get_order_list().length;
+            }else{
+                return0;
             }
         }
     }
-    TicketButton.template = 'TicketButton';
+    TicketButton.template='TicketButton';
 
     Registries.Component.add(TicketButton);
 
-    return TicketButton;
+    returnTicketButton;
 });

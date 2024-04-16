@@ -1,31 +1,31 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.bg = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.bg=factory()));
+}(this,function(){'usestrict';
 
-    var bg = {
-        code: "bg",
-        week: {
-            dow: 1,
-            doy: 7 // The week that contains Jan 1st is the first week of the year.
+    varbg={
+        code:"bg",
+        week:{
+            dow:1,
+            doy:7//TheweekthatcontainsJan1stisthefirstweekoftheyear.
         },
-        buttonText: {
-            prev: "назад",
-            next: "напред",
-            today: "днес",
-            month: "Месец",
-            week: "Седмица",
-            day: "Ден",
-            list: "График"
+        buttonText:{
+            prev:"назад",
+            next:"напред",
+            today:"днес",
+            month:"Месец",
+            week:"Седмица",
+            day:"Ден",
+            list:"График"
         },
-        allDayText: "Цял ден",
-        eventLimitText: function (n) {
-            return "+още " + n;
+        allDayText:"Цялден",
+        eventLimitText:function(n){
+            return"+още"+n;
         },
-        noEventsMessage: "Няма събития за показване"
+        noEventsMessage:"Нямасъбитиязапоказване"
     };
 
-    return bg;
+    returnbg;
 
 }));

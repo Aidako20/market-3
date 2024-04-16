@@ -1,72 +1,72 @@
-flectra.define('web.Loading', function (require) {
-"use strict";
+flectra.define('web.Loading',function(require){
+"usestrict";
 
 /**
- * Loading Indicator
+ *LoadingIndicator
  *
- * When the user performs an action, it is good to give him some feedback that
- * something is currently happening.  The purpose of the Loading Indicator is to
- * display a small rectangle on the bottom right of the screen with just the
- * text 'Loading' and the number of currently running rpcs.
+ *Whentheuserperformsanaction,itisgoodtogivehimsomefeedbackthat
+ *somethingiscurrentlyhappening. ThepurposeoftheLoadingIndicatoristo
+ *displayasmallrectangleonthebottomrightofthescreenwithjustthe
+ *text'Loading'andthenumberofcurrentlyrunningrpcs.
  *
- * After a delay of 3s, if a rpc is still not completed, we also block the UI.
+ *Afteradelayof3s,ifarpcisstillnotcompleted,wealsoblocktheUI.
  */
 
-var config = require('web.config');
-var core = require('web.core');
-var framework = require('web.framework');
-var Widget = require('web.Widget');
+varconfig=require('web.config');
+varcore=require('web.core');
+varframework=require('web.framework');
+varWidget=require('web.Widget');
 
-var _t = core._t;
+var_t=core._t;
 
-var Loading = Widget.extend({
-    template: "Loading",
+varLoading=Widget.extend({
+    template:"Loading",
 
-    init: function(parent) {
+    init:function(parent){
         this._super(parent);
-        this.count = 0;
-        this.blocked_ui = false;
+        this.count=0;
+        this.blocked_ui=false;
     },
-    start: function() {
-        core.bus.on('rpc_request', this, this.request_call);
-        core.bus.on("rpc_response", this, this.response_call);
-        core.bus.on("rpc_response_failed", this, this.response_call);
+    start:function(){
+        core.bus.on('rpc_request',this,this.request_call);
+        core.bus.on("rpc_response",this,this.response_call);
+        core.bus.on("rpc_response_failed",this,this.response_call);
     },
-    destroy: function() {
+    destroy:function(){
         this.on_rpc_event(-this.count);
         this._super();
     },
-    request_call: function() {
+    request_call:function(){
         this.on_rpc_event(1);
     },
-    response_call: function() {
+    response_call:function(){
         this.on_rpc_event(-1);
     },
-    on_rpc_event : function(increment) {
-        var self = this;
-        if (!this.count && increment === 1) {
-            // Block UI after 3s
-            this.long_running_timer = setTimeout(function () {
-                self.blocked_ui = true;
+    on_rpc_event:function(increment){
+        varself=this;
+        if(!this.count&&increment===1){
+            //BlockUIafter3s
+            this.long_running_timer=setTimeout(function(){
+                self.blocked_ui=true;
                 framework.blockUI();
-            }, 3000);
+            },3000);
         }
 
-        this.count += increment;
-        if (this.count > 0) {
-            if (config.isDebug()) {
-                this.$el.text(_.str.sprintf( _t("Loading (%d)"), this.count));
-            } else {
+        this.count+=increment;
+        if(this.count>0){
+            if(config.isDebug()){
+                this.$el.text(_.str.sprintf(_t("Loading(%d)"),this.count));
+            }else{
                 this.$el.text(_t("Loading"));
             }
             this.$el.show();
             this.getParent().$el.addClass('oe_wait');
-        } else {
-            this.count = 0;
+        }else{
+            this.count=0;
             clearTimeout(this.long_running_timer);
-            // Don't unblock if blocked by somebody else
-            if (self.blocked_ui) {
-                this.blocked_ui = false;
+            //Don'tunblockifblockedbysomebodyelse
+            if(self.blocked_ui){
+                this.blocked_ui=false;
                 framework.unblockUI();
             }
             this.$el.fadeOut();
@@ -75,6 +75,6 @@ var Loading = Widget.extend({
     }
 });
 
-return Loading;
+returnLoading;
 });
 

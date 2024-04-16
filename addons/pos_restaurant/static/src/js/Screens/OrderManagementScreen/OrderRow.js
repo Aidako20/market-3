@@ -1,17 +1,17 @@
-flectra.define('pos_restaurant.OrderRow', function (require) {
-    'use strict';
+flectra.define('pos_restaurant.OrderRow',function(require){
+    'usestrict';
 
-    const OrderRow = require('point_of_sale.OrderRow');
-    const Registries = require('point_of_sale.Registries');
+    constOrderRow=require('point_of_sale.OrderRow');
+    constRegistries=require('point_of_sale.Registries');
 
-    const PosResOrderRow = (OrderRow) =>
-        class extends OrderRow {
-            get table() {
-                return this.order.table ? this.order.table.name : '';
+    constPosResOrderRow=(OrderRow)=>
+        classextendsOrderRow{
+            gettable(){
+                returnthis.order.table?this.order.table.name:'';
             }
         };
 
-    Registries.Component.extend(OrderRow, PosResOrderRow);
+    Registries.Component.extend(OrderRow,PosResOrderRow);
 
-    return OrderRow;
+    returnOrderRow;
 });

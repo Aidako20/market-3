@@ -1,44 +1,44 @@
-flectra.define("web.collections", function (require) {
-    "use strict";
+flectra.define("web.collections",function(require){
+    "usestrict";
 
-    var Class = require("web.Class");
+    varClass=require("web.Class");
 
     /**
-     * Allows to build a tree representation of a data.
+     *Allowstobuildatreerepresentationofadata.
      */
-    var Tree = Class.extend({
+    varTree=Class.extend({
         /**
-         * @constructor
-         * @param {*} data - the data associated to the root node
+         *@constructor
+         *@param{*}data-thedataassociatedtotherootnode
          */
-        init: function (data) {
-            this._data = data;
-            this._children = [];
+        init:function(data){
+            this._data=data;
+            this._children=[];
         },
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * Returns the root's associated data.
+         *Returnstheroot'sassociateddata.
          *
-         * @returns {*}
+         *@returns{*}
          */
-        getData: function () {
-            return this._data;
+        getData:function(){
+            returnthis._data;
         },
         /**
-         * Adds a child tree.
+         *Addsachildtree.
          *
-         * @param {Tree} tree
+         *@param{Tree}tree
          */
-        addChild: function (tree) {
+        addChild:function(tree){
             this._children.push(tree);
         },
     });
 
-    return {
-        Tree: Tree,
+    return{
+        Tree:Tree,
     };
 });

@@ -1,48 +1,48 @@
-flectra.define('pos_restaurant.PosResPaymentScreen', function (require) {
-    'use strict';
+flectra.define('pos_restaurant.PosResPaymentScreen',function(require){
+    'usestrict';
 
-    const PaymentScreen = require('point_of_sale.PaymentScreen');
-    const { useListener } = require('web.custom_hooks');
-    const Registries = require('point_of_sale.Registries');
+    constPaymentScreen=require('point_of_sale.PaymentScreen');
+    const{useListener}=require('web.custom_hooks');
+    constRegistries=require('point_of_sale.Registries');
 
-    const PosResPaymentScreen = (PaymentScreen) =>
-        class extends PaymentScreen {
-            constructor() {
+    constPosResPaymentScreen=(PaymentScreen)=>
+        classextendsPaymentScreen{
+            constructor(){
                 super(...arguments);
-                useListener('send-payment-adjust', this._sendPaymentAdjust);
+                useListener('send-payment-adjust',this._sendPaymentAdjust);
             }
 
-            async _sendPaymentAdjust({ detail: line }) {
-                const previous_amount = line.get_amount();
-                const amount_diff = line.order.get_total_with_tax() - line.order.get_total_paid();
-                line.set_amount(previous_amount + amount_diff);
+            async_sendPaymentAdjust({detail:line}){
+                constprevious_amount=line.get_amount();
+                constamount_diff=line.order.get_total_with_tax()-line.order.get_total_paid();
+                line.set_amount(previous_amount+amount_diff);
                 line.set_payment_status('waiting');
 
-                const payment_terminal = line.payment_method.payment_terminal;
-                const isAdjustSuccessful = await payment_terminal.send_payment_adjust(line.cid);
-                if (isAdjustSuccessful) {
+                constpayment_terminal=line.payment_method.payment_terminal;
+                constisAdjustSuccessful=awaitpayment_terminal.send_payment_adjust(line.cid);
+                if(isAdjustSuccessful){
                     line.set_payment_status('done');
-                } else {
+                }else{
                     line.set_amount(previous_amount);
                     line.set_payment_status('done');
                 }
             }
 
-            get nextScreen() {
-                const order = this.currentOrder;
-                if (!this.env.pos.config.set_tip_after_payment || order.is_tipped) {
-                    return super.nextScreen;
+            getnextScreen(){
+                constorder=this.currentOrder;
+                if(!this.env.pos.config.set_tip_after_payment||order.is_tipped){
+                    returnsuper.nextScreen;
                 }
-                // Take the first payment method as the main payment.
-                const mainPayment = order.get_paymentlines()[0];
-                if (mainPayment.canBeAdjusted()) {
-                    return 'TipScreen';
+                //Takethefirstpaymentmethodasthemainpayment.
+                constmainPayment=order.get_paymentlines()[0];
+                if(mainPayment.canBeAdjusted()){
+                    return'TipScreen';
                 }
-                return super.nextScreen;
+                returnsuper.nextScreen;
             }
         };
 
-    Registries.Component.extend(PaymentScreen, PosResPaymentScreen);
+    Registries.Component.extend(PaymentScreen,PosResPaymentScreen);
 
-    return PosResPaymentScreen;
+    returnPosResPaymentScreen;
 });

@@ -1,63 +1,63 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
 <data>
-    <record id="event_stage_view_form" model="ir.ui.view">
-        <field name="name">event.stage.view.form</field>
-        <field name="model">event.stage</field>
-        <field name="arch" type="xml">
-            <form string="Events Stage">
+    <recordid="event_stage_view_form"model="ir.ui.view">
+        <fieldname="name">event.stage.view.form</field>
+        <fieldname="model">event.stage</field>
+        <fieldname="arch"type="xml">
+            <formstring="EventsStage">
                 <sheet>
                     <group>
                         <group>
-                            <field name="name"/>
-                            <field name="pipe_end"/>
+                            <fieldname="name"/>
+                            <fieldname="pipe_end"/>
                         </group>
                         <group>
-                            <field name="fold"/>
-                            <field name="sequence"/>
+                            <fieldname="fold"/>
+                            <fieldname="sequence"/>
                         </group>
                     </group>
-                    <group string="Stage Description and Tooltips">
-                        <p class="text-muted" colspan="2">
-                            You can define here labels that will be displayed for the state instead
-                            of the default labels in the kanban view.
+                    <groupstring="StageDescriptionandTooltips">
+                        <pclass="text-muted"colspan="2">
+                            Youcandefineherelabelsthatwillbedisplayedforthestateinstead
+                            ofthedefaultlabelsinthekanbanview.
                         </p>
-                        <label for="legend_normal" string=" " class="o_status " title="Task in progress. Click to block or set as done." aria-label="Task in progress. Click to block or set as done." role="img"/>
-                        <field name="legend_normal" nolabel="1"/>
-                        <label for="legend_blocked" string=" " class="o_status o_status_red" title="Task is blocked. Click to unblock or set as done." aria-label="Task is blocked. Click to unblock or set as done." role="img"/>
-                        <field name="legend_blocked" nolabel="1"/>
-                        <label for="legend_done" string=" " class="o_status o_status_green" title="This step is done. Click to block or set in progress." aria-label="This step is done. Click to block or set in progress." role="img"/>
-                        <field name="legend_done" nolabel="1"/>
+                        <labelfor="legend_normal"string=""class="o_status"title="Taskinprogress.Clicktoblockorsetasdone."aria-label="Taskinprogress.Clicktoblockorsetasdone."role="img"/>
+                        <fieldname="legend_normal"nolabel="1"/>
+                        <labelfor="legend_blocked"string=""class="o_statuso_status_red"title="Taskisblocked.Clicktounblockorsetasdone."aria-label="Taskisblocked.Clicktounblockorsetasdone."role="img"/>
+                        <fieldname="legend_blocked"nolabel="1"/>
+                        <labelfor="legend_done"string=""class="o_statuso_status_green"title="Thisstepisdone.Clicktoblockorsetinprogress."aria-label="Thisstepisdone.Clicktoblockorsetinprogress."role="img"/>
+                        <fieldname="legend_done"nolabel="1"/>
 
-                        <p class="text-muted" colspan="2">
-                            You can also add a description to help your coworkers understand the meaning and purpose of the stage.
+                        <pclass="text-muted"colspan="2">
+                            Youcanalsoaddadescriptiontohelpyourcoworkersunderstandthemeaningandpurposeofthestage.
                         </p>
-                        <field name="description" placeholder="Add a description..." nolabel="1" colspan="2"/>
+                        <fieldname="description"placeholder="Addadescription..."nolabel="1"colspan="2"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="event_stage_view_tree" model="ir.ui.view">
-        <field name="name">event.stage.view.tree</field>
-        <field name="model">event.stage</field>
-        <field name="arch" type="xml">
-            <tree string="Events Stage">
-                <field name="sequence" widget="handle"/>
-                <field name="name"/>
+    <recordid="event_stage_view_tree"model="ir.ui.view">
+        <fieldname="name">event.stage.view.tree</field>
+        <fieldname="model">event.stage</field>
+        <fieldname="arch"type="xml">
+            <treestring="EventsStage">
+                <fieldname="sequence"widget="handle"/>
+                <fieldname="name"/>
             </tree>
         </field>
     </record>
 
-    <record id="event_stage_action" model="ir.actions.act_window">
-        <field name="name">Event Stages</field>
-        <field name="res_model">event.stage</field>
-        <field name="view_mode">tree,form</field>
+    <recordid="event_stage_action"model="ir.actions.act_window">
+        <fieldname="name">EventStages</field>
+        <fieldname="res_model">event.stage</field>
+        <fieldname="view_mode">tree,form</field>
     </record>
 
-    <record id="event_stage_menu" model="ir.ui.menu">
-        <field name="action" ref="event.event_stage_action"/>
+    <recordid="event_stage_menu"model="ir.ui.menu">
+        <fieldname="action"ref="event.event_stage_action"/>
     </record>
 
 </data>

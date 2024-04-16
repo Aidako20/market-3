@@ -1,53 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="res_config_settings_view_form" model="ir.ui.view">
-        <field name="name">res.config.settings.view.form.inherit.website.twitter</field>
-        <field name="model">res.config.settings</field>
-        <field name="inherit_id" ref="website.res_config_settings_view_form"/>
-        <field name="arch" type="xml">
-            <div id="google_maps_setting" position="after">
-                <div class="col-12 col-lg-6 o_setting_box" id="twitter_roller_install_setting">
-                    <div class="o_setting_right_pane">
-                        <span class="o_form_label">Twitter Roller</span>
-                        <span class="fa fa-lg fa-globe" title="Values set here are website-specific." groups="website.group_multi_website"/>
-                        <div class="text-muted">
-                            Twitter API Credentials
+    <recordid="res_config_settings_view_form"model="ir.ui.view">
+        <fieldname="name">res.config.settings.view.form.inherit.website.twitter</field>
+        <fieldname="model">res.config.settings</field>
+        <fieldname="inherit_id"ref="website.res_config_settings_view_form"/>
+        <fieldname="arch"type="xml">
+            <divid="google_maps_setting"position="after">
+                <divclass="col-12col-lg-6o_setting_box"id="twitter_roller_install_setting">
+                    <divclass="o_setting_right_pane">
+                        <spanclass="o_form_label">TwitterRoller</span>
+                        <spanclass="fafa-lgfa-globe"title="Valuessetherearewebsite-specific."groups="website.group_multi_website"/>
+                        <divclass="text-muted">
+                            TwitterAPICredentials
                         </div>
-                        <div class="content-group">
-                            <div class="row mt16">
-                                <label class="col-lg-3 o_light_label" string="API Key" for="twitter_api_key"/>
-                                <field name="twitter_api_key" class="oe_inline"/>
+                        <divclass="content-group">
+                            <divclass="rowmt16">
+                                <labelclass="col-lg-3o_light_label"string="APIKey"for="twitter_api_key"/>
+                                <fieldname="twitter_api_key"class="oe_inline"/>
                             </div>
-                            <div class="row">
-                                <label class="col-lg-3 o_light_label" string="API secret" for="twitter_api_secret"/>
-                                <field name="twitter_api_secret" password="True" class="oe_inline"/>
+                            <divclass="row">
+                                <labelclass="col-lg-3o_light_label"string="APIsecret"for="twitter_api_secret"/>
+                                <fieldname="twitter_api_secret"password="True"class="oe_inline"/>
                             </div>
-                            <a data-toggle="collapse" href="#" data-target="#twitter_tutorial" aria-label="Twitter tutorial">
-                                <i class="fa fa-arrow-right"/>
-                                Show me how to obtain the Twitter API key and Twitter API secret
+                            <adata-toggle="collapse"href="#"data-target="#twitter_tutorial"aria-label="Twittertutorial">
+                                <iclass="fafa-arrow-right"/>
+                                ShowmehowtoobtaintheTwitterAPIkeyandTwitterAPIsecret
                             </a>
-                            <div class="row mt16 collapse" id="twitter_tutorial">
-                                <blockquote class="small">
-                                    <h2>How to configure the Twitter API access</h2>
+                            <divclass="rowmt16collapse"id="twitter_tutorial">
+                                <blockquoteclass="small">
+                                    <h2>HowtoconfiguretheTwitterAPIaccess</h2>
                                     <ol>
-                                        <li>Log in or create an account on <a href="https://developer.twitter.com/" target="new"> https://developer.twitter.com/</a></li>
-                                        <li>Once connected, and if not already done, complete the Twitter portal access process on <a href="https://developer.twitter.com/portal/" target="new">https://developer.twitter.com/portal/</a></li>
-                                        <li>On the <a href="https://developer.twitter.com/portal/" target="new">Twitter Portal</a>, <strong>create a project</strong> with the following information:
+                                        <li>Loginorcreateanaccounton<ahref="https://developer.twitter.com/"target="new">https://developer.twitter.com/</a></li>
+                                        <li>Onceconnected,andifnotalreadydone,completetheTwitterportalaccessprocesson<ahref="https://developer.twitter.com/portal/"target="new">https://developer.twitter.com/portal/</a></li>
+                                        <li>Onthe<ahref="https://developer.twitter.com/portal/"target="new">TwitterPortal</a>,<strong>createaproject</strong>withthefollowinginformation:
                                             <ul>
-                                                <li><strong>Name: </strong> Flectra Twitter Integration</li>
-                                                <li><strong>Use Case: </strong> Embedding Tweets in a website</li>
-                                                <li><strong>Description: </strong> Flectra Twitter Integration</li>
-                                                <li><strong>App Name: </strong> choose a unique name</li>
+                                                <li><strong>Name:</strong>FlectraTwitterIntegration</li>
+                                                <li><strong>UseCase:</strong>EmbeddingTweetsinawebsite</li>
+                                                <li><strong>Description:</strong>FlectraTwitterIntegration</li>
+                                                <li><strong>AppName:</strong>chooseauniquename</li>
                                             </ul>
                                         </li>
-                                        <li>Copy/Paste the API Key and API Key Secret values into the above fields</li>
-                                        <li>Get Elevated access by going to <a href="https://developer.twitter.com/en/portal/products" target="new">https://developer.twitter.com/en/portal/products</a>, click on <strong>Elevated</strong> then on <strong>Apply</strong> and finally complete the form.</li>
+                                        <li>Copy/PastetheAPIKeyandAPIKeySecretvaluesintotheabovefields</li>
+                                        <li>GetElevatedaccessbygoingto<ahref="https://developer.twitter.com/en/portal/products"target="new">https://developer.twitter.com/en/portal/products</a>,clickon<strong>Elevated</strong>thenon<strong>Apply</strong>andfinallycompletetheform.</li>
                                     </ol>
                                 </blockquote>
                             </div>
-                            <div class="row">
-                                <label class="col-lg-3 o_light_label" string="Favorites From" for="twitter_screen_name"/>
-                                <field name="twitter_screen_name" class="oe_inline"/>
+                            <divclass="row">
+                                <labelclass="col-lg-3o_light_label"string="FavoritesFrom"for="twitter_screen_name"/>
+                                <fieldname="twitter_screen_name"class="oe_inline"/>
                             </div>
                         </div>
                     </div>

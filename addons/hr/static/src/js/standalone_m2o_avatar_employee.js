@@ -1,61 +1,61 @@
-flectra.define('hr.StandaloneM2OAvatarEmployee', function (require) {
-    'use strict';
+flectra.define('hr.StandaloneM2OAvatarEmployee',function(require){
+    'usestrict';
 
-    const StandaloneFieldManagerMixin = require('web.StandaloneFieldManagerMixin');
-    const Widget = require('web.Widget');
+    constStandaloneFieldManagerMixin=require('web.StandaloneFieldManagerMixin');
+    constWidget=require('web.Widget');
 
-    const { Many2OneAvatarEmployee } = require('hr.Many2OneAvatarEmployee');
+    const{Many2OneAvatarEmployee}=require('hr.Many2OneAvatarEmployee');
 
-    const StandaloneM2OAvatarEmployee = Widget.extend(StandaloneFieldManagerMixin, {
-        className: 'o_standalone_avatar_employee',
+    constStandaloneM2OAvatarEmployee=Widget.extend(StandaloneFieldManagerMixin,{
+        className:'o_standalone_avatar_employee',
 
         /**
-         * @override
+         *@override
          */
-        init(parent, value) {
+        init(parent,value){
             this._super(...arguments);
             StandaloneFieldManagerMixin.init.call(this);
-            this.value = value;
+            this.value=value;
         },
         /**
-         * @override
+         *@override
          */
-        willStart() {
-            return Promise.all([this._super(...arguments), this._makeAvatarWidget()]);
+        willStart(){
+            returnPromise.all([this._super(...arguments),this._makeAvatarWidget()]);
         },
         /**
-         * @override
+         *@override
          */
-        start() {
+        start(){
             this.avatarWidget.$el.appendTo(this.$el);
-            return this._super(...arguments);
+            returnthis._super(...arguments);
         },
 
         //--------------------------------------------------------------------------
-        // Private
+        //Private
         //--------------------------------------------------------------------------
 
         /**
-         * Create a record, and initialize and start the avatar widget.
+         *Createarecord,andinitializeandstarttheavatarwidget.
          *
-         * @private
-         * @returns {Promise}
+         *@private
+         *@returns{Promise}
          */
-        async _makeAvatarWidget() {
-            const modelName = 'hr.employee';
-            const fieldName = 'employee_id';
-            const recordId = await this.model.makeRecord(modelName, [{
-                name: fieldName,
-                relation: modelName,
-                type: 'many2one',
-                value: this.value,
+        async_makeAvatarWidget(){
+            constmodelName='hr.employee';
+            constfieldName='employee_id';
+            constrecordId=awaitthis.model.makeRecord(modelName,[{
+                name:fieldName,
+                relation:modelName,
+                type:'many2one',
+                value:this.value,
             }]);
-            const state = this.model.get(recordId);
-            this.avatarWidget = new Many2OneAvatarEmployee(this, fieldName, state);
-            this._registerWidget(recordId, fieldName, this.avatarWidget);
-            return this.avatarWidget.appendTo(document.createDocumentFragment());
+            conststate=this.model.get(recordId);
+            this.avatarWidget=newMany2OneAvatarEmployee(this,fieldName,state);
+            this._registerWidget(recordId,fieldName,this.avatarWidget);
+            returnthis.avatarWidget.appendTo(document.createDocumentFragment());
         },
     });
 
-    return StandaloneM2OAvatarEmployee;
+    returnStandaloneM2OAvatarEmployee;
 });

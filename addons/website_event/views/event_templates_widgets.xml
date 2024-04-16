@@ -1,79 +1,79 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<!-- Search Box -->
-<template id="events_search_box" inherit_id="website.website_search_box" primary="True">
-    <xpath expr="//div[@role='search']" position="replace">
-        <form t-attf-class="o_wevent_event_searchbar_form o_wait_lazy_js w-100 my-1 my-lg-0 #{_classes}"
-              t-att-action="action if action else '/event'" method="get">
-            <t t-set="search" t-value="search or _searches and _searches['search']"/>
-            <t t-set="placeholder" t-value="placeholder or _placeholder"/>
+<!--SearchBox-->
+<templateid="events_search_box"inherit_id="website.website_search_box"primary="True">
+    <xpathexpr="//div[@role='search']"position="replace">
+        <formt-attf-class="o_wevent_event_searchbar_formo_wait_lazy_jsw-100my-1my-lg-0#{_classes}"
+              t-att-action="actionifactionelse'/event'"method="get">
+            <tt-set="search"t-value="searchor_searchesand_searches['search']"/>
+            <tt-set="placeholder"t-value="placeholderor_placeholder"/>
             <t>$0</t>
-            <t t-foreach="_searches" t-as="search">
-                <input t-if="search != 'search' and search_value != 'all'" type="hidden"
-                    t-att-name="search" t-att-value="search_value"/>
+            <tt-foreach="_searches"t-as="search">
+                <inputt-if="search!='search'andsearch_value!='all'"type="hidden"
+                    t-att-name="search"t-att-value="search_value"/>
             </t>
-            <t t-raw="0"/>
+            <tt-raw="0"/>
         </form>
     </xpath>
 </template>
 
-<!-- Snippet - Country Events - List -->
-<template id="country_events_list" name="Country Events List">
-    <div class="country_events_list">
-        <t t-if="events">
-            <h6 class="o_wevent_sidebar_title">
-                <t t-if="country">
-                    <i class="fa fa-flag mr-2"/>Events: <span t-esc="country.name"/>
-                    <img class="img-fluid" t-att-src="country.image_url" alt=""/>
+<!--Snippet-CountryEvents-List-->
+<templateid="country_events_list"name="CountryEventsList">
+    <divclass="country_events_list">
+        <tt-if="events">
+            <h6class="o_wevent_sidebar_title">
+                <tt-if="country">
+                    <iclass="fafa-flagmr-2"/>Events:<spant-esc="country.name"/>
+                    <imgclass="img-fluid"t-att-src="country.image_url"alt=""/>
                 </t>
-                <t t-else="">
-                    <i class="fa fa-globe mr-2"/>Upcoming Events
+                <tt-else="">
+                    <iclass="fafa-globemr-2"/>UpcomingEvents
                 </t>
             </h6>
-            <ul class="list-group mb-3">
-                <li t-foreach="events[:5]" t-as="event_dict" class="list-group-item d-flex justify-content-between">
-                    <a t-att-href="event_dict['url']">
-                        <i t-if="not event_dict['event'].website_published" class="fa fa-ban text-danger mr-1" role="img" aria-label="Unpublished" title="Unpublished"/>
-                        <span t-esc="event_dict['event'].name" t-attf-class="#{(not event_dict['event'].website_published) and 'text-danger' or ''}"/>
+            <ulclass="list-groupmb-3">
+                <lit-foreach="events[:5]"t-as="event_dict"class="list-group-itemd-flexjustify-content-between">
+                    <at-att-href="event_dict['url']">
+                        <it-if="notevent_dict['event'].website_published"class="fafa-bantext-dangermr-1"role="img"aria-label="Unpublished"title="Unpublished"/>
+                        <spant-esc="event_dict['event'].name"t-attf-class="#{(notevent_dict['event'].website_published)and'text-danger'or''}"/>
                     </a>
-                    <span t-esc="event_dict['date']"/>
+                    <spant-esc="event_dict['date']"/>
                 </li>
             </ul>
-            <div t-if="len(events) &gt; 5">
-                <t t-if="country">
-                    <a t-attf-href="/event?country=#{country.id}" class="small"><b>See all events from <span t-esc="country.name"/></b></a>
+            <divt-if="len(events)&gt;5">
+                <tt-if="country">
+                    <at-attf-href="/event?country=#{country.id}"class="small"><b>Seealleventsfrom<spant-esc="country.name"/></b></a>
                 </t>
-                <t t-else="">
-                    <a href="/event" class="small"><b>View all</b></a>
+                <tt-else="">
+                    <ahref="/event"class="small"><b>Viewall</b></a>
                 </t>
             </div>
         </t>
     </div>
 </template>
 
-<!-- Timer widget -->
-<template id="display_timer_widget" name="Display Timer Widget">
-    <t t-set="pre_countdown_display" t-value="bool(pre_countdown_text) or pre_countdown_display"/>
-    <t t-set="pre_countdown_time" t-value="datetime.datetime.now().timestamp() + int(pre_remaining_time)"/>
+<!--Timerwidget-->
+<templateid="display_timer_widget"name="DisplayTimerWidget">
+    <tt-set="pre_countdown_display"t-value="bool(pre_countdown_text)orpre_countdown_display"/>
+    <tt-set="pre_countdown_time"t-value="datetime.datetime.now().timestamp()+int(pre_remaining_time)"/>
 
-    <div class="o_display_timer"
+    <divclass="o_display_timer"
          t-att-data-display-class="display_class"
-         t-att-data-main-countdown-time="datetime.datetime.now().timestamp() + int(main_remaining_time)"
+         t-att-data-main-countdown-time="datetime.datetime.now().timestamp()+int(main_remaining_time)"
          t-att-data-main-countdown-text="main_countdown_text"
          t-att-data-main-countdown-display="main_countdown_display"
          t-att-data-pre-countdown-time="pre_countdown_time"
          t-att-data-pre-countdown-display="pre_countdown_display"
          t-att-data-pre-countdown-text="pre_countdown_text">
-        <t t-set="remaining_time" t-value="pre_remaining_time if pre_remaining_time else main_remaining_time"/>
-        <span class="o_display_timer_countdown d-flex justify-content-center">
-            <span class="o_countdown_text pr-1" t-esc="pre_countdown_text if pre_countdown_text else main_countdown_text if not pre_countdown_display else ''"/>
-            <div t-if="int(remaining_time) > 86400"
-             class="o_countdown_metric_container"><span class="o_countdown_remaining o_timer_days pr-1">0</span><span class="o_countdown_metric pr-1">days</span></div>
-            <div t-if="int(remaining_time) > 3600"
-                 class="o_countdown_metric_container"><span class="o_countdown_remaining o_timer_hours">00</span><span class="o_countdown_metric">:</span></div>
-            <div class="o_countdown_metric_container"><span class="o_countdown_remaining o_timer_minutes">00</span><span class="o_countdown_metric">:</span></div>
-            <div class="o_countdown_metric_container"><span class="o_countdown_remaining o_timer_seconds">00</span><span class="o_countdown_metric"></span></div>
+        <tt-set="remaining_time"t-value="pre_remaining_timeifpre_remaining_timeelsemain_remaining_time"/>
+        <spanclass="o_display_timer_countdownd-flexjustify-content-center">
+            <spanclass="o_countdown_textpr-1"t-esc="pre_countdown_textifpre_countdown_textelsemain_countdown_textifnotpre_countdown_displayelse''"/>
+            <divt-if="int(remaining_time)>86400"
+             class="o_countdown_metric_container"><spanclass="o_countdown_remainingo_timer_dayspr-1">0</span><spanclass="o_countdown_metricpr-1">days</span></div>
+            <divt-if="int(remaining_time)>3600"
+                 class="o_countdown_metric_container"><spanclass="o_countdown_remainingo_timer_hours">00</span><spanclass="o_countdown_metric">:</span></div>
+            <divclass="o_countdown_metric_container"><spanclass="o_countdown_remainingo_timer_minutes">00</span><spanclass="o_countdown_metric">:</span></div>
+            <divclass="o_countdown_metric_container"><spanclass="o_countdown_remainingo_timer_seconds">00</span><spanclass="o_countdown_metric"></span></div>
         </span>
     </div>
 </template>

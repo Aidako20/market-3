@@ -1,1 +1,1 @@
-flectra.__enable_summernote__ = true;
+flectra.__enable_summernote__=true;

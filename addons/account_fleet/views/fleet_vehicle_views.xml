@@ -1,18 +1,18 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xmlversion='1.0'encoding='utf-8'?>
 <flectra>
-    <record id="fleet_vehicle_view_form" model="ir.ui.view">
-        <field name="name">fleet.vehicle.form</field>
-        <field name="model">fleet.vehicle</field>
-        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//button[@name='open_assignation_logs']" position='before'>
-                <button name="action_view_bills"
+    <recordid="fleet_vehicle_view_form"model="ir.ui.view">
+        <fieldname="name">fleet.vehicle.form</field>
+        <fieldname="model">fleet.vehicle</field>
+        <fieldname="inherit_id"ref="fleet.fleet_vehicle_view_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//button[@name='open_assignation_logs']"position='before'>
+                <buttonname="action_view_bills"
                     type="object"
                     class="oe_stat_button"
                     icon="fa-pencil-square-o"
-                    attrs="{'invisible': [('bill_count', '=', 0)]}"
-                    help="show the vendor bills for this vehicle">
-                    <field name="bill_count" widget="statinfo" string="Bills"/>
+                    attrs="{'invisible':[('bill_count','=',0)]}"
+                    help="showthevendorbillsforthisvehicle">
+                    <fieldname="bill_count"widget="statinfo"string="Bills"/>
                 </button>
             </xpath>
         </field>

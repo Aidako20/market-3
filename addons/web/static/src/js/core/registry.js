@@ -1,154 +1,154 @@
-flectra.define("web.Registry", function (require) {
-    "use strict";
+flectra.define("web.Registry",function(require){
+    "usestrict";
 
-    const { sortBy } = require("web.utils");
+    const{sortBy}=require("web.utils");
 
     /**
-     * The registry is really pretty much only a mapping from some keys to some
-     * values. The Registry class only add a few simple methods around that to make
-     * it nicer and slightly safer.
+     *Theregistryisreallyprettymuchonlyamappingfromsomekeystosome
+     *values.TheRegistryclassonlyaddafewsimplemethodsaroundthattomake
+     *itnicerandslightlysafer.
      *
-     * Note that registries have a fundamental problem: the value that you try to
-     * get in a registry might not have been added yet, so of course, you need to
-     * make sure that your dependencies are solid.  For this reason, it is a good
-     * practice to avoid using the registry if you can simply import what you need
-     * with the 'require' statement.
+     *Notethatregistrieshaveafundamentalproblem:thevaluethatyoutryto
+     *getinaregistrymightnothavebeenaddedyet,soofcourse,youneedto
+     *makesurethatyourdependenciesaresolid. Forthisreason,itisagood
+     *practicetoavoidusingtheregistryifyoucansimplyimportwhatyouneed
+     *withthe'require'statement.
      *
-     * However, on the flip side, sometimes you cannot just simply import something
-     * because we would have a dependency cycle.  In that case, registries might
-     * help.
+     *However,ontheflipside,sometimesyoucannotjustsimplyimportsomething
+     *becausewewouldhaveadependencycycle. Inthatcase,registriesmight
+     *help.
      */
-    class Registry {
+    classRegistry{
         /**
-         * @function predicate
-         * @param {any} value
-         * @returns {boolean}
+         *@functionpredicate
+         *@param{any}value
+         *@returns{boolean}
          */
         /**
-         * @param {Object} [mapping] the initial data in the registry
-         * @param {predicate} [predicate=(() => true)] predicate that each
-         *      added value must pass to be registered.
+         *@param{Object}[mapping]theinitialdataintheregistry
+         *@param{predicate}[predicate=(()=>true)]predicatethateach
+         *     addedvaluemustpasstoberegistered.
          */
-        constructor(mapping, predicate = () => true) {
-            this.map = Object.create(mapping || null);
-            this._scoreMapping = Object.create(null);
-            this._sortedKeys = null;
-            this.listeners = []; // listening callbacks on newly added items.
-            this.predicate = predicate;
+        constructor(mapping,predicate=()=>true){
+            this.map=Object.create(mapping||null);
+            this._scoreMapping=Object.create(null);
+            this._sortedKeys=null;
+            this.listeners=[];//listeningcallbacksonnewlyaddeditems.
+            this.predicate=predicate;
         }
 
         //--------------------------------------------------------------------------
-        // Public
+        //Public
         //--------------------------------------------------------------------------
 
         /**
-         * Add a key (and a value) to the registry.
-         * Notify the listeners on newly added item in the registry.
-         * @param {string} key
-         * @param {any} value
-         * @param {number} [score] if given, this value will be used to order keys
-         * @returns {Registry} can be used to chain add calls.
+         *Addakey(andavalue)totheregistry.
+         *Notifythelistenersonnewlyaddeditemintheregistry.
+         *@param{string}key
+         *@param{any}value
+         *@param{number}[score]ifgiven,thisvaluewillbeusedtoorderkeys
+         *@returns{Registry}canbeusedtochainaddcalls.
          */
-        add(key, value, score) {
-            if (!this.predicate(value)) {
-                throw new Error(`Value of key "${key}" does not pass the addition predicate.`);
+        add(key,value,score){
+            if(!this.predicate(value)){
+                thrownewError(`Valueofkey"${key}"doesnotpasstheadditionpredicate.`);
             }
-            this._scoreMapping[key] = score === undefined ? key : score;
-            this._sortedKeys = null;
-            this.map[key] = value;
-            for (const callback of this.listeners) {
-                callback(key, value);
+            this._scoreMapping[key]=score===undefined?key:score;
+            this._sortedKeys=null;
+            this.map[key]=value;
+            for(constcallbackofthis.listeners){
+                callback(key,value);
             }
-            return this;
+            returnthis;
         }
 
         /**
-         * Check if the registry contains the key
-         * @param {string} key
-         * @returns {boolean}
+         *Checkiftheregistrycontainsthekey
+         *@param{string}key
+         *@returns{boolean}
          */
-        contains(key) {
-            return key in this.map;
+        contains(key){
+            returnkeyinthis.map;
         }
 
         /**
-         * Returns the content of the registry (an object mapping keys to values)
-         * @returns {Object}
+         *Returnsthecontentoftheregistry(anobjectmappingkeystovalues)
+         *@returns{Object}
          */
-        entries() {
-            const entries = {};
-            const keys = this.keys();
-            for (const key of keys) {
-                entries[key] = this.map[key];
+        entries(){
+            constentries={};
+            constkeys=this.keys();
+            for(constkeyofkeys){
+                entries[key]=this.map[key];
             }
-            return entries;
+            returnentries;
         }
 
         /**
-         * Returns the value associated to the given key.
-         * @param {string} key
-         * @returns {any}
+         *Returnsthevalueassociatedtothegivenkey.
+         *@param{string}key
+         *@returns{any}
          */
-        get(key) {
-            return this.map[key];
+        get(key){
+            returnthis.map[key];
         }
 
         /**
-         * Tries a number of keys, and returns the first object matching one of
-         * the keys.
-         * @param {string[]} keys a sequence of keys to fetch the object for
-         * @returns {any} the first result found matching an object
+         *Triesanumberofkeys,andreturnsthefirstobjectmatchingoneof
+         *thekeys.
+         *@param{string[]}keysasequenceofkeystofetchtheobjectfor
+         *@returns{any}thefirstresultfoundmatchinganobject
          */
-        getAny(keys) {
-            for (const key of keys) {
-                if (key in this.map) {
-                    return this.map[key];
+        getAny(keys){
+            for(constkeyofkeys){
+                if(keyinthis.map){
+                    returnthis.map[key];
                 }
             }
-            return null;
+            returnnull;
         }
 
         /**
-         * Return the list of keys in map object.
+         *Returnthelistofkeysinmapobject.
          *
-         * The registry guarantees that the keys have a consistent order, defined by
-         * the 'score' value when the item has been added.
-         * @returns {string[]}
+         *Theregistryguaranteesthatthekeyshaveaconsistentorder,definedby
+         *the'score'valuewhentheitemhasbeenadded.
+         *@returns{string[]}
          */
-        keys() {
-            if (!this._sortedKeys) {
-                const keys = [];
-                for (const key in this.map) {
+        keys(){
+            if(!this._sortedKeys){
+                constkeys=[];
+                for(constkeyinthis.map){
                     keys.push(key);
                 }
-                this._sortedKeys = sortBy(keys,
-                    key => this._scoreMapping[key] || 0
+                this._sortedKeys=sortBy(keys,
+                    key=>this._scoreMapping[key]||0
                 );
             }
-            return this._sortedKeys;
+            returnthis._sortedKeys;
         }
 
         /**
-         * @function onAddCallback
-         * @param {string} key
-         * @param {any} value
+         *@functiononAddCallback
+         *@param{string}key
+         *@param{any}value
          */
         /**
-         * Register a callback to execute when items are added to the registry.
-         * @param {onAddCallback} callback function with parameters (key, value).
+         *Registeracallbacktoexecutewhenitemsareaddedtotheregistry.
+         *@param{onAddCallback}callbackfunctionwithparameters(key,value).
          */
-        onAdd(callback) {
+        onAdd(callback){
             this.listeners.push(callback);
         }
 
         /**
-         * Return the list of values in map object
-         * @returns {string[]}
+         *Returnthelistofvaluesinmapobject
+         *@returns{string[]}
          */
-        values() {
-            return this.keys().map((key) => this.map[key]);
+        values(){
+            returnthis.keys().map((key)=>this.map[key]);
         }
     }
 
-    return Registry;
+    returnRegistry;
 });

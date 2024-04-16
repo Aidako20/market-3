@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models
+fromflectraimportapi,models
 
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+classResConfigSettings(models.TransientModel):
+    _inherit='res.config.settings'
 
     @api.model
-    def _redirect_to_iap_account(self):
-        return {
-            'type': 'ir.actions.act_url',
-            'url': self.env['iap.account'].get_account_url(),
+    def_redirect_to_iap_account(self):
+        return{
+            'type':'ir.actions.act_url',
+            'url':self.env['iap.account'].get_account_url(),
         }

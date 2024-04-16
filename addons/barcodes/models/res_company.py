@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import models, fields
+fromflectraimportmodels,fields
 
 
-class ResCompany(models.Model):
-    _inherit = 'res.company'
+classResCompany(models.Model):
+    _inherit='res.company'
 
-    def _get_default_nomenclature(self):
-        return self.env.ref('barcodes.default_barcode_nomenclature', raise_if_not_found=False)
+    def_get_default_nomenclature(self):
+        returnself.env.ref('barcodes.default_barcode_nomenclature',raise_if_not_found=False)
 
-    nomenclature_id = fields.Many2one(
+    nomenclature_id=fields.Many2one(
         'barcode.nomenclature',
         string="Nomenclature",
         default=_get_default_nomenclature,

@@ -1,184 +1,184 @@
-flectra.define('mail/static/src/utils/utils.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/utils/utils.js',function(require){
+'usestrict';
 
-const { delay } = require('web.concurrency');
-const {
-    patch: webUtilsPatch,
+const{delay}=require('web.concurrency');
+const{
+    patch:webUtilsPatch,
     unaccent,
-    unpatch: webUtilsUnpatch,
-} = require('web.utils');
+    unpatch:webUtilsUnpatch,
+}=require('web.utils');
 
 //------------------------------------------------------------------------------
-// Public
+//Public
 //------------------------------------------------------------------------------
 
-const classPatchMap = new WeakMap();
-const eventHandledWeakMap = new WeakMap();
+constclassPatchMap=newWeakMap();
+consteventHandledWeakMap=newWeakMap();
 
 /**
- * Returns the given string after cleaning it. The goal of the clean is to give
- * more convenient results when comparing it to potential search results, on
- * which the clean should also be called before comparing them.
+ *Returnsthegivenstringaftercleaningit.Thegoalofthecleanistogive
+ *moreconvenientresultswhencomparingittopotentialsearchresults,on
+ *whichthecleanshouldalsobecalledbeforecomparingthem.
  *
- * @param {string} searchTerm
- * @returns {string}
+ *@param{string}searchTerm
+ *@returns{string}
  */
-function cleanSearchTerm(searchTerm) {
-    return unaccent(searchTerm.toLowerCase());
+functioncleanSearchTerm(searchTerm){
+    returnunaccent(searchTerm.toLowerCase());
 }
 
 /**
- * Executes the provided functions in order, but with a potential delay between
- * them if they take too much time. This is done in order to avoid blocking the
- * main thread for too long.
+ *Executestheprovidedfunctionsinorder,butwithapotentialdelaybetween
+ *themiftheytaketoomuchtime.Thisisdoneinordertoavoidblockingthe
+ *mainthreadfortoolong.
  *
- * @param {function[]} functions
- * @param {integer} [maxTimeFrame=100] time (in ms) until a delay is introduced
+ *@param{function[]}functions
+ *@param{integer}[maxTimeFrame=100]time(inms)untiladelayisintroduced
  */
-async function executeGracefully(functions, maxTimeFrame = 100) {
-    let startDate = new Date();
-    for (const func of functions) {
-        if (new Date() - startDate > maxTimeFrame) {
-            await new Promise(resolve => setTimeout(resolve));
-            startDate = new Date();
+asyncfunctionexecuteGracefully(functions,maxTimeFrame=100){
+    letstartDate=newDate();
+    for(constfuncoffunctions){
+        if(newDate()-startDate>maxTimeFrame){
+            awaitnewPromise(resolve=>setTimeout(resolve));
+            startDate=newDate();
         }
-        await func();
+        awaitfunc();
     }
 }
 
 /**
- * Returns whether the given event has been handled with the given markName.
+ *ReturnswhetherthegiveneventhasbeenhandledwiththegivenmarkName.
  *
- * @param {Event} ev
- * @param {string} markName
- * @returns {boolean}
+ *@param{Event}ev
+ *@param{string}markName
+ *@returns{boolean}
  */
-function isEventHandled(ev, markName) {
-    if (!eventHandledWeakMap.get(ev)) {
-        return false;
+functionisEventHandled(ev,markName){
+    if(!eventHandledWeakMap.get(ev)){
+        returnfalse;
     }
-    return eventHandledWeakMap.get(ev).includes(markName);
+    returneventHandledWeakMap.get(ev).includes(markName);
 }
 
 /**
- * Marks the given event as handled by the given markName. Useful to allow
- * handlers in the propagation chain to make a decision based on what has
- * already been done.
+ *MarksthegiveneventashandledbythegivenmarkName.Usefultoallow
+ *handlersinthepropagationchaintomakeadecisionbasedonwhathas
+ *alreadybeendone.
  *
- * @param {Event} ev
- * @param {string} markName
+ *@param{Event}ev
+ *@param{string}markName
  */
-function markEventHandled(ev, markName) {
-    if (!eventHandledWeakMap.get(ev)) {
-        eventHandledWeakMap.set(ev, []);
+functionmarkEventHandled(ev,markName){
+    if(!eventHandledWeakMap.get(ev)){
+        eventHandledWeakMap.set(ev,[]);
     }
     eventHandledWeakMap.get(ev).push(markName);
 }
 
 /**
- * Wait a task tick, so that anything in micro-task queue that can be processed
- * is processed.
+ *Waitatasktick,sothatanythinginmicro-taskqueuethatcanbeprocessed
+ *isprocessed.
  */
-async function nextTick() {
-    await delay(0);
+asyncfunctionnextTick(){
+    awaitdelay(0);
 }
 
 /**
- * Inspired by web.utils:patch utility function
+ *Inspiredbyweb.utils:patchutilityfunction
  *
- * @param {Class} Class
- * @param {string} patchName
- * @param {Object} patch
- * @returns {function} unpatch function
+ *@param{Class}Class
+ *@param{string}patchName
+ *@param{Object}patch
+ *@returns{function}unpatchfunction
  */
-function patchClassMethods(Class, patchName, patch) {
-    let metadata = classPatchMap.get(Class);
-    if (!metadata) {
-        metadata = {
-            origMethods: {},
-            patches: {},
-            current: []
+functionpatchClassMethods(Class,patchName,patch){
+    letmetadata=classPatchMap.get(Class);
+    if(!metadata){
+        metadata={
+            origMethods:{},
+            patches:{},
+            current:[]
         };
-        classPatchMap.set(Class, metadata);
+        classPatchMap.set(Class,metadata);
     }
-    if (metadata.patches[patchName]) {
-        throw new Error(`Patch [${patchName}] already exists`);
+    if(metadata.patches[patchName]){
+        thrownewError(`Patch[${patchName}]alreadyexists`);
     }
-    metadata.patches[patchName] = patch;
-    applyPatch(Class, patch);
+    metadata.patches[patchName]=patch;
+    applyPatch(Class,patch);
     metadata.current.push(patchName);
 
-    function applyPatch(Class, patch) {
-        Object.keys(patch).forEach(function (methodName) {
-            const method = patch[methodName];
-            if (typeof method === "function") {
-                const original = Class[methodName];
-                if (!(methodName in metadata.origMethods)) {
-                    metadata.origMethods[methodName] = original;
+    functionapplyPatch(Class,patch){
+        Object.keys(patch).forEach(function(methodName){
+            constmethod=patch[methodName];
+            if(typeofmethod==="function"){
+                constoriginal=Class[methodName];
+                if(!(methodNameinmetadata.origMethods)){
+                    metadata.origMethods[methodName]=original;
                 }
-                Class[methodName] = function (...args) {
-                    const previousSuper = this._super;
-                    this._super = original;
-                    const res = method.call(this, ...args);
-                    this._super = previousSuper;
-                    return res;
+                Class[methodName]=function(...args){
+                    constpreviousSuper=this._super;
+                    this._super=original;
+                    constres=method.call(this,...args);
+                    this._super=previousSuper;
+                    returnres;
                 };
             }
         });
     }
 
-    return () => unpatchClassMethods.bind(Class, patchName);
+    return()=>unpatchClassMethods.bind(Class,patchName);
 }
 
 /**
- * @param {Class} Class
- * @param {string} patchName
- * @param {Object} patch
- * @returns {function} unpatch function
+ *@param{Class}Class
+ *@param{string}patchName
+ *@param{Object}patch
+ *@returns{function}unpatchfunction
  */
-function patchInstanceMethods(Class, patchName, patch) {
-    return webUtilsPatch(Class, patchName, patch);
+functionpatchInstanceMethods(Class,patchName,patch){
+    returnwebUtilsPatch(Class,patchName,patch);
 }
 
 /**
- * Inspired by web.utils:unpatch utility function
+ *Inspiredbyweb.utils:unpatchutilityfunction
  *
- * @param {Class} Class
- * @param {string} patchName
+ *@param{Class}Class
+ *@param{string}patchName
  */
-function unpatchClassMethods(Class, patchName) {
-    let metadata = classPatchMap.get(Class);
-    if (!metadata) {
+functionunpatchClassMethods(Class,patchName){
+    letmetadata=classPatchMap.get(Class);
+    if(!metadata){
         return;
     }
     classPatchMap.delete(Class);
 
-    // reset to original
-    for (let k in metadata.origMethods) {
-        Class[k] = metadata.origMethods[k];
+    //resettooriginal
+    for(letkinmetadata.origMethods){
+        Class[k]=metadata.origMethods[k];
     }
 
-    // apply other patches
-    for (let name of metadata.current) {
-        if (name !== patchName) {
-            patchClassMethods(Class, name, metadata.patches[name]);
+    //applyotherpatches
+    for(letnameofmetadata.current){
+        if(name!==patchName){
+            patchClassMethods(Class,name,metadata.patches[name]);
         }
     }
 }
 
 /**
- * @param {Class} Class
- * @param {string} patchName
+ *@param{Class}Class
+ *@param{string}patchName
  */
-function unpatchInstanceMethods(Class, patchName) {
-    return webUtilsUnpatch(Class, patchName);
+functionunpatchInstanceMethods(Class,patchName){
+    returnwebUtilsUnpatch(Class,patchName);
 }
 
 //------------------------------------------------------------------------------
-// Export
+//Export
 //------------------------------------------------------------------------------
 
-return {
+return{
     cleanSearchTerm,
     executeGracefully,
     isEventHandled,

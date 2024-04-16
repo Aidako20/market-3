@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="utf-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="PaymentTransactionPopup" owl="1">
-        <div role="dialog" class="modal-dialog">
-            <div class="popup">
-                <p class="title">
-                    <t t-esc="props.title"></t>
+    <tt-name="PaymentTransactionPopup"owl="1">
+        <divrole="dialog"class="modal-dialog">
+            <divclass="popup">
+                <pclass="title">
+                    <tt-esc="props.title"></t>
                 </p>
-                <p class="body">
-                    <t t-esc="state.message"></t>
+                <pclass="body">
+                    <tt-esc="state.message"></t>
                 </p>
-                <div t-if="state.confirmButtonIsShown" class="footer">
-                    <div class="button cancel" t-on-click="confirm">
-                        <t t-esc="props.confirmText"></t>
+                <divt-if="state.confirmButtonIsShown"class="footer">
+                    <divclass="buttoncancel"t-on-click="confirm">
+                        <tt-esc="props.confirmText"></t>
                     </div>
                 </div>
             </div>

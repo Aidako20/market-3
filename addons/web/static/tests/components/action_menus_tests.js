@@ -1,247 +1,247 @@
-flectra.define('web.action_menus_tests', function (require) {
-    "use strict";
+flectra.define('web.action_menus_tests',function(require){
+    "usestrict";
 
-    const ActionMenus = require('web.ActionMenus');
-    const Registry = require('web.Registry');
-    const testUtils = require('web.test_utils');
+    constActionMenus=require('web.ActionMenus');
+    constRegistry=require('web.Registry');
+    consttestUtils=require('web.test_utils');
 
-    const { Component } = owl;
-    const cpHelpers = testUtils.controlPanel;
-    const { createComponent } = testUtils;
+    const{Component}=owl;
+    constcpHelpers=testUtils.controlPanel;
+    const{createComponent}=testUtils;
 
-    QUnit.module('Components', {
-        beforeEach() {
-            this.action = {
-                res_model: 'hobbit',
+    QUnit.module('Components',{
+        beforeEach(){
+            this.action={
+                res_model:'hobbit',
             };
-            this.view = {
-                // needed by google_drive module, makes sense to give a view anyway.
-                type: 'form',
+            this.view={
+                //neededbygoogle_drivemodule,makessensetogiveaviewanyway.
+                type:'form',
             };
-            this.props = {
-                activeIds: [23],
-                context: {},
-                items: {
-                    action: [
-                        { action: { id: 1 }, name: "What's taters, precious ?", id: 1 },
+            this.props={
+                activeIds:[23],
+                context:{},
+                items:{
+                    action:[
+                        {action:{id:1},name:"What'staters,precious?",id:1},
                     ],
-                    print: [
-                        { action: { id: 2 }, name: "Po-ta-toes", id: 2 },
+                    print:[
+                        {action:{id:2},name:"Po-ta-toes",id:2},
                     ],
-                    other: [
-                        { description: "Boil'em", callback() { } },
-                        { description: "Mash'em", callback() { } },
-                        { description: "Stick'em in a stew", url: '#stew' },
+                    other:[
+                        {description:"Boil'em",callback(){}},
+                        {description:"Mash'em",callback(){}},
+                        {description:"Stick'eminastew",url:'#stew'},
                     ],
                 },
             };
-            // Patch the registry of the action menus
-            this.actionMenusRegistry = ActionMenus.registry;
-            ActionMenus.registry = new Registry();
+            //Patchtheregistryoftheactionmenus
+            this.actionMenusRegistry=ActionMenus.registry;
+            ActionMenus.registry=newRegistry();
         },
-        afterEach() {
-            ActionMenus.registry = this.actionMenusRegistry;
+        afterEach(){
+            ActionMenus.registry=this.actionMenusRegistry;
         },
-    }, function () {
+    },function(){
 
         QUnit.module('ActionMenus');
 
-        QUnit.test('basic interactions', async function (assert) {
+        QUnit.test('basicinteractions',asyncfunction(assert){
             assert.expect(10);
 
-            const actionMenus = await createComponent(ActionMenus, {
-                env: {
-                    action: this.action,
-                    view: this.view,
+            constactionMenus=awaitcreateComponent(ActionMenus,{
+                env:{
+                    action:this.action,
+                    view:this.view,
                 },
-                props: this.props,
+                props:this.props,
             });
 
-            const dropdowns = actionMenus.el.getElementsByClassName('o_dropdown');
-            assert.strictEqual(dropdowns.length, 2, "ActionMenus should contain 2 menus");
-            assert.strictEqual(dropdowns[0].querySelector('.o_dropdown_title').innerText.trim(), "Print");
-            assert.strictEqual(dropdowns[1].querySelector('.o_dropdown_title').innerText.trim(), "Action");
-            assert.containsNone(actionMenus, '.o_dropdown_menu');
+            constdropdowns=actionMenus.el.getElementsByClassName('o_dropdown');
+            assert.strictEqual(dropdowns.length,2,"ActionMenusshouldcontain2menus");
+            assert.strictEqual(dropdowns[0].querySelector('.o_dropdown_title').innerText.trim(),"Print");
+            assert.strictEqual(dropdowns[1].querySelector('.o_dropdown_title').innerText.trim(),"Action");
+            assert.containsNone(actionMenus,'.o_dropdown_menu');
 
-            await cpHelpers.toggleActionMenu(actionMenus, "Action");
+            awaitcpHelpers.toggleActionMenu(actionMenus,"Action");
 
-            assert.containsOnce(actionMenus, '.o_dropdown_menu');
-            assert.containsN(actionMenus, '.o_dropdown_menu .o_menu_item', 4);
-            const actionsTexts = [...dropdowns[1].querySelectorAll('.o_menu_item')].map(el => el.innerText.trim());
-            assert.deepEqual(actionsTexts, [
+            assert.containsOnce(actionMenus,'.o_dropdown_menu');
+            assert.containsN(actionMenus,'.o_dropdown_menu.o_menu_item',4);
+            constactionsTexts=[...dropdowns[1].querySelectorAll('.o_menu_item')].map(el=>el.innerText.trim());
+            assert.deepEqual(actionsTexts,[
                 "Boil'em",
                 "Mash'em",
-                "Stick'em in a stew",
-                "What's taters, precious ?",
-            ], "callbacks should appear before actions");
+                "Stick'eminastew",
+                "What'staters,precious?",
+            ],"callbacksshouldappearbeforeactions");
 
-            await cpHelpers.toggleActionMenu(actionMenus, "Print");
+            awaitcpHelpers.toggleActionMenu(actionMenus,"Print");
 
-            assert.containsOnce(actionMenus, '.o_dropdown_menu');
-            assert.containsN(actionMenus, '.o_dropdown_menu .o_menu_item', 1);
+            assert.containsOnce(actionMenus,'.o_dropdown_menu');
+            assert.containsN(actionMenus,'.o_dropdown_menu.o_menu_item',1);
 
-            await cpHelpers.toggleActionMenu(actionMenus, "Print");
+            awaitcpHelpers.toggleActionMenu(actionMenus,"Print");
 
-            assert.containsNone(actionMenus, '.o_dropdown_menu');
+            assert.containsNone(actionMenus,'.o_dropdown_menu');
 
             actionMenus.destroy();
         });
 
-        QUnit.test("empty action menus", async function (assert) {
+        QUnit.test("emptyactionmenus",asyncfunction(assert){
             assert.expect(1);
 
-            ActionMenus.registry.add("test", { Component, getProps: () => false });
-            this.props.items = {};
+            ActionMenus.registry.add("test",{Component,getProps:()=>false});
+            this.props.items={};
 
-            const actionMenus = await createComponent(ActionMenus, {
-                env: {
-                    action: this.action,
-                    view: this.view,
+            constactionMenus=awaitcreateComponent(ActionMenus,{
+                env:{
+                    action:this.action,
+                    view:this.view,
                 },
-                props: this.props,
+                props:this.props,
             });
 
-            assert.containsNone(actionMenus, ".o_cp_action_menus > *");
+            assert.containsNone(actionMenus,".o_cp_action_menus>*");
 
             actionMenus.destroy();
         });
 
-        QUnit.test('execute action', async function (assert) {
+        QUnit.test('executeaction',asyncfunction(assert){
             assert.expect(4);
 
-            const actionMenus = await createComponent(ActionMenus, {
-                env: {
-                    action: this.action,
-                    view: this.view,
+            constactionMenus=awaitcreateComponent(ActionMenus,{
+                env:{
+                    action:this.action,
+                    view:this.view,
                 },
-                props: this.props,
-                intercepts: {
-                    'do-action': ev => assert.step('do-action'),
+                props:this.props,
+                intercepts:{
+                    'do-action':ev=>assert.step('do-action'),
                 },
-                async mockRPC(route, args) {
-                    switch (route) {
-                        case '/web/action/load':
-                            const expectedContext = {
-                                active_id: 23,
-                                active_ids: [23],
-                                active_model: 'hobbit',
+                asyncmockRPC(route,args){
+                    switch(route){
+                        case'/web/action/load':
+                            constexpectedContext={
+                                active_id:23,
+                                active_ids:[23],
+                                active_model:'hobbit',
                             };
-                            assert.deepEqual(args.context, expectedContext);
+                            assert.deepEqual(args.context,expectedContext);
                             assert.step('load-action');
-                            return { context: {}, flags: {} };
+                            return{context:{},flags:{}};
                         default:
-                            return this._super(...arguments);
+                            returnthis._super(...arguments);
 
                     }
                 },
             });
 
-            await cpHelpers.toggleActionMenu(actionMenus, "Action");
-            await cpHelpers.toggleMenuItem(actionMenus, "What's taters, precious ?");
+            awaitcpHelpers.toggleActionMenu(actionMenus,"Action");
+            awaitcpHelpers.toggleMenuItem(actionMenus,"What'staters,precious?");
 
-            assert.verifySteps(['load-action', 'do-action']);
+            assert.verifySteps(['load-action','do-action']);
 
             actionMenus.destroy();
         });
 
-        QUnit.test('execute callback action', async function (assert) {
+        QUnit.test('executecallbackaction',asyncfunction(assert){
             assert.expect(2);
 
-            const callbackPromise = testUtils.makeTestPromise();
-            this.props.items.other[0].callback = function (items) {
-                assert.strictEqual(items.length, 1);
-                assert.strictEqual(items[0].description, "Boil'em");
+            constcallbackPromise=testUtils.makeTestPromise();
+            this.props.items.other[0].callback=function(items){
+                assert.strictEqual(items.length,1);
+                assert.strictEqual(items[0].description,"Boil'em");
                 callbackPromise.resolve();
             };
 
-            const actionMenus = await createComponent(ActionMenus, {
-                env: {
-                    action: this.action,
-                    view: this.view,
+            constactionMenus=awaitcreateComponent(ActionMenus,{
+                env:{
+                    action:this.action,
+                    view:this.view,
                 },
-                props: this.props,
-                async mockRPC(route, args) {
-                    switch (route) {
-                        case '/web/action/load':
-                            throw new Error("No action should be loaded.");
+                props:this.props,
+                asyncmockRPC(route,args){
+                    switch(route){
+                        case'/web/action/load':
+                            thrownewError("Noactionshouldbeloaded.");
                         default:
-                            return this._super(...arguments);
+                            returnthis._super(...arguments);
                     }
                 },
             });
 
-            await cpHelpers.toggleActionMenu(actionMenus, "Action");
-            await cpHelpers.toggleMenuItem(actionMenus, "Boil'em");
+            awaitcpHelpers.toggleActionMenu(actionMenus,"Action");
+            awaitcpHelpers.toggleMenuItem(actionMenus,"Boil'em");
 
-            await callbackPromise;
+            awaitcallbackPromise;
 
             actionMenus.destroy();
         });
 
-        QUnit.test('execute print action', async function (assert) {
+        QUnit.test('executeprintaction',asyncfunction(assert){
             assert.expect(4);
 
-            const actionMenus = await createComponent(ActionMenus, {
-                env: {
-                    action: this.action,
-                    view: this.view,
+            constactionMenus=awaitcreateComponent(ActionMenus,{
+                env:{
+                    action:this.action,
+                    view:this.view,
                 },
-                intercepts: {
-                    'do-action': ev => assert.step('do-action'),
+                intercepts:{
+                    'do-action':ev=>assert.step('do-action'),
                 },
-                props: this.props,
-                async mockRPC(route, args) {
-                    switch (route) {
-                        case '/web/action/load':
-                            const expectedContext = {
-                                active_id: 23,
-                                active_ids: [23],
-                                active_model: 'hobbit',
+                props:this.props,
+                asyncmockRPC(route,args){
+                    switch(route){
+                        case'/web/action/load':
+                            constexpectedContext={
+                                active_id:23,
+                                active_ids:[23],
+                                active_model:'hobbit',
                             };
-                            assert.deepEqual(args.context, expectedContext);
+                            assert.deepEqual(args.context,expectedContext);
                             assert.step('load-action');
-                            return { context: {}, flags: {} };
+                            return{context:{},flags:{}};
                         default:
-                            return this._super(...arguments);
+                            returnthis._super(...arguments);
 
                     }
                 },
             });
 
-            await cpHelpers.toggleActionMenu(actionMenus, "Print");
-            await cpHelpers.toggleMenuItem(actionMenus, "Po-ta-toes");
+            awaitcpHelpers.toggleActionMenu(actionMenus,"Print");
+            awaitcpHelpers.toggleMenuItem(actionMenus,"Po-ta-toes");
 
-            assert.verifySteps(['load-action', 'do-action']);
+            assert.verifySteps(['load-action','do-action']);
 
             actionMenus.destroy();
         });
 
-        QUnit.test('execute url action', async function (assert) {
+        QUnit.test('executeurlaction',asyncfunction(assert){
             assert.expect(2);
 
-            const actionMenus = await createComponent(ActionMenus, {
-                env: {
-                    action: this.action,
-                    services: {
-                        navigate(url) {
+            constactionMenus=awaitcreateComponent(ActionMenus,{
+                env:{
+                    action:this.action,
+                    services:{
+                        navigate(url){
                             assert.step(url);
                         },
                     },
-                    view: this.view,
+                    view:this.view,
                 },
-                props: this.props,
-                async mockRPC(route, args) {
-                    switch (route) {
-                        case '/web/action/load':
-                            throw new Error("No action should be loaded.");
+                props:this.props,
+                asyncmockRPC(route,args){
+                    switch(route){
+                        case'/web/action/load':
+                            thrownewError("Noactionshouldbeloaded.");
                         default:
-                            return this._super(...arguments);
+                            returnthis._super(...arguments);
                     }
                 },
             });
 
-            await cpHelpers.toggleActionMenu(actionMenus, "Action");
-            await cpHelpers.toggleMenuItem(actionMenus, "Stick'em in a stew");
+            awaitcpHelpers.toggleActionMenu(actionMenus,"Action");
+            awaitcpHelpers.toggleMenuItem(actionMenus,"Stick'eminastew");
 
             assert.verifySteps(['#stew']);
 

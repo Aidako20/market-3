@@ -1,54 +1,54 @@
-flectra.define('sms.onchange_in_keyup', function (require) {
-"use strict";
+flectra.define('sms.onchange_in_keyup',function(require){
+"usestrict";
 
-var FieldChar = require('web.basic_fields').FieldChar;
+varFieldChar=require('web.basic_fields').FieldChar;
 FieldChar.include({
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //-------------------------------------------------------------------------
 
     /**
-     * Support a key-based onchange in text field. In order to avoid too much
-     * rpc to the server _triggerOnchange is throttled (once every second max)
+     *Supportakey-basedonchangeintextfield.Inordertoavoidtoomuch
+     *rpctotheserver_triggerOnchangeisthrottled(onceeverysecondmax)
      *
      */
-    init: function () {
-        this._super.apply(this, arguments);
-        this._triggerOnchange = _.throttle(this._triggerOnchange, 1000, {leading: false});
+    init:function(){
+        this._super.apply(this,arguments);
+        this._triggerOnchange=_.throttle(this._triggerOnchange,1000,{leading:false});
     },
 
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Trigger the 'change' event at key down. It allows to trigger an onchange
-     * while typing which may be interesting in some cases. Otherwise onchange
-     * is triggered only on blur.
+     *Triggerthe'change'eventatkeydown.Itallowstotriggeranonchange
+     *whiletypingwhichmaybeinterestinginsomecases.Otherwiseonchange
+     *istriggeredonlyonblur.
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onKeydown: function () {
-        this._super.apply(this, arguments);
-        if (this.nodeOptions.onchange_on_keydown) {
+    _onKeydown:function(){
+        this._super.apply(this,arguments);
+        if(this.nodeOptions.onchange_on_keydown){
             this._triggerOnchange();
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Triggers the 'change' event to refresh the value. Throttled at init to
-     * avoid spaming server.
+     *Triggersthe'change'eventtorefreshthevalue.Throttledatinitto
+     *avoidspamingserver.
      *
-     * @private
+     *@private
      */
-    _triggerOnchange: function () {
+    _triggerOnchange:function(){
         this.$input.trigger('change');
     },
 });

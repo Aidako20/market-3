@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = "res.config.settings"
+classResConfigSettings(models.TransientModel):
+    _inherit="res.config.settings"
 
-    google_drive_uri_copy = fields.Char(related='google_drive_uri', string='URI Copy', help="The URL to generate the authorization code from Google", readonly=False)
+    google_drive_uri_copy=fields.Char(related='google_drive_uri',string='URICopy',help="TheURLtogeneratetheauthorizationcodefromGoogle",readonly=False)

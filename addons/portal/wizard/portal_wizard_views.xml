@@ -1,37 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <!-- wizard action on res.partner -->
-        <record id="partner_wizard_action" model="ir.actions.act_window">
-            <field name="name">Grant portal access</field>
-            <field name="res_model">portal.wizard</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
-            <field name="binding_model_id" ref="base.model_res_partner"/>
+        <!--wizardactiononres.partner-->
+        <recordid="partner_wizard_action"model="ir.actions.act_window">
+            <fieldname="name">Grantportalaccess</field>
+            <fieldname="res_model">portal.wizard</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="target">new</field>
+            <fieldname="binding_model_id"ref="base.model_res_partner"/>
         </record>
 
-        <!-- wizard view -->
-        <record id="wizard_view" model="ir.ui.view">
-            <field name="name">Grant Portal Access</field>
-            <field name="model">portal.wizard</field>
-            <field name="arch" type="xml">
-                <form string="Grant Portal Access">
+        <!--wizardview-->
+        <recordid="wizard_view"model="ir.ui.view">
+            <fieldname="name">GrantPortalAccess</field>
+            <fieldname="model">portal.wizard</field>
+            <fieldname="arch"type="xml">
+                <formstring="GrantPortalAccess">
                     <div>
-                        Select which contacts should belong to the portal in the list below.
-                        The email address of each selected contact must be valid and unique.
-                        If necessary, you can fix any contact's email address directly in the list.
+                        Selectwhichcontactsshouldbelongtotheportalinthelistbelow.
+                        Theemailaddressofeachselectedcontactmustbevalidandunique.
+                        Ifnecessary,youcanfixanycontact'semailaddressdirectlyinthelist.
                     </div>
-                    <field name="user_ids">
-                        <tree string="Contacts" editable="bottom" create="false" delete="false">
-                            <field name="partner_id" force_save="1"/>
-                            <field name="email"/>
-                            <field name="in_portal"/>
+                    <fieldname="user_ids">
+                        <treestring="Contacts"editable="bottom"create="false"delete="false">
+                            <fieldname="partner_id"force_save="1"/>
+                            <fieldname="email"/>
+                            <fieldname="in_portal"/>
                         </tree>
                     </field>
-                    <field name="welcome_message"
-                        placeholder="This text is included in the email sent to new portal users."/>
+                    <fieldname="welcome_message"
+                        placeholder="Thistextisincludedintheemailsenttonewportalusers."/>
                     <footer>
-                        <button string="Apply" name="action_apply" type="object" class="btn-primary"/>
-                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                        <buttonstring="Apply"name="action_apply"type="object"class="btn-primary"/>
+                        <buttonstring="Cancel"class="btn-secondary"special="cancel"/>
                     </footer>
                 </form>
             </field>

@@ -1,18 +1,18 @@
-flectra.define('point_of_sale.WrappedProductNameLines', function(require) {
-    'use strict';
+flectra.define('point_of_sale.WrappedProductNameLines',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
 
-    class WrappedProductNameLines extends PosComponent {
-        constructor() {
+    classWrappedProductNameLinesextendsPosComponent{
+        constructor(){
             super(...arguments);
-            this.line = this.props.line;
+            this.line=this.props.line;
         }
     }
-    WrappedProductNameLines.template = 'WrappedProductNameLines';
+    WrappedProductNameLines.template='WrappedProductNameLines';
 
     Registries.Component.add(WrappedProductNameLines);
 
-    return WrappedProductNameLines;
+    returnWrappedProductNameLines;
 });

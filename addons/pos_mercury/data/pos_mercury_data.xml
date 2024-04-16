@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record id="barcode_rule_credit" model="barcode.rule">
-            <field name="name">Magnetic Credit Card</field>
-            <field name="barcode_nomenclature_id" ref="barcodes.default_barcode_nomenclature"/>
-            <field name="sequence">85</field>
-            <field name="type">credit</field>
-            <field name="encoding">any</field>
-            <field name="pattern">%.*</field>
+    <datanoupdate="1">
+        <recordid="barcode_rule_credit"model="barcode.rule">
+            <fieldname="name">MagneticCreditCard</field>
+            <fieldname="barcode_nomenclature_id"ref="barcodes.default_barcode_nomenclature"/>
+            <fieldname="sequence">85</field>
+            <fieldname="type">credit</field>
+            <fieldname="encoding">any</field>
+            <fieldname="pattern">%.*</field>
         </record>
     </data>
 </flectra>

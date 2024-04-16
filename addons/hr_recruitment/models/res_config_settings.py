@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = ['res.config.settings']
+classResConfigSettings(models.TransientModel):
+    _inherit=['res.config.settings']
 
-    module_website_hr_recruitment = fields.Boolean(string='Online Posting')
-    module_hr_recruitment_survey = fields.Boolean(string='Interview Forms')
+    module_website_hr_recruitment=fields.Boolean(string='OnlinePosting')
+    module_hr_recruitment_survey=fields.Boolean(string='InterviewForms')

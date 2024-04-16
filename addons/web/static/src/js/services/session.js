@@ -1,12 +1,12 @@
-flectra.define('web.session', function (require) {
-"use strict";
+flectra.define('web.session',function(require){
+"usestrict";
 
-var Session = require('web.Session');
-var modules = flectra._modules;
+varSession=require('web.Session');
+varmodules=flectra._modules;
 
-var session = new Session(undefined, undefined, {modules: modules, use_cors: false});
-session.is_bound = session.session_bind();
+varsession=newSession(undefined,undefined,{modules:modules,use_cors:false});
+session.is_bound=session.session_bind();
 
-return session;
+returnsession;
 
 });

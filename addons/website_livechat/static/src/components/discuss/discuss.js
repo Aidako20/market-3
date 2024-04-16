@@ -1,22 +1,22 @@
-flectra.define('website_livechat/static/src/components/discuss/discuss.js', function (require) {
-'use strict';
+flectra.define('website_livechat/static/src/components/discuss/discuss.js',function(require){
+'usestrict';
 
-const components = {
-    Discuss: require('mail/static/src/components/discuss/discuss.js'),
-    VisitorBanner: require('website_livechat/static/src/components/visitor_banner/visitor_banner.js'),
+constcomponents={
+    Discuss:require('mail/static/src/components/discuss/discuss.js'),
+    VisitorBanner:require('website_livechat/static/src/components/visitor_banner/visitor_banner.js'),
 };
 
-components.Discuss.patch('website_livechat/static/src/components/discuss/discuss.js', T =>
-    class extends T {
+components.Discuss.patch('website_livechat/static/src/components/discuss/discuss.js',T=>
+    classextendsT{
 
         /**
-         * @override
+         *@override
          */
-        _useStoreSelector(props) {
-            const res = super._useStoreSelector(...arguments);
-            const thread = res.thread;
-            const visitor = thread && thread.visitor;
-            return Object.assign({}, res, {
+        _useStoreSelector(props){
+            constres=super._useStoreSelector(...arguments);
+            constthread=res.thread;
+            constvisitor=thread&&thread.visitor;
+            returnObject.assign({},res,{
                 visitor,
             });
         }
@@ -24,8 +24,8 @@ components.Discuss.patch('website_livechat/static/src/components/discuss/discuss
     }
 );
 
-Object.assign(components.Discuss.components, {
-    VisitorBanner: components.VisitorBanner,
+Object.assign(components.Discuss.components,{
+    VisitorBanner:components.VisitorBanner,
 });
 
 });

@@ -1,35 +1,35 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra><data>
-    <record id="event_registration_action_from_visitor" model="ir.actions.act_window">
-        <field name="name">Registrations</field>
-        <field name="res_model">event.registration</field>
-        <field name="view_mode">kanban,tree,form</field>
-        <field name="domain">[('visitor_id', 'in', [active_id])]</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_empty_folder">
-                No registration linked to this visitor
+    <recordid="event_registration_action_from_visitor"model="ir.actions.act_window">
+        <fieldname="name">Registrations</field>
+        <fieldname="res_model">event.registration</field>
+        <fieldname="view_mode">kanban,tree,form</field>
+        <fieldname="domain">[('visitor_id','in',[active_id])]</field>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_empty_folder">
+                Noregistrationlinkedtothisvisitor
             </p>
         </field>
     </record>
 
-    <record id="event_registration_view_form" model="ir.ui.view">
-        <field name="name">event.registration.view.form.inherit.online</field>
-        <field name="model">event.registration</field>
-        <field name="inherit_id" ref="event.view_event_registration_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="visitor_id" groups="base.group_no_one"/>
+    <recordid="event_registration_view_form"model="ir.ui.view">
+        <fieldname="name">event.registration.view.form.inherit.online</field>
+        <fieldname="model">event.registration</field>
+        <fieldname="inherit_id"ref="event.view_event_registration_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='partner_id']"position="after">
+                <fieldname="visitor_id"groups="base.group_no_one"/>
             </xpath>
         </field>
     </record>
 
-    <record id="event_registration_view_tree" model="ir.ui.view">
-        <field name="name">event.registration.view.tree.inherit.online</field>
-        <field name="model">event.registration</field>
-        <field name="inherit_id" ref="event.view_event_registration_tree"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="visitor_id" optional="hide" groups="base.group_no_one"/>
+    <recordid="event_registration_view_tree"model="ir.ui.view">
+        <fieldname="name">event.registration.view.tree.inherit.online</field>
+        <fieldname="model">event.registration</field>
+        <fieldname="inherit_id"ref="event.view_event_registration_tree"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='partner_id']"position="after">
+                <fieldname="visitor_id"optional="hide"groups="base.group_no_one"/>
             </xpath>
         </field>
     </record>

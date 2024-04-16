@@ -1,154 +1,154 @@
-flectra.define('mail/static/src/models/messaging_menu/messaging_menu.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/messaging_menu/messaging_menu.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr, one2one } = require('mail/static/src/model/model_field.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{attr,one2one}=require('mail/static/src/model/model_field.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class MessagingMenu extends dependencies['mail.model'] {
+    classMessagingMenuextendsdependencies['mail.model']{
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * Close the messaging menu. Should reset its internal state.
+         *Closethemessagingmenu.Shouldresetitsinternalstate.
          */
-        close() {
-            this.update({ isOpen: false });
+        close(){
+            this.update({isOpen:false});
         }
 
         /**
-         * Toggle the visibility of the messaging menu "new message" input in
-         * mobile.
+         *Togglethevisibilityofthemessagingmenu"newmessage"inputin
+         *mobile.
          */
-        toggleMobileNewMessage() {
-            this.update({ isMobileNewMessageToggled: !this.isMobileNewMessageToggled });
+        toggleMobileNewMessage(){
+            this.update({isMobileNewMessageToggled:!this.isMobileNewMessageToggled});
         }
 
         /**
-         * Toggle whether the messaging menu is open or not.
+         *Togglewhetherthemessagingmenuisopenornot.
          */
-        toggleOpen() {
-            this.update({ isOpen: !this.isOpen });
+        toggleOpen(){
+            this.update({isOpen:!this.isOpen});
         }
 
         //----------------------------------------------------------------------
-        // Private
+        //Private
         //----------------------------------------------------------------------
 
         /**
-         * @private
+         *@private
          */
-        _computeInboxMessagesAutoloader() {
-            if (!this.isOpen) {
+        _computeInboxMessagesAutoloader(){
+            if(!this.isOpen){
                 return;
             }
-            const inbox = this.env.messaging.inbox;
-            if (!inbox || !inbox.mainCache) {
+            constinbox=this.env.messaging.inbox;
+            if(!inbox||!inbox.mainCache){
                 return;
             }
-            // populate some needaction messages on threads.
-            inbox.mainCache.update({ isCacheRefreshRequested: true });
+            //populatesomeneedactionmessagesonthreads.
+            inbox.mainCache.update({isCacheRefreshRequested:true});
         }
 
         /**
-         * @private
-         * @returns {integer}
+         *@private
+         *@returns{integer}
          */
-        _updateCounter() {
-            if (!this.env.messaging) {
-                return 0;
+        _updateCounter(){
+            if(!this.env.messaging){
+                return0;
             }
-            const inboxMailbox = this.env.messaging.inbox;
-            const unreadChannels = this.env.models['mail.thread'].all(thread =>
-                thread.displayCounter > 0 &&
-                thread.model === 'mail.channel' &&
+            constinboxMailbox=this.env.messaging.inbox;
+            constunreadChannels=this.env.models['mail.thread'].all(thread=>
+                thread.displayCounter>0&&
+                thread.model==='mail.channel'&&
                 thread.isPinned
             );
-            let counter = unreadChannels.length;
-            if (inboxMailbox) {
-                counter += inboxMailbox.counter;
+            letcounter=unreadChannels.length;
+            if(inboxMailbox){
+                counter+=inboxMailbox.counter;
             }
-            if (this.messaging.notificationGroupManager) {
-                counter += this.messaging.notificationGroupManager.groups.reduce(
-                    (total, group) => total + group.notifications.length,
+            if(this.messaging.notificationGroupManager){
+                counter+=this.messaging.notificationGroupManager.groups.reduce(
+                    (total,group)=>total+group.notifications.length,
                     0
                 );
             }
-            if (this.messaging.isNotificationPermissionDefault()) {
+            if(this.messaging.isNotificationPermissionDefault()){
                 counter++;
             }
-            return counter;
+            returncounter;
         }
 
         /**
-         * @override
+         *@override
          */
-        _updateAfter(previous) {
-            const counter = this._updateCounter();
-            if (this.counter !== counter) {
-                this.update({ counter });
+        _updateAfter(previous){
+            constcounter=this._updateCounter();
+            if(this.counter!==counter){
+                this.update({counter});
             }
         }
 
     }
 
-    MessagingMenu.fields = {
+    MessagingMenu.fields={
         /**
-         * Tab selected in the messaging menu.
-         * Either 'all', 'chat' or 'channel'.
+         *Tabselectedinthemessagingmenu.
+         *Either'all','chat'or'channel'.
          */
-        activeTabId: attr({
-            default: 'all',
+        activeTabId:attr({
+            default:'all',
         }),
-        counter: attr({
-            default: 0,
+        counter:attr({
+            default:0,
         }),
         /**
-         * Dummy field to automatically load messages of inbox when messaging
-         * menu is open.
+         *Dummyfieldtoautomaticallyloadmessagesofinboxwhenmessaging
+         *menuisopen.
          *
-         * Useful because needaction notifications require fetching inbox
-         * messages to work.
+         *Usefulbecauseneedactionnotificationsrequirefetchinginbox
+         *messagestowork.
          */
-        inboxMessagesAutoloader: attr({
-            compute: '_computeInboxMessagesAutoloader',
-            dependencies: [
+        inboxMessagesAutoloader:attr({
+            compute:'_computeInboxMessagesAutoloader',
+            dependencies:[
                 'isOpen',
                 'messagingInbox',
                 'messagingInboxMainCache',
             ],
         }),
         /**
-         * Determine whether the mobile new message input is visible or not.
+         *Determinewhetherthemobilenewmessageinputisvisibleornot.
          */
-        isMobileNewMessageToggled: attr({
-            default: false,
+        isMobileNewMessageToggled:attr({
+            default:false,
         }),
         /**
-         * Determine whether the messaging menu dropdown is open or not.
+         *Determinewhetherthemessagingmenudropdownisopenornot.
          */
-        isOpen: attr({
-            default: false,
+        isOpen:attr({
+            default:false,
         }),
-        messaging: one2one('mail.messaging', {
-            inverse: 'messagingMenu',
+        messaging:one2one('mail.messaging',{
+            inverse:'messagingMenu',
         }),
-        messagingInbox: one2one('mail.thread', {
-            related: 'messaging.inbox',
+        messagingInbox:one2one('mail.thread',{
+            related:'messaging.inbox',
         }),
-        messagingInboxMainCache: one2one('mail.thread_cache', {
-            related: 'messagingInbox.mainCache',
+        messagingInboxMainCache:one2one('mail.thread_cache',{
+            related:'messagingInbox.mainCache',
         }),
     };
 
-    MessagingMenu.modelName = 'mail.messaging_menu';
+    MessagingMenu.modelName='mail.messaging_menu';
 
-    return MessagingMenu;
+    returnMessagingMenu;
 }
 
-registerNewModel('mail.messaging_menu', factory);
+registerNewModel('mail.messaging_menu',factory);
 
 });

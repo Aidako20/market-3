@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class StockPicking(models.Model):
-    _inherit = 'stock.picking'
+classStockPicking(models.Model):
+    _inherit='stock.picking'
 
-    def _needs_automatic_assign(self):
+    def_needs_automatic_assign(self):
         self.ensure_one()
-        if self.sale_id:
-            return True
-        return super()._needs_automatic_assign()
+        ifself.sale_id:
+            returnTrue
+        returnsuper()._needs_automatic_assign()

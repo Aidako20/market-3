@@ -1,401 +1,401 @@
-# -*- coding: utf-8 -*-
-import json
-import logging
-import requests
+#-*-coding:utf-8-*-
+importjson
+importlogging
+importrequests
 
-from uuid import uuid4
+fromuuidimportuuid4
 
-from flectra import _
-from flectra.exceptions import UserError
+fromflectraimport_
+fromflectra.exceptionsimportUserError
 
-from flectra.addons.payment.models.payment_acquirer import _partner_split_name
+fromflectra.addons.payment.models.payment_acquirerimport_partner_split_name
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
 
-class AuthorizeAPI():
-    """Authorize.net Gateway API integration.
+classAuthorizeAPI():
+    """Authorize.netGatewayAPIintegration.
 
-    This class allows contacting the Authorize.net API with simple operation
-    requests. It implements a *very limited* subset of the complete API
-    (http://developer.authorize.net/api/reference); namely:
-        - Customer Profile/Payment Profile creation
-        - Transaction authorization/capture/voiding
+    ThisclassallowscontactingtheAuthorize.netAPIwithsimpleoperation
+    requests.Itimplementsa*verylimited*subsetofthecompleteAPI
+    (http://developer.authorize.net/api/reference);namely:
+        -CustomerProfile/PaymentProfilecreation
+        -Transactionauthorization/capture/voiding
     """
 
-    AUTH_ERROR_STATUS = 3
+    AUTH_ERROR_STATUS=3
 
-    def __init__(self, acquirer):
-        """Initiate the environment with the acquirer data.
+    def__init__(self,acquirer):
+        """Initiatetheenvironmentwiththeacquirerdata.
 
-        :param record acquirer: payment.acquirer account that will be contacted
+        :paramrecordacquirer:payment.acquireraccountthatwillbecontacted
         """
-        if acquirer.state == 'enabled':
-            self.url = 'https://api.authorize.net/xml/v1/request.api'
+        ifacquirer.state=='enabled':
+            self.url='https://api.authorize.net/xml/v1/request.api'
         else:
-            self.url = 'https://apitest.authorize.net/xml/v1/request.api'
+            self.url='https://apitest.authorize.net/xml/v1/request.api'
 
-        self.state = acquirer.state
-        self.name = acquirer.authorize_login
-        self.transaction_key = acquirer.authorize_transaction_key
+        self.state=acquirer.state
+        self.name=acquirer.authorize_login
+        self.transaction_key=acquirer.authorize_transaction_key
 
-    def _authorize_request(self, data):
-        _logger.info('_authorize_request: Sending values to URL %s, values:\n%s', self.url, data)
-        resp = requests.post(self.url, json.dumps(data))
+    def_authorize_request(self,data):
+        _logger.info('_authorize_request:SendingvaluestoURL%s,values:\n%s',self.url,data)
+        resp=requests.post(self.url,json.dumps(data))
         resp.raise_for_status()
-        resp = json.loads(resp.content)
-        _logger.info("_authorize_request: Received response:\n%s", resp)
-        messages = resp.get('messages')
-        if messages and messages.get('resultCode') == 'Error':
-            return {
-                'err_code': messages.get('message')[0].get('code'),
-                'err_msg': messages.get('message')[0].get('text')
+        resp=json.loads(resp.content)
+        _logger.info("_authorize_request:Receivedresponse:\n%s",resp)
+        messages=resp.get('messages')
+        ifmessagesandmessages.get('resultCode')=='Error':
+            return{
+                'err_code':messages.get('message')[0].get('code'),
+                'err_msg':messages.get('message')[0].get('text')
             }
 
-        return resp
+        returnresp
 
-    # Customer profiles
-    def create_customer_profile(self, partner, opaqueData):
-        """Create a payment and customer profile in the Authorize.net backend.
+    #Customerprofiles
+    defcreate_customer_profile(self,partner,opaqueData):
+        """CreateapaymentandcustomerprofileintheAuthorize.netbackend.
 
-        Creates a customer profile for the partner/credit card combination and links
-        a corresponding payment profile to it. Note that a single partner in the Flectra
-        database can have multiple customer profiles in Authorize.net (i.e. a customer
-        profile is created for every res.partner/payment.token couple).
+        Createsacustomerprofileforthepartner/creditcardcombinationandlinks
+        acorrespondingpaymentprofiletoit.NotethatasinglepartnerintheFlectra
+        databasecanhavemultiplecustomerprofilesinAuthorize.net(i.e.acustomer
+        profileiscreatedforeveryres.partner/payment.tokencouple).
 
-        :param record partner: the res.partner record of the customer
-        :param str cardnumber: cardnumber in string format (numbers only, no separator)
-        :param str expiration_date: expiration date in 'YYYY-MM' string format
-        :param str card_code: three- or four-digit verification number
+        :paramrecordpartner:theres.partnerrecordofthecustomer
+        :paramstrcardnumber:cardnumberinstringformat(numbersonly,noseparator)
+        :paramstrexpiration_date:expirationdatein'YYYY-MM'stringformat
+        :paramstrcard_code:three-orfour-digitverificationnumber
 
-        :return: a dict containing the profile_id and payment_profile_id of the
-                 newly created customer profile and payment profile
-        :rtype: dict
+        :return:adictcontainingtheprofile_idandpayment_profile_idofthe
+                 newlycreatedcustomerprofileandpaymentprofile
+        :rtype:dict
         """
-        values = {
-            'createCustomerProfileRequest': {
-                'merchantAuthentication': {
-                    'name': self.name,
-                    'transactionKey': self.transaction_key
+        values={
+            'createCustomerProfileRequest':{
+                'merchantAuthentication':{
+                    'name':self.name,
+                    'transactionKey':self.transaction_key
                 },
-                'profile': {
-                    'description': ('FLECTRA-%s-%s' % (partner.id, uuid4().hex[:8]))[:20],
-                    'email': partner.email or '',
-                    'paymentProfiles': {
-                        'customerType': 'business' if partner.is_company else 'individual',
-                        'billTo': {
-                            'firstName': '' if partner.is_company else _partner_split_name(partner.name)[0][:50],
-                            'lastName':  partner.name[:50] if partner.is_company else _partner_split_name(partner.name)[1][:50],
-                            'address': (partner.street or '' + (partner.street2 if partner.street2 else '')) or None,
-                            'city': partner.city,
-                            'state': partner.state_id.name or None,
-                            'zip': partner.zip or '',
-                            'country': partner.country_id.name or None,
-                            'phoneNumber': partner.phone or '',
+                'profile':{
+                    'description':('FLECTRA-%s-%s'%(partner.id,uuid4().hex[:8]))[:20],
+                    'email':partner.emailor'',
+                    'paymentProfiles':{
+                        'customerType':'business'ifpartner.is_companyelse'individual',
+                        'billTo':{
+                            'firstName':''ifpartner.is_companyelse_partner_split_name(partner.name)[0][:50],
+                            'lastName': partner.name[:50]ifpartner.is_companyelse_partner_split_name(partner.name)[1][:50],
+                            'address':(partner.streetor''+(partner.street2ifpartner.street2else''))orNone,
+                            'city':partner.city,
+                            'state':partner.state_id.nameorNone,
+                            'zip':partner.zipor'',
+                            'country':partner.country_id.nameorNone,
+                            'phoneNumber':partner.phoneor'',
                         },
-                        'payment': {
-                            'opaqueData': {
-                                'dataDescriptor': opaqueData.get('dataDescriptor'),
-                                'dataValue': opaqueData.get('dataValue')
+                        'payment':{
+                            'opaqueData':{
+                                'dataDescriptor':opaqueData.get('dataDescriptor'),
+                                'dataValue':opaqueData.get('dataValue')
                             }
                         }
                     }
                 },
-                'validationMode': 'liveMode' if self.state == 'enabled' else 'testMode'
+                'validationMode':'liveMode'ifself.state=='enabled'else'testMode'
             }
         }
 
-        response = self._authorize_request(values)
+        response=self._authorize_request(values)
 
-        if response and response.get('err_code'):
-            raise UserError(_(
-                "Authorize.net Error:\nCode: %s\nMessage: %s",
-                response.get('err_code'), response.get('err_msg'),
+        ifresponseandresponse.get('err_code'):
+            raiseUserError(_(
+                "Authorize.netError:\nCode:%s\nMessage:%s",
+                response.get('err_code'),response.get('err_msg'),
             ))
 
-        return {
-            'profile_id': response.get('customerProfileId'),
-            'payment_profile_id': response.get('customerPaymentProfileIdList')[0]
+        return{
+            'profile_id':response.get('customerProfileId'),
+            'payment_profile_id':response.get('customerPaymentProfileIdList')[0]
         }
 
-    def create_customer_profile_from_tx(self, partner, transaction_id):
-        """Create an Auth.net payment/customer profile from an existing transaction.
+    defcreate_customer_profile_from_tx(self,partner,transaction_id):
+        """CreateanAuth.netpayment/customerprofilefromanexistingtransaction.
 
-        Creates a customer profile for the partner/credit card combination and links
-        a corresponding payment profile to it. Note that a single partner in the Flectra
-        database can have multiple customer profiles in Authorize.net (i.e. a customer
-        profile is created for every res.partner/payment.token couple).
+        Createsacustomerprofileforthepartner/creditcardcombinationandlinks
+        acorrespondingpaymentprofiletoit.NotethatasinglepartnerintheFlectra
+        databasecanhavemultiplecustomerprofilesinAuthorize.net(i.e.acustomer
+        profileiscreatedforeveryres.partner/payment.tokencouple).
 
-        Note that this function makes 2 calls to the authorize api, since we need to
-        obtain a partial cardnumber to generate a meaningful payment.token name.
+        Notethatthisfunctionmakes2callstotheauthorizeapi,sinceweneedto
+        obtainapartialcardnumbertogenerateameaningfulpayment.tokenname.
 
-        :param record partner: the res.partner record of the customer
-        :param str transaction_id: id of the authorized transaction in the
-                                   Authorize.net backend
+        :paramrecordpartner:theres.partnerrecordofthecustomer
+        :paramstrtransaction_id:idoftheauthorizedtransactioninthe
+                                   Authorize.netbackend
 
-        :return: a dict containing the profile_id and payment_profile_id of the
-                 newly created customer profile and payment profile as well as the
-                 last digits of the card number
-        :rtype: dict
+        :return:adictcontainingtheprofile_idandpayment_profile_idofthe
+                 newlycreatedcustomerprofileandpaymentprofileaswellasthe
+                 lastdigitsofthecardnumber
+        :rtype:dict
         """
-        values = {
-            'createCustomerProfileFromTransactionRequest': {
-                "merchantAuthentication": {
-                    "name": self.name,
-                    "transactionKey": self.transaction_key
+        values={
+            'createCustomerProfileFromTransactionRequest':{
+                "merchantAuthentication":{
+                    "name":self.name,
+                    "transactionKey":self.transaction_key
                 },
-                'transId': transaction_id,
-                'customer': {
-                    'merchantCustomerId': ('FLECTRA-%s-%s' % (partner.id, uuid4().hex[:8]))[:20],
-                    'email': partner.email or ''
+                'transId':transaction_id,
+                'customer':{
+                    'merchantCustomerId':('FLECTRA-%s-%s'%(partner.id,uuid4().hex[:8]))[:20],
+                    'email':partner.emailor''
                 }
             }
         }
 
-        response = self._authorize_request(values)
+        response=self._authorize_request(values)
 
-        if not response.get('customerProfileId'):
+        ifnotresponse.get('customerProfileId'):
             _logger.warning(
-                'Unable to create customer payment profile, data missing from transaction. Transaction_id: %s - Partner_id: %s'
-                % (transaction_id, partner)
+                'Unabletocreatecustomerpaymentprofile,datamissingfromtransaction.Transaction_id:%s-Partner_id:%s'
+                %(transaction_id,partner)
             )
-            return False
+            returnFalse
 
-        res = {
-            'profile_id': response.get('customerProfileId'),
-            'payment_profile_id': response.get('customerPaymentProfileIdList')[0]
+        res={
+            'profile_id':response.get('customerProfileId'),
+            'payment_profile_id':response.get('customerPaymentProfileIdList')[0]
         }
 
-        values = {
-            'getCustomerPaymentProfileRequest': {
-                "merchantAuthentication": {
-                    "name": self.name,
-                    "transactionKey": self.transaction_key
+        values={
+            'getCustomerPaymentProfileRequest':{
+                "merchantAuthentication":{
+                    "name":self.name,
+                    "transactionKey":self.transaction_key
                 },
-                'customerProfileId': res['profile_id'],
-                'customerPaymentProfileId': res['payment_profile_id'],
+                'customerProfileId':res['profile_id'],
+                'customerPaymentProfileId':res['payment_profile_id'],
             }
         }
 
-        response = self._authorize_request(values)
+        response=self._authorize_request(values)
 
-        res['name'] = response.get('paymentProfile', {}).get('payment', {}).get('creditCard', {}).get('cardNumber')
-        return res
+        res['name']=response.get('paymentProfile',{}).get('payment',{}).get('creditCard',{}).get('cardNumber')
+        returnres
 
-    # Transaction management
-    def auth_and_capture(self, token, amount, reference):
-        """Authorize and capture a payment for the given amount.
+    #Transactionmanagement
+    defauth_and_capture(self,token,amount,reference):
+        """Authorizeandcaptureapaymentforthegivenamount.
 
-        Authorize and immediately capture a payment for the given payment.token
-        record for the specified amount with reference as communication.
+        Authorizeandimmediatelycaptureapaymentforthegivenpayment.token
+        recordforthespecifiedamountwithreferenceascommunication.
 
-        :param record token: the payment.token record that must be charged
-        :param str amount: transaction amount (up to 15 digits with decimal point)
-        :param str reference: used as "invoiceNumber" in the Authorize.net backend
+        :paramrecordtoken:thepayment.tokenrecordthatmustbecharged
+        :paramstramount:transactionamount(upto15digitswithdecimalpoint)
+        :paramstrreference:usedas"invoiceNumber"intheAuthorize.netbackend
 
-        :return: a dict containing the response code, transaction id and transaction type
-        :rtype: dict
+        :return:adictcontainingtheresponsecode,transactionidandtransactiontype
+        :rtype:dict
         """
-        values = {
-            'createTransactionRequest': {
-                "merchantAuthentication": {
-                    "name": self.name,
-                    "transactionKey": self.transaction_key
+        values={
+            'createTransactionRequest':{
+                "merchantAuthentication":{
+                    "name":self.name,
+                    "transactionKey":self.transaction_key
                 },
-                'transactionRequest': {
-                    'transactionType': 'authCaptureTransaction',
-                    'amount': str(amount),
-                    'profile': {
-                        'customerProfileId': token.authorize_profile,
-                        'paymentProfile': {
-                            'paymentProfileId': token.acquirer_ref,
+                'transactionRequest':{
+                    'transactionType':'authCaptureTransaction',
+                    'amount':str(amount),
+                    'profile':{
+                        'customerProfileId':token.authorize_profile,
+                        'paymentProfile':{
+                            'paymentProfileId':token.acquirer_ref,
                         }
                     },
-                    'order': {
-                        'invoiceNumber': reference[:20],
-                        'description': reference[:255],
+                    'order':{
+                        'invoiceNumber':reference[:20],
+                        'description':reference[:255],
                     }
                 }
 
             }
         }
-        response = self._authorize_request(values)
+        response=self._authorize_request(values)
 
-        if response and response.get('err_code'):
-            return {
-                'x_response_code': self.AUTH_ERROR_STATUS,
-                'x_response_reason_text': response.get('err_msg')
+        ifresponseandresponse.get('err_code'):
+            return{
+                'x_response_code':self.AUTH_ERROR_STATUS,
+                'x_response_reason_text':response.get('err_msg')
             }
 
-        result = {
-            'x_response_code': response.get('transactionResponse', {}).get('responseCode'),
-            'x_trans_id': response.get('transactionResponse', {}).get('transId'),
-            'x_type': 'auth_capture'
+        result={
+            'x_response_code':response.get('transactionResponse',{}).get('responseCode'),
+            'x_trans_id':response.get('transactionResponse',{}).get('transId'),
+            'x_type':'auth_capture'
         }
-        errors = response.get('transactionResponse', {}).get('errors')
-        if errors:
-            result['x_response_reason_text'] = '\n'.join([e.get('errorText') for e in errors])
-        return result
+        errors=response.get('transactionResponse',{}).get('errors')
+        iferrors:
+            result['x_response_reason_text']='\n'.join([e.get('errorText')foreinerrors])
+        returnresult
 
-    def authorize(self, token, amount, reference):
-        """Authorize a payment for the given amount.
+    defauthorize(self,token,amount,reference):
+        """Authorizeapaymentforthegivenamount.
 
-        Authorize (without capture) a payment for the given payment.token
-        record for the specified amount with reference as communication.
+        Authorize(withoutcapture)apaymentforthegivenpayment.token
+        recordforthespecifiedamountwithreferenceascommunication.
 
-        :param record token: the payment.token record that must be charged
-        :param str amount: transaction amount (up to 15 digits with decimal point)
-        :param str reference: used as "invoiceNumber" in the Authorize.net backend
+        :paramrecordtoken:thepayment.tokenrecordthatmustbecharged
+        :paramstramount:transactionamount(upto15digitswithdecimalpoint)
+        :paramstrreference:usedas"invoiceNumber"intheAuthorize.netbackend
 
-        :return: a dict containing the response code, transaction id and transaction type
-        :rtype: dict
+        :return:adictcontainingtheresponsecode,transactionidandtransactiontype
+        :rtype:dict
         """
-        values = {
-            'createTransactionRequest': {
-                "merchantAuthentication": {
-                    "name": self.name,
-                    "transactionKey": self.transaction_key
+        values={
+            'createTransactionRequest':{
+                "merchantAuthentication":{
+                    "name":self.name,
+                    "transactionKey":self.transaction_key
                 },
-                'transactionRequest': {
-                    'transactionType': 'authOnlyTransaction',
-                    'amount': str(amount),
-                    'profile': {
-                        'customerProfileId': token.authorize_profile,
-                        'paymentProfile': {
-                            'paymentProfileId': token.acquirer_ref,
+                'transactionRequest':{
+                    'transactionType':'authOnlyTransaction',
+                    'amount':str(amount),
+                    'profile':{
+                        'customerProfileId':token.authorize_profile,
+                        'paymentProfile':{
+                            'paymentProfileId':token.acquirer_ref,
                         }
                     },
-                    'order': {
-                        'invoiceNumber': reference[:20],
-                        'description': reference[:255],
+                    'order':{
+                        'invoiceNumber':reference[:20],
+                        'description':reference[:255],
                     }
                 }
 
             }
         }
-        response = self._authorize_request(values)
+        response=self._authorize_request(values)
 
-        if response and response.get('err_code'):
-            return {
-                'x_response_code': self.AUTH_ERROR_STATUS,
-                'x_response_reason_text': response.get('err_msg')
+        ifresponseandresponse.get('err_code'):
+            return{
+                'x_response_code':self.AUTH_ERROR_STATUS,
+                'x_response_reason_text':response.get('err_msg')
             }
 
-        return {
-            'x_response_code': response.get('transactionResponse', {}).get('responseCode'),
-            'x_trans_id': response.get('transactionResponse', {}).get('transId'),
-            'x_type': 'auth_only'
+        return{
+            'x_response_code':response.get('transactionResponse',{}).get('responseCode'),
+            'x_trans_id':response.get('transactionResponse',{}).get('transId'),
+            'x_type':'auth_only'
         }
 
-    def capture(self, transaction_id, amount):
-        """Capture a previously authorized payment for the given amount.
+    defcapture(self,transaction_id,amount):
+        """Captureapreviouslyauthorizedpaymentforthegivenamount.
 
-        Capture a previsouly authorized payment. Note that the amount is required
-        even though we do not support partial capture.
+        Captureaprevisoulyauthorizedpayment.Notethattheamountisrequired
+        eventhoughwedonotsupportpartialcapture.
 
-        :param str transaction_id: id of the authorized transaction in the
-                                   Authorize.net backend
-        :param str amount: transaction amount (up to 15 digits with decimal point)
+        :paramstrtransaction_id:idoftheauthorizedtransactioninthe
+                                   Authorize.netbackend
+        :paramstramount:transactionamount(upto15digitswithdecimalpoint)
 
-        :return: a dict containing the response code, transaction id and transaction type
-        :rtype: dict
+        :return:adictcontainingtheresponsecode,transactionidandtransactiontype
+        :rtype:dict
         """
-        values = {
-            'createTransactionRequest': {
-                "merchantAuthentication": {
-                    "name": self.name,
-                    "transactionKey": self.transaction_key
+        values={
+            'createTransactionRequest':{
+                "merchantAuthentication":{
+                    "name":self.name,
+                    "transactionKey":self.transaction_key
                 },
-                'transactionRequest': {
-                    'transactionType': 'priorAuthCaptureTransaction',
-                    'amount': str(amount),
-                    'refTransId': transaction_id,
+                'transactionRequest':{
+                    'transactionType':'priorAuthCaptureTransaction',
+                    'amount':str(amount),
+                    'refTransId':transaction_id,
                 }
             }
         }
 
-        response = self._authorize_request(values)
+        response=self._authorize_request(values)
 
-        if response and response.get('err_code'):
-            return {
-                'x_response_code': self.AUTH_ERROR_STATUS,
-                'x_response_reason_text': response.get('err_msg')
+        ifresponseandresponse.get('err_code'):
+            return{
+                'x_response_code':self.AUTH_ERROR_STATUS,
+                'x_response_reason_text':response.get('err_msg')
             }
 
-        return {
-            'x_response_code': response.get('transactionResponse', {}).get('responseCode'),
-            'x_trans_id': response.get('transactionResponse', {}).get('transId'),
-            'x_type': 'prior_auth_capture'
+        return{
+            'x_response_code':response.get('transactionResponse',{}).get('responseCode'),
+            'x_trans_id':response.get('transactionResponse',{}).get('transId'),
+            'x_type':'prior_auth_capture'
         }
 
-    def void(self, transaction_id):
-        """Void a previously authorized payment.
+    defvoid(self,transaction_id):
+        """Voidapreviouslyauthorizedpayment.
 
-        :param str transaction_id: the id of the authorized transaction in the
-                                   Authorize.net backend
+        :paramstrtransaction_id:theidoftheauthorizedtransactioninthe
+                                   Authorize.netbackend
 
-        :return: a dict containing the response code, transaction id and transaction type
-        :rtype: dict
+        :return:adictcontainingtheresponsecode,transactionidandtransactiontype
+        :rtype:dict
         """
-        values = {
-            'createTransactionRequest': {
-                "merchantAuthentication": {
-                    "name": self.name,
-                    "transactionKey": self.transaction_key
+        values={
+            'createTransactionRequest':{
+                "merchantAuthentication":{
+                    "name":self.name,
+                    "transactionKey":self.transaction_key
                 },
-                'transactionRequest': {
-                    'transactionType': 'voidTransaction',
-                    'refTransId': transaction_id
+                'transactionRequest':{
+                    'transactionType':'voidTransaction',
+                    'refTransId':transaction_id
                 }
             }
         }
 
-        response = self._authorize_request(values)
+        response=self._authorize_request(values)
 
-        if response and response.get('err_code'):
-            return {
-                'x_response_code': self.AUTH_ERROR_STATUS,
-                'x_response_reason_text': response.get('err_msg')
+        ifresponseandresponse.get('err_code'):
+            return{
+                'x_response_code':self.AUTH_ERROR_STATUS,
+                'x_response_reason_text':response.get('err_msg')
             }
 
-        return {
-            'x_response_code': response.get('transactionResponse', {}).get('responseCode'),
-            'x_trans_id': response.get('transactionResponse', {}).get('transId'),
-            'x_type': 'void'
+        return{
+            'x_response_code':response.get('transactionResponse',{}).get('responseCode'),
+            'x_trans_id':response.get('transactionResponse',{}).get('transId'),
+            'x_type':'void'
         }
 
-    # Test
-    def test_authenticate(self):
-        """Test Authorize.net communication with a simple credentials check.
+    #Test
+    deftest_authenticate(self):
+        """TestAuthorize.netcommunicationwithasimplecredentialscheck.
 
-        :return: True if authentication was successful, else False (or throws an error)
-        :rtype: bool
+        :return:Trueifauthenticationwassuccessful,elseFalse(orthrowsanerror)
+        :rtype:bool
         """
-        values = {
-            'authenticateTestRequest': {
-                "merchantAuthentication": {
-                    "name": self.name,
-                    "transactionKey": self.transaction_key
+        values={
+            'authenticateTestRequest':{
+                "merchantAuthentication":{
+                    "name":self.name,
+                    "transactionKey":self.transaction_key
                 },
             }
         }
 
-        response = self._authorize_request(values)
-        if response and response.get('err_code'):
-            return False
-        return True
+        response=self._authorize_request(values)
+        ifresponseandresponse.get('err_code'):
+            returnFalse
+        returnTrue
 
-    # Client Key
-    def get_client_secret(self):
-        """ Create a client secret that will be needed for the AcceptJS integration. """
-        values = {
-            "getMerchantDetailsRequest": {
-                "merchantAuthentication": {
-                    "name": self.name,
-                    "transactionKey": self.transaction_key,
+    #ClientKey
+    defget_client_secret(self):
+        """CreateaclientsecretthatwillbeneededfortheAcceptJSintegration."""
+        values={
+            "getMerchantDetailsRequest":{
+                "merchantAuthentication":{
+                    "name":self.name,
+                    "transactionKey":self.transaction_key,
                 }
             }
         }
-        response = self._authorize_request(values)
-        client_secret = response.get('publicClientKey')
-        return client_secret
+        response=self._authorize_request(values)
+        client_secret=response.get('publicClientKey')
+        returnclient_secret

@@ -1,25 +1,25 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models
+fromflectraimportapi,models
 
 
-class SaleOrder(models.Model):
-    _inherit = "sale.order"
+classSaleOrder(models.Model):
+    _inherit="sale.order"
 
-    def _cart_find_product_line(self, product_id=None, line_id=None, **kwargs):
-        lines = super(SaleOrder, self)._cart_find_product_line(product_id, line_id, **kwargs)
-        if line_id:  # in this case we get the exact line we want, so filtering below would be wrong
-            return lines
+    def_cart_find_product_line(self,product_id=None,line_id=None,**kwargs):
+        lines=super(SaleOrder,self)._cart_find_product_line(product_id,line_id,**kwargs)
+        ifline_id: #inthiscasewegettheexactlinewewant,sofilteringbelowwouldbewrong
+            returnlines
 
-        linked_line_id = kwargs.get('linked_line_id', False)
-        optional_product_ids = set(kwargs.get('optional_product_ids', []))
+        linked_line_id=kwargs.get('linked_line_id',False)
+        optional_product_ids=set(kwargs.get('optional_product_ids',[]))
 
-        lines = lines.filtered(lambda line: line.linked_line_id.id == linked_line_id)
-        if optional_product_ids:
-            # only match the lines with the same chosen optional products on the existing lines
-            lines = lines.filtered(lambda line: optional_product_ids == set(line.mapped('option_line_ids.product_id.id')))
+        lines=lines.filtered(lambdaline:line.linked_line_id.id==linked_line_id)
+        ifoptional_product_ids:
+            #onlymatchthelineswiththesamechosenoptionalproductsontheexistinglines
+            lines=lines.filtered(lambdaline:optional_product_ids==set(line.mapped('option_line_ids.product_id.id')))
         else:
-            lines = lines.filtered(lambda line: not line.option_line_ids)
+            lines=lines.filtered(lambdaline:notline.option_line_ids)
 
-        return lines
+        returnlines

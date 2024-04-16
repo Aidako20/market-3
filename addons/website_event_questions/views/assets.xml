@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 <data>
-    <template id="assets_tests" name="Website Event Questions Assets Tests" inherit_id="web.assets_tests">
-        <xpath expr="." position="inside">
-            <script type="text/javascript" src="/website_event_questions/static/tests/tours/tickets_questions.js"></script>
+    <templateid="assets_tests"name="WebsiteEventQuestionsAssetsTests"inherit_id="web.assets_tests">
+        <xpathexpr="."position="inside">
+            <scripttype="text/javascript"src="/website_event_questions/static/tests/tours/tickets_questions.js"></script>
         </xpath>
     </template>
 </data>

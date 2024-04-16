@@ -1,40 +1,40 @@
-flectra.define('account.dashboard.setup.tour', function (require) {
-    "use strict";
+flectra.define('account.dashboard.setup.tour',function(require){
+    "usestrict";
 
-    var core = require('web.core');
-    var tour = require('web_tour.tour');
+    varcore=require('web.core');
+    vartour=require('web_tour.tour');
 
-    var _t = core._t;
+    var_t=core._t;
 
-    tour.register('account_render_report', {
-        test: true,
-        url: '/web',
-    }, [tour.stepUtils.showAppsMenuItem(),
+    tour.register('account_render_report',{
+        test:true,
+        url:'/web',
+    },[tour.stepUtils.showAppsMenuItem(),
     {
-        id: 'account_menu_click',
-        trigger: '.o_app[data-menu-xmlid="account.menu_finance"]',
-        position: 'bottom',
-    }, {
-        trigger: '.o_data_row:first',
-        extra_trigger: '.breadcrumb',
-    }, {
-        trigger: '.o_control_panel button:contains("' + _t('Print') + '")',
-    }, {
-        trigger: '.o_control_panel .o_dropdown_menu a:contains("' + _t('Invoices without Payment') + '")',
-    }, {
-        trigger: 'iframe .o_report_layout_standard h2',
-        content: 'Primary color is correct',
-        run: function () {
-            if (this.$anchor.css('color') !== "rgb(18, 52, 86)") {
-                console.error('The primary color should be the one set on the company.');
+        id:'account_menu_click',
+        trigger:'.o_app[data-menu-xmlid="account.menu_finance"]',
+        position:'bottom',
+    },{
+        trigger:'.o_data_row:first',
+        extra_trigger:'.breadcrumb',
+    },{
+        trigger:'.o_control_panelbutton:contains("'+_t('Print')+'")',
+    },{
+        trigger:'.o_control_panel.o_dropdown_menua:contains("'+_t('InvoiceswithoutPayment')+'")',
+    },{
+        trigger:'iframe.o_report_layout_standardh2',
+        content:'Primarycoloriscorrect',
+        run:function(){
+            if(this.$anchor.css('color')!=="rgb(18,52,86)"){
+                console.error('Theprimarycolorshouldbetheonesetonthecompany.');
             }
         },
-    }, {
-        trigger: 'iframe .o_report_layout_standard #informations div strong',
-        content: 'Secondary color is correct',
-        run: function () {
-            if (this.$anchor.css('color') !== "rgb(120, 145, 1)") {
-                console.error('The secondary color should be the one set on the company.');
+    },{
+        trigger:'iframe.o_report_layout_standard#informationsdivstrong',
+        content:'Secondarycoloriscorrect',
+        run:function(){
+            if(this.$anchor.css('color')!=="rgb(120,145,1)"){
+                console.error('Thesecondarycolorshouldbetheonesetonthecompany.');
             }
         },
     }

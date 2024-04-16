@@ -1,71 +1,71 @@
-flectra.define('mail/static/src/models/device/device.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/device/device.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr } = require('mail/static/src/model/model_field.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{attr}=require('mail/static/src/model/model_field.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class Device extends dependencies['mail.model'] {
+    classDeviceextendsdependencies['mail.model']{
 
         /**
-         * @override
+         *@override
          */
-        _created() {
-            const res = super._created(...arguments);
+        _created(){
+            constres=super._created(...arguments);
             this._refresh();
-            this._onResize = _.debounce(() => this._refresh(), 100);
-            return res;
+            this._onResize=_.debounce(()=>this._refresh(),100);
+            returnres;
         }
 
         /**
-         * @override
+         *@override
          */
-        _willDelete() {
-            window.removeEventListener('resize', this._onResize);
-            return super._willDelete(...arguments);
+        _willDelete(){
+            window.removeEventListener('resize',this._onResize);
+            returnsuper._willDelete(...arguments);
         }
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * Called when messaging is started.
+         *Calledwhenmessagingisstarted.
          */
-        start() {
-            // TODO FIXME Not using this.env.browser because it's proxified, and
-            // addEventListener does not work on proxified window. task-2234596
-            window.addEventListener('resize', this._onResize);
+        start(){
+            //TODOFIXMENotusingthis.env.browserbecauseit'sproxified,and
+            //addEventListenerdoesnotworkonproxifiedwindow.task-2234596
+            window.addEventListener('resize',this._onResize);
         }
 
         //----------------------------------------------------------------------
-        // Private
+        //Private
         //----------------------------------------------------------------------
 
         /**
-         * @private
+         *@private
          */
-        _refresh() {
+        _refresh(){
             this.update({
-                globalWindowInnerHeight: this.env.browser.innerHeight,
-                globalWindowInnerWidth: this.env.browser.innerWidth,
-                isMobile: this.env.device.isMobile,
+                globalWindowInnerHeight:this.env.browser.innerHeight,
+                globalWindowInnerWidth:this.env.browser.innerWidth,
+                isMobile:this.env.device.isMobile,
             });
         }
     }
 
-    Device.fields = {
-        globalWindowInnerHeight: attr(),
-        globalWindowInnerWidth: attr(),
-        isMobile: attr(),
+    Device.fields={
+        globalWindowInnerHeight:attr(),
+        globalWindowInnerWidth:attr(),
+        isMobile:attr(),
     };
 
-    Device.modelName = 'mail.device';
+    Device.modelName='mail.device';
 
-    return Device;
+    returnDevice;
 }
 
-registerNewModel('mail.device', factory);
+registerNewModel('mail.device',factory);
 
 });

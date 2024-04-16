@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models
+fromflectraimportapi,models
 
 
-class SaleOrder(models.Model):
-    _inherit = 'sale.order'
+classSaleOrder(models.Model):
+    _inherit='sale.order'
 
-    @api.depends('procurement_group_id.stock_move_ids.created_purchase_line_id.order_id', 'procurement_group_id.stock_move_ids.move_orig_ids.purchase_line_id.order_id')
-    def _compute_purchase_order_count(self):
-        super(SaleOrder, self)._compute_purchase_order_count()
+    @api.depends('procurement_group_id.stock_move_ids.created_purchase_line_id.order_id','procurement_group_id.stock_move_ids.move_orig_ids.purchase_line_id.order_id')
+    def_compute_purchase_order_count(self):
+        super(SaleOrder,self)._compute_purchase_order_count()
 
-    def _get_purchase_orders(self):
-        return super(SaleOrder, self)._get_purchase_orders() | self.procurement_group_id.stock_move_ids.created_purchase_line_id.order_id | self.procurement_group_id.stock_move_ids.move_orig_ids.purchase_line_id.order_id
+    def_get_purchase_orders(self):
+        returnsuper(SaleOrder,self)._get_purchase_orders()|self.procurement_group_id.stock_move_ids.created_purchase_line_id.order_id|self.procurement_group_id.stock_move_ids.move_orig_ids.purchase_line_id.order_id

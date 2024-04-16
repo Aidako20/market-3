@@ -1,118 +1,118 @@
-# -*- coding:utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
-from flectra.exceptions import ValidationError
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportValidationError
 
-TAX_SYSTEM = [
-    ("RF01", "[RF01] Ordinario"),
-    ("RF02", "[RF02] Contribuenti minimi (art.1, c.96-117, L. 244/07)"),
-    ("RF04", "[RF04] Agricoltura e attività connesse e pesca (artt.34 e 34-bis, DPR 633/72)"),
-    ("RF05", "[RF05] Vendita sali e tabacchi (art.74, c.1, DPR. 633/72)"),
-    ("RF06", "[RF06] Commercio fiammiferi (art.74, c.1, DPR  633/72)"),
-    ("RF07", "[RF07] Editoria (art.74, c.1, DPR  633/72)"),
-    ("RF08", "[RF08] Gestione servizi telefonia pubblica (art.74, c.1, DPR 633/72)"),
-    ("RF09", "[RF09] Rivendita documenti di trasporto pubblico e di sosta (art.74, c.1, DPR  633/72)"),
-    ("RF10", "[RF10] Intrattenimenti, giochi e altre attività di cui alla tariffa allegata al DPR 640/72 (art.74, c.6, DPR 633/72)"),
-    ("RF11", "[RF11] Agenzie viaggi e turismo (art.74-ter, DPR 633/72)"),
-    ("RF12", "[RF12] Agriturismo (art.5, c.2, L. 413/91)"),
-    ("RF13", "[RF13] Vendite a domicilio (art.25-bis, c.6, DPR  600/73)"),
-    ("RF14", "[RF14] Rivendita beni usati, oggetti d’arte, d’antiquariato o da collezione (art.36, DL 41/95)"),
-    ("RF15", "[RF15] Agenzie di vendite all’asta di oggetti d’arte, antiquariato o da collezione (art.40-bis, DL 41/95)"),
-    ("RF16", "[RF16] IVA per cassa P.A. (art.6, c.5, DPR 633/72)"),
-    ("RF17", "[RF17] IVA per cassa (art. 32-bis, DL 83/2012)"),
-    ("RF18", "[RF18] Altro"),
-    ("RF19", "[RF19] Regime forfettario (art.1, c.54-89, L. 190/2014)"),
+TAX_SYSTEM=[
+    ("RF01","[RF01]Ordinario"),
+    ("RF02","[RF02]Contribuentiminimi(art.1,c.96-117,L.244/07)"),
+    ("RF04","[RF04]Agricolturaeattivitàconnesseepesca(artt.34e34-bis,DPR633/72)"),
+    ("RF05","[RF05]Venditasalietabacchi(art.74,c.1,DPR.633/72)"),
+    ("RF06","[RF06]Commerciofiammiferi(art.74,c.1,DPR 633/72)"),
+    ("RF07","[RF07]Editoria(art.74,c.1,DPR 633/72)"),
+    ("RF08","[RF08]Gestioneservizitelefoniapubblica(art.74,c.1,DPR633/72)"),
+    ("RF09","[RF09]Rivenditadocumentiditrasportopubblicoedisosta(art.74,c.1,DPR 633/72)"),
+    ("RF10","[RF10]Intrattenimenti,giochiealtreattivitàdicuiallatariffaallegataalDPR640/72(art.74,c.6,DPR633/72)"),
+    ("RF11","[RF11]Agenzieviaggieturismo(art.74-ter,DPR633/72)"),
+    ("RF12","[RF12]Agriturismo(art.5,c.2,L.413/91)"),
+    ("RF13","[RF13]Venditeadomicilio(art.25-bis,c.6,DPR 600/73)"),
+    ("RF14","[RF14]Rivenditabeniusati,oggettid’arte,d’antiquariatoodacollezione(art.36,DL41/95)"),
+    ("RF15","[RF15]Agenziedivenditeall’astadioggettid’arte,antiquariatoodacollezione(art.40-bis,DL41/95)"),
+    ("RF16","[RF16]IVApercassaP.A.(art.6,c.5,DPR633/72)"),
+    ("RF17","[RF17]IVApercassa(art.32-bis,DL83/2012)"),
+    ("RF18","[RF18]Altro"),
+    ("RF19","[RF19]Regimeforfettario(art.1,c.54-89,L.190/2014)"),
 ]
 
-class ResCompany(models.Model):
-    _name = 'res.company'
-    _inherit = 'res.company'
+classResCompany(models.Model):
+    _name='res.company'
+    _inherit='res.company'
 
-    l10n_it_codice_fiscale = fields.Char(string="Codice Fiscale", size=16, related='partner_id.l10n_it_codice_fiscale',
-        store=True, readonly=False, help="Fiscal code of your company")
-    l10n_it_tax_system = fields.Selection(selection=TAX_SYSTEM, string="Tax System",
-        help="Please select the Tax system to which you are subjected.")
+    l10n_it_codice_fiscale=fields.Char(string="CodiceFiscale",size=16,related='partner_id.l10n_it_codice_fiscale',
+        store=True,readonly=False,help="Fiscalcodeofyourcompany")
+    l10n_it_tax_system=fields.Selection(selection=TAX_SYSTEM,string="TaxSystem",
+        help="PleaseselecttheTaxsystemtowhichyouaresubjected.")
 
-    # PEC server
-    l10n_it_mail_pec_server_id = fields.Many2one('ir.mail_server', string="Server PEC",
-        help="Configure your PEC-mail server to send electronic invoices.")
-    l10n_it_address_recipient_fatturapa = fields.Char(string="Government PEC-mail",
-        help="Enter Government PEC-mail address. Ex: sdi01@pec.fatturapa.it")
-    l10n_it_address_send_fatturapa = fields.Char(string="Company PEC-mail",
-        help="Enter your company PEC-mail address. Ex: yourcompany@pec.mail.it")
+    #PECserver
+    l10n_it_mail_pec_server_id=fields.Many2one('ir.mail_server',string="ServerPEC",
+        help="ConfigureyourPEC-mailservertosendelectronicinvoices.")
+    l10n_it_address_recipient_fatturapa=fields.Char(string="GovernmentPEC-mail",
+        help="EnterGovernmentPEC-mailaddress.Ex:sdi01@pec.fatturapa.it")
+    l10n_it_address_send_fatturapa=fields.Char(string="CompanyPEC-mail",
+        help="EnteryourcompanyPEC-mailaddress.Ex:yourcompany@pec.mail.it")
 
 
-    # Economic and Administrative Index
-    l10n_it_has_eco_index = fields.Boolean(default=False,
-        help="The seller/provider is a company listed on the register of companies and as\
-        such must also indicate the registration data on all documents (art. 2250, Italian\
-        Civil Code)")
-    l10n_it_eco_index_office = fields.Many2one('res.country.state', domain="[('country_id','=','IT')]",
-        string="Province of the register-of-companies office")
-    l10n_it_eco_index_number = fields.Char(string="Number in register of companies", size=20,
-        help="This field must contain the number under which the\
-        seller/provider is listed on the register of companies.")
-    l10n_it_eco_index_share_capital = fields.Float(default=0.0, string="Share capital actually paid up",
-        help="Mandatory if the seller/provider is a company with share\
-        capital (SpA, SApA, Srl), this field must contain the amount\
-        of share capital actually paid up as resulting from the last\
-        financial statement")
-    l10n_it_eco_index_sole_shareholder = fields.Selection(
+    #EconomicandAdministrativeIndex
+    l10n_it_has_eco_index=fields.Boolean(default=False,
+        help="Theseller/providerisacompanylistedontheregisterofcompaniesandas\
+        suchmustalsoindicatetheregistrationdataonalldocuments(art.2250,Italian\
+        CivilCode)")
+    l10n_it_eco_index_office=fields.Many2one('res.country.state',domain="[('country_id','=','IT')]",
+        string="Provinceoftheregister-of-companiesoffice")
+    l10n_it_eco_index_number=fields.Char(string="Numberinregisterofcompanies",size=20,
+        help="Thisfieldmustcontainthenumberunderwhichthe\
+        seller/providerislistedontheregisterofcompanies.")
+    l10n_it_eco_index_share_capital=fields.Float(default=0.0,string="Sharecapitalactuallypaidup",
+        help="Mandatoryiftheseller/providerisacompanywithshare\
+        capital(SpA,SApA,Srl),thisfieldmustcontaintheamount\
+        ofsharecapitalactuallypaidupasresultingfromthelast\
+        financialstatement")
+    l10n_it_eco_index_sole_shareholder=fields.Selection(
         [
-            ("NO", "Not a limited liability company"),
-            ("SU", "Socio unico"),
-            ("SM", "Più soci")],
+            ("NO","Notalimitedliabilitycompany"),
+            ("SU","Sociounico"),
+            ("SM","Piùsoci")],
         string="Shareholder")
-    l10n_it_eco_index_liquidation_state = fields.Selection(
+    l10n_it_eco_index_liquidation_state=fields.Selection(
         [
-            ("LS", "The company is in a state of liquidation"),
-            ("LN", "The company is not in a state of liquidation")],
-        string="Liquidation state")
+            ("LS","Thecompanyisinastateofliquidation"),
+            ("LN","Thecompanyisnotinastateofliquidation")],
+        string="Liquidationstate")
 
 
-    # Tax representative
-    l10n_it_has_tax_representative = fields.Boolean(default=False,
-        help="The seller/provider is a non-resident subject which\
-        carries out transactions in Italy with relevance for VAT\
-        purposes and which takes avail of a tax representative in\
+    #Taxrepresentative
+    l10n_it_has_tax_representative=fields.Boolean(default=False,
+        help="Theseller/providerisanon-residentsubjectwhich\
+        carriesouttransactionsinItalywithrelevanceforVAT\
+        purposesandwhichtakesavailofataxrepresentativein\
         Italy")
-    l10n_it_tax_representative_partner_id = fields.Many2one('res.partner', string='Tax representative partner')
+    l10n_it_tax_representative_partner_id=fields.Many2one('res.partner',string='Taxrepresentativepartner')
 
     @api.constrains('l10n_it_has_eco_index',
                     'l10n_it_eco_index_office',
                     'l10n_it_eco_index_number',
                     'l10n_it_eco_index_liquidation_state')
-    def _check_eco_admin_index(self):
-        for record in self:
-            if (record.l10n_it_has_eco_index
-                and (not record.l10n_it_eco_index_office
-                     or not record.l10n_it_eco_index_number
-                     or not record.l10n_it_eco_index_liquidation_state)):
-                raise ValidationError(_("All fields about the Economic and Administrative Index must be completed."))
+    def_check_eco_admin_index(self):
+        forrecordinself:
+            if(record.l10n_it_has_eco_index
+                and(notrecord.l10n_it_eco_index_office
+                     ornotrecord.l10n_it_eco_index_number
+                     ornotrecord.l10n_it_eco_index_liquidation_state)):
+                raiseValidationError(_("AllfieldsabouttheEconomicandAdministrativeIndexmustbecompleted."))
 
     @api.constrains('l10n_it_has_eco_index',
                     'l10n_it_eco_index_share_capital',
                     'l10n_it_eco_index_sole_shareholder')
-    def _check_eco_incorporated(self):
-        """ If the business is incorporated, both these fields must be present.
-            We don't know whether the business is incorporated, but in any case the fields
-            must be both present or not present. """
-        for record in self:
-            if (record.l10n_it_has_eco_index
-                and bool(record.l10n_it_eco_index_share_capital) ^ bool(record.l10n_it_eco_index_sole_shareholder)):
-                raise ValidationError(_("If one of Share Capital or Sole Shareholder is present, "
-                                        "then they must be both filled out."))
+    def_check_eco_incorporated(self):
+        """Ifthebusinessisincorporated,boththesefieldsmustbepresent.
+            Wedon'tknowwhetherthebusinessisincorporated,butinanycasethefields
+            mustbebothpresentornotpresent."""
+        forrecordinself:
+            if(record.l10n_it_has_eco_index
+                andbool(record.l10n_it_eco_index_share_capital)^bool(record.l10n_it_eco_index_sole_shareholder)):
+                raiseValidationError(_("IfoneofShareCapitalorSoleShareholderispresent,"
+                                        "thentheymustbebothfilledout."))
 
     @api.constrains('l10n_it_has_tax_representative',
                     'l10n_it_tax_representative_partner_id')
-    def _check_tax_representative(self):
-        for record in self:
-            if not record.l10n_it_has_tax_representative:
+    def_check_tax_representative(self):
+        forrecordinself:
+            ifnotrecord.l10n_it_has_tax_representative:
                 continue
-            if not record.l10n_it_tax_representative_partner_id:
-                raise ValidationError(_("You must select a tax representative."))
-            if not record.l10n_it_tax_representative_partner_id.vat:
-                raise ValidationError(_("Your tax representative partner must have a tax number."))
-            if not record.l10n_it_tax_representative_partner_id.country_id:
-                raise ValidationError(_("Your tax representative partner must have a country."))
+            ifnotrecord.l10n_it_tax_representative_partner_id:
+                raiseValidationError(_("Youmustselectataxrepresentative."))
+            ifnotrecord.l10n_it_tax_representative_partner_id.vat:
+                raiseValidationError(_("Yourtaxrepresentativepartnermusthaveataxnumber."))
+            ifnotrecord.l10n_it_tax_representative_partner_id.country_id:
+                raiseValidationError(_("Yourtaxrepresentativepartnermusthaveacountry."))

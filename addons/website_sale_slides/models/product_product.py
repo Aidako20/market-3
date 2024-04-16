@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class Product(models.Model):
-    _inherit = "product.product"
+classProduct(models.Model):
+    _inherit="product.product"
 
-    channel_ids = fields.One2many('slide.channel', 'product_id', string='Courses')
+    channel_ids=fields.One2many('slide.channel','product_id',string='Courses')

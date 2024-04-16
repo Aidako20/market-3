@@ -1,25 +1,25 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, api, models
+fromflectraimportfields,api,models
 
 
-class ResPartner(models.Model):
-    _inherit = "res.partner"
+classResPartner(models.Model):
+    _inherit="res.partner"
 
-    branch_code = fields.Char("Branch Code", default='000', compute='_compute_branch_code', store=True)
-    first_name = fields.Char("First Name")
-    middle_name = fields.Char("Middle Name")
-    last_name = fields.Char("Last Name")
+    branch_code=fields.Char("BranchCode",default='000',compute='_compute_branch_code',store=True)
+    first_name=fields.Char("FirstName")
+    middle_name=fields.Char("MiddleName")
+    last_name=fields.Char("LastName")
 
     @api.model
-    def _commercial_fields(self):
-        return super()._commercial_fields() + ['branch_code']
+    def_commercial_fields(self):
+        returnsuper()._commercial_fields()+['branch_code']
 
-    @api.depends('vat', 'country_id')
-    def _compute_branch_code(self):
-        for partner in self:
-            branch_code = '000'
-            if partner.country_id.code == 'PH' and partner.vat:
-                match = partner.__check_vat_ph_re.match(partner.vat)
-                branch_code = match and match.group(1) and match.group(1)[1:] or branch_code
-            partner.branch_code = branch_code
+    @api.depends('vat','country_id')
+    def_compute_branch_code(self):
+        forpartnerinself:
+            branch_code='000'
+            ifpartner.country_id.code=='PH'andpartner.vat:
+                match=partner.__check_vat_ph_re.match(partner.vat)
+                branch_code=matchandmatch.group(1)andmatch.group(1)[1:]orbranch_code
+            partner.branch_code=branch_code

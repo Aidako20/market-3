@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class PosSession(models.Model):
-    _inherit = 'pos.session'
+classPosSession(models.Model):
+    _inherit='pos.session'
 
-    crm_team_id = fields.Many2one('crm.team', related='config_id.crm_team_id', string="Sales Team", readonly=True)
+    crm_team_id=fields.Many2one('crm.team',related='config_id.crm_team_id',string="SalesTeam",readonly=True)

@@ -1,20 +1,20 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from datetime import datetime, timedelta
+fromdatetimeimportdatetime,timedelta
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class HrDepartureWizard(models.TransientModel):
-    _inherit = 'hr.departure.wizard'
+classHrDepartureWizard(models.TransientModel):
+    _inherit='hr.departure.wizard'
 
-    cancel_leaves = fields.Boolean("Cancel Future Leaves", default=True)
+    cancel_leaves=fields.Boolean("CancelFutureLeaves",default=True)
 
-    def action_register_departure(self):
-        super(HrDepartureWizard, self).action_register_departure()
-        if self.cancel_leaves:
-            future_leaves = self.env['hr.leave'].search([('employee_id', '=', self.employee_id.id), 
-                                                         ('date_to', '>', self.departure_date),
-                                                         ('state', 'not in', ['cancel', 'refuse'])])
-            future_leaves.write({'state': 'cancel'})
+    defaction_register_departure(self):
+        super(HrDepartureWizard,self).action_register_departure()
+        ifself.cancel_leaves:
+            future_leaves=self.env['hr.leave'].search([('employee_id','=',self.employee_id.id),
+                                                         ('date_to','>',self.departure_date),
+                                                         ('state','notin',['cancel','refuse'])])
+            future_leaves.write({'state':'cancel'})

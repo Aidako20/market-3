@@ -1,50 +1,50 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, fields, api
+fromflectraimportmodels,fields,api
 
-from flectra.exceptions import ValidationError
+fromflectra.exceptionsimportValidationError
 
-from flectra.addons.base_iban.models.res_partner_bank import validate_iban
-from flectra.addons.base.models.res_bank import sanitize_account_number
+fromflectra.addons.base_iban.models.res_partner_bankimportvalidate_iban
+fromflectra.addons.base.models.res_bankimportsanitize_account_number
 
 
-class AccountJournal(models.Model):
-    _inherit = 'account.journal'
+classAccountJournal(models.Model):
+    _inherit='account.journal'
 
-    # creation of bank journals by giving the account number, allow craetion of the
-    l10n_ch_postal = fields.Char('Client Number', related='bank_account_id.l10n_ch_postal', readonly=False)
-    invoice_reference_model = fields.Selection(selection_add=[
-        ('ch', 'Switzerland')
-    ], ondelete={'ch': lambda recs: recs.write({'invoice_reference_model': 'flectra'})})
+    #creationofbankjournalsbygivingtheaccountnumber,allowcraetionofthe
+    l10n_ch_postal=fields.Char('ClientNumber',related='bank_account_id.l10n_ch_postal',readonly=False)
+    invoice_reference_model=fields.Selection(selection_add=[
+        ('ch','Switzerland')
+    ],ondelete={'ch':lambdarecs:recs.write({'invoice_reference_model':'flectra'})})
 
     @api.model
-    def create(self, vals):
-        rslt = super(AccountJournal, self).create(vals)
+    defcreate(self,vals):
+        rslt=super(AccountJournal,self).create(vals)
 
-        # The call to super() creates the related bank_account_id field
-        if 'l10n_ch_postal' in vals:
-            rslt.l10n_ch_postal = vals['l10n_ch_postal']
-        return rslt
+        #Thecalltosuper()createstherelatedbank_account_idfield
+        if'l10n_ch_postal'invals:
+            rslt.l10n_ch_postal=vals['l10n_ch_postal']
+        returnrslt
 
-    def write(self, vals):
-        rslt = super(AccountJournal, self).write(vals)
+    defwrite(self,vals):
+        rslt=super(AccountJournal,self).write(vals)
 
-        # The call to super() creates the related bank_account_id field if necessary
-        if 'l10n_ch_postal' in vals:
-            for record in self.filtered('bank_account_id'):
-                record.bank_account_id.l10n_ch_postal = vals['l10n_ch_postal']
-        return rslt
+        #Thecalltosuper()createstherelatedbank_account_idfieldifnecessary
+        if'l10n_ch_postal'invals:
+            forrecordinself.filtered('bank_account_id'):
+                record.bank_account_id.l10n_ch_postal=vals['l10n_ch_postal']
+        returnrslt
 
     @api.onchange('bank_acc_number')
-    def _onchange_set_l10n_ch_postal(self):
+    def_onchange_set_l10n_ch_postal(self):
         try:
             validate_iban(self.bank_acc_number)
-            is_iban = True
-        except ValidationError:
-            is_iban = False
+            is_iban=True
+        exceptValidationError:
+            is_iban=False
 
-        if is_iban:
-            self.l10n_ch_postal = self.env['res.partner.bank']._retrieve_l10n_ch_postal(sanitize_account_number(self.bank_acc_number))
+        ifis_iban:
+            self.l10n_ch_postal=self.env['res.partner.bank']._retrieve_l10n_ch_postal(sanitize_account_number(self.bank_acc_number))
         else:
-            self.l10n_ch_postal = self.bank_acc_number
+            self.l10n_ch_postal=self.bank_acc_number

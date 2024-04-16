@@ -1,87 +1,87 @@
-flectra.define('barcodes.field', function(require) {
-"use strict";
+flectra.define('barcodes.field',function(require){
+"usestrict";
 
-var AbstractField = require('web.AbstractField');
-var basicFields = require('web.basic_fields');
-var fieldRegistry = require('web.field_registry');
-var BarcodeEvents = require('barcodes.BarcodeEvents').BarcodeEvents;
+varAbstractField=require('web.AbstractField');
+varbasicFields=require('web.basic_fields');
+varfieldRegistry=require('web.field_registry');
+varBarcodeEvents=require('barcodes.BarcodeEvents').BarcodeEvents;
 
-// Field in which the user can both type normally and scan barcodes
+//Fieldinwhichtheusercanbothtypenormallyandscanbarcodes
 
-var FieldFloatScannable = basicFields.FieldFloat.extend({
-    events: _.extend({}, basicFields.FieldFloat.prototype.events, {
-        // The barcode_events component intercepts keypresses and releases them when it
-        // appears they are not part of a barcode. But since released keypresses don't
-        // trigger native behaviour (like characters input), we must simulate it.
-        keypress: '_onKeypress',
+varFieldFloatScannable=basicFields.FieldFloat.extend({
+    events:_.extend({},basicFields.FieldFloat.prototype.events,{
+        //Thebarcode_eventscomponentinterceptskeypressesandreleasesthemwhenit
+        //appearstheyarenotpartofabarcode.Butsincereleasedkeypressesdon't
+        //triggernativebehaviour(likecharactersinput),wemustsimulateit.
+        keypress:'_onKeypress',
     }),
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _renderEdit: function () {
-        var self = this;
-        return Promise.resolve(this._super()).then(function () {
-            self.$input.data('enableBarcode', true);
+    _renderEdit:function(){
+        varself=this;
+        returnPromise.resolve(this._super()).then(function(){
+            self.$input.data('enableBarcode',true);
         });
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {KeyboardEvent} e
+     *@private
+     *@param{KeyboardEvent}e
      */
-    _onKeypress: function (e) {
-        /* only simulate a keypress if it has been previously prevented */
-        if (e.dispatched_by_barcode_reader !== true) {
-            if (!BarcodeEvents.is_special_key(e)) {
+    _onKeypress:function(e){
+        /*onlysimulateakeypressifithasbeenpreviouslyprevented*/
+        if(e.dispatched_by_barcode_reader!==true){
+            if(!BarcodeEvents.is_special_key(e)){
                 e.preventDefault();
             }
             return;
         }
-        var character = String.fromCharCode(e.which);
-        var current_str = e.target.value;
-        var str_before_carret = current_str.substring(0, e.target.selectionStart);
-        var str_after_carret = current_str.substring(e.target.selectionEnd);
-        e.target.value = str_before_carret + character + str_after_carret;
-        var new_carret_index = str_before_carret.length + character.length;
-        e.target.setSelectionRange(new_carret_index, new_carret_index);
-        // trigger an 'input' event to notify the widget that it's value changed
+        varcharacter=String.fromCharCode(e.which);
+        varcurrent_str=e.target.value;
+        varstr_before_carret=current_str.substring(0,e.target.selectionStart);
+        varstr_after_carret=current_str.substring(e.target.selectionEnd);
+        e.target.value=str_before_carret+character+str_after_carret;
+        varnew_carret_index=str_before_carret.length+character.length;
+        e.target.setSelectionRange(new_carret_index,new_carret_index);
+        //triggeran'input'eventtonotifythewidgetthatit'svaluechanged
         $(e.target).trigger('input');
     },
 });
 
-// Field to use scan barcodes
-var FormViewBarcodeHandler = AbstractField.extend({
+//Fieldtousescanbarcodes
+varFormViewBarcodeHandler=AbstractField.extend({
     /**
-     * @override
+     *@override
      */
-    init: function() {
-        this._super.apply(this, arguments);
+    init:function(){
+        this._super.apply(this,arguments);
 
-        this.trigger_up('activeBarcode', {
-            name: this.name,
-            commands: {
-                barcode: '_barcodeAddX2MQuantity',
+        this.trigger_up('activeBarcode',{
+            name:this.name,
+            commands:{
+                barcode:'_barcodeAddX2MQuantity',
             }
         });
     },
 });
 
-fieldRegistry.add('field_float_scannable', FieldFloatScannable);
-fieldRegistry.add('barcode_handler', FormViewBarcodeHandler);
+fieldRegistry.add('field_float_scannable',FieldFloatScannable);
+fieldRegistry.add('barcode_handler',FormViewBarcodeHandler);
 
-return {
-    FieldFloatScannable: FieldFloatScannable,
-    FormViewBarcodeHandler: FormViewBarcodeHandler,
+return{
+    FieldFloatScannable:FieldFloatScannable,
+    FormViewBarcodeHandler:FormViewBarcodeHandler,
 };
 
 });

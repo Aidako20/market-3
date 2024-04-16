@@ -1,180 +1,180 @@
-flectra.define('point_of_sale.tour.OrderManagementScreenTourMethods', function (require) {
-    'use strict';
+flectra.define('point_of_sale.tour.OrderManagementScreenTourMethods',function(require){
+    'usestrict';
 
-    const { createTourMethods } = require('point_of_sale.tour.utils');
+    const{createTourMethods}=require('point_of_sale.tour.utils');
 
-    class Do {
-        clickBack() {
-            return [
+    classDo{
+        clickBack(){
+            return[
                 {
-                    content: 'order management screen, click back button',
-                    trigger: '.order-management-screen .control-panel .button.back',
+                    content:'ordermanagementscreen,clickbackbutton',
+                    trigger:'.order-management-screen.control-panel.button.back',
                 },
             ];
         }
-        clickOrder(name, [otherCol, otherColVal] = [null, null]) {
-            let trigger = `.order-management-screen .order-list .order-row .item.name:contains("${name}")`;
-            if (otherCol) {
-                trigger = `${trigger} ~ .item.${otherCol}:contains("${otherColVal}")`;
+        clickOrder(name,[otherCol,otherColVal]=[null,null]){
+            lettrigger=`.order-management-screen.order-list.order-row.item.name:contains("${name}")`;
+            if(otherCol){
+                trigger=`${trigger}~.item.${otherCol}:contains("${otherColVal}")`;
             }
-            return [
+            return[
                 {
-                    content: `clicking order '${name}' from orderlist`,
+                    content:`clickingorder'${name}'fromorderlist`,
                     trigger,
                 },
             ];
         }
-        clickInvoiceButton() {
-            return [
+        clickInvoiceButton(){
+            return[
                 {
-                    content: 'click invoice button',
-                    trigger: '.order-management-screen .control-button span:contains("Invoice")',
+                    content:'clickinvoicebutton',
+                    trigger:'.order-management-screen.control-buttonspan:contains("Invoice")',
                 },
             ];
         }
-        clickPrintReceiptButton() {
-            return [
+        clickPrintReceiptButton(){
+            return[
                 {
-                    content: 'click reprint receipt button',
-                    trigger: '.order-management-screen .control-button span:contains("Print Receipt")'
+                    content:'clickreprintreceiptbutton',
+                    trigger:'.order-management-screen.control-buttonspan:contains("PrintReceipt")'
                 }
             ]
         }
-        clickCustomerButton() {
-            return [
+        clickCustomerButton(){
+            return[
                 {
-                    content: 'click customer button',
-                    trigger: '.order-management-screen .actionpad .button.set-customer',
+                    content:'clickcustomerbutton',
+                    trigger:'.order-management-screen.actionpad.button.set-customer',
                 },
             ];
         }
-        closeReceipt() {
-            return [
+        closeReceipt(){
+            return[
                 {
-                    content: 'close receipt',
-                    trigger: '.receipt-screen .button.back',
+                    content:'closereceipt',
+                    trigger:'.receipt-screen.button.back',
                 }
             ]
         }
     }
 
-    class Check {
-        isShown() {
-            return [
+    classCheck{
+        isShown(){
+            return[
                 {
-                    content: 'order management screen is shown',
-                    trigger: '.pos .pos-content .order-management-screen',
-                    run: () => {},
+                    content:'ordermanagementscreenisshown',
+                    trigger:'.pos.pos-content.order-management-screen',
+                    run:()=>{},
                 },
             ];
         }
-        orderlistHas({ orderName, total, customer }) {
-            const steps = [];
+        orderlistHas({orderName,total,customer}){
+            conststeps=[];
             steps.push({
-                content: `order list has row having: name '${orderName}', total '${total}'`,
-                trigger: `.order-list .order-row .item:contains("${orderName}") ~ .item:contains("${total}")`,
-                run: () => {},
+                content:`orderlisthasrowhaving:name'${orderName}',total'${total}'`,
+                trigger:`.order-list.order-row.item:contains("${orderName}")~.item:contains("${total}")`,
+                run:()=>{},
             });
-            if (customer) {
+            if(customer){
                 steps.push({
-                    content: `order list has row having: name '${orderName}', customer '${customer}'`,
-                    trigger: `.order-list .order-row .item:contains("${orderName}") ~ .item:contains("${customer}")`,
-                    run: () => {},
+                    content:`orderlisthasrowhaving:name'${orderName}',customer'${customer}'`,
+                    trigger:`.order-list.order-row.item:contains("${orderName}")~.item:contains("${customer}")`,
+                    run:()=>{},
                 });
             }
-            return steps;
+            returnsteps;
         }
-        highlightedOrderRowHas(name) {
-            return [
+        highlightedOrderRowHas(name){
+            return[
                 {
-                    content: `order '${name}' in orderlist is highligted`,
-                    trigger: `.order-list .order-row.highlight:has(> .item:contains("${name}"))`,
-                    run: () => {},
+                    content:`order'${name}'inorderlistishighligted`,
+                    trigger:`.order-list.order-row.highlight:has(>.item:contains("${name}"))`,
+                    run:()=>{},
                 },
             ];
         }
-        orderRowIsNotHighlighted(name) {
-            return [
+        orderRowIsNotHighlighted(name){
+            return[
                 {
-                    content: `order '${name}' in orderlist is not highligted`,
-                    trigger: `.order-list .order-row:not(:has(.highlight)):has(> .item:contains("${name}"))`,
-                    run: () => {},
+                    content:`order'${name}'inorderlistisnothighligted`,
+                    trigger:`.order-list.order-row:not(:has(.highlight)):has(>.item:contains("${name}"))`,
+                    run:()=>{},
                 },
             ];
         }
-        orderDetailsHas({ lines, total }) {
-            const steps = [];
-            for (let { product, quantity } of lines) {
+        orderDetailsHas({lines,total}){
+            conststeps=[];
+            for(let{product,quantity}oflines){
                 steps.push({
-                    content: `order details has product '${product}' and quantity '${quantity}'`,
-                    trigger: `.orderlines .product-name:contains("${product}") ~ .info strong:contains("${quantity}")`,
-                    run: () => {},
+                    content:`orderdetailshasproduct'${product}'andquantity'${quantity}'`,
+                    trigger:`.orderlines.product-name:contains("${product}")~.infostrong:contains("${quantity}")`,
+                    run:()=>{},
                 });
             }
-            if (total) {
+            if(total){
                 steps.push({
-                    content: `order details has total amount of ${total}`,
-                    trigger: `.order-container .summary .total .value:contains("${total}")`,
-                    run: () => {},
+                    content:`orderdetailshastotalamountof${total}`,
+                    trigger:`.order-container.summary.total.value:contains("${total}")`,
+                    run:()=>{},
                 });
             }
-            return steps;
+            returnsteps;
         }
-        customerIs(name) {
-            return [
+        customerIs(name){
+            return[
                 {
-                    content: `set customer is '${name}'`,
-                    trigger: `.order-management-screen .actionpad .set-customer:contains("${name}")`,
-                    run: () => {},
+                    content:`setcustomeris'${name}'`,
+                    trigger:`.order-management-screen.actionpad.set-customer:contains("${name}")`,
+                    run:()=>{},
                 },
             ];
         }
-        reprintReceiptIsShown() {
-            return [
+        reprintReceiptIsShown(){
+            return[
                 {
-                    content: 'reprint receipt screen is shown',
-                    trigger: '.pos .receipt-screen',
-                    run: () => {},
+                    content:'reprintreceiptscreenisshown',
+                    trigger:'.pos.receipt-screen',
+                    run:()=>{},
                 }
             ]
         }
-        receiptChangeIs(amount) {
-            return [
+        receiptChangeIs(amount){
+            return[
                 {
-                    content: `receipt change is ${amount}`,
-                    trigger: `.pos-receipt-amount.receipt-change:contains("${amount}")`,
-                    run: () => {},
+                    content:`receiptchangeis${amount}`,
+                    trigger:`.pos-receipt-amount.receipt-change:contains("${amount}")`,
+                    run:()=>{},
                 }
             ]
         }
-        receiptOrderDataContains(orderInfo) {
-            return [
+        receiptOrderDataContains(orderInfo){
+            return[
                 {
-                    content: `order data contains ${orderInfo}`,
-                    trigger: `.pos-receipt-order-data:contains("${orderInfo}")`,
-                    run: () => {},
+                    content:`orderdatacontains${orderInfo}`,
+                    trigger:`.pos-receipt-order-data:contains("${orderInfo}")`,
+                    run:()=>{},
                 }
             ]
         }
-        receiptAmountIs(amount) {
-            return [
+        receiptAmountIs(amount){
+            return[
                 {
-                    content: `receipt amount is ${amount}`,
-                    trigger: `.pos-receipt-amount:contains("${amount}")`,
-                    run: () => {},
+                    content:`receiptamountis${amount}`,
+                    trigger:`.pos-receipt-amount:contains("${amount}")`,
+                    run:()=>{},
                 }
             ]
         }
-        isNotHidden() {
-            return [
+        isNotHidden(){
+            return[
                 {
-                    content: 'order management screen is not hidden',
-                    trigger: `.order-management-screen:not(:has(.oe_hidden))`,
-                    run: () => {},
+                    content:'ordermanagementscreenisnothidden',
+                    trigger:`.order-management-screen:not(:has(.oe_hidden))`,
+                    run:()=>{},
                 }
             ]
         }
     }
 
-    return createTourMethods('OrderManagementScreen', Do, Check);
+    returncreateTourMethods('OrderManagementScreen',Do,Check);
 });

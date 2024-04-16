@@ -1,17 +1,17 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models, fields
+fromflectraimportapi,models,fields
 
 
-class AccountChartTemplate(models.Model):
-    _inherit = 'account.chart.template'
+classAccountChartTemplate(models.Model):
+    _inherit='account.chart.template'
 
     @api.model
-    def _prepare_all_journals(self, acc_template_ref, company, journals_dict=None):
-        journal_data = super(AccountChartTemplate, self)._prepare_all_journals(
-            acc_template_ref, company, journals_dict)
-        for journal in journal_data:
-            if journal['type'] in ('sale', 'purchase') and company.country_id.code == "BE":
-                journal.update({'refund_sequence': True})
-        return journal_data
+    def_prepare_all_journals(self,acc_template_ref,company,journals_dict=None):
+        journal_data=super(AccountChartTemplate,self)._prepare_all_journals(
+            acc_template_ref,company,journals_dict)
+        forjournalinjournal_data:
+            ifjournal['type']in('sale','purchase')andcompany.country_id.code=="BE":
+                journal.update({'refund_sequence':True})
+        returnjournal_data

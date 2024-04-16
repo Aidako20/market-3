@@ -1,34 +1,34 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class StockPicking(models.Model):
-    _inherit = "stock.picking"
+classStockPicking(models.Model):
+    _inherit="stock.picking"
 
-    batch_id = fields.Many2one(
-        'stock.picking.batch', string='Batch Transfer',
+    batch_id=fields.Many2one(
+        'stock.picking.batch',string='BatchTransfer',
         check_company=True,
-        states={'done': [('readonly', True)], 'cancel': [('readonly', True)]},
-        help='Batch associated to this transfer', copy=False)
+        states={'done':[('readonly',True)],'cancel':[('readonly',True)]},
+        help='Batchassociatedtothistransfer',copy=False)
 
     @api.model
-    def create(self, vals):
-        res = super().create(vals)
-        if vals.get('batch_id'):
+    defcreate(self,vals):
+        res=super().create(vals)
+        ifvals.get('batch_id'):
             res.batch_id._sanity_check()
-        return res
+        returnres
 
-    def write(self, vals):
-        res = super().write(vals)
-        if vals.get('batch_id'):
-            if not self.batch_id.picking_type_id:
-                self.batch_id.picking_type_id = self.picking_type_id[0]
+    defwrite(self,vals):
+        res=super().write(vals)
+        ifvals.get('batch_id'):
+            ifnotself.batch_id.picking_type_id:
+                self.batch_id.picking_type_id=self.picking_type_id[0]
             self.batch_id._sanity_check()
-        return res
+        returnres
 
-    def _should_show_transfers(self):
-        if len(self.batch_id) == 1 and self == self.batch_id.picking_ids:
-            return False
-        return super()._should_show_transfers()
+    def_should_show_transfers(self):
+        iflen(self.batch_id)==1andself==self.batch_id.picking_ids:
+            returnFalse
+        returnsuper()._should_show_transfers()

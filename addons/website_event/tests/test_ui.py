@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import flectra.tests
-from flectra import tools
+importflectra.tests
+fromflectraimporttools
 
 
-@flectra.tests.tagged('post_install', '-at_install')
-class TestUi(flectra.tests.HttpCase):
-    def test_admin(self):
-        self.start_tour("/", 'event', login='admin', step_delay=100)
+@flectra.tests.tagged('post_install','-at_install')
+classTestUi(flectra.tests.HttpCase):
+    deftest_admin(self):
+        self.start_tour("/",'event',login='admin',step_delay=100)

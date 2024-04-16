@@ -1,48 +1,48 @@
 //
-// This file is meant to allow to switch the type of an input #password
-// from password to text on mousedown on an input group.
-// On mouse down, we see the password in clear text
-// On mouse up, we hide it again.
+//Thisfileismeanttoallowtoswitchthetypeofaninput#password
+//frompasswordtotextonmousedownonaninputgroup.
+//Onmousedown,weseethepasswordincleartext
+//Onmouseup,wehideitagain.
 //
-flectra.define('website.show_password', function (require) {
-'use strict';
+flectra.define('website.show_password',function(require){
+'usestrict';
 
-var publicWidget = require('web.public.widget');
+varpublicWidget=require('web.public.widget');
 
-publicWidget.registry.ShowPassword = publicWidget.Widget.extend({
-    selector: '#showPass',
-    events: {
-        'mousedown': '_onShowText',
-        'touchstart': '_onShowText',
+publicWidget.registry.ShowPassword=publicWidget.Widget.extend({
+    selector:'#showPass',
+    events:{
+        'mousedown':'_onShowText',
+        'touchstart':'_onShowText',
     },
 
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
+    destroy:function(){
         this._super(...arguments);
         $('body').off(".ShowPassword");
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onShowPassword: function () {
-        this.$el.closest('.input-group').find('#password').attr('type', 'password');
+    _onShowPassword:function(){
+        this.$el.closest('.input-group').find('#password').attr('type','password');
     },
     /**
-     * @private
+     *@private
      */
-    _onShowText: function () {
-        $('body').one('mouseup.ShowPassword touchend.ShowPassword', this._onShowPassword.bind(this));
-        this.$el.closest('.input-group').find('#password').attr('type', 'text');
+    _onShowText:function(){
+        $('body').one('mouseup.ShowPasswordtouchend.ShowPassword',this._onShowPassword.bind(this));
+        this.$el.closest('.input-group').find('#password').attr('type','text');
     },
 });
 
-return publicWidget.registry.ShowPassword;
+returnpublicWidget.registry.ShowPassword;
 
 });

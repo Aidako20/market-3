@@ -1,26 +1,26 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, fields
+fromflectraimportmodels,fields
 
 
-class User(models.Model):
-    _inherit = ['res.users']
+classUser(models.Model):
+    _inherit=['res.users']
 
-    employee_cars_count = fields.Integer(related='employee_id.employee_cars_count')
+    employee_cars_count=fields.Integer(related='employee_id.employee_cars_count')
 
-    def __init__(self, pool, cr):
-        """ Override of __init__ to add access rights.
-            Access rights are disabled by default, but allowed
-            on some specific fields defined in self.SELF_{READ/WRITE}ABLE_FIELDS.
+    def__init__(self,pool,cr):
+        """Overrideof__init__toaddaccessrights.
+            Accessrightsaredisabledbydefault,butallowed
+            onsomespecificfieldsdefinedinself.SELF_{READ/WRITE}ABLE_FIELDS.
         """
-        init_res = super(User, self).__init__(pool, cr)
-        # duplicate list to avoid modifying the original reference
-        pool[self._name].SELF_READABLE_FIELDS = pool[self._name].SELF_READABLE_FIELDS + ['employee_cars_count']
-        return init_res
+        init_res=super(User,self).__init__(pool,cr)
+        #duplicatelisttoavoidmodifyingtheoriginalreference
+        pool[self._name].SELF_READABLE_FIELDS=pool[self._name].SELF_READABLE_FIELDS+['employee_cars_count']
+        returninit_res
 
-    def action_get_claim_report(self):
-        return self.employee_id.action_get_claim_report()
+    defaction_get_claim_report(self):
+        returnself.employee_id.action_get_claim_report()
 
-    def action_open_employee_cars(self):
-        return self.employee_id.action_open_employee_cars()
+    defaction_open_employee_cars(self):
+        returnself.employee_id.action_open_employee_cars()

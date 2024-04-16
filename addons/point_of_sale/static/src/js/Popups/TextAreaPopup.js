@@ -1,39 +1,39 @@
-flectra.define('point_of_sale.TextAreaPopup', function(require) {
-    'use strict';
+flectra.define('point_of_sale.TextAreaPopup',function(require){
+    'usestrict';
 
-    const { useState, useRef } = owl.hooks;
-    const AbstractAwaitablePopup = require('point_of_sale.AbstractAwaitablePopup');
-    const Registries = require('point_of_sale.Registries');
+    const{useState,useRef}=owl.hooks;
+    constAbstractAwaitablePopup=require('point_of_sale.AbstractAwaitablePopup');
+    constRegistries=require('point_of_sale.Registries');
 
-    // formerly TextAreaPopupWidget
-    // IMPROVEMENT: This code is very similar to TextInputPopup.
-    //      Combining them would reduce the code.
-    class TextAreaPopup extends AbstractAwaitablePopup {
+    //formerlyTextAreaPopupWidget
+    //IMPROVEMENT:ThiscodeisverysimilartoTextInputPopup.
+    //     Combiningthemwouldreducethecode.
+    classTextAreaPopupextendsAbstractAwaitablePopup{
         /**
-         * @param {Object} props
-         * @param {string} props.startingValue
+         *@param{Object}props
+         *@param{string}props.startingValue
          */
-        constructor() {
+        constructor(){
             super(...arguments);
-            this.state = useState({ inputValue: this.props.startingValue });
-            this.inputRef = useRef('input');
+            this.state=useState({inputValue:this.props.startingValue});
+            this.inputRef=useRef('input');
         }
-        mounted() {
+        mounted(){
             this.inputRef.el.focus();
         }
-        getPayload() {
-            return this.state.inputValue;
+        getPayload(){
+            returnthis.state.inputValue;
         }
     }
-    TextAreaPopup.template = 'TextAreaPopup';
-    TextAreaPopup.defaultProps = {
-        confirmText: 'Ok',
-        cancelText: 'Cancel',
-        title: '',
-        body: '',
+    TextAreaPopup.template='TextAreaPopup';
+    TextAreaPopup.defaultProps={
+        confirmText:'Ok',
+        cancelText:'Cancel',
+        title:'',
+        body:'',
     };
 
     Registries.Component.add(TextAreaPopup);
 
-    return TextAreaPopup;
+    returnTextAreaPopup;
 });

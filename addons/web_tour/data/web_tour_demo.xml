@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <!-- Disable tours if Flectra installed with demo data. -->
-    <template id="assets_common_disable_tour" name="disable tour" inherit_id="web.assets_common">
-        <xpath expr="." position="inside">
-            <script type="text/javascript" src="/web_tour/static/src/js/tour_disable.js"></script>
+    <!--DisabletoursifFlectrainstalledwithdemodata.-->
+    <templateid="assets_common_disable_tour"name="disabletour"inherit_id="web.assets_common">
+        <xpathexpr="."position="inside">
+            <scripttype="text/javascript"src="/web_tour/static/src/js/tour_disable.js"></script>
         </xpath>
     </template>
 

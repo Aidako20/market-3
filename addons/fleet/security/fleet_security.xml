@@ -1,107 +1,107 @@
-<?xml version="1.0" ?>
+<?xmlversion="1.0"?>
 <flectra>
-        <record id="module_fleet_category" model="ir.module.category">
-            <field name="name">Fleet</field>
-            <field name="sequence">17</field>
+        <recordid="module_fleet_category"model="ir.module.category">
+            <fieldname="name">Fleet</field>
+            <fieldname="sequence">17</field>
         </record>
-        <record id="fleet_group_user" model="res.groups">
-            <field name="name">User</field>
-            <field name="category_id" ref="base.module_category_human_resources_fleet"/>
-            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <recordid="fleet_group_user"model="res.groups">
+            <fieldname="name">User</field>
+            <fieldname="category_id"ref="base.module_category_human_resources_fleet"/>
+            <fieldname="implied_ids"eval="[(4,ref('base.group_user'))]"/>
         </record>
-        <record id="fleet_group_manager" model="res.groups">
-            <field name="name">Administrator</field>
-            <field name="implied_ids" eval="[(4, ref('fleet_group_user'))]"/>
-            <field name="category_id" ref="base.module_category_human_resources_fleet"/>
-            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <recordid="fleet_group_manager"model="res.groups">
+            <fieldname="name">Administrator</field>
+            <fieldname="implied_ids"eval="[(4,ref('fleet_group_user'))]"/>
+            <fieldname="category_id"ref="base.module_category_human_resources_fleet"/>
+            <fieldname="users"eval="[(4,ref('base.user_root')),(4,ref('base.user_admin'))]"/>
         </record>
 
-    <data noupdate="1">
-        <record id="base.default_user" model="res.users">
-            <field name="groups_id" eval="[(4,ref('fleet.fleet_group_manager'))]"/>
+    <datanoupdate="1">
+        <recordid="base.default_user"model="res.users">
+            <fieldname="groups_id"eval="[(4,ref('fleet.fleet_group_manager'))]"/>
         </record>
-        <record id="fleet_rule_contract_visibility_user" model="ir.rule">
-            <field name="name">User can only see his/her contracts</field>
-            <field name="model_id" ref="model_fleet_vehicle_log_contract"/>
-            <field name="groups" eval="[(4, ref('fleet_group_user'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_unlink" eval="False"/>
-            <field name="domain_force">[('vehicle_id.driver_id','=',user.partner_id.id)]</field>
+        <recordid="fleet_rule_contract_visibility_user"model="ir.rule">
+            <fieldname="name">Usercanonlyseehis/hercontracts</field>
+            <fieldname="model_id"ref="model_fleet_vehicle_log_contract"/>
+            <fieldname="groups"eval="[(4,ref('fleet_group_user'))]"/>
+            <fieldname="perm_read"eval="True"/>
+            <fieldname="perm_write"eval="False"/>
+            <fieldname="perm_create"eval="False"/>
+            <fieldname="perm_unlink"eval="False"/>
+            <fieldname="domain_force">[('vehicle_id.driver_id','=',user.partner_id.id)]</field>
         </record>
-        <record id="fleet_rule_service_visibility_user" model="ir.rule">
-            <field name="name">User can only see his/her vehicle's services</field>
-            <field name="model_id" ref="model_fleet_vehicle_log_services"/>
-            <field name="groups" eval="[(4, ref('fleet_group_user'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_unlink" eval="False"/>
-            <field name="domain_force">[('vehicle_id.driver_id','=',user.partner_id.id)]</field>
+        <recordid="fleet_rule_service_visibility_user"model="ir.rule">
+            <fieldname="name">Usercanonlyseehis/hervehicle'sservices</field>
+            <fieldname="model_id"ref="model_fleet_vehicle_log_services"/>
+            <fieldname="groups"eval="[(4,ref('fleet_group_user'))]"/>
+            <fieldname="perm_read"eval="True"/>
+            <fieldname="perm_write"eval="False"/>
+            <fieldname="perm_create"eval="False"/>
+            <fieldname="perm_unlink"eval="False"/>
+            <fieldname="domain_force">[('vehicle_id.driver_id','=',user.partner_id.id)]</field>
         </record>
-        <record id="fleet_rule_odometer_visibility_user" model="ir.rule">
-            <field name="name">User can only see his/her vehicle's odometer</field>
-            <field name="model_id" ref="model_fleet_vehicle_odometer"/>
-            <field name="groups" eval="[(4, ref('fleet_group_user'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
-            <field name="domain_force">[('vehicle_id.driver_id','=',user.partner_id.id)]</field>
+        <recordid="fleet_rule_odometer_visibility_user"model="ir.rule">
+            <fieldname="name">Usercanonlyseehis/hervehicle'sodometer</field>
+            <fieldname="model_id"ref="model_fleet_vehicle_odometer"/>
+            <fieldname="groups"eval="[(4,ref('fleet_group_user'))]"/>
+            <fieldname="perm_read"eval="True"/>
+            <fieldname="perm_write"eval="True"/>
+            <fieldname="perm_create"eval="True"/>
+            <fieldname="perm_unlink"eval="True"/>
+            <fieldname="domain_force">[('vehicle_id.driver_id','=',user.partner_id.id)]</field>
         </record>
-        <record id="fleet_rule_vehicle_visibility_user" model="ir.rule">
-            <field name="name">User can only see his/her vehicle</field>
-            <field name="model_id" ref="model_fleet_vehicle"/>
-            <field name="groups" eval="[(4, ref('fleet_group_user'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_unlink" eval="False"/>
-            <field name="domain_force">[('driver_id','=',user.partner_id.id)]</field>
+        <recordid="fleet_rule_vehicle_visibility_user"model="ir.rule">
+            <fieldname="name">Usercanonlyseehis/hervehicle</field>
+            <fieldname="model_id"ref="model_fleet_vehicle"/>
+            <fieldname="groups"eval="[(4,ref('fleet_group_user'))]"/>
+            <fieldname="perm_read"eval="True"/>
+            <fieldname="perm_write"eval="True"/>
+            <fieldname="perm_create"eval="False"/>
+            <fieldname="perm_unlink"eval="False"/>
+            <fieldname="domain_force">[('driver_id','=',user.partner_id.id)]</field>
         </record>
-        <record id="fleet_rule_contract_visibility_manager" model="ir.rule">
-            <field name="name">Administrator has all rights on vehicle's contracts</field>
-            <field name="model_id" ref="model_fleet_vehicle_log_contract"/>
-            <field name="groups" eval="[(4, ref('fleet_group_manager'))]"/>
+        <recordid="fleet_rule_contract_visibility_manager"model="ir.rule">
+            <fieldname="name">Administratorhasallrightsonvehicle'scontracts</field>
+            <fieldname="model_id"ref="model_fleet_vehicle_log_contract"/>
+            <fieldname="groups"eval="[(4,ref('fleet_group_manager'))]"/>
         </record>
-        <record id="fleet_rule_service_visibility_manager" model="ir.rule">
-            <field name="name">Administrator has all rights on vehicle's services</field>
-            <field name="model_id" ref="model_fleet_vehicle_log_services"/>
-            <field name="groups" eval="[(4, ref('fleet_group_manager'))]"/>
+        <recordid="fleet_rule_service_visibility_manager"model="ir.rule">
+            <fieldname="name">Administratorhasallrightsonvehicle'sservices</field>
+            <fieldname="model_id"ref="model_fleet_vehicle_log_services"/>
+            <fieldname="groups"eval="[(4,ref('fleet_group_manager'))]"/>
         </record>
-        <record id="fleet_rule_odometer_visibility_manager" model="ir.rule">
-            <field name="name">Administrator has all rights on vehicle's vehicle's odometer</field>
-            <field name="model_id" ref="model_fleet_vehicle_odometer"/>
-            <field name="groups" eval="[(4, ref('fleet_group_manager'))]"/>
+        <recordid="fleet_rule_odometer_visibility_manager"model="ir.rule">
+            <fieldname="name">Administratorhasallrightsonvehicle'svehicle'sodometer</field>
+            <fieldname="model_id"ref="model_fleet_vehicle_odometer"/>
+            <fieldname="groups"eval="[(4,ref('fleet_group_manager'))]"/>
         </record>
-        <record id="fleet_rule_vehicle_visibility_manager" model="ir.rule">
-            <field name="name">Administrator has all rights on vehicle</field>
-            <field name="model_id" ref="model_fleet_vehicle"/>
-            <field name="groups" eval="[(4, ref('fleet_group_manager'))]"/>
+        <recordid="fleet_rule_vehicle_visibility_manager"model="ir.rule">
+            <fieldname="name">Administratorhasallrightsonvehicle</field>
+            <fieldname="model_id"ref="model_fleet_vehicle"/>
+            <fieldname="groups"eval="[(4,ref('fleet_group_manager'))]"/>
         </record>
-        <record id="ir_rule_fleet_vehicle" model="ir.rule">
-            <field name="name">Fleet vehicle: Multi Company</field>
-            <field name="model_id" ref="model_fleet_vehicle"/>
-            <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+        <recordid="ir_rule_fleet_vehicle"model="ir.rule">
+            <fieldname="name">Fleetvehicle:MultiCompany</field>
+            <fieldname="model_id"ref="model_fleet_vehicle"/>
+            <fieldname="domain_force">[('company_id','in',company_ids+[False])]</field>
         </record>
-        <record id="ir_rule_fleet_odometer" model="ir.rule">
-            <field name="name">Fleet odometer: Multi Company</field>
-            <field name="model_id" ref="model_fleet_vehicle_odometer"/>
-            <field name="global" eval="True"/>
-            <field name="domain_force">[('vehicle_id.company_id', 'in', company_ids + [False])]</field>
+        <recordid="ir_rule_fleet_odometer"model="ir.rule">
+            <fieldname="name">Fleetodometer:MultiCompany</field>
+            <fieldname="model_id"ref="model_fleet_vehicle_odometer"/>
+            <fieldname="global"eval="True"/>
+            <fieldname="domain_force">[('vehicle_id.company_id','in',company_ids+[False])]</field>
         </record>
-        <record id="ir_rule_fleet_log_services" model="ir.rule">
-            <field name="name">Fleet log services: Multi Company</field>
-            <field name="model_id" ref="model_fleet_vehicle_log_services"/>
-            <field name="global" eval="True"/>
-            <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+        <recordid="ir_rule_fleet_log_services"model="ir.rule">
+            <fieldname="name">Fleetlogservices:MultiCompany</field>
+            <fieldname="model_id"ref="model_fleet_vehicle_log_services"/>
+            <fieldname="global"eval="True"/>
+            <fieldname="domain_force">[('company_id','in',company_ids+[False])]</field>
         </record>
-        <record id="ir_rule_fleet_log_contract" model="ir.rule">
-            <field name="name">Fleet log contract: Multi Company</field>
-            <field name="model_id" ref="model_fleet_vehicle_log_contract"/>
-            <field name="global" eval="True"/>
-            <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+        <recordid="ir_rule_fleet_log_contract"model="ir.rule">
+            <fieldname="name">Fleetlogcontract:MultiCompany</field>
+            <fieldname="model_id"ref="model_fleet_vehicle_log_contract"/>
+            <fieldname="global"eval="True"/>
+            <fieldname="domain_force">[('company_id','in',company_ids+[False])]</field>
         </record>
     </data>
 </flectra>

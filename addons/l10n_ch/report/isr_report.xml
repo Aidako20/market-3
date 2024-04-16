@@ -1,149 +1,149 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
 
-        <record id="paperformat_euro_no_margin" model="report.paperformat">
-            <field name="name">European A4 without borders</field>
-            <field name="default" eval="False" />
-            <field name="format">A4</field>
-            <field name="orientation">Portrait</field>
-            <field name="margin_top">0</field>
-            <field name="margin_bottom">0</field>
-            <field name="margin_left">0</field>
-            <field name="margin_right">0</field>
-            <field name="header_line" eval="False" />
-            <field name="header_spacing">0</field>
+        <recordid="paperformat_euro_no_margin"model="report.paperformat">
+            <fieldname="name">EuropeanA4withoutborders</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="format">A4</field>
+            <fieldname="orientation">Portrait</field>
+            <fieldname="margin_top">0</field>
+            <fieldname="margin_bottom">0</field>
+            <fieldname="margin_left">0</field>
+            <fieldname="margin_right">0</field>
+            <fieldname="header_line"eval="False"/>
+            <fieldname="header_spacing">0</field>
         </record>
 
-        <!--Report containing an ISR corrresponding to an invoice.-->
-        <record id="l10n_ch_isr_report" model="ir.actions.report">
-            <field name="name">ISR</field>
-            <field name="model">account.move</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">l10n_ch.isr_report_main</field>
-            <field name="report_file">l10n_ch.isr_report_main</field>
-            <field name="print_report_name">'ISR-%s' % object.name</field>
-            <field name="paperformat_id" ref="paperformat_euro_no_margin"/>
-            <field name="attachment">'ISR-' + object.name + '.pdf'</field>
-            <field name="attachment_use">True</field>
+        <!--ReportcontaininganISRcorrrespondingtoaninvoice.-->
+        <recordid="l10n_ch_isr_report"model="ir.actions.report">
+            <fieldname="name">ISR</field>
+            <fieldname="model">account.move</field>
+            <fieldname="report_type">qweb-pdf</field>
+            <fieldname="report_name">l10n_ch.isr_report_main</field>
+            <fieldname="report_file">l10n_ch.isr_report_main</field>
+            <fieldname="print_report_name">'ISR-%s'%object.name</field>
+            <fieldname="paperformat_id"ref="paperformat_euro_no_margin"/>
+            <fieldname="attachment">'ISR-'+object.name+'.pdf'</field>
+            <fieldname="attachment_use">True</field>
         </record>
-        <!--No additional condition in report name on invoice state or type as this
-            report is only available to be printed for out invoices after
-            'draft' state, if the fields required by the ISR have been set.-->
+        <!--Noadditionalconditioninreportnameoninvoicestateortypeasthis
+            reportisonlyavailabletobeprintedforoutinvoicesafter
+            'draft'state,ifthefieldsrequiredbytheISRhavebeenset.-->
 
-        <template id="assets_common" name="l10n_ch_isr_report" inherit_id="web.report_assets_common">
-            <xpath expr="." position="inside">
-                <link rel="stylesheet" type="text/scss" href="/l10n_ch/static/src/scss/report_isr.scss"/>
+        <templateid="assets_common"name="l10n_ch_isr_report"inherit_id="web.report_assets_common">
+            <xpathexpr="."position="inside">
+                <linkrel="stylesheet"type="text/scss"href="/l10n_ch/static/src/scss/report_isr.scss"/>
             </xpath>
         </template>
 
-        <template id="l10n_ch_isr_report_template">
-            <t t-call="web.external_layout">
-                <t t-set="split_total_amount" t-value="invoice.split_total_amount()"/>
-                <t t-set="print_bank" t-value="invoice.company_id.l10n_ch_isr_print_bank_location"/>
+        <templateid="l10n_ch_isr_report_template">
+            <tt-call="web.external_layout">
+                <tt-set="split_total_amount"t-value="invoice.split_total_amount()"/>
+                <tt-set="print_bank"t-value="invoice.company_id.l10n_ch_isr_print_bank_location"/>
 
-                <!-- add class to body tag -->
-                <script>document.body.className += " l10n_ch_isr";</script>
+                <!--addclasstobodytag-->
+                <script>document.body.className+="l10n_ch_isr";</script>
 
-                <!-- since the body content take the whole page we need a way to add margin
-                     back on content outside the ISR so it does not overlap with the header -->
-                <div id="content_outside_isr">
-                    <h1>ISR for invoice <t t-esc="invoice.name"/></h1>
+                <!--sincethebodycontenttakethewholepageweneedawaytoaddmargin
+                     backoncontentoutsidetheISRsoitdoesnotoverlapwiththeheader-->
+                <divid="content_outside_isr">
+                    <h1>ISRforinvoice<tt-esc="invoice.name"/></h1>
                 </div>
 
-                <div id="isr" t-att-class="'isr-print-bank' if print_bank else None">
+                <divid="isr"t-att-class="'isr-print-bank'ifprint_bankelseNone">
 
-                    <!--Voucher, left part of the ISR.-->
-                    <div id="voucher">
-                        <!--Einzahlung für/Versement pour/Versamento per-->
+                    <!--Voucher,leftpartoftheISR.-->
+                    <divid="voucher">
+                        <!--Einzahlungfür/Versementpour/Versamentoper-->
 
-                        <!--If we use the alternate ISR layout, displaying name
-                        and location of the bank.-->
-                        <t t-if="print_bank">
-                            <div id="voucher-for-bank">
-                                <p t-if="not invoice.company_id.l10n_ch_isr_preprinted_bank">
-                                    <t t-esc="invoice.partner_bank_id.bank_id.name"/><br />
-                                    <t t-esc="invoice.partner_bank_id.bank_id.zip"/>
-                                    <t t-esc="invoice.partner_bank_id.bank_id.city"/>
+                        <!--IfweusethealternateISRlayout,displayingname
+                        andlocationofthebank.-->
+                        <tt-if="print_bank">
+                            <divid="voucher-for-bank">
+                                <pt-if="notinvoice.company_id.l10n_ch_isr_preprinted_bank">
+                                    <tt-esc="invoice.partner_bank_id.bank_id.name"/><br/>
+                                    <tt-esc="invoice.partner_bank_id.bank_id.zip"/>
+                                    <tt-esc="invoice.partner_bank_id.bank_id.city"/>
                                 </p>
                             </div>
-                            <!--Zugunsten von/En faveur de/A favore di-->
+                            <!--Zugunstenvon/Enfaveurde/Afavoredi-->
                         </t>
-                        <div id="voucher-for-contact">
-                            <p id="voucher-for_name" t-field="invoice.company_id.display_name"/>
-                            <p id="voucher-for_address1" t-field="invoice.company_id.street"/>
-                            <p id="voucher-for_address2" t-field="invoice.company_id.street2"/>
-                            <p id="voucher-for_address3">
-                                <t t-esc="invoice.company_id.zip"/>
-                                <t t-esc="invoice.company_id.city"/>
+                        <divid="voucher-for-contact">
+                            <pid="voucher-for_name"t-field="invoice.company_id.display_name"/>
+                            <pid="voucher-for_address1"t-field="invoice.company_id.street"/>
+                            <pid="voucher-for_address2"t-field="invoice.company_id.street2"/>
+                            <pid="voucher-for_address3">
+                                <tt-esc="invoice.company_id.zip"/>
+                                <tt-esc="invoice.company_id.city"/>
                             </p>
                         </div>
 
-                        <div id="voucher-bank" t-if="not print_bank or not invoice.company_id.l10n_ch_isr_preprinted_account">
+                        <divid="voucher-bank"t-if="notprint_bankornotinvoice.company_id.l10n_ch_isr_preprinted_account">
                             <!--Konto/Compte/Conto-->
-                            <p id="voucher-bank_ref" t-field="invoice.l10n_ch_isr_subscription_formatted"/>
+                            <pid="voucher-bank_ref"t-field="invoice.l10n_ch_isr_subscription_formatted"/>
                         </div>
 
-                        <p id="voucher-amount_units" t-esc="split_total_amount[0]"/>
-                        <p id="voucher-amount_cents" t-esc="split_total_amount[1]"/>
+                        <pid="voucher-amount_units"t-esc="split_total_amount[0]"/>
+                        <pid="voucher-amount_cents"t-esc="split_total_amount[1]"/>
 
-                        <div id="voucher-by">
-                            <!--Einbezahlt von/Versé par/Versato da-->
-                            <p id="voucher-by_reference_number" t-field="invoice.l10n_ch_isr_number"/>
-                            <address id="voucher-by_customer_address" t-field="invoice.partner_id" t-options='{"widget": "contact", "fields": ["address","name"], "no_marker": True}' />
+                        <divid="voucher-by">
+                            <!--Einbezahltvon/Versépar/Versatoda-->
+                            <pid="voucher-by_reference_number"t-field="invoice.l10n_ch_isr_number"/>
+                            <addressid="voucher-by_customer_address"t-field="invoice.partner_id"t-options='{"widget":"contact","fields":["address","name"],"no_marker":True}'/>
                         </div>
                     </div>
 
-                    <!--Slip, right part of the ISR.-->
-                    <div id="slip">
-                        <!--Einzahlung für/Versement pour/Versamento per-->
+                    <!--Slip,rightpartoftheISR.-->
+                    <divid="slip">
+                        <!--Einzahlungfür/Versementpour/Versamentoper-->
 
-                        <!--If we use the alternate ISR layout, displaying name
-                        and location of the bank.-->
-                        <t t-if="print_bank">
-                            <div id="slip-for-bank">
-                                <p t-if="not invoice.company_id.l10n_ch_isr_preprinted_bank">
-                                    <t t-esc="invoice.partner_bank_id.bank_id.name"/><br />
-                                    <t t-esc="invoice.partner_bank_id.bank_id.zip"/>
-                                    <t t-esc="invoice.partner_bank_id.bank_id.city"/>
+                        <!--IfweusethealternateISRlayout,displayingname
+                        andlocationofthebank.-->
+                        <tt-if="print_bank">
+                            <divid="slip-for-bank">
+                                <pt-if="notinvoice.company_id.l10n_ch_isr_preprinted_bank">
+                                    <tt-esc="invoice.partner_bank_id.bank_id.name"/><br/>
+                                    <tt-esc="invoice.partner_bank_id.bank_id.zip"/>
+                                    <tt-esc="invoice.partner_bank_id.bank_id.city"/>
                                 </p>
                             </div>
-                            <!--Zugunsten von/En faveur de/A favore di-->
+                            <!--Zugunstenvon/Enfaveurde/Afavoredi-->
                         </t>
 
-                        <div id="slip-for-contact">
-                            <p id="slip-for_name" t-field="invoice.company_id.display_name"/>
-                            <p id="slip-for_address1" t-field="invoice.company_id.street"/>
-                            <p id="slip-for_address2" t-field="invoice.company_id.street2"/>
-                            <p id="slip-for_address3">
-                                <t t-esc="invoice.company_id.zip"/>
-                                <t t-esc="invoice.company_id.city"/>
+                        <divid="slip-for-contact">
+                            <pid="slip-for_name"t-field="invoice.company_id.display_name"/>
+                            <pid="slip-for_address1"t-field="invoice.company_id.street"/>
+                            <pid="slip-for_address2"t-field="invoice.company_id.street2"/>
+                            <pid="slip-for_address3">
+                                <tt-esc="invoice.company_id.zip"/>
+                                <tt-esc="invoice.company_id.city"/>
                             </p>
                         </div>
 
-                        <div id="slip-bank" t-if="not print_bank or not invoice.company_id.l10n_ch_isr_preprinted_account">
+                        <divid="slip-bank"t-if="notprint_bankornotinvoice.company_id.l10n_ch_isr_preprinted_account">
                             <!--Konto/Compte/Conto-->
-                            <!--aka ISR Subscriber number provided by the financial institution-->
-                            <p id="slip-bank_ref" t-field="invoice.l10n_ch_isr_subscription_formatted"/>
+                            <!--akaISRSubscribernumberprovidedbythefinancialinstitution-->
+                            <pid="slip-bank_ref"t-field="invoice.l10n_ch_isr_subscription_formatted"/>
                         </div>
 
-                        <p id="slip-amount_units" t-esc="split_total_amount[0]"/>
-                        <p id="slip-amount_cents" t-esc="split_total_amount[1]"/>
+                        <pid="slip-amount_units"t-esc="split_total_amount[0]"/>
+                        <pid="slip-amount_cents"t-esc="split_total_amount[1]"/>
 
-                        <div id="slip-reference">
-                            <!--Referenz-Nr./N°de référence/N°di riferimento-->
-                            <p id="slip-reference_number" t-field="invoice.l10n_ch_isr_number_spaced"/>
+                        <divid="slip-reference">
+                            <!--Referenz-Nr./N°deréférence/N°diriferimento-->
+                            <pid="slip-reference_number"t-field="invoice.l10n_ch_isr_number_spaced"/>
                         </div>
 
-                        <div id="slip-by">
-                            <!--Einbezahlt von/Versé par/Versato da-->
-                            <address id="slip-by_customer_address" t-field="invoice.partner_id" t-options='{"widget": "contact", "fields": ["address","name"], "no_marker": True}' />
+                        <divid="slip-by">
+                            <!--Einbezahltvon/Versépar/Versatoda-->
+                            <addressid="slip-by_customer_address"t-field="invoice.partner_id"t-options='{"widget":"contact","fields":["address","name"],"no_marker":True}'/>
                         </div>
 
-                        <div id="slip-optical-line">
-                            <!--Optical reference-->
-                            <div t-attf-style="top: {{ invoice.company_id.l10n_ch_isr_scan_line_top }}mm; left: {{ invoice.company_id.l10n_ch_isr_scan_line_left }}mm;">
-                                <div t-foreach="invoice.l10n_ch_isr_optical_line" t-as="char" t-esc="char" t-attf-style="right: {{ round((char_size - char_index - 1) * 0.1, 1) }}in"/>
+                        <divid="slip-optical-line">
+                            <!--Opticalreference-->
+                            <divt-attf-style="top:{{invoice.company_id.l10n_ch_isr_scan_line_top}}mm;left:{{invoice.company_id.l10n_ch_isr_scan_line_left}}mm;">
+                                <divt-foreach="invoice.l10n_ch_isr_optical_line"t-as="char"t-esc="char"t-attf-style="right:{{round((char_size-char_index-1)*0.1,1)}}in"/>
                             </div>
                         </div>
                     </div>
@@ -151,11 +151,11 @@
             </t>
         </template>
 
-        <template id="l10n_ch.isr_report_main">
-            <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="invoice">
-                    <t t-set="o" t-value="invoice"/>
-                    <t t-call="l10n_ch.l10n_ch_isr_report_template"/>
+        <templateid="l10n_ch.isr_report_main">
+            <tt-call="web.html_container">
+                <tt-foreach="docs"t-as="invoice">
+                    <tt-set="o"t-value="invoice"/>
+                    <tt-call="l10n_ch.l10n_ch_isr_report_template"/>
                 </t>
             </t>
         </template>

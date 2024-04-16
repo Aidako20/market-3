@@ -1,85 +1,85 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record id="fps_euro_25_goods_acc" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fp_euro_b2b"/>
-            <field name="account_src_id" ref="a3001"/>
-            <field name="account_dest_id" ref="a3106"/>
+    <datanoupdate="1">
+        <recordid="fps_euro_25_goods_acc"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="account_src_id"ref="a3001"/>
+            <fieldname="account_dest_id"ref="a3106"/>
         </record>
-        <record id="fps_euro_12_goods_acc" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fp_euro_b2b"/>
-            <field name="account_src_id" ref="a3002"/>
-            <field name="account_dest_id" ref="a3106"/>
+        <recordid="fps_euro_12_goods_acc"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="account_src_id"ref="a3002"/>
+            <fieldname="account_dest_id"ref="a3106"/>
         </record>
-        <record id="fps_euro_6_goods_acc" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fp_euro_b2b"/>
-            <field name="account_src_id" ref="a3003"/>
-            <field name="account_dest_id" ref="a3106"/>
+        <recordid="fps_euro_6_goods_acc"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="account_src_id"ref="a3003"/>
+            <fieldname="account_dest_id"ref="a3106"/>
         </record>
-        <record id="fps_euro_0_goods_acc" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fp_euro_b2b"/>
-            <field name="account_src_id" ref="a3004"/>
-            <field name="account_dest_id" ref="a3106"/>
+        <recordid="fps_euro_0_goods_acc"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="account_src_id"ref="a3004"/>
+            <fieldname="account_dest_id"ref="a3106"/>
         </record>
-        <record id="fps_euro_25_service_acc" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fp_euro_b2b"/>
-            <field name="account_src_id" ref="a3001"/>
-            <field name="account_dest_id" ref="a3308"/>
+        <recordid="fps_euro_25_service_acc"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="account_src_id"ref="a3001"/>
+            <fieldname="account_dest_id"ref="a3308"/>
         </record>
-        <record id="fps_euro_12_service_acc" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fp_euro_b2b"/>
-            <field name="account_src_id" ref="a3002"/>
-            <field name="account_dest_id" ref="a3308"/>
+        <recordid="fps_euro_12_service_acc"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="account_src_id"ref="a3002"/>
+            <fieldname="account_dest_id"ref="a3308"/>
         </record>
-        <record id="fps_euro_6_service_acc" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fp_euro_b2b"/>
-            <field name="account_src_id" ref="a3003"/>
-            <field name="account_dest_id" ref="a3308"/>
+        <recordid="fps_euro_6_service_acc"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="account_src_id"ref="a3003"/>
+            <fieldname="account_dest_id"ref="a3308"/>
         </record>
-        <record id="fps_euro_0_service_acc" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fp_euro_b2b"/>
-            <field name="account_src_id" ref="a3004"/>
-            <field name="account_dest_id" ref="a3308"/>
-        </record>        
-        <record id="fps_outside_euro_25_goods_acc" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fp_outside_euro"/>
-            <field name="account_src_id" ref="a3001"/>
-            <field name="account_dest_id" ref="a3105"/>
+        <recordid="fps_euro_0_service_acc"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="account_src_id"ref="a3004"/>
+            <fieldname="account_dest_id"ref="a3308"/>
+        </record>       
+        <recordid="fps_outside_euro_25_goods_acc"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="account_src_id"ref="a3001"/>
+            <fieldname="account_dest_id"ref="a3105"/>
         </record>
-        <record id="fps_outside_euro_12_goods_acc" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fp_outside_euro"/>
-            <field name="account_src_id" ref="a3002"/>
-            <field name="account_dest_id" ref="a3105"/>
+        <recordid="fps_outside_euro_12_goods_acc"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="account_src_id"ref="a3002"/>
+            <fieldname="account_dest_id"ref="a3105"/>
         </record>
-        <record id="fps_outside_euro_6_goods_acc" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fp_outside_euro"/>
-            <field name="account_src_id" ref="a3003"/>
-            <field name="account_dest_id" ref="a3105"/>
+        <recordid="fps_outside_euro_6_goods_acc"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="account_src_id"ref="a3003"/>
+            <fieldname="account_dest_id"ref="a3105"/>
         </record>
-        <record id="fps_outside_euro_0_goods_acc" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fp_outside_euro"/>
-            <field name="account_src_id" ref="a3004"/>
-            <field name="account_dest_id" ref="a3105"/>
+        <recordid="fps_outside_euro_0_goods_acc"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="account_src_id"ref="a3004"/>
+            <fieldname="account_dest_id"ref="a3105"/>
         </record>
-        <record id="fps_outside_euro_25_service_acc" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fp_outside_euro"/>
-            <field name="account_src_id" ref="a3001"/>
-            <field name="account_dest_id" ref="a3305"/>
+        <recordid="fps_outside_euro_25_service_acc"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="account_src_id"ref="a3001"/>
+            <fieldname="account_dest_id"ref="a3305"/>
         </record>
-        <record id="fps_outside_euro_12_service_acc" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fp_outside_euro"/>
-            <field name="account_src_id" ref="a3002"/>
-            <field name="account_dest_id" ref="a3305"/>
+        <recordid="fps_outside_euro_12_service_acc"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="account_src_id"ref="a3002"/>
+            <fieldname="account_dest_id"ref="a3305"/>
         </record>
-        <record id="fps_outside_euro_6_service_acc" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fp_outside_euro"/>
-            <field name="account_src_id" ref="a3003"/>
-            <field name="account_dest_id" ref="a3305"/>
+        <recordid="fps_outside_euro_6_service_acc"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="account_src_id"ref="a3003"/>
+            <fieldname="account_dest_id"ref="a3305"/>
         </record>
-        <record id="fps_outside_euro_0_service_acc" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fp_outside_euro"/>
-            <field name="account_src_id" ref="a3004"/>
-            <field name="account_dest_id" ref="a3305"/>
-        </record>  
+        <recordid="fps_outside_euro_0_service_acc"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="account_src_id"ref="a3004"/>
+            <fieldname="account_dest_id"ref="a3305"/>
+        </record> 
     </data>
 </flectra>

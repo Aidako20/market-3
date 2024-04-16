@@ -1,51 +1,51 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
-from flectra.addons.http_routing.models.ir_http import slug
+fromflectraimportapi,fields,models,_
+fromflectra.addons.http_routing.models.ir_httpimportslug
 
 
-class EventEvent(models.Model):
-    _inherit = "event.event"
+classEventEvent(models.Model):
+    _inherit="event.event"
 
-    exhibitor_menu = fields.Boolean(
-        string='Showcase Exhibitors', compute='_compute_exhibitor_menu',
-        readonly=False, store=True)
-    exhibitor_menu_ids = fields.One2many(
-        'website.event.menu', 'event_id', string='Exhibitors Menus',
-        domain=[('menu_type', '=', 'exhibitor')])
+    exhibitor_menu=fields.Boolean(
+        string='ShowcaseExhibitors',compute='_compute_exhibitor_menu',
+        readonly=False,store=True)
+    exhibitor_menu_ids=fields.One2many(
+        'website.event.menu','event_id',string='ExhibitorsMenus',
+        domain=[('menu_type','=','exhibitor')])
 
-    @api.depends('event_type_id', 'website_menu', 'exhibitor_menu')
-    def _compute_exhibitor_menu(self):
-        for event in self:
-            if event.event_type_id and event.event_type_id != event._origin.event_type_id:
-                event.exhibitor_menu = event.event_type_id.exhibitor_menu
-            elif event.website_menu and (event.website_menu != event._origin.website_menu or not event.exhibitor_menu):
-                event.exhibitor_menu = True
-            elif not event.website_menu:
-                event.exhibitor_menu = False
+    @api.depends('event_type_id','website_menu','exhibitor_menu')
+    def_compute_exhibitor_menu(self):
+        foreventinself:
+            ifevent.event_type_idandevent.event_type_id!=event._origin.event_type_id:
+                event.exhibitor_menu=event.event_type_id.exhibitor_menu
+            elifevent.website_menuand(event.website_menu!=event._origin.website_menuornotevent.exhibitor_menu):
+                event.exhibitor_menu=True
+            elifnotevent.website_menu:
+                event.exhibitor_menu=False
 
-    # ------------------------------------------------------------
-    # WEBSITE MENU MANAGEMENT
-    # ------------------------------------------------------------
+    #------------------------------------------------------------
+    #WEBSITEMENUMANAGEMENT
+    #------------------------------------------------------------
 
-    def toggle_exhibitor_menu(self, val):
-        self.exhibitor_menu = val
+    deftoggle_exhibitor_menu(self,val):
+        self.exhibitor_menu=val
 
-    def _get_menu_update_fields(self):
-        return super(EventEvent, self)._get_menu_update_fields() + ['exhibitor_menu']
+    def_get_menu_update_fields(self):
+        returnsuper(EventEvent,self)._get_menu_update_fields()+['exhibitor_menu']
 
-    def _update_website_menus(self, menus_update_by_field=None):
-        super(EventEvent, self)._update_website_menus(menus_update_by_field=menus_update_by_field)
-        for event in self:
-            if event.menu_id and (not menus_update_by_field or event in menus_update_by_field.get('exhibitor_menu')):
-                event._update_website_menu_entry('exhibitor_menu', 'exhibitor_menu_ids', '_get_exhibitor_menu_entries')
+    def_update_website_menus(self,menus_update_by_field=None):
+        super(EventEvent,self)._update_website_menus(menus_update_by_field=menus_update_by_field)
+        foreventinself:
+            ifevent.menu_idand(notmenus_update_by_fieldoreventinmenus_update_by_field.get('exhibitor_menu')):
+                event._update_website_menu_entry('exhibitor_menu','exhibitor_menu_ids','_get_exhibitor_menu_entries')
 
-    def _get_menu_type_field_matching(self):
-        res = super(EventEvent, self)._get_menu_type_field_matching()
-        res['exhibitor'] = 'exhibitor_menu'
-        return res
+    def_get_menu_type_field_matching(self):
+        res=super(EventEvent,self)._get_menu_type_field_matching()
+        res['exhibitor']='exhibitor_menu'
+        returnres
 
-    def _get_exhibitor_menu_entries(self):
+    def_get_exhibitor_menu_entries(self):
         self.ensure_one()
-        return [(_('Exhibitors'), '/event/%s/exhibitors' % slug(self), False, 60, 'exhibitor')]
+        return[(_('Exhibitors'),'/event/%s/exhibitors'%slug(self),False,60,'exhibitor')]

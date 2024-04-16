@@ -1,100 +1,100 @@
-flectra.define('website_mail_channel.s_channel_options', function (require) {
-'use strict';
+flectra.define('website_mail_channel.s_channel_options',function(require){
+'usestrict';
 
-var core = require('web.core');
-var options = require('web_editor.snippets.options');
-var wUtils = require('website.utils');
+varcore=require('web.core');
+varoptions=require('web_editor.snippets.options');
+varwUtils=require('website.utils');
 
-var _t = core._t;
+var_t=core._t;
 
-options.registry.Channel = options.Class.extend({
+options.registry.Channel=options.Class.extend({
     /**
-     * @override
+     *@override
      */
-    async start() {
-        await this._super(...arguments);
-        this.publicChannels = await this._getPublicChannels();
+    asyncstart(){
+        awaitthis._super(...arguments);
+        this.publicChannels=awaitthis._getPublicChannels();
     },
     /**
-     * If we have already created channels => select the first one
-     * else => modal prompt (create a new channel)
+     *Ifwehavealreadycreatedchannels=>selectthefirstone
+     *else=>modalprompt(createanewchannel)
      *
-     * @override
+     *@override
      */
-    onBuilt() {
-        if (this.publicChannels.length) {
-            this.$target[0].dataset.id = this.publicChannels[0][0];
-        } else {
-            const widget = this._requestUserValueWidgets('create_mail_channel_opt')[0];
+    onBuilt(){
+        if(this.publicChannels.length){
+            this.$target[0].dataset.id=this.publicChannels[0][0];
+        }else{
+            constwidget=this._requestUserValueWidgets('create_mail_channel_opt')[0];
             widget.$el.click();
         }
     },
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * Creates a new mail.channel through a modal prompt.
+     *Createsanewmail.channelthroughamodalprompt.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    createChannel: function (previewMode, widgetValue, params) {
-        var self = this;
-        return wUtils.prompt({
-            id: "editor_new_mail_channel_subscribe",
-            window_title: _t("New Mail Channel"),
-            input: _t("Name"),
-        }).then(function (result) {
-            var name = result.val;
-            if (!name) {
+    createChannel:function(previewMode,widgetValue,params){
+        varself=this;
+        returnwUtils.prompt({
+            id:"editor_new_mail_channel_subscribe",
+            window_title:_t("NewMailChannel"),
+            input:_t("Name"),
+        }).then(function(result){
+            varname=result.val;
+            if(!name){
                 return;
             }
-            return self._rpc({
-                model: 'mail.channel',
-                method: 'create',
-                args: [{
-                    name: name,
-                    public: 'public',
+            returnself._rpc({
+                model:'mail.channel',
+                method:'create',
+                args:[{
+                    name:name,
+                    public:'public',
                 }],
-            }).then(function (id) {
-                self.$target.attr("data-id", id);
-                return self._rerenderXML();
+            }).then(function(id){
+                self.$target.attr("data-id",id);
+                returnself._rerenderXML();
             });
         });
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _renderCustomXML(uiFragment) {
-        // TODO remove this part in master 
-        const createChannelEl = uiFragment.querySelector('we-button[data-create-channel]');
-        createChannelEl.dataset.name = 'create_mail_channel_opt';
+    _renderCustomXML(uiFragment){
+        //TODOremovethispartinmaster
+        constcreateChannelEl=uiFragment.querySelector('we-button[data-create-channel]');
+        createChannelEl.dataset.name='create_mail_channel_opt';
 
-        return this._getPublicChannels().then(channels => {
-            const menuEl = uiFragment.querySelector('.select_discussion_list');
-            for (const channel of channels) {
-                const el = document.createElement('we-button');
-                el.dataset.selectDataAttribute = channel[0];
-                el.textContent = channel[1];
+        returnthis._getPublicChannels().then(channels=>{
+            constmenuEl=uiFragment.querySelector('.select_discussion_list');
+            for(constchannelofchannels){
+                constel=document.createElement('we-button');
+                el.dataset.selectDataAttribute=channel[0];
+                el.textContent=channel[1];
                 menuEl.appendChild(el);
             }
         });
     },
     /**
-     * @private
-     * @return {Promise}
+     *@private
+     *@return{Promise}
      */
-    _getPublicChannels() {
-        return this._rpc({
-            model: 'mail.channel',
-            method: 'name_search',
-            args: ['', [['public', '=', 'public']]],
+    _getPublicChannels(){
+        returnthis._rpc({
+            model:'mail.channel',
+            method:'name_search',
+            args:['',[['public','=','public']]],
         });
     },
 });

@@ -1,59 +1,59 @@
-flectra.define('snailmail/static/src/models/notification_group/notification_group.js', function (require) {
-'use strict';
+flectra.define('snailmail/static/src/models/notification_group/notification_group.js',function(require){
+'usestrict';
 
-const {
+const{
     registerInstancePatchModel,
-} = require('mail/static/src/model/model_core.js');
+}=require('mail/static/src/model/model_core.js');
 
-registerInstancePatchModel('mail.notification_group', 'snailmail/static/src/models/notification_group/notification_group.js', {
+registerInstancePatchModel('mail.notification_group','snailmail/static/src/models/notification_group/notification_group.js',{
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    openCancelAction() {
-        if (this.notification_type !== 'snail') {
-            return this._super(...arguments);
+    openCancelAction(){
+        if(this.notification_type!=='snail'){
+            returnthis._super(...arguments);
         }
-        this.env.bus.trigger('do-action', {
-            action: 'snailmail.snailmail_letter_cancel_action',
-            options: {
-                additional_context: {
-                    default_model: this.res_model,
-                    unread_counter: this.notifications.length,
+        this.env.bus.trigger('do-action',{
+            action:'snailmail.snailmail_letter_cancel_action',
+            options:{
+                additional_context:{
+                    default_model:this.res_model,
+                    unread_counter:this.notifications.length,
                 },
             },
         });
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _openDocuments() {
-        if (this.notification_type !== 'snail') {
-            return this._super(...arguments);
+    _openDocuments(){
+        if(this.notification_type!=='snail'){
+            returnthis._super(...arguments);
         }
-        this.env.bus.trigger('do-action', {
-            action: {
-                name: this.env._t("Snailmail Failures"),
-                type: 'ir.actions.act_window',
-                view_mode: 'kanban,list,form',
-                views: [[false, 'kanban'], [false, 'list'], [false, 'form']],
-                target: 'current',
-                res_model: this.res_model,
-                domain: [['message_ids.snailmail_error', '=', true]],
+        this.env.bus.trigger('do-action',{
+            action:{
+                name:this.env._t("SnailmailFailures"),
+                type:'ir.actions.act_window',
+                view_mode:'kanban,list,form',
+                views:[[false,'kanban'],[false,'list'],[false,'form']],
+                target:'current',
+                res_model:this.res_model,
+                domain:[['message_ids.snailmail_error','=',true]],
             },
         });
-        if (this.env.messaging.device.isMobile) {
-            // messaging menu has a higher z-index than views so it must
-            // be closed to ensure the visibility of the view
+        if(this.env.messaging.device.isMobile){
+            //messagingmenuhasahigherz-indexthanviewssoitmust
+            //beclosedtoensurethevisibilityoftheview
             this.env.messaging.messagingMenu.close();
         }
     },

@@ -1,60 +1,60 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from cups import Connection as cups_connection
-from re import sub
-from threading import Lock
+fromcupsimportConnectionascups_connection
+fromreimportsub
+fromthreadingimportLock
 
-from flectra.addons.hw_drivers.interface import Interface
+fromflectra.addons.hw_drivers.interfaceimportInterface
 
-conn = cups_connection()
-PPDs = conn.getPPDs()
-cups_lock = Lock()  # We can only make one call to Cups at a time
+conn=cups_connection()
+PPDs=conn.getPPDs()
+cups_lock=Lock() #WecanonlymakeonecalltoCupsatatime
 
-class PrinterInterface(Interface):
-    _loop_delay = 120
-    connection_type = 'printer'
-    printer_devices = {}
+classPrinterInterface(Interface):
+    _loop_delay=120
+    connection_type='printer'
+    printer_devices={}
 
-    def get_devices(self):
-        discovered_devices = {}
-        with cups_lock:
-            printers = conn.getPrinters()
-            devices = conn.getDevices()
-            for printer_name, printer in printers.items():
-                path = printer.get('device-uri', False)
-                if printer_name != self.get_identifier(path):
-                    printer.update({'supported': True}) # these printers are automatically supported
-                    device_class = 'network'
-                    if 'usb' in printer.get('device-uri'):
-                        device_class = 'direct'
-                    printer.update({'device-class': device_class})
-                    printer.update({'device-make-and-model': printer}) # give name setted in Cups
-                    printer.update({'device-id': ''})
-                    devices.update({printer_name: printer})
-        for path, device in devices.items():
-            identifier = self.get_identifier(path)
-            device.update({'identifier': identifier})
-            device.update({'url': path})
-            device.update({'disconnect_counter': 0})
-            discovered_devices.update({identifier: device})
+    defget_devices(self):
+        discovered_devices={}
+        withcups_lock:
+            printers=conn.getPrinters()
+            devices=conn.getDevices()
+            forprinter_name,printerinprinters.items():
+                path=printer.get('device-uri',False)
+                ifprinter_name!=self.get_identifier(path):
+                    printer.update({'supported':True})#theseprintersareautomaticallysupported
+                    device_class='network'
+                    if'usb'inprinter.get('device-uri'):
+                        device_class='direct'
+                    printer.update({'device-class':device_class})
+                    printer.update({'device-make-and-model':printer})#givenamesettedinCups
+                    printer.update({'device-id':''})
+                    devices.update({printer_name:printer})
+        forpath,deviceindevices.items():
+            identifier=self.get_identifier(path)
+            device.update({'identifier':identifier})
+            device.update({'url':path})
+            device.update({'disconnect_counter':0})
+            discovered_devices.update({identifier:device})
         self.printer_devices.update(discovered_devices)
-        # Deal with devices which are on the list but were not found during this call of "get_devices"
-        # If they aren't detected 3 times consecutively, remove them from the list of available devices
-        for device in list(self.printer_devices):
-            if not discovered_devices.get(device):
-                disconnect_counter = self.printer_devices.get(device).get('disconnect_counter')
-                if disconnect_counter >= 2:
-                    self.printer_devices.pop(device, None)
+        #Dealwithdeviceswhichareonthelistbutwerenotfoundduringthiscallof"get_devices"
+        #Iftheyaren'tdetected3timesconsecutively,removethemfromthelistofavailabledevices
+        fordeviceinlist(self.printer_devices):
+            ifnotdiscovered_devices.get(device):
+                disconnect_counter=self.printer_devices.get(device).get('disconnect_counter')
+                ifdisconnect_counter>=2:
+                    self.printer_devices.pop(device,None)
                 else:
-                    self.printer_devices[device].update({'disconnect_counter': disconnect_counter + 1})
-        return dict(self.printer_devices)
+                    self.printer_devices[device].update({'disconnect_counter':disconnect_counter+1})
+        returndict(self.printer_devices)
 
-    def get_identifier(self, path):
-        if 'uuid=' in path:
-            identifier = sub('[^a-zA-Z0-9_]', '', path.split('uuid=')[1])
-        elif 'serial=' in path:
-            identifier = sub('[^a-zA-Z0-9_]', '', path.split('serial=')[1])
+    defget_identifier(self,path):
+        if'uuid='inpath:
+            identifier=sub('[^a-zA-Z0-9_]','',path.split('uuid=')[1])
+        elif'serial='inpath:
+            identifier=sub('[^a-zA-Z0-9_]','',path.split('serial=')[1])
         else:
-            identifier = sub('[^a-zA-Z0-9_]', '', path)
-        return identifier
+            identifier=sub('[^a-zA-Z0-9_]','',path)
+        returnidentifier

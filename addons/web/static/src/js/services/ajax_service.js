@@ -1,41 +1,41 @@
-flectra.define('web.AjaxService', function (require) {
-"use strict";
+flectra.define('web.AjaxService',function(require){
+"usestrict";
 
-var AbstractService = require('web.AbstractService');
-var ajax = require('web.ajax');
-var core = require('web.core');
-var session = require('web.session');
+varAbstractService=require('web.AbstractService');
+varajax=require('web.ajax');
+varcore=require('web.core');
+varsession=require('web.session');
 
-var AjaxService = AbstractService.extend({
+varAjaxService=AbstractService.extend({
     /**
-     * @param {Object} libs - @see ajax.loadLibs
-     * @param {Object} [context] - @see ajax.loadLibs
-     * @param {Object} [tplRoute] - @see ajax.loadLibs
+     *@param{Object}libs-@seeajax.loadLibs
+     *@param{Object}[context]-@seeajax.loadLibs
+     *@param{Object}[tplRoute]-@seeajax.loadLibs
      */
-    loadLibs: function (libs, context, tplRoute) {
-        return ajax.loadLibs(libs, context, tplRoute);
+    loadLibs:function(libs,context,tplRoute){
+        returnajax.loadLibs(libs,context,tplRoute);
     },
-    rpc: function (route, args, options, target) {
-        var rpcPromise;
-        var promise = new Promise(function (resolve, reject) {
-            rpcPromise = session.rpc(route, args, options);
-            rpcPromise.then(function (result) {
-                if (!target.isDestroyed()) {
+    rpc:function(route,args,options,target){
+        varrpcPromise;
+        varpromise=newPromise(function(resolve,reject){
+            rpcPromise=session.rpc(route,args,options);
+            rpcPromise.then(function(result){
+                if(!target.isDestroyed()){
                     resolve(result);
                 }
-            }).guardedCatch(function (reason) {
-                if (!target.isDestroyed()) {
+            }).guardedCatch(function(reason){
+                if(!target.isDestroyed()){
                     reject(reason);
                 }
             });
         });
-        promise.abort = rpcPromise.abort.bind(rpcPromise);
-        return promise;
+        promise.abort=rpcPromise.abort.bind(rpcPromise);
+        returnpromise;
     },
 });
 
-core.serviceRegistry.add('ajax', AjaxService);
+core.serviceRegistry.add('ajax',AjaxService);
 
-return AjaxService;
+returnAjaxService;
 
 });

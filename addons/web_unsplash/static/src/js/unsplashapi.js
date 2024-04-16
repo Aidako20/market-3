@@ -1,89 +1,89 @@
-flectra.define('unsplash.api', function (require) {
-'use strict';
+flectra.define('unsplash.api',function(require){
+'usestrict';
 
-var Class = require('web.Class');
-var rpc = require('web.rpc');
-var Mixins = require('web.mixins');
-var ServicesMixin = require('web.ServicesMixin');
+varClass=require('web.Class');
+varrpc=require('web.rpc');
+varMixins=require('web.mixins');
+varServicesMixin=require('web.ServicesMixin');
 
-var UnsplashCore = Class.extend(Mixins.EventDispatcherMixin, ServicesMixin, {
+varUnsplashCore=Class.extend(Mixins.EventDispatcherMixin,ServicesMixin,{
     /**
-     * @constructor
+     *@constructor
      */
-    init: function (parent) {
-        Mixins.EventDispatcherMixin.init.call(this, arguments);
+    init:function(parent){
+        Mixins.EventDispatcherMixin.init.call(this,arguments);
         this.setParent(parent);
 
-        this._cache = {};
-        this.clientId = false;
+        this._cache={};
+        this.clientId=false;
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Gets unsplash images from query string.
+     *Getsunsplashimagesfromquerystring.
      *
-     * @param {String} query search terms
-     * @param {Integer} pageSize number of image to display per page
-     * @returns {Promise}
+     *@param{String}querysearchterms
+     *@param{Integer}pageSizenumberofimagetodisplayperpage
+     *@returns{Promise}
      */
-    getImages: function (query, pageSize) {
-        var from = 0;
-        var to = pageSize;
-        var cachedData = this._cache[query];
+    getImages:function(query,pageSize){
+        varfrom=0;
+        varto=pageSize;
+        varcachedData=this._cache[query];
 
-        if (cachedData && (cachedData.images.length >= to || (cachedData.totalImages !== 0 && cachedData.totalImages < to))) {
-            return Promise.resolve({ images: cachedData.images.slice(from, to), isMaxed: to > cachedData.totalImages });
+        if(cachedData&&(cachedData.images.length>=to||(cachedData.totalImages!==0&&cachedData.totalImages<to))){
+            returnPromise.resolve({images:cachedData.images.slice(from,to),isMaxed:to>cachedData.totalImages});
         }
-        return this._fetchImages(query).then(function (cachedData) {
-            return { images: cachedData.images.slice(from, to), isMaxed: to > cachedData.totalImages };
+        returnthis._fetchImages(query).then(function(cachedData){
+            return{images:cachedData.images.slice(from,to),isMaxed:to>cachedData.totalImages};
         });
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Fetches images from unsplash and stores it in cache
+     *Fetchesimagesfromunsplashandstoresitincache
      *
-     * @param {String} query search terms
-     * @returns {Promise}
-     * @private
+     *@param{String}querysearchterms
+     *@returns{Promise}
+     *@private
      */
-    _fetchImages: function (query) {
-        if (!this._cache[query]) {
-            this._cache[query] = {
-                images: [],
-                maxPages: 0,
-                totalImages: 0,
-                pageCached: 0
+    _fetchImages:function(query){
+        if(!this._cache[query]){
+            this._cache[query]={
+                images:[],
+                maxPages:0,
+                totalImages:0,
+                pageCached:0
             };
         }
-        var cachedData = this._cache[query];
-        var payload = {
-            query: query,
-            page: cachedData.pageCached + 1,
-            per_page: 30, // max size from unsplash API
+        varcachedData=this._cache[query];
+        varpayload={
+            query:query,
+            page:cachedData.pageCached+1,
+            per_page:30,//maxsizefromunsplashAPI
         };
-        return this._rpc({
-            route: '/web_unsplash/fetch_images',
-            params: payload,
-        }).then(function (result) {
-            if (result.error) {
-                return Promise.reject(result.error);
+        returnthis._rpc({
+            route:'/web_unsplash/fetch_images',
+            params:payload,
+        }).then(function(result){
+            if(result.error){
+                returnPromise.reject(result.error);
             }
             cachedData.pageCached++;
-            cachedData.images.push.apply(cachedData.images, result.results);
-            cachedData.maxPages = result.total_pages;
-            cachedData.totalImages = result.total;
-            return cachedData;
+            cachedData.images.push.apply(cachedData.images,result.results);
+            cachedData.maxPages=result.total_pages;
+            cachedData.totalImages=result.total;
+            returncachedData;
         });
     },
 });
 
-return UnsplashCore;
+returnUnsplashCore;
 
 });

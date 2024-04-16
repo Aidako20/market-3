@@ -1,175 +1,175 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-<data noupdate="1">
-    <record id="lunch_location_main" model="lunch.location" forcecreate="0">
-        <field name="name">HQ Office</field>
+<datanoupdate="1">
+    <recordid="lunch_location_main"model="lunch.location"forcecreate="0">
+        <fieldname="name">HQOffice</field>
     </record>
 
-    <record model="lunch.product.category" id="categ_sandwich" forcecreate="0">
-        <field name="name">Sandwich</field>
+    <recordmodel="lunch.product.category"id="categ_sandwich"forcecreate="0">
+        <fieldname="name">Sandwich</field>
     </record>
 
-    <record id="categ_pizza" model="lunch.product.category" forcecreate="0">
-        <field name="name">Pizza</field>
-        <field name="image_1920" type="base64" file="lunch/static/img/pizza.png"/>
+    <recordid="categ_pizza"model="lunch.product.category"forcecreate="0">
+        <fieldname="name">Pizza</field>
+        <fieldname="image_1920"type="base64"file="lunch/static/img/pizza.png"/>
     </record>
 
-    <record id="categ_burger" model="lunch.product.category" forcecreate="0">
-        <field name="name">Burger</field>
-        <field name="image_1920" type="base64" file="lunch/static/img/burger.png"/>
+    <recordid="categ_burger"model="lunch.product.category"forcecreate="0">
+        <fieldname="name">Burger</field>
+        <fieldname="image_1920"type="base64"file="lunch/static/img/burger.png"/>
     </record>
 
-    <record id="categ_drinks" model="lunch.product.category" forcecreate="0">
-        <field name="name">Drinks</field>
-        <field name="image_1920" type="base64" file="lunch/static/img/drink.png"/>
+    <recordid="categ_drinks"model="lunch.product.category"forcecreate="0">
+        <fieldname="name">Drinks</field>
+        <fieldname="image_1920"type="base64"file="lunch/static/img/drink.png"/>
     </record>
 
-    <record id="partner_hungry_dog" model="res.partner" forcecreate="0">
-        <field name="name">Lunch Supplier</field>
+    <recordid="partner_hungry_dog"model="res.partner"forcecreate="0">
+        <fieldname="name">LunchSupplier</field>
     </record>
 
-    <record id="supplier_hungry_dog" model="lunch.supplier" forcecreate="0">
-        <field name="partner_id" ref="partner_hungry_dog"/>
-        <field name="available_location_ids" eval="[
-            (6, 0, [ref('lunch_location_main')]),
+    <recordid="supplier_hungry_dog"model="lunch.supplier"forcecreate="0">
+        <fieldname="partner_id"ref="partner_hungry_dog"/>
+        <fieldname="available_location_ids"eval="[
+            (6,0,[ref('lunch_location_main')]),
             ]"/>
     </record>
 </data>
 <data>
-    <record id="lunch_order_action_confirm" model="ir.actions.server">
-        <field name="name">Lunch: Receive meals</field>
-        <field name="model_id" ref="model_lunch_order"/>
-        <field name="binding_model_id" ref="model_lunch_order"/>
-        <field name="binding_view_types">list</field>
-        <field name="state">code</field>
-        <field name="code">records.action_confirm()</field>
+    <recordid="lunch_order_action_confirm"model="ir.actions.server">
+        <fieldname="name">Lunch:Receivemeals</field>
+        <fieldname="model_id"ref="model_lunch_order"/>
+        <fieldname="binding_model_id"ref="model_lunch_order"/>
+        <fieldname="binding_view_types">list</field>
+        <fieldname="state">code</field>
+        <fieldname="code">records.action_confirm()</field>
     </record>
 
-    <record id="lunch_order_action_cancel" model="ir.actions.server">
-        <field name="name">Lunch: Cancel meals</field>
-        <field name="model_id" ref="model_lunch_order"/>
-        <field name="binding_model_id" ref="model_lunch_order"/>
-        <field name="binding_view_types">list</field>
-        <field name="state">code</field>
-        <field name="code">records.action_cancel()</field>
+    <recordid="lunch_order_action_cancel"model="ir.actions.server">
+        <fieldname="name">Lunch:Cancelmeals</field>
+        <fieldname="model_id"ref="model_lunch_order"/>
+        <fieldname="binding_model_id"ref="model_lunch_order"/>
+        <fieldname="binding_view_types">list</field>
+        <fieldname="state">code</field>
+        <fieldname="code">records.action_cancel()</field>
     </record>
 </data>
-<data noupdate="0">
-    <record id="lunch_order_mail_supplier" model="mail.template">
-        <field name="name">Lunch: Send by email</field>
-        <field name="model_id" ref="lunch.model_lunch_supplier"/>
-        <field name="email_from">${ctx['order']['email_from'] |safe}</field>
-        <field name="partner_to">${ctx['order']['supplier_id']}</field>
-        <field name="subject">Orders for ${ctx['order']['company_name']}</field>
-        <field name="lang">${ctx.get('default_lang')}</field>
-        <field name="body_html" type="html">
-<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;"><tr><td align="center">
-<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">
+<datanoupdate="0">
+    <recordid="lunch_order_mail_supplier"model="mail.template">
+        <fieldname="name">Lunch:Sendbyemail</field>
+        <fieldname="model_id"ref="lunch.model_lunch_supplier"/>
+        <fieldname="email_from">${ctx['order']['email_from']|safe}</field>
+        <fieldname="partner_to">${ctx['order']['supplier_id']}</field>
+        <fieldname="subject">Ordersfor${ctx['order']['company_name']}</field>
+        <fieldname="lang">${ctx.get('default_lang')}</field>
+        <fieldname="body_html"type="html">
+<tableborder="0"cellpadding="0"cellspacing="0"style="padding-top:16px;background-color:#F1F1F1;font-family:Verdana,Arial,sans-serif;color:#454748;width:100%;border-collapse:separate;"><tr><tdalign="center">
+<tableborder="0"cellpadding="0"cellspacing="0"width="590"style="padding:16px;background-color:white;color:#454748;border-collapse:separate;">
 <tbody>
-    <!-- HEADER -->
+    <!--HEADER-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
-                <tr><td valign="middle">
-                    <span style="font-size: 10px;">Lunch Order</span><br/>
-                </td><td valign="middle" align="right">
-                    <img src="/logo.png?company=${user.company_id.id}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" t-att-alt="'%s' % company.name"/>
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;padding:0px8px0px8px;border-collapse:separate;">
+                <tr><tdvalign="middle">
+                    <spanstyle="font-size:10px;">LunchOrder</span><br/>
+                </td><tdvalign="middle"align="right">
+                    <imgsrc="/logo.png?company=${user.company_id.id}"style="padding:0px;margin:0px;height:auto;width:80px;"t-att-alt="'%s'%company.name"/>
                 </td></tr>
-                <tr><td colspan="2" style="text-align:center;">
-                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin:16px 0px 16px 0px;"/>
+                <tr><tdcolspan="2"style="text-align:center;">
+                  <hrwidth="100%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:16px0px16px0px;"/>
                 </td></tr>
             </table>
         </td>
     </tr>
-    <!-- CONTENT -->
+    <!--CONTENT-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;padding:0px8px0px8px;border-collapse:separate;">
                 <tr>
-                    <td valign="top" style="font-size: 13px;">
+                    <tdvalign="top"style="font-size:13px;">
     <div>
-        % set lines = ctx['lines']
-        % set order = ctx['order']
-        % set supplier = user.env['res.partner'].browse(order['supplier_id'])
-        % set currency = user.env['res.currency'].browse(order['currency_id'])
+        %setlines=ctx['lines']
+        %setorder=ctx['order']
+        %setsupplier=user.env['res.partner'].browse(order['supplier_id'])
+        %setcurrency=user.env['res.currency'].browse(order['currency_id'])
         <p>
-        Dear ${order['supplier_name']},
+        Dear${order['supplier_name']},
         </p><p>
-        Here is, today orders for ${order['company_name']}:
+        Hereis,todayordersfor${order['company_name']}:
         </p>
 
         <table>
             <thead>
-                <tr style="background-color:rgb(233,232,233);">
-                    <th style="width: 100%; min-width: 96px; font-size: 13px;"><strong>Product</strong></th>
-                    <th style="width: 100%; min-width: 96px; font-size: 13px;"><strong>Comments</strong></th>
-                    <th style="width: 100%; min-width: 96px; font-size: 13px;"><strong>Person</strong></th>
-                    <th style="width: 100%; min-width: 96px; font-size: 13px;" align="center"><strong>Qty</strong></th>
-                    <th style="width: 100%; min-width: 96px; font-size: 13px;" align="center"><strong>Price</strong></th>
+                <trstyle="background-color:rgb(233,232,233);">
+                    <thstyle="width:100%;min-width:96px;font-size:13px;"><strong>Product</strong></th>
+                    <thstyle="width:100%;min-width:96px;font-size:13px;"><strong>Comments</strong></th>
+                    <thstyle="width:100%;min-width:96px;font-size:13px;"><strong>Person</strong></th>
+                    <thstyle="width:100%;min-width:96px;font-size:13px;"align="center"><strong>Qty</strong></th>
+                    <thstyle="width:100%;min-width:96px;font-size:13px;"align="center"><strong>Price</strong></th>
                 </tr>
             </thead>
             <tbody>
-                % for line in lines
+                %forlineinlines
                 <tr>
-                    <td style="width: 100%; font-size: 13px;" valign="top">${line['product']}</td>
-                    <td style="width: 100%; font-size: 13px;" valign="top">
-                    % if line['toppings']:
+                    <tdstyle="width:100%;font-size:13px;"valign="top">${line['product']}</td>
+                    <tdstyle="width:100%;font-size:13px;"valign="top">
+                    %ifline['toppings']:
                         ${line['toppings']}
-                    % endif
-                    % if line['note']:
-                        <div style="color: rgb(173,181,189);">${line['note']}</div>
-                    % endif
+                    %endif
+                    %ifline['note']:
+                        <divstyle="color:rgb(173,181,189);">${line['note']}</div>
+                    %endif
                     </td>
-                    <td style="width: 100%; font-size: 13px;" valign="top">${line['username']}</td>
-                    <td style="width: 100%; font-size: 13px;" valign="top" align="right">${line['quantity']}</td>
-                    <td style="width: 100%; font-size: 13px;" valign="top" align="right">${format_amount(line['price'], currency)}</td>
+                    <tdstyle="width:100%;font-size:13px;"valign="top">${line['username']}</td>
+                    <tdstyle="width:100%;font-size:13px;"valign="top"align="right">${line['quantity']}</td>
+                    <tdstyle="width:100%;font-size:13px;"valign="top"align="right">${format_amount(line['price'],currency)}</td>
                 </tr>
-                % endfor
+                %endfor
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td style="width: 100%; font-size: 13px; border-top: 1px solid black;"><strong>Total</strong></td>
-                    <td style="width: 100%; font-size: 13px; border-top: 1px solid black;" align="right"><strong>${format_amount(order['amount_total'], currency)}</strong></td>
+                    <tdstyle="width:100%;font-size:13px;border-top:1pxsolidblack;"><strong>Total</strong></td>
+                    <tdstyle="width:100%;font-size:13px;border-top:1pxsolidblack;"align="right"><strong>${format_amount(order['amount_total'],currency)}</strong></td>
                 </tr>
             </tbody>
         </table>
 
-        <p>Do not hesitate to contact us if you have any questions.</p>
+        <p>Donothesitatetocontactusifyouhaveanyquestions.</p>
     </div>
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align:center;">
-                        <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                    <tdstyle="text-align:center;">
+                        <hrwidth="100%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:16px0px16px0px;"/>
                     </td>
                 </tr>
             </table>
         </td>
     </tr>
-    <!-- FOOTER -->
+    <!--FOOTER-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
-                <tr><td valign="middle" align="left">
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;font-size:11px;padding:0px8px0px8px;border-collapse:separate;">
+                <tr><tdvalign="middle"align="left">
                     ${user.company_id.name}
                 </td></tr>
-                <tr><td valign="middle" align="left" style="opacity: 0.7;">
+                <tr><tdvalign="middle"align="left"style="opacity:0.7;">
                     ${user.company_id.phone}
-                    % if user.company_id.phone and (user.company_id.email or user.company_id.website)
+                    %ifuser.company_id.phoneand(user.company_id.emailoruser.company_id.website)
                     |
-                    % endif
-                    % if user.company_id.email
-                    <a href="'mailto:%s' % ${user.company_id.email}" style="text-decoration:none; color: #454748;">${user.company_id.email}</a>
-                    % endif
-                    % if user.company_id.email and user.company_id.website
+                    %endif
+                    %ifuser.company_id.email
+                    <ahref="'mailto:%s'%${user.company_id.email}"style="text-decoration:none;color:#454748;">${user.company_id.email}</a>
+                    %endif
+                    %ifuser.company_id.emailanduser.company_id.website
                     |
-                    % endif
-                    % if user.company_id.website
-                    <a href="'%s' % ${user.company_id.website}" style="text-decoration:none; color: #454748;">
+                    %endif
+                    %ifuser.company_id.website
+                    <ahref="'%s'%${user.company_id.website}"style="text-decoration:none;color:#454748;">
                     ${user.company_id.website}
                     </a>
-                    % endif
+                    %endif
                 </td></tr>
             </table>
         </td>
@@ -177,11 +177,11 @@
 </tbody>
 </table>
 </td></tr>
-<!-- POWERED BY -->
-<tr><td align="center" style="min-width: 590px;">
-    <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;">
-      <tr><td style="text-align: center; font-size: 13px;">
-        Powered by <a target="_blank" href="https://www.flectrahq.com" style="color: #009EFB;">Flectra</a>
+<!--POWEREDBY-->
+<tr><tdalign="center"style="min-width:590px;">
+    <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:#F1F1F1;color:#454748;padding:8px;border-collapse:separate;">
+      <tr><tdstyle="text-align:center;font-size:13px;">
+        Poweredby<atarget="_blank"href="https://www.flectrahq.com"style="color:#009EFB;">Flectra</a>
       </td></tr>
     </table>
 </td></tr>

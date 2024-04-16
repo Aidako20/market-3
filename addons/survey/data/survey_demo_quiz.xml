@@ -1,582 +1,582 @@
-<?xml version="1.0" encoding="utf-8"?>
-<flectra><data noupdate="0">
+<?xmlversion="1.0"encoding="utf-8"?>
+<flectra><datanoupdate="0">
 
-    <record id="survey_demo_quiz" model="survey.survey">
-        <field name="title">Quiz about our Company</field>
-        <field name="access_token">b137640d-9876-1234-abcd-344ca256531e</field>
-        <field name="state">open</field>
-        <field name="access_mode">public</field>
-        <field name="users_can_go_back" eval="False"/>
-        <field name="scoring_type">scoring_with_answers</field>
-        <field name="scoring_success_min">55</field>
-        <field name="questions_layout">page_per_question</field>
-        <field name="description" type="html">
-<p>This small quiz will test your knowledge about our Company. Be prepared !</p></field>
-        <field name="background_image" type="base64" file="survey/static/src/img/survey_background.jpg"/>
-    </record>
-
-    <!-- Page 1: general informations -->
-    <record id="survey_demo_quiz_p1" model="survey.question">
-        <field name="title">Who are you ?</field>
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">1</field>
-        <field name="question_type" eval="False"/>
-        <field name="is_page" eval="True"/>
-        <field name="description" type="html">
-<p>Some general information about you. It will be used internally for statistics only.</p></field>
-    </record>
-    <record id="survey_demo_quiz_p1_q1" model="survey.question">
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">2</field>
-        <field name="title">What is your email ?</field>
-        <field name="question_type">char_box</field>
-        <field name="constr_mandatory" eval="True"/>
-        <field name="validation_email" eval="True"/>
-        <field name="save_as_email" eval="True"/>
-    </record>
-    <record id="survey_demo_quiz_p1_q2" model="survey.question">
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">3</field>
-        <field name="title">What is your nickname ?</field>
-        <field name="question_type">char_box</field>
-        <field name="constr_mandatory" eval="True"/>
-        <field name="save_as_nickname" eval="True"/>
-    </record>
-    <record id="survey_demo_quiz_p1_q3" model="survey.question">
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">4</field>
-        <field name="title">Where are you from ?</field>
-        <field name="question_type">char_box</field>
-        <field name="constr_mandatory" eval="True"/>
-    </record>
-    <record id="survey_demo_quiz_p1_q4" model="survey.question">
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">5</field>
-        <field name="title">How old are you ?</field>
-        <field name="description" type="html"><p>Just to categorize your answers, don't worry.</p></field>
-        <field name="question_type">numerical_box</field>
-        <field name="constr_mandatory" eval="True"/>
+    <recordid="survey_demo_quiz"model="survey.survey">
+        <fieldname="title">QuizaboutourCompany</field>
+        <fieldname="access_token">b137640d-9876-1234-abcd-344ca256531e</field>
+        <fieldname="state">open</field>
+        <fieldname="access_mode">public</field>
+        <fieldname="users_can_go_back"eval="False"/>
+        <fieldname="scoring_type">scoring_with_answers</field>
+        <fieldname="scoring_success_min">55</field>
+        <fieldname="questions_layout">page_per_question</field>
+        <fieldname="description"type="html">
+<p>ThissmallquizwilltestyourknowledgeaboutourCompany.Beprepared!</p></field>
+        <fieldname="background_image"type="base64"file="survey/static/src/img/survey_background.jpg"/>
     </record>
 
-    <!-- Page 2: quiz about company -->
-    <record id="survey_demo_quiz_p2" model="survey.question">
-        <field name="title">Our Company in a few questions ...</field>
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">10</field>
-        <field name="question_type" eval="False"/>
-        <field name="is_page" eval="True"/>
-        <field name="description" type="html">
-<p>Some questions about our company. Do you really know us?</p></field>
+    <!--Page1:generalinformations-->
+    <recordid="survey_demo_quiz_p1"model="survey.question">
+        <fieldname="title">Whoareyou?</field>
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">1</field>
+        <fieldname="question_type"eval="False"/>
+        <fieldname="is_page"eval="True"/>
+        <fieldname="description"type="html">
+<p>Somegeneralinformationaboutyou.Itwillbeusedinternallyforstatisticsonly.</p></field>
     </record>
-    <record id="survey_demo_quiz_p2_q1" model="survey.question">
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">11</field>
-        <field name="title">When is Mitchell Admin born ?</field>
-        <field name="description" type="html"><span>Our famous Leader !</span></field>
-        <field name="question_type">date</field>
-        <field name="constr_mandatory" eval="True"/>
+    <recordid="survey_demo_quiz_p1_q1"model="survey.question">
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">2</field>
+        <fieldname="title">Whatisyouremail?</field>
+        <fieldname="question_type">char_box</field>
+        <fieldname="constr_mandatory"eval="True"/>
+        <fieldname="validation_email"eval="True"/>
+        <fieldname="save_as_email"eval="True"/>
     </record>
-    <record id="survey_demo_quiz_p2_q2" model="survey.question">
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">12</field>
-        <field name="title">When did precisely Marc Demo crop its first apple tree ?</field>
-        <field name="question_type">datetime</field>
-        <field name="constr_mandatory" eval="True"/>
+    <recordid="survey_demo_quiz_p1_q2"model="survey.question">
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">3</field>
+        <fieldname="title">Whatisyournickname?</field>
+        <fieldname="question_type">char_box</field>
+        <fieldname="constr_mandatory"eval="True"/>
+        <fieldname="save_as_nickname"eval="True"/>
     </record>
-    <record id="survey_demo_quiz_p2_q3" model="survey.question">
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">13</field>
-        <field name="title">Give the list of all types of wood we sell.</field>
-        <field name="question_type">text_box</field>
-        <field name="constr_mandatory" eval="False"/>
+    <recordid="survey_demo_quiz_p1_q3"model="survey.question">
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">4</field>
+        <fieldname="title">Whereareyoufrom?</field>
+        <fieldname="question_type">char_box</field>
+        <fieldname="constr_mandatory"eval="True"/>
+    </record>
+    <recordid="survey_demo_quiz_p1_q4"model="survey.question">
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">5</field>
+        <fieldname="title">Howoldareyou?</field>
+        <fieldname="description"type="html"><p>Justtocategorizeyouranswers,don'tworry.</p></field>
+        <fieldname="question_type">numerical_box</field>
+        <fieldname="constr_mandatory"eval="True"/>
     </record>
 
-    <!-- Page 3: quiz about fruits and vegetables -->
-    <record id="survey_demo_quiz_p3" model="survey.question">
-        <field name="title">Fruits and vegetables</field>
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">20</field>
-        <field name="question_type" eval="False"/>
-        <field name="is_page" eval="True"/>
-        <field name="description" type="html">
-<p>An apple a day keeps the doctor away.</p></field>
+    <!--Page2:quizaboutcompany-->
+    <recordid="survey_demo_quiz_p2"model="survey.question">
+        <fieldname="title">OurCompanyinafewquestions...</field>
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">10</field>
+        <fieldname="question_type"eval="False"/>
+        <fieldname="is_page"eval="True"/>
+        <fieldname="description"type="html">
+<p>Somequestionsaboutourcompany.Doyoureallyknowus?</p></field>
     </record>
-    <record id="survey_demo_quiz_p3_q1" model="survey.question">
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">21</field>
-        <field name="title">Which category does a tomato belong to</field>
-        <field name="description" type="html"><span>"Red" is not a category, I know what you are trying to do ;)</span></field>
-        <field name="question_type">simple_choice</field>
-        <field name="comments_allowed" eval="True"/>
-        <field name="comment_count_as_answer" eval="True"/>
-        <field name="constr_mandatory" eval="True"/>
+    <recordid="survey_demo_quiz_p2_q1"model="survey.question">
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">11</field>
+        <fieldname="title">WhenisMitchellAdminborn?</field>
+        <fieldname="description"type="html"><span>OurfamousLeader!</span></field>
+        <fieldname="question_type">date</field>
+        <fieldname="constr_mandatory"eval="True"/>
     </record>
-        <record id="survey_demo_quiz_p3_q1_sug1" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q1"/>
-            <field name="sequence">1</field>
-            <field name="value">Fruits</field>
-            <field name="is_correct" eval="True"/>
-            <field name="answer_score">20</field>
-        </record>
-        <record id="survey_demo_quiz_p3_q1_sug2" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q1"/>
-            <field name="sequence">2</field>
-            <field name="value">Vegetables</field>
-            <field name="is_correct" eval="True"/>
-            <field name="answer_score">10</field>
-        </record>
-        <record id="survey_demo_quiz_p3_q1_sug3" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q1"/>
-            <field name="sequence">3</field>
-            <field name="value">Space stations</field>
-        </record>
-    <record id="survey_demo_quiz_p3_q2" model="survey.question">
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">22</field>
-        <field name="title">Which of the following would you use to pollinate</field>
-        <field name="question_type">simple_choice</field>
-        <field name="comments_allowed" eval="True"/>
-        <field name="comment_count_as_answer" eval="False"/>
-        <field name="constr_mandatory" eval="True"/>
-        <field name="is_time_limited" eval="True"/>
-        <field name="time_limit">15</field>
+    <recordid="survey_demo_quiz_p2_q2"model="survey.question">
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">12</field>
+        <fieldname="title">WhendidpreciselyMarcDemocropitsfirstappletree?</field>
+        <fieldname="question_type">datetime</field>
+        <fieldname="constr_mandatory"eval="True"/>
     </record>
-        <record id="survey_demo_quiz_p3_q2_sug1" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q2"/>
-            <field name="sequence">1</field>
-            <field name="value">Bees</field>
-            <field name="is_correct" eval="True"/>
-            <field name="answer_score">20</field>
-        </record>
-        <record id="survey_demo_quiz_p3_q2_sug2" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q2"/>
-            <field name="sequence">2</field>
-            <field name="value">Dogs</field>
-        </record>
-        <record id="survey_demo_quiz_p3_q2_sug3" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q2"/>
-            <field name="sequence">3</field>
-            <field name="value">Mooses</field>
-        </record>
-    <record id="survey_demo_quiz_p3_q3" model="survey.question">
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">23</field>
-        <field name="title">Select trees that made more than 20K sales this year</field>
-        <field name="description" type="html"><span>Our sales people have an advantage, but you can do it !</span></field>
-        <field name="question_type">multiple_choice</field>
-        <field name="constr_mandatory" eval="False"/>
-        <field name="comments_allowed" eval="True"/>
-        <field name="comment_count_as_answer" eval="True"/>
-        <field name="is_time_limited" eval="True"/>
-        <field name="time_limit">20</field>
+    <recordid="survey_demo_quiz_p2_q3"model="survey.question">
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">13</field>
+        <fieldname="title">Givethelistofalltypesofwoodwesell.</field>
+        <fieldname="question_type">text_box</field>
+        <fieldname="constr_mandatory"eval="False"/>
     </record>
-        <record id="survey_demo_quiz_p3_q3_sug1" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q3"/>
-            <field name="sequence">1</field>
-            <field name="value">Apple Trees</field>
-            <field name="is_correct" eval="True"/>
-            <field name="answer_score">20</field>
-        </record>
-        <record id="survey_demo_quiz_p3_q3_sug2" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q3"/>
-            <field name="sequence">2</field>
-            <field name="value">Lemon Trees</field>
-            <field name="is_correct" eval="True"/>
-            <field name="answer_score">10</field>
-        </record>
-        <record id="survey_demo_quiz_p3_q3_sug3" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q3"/>
-            <field name="sequence">3</field>
-            <field name="value">Baobab Trees</field>
-            <field name="answer_score">-10</field>
-        </record>
-        <record id="survey_demo_quiz_p3_q3_sug4" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q3"/>
-            <field name="sequence">4</field>
-            <field name="value">Cookies</field>
-            <field name="answer_score">-10</field>
-        </record>
-    <record id="survey_demo_quiz_p3_q4" model="survey.question">
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">24</field>
-        <field name="title">A "Citrus" could give you ...</field>
-        <field name="question_type">multiple_choice</field>
-        <field name="constr_mandatory" eval="True"/>
-        <field name="comments_allowed" eval="True"/>
-        <field name="comment_count_as_answer" eval="False"/>
-        <field name="is_time_limited" eval="True"/>
-        <field name="time_limit">20</field>
+
+    <!--Page3:quizaboutfruitsandvegetables-->
+    <recordid="survey_demo_quiz_p3"model="survey.question">
+        <fieldname="title">Fruitsandvegetables</field>
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">20</field>
+        <fieldname="question_type"eval="False"/>
+        <fieldname="is_page"eval="True"/>
+        <fieldname="description"type="html">
+<p>Anappleadaykeepsthedoctoraway.</p></field>
     </record>
-        <record id="survey_demo_quiz_p3_q4_sug1" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q4"/>
-            <field name="sequence">1</field>
-            <field name="value">Pomelos</field>
-            <field name="is_correct" eval="True"/>
-            <field name="answer_score">20</field>
-        </record>
-        <record id="survey_demo_quiz_p3_q4_sug2" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q4"/>
-            <field name="sequence">2</field>
-            <field name="value">Grapefruits</field>
-            <field name="is_correct" eval="True"/>
-            <field name="answer_score">20</field>
-        </record>
-        <record id="survey_demo_quiz_p3_q4_sug3" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q4"/>
-            <field name="sequence">3</field>
-            <field name="value">Cosmic rays</field>
-            <field name="answer_score">-10</field>
-        </record>
-        <record id="survey_demo_quiz_p3_q4_sug4" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q4"/>
-            <field name="sequence">4</field>
-            <field name="value">Bricks</field>
-            <field name="answer_score">-10</field>
-        </record>
-    <record id="survey_demo_quiz_p3_q5" model="survey.question">
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">25</field>
-        <field name="title">How often should you water those plants</field>
-        <field name="question_type">matrix</field>
-        <field name="matrix_subtype">simple</field>
-        <field name="constr_mandatory" eval="True"/>
-        <field name="comments_allowed" eval="True"/>
+    <recordid="survey_demo_quiz_p3_q1"model="survey.question">
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">21</field>
+        <fieldname="title">Whichcategorydoesatomatobelongto</field>
+        <fieldname="description"type="html"><span>"Red"isnotacategory,Iknowwhatyouaretryingtodo;)</span></field>
+        <fieldname="question_type">simple_choice</field>
+        <fieldname="comments_allowed"eval="True"/>
+        <fieldname="comment_count_as_answer"eval="True"/>
+        <fieldname="constr_mandatory"eval="True"/>
     </record>
-        <record id="survey_demo_quiz_p3_q5_row1" model="survey.question.answer">
-            <field name="matrix_question_id" ref="survey_demo_quiz_p3_q5"/>
-            <field name="sequence">1</field>
-            <field name="value">Cactus</field>
+        <recordid="survey_demo_quiz_p3_q1_sug1"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q1"/>
+            <fieldname="sequence">1</field>
+            <fieldname="value">Fruits</field>
+            <fieldname="is_correct"eval="True"/>
+            <fieldname="answer_score">20</field>
         </record>
-        <record id="survey_demo_quiz_p3_q5_row2" model="survey.question.answer">
-            <field name="matrix_question_id" ref="survey_demo_quiz_p3_q5"/>
-            <field name="sequence">2</field>
-            <field name="value">Ficus</field>
+        <recordid="survey_demo_quiz_p3_q1_sug2"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q1"/>
+            <fieldname="sequence">2</field>
+            <fieldname="value">Vegetables</field>
+            <fieldname="is_correct"eval="True"/>
+            <fieldname="answer_score">10</field>
         </record>
-        <record id="survey_demo_quiz_p3_q5_sug1" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q5"/>
-            <field name="sequence">1</field>
-            <field name="value">Once a month</field>
+        <recordid="survey_demo_quiz_p3_q1_sug3"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q1"/>
+            <fieldname="sequence">3</field>
+            <fieldname="value">Spacestations</field>
         </record>
-        <record id="survey_demo_quiz_p3_q5_sug2" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q5"/>
-            <field name="sequence">2</field>
-            <field name="value">Once a week</field>
-        </record>
-    <record id="survey_demo_quiz_p3_q6" model="survey.question">
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">26</field>
-        <field name="title">When do you harvest those fruits</field>
-        <field name="description" type="html"><span>Best time to do it, is the right time to do it.</span></field>
-        <field name="question_type">matrix</field>
-        <field name="matrix_subtype">multiple</field>
-        <field name="constr_mandatory" eval="True"/>
-        <field name="comments_allowed" eval="False"/>
+    <recordid="survey_demo_quiz_p3_q2"model="survey.question">
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">22</field>
+        <fieldname="title">Whichofthefollowingwouldyouusetopollinate</field>
+        <fieldname="question_type">simple_choice</field>
+        <fieldname="comments_allowed"eval="True"/>
+        <fieldname="comment_count_as_answer"eval="False"/>
+        <fieldname="constr_mandatory"eval="True"/>
+        <fieldname="is_time_limited"eval="True"/>
+        <fieldname="time_limit">15</field>
     </record>
-        <record id="survey_demo_quiz_p3_q6_row1" model="survey.question.answer">
-            <field name="matrix_question_id" ref="survey_demo_quiz_p3_q6"/>
-            <field name="sequence">1</field>
-            <field name="value">Apples</field>
+        <recordid="survey_demo_quiz_p3_q2_sug1"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q2"/>
+            <fieldname="sequence">1</field>
+            <fieldname="value">Bees</field>
+            <fieldname="is_correct"eval="True"/>
+            <fieldname="answer_score">20</field>
         </record>
-        <record id="survey_demo_quiz_p3_q6_row2" model="survey.question.answer">
-            <field name="matrix_question_id" ref="survey_demo_quiz_p3_q6"/>
-            <field name="sequence">2</field>
-            <field name="value">Strawberries</field>
+        <recordid="survey_demo_quiz_p3_q2_sug2"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q2"/>
+            <fieldname="sequence">2</field>
+            <fieldname="value">Dogs</field>
         </record>
-        <record id="survey_demo_quiz_p3_q6_row3" model="survey.question.answer">
-            <field name="matrix_question_id" ref="survey_demo_quiz_p3_q6"/>
-            <field name="sequence">3</field>
-            <field name="value">Clementine</field>
+        <recordid="survey_demo_quiz_p3_q2_sug3"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q2"/>
+            <fieldname="sequence">3</field>
+            <fieldname="value">Mooses</field>
         </record>
-        <record id="survey_demo_quiz_p3_q6_sug1" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q6"/>
-            <field name="sequence">1</field>
-            <field name="value">Spring</field>
+    <recordid="survey_demo_quiz_p3_q3"model="survey.question">
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">23</field>
+        <fieldname="title">Selecttreesthatmademorethan20Ksalesthisyear</field>
+        <fieldname="description"type="html"><span>Oursalespeoplehaveanadvantage,butyoucandoit!</span></field>
+        <fieldname="question_type">multiple_choice</field>
+        <fieldname="constr_mandatory"eval="False"/>
+        <fieldname="comments_allowed"eval="True"/>
+        <fieldname="comment_count_as_answer"eval="True"/>
+        <fieldname="is_time_limited"eval="True"/>
+        <fieldname="time_limit">20</field>
+    </record>
+        <recordid="survey_demo_quiz_p3_q3_sug1"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q3"/>
+            <fieldname="sequence">1</field>
+            <fieldname="value">AppleTrees</field>
+            <fieldname="is_correct"eval="True"/>
+            <fieldname="answer_score">20</field>
         </record>
-        <record id="survey_demo_quiz_p3_q6_sug2" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q6"/>
-            <field name="sequence">2</field>
-            <field name="value">Summer</field>
+        <recordid="survey_demo_quiz_p3_q3_sug2"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q3"/>
+            <fieldname="sequence">2</field>
+            <fieldname="value">LemonTrees</field>
+            <fieldname="is_correct"eval="True"/>
+            <fieldname="answer_score">10</field>
         </record>
-        <record id="survey_demo_quiz_p3_q6_sug3" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q6"/>
-            <field name="sequence">3</field>
-            <field name="value">Autumn</field>
+        <recordid="survey_demo_quiz_p3_q3_sug3"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q3"/>
+            <fieldname="sequence">3</field>
+            <fieldname="value">BaobabTrees</field>
+            <fieldname="answer_score">-10</field>
         </record>
-        <record id="survey_demo_quiz_p3_q6_sug4" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p3_q6"/>
-            <field name="sequence">4</field>
-            <field name="value">Winter</field>
+        <recordid="survey_demo_quiz_p3_q3_sug4"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q3"/>
+            <fieldname="sequence">4</field>
+            <fieldname="value">Cookies</field>
+            <fieldname="answer_score">-10</field>
+        </record>
+    <recordid="survey_demo_quiz_p3_q4"model="survey.question">
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">24</field>
+        <fieldname="title">A"Citrus"couldgiveyou...</field>
+        <fieldname="question_type">multiple_choice</field>
+        <fieldname="constr_mandatory"eval="True"/>
+        <fieldname="comments_allowed"eval="True"/>
+        <fieldname="comment_count_as_answer"eval="False"/>
+        <fieldname="is_time_limited"eval="True"/>
+        <fieldname="time_limit">20</field>
+    </record>
+        <recordid="survey_demo_quiz_p3_q4_sug1"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q4"/>
+            <fieldname="sequence">1</field>
+            <fieldname="value">Pomelos</field>
+            <fieldname="is_correct"eval="True"/>
+            <fieldname="answer_score">20</field>
+        </record>
+        <recordid="survey_demo_quiz_p3_q4_sug2"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q4"/>
+            <fieldname="sequence">2</field>
+            <fieldname="value">Grapefruits</field>
+            <fieldname="is_correct"eval="True"/>
+            <fieldname="answer_score">20</field>
+        </record>
+        <recordid="survey_demo_quiz_p3_q4_sug3"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q4"/>
+            <fieldname="sequence">3</field>
+            <fieldname="value">Cosmicrays</field>
+            <fieldname="answer_score">-10</field>
+        </record>
+        <recordid="survey_demo_quiz_p3_q4_sug4"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q4"/>
+            <fieldname="sequence">4</field>
+            <fieldname="value">Bricks</field>
+            <fieldname="answer_score">-10</field>
+        </record>
+    <recordid="survey_demo_quiz_p3_q5"model="survey.question">
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">25</field>
+        <fieldname="title">Howoftenshouldyouwaterthoseplants</field>
+        <fieldname="question_type">matrix</field>
+        <fieldname="matrix_subtype">simple</field>
+        <fieldname="constr_mandatory"eval="True"/>
+        <fieldname="comments_allowed"eval="True"/>
+    </record>
+        <recordid="survey_demo_quiz_p3_q5_row1"model="survey.question.answer">
+            <fieldname="matrix_question_id"ref="survey_demo_quiz_p3_q5"/>
+            <fieldname="sequence">1</field>
+            <fieldname="value">Cactus</field>
+        </record>
+        <recordid="survey_demo_quiz_p3_q5_row2"model="survey.question.answer">
+            <fieldname="matrix_question_id"ref="survey_demo_quiz_p3_q5"/>
+            <fieldname="sequence">2</field>
+            <fieldname="value">Ficus</field>
+        </record>
+        <recordid="survey_demo_quiz_p3_q5_sug1"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q5"/>
+            <fieldname="sequence">1</field>
+            <fieldname="value">Onceamonth</field>
+        </record>
+        <recordid="survey_demo_quiz_p3_q5_sug2"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q5"/>
+            <fieldname="sequence">2</field>
+            <fieldname="value">Onceaweek</field>
+        </record>
+    <recordid="survey_demo_quiz_p3_q6"model="survey.question">
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">26</field>
+        <fieldname="title">Whendoyouharvestthosefruits</field>
+        <fieldname="description"type="html"><span>Besttimetodoit,istherighttimetodoit.</span></field>
+        <fieldname="question_type">matrix</field>
+        <fieldname="matrix_subtype">multiple</field>
+        <fieldname="constr_mandatory"eval="True"/>
+        <fieldname="comments_allowed"eval="False"/>
+    </record>
+        <recordid="survey_demo_quiz_p3_q6_row1"model="survey.question.answer">
+            <fieldname="matrix_question_id"ref="survey_demo_quiz_p3_q6"/>
+            <fieldname="sequence">1</field>
+            <fieldname="value">Apples</field>
+        </record>
+        <recordid="survey_demo_quiz_p3_q6_row2"model="survey.question.answer">
+            <fieldname="matrix_question_id"ref="survey_demo_quiz_p3_q6"/>
+            <fieldname="sequence">2</field>
+            <fieldname="value">Strawberries</field>
+        </record>
+        <recordid="survey_demo_quiz_p3_q6_row3"model="survey.question.answer">
+            <fieldname="matrix_question_id"ref="survey_demo_quiz_p3_q6"/>
+            <fieldname="sequence">3</field>
+            <fieldname="value">Clementine</field>
+        </record>
+        <recordid="survey_demo_quiz_p3_q6_sug1"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q6"/>
+            <fieldname="sequence">1</field>
+            <fieldname="value">Spring</field>
+        </record>
+        <recordid="survey_demo_quiz_p3_q6_sug2"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q6"/>
+            <fieldname="sequence">2</field>
+            <fieldname="value">Summer</field>
+        </record>
+        <recordid="survey_demo_quiz_p3_q6_sug3"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q6"/>
+            <fieldname="sequence">3</field>
+            <fieldname="value">Autumn</field>
+        </record>
+        <recordid="survey_demo_quiz_p3_q6_sug4"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p3_q6"/>
+            <fieldname="sequence">4</field>
+            <fieldname="value">Winter</field>
         </record>
     
-    <!-- Page 4: Trees -->
-    <record id="survey_demo_quiz_p4" model="survey.question">
-        <field name="title">Trees</field>
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">30</field>
-        <field name="is_page" eval="True"/>
-        <field name="question_type" eval="False"/>
-        <field name="description" type="html">
+    <!--Page4:Trees-->
+    <recordid="survey_demo_quiz_p4"model="survey.question">
+        <fieldname="title">Trees</field>
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">30</field>
+        <fieldname="is_page"eval="True"/>
+        <fieldname="question_type"eval="False"/>
+        <fieldname="description"type="html">
             <p>
-                We like to say that the apple doesn't fall far from the tree, so here are trees.
+                Weliketosaythattheappledoesn'tfallfarfromthetree,soherearetrees.
             </p>
         </field>
     </record>
 
-    <record id="survey_demo_quiz_p4_q1" model="survey.question">
-        <field name="title">Dogwood is from which family of trees ?</field>
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">31</field>
-        <field name="question_type">simple_choice</field>
-        <field name="column_nb">6</field>
-        <field name="allow_value_image" eval="True"/>
-        <field name="constr_mandatory" eval="True"/>
+    <recordid="survey_demo_quiz_p4_q1"model="survey.question">
+        <fieldname="title">Dogwoodisfromwhichfamilyoftrees?</field>
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">31</field>
+        <fieldname="question_type">simple_choice</field>
+        <fieldname="column_nb">6</field>
+        <fieldname="allow_value_image"eval="True"/>
+        <fieldname="constr_mandatory"eval="True"/>
     </record>
-    <record id="survey_demo_quiz_p4_q1_sug1" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q1"/>
-        <field name="sequence">1</field>
-        <field name="value">Pinaceae</field>
-        <field name="value_image" type="base64" file="survey/static/img/pinaceae.jpg"/>
+    <recordid="survey_demo_quiz_p4_q1_sug1"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q1"/>
+        <fieldname="sequence">1</field>
+        <fieldname="value">Pinaceae</field>
+        <fieldname="value_image"type="base64"file="survey/static/img/pinaceae.jpg"/>
     </record>
-    <record id="survey_demo_quiz_p4_q1_sug2" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q1"/>
-        <field name="sequence">2</field>
-        <field name="value">Ulmaceae</field>
-        <field name="value_image" type="base64" file="survey/static/img/ulmaceae.jpg"/>
+    <recordid="survey_demo_quiz_p4_q1_sug2"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q1"/>
+        <fieldname="sequence">2</field>
+        <fieldname="value">Ulmaceae</field>
+        <fieldname="value_image"type="base64"file="survey/static/img/ulmaceae.jpg"/>
     </record>
-    <record id="survey_demo_quiz_p4_q1_sug3" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q1"/>
-        <field name="sequence">3</field>
-        <field name="value">Cornaceae</field>
-        <field name="value_image" type="base64" file="survey/static/img/cornaceae.jpg"/>
-        <field name="is_correct" eval="True"/>
-        <field name="answer_score">20</field>
+    <recordid="survey_demo_quiz_p4_q1_sug3"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q1"/>
+        <fieldname="sequence">3</field>
+        <fieldname="value">Cornaceae</field>
+        <fieldname="value_image"type="base64"file="survey/static/img/cornaceae.jpg"/>
+        <fieldname="is_correct"eval="True"/>
+        <fieldname="answer_score">20</field>
     </record>
-    <record id="survey_demo_quiz_p4_q1_sug4" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q1"/>
-        <field name="sequence">4</field>
-        <field name="value">Salicaceae</field>
-        <field name="value_image" type="base64" file="survey/static/img/salicaceae.jpg"/>
-    </record>
-
-    <record id="survey_demo_quiz_p4_q2" model="survey.question">
-        <field name="title">In which country did the bonsai technique develop ?</field>
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">32</field>
-        <field name="question_type">simple_choice</field>
-        <field name="column_nb">6</field>
-        <field name="allow_value_image" eval="True"/>
-        <field name="constr_mandatory" eval="True"/>
-    </record>
-    <record id="survey_demo_quiz_p4_q2_sug1" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q2"/>
-        <field name="sequence">1</field>
-        <field name="value">Japan</field>
-        <field name="value_image" type="base64" file="survey/static/img/japan.jpg"/>
-        <field name="is_correct" eval="True"/>
-        <field name="answer_score">20</field>
-    </record>
-    <record id="survey_demo_quiz_p4_q2_sug2" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q2"/>
-        <field name="sequence">2</field>
-        <field name="value">China</field>
-        <field name="value_image" type="base64" file="survey/static/img/china.jpg"/>
-    </record>
-    <record id="survey_demo_quiz_p4_q2_sug3" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q2"/>
-        <field name="sequence">3</field>
-        <field name="value">Vietnam</field>
-        <field name="value_image" type="base64" file="survey/static/img/vietnam.jpg"/>
-    </record>
-    <record id="survey_demo_quiz_p4_q2_sug4" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q2"/>
-        <field name="sequence">4</field>
-        <field name="value">South Korea</field>
-        <field name="value_image" type="base64" file="survey/static/img/south_korea.jpg"/>
+    <recordid="survey_demo_quiz_p4_q1_sug4"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q1"/>
+        <fieldname="sequence">4</field>
+        <fieldname="value">Salicaceae</field>
+        <fieldname="value_image"type="base64"file="survey/static/img/salicaceae.jpg"/>
     </record>
 
-    <record id="survey_demo_quiz_p4_q3" model="survey.question">
-        <field name="title">Is the wood of a coniferous hard or soft ?</field>
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">33</field>
-        <field name="question_type">simple_choice</field>
-        <field name="column_nb">6</field>
-        <field name="constr_mandatory" eval="True"/>
-        <field name="description" type="html">
+    <recordid="survey_demo_quiz_p4_q2"model="survey.question">
+        <fieldname="title">Inwhichcountrydidthebonsaitechniquedevelop?</field>
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">32</field>
+        <fieldname="question_type">simple_choice</field>
+        <fieldname="column_nb">6</field>
+        <fieldname="allow_value_image"eval="True"/>
+        <fieldname="constr_mandatory"eval="True"/>
+    </record>
+    <recordid="survey_demo_quiz_p4_q2_sug1"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q2"/>
+        <fieldname="sequence">1</field>
+        <fieldname="value">Japan</field>
+        <fieldname="value_image"type="base64"file="survey/static/img/japan.jpg"/>
+        <fieldname="is_correct"eval="True"/>
+        <fieldname="answer_score">20</field>
+    </record>
+    <recordid="survey_demo_quiz_p4_q2_sug2"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q2"/>
+        <fieldname="sequence">2</field>
+        <fieldname="value">China</field>
+        <fieldname="value_image"type="base64"file="survey/static/img/china.jpg"/>
+    </record>
+    <recordid="survey_demo_quiz_p4_q2_sug3"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q2"/>
+        <fieldname="sequence">3</field>
+        <fieldname="value">Vietnam</field>
+        <fieldname="value_image"type="base64"file="survey/static/img/vietnam.jpg"/>
+    </record>
+    <recordid="survey_demo_quiz_p4_q2_sug4"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q2"/>
+        <fieldname="sequence">4</field>
+        <fieldname="value">SouthKorea</field>
+        <fieldname="value_image"type="base64"file="survey/static/img/south_korea.jpg"/>
+    </record>
+
+    <recordid="survey_demo_quiz_p4_q3"model="survey.question">
+        <fieldname="title">Isthewoodofaconiferoushardorsoft?</field>
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">33</field>
+        <fieldname="question_type">simple_choice</field>
+        <fieldname="column_nb">6</field>
+        <fieldname="constr_mandatory"eval="True"/>
+        <fieldname="description"type="html">
             <p>
-                <img class="img-fluid o_we_custom_image d-block mx-auto"
+                <imgclass="img-fluido_we_custom_imaged-blockmx-auto"
                     src="/survey/static/img/coniferous.jpg"/><br/>
             </p>
         </field>
     </record>
-    <record id="survey_demo_quiz_p4_q3_sug1" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q3"/>
-        <field name="sequence">1</field>
-        <field name="value">Hard</field>
+    <recordid="survey_demo_quiz_p4_q3_sug1"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q3"/>
+        <fieldname="sequence">1</field>
+        <fieldname="value">Hard</field>
     </record>
-    <record id="survey_demo_quiz_p4_q3_sug2" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q3"/>
-        <field name="sequence">2</field>
-        <field name="value">Soft</field>
-        <field name="is_correct" eval="True"/>
-        <field name="answer_score">10</field>
+    <recordid="survey_demo_quiz_p4_q3_sug2"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q3"/>
+        <fieldname="sequence">2</field>
+        <fieldname="value">Soft</field>
+        <fieldname="is_correct"eval="True"/>
+        <fieldname="answer_score">10</field>
     </record>
 
-    <record id="survey_demo_quiz_p4_q4" model="survey.question">
-        <field name="title">From which continent is native the Scots pine (pinus sylvestris) ?</field>
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">34</field>
-        <field name="question_type">simple_choice</field>
-        <field name="allow_value_image" eval="True"/>
-        <field name="constr_mandatory" eval="True"/>
-        <field name="description" type="html">
+    <recordid="survey_demo_quiz_p4_q4"model="survey.question">
+        <fieldname="title">FromwhichcontinentisnativetheScotspine(pinussylvestris)?</field>
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">34</field>
+        <fieldname="question_type">simple_choice</field>
+        <fieldname="allow_value_image"eval="True"/>
+        <fieldname="constr_mandatory"eval="True"/>
+        <fieldname="description"type="html">
             <p>
-                <img class="img-fluid o_we_custom_image d-block mx-auto"
-                    src="/survey/static/img/pinus_sylvestris.jpg" style="width: 100%;"/><br/>
+                <imgclass="img-fluido_we_custom_imaged-blockmx-auto"
+                    src="/survey/static/img/pinus_sylvestris.jpg"style="width:100%;"/><br/>
             </p>
         </field>
     </record>
-    <record id="survey_demo_quiz_p4_q4_sug1" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q4"/>
-        <field name="sequence">1</field>
-        <field name="value">Africa</field>
-        <field name="value_image" type="base64" file="survey/static/img/africa.png"/>
+    <recordid="survey_demo_quiz_p4_q4_sug1"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q4"/>
+        <fieldname="sequence">1</field>
+        <fieldname="value">Africa</field>
+        <fieldname="value_image"type="base64"file="survey/static/img/africa.png"/>
     </record>
-    <record id="survey_demo_quiz_p4_q4_sug2" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q4"/>
-        <field name="sequence">2</field>
-        <field name="value">Asia</field>
-        <field name="is_correct" eval="True"/>
-        <field name="answer_score">20</field>
-        <field name="value_image" type="base64" file="survey/static/img/asia.png"/>
+    <recordid="survey_demo_quiz_p4_q4_sug2"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q4"/>
+        <fieldname="sequence">2</field>
+        <fieldname="value">Asia</field>
+        <fieldname="is_correct"eval="True"/>
+        <fieldname="answer_score">20</field>
+        <fieldname="value_image"type="base64"file="survey/static/img/asia.png"/>
     </record>
-    <record id="survey_demo_quiz_p4_q4_sug3" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q4"/>
-        <field name="sequence">3</field>
-        <field name="value">Europe</field>
-        <field name="value_image" type="base64" file="survey/static/img/europe.png"/>
+    <recordid="survey_demo_quiz_p4_q4_sug3"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q4"/>
+        <fieldname="sequence">3</field>
+        <fieldname="value">Europe</field>
+        <fieldname="value_image"type="base64"file="survey/static/img/europe.png"/>
     </record>
-    <record id="survey_demo_quiz_p4_q4_sug4" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q4"/>
-        <field name="sequence">4</field>
-        <field name="value">South America</field>
-        <field name="value_image" type="base64" file="survey/static/img/south_america.png"/>
-    </record>
-
-    <record id="survey_demo_quiz_p4_q5" model="survey.question">
-        <field name="title">In the list below, select all the coniferous.</field>
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">35</field>
-        <field name="question_type">multiple_choice</field>
-        <field name="column_nb">6</field>
-        <field name="allow_value_image" eval="True"/>
-        <field name="constr_mandatory" eval="True"/>
-    </record>
-    <record id="survey_demo_quiz_p4_q5_sug1" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q5"/>
-        <field name="sequence">1</field>
-        <field name="value">Douglas Fir</field>
-        <field name="value_image" type="base64" file="survey/static/img/douglas_fir.jpg"/>
-        <field name="is_correct" eval="True"/>
-        <field name="answer_score">5</field>
-    </record>
-    <record id="survey_demo_quiz_p4_q5_sug2" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q5"/>
-        <field name="sequence">2</field>
-        <field name="value">Norway Spruce</field>
-        <field name="value_image" type="base64" file="survey/static/img/norway_spruce.jpg"/>
-        <field name="is_correct" eval="True"/>
-        <field name="answer_score">5</field>
-    </record>
-    <record id="survey_demo_quiz_p4_q5_sug3" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q5"/>
-        <field name="sequence">3</field>
-        <field name="value">European Yew</field>
-        <field name="value_image" type="base64" file="survey/static/img/european_yew.jpg"/>
-        <field name="is_correct" eval="True"/>
-        <field name="answer_score">5</field>
-    </record>
-    <record id="survey_demo_quiz_p4_q5_sug4" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q5"/>
-        <field name="sequence">4</field>
-        <field name="value">Mountain Pine</field>
-        <field name="value_image" type="base64" file="survey/static/img/mountain_pine.jpg"/>
-        <field name="is_correct" eval="True"/>
-        <field name="answer_score">5</field>
+    <recordid="survey_demo_quiz_p4_q4_sug4"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q4"/>
+        <fieldname="sequence">4</field>
+        <fieldname="value">SouthAmerica</field>
+        <fieldname="value_image"type="base64"file="survey/static/img/south_america.png"/>
     </record>
 
-    <record id="survey_demo_quiz_p4_q6" model="survey.question">
-        <field name="title">After watching this video, will you swear that you are not going to procrastinate to trim your hedge this year ?</field>
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">36</field>
-        <field name="question_type">simple_choice</field>
-        <field name="column_nb">6</field>
-        <field name="description" type="html">
-            <div class="text-center">
-                <div class="media_iframe_video" data-oe-expression="//www.youtube.com/embed/7y4T6yv5L1k?autoplay=0&amp;rel=0" style="width: 50%;">
-                    <div class="css_editable_mode_display"/>
-                    <div class="media_iframe_video_size" contenteditable="false"/>
-                    <iframe src="//www.youtube.com/embed/7y4T6yv5L1k?autoplay=0&amp;rel=0" frameborder="0" contenteditable="false"></iframe>
+    <recordid="survey_demo_quiz_p4_q5"model="survey.question">
+        <fieldname="title">Inthelistbelow,selectalltheconiferous.</field>
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">35</field>
+        <fieldname="question_type">multiple_choice</field>
+        <fieldname="column_nb">6</field>
+        <fieldname="allow_value_image"eval="True"/>
+        <fieldname="constr_mandatory"eval="True"/>
+    </record>
+    <recordid="survey_demo_quiz_p4_q5_sug1"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q5"/>
+        <fieldname="sequence">1</field>
+        <fieldname="value">DouglasFir</field>
+        <fieldname="value_image"type="base64"file="survey/static/img/douglas_fir.jpg"/>
+        <fieldname="is_correct"eval="True"/>
+        <fieldname="answer_score">5</field>
+    </record>
+    <recordid="survey_demo_quiz_p4_q5_sug2"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q5"/>
+        <fieldname="sequence">2</field>
+        <fieldname="value">NorwaySpruce</field>
+        <fieldname="value_image"type="base64"file="survey/static/img/norway_spruce.jpg"/>
+        <fieldname="is_correct"eval="True"/>
+        <fieldname="answer_score">5</field>
+    </record>
+    <recordid="survey_demo_quiz_p4_q5_sug3"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q5"/>
+        <fieldname="sequence">3</field>
+        <fieldname="value">EuropeanYew</field>
+        <fieldname="value_image"type="base64"file="survey/static/img/european_yew.jpg"/>
+        <fieldname="is_correct"eval="True"/>
+        <fieldname="answer_score">5</field>
+    </record>
+    <recordid="survey_demo_quiz_p4_q5_sug4"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q5"/>
+        <fieldname="sequence">4</field>
+        <fieldname="value">MountainPine</field>
+        <fieldname="value_image"type="base64"file="survey/static/img/mountain_pine.jpg"/>
+        <fieldname="is_correct"eval="True"/>
+        <fieldname="answer_score">5</field>
+    </record>
+
+    <recordid="survey_demo_quiz_p4_q6"model="survey.question">
+        <fieldname="title">Afterwatchingthisvideo,willyouswearthatyouarenotgoingtoprocrastinatetotrimyourhedgethisyear?</field>
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">36</field>
+        <fieldname="question_type">simple_choice</field>
+        <fieldname="column_nb">6</field>
+        <fieldname="description"type="html">
+            <divclass="text-center">
+                <divclass="media_iframe_video"data-oe-expression="//www.youtube.com/embed/7y4T6yv5L1k?autoplay=0&amp;rel=0"style="width:50%;">
+                    <divclass="css_editable_mode_display"/>
+                    <divclass="media_iframe_video_size"contenteditable="false"/>
+                    <iframesrc="//www.youtube.com/embed/7y4T6yv5L1k?autoplay=0&amp;rel=0"frameborder="0"contenteditable="false"></iframe>
                 </div><br/>
             </div>
         </field>
     </record>
-    <record id="survey_demo_quiz_p4_q6_sug1" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q6"/>
-        <field name="sequence">1</field>
-        <field name="value">Yes</field>
-        <field name="is_correct" eval="True"/>
-        <field name="answer_score">10</field>
+    <recordid="survey_demo_quiz_p4_q6_sug1"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q6"/>
+        <fieldname="sequence">1</field>
+        <fieldname="value">Yes</field>
+        <fieldname="is_correct"eval="True"/>
+        <fieldname="answer_score">10</field>
     </record>
-    <record id="survey_demo_quiz_p4_q6_sug2" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q6"/>
-        <field name="sequence">2</field>
-        <field name="value">No</field>
+    <recordid="survey_demo_quiz_p4_q6_sug2"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q6"/>
+        <fieldname="sequence">2</field>
+        <fieldname="value">No</field>
     </record>
-    <record id="survey_demo_quiz_p4_q6_sug3" model="survey.question.answer">
-        <field name="question_id" ref="survey_demo_quiz_p4_q6"/>
-        <field name="sequence">3</field>
-        <field name="value">Perhaps</field>
-        <field name="answer_score">-10</field>
+    <recordid="survey_demo_quiz_p4_q6_sug3"model="survey.question.answer">
+        <fieldname="question_id"ref="survey_demo_quiz_p4_q6"/>
+        <fieldname="sequence">3</field>
+        <fieldname="value">Perhaps</field>
+        <fieldname="answer_score">-10</field>
     </record>
 
-    <!-- Page 5: Feedback - non scored question -->
-    <record id="survey_demo_quiz_p5" model="survey.question">
-        <field name="title">Your feeling</field>
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">40</field>
-        <field name="question_type" eval="False"/>
-        <field name="is_page" eval="True"/>
-        <field name="description" type="html">
-            <p>We may be interested by your input.</p></field>
+    <!--Page5:Feedback-nonscoredquestion-->
+    <recordid="survey_demo_quiz_p5"model="survey.question">
+        <fieldname="title">Yourfeeling</field>
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">40</field>
+        <fieldname="question_type"eval="False"/>
+        <fieldname="is_page"eval="True"/>
+        <fieldname="description"type="html">
+            <p>Wemaybeinterestedbyyourinput.</p></field>
     </record>
-    <record id="survey_demo_quiz_p5_q1" model="survey.question">
-        <field name="survey_id" ref="survey_demo_quiz"/>
-        <field name="sequence">41</field>
-        <field name="title">What do you think about this survey ?</field>
-        <field name="description" type="html"><span>If you don't like us, please try to be as objective as possible.</span></field>
-        <field name="question_type">simple_choice</field>
-        <field name="comments_allowed" eval="True"/>
-        <field name="comment_count_as_answer" eval="True"/>
-        <field name="constr_mandatory" eval="False"/>
+    <recordid="survey_demo_quiz_p5_q1"model="survey.question">
+        <fieldname="survey_id"ref="survey_demo_quiz"/>
+        <fieldname="sequence">41</field>
+        <fieldname="title">Whatdoyouthinkaboutthissurvey?</field>
+        <fieldname="description"type="html"><span>Ifyoudon'tlikeus,pleasetrytobeasobjectiveaspossible.</span></field>
+        <fieldname="question_type">simple_choice</field>
+        <fieldname="comments_allowed"eval="True"/>
+        <fieldname="comment_count_as_answer"eval="True"/>
+        <fieldname="constr_mandatory"eval="False"/>
     </record>
-        <record id="survey_demo_quiz_p5_q1_sug1" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p5_q1"/>
-            <field name="sequence">1</field>
-            <field name="value">Good</field>
+        <recordid="survey_demo_quiz_p5_q1_sug1"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p5_q1"/>
+            <fieldname="sequence">1</field>
+            <fieldname="value">Good</field>
         </record>
-        <record id="survey_demo_quiz_p5_q1_sug2" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p5_q1"/>
-            <field name="sequence">2</field>
-            <field name="value">Not Good, Not Bad</field>
+        <recordid="survey_demo_quiz_p5_q1_sug2"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p5_q1"/>
+            <fieldname="sequence">2</field>
+            <fieldname="value">NotGood,NotBad</field>
         </record>
-        <record id="survey_demo_quiz_p5_q1_sug3" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p5_q1"/>
-            <field name="sequence">3</field>
-            <field name="value">Iznogoud</field>
+        <recordid="survey_demo_quiz_p5_q1_sug3"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p5_q1"/>
+            <fieldname="sequence">3</field>
+            <fieldname="value">Iznogoud</field>
         </record>
-        <record id="survey_demo_quiz_p5_q1_sug4" model="survey.question.answer">
-            <field name="question_id" ref="survey_demo_quiz_p5_q1"/>
-            <field name="sequence">4</field>
-            <field name="value">I have no idea, I'm a dog!</field>
+        <recordid="survey_demo_quiz_p5_q1_sug4"model="survey.question.answer">
+            <fieldname="question_id"ref="survey_demo_quiz_p5_q1"/>
+            <fieldname="sequence">4</field>
+            <fieldname="value">Ihavenoidea,I'madog!</field>
         </record>
 </data></flectra>

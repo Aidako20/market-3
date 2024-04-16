@@ -1,36 +1,36 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class StockScrap(models.Model):
-    _inherit = 'stock.scrap'
+classStockScrap(models.Model):
+    _inherit='stock.scrap'
 
-    production_id = fields.Many2one(
-        'mrp.production', 'Manufacturing Order',
-        states={'done': [('readonly', True)]}, check_company=True)
-    workorder_id = fields.Many2one(
-        'mrp.workorder', 'Work Order',
-        states={'done': [('readonly', True)]},
-        help='Not to restrict or prefer quants, but informative.', check_company=True)
+    production_id=fields.Many2one(
+        'mrp.production','ManufacturingOrder',
+        states={'done':[('readonly',True)]},check_company=True)
+    workorder_id=fields.Many2one(
+        'mrp.workorder','WorkOrder',
+        states={'done':[('readonly',True)]},
+        help='Nottorestrictorpreferquants,butinformative.',check_company=True)
 
     @api.onchange('workorder_id')
-    def _onchange_workorder_id(self):
-        if self.workorder_id:
-            self.location_id = self.workorder_id.production_id.location_src_id.id
+    def_onchange_workorder_id(self):
+        ifself.workorder_id:
+            self.location_id=self.workorder_id.production_id.location_src_id.id
 
     @api.onchange('production_id')
-    def _onchange_production_id(self):
-        if self.production_id:
-            self.location_id = self.production_id.move_raw_ids.filtered(lambda x: x.state not in ('done', 'cancel')) and self.production_id.location_src_id.id or self.production_id.location_dest_id.id
+    def_onchange_production_id(self):
+        ifself.production_id:
+            self.location_id=self.production_id.move_raw_ids.filtered(lambdax:x.statenotin('done','cancel'))andself.production_id.location_src_id.idorself.production_id.location_dest_id.id
 
-    def _prepare_move_values(self):
-        vals = super(StockScrap, self)._prepare_move_values()
-        if self.production_id:
-            vals['origin'] = vals['origin'] or self.production_id.name
-            if self.product_id in self.production_id.move_finished_ids.mapped('product_id'):
-                vals.update({'production_id': self.production_id.id})
+    def_prepare_move_values(self):
+        vals=super(StockScrap,self)._prepare_move_values()
+        ifself.production_id:
+            vals['origin']=vals['origin']orself.production_id.name
+            ifself.product_idinself.production_id.move_finished_ids.mapped('product_id'):
+                vals.update({'production_id':self.production_id.id})
             else:
-                vals.update({'raw_material_production_id': self.production_id.id})
-        return vals
+                vals.update({'raw_material_production_id':self.production_id.id})
+        returnvals

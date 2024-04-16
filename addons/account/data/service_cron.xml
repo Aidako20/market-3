@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="ir_cron_auto_post_draft_entry" model="ir.cron">
-        <field name="name">Account; Post draft entries with auto_post set to True up to today</field>
-        <field name="interval_number">1</field>
-        <field name="interval_type">days</field>
-        <field name="numbercall">-1</field>
-        <field name="nextcall" eval="(DateTime.now().replace(hour=2, minute=0) + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')" />
-        <field name="doall" eval="False"/>
-        <field name="model_id" ref="model_account_move"/>
-        <field name="code">model._autopost_draft_entries()</field>
-        <field name="state">code</field>
+    <recordid="ir_cron_auto_post_draft_entry"model="ir.cron">
+        <fieldname="name">Account;Postdraftentrieswithauto_postsettoTrueuptotoday</field>
+        <fieldname="interval_number">1</field>
+        <fieldname="interval_type">days</field>
+        <fieldname="numbercall">-1</field>
+        <fieldname="nextcall"eval="(DateTime.now().replace(hour=2,minute=0)+timedelta(days=1)).strftime('%Y-%m-%d%H:%M:%S')"/>
+        <fieldname="doall"eval="False"/>
+        <fieldname="model_id"ref="model_account_move"/>
+        <fieldname="code">model._autopost_draft_entries()</field>
+        <fieldname="state">code</field>
     </record>
 </flectra>

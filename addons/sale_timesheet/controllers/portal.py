@@ -1,83 +1,83 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import http, _
-from flectra.http import request
-from flectra.osv import expression
+fromflectraimporthttp,_
+fromflectra.httpimportrequest
+fromflectra.osvimportexpression
 
-from flectra.addons.account.controllers import portal
-from flectra.addons.hr_timesheet.controllers.portal import TimesheetCustomerPortal
+fromflectra.addons.account.controllersimportportal
+fromflectra.addons.hr_timesheet.controllers.portalimportTimesheetCustomerPortal
 
 
-class PortalAccount(portal.PortalAccount):
+classPortalAccount(portal.PortalAccount):
 
-    def _invoice_get_page_view_values(self, invoice, access_token, **kwargs):
-        values = super(PortalAccount, self)._invoice_get_page_view_values(invoice, access_token, **kwargs)
-        domain = request.env['account.analytic.line']._timesheet_get_portal_domain()
-        domain = expression.AND([
+    def_invoice_get_page_view_values(self,invoice,access_token,**kwargs):
+        values=super(PortalAccount,self)._invoice_get_page_view_values(invoice,access_token,**kwargs)
+        domain=request.env['account.analytic.line']._timesheet_get_portal_domain()
+        domain=expression.AND([
             domain,
             request.env['account.analytic.line']._timesheet_get_sale_domain(
                 invoice.mapped('line_ids.sale_line_ids'),
                 request.env['account.move'].browse([invoice.id])
             )
         ])
-        values['timesheets'] = request.env['account.analytic.line'].sudo().search(domain)
-        values['is_uom_day'] = request.env['account.analytic.line'].sudo()._is_timesheet_encode_uom_day()
-        return values
+        values['timesheets']=request.env['account.analytic.line'].sudo().search(domain)
+        values['is_uom_day']=request.env['account.analytic.line'].sudo()._is_timesheet_encode_uom_day()
+        returnvalues
 
 
-class CustomerPortal(portal.CustomerPortal):
-    def _order_get_page_view_values(self, order, access_token, **kwargs):
-        values = super(CustomerPortal, self)._order_get_page_view_values(order, access_token, **kwargs)
-        domain = request.env['account.analytic.line']._timesheet_get_portal_domain()
-        domain = expression.AND([
+classCustomerPortal(portal.CustomerPortal):
+    def_order_get_page_view_values(self,order,access_token,**kwargs):
+        values=super(CustomerPortal,self)._order_get_page_view_values(order,access_token,**kwargs)
+        domain=request.env['account.analytic.line']._timesheet_get_portal_domain()
+        domain=expression.AND([
             domain,
             request.env['account.analytic.line']._timesheet_get_sale_domain(
                 order.mapped('order_line'),
                 order.invoice_ids
             )
         ])
-        values['timesheets'] = request.env['account.analytic.line'].sudo().search(domain)
-        values['is_uom_day'] = request.env['account.analytic.line'].sudo()._is_timesheet_encode_uom_day()
-        return values
+        values['timesheets']=request.env['account.analytic.line'].sudo().search(domain)
+        values['is_uom_day']=request.env['account.analytic.line'].sudo()._is_timesheet_encode_uom_day()
+        returnvalues
 
 
-class SaleTimesheetCustomerPortal(TimesheetCustomerPortal):
+classSaleTimesheetCustomerPortal(TimesheetCustomerPortal):
 
-    def _get_searchbar_inputs(self):
-        searchbar_inputs = super()._get_searchbar_inputs()
+    def_get_searchbar_inputs(self):
+        searchbar_inputs=super()._get_searchbar_inputs()
         searchbar_inputs.update(
-            sol={'input': 'sol', 'label': _('Search in Sales Order Item')},
-            sol_id={'input': 'sol_id', 'label': _('Search in Sales Order Item ID')},
-            invoice={'input': 'invoice_id', 'label': _('Search in Invoice ID')})
-        return searchbar_inputs
+            sol={'input':'sol','label':_('SearchinSalesOrderItem')},
+            sol_id={'input':'sol_id','label':_('SearchinSalesOrderItemID')},
+            invoice={'input':'invoice_id','label':_('SearchinInvoiceID')})
+        returnsearchbar_inputs
 
-    def _get_searchbar_groupby(self):
-        searchbar_groupby = super()._get_searchbar_groupby()
-        searchbar_groupby.update(sol={'input': 'sol', 'label': _('Sales Order Item')})
-        return searchbar_groupby
+    def_get_searchbar_groupby(self):
+        searchbar_groupby=super()._get_searchbar_groupby()
+        searchbar_groupby.update(sol={'input':'sol','label':_('SalesOrderItem')})
+        returnsearchbar_groupby
 
-    def _get_search_domain(self, search_in, search):
-        search_domain = super()._get_search_domain(search_in, search)
-        if search_in in ('sol', 'all'):
-            search_domain = expression.OR([search_domain, [('so_line', 'ilike', search)]])
-        if search_in in ('sol_id', 'invoice_id'):
-            search = int(search) if search.isdigit() else 0
-        if search_in == 'sol_id':
-            search_domain = expression.OR([search_domain, [('so_line.id', '=', search)]])
-        if search_in == 'invoice_id':
-            invoice = request.env['account.move'].browse(search)
-            domain = request.env['account.analytic.line']._timesheet_get_sale_domain(invoice.mapped('invoice_line_ids.sale_line_ids'), invoice)
-            search_domain = expression.OR([search_domain, domain])
-        return search_domain
+    def_get_search_domain(self,search_in,search):
+        search_domain=super()._get_search_domain(search_in,search)
+        ifsearch_inin('sol','all'):
+            search_domain=expression.OR([search_domain,[('so_line','ilike',search)]])
+        ifsearch_inin('sol_id','invoice_id'):
+            search=int(search)ifsearch.isdigit()else0
+        ifsearch_in=='sol_id':
+            search_domain=expression.OR([search_domain,[('so_line.id','=',search)]])
+        ifsearch_in=='invoice_id':
+            invoice=request.env['account.move'].browse(search)
+            domain=request.env['account.analytic.line']._timesheet_get_sale_domain(invoice.mapped('invoice_line_ids.sale_line_ids'),invoice)
+            search_domain=expression.OR([search_domain,domain])
+        returnsearch_domain
 
-    def _get_groupby_mapping(self):
-        groupby_mapping = super()._get_groupby_mapping()
+    def_get_groupby_mapping(self):
+        groupby_mapping=super()._get_groupby_mapping()
         groupby_mapping.update(sol='so_line')
-        return groupby_mapping
+        returngroupby_mapping
 
-    @http.route(['/my/timesheets', '/my/timesheets/page/<int:page>'], type='http', auth="user", website=True)
-    def portal_my_timesheets(self, page=1, sortby=None, filterby=None, search=None, search_in='all', groupby='sol', **kw):
-        if search and search_in and search_in in ('sol_id', 'invoice_id') and not search.isdigit():
-            search = '0'
-        return super().portal_my_timesheets(page, sortby, filterby, search, search_in, groupby, **kw)
+    @http.route(['/my/timesheets','/my/timesheets/page/<int:page>'],type='http',auth="user",website=True)
+    defportal_my_timesheets(self,page=1,sortby=None,filterby=None,search=None,search_in='all',groupby='sol',**kw):
+        ifsearchandsearch_inandsearch_inin('sol_id','invoice_id')andnotsearch.isdigit():
+            search='0'
+        returnsuper().portal_my_timesheets(page,sortby,filterby,search,search_in,groupby,**kw)

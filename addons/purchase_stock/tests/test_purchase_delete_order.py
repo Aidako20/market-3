@@ -1,42 +1,42 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.exceptions import UserError
-from .common import PurchaseTestCommon
+fromflectra.exceptionsimportUserError
+from.commonimportPurchaseTestCommon
 
 
-class TestDeleteOrder(PurchaseTestCommon):
+classTestDeleteOrder(PurchaseTestCommon):
 
-    def test_00_delete_order(self):
-        ''' Testcase for deleting purchase order with purchase user group'''
+    deftest_00_delete_order(self):
+        '''Testcasefordeletingpurchaseorderwithpurchaseusergroup'''
 
-        # In order to test delete process on purchase order,tried to delete a confirmed order and check Error Message.
-        partner = self.env['res.partner'].create({'name': 'My Partner'})
+        #Inordertotestdeleteprocessonpurchaseorder,triedtodeleteaconfirmedorderandcheckErrorMessage.
+        partner=self.env['res.partner'].create({'name':'MyPartner'})
 
-        purchase_order = self.env['purchase.order'].create({
-            'partner_id': partner.id,
-            'state': 'purchase',
+        purchase_order=self.env['purchase.order'].create({
+            'partner_id':partner.id,
+            'state':'purchase',
         })
-        purchase_order_1 = purchase_order.with_user(self.res_users_purchase_user)
-        with self.assertRaises(UserError):
+        purchase_order_1=purchase_order.with_user(self.res_users_purchase_user)
+        withself.assertRaises(UserError):
             purchase_order_1.unlink()
 
-        # Delete 'cancelled' purchase order with user group
-        purchase_order = self.env['purchase.order'].create({
-            'partner_id': partner.id,
-            'state': 'purchase',
+        #Delete'cancelled'purchaseorderwithusergroup
+        purchase_order=self.env['purchase.order'].create({
+            'partner_id':partner.id,
+            'state':'purchase',
         })
-        purchase_order_2 = purchase_order.with_user(self.res_users_purchase_user)
+        purchase_order_2=purchase_order.with_user(self.res_users_purchase_user)
         purchase_order_2.button_cancel()
-        self.assertEqual(purchase_order_2.state, 'cancel', 'PO is cancelled!')
+        self.assertEqual(purchase_order_2.state,'cancel','POiscancelled!')
         purchase_order_2.unlink()
 
-        # Delete 'draft' purchase order with user group
-        purchase_order = self.env['purchase.order'].create({
-            'partner_id': partner.id,
-            'state': 'draft',
+        #Delete'draft'purchaseorderwithusergroup
+        purchase_order=self.env['purchase.order'].create({
+            'partner_id':partner.id,
+            'state':'draft',
         })
-        purchase_order_3 = purchase_order.with_user(self.res_users_purchase_user)
+        purchase_order_3=purchase_order.with_user(self.res_users_purchase_user)
         purchase_order_3.button_cancel()
-        self.assertEqual(purchase_order_3.state, 'cancel', 'PO is cancelled!')
+        self.assertEqual(purchase_order_3.state,'cancel','POiscancelled!')
         purchase_order_3.unlink()

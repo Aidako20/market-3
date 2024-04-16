@@ -1,34 +1,34 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra.tests import TransactionCase
-from flectra.exceptions import UserError
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectra.testsimportTransactionCase
+fromflectra.exceptionsimportUserError
 
-import flectra.tests
+importflectra.tests
 
 
-@flectra.tests.tagged('external', '-standard')
-class TestGeoLocalize(TransactionCase):
+@flectra.tests.tagged('external','-standard')
+classTestGeoLocalize(TransactionCase):
 
-    def test_default_openstreetmap(self):
-        """ Test that openstreetmap localize service works. """
-        test_partner = self.env.ref('base.res_partner_2')
+    deftest_default_openstreetmap(self):
+        """Testthatopenstreetmaplocalizeserviceworks."""
+        test_partner=self.env.ref('base.res_partner_2')
         test_partner.geo_localize()
         self.assertTrue(test_partner.partner_longitude)
         self.assertTrue(test_partner.partner_latitude)
         self.assertTrue(test_partner.date_localization)
 
-        # we don't check here that the localization is at right place
-        # but just that result is realistic float coordonates
-        self.assertTrue(float(test_partner.partner_longitude) != 0.0)
-        self.assertTrue(float(test_partner.partner_latitude) != 0.0)
+        #wedon'tcheckherethatthelocalizationisatrightplace
+        #butjustthatresultisrealisticfloatcoordonates
+        self.assertTrue(float(test_partner.partner_longitude)!=0.0)
+        self.assertTrue(float(test_partner.partner_latitude)!=0.0)
 
-    def test_googlemap_without_api_key(self):
-        """ Without providing API key to google maps,
-        the service doesn't work."""
-        test_partner = self.env.ref('base.res_partner_address_4')
-        google_map = self.env.ref('base_geolocalize.geoprovider_google_map').id
-        self.env['ir.config_parameter'].set_param('base_geolocalize.geo_provider', google_map)
-        with self.assertRaises(UserError):
+    deftest_googlemap_without_api_key(self):
+        """WithoutprovidingAPIkeytogooglemaps,
+        theservicedoesn'twork."""
+        test_partner=self.env.ref('base.res_partner_address_4')
+        google_map=self.env.ref('base_geolocalize.geoprovider_google_map').id
+        self.env['ir.config_parameter'].set_param('base_geolocalize.geo_provider',google_map)
+        withself.assertRaises(UserError):
             test_partner.geo_localize()
         self.assertFalse(test_partner.partner_longitude)
         self.assertFalse(test_partner.partner_latitude)

@@ -1,80 +1,80 @@
-flectra.define('mail/static/src/components/discuss_mobile_mailbox_selection/discuss_mobile_mailbox_selection_tests.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/discuss_mobile_mailbox_selection/discuss_mobile_mailbox_selection_tests.js',function(require){
+'usestrict';
 
-const {
+const{
     afterEach,
     afterNextRender,
     beforeEach,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+}=require('mail/static/src/utils/test_utils.js');
 
-QUnit.module('mail', {}, function () {
-QUnit.module('components', {}, function () {
-QUnit.module('discuss_mobile_mailbox_selection', {}, function () {
-QUnit.module('discuss_mobile_mailbox_selection_tests.js', {
-    beforeEach() {
+QUnit.module('mail',{},function(){
+QUnit.module('components',{},function(){
+QUnit.module('discuss_mobile_mailbox_selection',{},function(){
+QUnit.module('discuss_mobile_mailbox_selection_tests.js',{
+    beforeEach(){
         beforeEach(this);
 
-        this.start = async params => {
-            const { env, widget } = await start(Object.assign(
+        this.start=asyncparams=>{
+            const{env,widget}=awaitstart(Object.assign(
                 {
-                    autoOpenDiscuss: true,
-                    data: this.data,
-                    env: {
-                        browser: {
-                            innerHeight: 640,
-                            innerWidth: 360,
+                    autoOpenDiscuss:true,
+                    data:this.data,
+                    env:{
+                        browser:{
+                            innerHeight:640,
+                            innerWidth:360,
                         },
-                        device: {
-                            isMobile: true,
+                        device:{
+                            isMobile:true,
                         },
                     },
-                    hasDiscuss: true,
+                    hasDiscuss:true,
                 },
                 params,
             ));
-            this.env = env;
-            this.widget = widget;
+            this.env=env;
+            this.widget=widget;
         };
     },
-    afterEach() {
+    afterEach(){
         afterEach(this);
     },
 });
 
-QUnit.test('select another mailbox', async function (assert) {
+QUnit.test('selectanothermailbox',asyncfunction(assert){
     assert.expect(7);
 
-    await this.start();
+    awaitthis.start();
     assert.containsOnce(
         document.body,
         '.o_Discuss',
-        "should display discuss initially"
+        "shoulddisplaydiscussinitially"
     );
     assert.hasClass(
         document.querySelector('.o_Discuss'),
         'o-mobile',
-        "discuss should be opened in mobile mode"
+        "discussshouldbeopenedinmobilemode"
     );
     assert.containsOnce(
         document.body,
         '.o_Discuss_thread',
-        "discuss should display a thread initially"
+        "discussshoulddisplayathreadinitially"
     );
     assert.strictEqual(
         document.querySelector('.o_Discuss_thread').dataset.threadLocalId,
         this.env.messaging.inbox.localId,
-        "inbox mailbox should be opened initially"
+        "inboxmailboxshouldbeopenedinitially"
     );
     assert.containsOnce(
         document.body,
         `.o_DiscussMobileMailboxSelection_button[
             data-mailbox-local-id="${this.env.messaging.starred.localId}"
         ]`,
-        "should have a button to open starred mailbox"
+        "shouldhaveabuttontoopenstarredmailbox"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_DiscussMobileMailboxSelection_button[
             data-mailbox-local-id="${this.env.messaging.starred.localId}"]
         `).click()
@@ -82,44 +82,44 @@ QUnit.test('select another mailbox', async function (assert) {
     assert.containsOnce(
         document.body,
         '.o_Discuss_thread',
-        "discuss should still have a thread after clicking on starred mailbox"
+        "discussshouldstillhaveathreadafterclickingonstarredmailbox"
     );
     assert.strictEqual(
         document.querySelector('.o_Discuss_thread').dataset.threadLocalId,
         this.env.messaging.starred.localId,
-        "starred mailbox should be opened after clicking on it"
+        "starredmailboxshouldbeopenedafterclickingonit"
     );
 });
 
-QUnit.test('auto-select "Inbox" when discuss had channel as active thread', async function (assert) {
+QUnit.test('auto-select"Inbox"whendiscusshadchannelasactivethread',asyncfunction(assert){
     assert.expect(3);
 
-    this.data['mail.channel'].records.push({ id: 20 });
-    await this.start({
-        discuss: {
-            context: {
-                active_id: 20,
+    this.data['mail.channel'].records.push({id:20});
+    awaitthis.start({
+        discuss:{
+            context:{
+                active_id:20,
             },
         }
     });
     assert.hasClass(
         document.querySelector('.o_MobileMessagingNavbar_tab[data-tab-id="channel"]'),
         'o-active',
-        "'channel' tab should be active initially when loading discuss with channel id as active_id"
+        "'channel'tabshouldbeactiveinitiallywhenloadingdiscusswithchannelidasactive_id"
     );
 
-    await afterNextRender(() => document.querySelector('.o_MobileMessagingNavbar_tab[data-tab-id="mailbox"]').click());
+    awaitafterNextRender(()=>document.querySelector('.o_MobileMessagingNavbar_tab[data-tab-id="mailbox"]').click());
     assert.hasClass(
         document.querySelector('.o_MobileMessagingNavbar_tab[data-tab-id="mailbox"]'),
         'o-active',
-        "'mailbox' tab should be selected after click on mailbox tab"
+        "'mailbox'tabshouldbeselectedafterclickonmailboxtab"
     );
     assert.hasClass(
         document.querySelector(`.o_DiscussMobileMailboxSelection_button[data-mailbox-local-id="${
             this.env.messaging.inbox.localId
         }"]`),
         'o-active',
-        "'Inbox' mailbox should be auto-selected after click on mailbox tab"
+        "'Inbox'mailboxshouldbeauto-selectedafterclickonmailboxtab"
     );
 });
 

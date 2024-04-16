@@ -1,171 +1,171 @@
 /*!
-  * Bootstrap util.js v4.3.1 (https://getbootstrap.com/)
-  * Copyright 2011-2019 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
-  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  *Bootstraputil.jsv4.3.1(https://getbootstrap.com/)
+  *Copyright2011-2019TheBootstrapAuthors(https://github.com/twbs/bootstrap/graphs/contributors)
+  *LicensedunderMIT(https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery')) :
-  typeof define === 'function' && define.amd ? define(['jquery'], factory) :
-  (global = global || self, global.Util = factory(global.jQuery));
-}(this, function ($) { 'use strict';
+(function(global,factory){
+  typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory(require('jquery')):
+  typeofdefine==='function'&&define.amd?define(['jquery'],factory):
+  (global=global||self,global.Util=factory(global.jQuery));
+}(this,function($){'usestrict';
 
-  $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
+  $=$&&$.hasOwnProperty('default')?$['default']:$;
 
   /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v4.3.1): util.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-   * --------------------------------------------------------------------------
+   *--------------------------------------------------------------------------
+   *Bootstrap(v4.3.1):util.js
+   *LicensedunderMIT(https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   *--------------------------------------------------------------------------
    */
   /**
-   * ------------------------------------------------------------------------
-   * Private TransitionEnd Helpers
-   * ------------------------------------------------------------------------
+   *------------------------------------------------------------------------
+   *PrivateTransitionEndHelpers
+   *------------------------------------------------------------------------
    */
 
-  var TRANSITION_END = 'transitionend';
-  var MAX_UID = 1000000;
-  var MILLISECONDS_MULTIPLIER = 1000; // Shoutout AngusCroll (https://goo.gl/pxwQGp)
+  varTRANSITION_END='transitionend';
+  varMAX_UID=1000000;
+  varMILLISECONDS_MULTIPLIER=1000;//ShoutoutAngusCroll(https://goo.gl/pxwQGp)
 
-  function toType(obj) {
-    return {}.toString.call(obj).match(/\s([a-z]+)/i)[1].toLowerCase();
+  functiontoType(obj){
+    return{}.toString.call(obj).match(/\s([a-z]+)/i)[1].toLowerCase();
   }
 
-  function getSpecialTransitionEndEvent() {
-    return {
-      bindType: TRANSITION_END,
-      delegateType: TRANSITION_END,
-      handle: function handle(event) {
-        if ($(event.target).is(this)) {
-          return event.handleObj.handler.apply(this, arguments); // eslint-disable-line prefer-rest-params
+  functiongetSpecialTransitionEndEvent(){
+    return{
+      bindType:TRANSITION_END,
+      delegateType:TRANSITION_END,
+      handle:functionhandle(event){
+        if($(event.target).is(this)){
+          returnevent.handleObj.handler.apply(this,arguments);//eslint-disable-lineprefer-rest-params
         }
 
-        return undefined; // eslint-disable-line no-undefined
+        returnundefined;//eslint-disable-lineno-undefined
       }
     };
   }
 
-  function transitionEndEmulator(duration) {
-    var _this = this;
+  functiontransitionEndEmulator(duration){
+    var_this=this;
 
-    var called = false;
-    $(this).one(Util.TRANSITION_END, function () {
-      called = true;
+    varcalled=false;
+    $(this).one(Util.TRANSITION_END,function(){
+      called=true;
     });
-    setTimeout(function () {
-      if (!called) {
+    setTimeout(function(){
+      if(!called){
         Util.triggerTransitionEnd(_this);
       }
-    }, duration);
-    return this;
+    },duration);
+    returnthis;
   }
 
-  function setTransitionEndSupport() {
-    $.fn.emulateTransitionEnd = transitionEndEmulator;
-    $.event.special[Util.TRANSITION_END] = getSpecialTransitionEndEvent();
+  functionsetTransitionEndSupport(){
+    $.fn.emulateTransitionEnd=transitionEndEmulator;
+    $.event.special[Util.TRANSITION_END]=getSpecialTransitionEndEvent();
   }
   /**
-   * --------------------------------------------------------------------------
-   * Public Util Api
-   * --------------------------------------------------------------------------
+   *--------------------------------------------------------------------------
+   *PublicUtilApi
+   *--------------------------------------------------------------------------
    */
 
 
-  var Util = {
-    TRANSITION_END: 'bsTransitionEnd',
-    getUID: function getUID(prefix) {
-      do {
-        // eslint-disable-next-line no-bitwise
-        prefix += ~~(Math.random() * MAX_UID); // "~~" acts like a faster Math.floor() here
-      } while (document.getElementById(prefix));
+  varUtil={
+    TRANSITION_END:'bsTransitionEnd',
+    getUID:functiongetUID(prefix){
+      do{
+        //eslint-disable-next-lineno-bitwise
+        prefix+=~~(Math.random()*MAX_UID);//"~~"actslikeafasterMath.floor()here
+      }while(document.getElementById(prefix));
 
-      return prefix;
+      returnprefix;
     },
-    getSelectorFromElement: function getSelectorFromElement(element) {
-      var selector = element.getAttribute('data-target');
+    getSelectorFromElement:functiongetSelectorFromElement(element){
+      varselector=element.getAttribute('data-target');
 
-      if (!selector || selector === '#') {
-        var hrefAttr = element.getAttribute('href');
-        selector = hrefAttr && hrefAttr !== '#' ? hrefAttr.trim() : '';
+      if(!selector||selector==='#'){
+        varhrefAttr=element.getAttribute('href');
+        selector=hrefAttr&&hrefAttr!=='#'?hrefAttr.trim():'';
       }
 
-      try {
-        return document.querySelector(selector) ? selector : null;
-      } catch (err) {
-        return null;
+      try{
+        returndocument.querySelector(selector)?selector:null;
+      }catch(err){
+        returnnull;
       }
     },
-    getTransitionDurationFromElement: function getTransitionDurationFromElement(element) {
-      if (!element) {
-        return 0;
-      } // Get transition-duration of the element
+    getTransitionDurationFromElement:functiongetTransitionDurationFromElement(element){
+      if(!element){
+        return0;
+      }//Gettransition-durationoftheelement
 
 
-      var transitionDuration = $(element).css('transition-duration');
-      var transitionDelay = $(element).css('transition-delay');
-      var floatTransitionDuration = parseFloat(transitionDuration);
-      var floatTransitionDelay = parseFloat(transitionDelay); // Return 0 if element or transition duration is not found
+      vartransitionDuration=$(element).css('transition-duration');
+      vartransitionDelay=$(element).css('transition-delay');
+      varfloatTransitionDuration=parseFloat(transitionDuration);
+      varfloatTransitionDelay=parseFloat(transitionDelay);//Return0ifelementortransitiondurationisnotfound
 
-      if (!floatTransitionDuration && !floatTransitionDelay) {
-        return 0;
-      } // If multiple durations are defined, take the first
+      if(!floatTransitionDuration&&!floatTransitionDelay){
+        return0;
+      }//Ifmultipledurationsaredefined,takethefirst
 
 
-      transitionDuration = transitionDuration.split(',')[0];
-      transitionDelay = transitionDelay.split(',')[0];
-      return (parseFloat(transitionDuration) + parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
+      transitionDuration=transitionDuration.split(',')[0];
+      transitionDelay=transitionDelay.split(',')[0];
+      return(parseFloat(transitionDuration)+parseFloat(transitionDelay))*MILLISECONDS_MULTIPLIER;
     },
-    reflow: function reflow(element) {
-      return element.offsetHeight;
+    reflow:functionreflow(element){
+      returnelement.offsetHeight;
     },
-    triggerTransitionEnd: function triggerTransitionEnd(element) {
+    triggerTransitionEnd:functiontriggerTransitionEnd(element){
       $(element).trigger(TRANSITION_END);
     },
-    // TODO: Remove in v5
-    supportsTransitionEnd: function supportsTransitionEnd() {
-      return Boolean(TRANSITION_END);
+    //TODO:Removeinv5
+    supportsTransitionEnd:functionsupportsTransitionEnd(){
+      returnBoolean(TRANSITION_END);
     },
-    isElement: function isElement(obj) {
-      return (obj[0] || obj).nodeType;
+    isElement:functionisElement(obj){
+      return(obj[0]||obj).nodeType;
     },
-    typeCheckConfig: function typeCheckConfig(componentName, config, configTypes) {
-      for (var property in configTypes) {
-        if (Object.prototype.hasOwnProperty.call(configTypes, property)) {
-          var expectedTypes = configTypes[property];
-          var value = config[property];
-          var valueType = value && Util.isElement(value) ? 'element' : toType(value);
+    typeCheckConfig:functiontypeCheckConfig(componentName,config,configTypes){
+      for(varpropertyinconfigTypes){
+        if(Object.prototype.hasOwnProperty.call(configTypes,property)){
+          varexpectedTypes=configTypes[property];
+          varvalue=config[property];
+          varvalueType=value&&Util.isElement(value)?'element':toType(value);
 
-          if (!new RegExp(expectedTypes).test(valueType)) {
-            throw new Error(componentName.toUpperCase() + ": " + ("Option \"" + property + "\" provided type \"" + valueType + "\" ") + ("but expected type \"" + expectedTypes + "\"."));
+          if(!newRegExp(expectedTypes).test(valueType)){
+            thrownewError(componentName.toUpperCase()+":"+("Option\""+property+"\"providedtype\""+valueType+"\"")+("butexpectedtype\""+expectedTypes+"\"."));
           }
         }
       }
     },
-    findShadowRoot: function findShadowRoot(element) {
-      if (!document.documentElement.attachShadow) {
-        return null;
-      } // Can find the shadow root otherwise it'll return the document
+    findShadowRoot:functionfindShadowRoot(element){
+      if(!document.documentElement.attachShadow){
+        returnnull;
+      }//Canfindtheshadowroototherwiseit'llreturnthedocument
 
 
-      if (typeof element.getRootNode === 'function') {
-        var root = element.getRootNode();
-        return root instanceof ShadowRoot ? root : null;
+      if(typeofelement.getRootNode==='function'){
+        varroot=element.getRootNode();
+        returnrootinstanceofShadowRoot?root:null;
       }
 
-      if (element instanceof ShadowRoot) {
-        return element;
-      } // when we don't find a shadow root
+      if(elementinstanceofShadowRoot){
+        returnelement;
+      }//whenwedon'tfindashadowroot
 
 
-      if (!element.parentNode) {
-        return null;
+      if(!element.parentNode){
+        returnnull;
       }
 
-      return Util.findShadowRoot(element.parentNode);
+      returnUtil.findShadowRoot(element.parentNode);
     }
   };
   setTransitionEndSupport();
 
-  return Util;
+  returnUtil;
 
 }));

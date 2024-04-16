@@ -1,37 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="view_move_form_inherit_purchase" model="ir.ui.view">
-        <field name="name">account.move.inherit.purchase</field>
-        <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_move_form"/>
-        <field name="groups_id" eval="[(4, ref('purchase.group_purchase_user'))]"/>
-        <field name="arch" type="xml">
-            <!-- Auto-complete could be done from either a bill either a purchase order -->
-            <field name="invoice_vendor_bill_id" position="after">
-                <field name="purchase_id" invisible="1"/>
-                <label for="purchase_vendor_bill_id" string="Auto-Complete" class="oe_edit_only"
-                       attrs="{'invisible': ['|', ('state','!=','draft'), ('move_type', '!=', 'in_invoice')]}" />
-                <field name="purchase_vendor_bill_id" nolabel="1"
-                       attrs="{'invisible': ['|', ('state','!=','draft'), ('move_type', '!=', 'in_invoice')]}"
+    <recordid="view_move_form_inherit_purchase"model="ir.ui.view">
+        <fieldname="name">account.move.inherit.purchase</field>
+        <fieldname="model">account.move</field>
+        <fieldname="inherit_id"ref="account.view_move_form"/>
+        <fieldname="groups_id"eval="[(4,ref('purchase.group_purchase_user'))]"/>
+        <fieldname="arch"type="xml">
+            <!--Auto-completecouldbedonefromeitherabilleitherapurchaseorder-->
+            <fieldname="invoice_vendor_bill_id"position="after">
+                <fieldname="purchase_id"invisible="1"/>
+                <labelfor="purchase_vendor_bill_id"string="Auto-Complete"class="oe_edit_only"
+                       attrs="{'invisible':['|',('state','!=','draft'),('move_type','!=','in_invoice')]}"/>
+                <fieldname="purchase_vendor_bill_id"nolabel="1"
+                       attrs="{'invisible':['|',('state','!=','draft'),('move_type','!=','in_invoice')]}"
                        class="oe_edit_only"
-                       domain="partner_id and [('company_id', '=', company_id), ('partner_id.commercial_partner_id', '=', commercial_partner_id)] or [('company_id', '=', company_id)]"
-                       placeholder="Select a purchase order or an old bill"
-                       context="{'show_total_amount': True}"
-                       options="{'no_create': True, 'no_open': True}"/>
+                       domain="partner_idand[('company_id','=',company_id),('partner_id.commercial_partner_id','=',commercial_partner_id)]or[('company_id','=',company_id)]"
+                       placeholder="Selectapurchaseorderoranoldbill"
+                       context="{'show_total_amount':True}"
+                       options="{'no_create':True,'no_open':True}"/>
             </field>
-            <label name="invoice_vendor_bill_id_label" position="attributes">
-                <attribute name="invisible">1</attribute>
+            <labelname="invoice_vendor_bill_id_label"position="attributes">
+                <attributename="invisible">1</attribute>
             </label>
-            <field name="invoice_vendor_bill_id" position="attributes">
-                <attribute name="invisible">1</attribute>
+            <fieldname="invoice_vendor_bill_id"position="attributes">
+                <attributename="invisible">1</attribute>
             </field>
-            <!-- Add link to purchase_line_id to account.move.line -->
-            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='company_id']" position="after">
-                <field name="purchase_line_id" invisible="1"/>
-                <field name="purchase_order_id" attrs="{'column_invisible': [('parent.move_type', '!=', 'in_invoice')]}" optional="hide"/>
+            <!--Addlinktopurchase_line_idtoaccount.move.line-->
+            <xpathexpr="//field[@name='invoice_line_ids']/tree/field[@name='company_id']"position="after">
+                <fieldname="purchase_line_id"invisible="1"/>
+                <fieldname="purchase_order_id"attrs="{'column_invisible':[('parent.move_type','!=','in_invoice')]}"optional="hide"/>
             </xpath>
-            <xpath expr="//field[@name='line_ids']/tree/field[@name='company_id']" position="after">
-                <field name="purchase_line_id" invisible="1"/>
+            <xpathexpr="//field[@name='line_ids']/tree/field[@name='company_id']"position="after">
+                <fieldname="purchase_line_id"invisible="1"/>
             </xpath>
         </field>
     </record>

@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class StockRulesReport(models.TransientModel):
-    _inherit = 'stock.rules.report'
+classStockRulesReport(models.TransientModel):
+    _inherit='stock.rules.report'
 
-    so_route_ids = fields.Many2many('stock.location.route', string='Apply specific routes',
-        domain="[('sale_selectable', '=', True)]", help="Choose to apply SO lines specific routes.")
+    so_route_ids=fields.Many2many('stock.location.route',string='Applyspecificroutes',
+        domain="[('sale_selectable','=',True)]",help="ChoosetoapplySOlinesspecificroutes.")
 
-    def _prepare_report_data(self):
-        data = super(StockRulesReport, self)._prepare_report_data()
-        data['so_route_ids'] = self.so_route_ids.ids
-        return data
+    def_prepare_report_data(self):
+        data=super(StockRulesReport,self)._prepare_report_data()
+        data['so_route_ids']=self.so_route_ids.ids
+        returndata

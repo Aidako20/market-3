@@ -1,306 +1,306 @@
-flectra.define('mass_mailing.website_integration', function (require) {
-"use strict";
+flectra.define('mass_mailing.website_integration',function(require){
+"usestrict";
 
-var config = require('web.config');
-var core = require('web.core');
-const dom = require('web.dom');
-var Dialog = require('web.Dialog');
-var utils = require('web.utils');
-var publicWidget = require('web.public.widget');
-const session = require('web.session');
+varconfig=require('web.config');
+varcore=require('web.core');
+constdom=require('web.dom');
+varDialog=require('web.Dialog');
+varutils=require('web.utils');
+varpublicWidget=require('web.public.widget');
+constsession=require('web.session');
 
-// FIXME the 14.0 was released with this but without the google_recaptcha
-// module being added as a dependency of the website_mass_mailing module. This
-// is to be fixed in master of course but in stable, we'll have to use a
-// workaround.
-// const {ReCaptcha} = require('google_recaptcha.ReCaptchaV3');
+//FIXMEthe14.0wasreleasedwiththisbutwithoutthegoogle_recaptcha
+//modulebeingaddedasadependencyofthewebsite_mass_mailingmodule.This
+//istobefixedinmasterofcoursebutinstable,we'llhavetousea
+//workaround.
+//const{ReCaptcha}=require('google_recaptcha.ReCaptchaV3');
 
-var _t = core._t;
+var_t=core._t;
 
-let alertReCaptchaDisplayed;
+letalertReCaptchaDisplayed;
 
-publicWidget.registry.subscribe = publicWidget.Widget.extend({
-    selector: ".js_subscribe",
-    disabledInEditableMode: false,
-    read_events: {
-        'click .js_subscribe_btn': '_onSubscribeClick',
+publicWidget.registry.subscribe=publicWidget.Widget.extend({
+    selector:".js_subscribe",
+    disabledInEditableMode:false,
+    read_events:{
+        'click.js_subscribe_btn':'_onSubscribeClick',
     },
 
     /**
-     * @constructor
+     *@constructor
      */
-    init: function () {
+    init:function(){
         this._super(...arguments);
-        const ReCaptchaService = flectra.__DEBUG__.services['google_recaptcha.ReCaptchaV3'];
-        this._recaptcha = ReCaptchaService && new ReCaptchaService.ReCaptcha() || null;
+        constReCaptchaService=flectra.__DEBUG__.services['google_recaptcha.ReCaptchaV3'];
+        this._recaptcha=ReCaptchaService&&newReCaptchaService.ReCaptcha()||null;
     },
     /**
-     * @override
+     *@override
      */
-    willStart: function () {
-        if (this._recaptcha) {
+    willStart:function(){
+        if(this._recaptcha){
             this._recaptcha.loadLibs();
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var def = this._super.apply(this, arguments);
+    start:function(){
+        vardef=this._super.apply(this,arguments);
 
-        if (!this._recaptcha && this.editableMode && session.is_admin && !alertReCaptchaDisplayed) {
+        if(!this._recaptcha&&this.editableMode&&session.is_admin&&!alertReCaptchaDisplayed){
             this.displayNotification({
-                type: 'info',
-                message: _t("Do you want to install Google reCAPTCHA to secure your newsletter subscriptions?"),
-                sticky: true,
-                buttons: [{text: _t("Install now"), primary: true, click: async () => {
-                    dom.addButtonLoadingEffect($('.o_notification .btn-primary')[0]);
+                type:'info',
+                message:_t("DoyouwanttoinstallGooglereCAPTCHAtosecureyournewslettersubscriptions?"),
+                sticky:true,
+                buttons:[{text:_t("Installnow"),primary:true,click:async()=>{
+                    dom.addButtonLoadingEffect($('.o_notification.btn-primary')[0]);
 
-                    const record = await this._rpc({
-                        model: 'ir.module.module',
-                        method: 'search_read',
-                        domain: [['name', '=', 'google_recaptcha']],
-                        fields: ['id'],
-                        limit: 1,
+                    constrecord=awaitthis._rpc({
+                        model:'ir.module.module',
+                        method:'search_read',
+                        domain:[['name','=','google_recaptcha']],
+                        fields:['id'],
+                        limit:1,
                     });
-                    await this._rpc({
-                        model: 'ir.module.module',
-                        method: 'button_immediate_install',
-                        args: [[record[0]['id']]],
+                    awaitthis._rpc({
+                        model:'ir.module.module',
+                        method:'button_immediate_install',
+                        args:[[record[0]['id']]],
                     });
 
                     this.displayNotification({
-                        type: 'info',
-                        message: _t("Google reCAPTCHA is now installed! You can configure it from your website settings."),
-                        sticky: true,
-                        buttons: [{text: _t("Website settings"), primary: true, click: async () => {
-                            window.open('/web#action=website.action_website_configuration', '_blank');
+                        type:'info',
+                        message:_t("GooglereCAPTCHAisnowinstalled!Youcanconfigureitfromyourwebsitesettings."),
+                        sticky:true,
+                        buttons:[{text:_t("Websitesettings"),primary:true,click:async()=>{
+                            window.open('/web#action=website.action_website_configuration','_blank');
                         }}],
                     });
                 }}],
             });
-            alertReCaptchaDisplayed = true;
+            alertReCaptchaDisplayed=true;
         }
 
-        this.$popup = this.$target.closest('.o_newsletter_modal');
-        if (this.$popup.length) {
-            // No need to check whether the user subscribed or not if the input
-            // is in a popup as the popup won't open if he did subscribe.
-            return def;
+        this.$popup=this.$target.closest('.o_newsletter_modal');
+        if(this.$popup.length){
+            //Noneedtocheckwhethertheusersubscribedornotiftheinput
+            //isinapopupasthepopupwon'topenifhedidsubscribe.
+            returndef;
         }
 
-        if (this.editableMode) {
-            // Since there is an editor option to choose whether "Thanks" button
-            // should be visible or not, we should not vary its visibility here.
-            return def;
+        if(this.editableMode){
+            //Sincethereisaneditoroptiontochoosewhether"Thanks"button
+            //shouldbevisibleornot,weshouldnotvaryitsvisibilityhere.
+            returndef;
         }
-        const always = this._updateView.bind(this);
-        return Promise.all([def, this._rpc({
-            route: '/website_mass_mailing/is_subscriber',
-            params: {
-                'list_id': this.$target.data('list-id'),
+        constalways=this._updateView.bind(this);
+        returnPromise.all([def,this._rpc({
+            route:'/website_mass_mailing/is_subscriber',
+            params:{
+                'list_id':this.$target.data('list-id'),
             },
         }).then(always).guardedCatch(always)]);
     },
     /**
-     * @override
+     *@override
      */
-    destroy() {
-        this._updateView({is_subscriber: false});
-        this._super.apply(this, arguments);
+    destroy(){
+        this._updateView({is_subscriber:false});
+        this._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Modifies the elements to have the view of a subscriber/non-subscriber.
+     *Modifiestheelementstohavetheviewofasubscriber/non-subscriber.
      *
-     * @param {Object} data
+     *@param{Object}data
      */
-    _updateView(data) {
-        const isSubscriber = data.is_subscriber;
-        const subscribeBtnEl = this.$target[0].querySelector('.js_subscribe_btn');
-        const thanksBtnEl = this.$target[0].querySelector('.js_subscribed_btn');
-        const emailInputEl = this.$target[0].querySelector('input.js_subscribe_email');
+    _updateView(data){
+        constisSubscriber=data.is_subscriber;
+        constsubscribeBtnEl=this.$target[0].querySelector('.js_subscribe_btn');
+        constthanksBtnEl=this.$target[0].querySelector('.js_subscribed_btn');
+        constemailInputEl=this.$target[0].querySelector('input.js_subscribe_email');
 
-        subscribeBtnEl.disabled = isSubscriber;
-        emailInputEl.value = data.email || '';
-        emailInputEl.disabled = isSubscriber;
-        // Compat: remove d-none for DBs that have the button saved with it.
+        subscribeBtnEl.disabled=isSubscriber;
+        emailInputEl.value=data.email||'';
+        emailInputEl.disabled=isSubscriber;
+        //Compat:removed-noneforDBsthathavethebuttonsavedwithit.
         this.$target[0].classList.remove('d-none');
 
-        subscribeBtnEl.classList.toggle('d-none', !!isSubscriber);
-        thanksBtnEl.classList.toggle('d-none', !isSubscriber);
+        subscribeBtnEl.classList.toggle('d-none',!!isSubscriber);
+        thanksBtnEl.classList.toggle('d-none',!isSubscriber);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onSubscribeClick: async function () {
-        var self = this;
-        var $email = this.$(".js_subscribe_email:visible");
+    _onSubscribeClick:asyncfunction(){
+        varself=this;
+        var$email=this.$(".js_subscribe_email:visible");
 
-        if ($email.length && !$email.val().match(/.+@.+/)) {
+        if($email.length&&!$email.val().match(/.+@.+/)){
             this.$target.addClass('o_has_error').find('.form-control').addClass('is-invalid');
-            return false;
+            returnfalse;
         }
         this.$target.removeClass('o_has_error').find('.form-control').removeClass('is-invalid');
-        let tokenObj = null;
-        if (this._recaptcha) {
-            tokenObj = await this._recaptcha.getToken('website_mass_mailing_subscribe');
-            if (tokenObj.error) {
+        lettokenObj=null;
+        if(this._recaptcha){
+            tokenObj=awaitthis._recaptcha.getToken('website_mass_mailing_subscribe');
+            if(tokenObj.error){
                 self.displayNotification({
-                    type: 'danger',
-                    title: _t("Error"),
-                    message: tokenObj.error,
-                    sticky: true,
+                    type:'danger',
+                    title:_t("Error"),
+                    message:tokenObj.error,
+                    sticky:true,
                 });
-                return false;
+                returnfalse;
             }
         }
-        const params = {
-            'list_id': this.$target.data('list-id'),
-            'email': $email.length ? $email.val() : false,
+        constparams={
+            'list_id':this.$target.data('list-id'),
+            'email':$email.length?$email.val():false,
         };
-        if (this._recaptcha) {
-            params['recaptcha_token_response'] = tokenObj.token;
+        if(this._recaptcha){
+            params['recaptcha_token_response']=tokenObj.token;
         }
         this._rpc({
-            route: '/website_mass_mailing/subscribe',
-            params: params,
-        }).then(function (result) {
-            let toastType = result.toast_type;
-            if (toastType === 'success') {
+            route:'/website_mass_mailing/subscribe',
+            params:params,
+        }).then(function(result){
+            lettoastType=result.toast_type;
+            if(toastType==='success'){
                 self.$(".js_subscribe_btn").addClass('d-none');
                 self.$(".js_subscribed_btn").removeClass('d-none');
-                self.$('input.js_subscribe_email').prop('disabled', !!result);
-                if (self.$popup.length) {
+                self.$('input.js_subscribe_email').prop('disabled',!!result);
+                if(self.$popup.length){
                     self.$popup.modal('hide');
                 }
             }
             self.displayNotification({
-                type: toastType,
-                title: toastType === 'success' ? _t('Success') : _t('Error'),
-                message: result.toast_content,
-                sticky: true,
+                type:toastType,
+                title:toastType==='success'?_t('Success'):_t('Error'),
+                message:result.toast_content,
+                sticky:true,
             });
         });
     },
 });
 
-publicWidget.registry.newsletter_popup = publicWidget.Widget.extend({
-    selector: ".o_newsletter_popup",
-    disabledInEditableMode: false,
+publicWidget.registry.newsletter_popup=publicWidget.Widget.extend({
+    selector:".o_newsletter_popup",
+    disabledInEditableMode:false,
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var self = this;
-        var defs = [this._super.apply(this, arguments)];
-        this.websiteID = this._getContext().website_id;
-        this.listID = parseInt(this.$target.attr('data-list-id'));
-        if (!this.listID || (utils.get_cookie(_.str.sprintf("newsletter-popup-%s-%s", this.listID, this.websiteID)) && !self.editableMode)) {
-            return Promise.all(defs);
+    start:function(){
+        varself=this;
+        vardefs=[this._super.apply(this,arguments)];
+        this.websiteID=this._getContext().website_id;
+        this.listID=parseInt(this.$target.attr('data-list-id'));
+        if(!this.listID||(utils.get_cookie(_.str.sprintf("newsletter-popup-%s-%s",this.listID,this.websiteID))&&!self.editableMode)){
+            returnPromise.all(defs);
         }
-        if (this.$target.data('content') && this.editableMode) {
-            // To avoid losing user changes.
+        if(this.$target.data('content')&&this.editableMode){
+            //Toavoidlosinguserchanges.
             this._dialogInit(this.$target.data('content'));
             this.$target.removeData('quick-open');
             this.massMailingPopup.open();
-        } else {
+        }else{
             defs.push(this._rpc({
-                route: '/website_mass_mailing/get_content',
-                params: {
-                    newsletter_id: self.listID,
+                route:'/website_mass_mailing/get_content',
+                params:{
+                    newsletter_id:self.listID,
                 },
-            }).then(function (data) {
-                self._dialogInit(data.popup_content, data.email || '');
-                if (!self.editableMode && !data.is_subscriber) {
-                    if (config.device.isMobile) {
-                        setTimeout(function () {
+            }).then(function(data){
+                self._dialogInit(data.popup_content,data.email||'');
+                if(!self.editableMode&&!data.is_subscriber){
+                    if(config.device.isMobile){
+                        setTimeout(function(){
                             self._showBanner();
-                        }, 5000);
-                    } else {
-                        $(document).on('mouseleave.open_popup_event', self._showBanner.bind(self));
+                        },5000);
+                    }else{
+                        $(document).on('mouseleave.open_popup_event',self._showBanner.bind(self));
                     }
-                } else {
+                }else{
                     $(document).off('mouseleave.open_popup_event');
                 }
-                // show popup after choosing a newsletter
-                if (self.$target.data('quick-open')) {
+                //showpopupafterchoosinganewsletter
+                if(self.$target.data('quick-open')){
                     self.massMailingPopup.open();
                     self.$target.removeData('quick-open');
                 }
             }));
         }
 
-        return Promise.all(defs);
+        returnPromise.all(defs);
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
-        if (this.massMailingPopup) {
+    destroy:function(){
+        if(this.massMailingPopup){
             this.massMailingPopup.close();
         }
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @param {string} content
-     * @private
+     *@param{string}content
+     *@private
      */
-    _dialogInit: function (content, email) {
-        var self = this;
-        this.massMailingPopup = new Dialog(this, {
-            technical: false,
-            $content: $('<div/>').html(content),
-            $parentNode: this.$target,
-            backdrop: !this.editableMode,
-            dialogClass: 'p-0' + (this.editableMode ? ' oe_structure oe_empty' : ''),
-            renderFooter: false,
-            size: 'medium',
+    _dialogInit:function(content,email){
+        varself=this;
+        this.massMailingPopup=newDialog(this,{
+            technical:false,
+            $content:$('<div/>').html(content),
+            $parentNode:this.$target,
+            backdrop:!this.editableMode,
+            dialogClass:'p-0'+(this.editableMode?'oe_structureoe_empty':''),
+            renderFooter:false,
+            size:'medium',
         });
-        this.massMailingPopup.opened().then(function () {
-            var $modal = self.massMailingPopup.$modal;
-            $modal.find('header button.close').on('mouseup', function (ev) {
+        this.massMailingPopup.opened().then(function(){
+            var$modal=self.massMailingPopup.$modal;
+            $modal.find('headerbutton.close').on('mouseup',function(ev){
                 ev.stopPropagation();
             });
             $modal.addClass('o_newsletter_modal');
-            $modal.find('.oe_structure').attr('data-editor-message', _t('DRAG BUILDING BLOCKS HERE'));
+            $modal.find('.oe_structure').attr('data-editor-message',_t('DRAGBUILDINGBLOCKSHERE'));
             $modal.find('.modal-dialog').addClass('modal-dialog-centered');
-            $modal.find('.js_subscribe').data('list-id', self.listID)
+            $modal.find('.js_subscribe').data('list-id',self.listID)
                   .find('input.js_subscribe_email').val(email);
-            self.trigger_up('widgets_start_request', {
-                editableMode: self.editableMode,
-                $target: $modal,
+            self.trigger_up('widgets_start_request',{
+                editableMode:self.editableMode,
+                $target:$modal,
             });
         });
-        this.massMailingPopup.on('closed', this, function () {
-            var $modal = self.massMailingPopup.$modal;
-            if ($modal) { // The dialog might have never been opened
-                self.$el.data('content', $modal.find('.modal-body').html());
+        this.massMailingPopup.on('closed',this,function(){
+            var$modal=self.massMailingPopup.$modal;
+            if($modal){//Thedialogmighthaveneverbeenopened
+                self.$el.data('content',$modal.find('.modal-body').html());
             }
         });
     },
     /**
-     * @private
+     *@private
      */
-    _showBanner: function () {
+    _showBanner:function(){
         this.massMailingPopup.open();
-        utils.set_cookie(_.str.sprintf("newsletter-popup-%s-%s", this.listID, this.websiteID), true);
+        utils.set_cookie(_.str.sprintf("newsletter-popup-%s-%s",this.listID,this.websiteID),true);
         $(document).off('mouseleave.open_popup_event');
     },
 });

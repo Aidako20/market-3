@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, fields
-
-
-class MailActivityType(models.Model):
-    _inherit = "mail.activity.type"
-
-    category = fields.Selection(selection_add=[('reminder', 'Reminder')])
+fromflectraimportmodels,fields
 
 
-class MailActivity(models.Model):
-    _inherit = "mail.activity"
+classMailActivityType(models.Model):
+    _inherit="mail.activity.type"
 
-    note_id = fields.Many2one('note.note', string="Related Note", ondelete='cascade')
+    category=fields.Selection(selection_add=[('reminder','Reminder')])
+
+
+classMailActivity(models.Model):
+    _inherit="mail.activity"
+
+    note_id=fields.Many2one('note.note',string="RelatedNote",ondelete='cascade')

@@ -1,23 +1,23 @@
-flectra.define('point_of_sale.IndependentToOrderScreen', function (require) {
-    'use strict';
+flectra.define('point_of_sale.IndependentToOrderScreen',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
+    constPosComponent=require('point_of_sale.PosComponent');
 
-    class IndependentToOrderScreen extends PosComponent {
+    classIndependentToOrderScreenextendsPosComponent{
         /**
-         * Alias the forceTriggerSelectedOrder method as it also
-         * means 'closing' this screen.
+         *AliastheforceTriggerSelectedOrdermethodasitalso
+         *means'closing'thisscreen.
          */
-        close() {
+        close(){
             this.forceTriggerSelectedOrder();
         }
-        forceTriggerSelectedOrder() {
-            // Calling this method forcefully trigger change
-            // on the selectedOrder attribute, which then shows the screen of the
-            // current order, essentially closing this screen.
-            this.env.pos.trigger('change:selectedOrder', this.env.pos, this.env.pos.get_order());
+        forceTriggerSelectedOrder(){
+            //Callingthismethodforcefullytriggerchange
+            //ontheselectedOrderattribute,whichthenshowsthescreenofthe
+            //currentorder,essentiallyclosingthisscreen.
+            this.env.pos.trigger('change:selectedOrder',this.env.pos,this.env.pos.get_order());
         }
     }
 
-    return IndependentToOrderScreen;
+    returnIndependentToOrderScreen;
 });

@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="OrderlineDetails" owl="1">
-        <li class="orderline">
-            <span class="product-name">
-                <t t-esc="productName" />
+    <tt-name="OrderlineDetails"owl="1">
+        <liclass="orderline">
+            <spanclass="product-name">
+                <tt-esc="productName"/>
             </span>
-            <span class="price">
-                <t t-esc="totalPrice" />
+            <spanclass="price">
+                <tt-esc="totalPrice"/>
             </span>
-            <li class="info">
+            <liclass="info">
                 <strong>
-                    <t t-esc="quantity" />
+                    <tt-esc="quantity"/>
                 </strong>
-                <span><t t-esc="pricePerUnit" /></span>
+                <span><tt-esc="pricePerUnit"/></span>
             </li>
         </li>
     </t>

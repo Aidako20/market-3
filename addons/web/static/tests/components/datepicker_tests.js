@@ -1,386 +1,386 @@
-flectra.define('web.datepicker_tests', function (require) {
-    "use strict";
+flectra.define('web.datepicker_tests',function(require){
+    "usestrict";
 
-    const { DatePicker, DateTimePicker } = require('web.DatePickerOwl');
-    const testUtils = require('web.test_utils');
-    const time = require('web.time');
-    const CustomFilterItem = require('web.CustomFilterItem');
-    const ActionModel = require('web/static/src/js/views/action_model.js');
+    const{DatePicker,DateTimePicker}=require('web.DatePickerOwl');
+    consttestUtils=require('web.test_utils');
+    consttime=require('web.time');
+    constCustomFilterItem=require('web.CustomFilterItem');
+    constActionModel=require('web/static/src/js/views/action_model.js');
 
-    const { createComponent } = testUtils;
+    const{createComponent}=testUtils;
 
-    QUnit.module('Components', {}, function () {
+    QUnit.module('Components',{},function(){
 
         QUnit.module('DatePicker');
 
-        QUnit.test("basic rendering", async function (assert) {
+        QUnit.test("basicrendering",asyncfunction(assert){
             assert.expect(8);
 
-            const picker = await createComponent(DatePicker, {
-                props: { date: moment('01/09/1997') },
+            constpicker=awaitcreateComponent(DatePicker,{
+                props:{date:moment('01/09/1997')},
             });
 
-            assert.containsOnce(picker, 'input.o_input.o_datepicker_input');
-            assert.containsOnce(picker, 'span.o_datepicker_button');
-            assert.containsNone(document.body, 'div.bootstrap-datetimepicker-widget');
+            assert.containsOnce(picker,'input.o_input.o_datepicker_input');
+            assert.containsOnce(picker,'span.o_datepicker_button');
+            assert.containsNone(document.body,'div.bootstrap-datetimepicker-widget');
 
-            const input = picker.el.querySelector('input.o_input.o_datepicker_input');
-            assert.strictEqual(input.value, '01/09/1997',
-                "Value should be the one given")
+            constinput=picker.el.querySelector('input.o_input.o_datepicker_input');
+            assert.strictEqual(input.value,'01/09/1997',
+                "Valueshouldbetheonegiven")
                 ;
-            assert.strictEqual(input.dataset.target, `#${picker.el.id}`,
-                "DatePicker id should match its input target");
+            assert.strictEqual(input.dataset.target,`#${picker.el.id}`,
+                "DatePickeridshouldmatchitsinputtarget");
 
-            await testUtils.dom.click(input);
+            awaittestUtils.dom.click(input);
 
-            assert.containsOnce(document.body, 'div.bootstrap-datetimepicker-widget .datepicker');
-            assert.containsNone(document.body, 'div.bootstrap-datetimepicker-widget .timepicker');
+            assert.containsOnce(document.body,'div.bootstrap-datetimepicker-widget.datepicker');
+            assert.containsNone(document.body,'div.bootstrap-datetimepicker-widget.timepicker');
             assert.strictEqual(
-                document.querySelector('.datepicker .day.active').dataset.day,
+                document.querySelector('.datepicker.day.active').dataset.day,
                 '01/09/1997',
-                "Datepicker should have set the correct day"
+                "Datepickershouldhavesetthecorrectday"
             );
 
             picker.destroy();
         });
 
-        QUnit.test("pick a date", async function (assert) {
+        QUnit.test("pickadate",asyncfunction(assert){
             assert.expect(5);
 
-            const picker = await createComponent(DatePicker, {
-                props: { date: moment('01/09/1997') },
-                intercepts: {
-                    'datetime-changed': ev => {
+            constpicker=awaitcreateComponent(DatePicker,{
+                props:{date:moment('01/09/1997')},
+                intercepts:{
+                    'datetime-changed':ev=>{
                         assert.step('datetime-changed');
-                        assert.strictEqual(ev.detail.date.format('MM/DD/YYYY'), '02/08/1997',
-                            "Event should transmit the correct date");
+                        assert.strictEqual(ev.detail.date.format('MM/DD/YYYY'),'02/08/1997',
+                            "Eventshouldtransmitthecorrectdate");
                     },
                 }
             });
-            const input = picker.el.querySelector('.o_datepicker_input');
+            constinput=picker.el.querySelector('.o_datepicker_input');
 
-            await testUtils.dom.click(input);
-            await testUtils.dom.click(document.querySelector('.datepicker th.next')); // next month
+            awaittestUtils.dom.click(input);
+            awaittestUtils.dom.click(document.querySelector('.datepickerth.next'));//nextmonth
 
             assert.verifySteps([]);
 
-            await testUtils.dom.click(document.querySelectorAll('.datepicker table td')[15]); // previous day
+            awaittestUtils.dom.click(document.querySelectorAll('.datepickertabletd')[15]);//previousday
 
-            assert.strictEqual(input.value, '02/08/1997');
+            assert.strictEqual(input.value,'02/08/1997');
             assert.verifySteps(['datetime-changed']);
 
             picker.destroy();
         });
 
-        QUnit.test("pick a date with locale", async function (assert) {
+        QUnit.test("pickadatewithlocale",asyncfunction(assert){
             assert.expect(4);
 
-            // weird shit of moment https://github.com/moment/moment/issues/5600
-            // When month regex returns undefined, january is taken (first month of the default "nameless" locale)
-            const originalLocale = moment.locale();
-            // Those parameters will make Moment's internal compute stuff that are relevant to the bug
-            const months = 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_');
-            const monthsShort = 'janv._févr._mars_avr._mai_juin_juil._août_custSept._oct._nov._déc.'.split('_');
-            moment.defineLocale('frenchForTests', { months, monthsShort, code: 'frTest' , monthsParseExact: true});
+            //weirdshitofmomenthttps://github.com/moment/moment/issues/5600
+            //Whenmonthregexreturnsundefined,januaryistaken(firstmonthofthedefault"nameless"locale)
+            constoriginalLocale=moment.locale();
+            //ThoseparameterswillmakeMoment'sinternalcomputestuffthatarerelevanttothebug
+            constmonths='janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_');
+            constmonthsShort='janv._févr._mars_avr._mai_juin_juil._août_custSept._oct._nov._déc.'.split('_');
+            moment.defineLocale('frenchForTests',{months,monthsShort,code:'frTest',monthsParseExact:true});
 
-            const hasChanged = testUtils.makeTestPromise();
-            const picker = await createComponent(DatePicker, {
-                translateParameters: {
-                    date_format: "%d %b, %Y", // Those are important too
-                    time_format: "%H:%M:%S",
+            consthasChanged=testUtils.makeTestPromise();
+            constpicker=awaitcreateComponent(DatePicker,{
+                translateParameters:{
+                    date_format:"%d%b,%Y",//Thoseareimportanttoo
+                    time_format:"%H:%M:%S",
                 },
-                props: { date: moment('09/01/1997', 'MM/DD/YYYY') },
-                intercepts: {
-                    'datetime-changed': ev => {
+                props:{date:moment('09/01/1997','MM/DD/YYYY')},
+                intercepts:{
+                    'datetime-changed':ev=>{
                         assert.step('datetime-changed');
-                        assert.strictEqual(ev.detail.date.format('MM/DD/YYYY'), '09/02/1997',
-                            "Event should transmit the correct date");
+                        assert.strictEqual(ev.detail.date.format('MM/DD/YYYY'),'09/02/1997',
+                            "Eventshouldtransmitthecorrectdate");
                         hasChanged.resolve();
                     },
                 }
             });
-            const input = picker.el.querySelector('.o_datepicker_input');
-            await testUtils.dom.click(input);
+            constinput=picker.el.querySelector('.o_datepicker_input');
+            awaittestUtils.dom.click(input);
 
-            await testUtils.dom.click(document.querySelectorAll('.datepicker table td')[3]); // next day
+            awaittestUtils.dom.click(document.querySelectorAll('.datepickertabletd')[3]);//nextday
 
-            assert.strictEqual(input.value, '02 custSept., 1997');
+            assert.strictEqual(input.value,'02custSept.,1997');
             assert.verifySteps(['datetime-changed']);
 
             moment.locale(originalLocale);
-            moment.updateLocale('englishForTest', null);
+            moment.updateLocale('englishForTest',null);
 
             picker.destroy();
         });
 
-        QUnit.test("enter a date value", async function (assert) {
+        QUnit.test("enteradatevalue",asyncfunction(assert){
             assert.expect(5);
 
-            const picker = await createComponent(DatePicker, {
-                props: { date: moment('01/09/1997') },
-                intercepts: {
-                    'datetime-changed': ev => {
+            constpicker=awaitcreateComponent(DatePicker,{
+                props:{date:moment('01/09/1997')},
+                intercepts:{
+                    'datetime-changed':ev=>{
                         assert.step('datetime-changed');
-                        assert.strictEqual(ev.detail.date.format('MM/DD/YYYY'), '02/08/1997',
-                            "Event should transmit the correct date");
+                        assert.strictEqual(ev.detail.date.format('MM/DD/YYYY'),'02/08/1997',
+                            "Eventshouldtransmitthecorrectdate");
                     },
                 }
             });
-            const input = picker.el.querySelector('.o_datepicker_input');
+            constinput=picker.el.querySelector('.o_datepicker_input');
 
             assert.verifySteps([]);
 
-            await testUtils.fields.editAndTrigger(input, '02/08/1997', ['change']);
+            awaittestUtils.fields.editAndTrigger(input,'02/08/1997',['change']);
 
             assert.verifySteps(['datetime-changed']);
 
-            await testUtils.dom.click(input);
+            awaittestUtils.dom.click(input);
 
             assert.strictEqual(
-                document.querySelector('.datepicker .day.active').dataset.day,
+                document.querySelector('.datepicker.day.active').dataset.day,
                 '02/08/1997',
-                "Datepicker should have set the correct day"
+                "Datepickershouldhavesetthecorrectday"
             );
 
             picker.destroy();
         });
 
-        QUnit.test("Date format is correctly set", async function (assert) {
+        QUnit.test("Dateformatiscorrectlyset",asyncfunction(assert){
             assert.expect(2);
 
-            testUtils.patch(time, { getLangDateFormat: () => "YYYY/MM/DD" });
-            const picker = await createComponent(DatePicker, {
-                props: { date: moment('01/09/1997') },
+            testUtils.patch(time,{getLangDateFormat:()=>"YYYY/MM/DD"});
+            constpicker=awaitcreateComponent(DatePicker,{
+                props:{date:moment('01/09/1997')},
             });
-            const input = picker.el.querySelector('.o_datepicker_input');
+            constinput=picker.el.querySelector('.o_datepicker_input');
 
-            assert.strictEqual(input.value, '1997/01/09');
+            assert.strictEqual(input.value,'1997/01/09');
 
-            // Forces an update to assert that the registered format is the correct one
-            await testUtils.dom.click(input);
+            //Forcesanupdatetoassertthattheregisteredformatisthecorrectone
+            awaittestUtils.dom.click(input);
 
-            assert.strictEqual(input.value, '1997/01/09');
+            assert.strictEqual(input.value,'1997/01/09');
 
             picker.destroy();
             testUtils.unpatch(time);
         });
 
-        QUnit.test('custom filter date', async function (assert) {
+        QUnit.test('customfilterdate',asyncfunction(assert){
             assert.expect(5);
 
-            class MockedSearchModel extends ActionModel {
-                dispatch(method, ...args) {
-                    assert.strictEqual(method, 'createNewFilters');
-                    const preFilters = args[0];
-                    const preFilter = preFilters[0];
+            classMockedSearchModelextendsActionModel{
+                dispatch(method,...args){
+                    assert.strictEqual(method,'createNewFilters');
+                    constpreFilters=args[0];
+                    constpreFilter=preFilters[0];
                     assert.strictEqual(preFilter.description,
-                        'A date is equal to "05/05/2005"',
-                        "description should be in localized format");
+                        'Adateisequalto"05/05/2005"',
+                        "descriptionshouldbeinlocalizedformat");
                     assert.deepEqual(preFilter.domain,
                         '[["date_field","=","2005-05-05"]]',
-                        "domain should be in UTC format");
+                        "domainshouldbeinUTCformat");
                 }
             }
-            const searchModel = new MockedSearchModel();
-            const date_field = { name: 'date_field', string: "A date", type: 'date', searchable: true };
-            const cfi = await createComponent(CustomFilterItem, {
-                props: {
-                    fields: { date_field },
+            constsearchModel=newMockedSearchModel();
+            constdate_field={name:'date_field',string:"Adate",type:'date',searchable:true};
+            constcfi=awaitcreateComponent(CustomFilterItem,{
+                props:{
+                    fields:{date_field},
                 },
-                env: { searchModel },
+                env:{searchModel},
             });
 
-            await testUtils.controlPanel.toggleAddCustomFilter(cfi);
-            await testUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'), 'date_field');
-            const valueInput = cfi.el.querySelector('.o_generator_menu_value .o_input');
-            await testUtils.dom.click(valueInput);
-            assert.containsOnce(document.body, '.datepicker');
-            await testUtils.fields.editSelect(valueInput, '05/05/2005');
-            await testUtils.controlPanel.applyFilter(cfi);
-            assert.containsNone(document.body, '.datepicker');
+            awaittestUtils.controlPanel.toggleAddCustomFilter(cfi);
+            awaittestUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'),'date_field');
+            constvalueInput=cfi.el.querySelector('.o_generator_menu_value.o_input');
+            awaittestUtils.dom.click(valueInput);
+            assert.containsOnce(document.body,'.datepicker');
+            awaittestUtils.fields.editSelect(valueInput,'05/05/2005');
+            awaittestUtils.controlPanel.applyFilter(cfi);
+            assert.containsNone(document.body,'.datepicker');
             cfi.destroy();
         });
 
 
         QUnit.module('DateTimePicker');
 
-        QUnit.test("basic rendering", async function (assert) {
+        QUnit.test("basicrendering",asyncfunction(assert){
             assert.expect(11);
 
-            const picker = await createComponent(DateTimePicker, {
-                props: { date: moment('01/09/1997 12:30:01') },
+            constpicker=awaitcreateComponent(DateTimePicker,{
+                props:{date:moment('01/09/199712:30:01')},
             });
 
-            assert.containsOnce(picker, 'input.o_input.o_datepicker_input');
-            assert.containsOnce(picker, 'span.o_datepicker_button');
-            assert.containsNone(document.body, 'div.bootstrap-datetimepicker-widget');
+            assert.containsOnce(picker,'input.o_input.o_datepicker_input');
+            assert.containsOnce(picker,'span.o_datepicker_button');
+            assert.containsNone(document.body,'div.bootstrap-datetimepicker-widget');
 
-            const input = picker.el.querySelector('input.o_input.o_datepicker_input');
-            assert.strictEqual(input.value, '01/09/1997 12:30:01', "Value should be the one given");
-            assert.strictEqual(input.dataset.target, `#${picker.el.id}`,
-                "DateTimePicker id should match its input target");
+            constinput=picker.el.querySelector('input.o_input.o_datepicker_input');
+            assert.strictEqual(input.value,'01/09/199712:30:01',"Valueshouldbetheonegiven");
+            assert.strictEqual(input.dataset.target,`#${picker.el.id}`,
+                "DateTimePickeridshouldmatchitsinputtarget");
 
-            await testUtils.dom.click(input);
+            awaittestUtils.dom.click(input);
 
-            assert.containsOnce(document.body, 'div.bootstrap-datetimepicker-widget .datepicker');
-            assert.containsOnce(document.body, 'div.bootstrap-datetimepicker-widget .timepicker');
+            assert.containsOnce(document.body,'div.bootstrap-datetimepicker-widget.datepicker');
+            assert.containsOnce(document.body,'div.bootstrap-datetimepicker-widget.timepicker');
             assert.strictEqual(
-                document.querySelector('.datepicker .day.active').dataset.day,
+                document.querySelector('.datepicker.day.active').dataset.day,
                 '01/09/1997',
-                "Datepicker should have set the correct day");
+                "Datepickershouldhavesetthecorrectday");
 
-            assert.strictEqual(document.querySelector('.timepicker .timepicker-hour').innerText.trim(), '12',
-                "Datepicker should have set the correct hour");
-            assert.strictEqual(document.querySelector('.timepicker .timepicker-minute').innerText.trim(), '30',
-                "Datepicker should have set the correct minute");
-            assert.strictEqual(document.querySelector('.timepicker .timepicker-second').innerText.trim(), '01',
-                "Datepicker should have set the correct second");
+            assert.strictEqual(document.querySelector('.timepicker.timepicker-hour').innerText.trim(),'12',
+                "Datepickershouldhavesetthecorrecthour");
+            assert.strictEqual(document.querySelector('.timepicker.timepicker-minute').innerText.trim(),'30',
+                "Datepickershouldhavesetthecorrectminute");
+            assert.strictEqual(document.querySelector('.timepicker.timepicker-second').innerText.trim(),'01',
+                "Datepickershouldhavesetthecorrectsecond");
 
             picker.destroy();
         });
 
-        QUnit.test("pick a date and time", async function (assert) {
+        QUnit.test("pickadateandtime",asyncfunction(assert){
             assert.expect(5);
 
-            const picker = await createComponent(DateTimePicker, {
-                props: { date: moment('01/09/1997 12:30:01') },
-                intercepts: {
-                    'datetime-changed': ev => {
+            constpicker=awaitcreateComponent(DateTimePicker,{
+                props:{date:moment('01/09/199712:30:01')},
+                intercepts:{
+                    'datetime-changed':ev=>{
                         assert.step('datetime-changed');
-                        assert.strictEqual(ev.detail.date.format('MM/DD/YYYY HH:mm:ss'), '02/08/1997 15:45:05',
-                            "Event should transmit the correct date");
+                        assert.strictEqual(ev.detail.date.format('MM/DD/YYYYHH:mm:ss'),'02/08/199715:45:05',
+                            "Eventshouldtransmitthecorrectdate");
                     },
                 }
             });
-            const input = picker.el.querySelector('input.o_input.o_datepicker_input');
+            constinput=picker.el.querySelector('input.o_input.o_datepicker_input');
 
-            await testUtils.dom.click(input);
-            await testUtils.dom.click(document.querySelector('.datepicker th.next')); // February
-            await testUtils.dom.click(document.querySelectorAll('.datepicker table td')[15]); // 08
-            await testUtils.dom.click(document.querySelector('a[title="Select Time"]'));
-            await testUtils.dom.click(document.querySelector('.timepicker .timepicker-hour'));
-            await testUtils.dom.click(document.querySelectorAll('.timepicker .hour')[15]); // 15h
-            await testUtils.dom.click(document.querySelector('.timepicker .timepicker-minute'));
-            await testUtils.dom.click(document.querySelectorAll('.timepicker .minute')[9]); // 45m
-            await testUtils.dom.click(document.querySelector('.timepicker .timepicker-second'));
+            awaittestUtils.dom.click(input);
+            awaittestUtils.dom.click(document.querySelector('.datepickerth.next'));//February
+            awaittestUtils.dom.click(document.querySelectorAll('.datepickertabletd')[15]);//08
+            awaittestUtils.dom.click(document.querySelector('a[title="SelectTime"]'));
+            awaittestUtils.dom.click(document.querySelector('.timepicker.timepicker-hour'));
+            awaittestUtils.dom.click(document.querySelectorAll('.timepicker.hour')[15]);//15h
+            awaittestUtils.dom.click(document.querySelector('.timepicker.timepicker-minute'));
+            awaittestUtils.dom.click(document.querySelectorAll('.timepicker.minute')[9]);//45m
+            awaittestUtils.dom.click(document.querySelector('.timepicker.timepicker-second'));
 
             assert.verifySteps([]);
 
-            await testUtils.dom.click(document.querySelectorAll('.timepicker .second')[1]); // 05s
+            awaittestUtils.dom.click(document.querySelectorAll('.timepicker.second')[1]);//05s
 
-            assert.strictEqual(input.value, '02/08/1997 15:45:05');
+            assert.strictEqual(input.value,'02/08/199715:45:05');
             assert.verifySteps(['datetime-changed']);
 
             picker.destroy();
         });
 
-        QUnit.test("pick a date and time with locale", async function (assert) {
+        QUnit.test("pickadateandtimewithlocale",asyncfunction(assert){
             assert.expect(5);
 
-            // weird shit of moment https://github.com/moment/moment/issues/5600
-            // When month regex returns undefined, january is taken (first month of the default "nameless" locale)
-            const originalLocale = moment.locale();
-            // Those parameters will make Moment's internal compute stuff that are relevant to the bug
-            const months = 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_');
-            const monthsShort = 'janv._févr._mars_avr._mai_juin_juil._août_custSept._oct._nov._déc.'.split('_');
-            moment.defineLocale('frenchForTests', { months, monthsShort, code: 'frTest' , monthsParseExact: true});
+            //weirdshitofmomenthttps://github.com/moment/moment/issues/5600
+            //Whenmonthregexreturnsundefined,januaryistaken(firstmonthofthedefault"nameless"locale)
+            constoriginalLocale=moment.locale();
+            //ThoseparameterswillmakeMoment'sinternalcomputestuffthatarerelevanttothebug
+            constmonths='janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_');
+            constmonthsShort='janv._févr._mars_avr._mai_juin_juil._août_custSept._oct._nov._déc.'.split('_');
+            moment.defineLocale('frenchForTests',{months,monthsShort,code:'frTest',monthsParseExact:true});
 
-            const hasChanged = testUtils.makeTestPromise();
-            const picker = await createComponent(DateTimePicker, {
-                translateParameters: {
-                    date_format: "%d %b, %Y", // Those are important too
-                    time_format: "%H:%M:%S",
+            consthasChanged=testUtils.makeTestPromise();
+            constpicker=awaitcreateComponent(DateTimePicker,{
+                translateParameters:{
+                    date_format:"%d%b,%Y",//Thoseareimportanttoo
+                    time_format:"%H:%M:%S",
                 },
-                props: { date: moment('09/01/1997 12:30:01', 'MM/DD/YYYY HH:mm:ss') },
-                intercepts: {
-                    'datetime-changed': ev => {
+                props:{date:moment('09/01/199712:30:01','MM/DD/YYYYHH:mm:ss')},
+                intercepts:{
+                    'datetime-changed':ev=>{
                         assert.step('datetime-changed');
-                        assert.strictEqual(ev.detail.date.format('MM/DD/YYYY HH:mm:ss'), '09/02/1997 15:45:05',
-                            "Event should transmit the correct date");
+                        assert.strictEqual(ev.detail.date.format('MM/DD/YYYYHH:mm:ss'),'09/02/199715:45:05',
+                            "Eventshouldtransmitthecorrectdate");
                         hasChanged.resolve();
                     },
                 }
             });
 
-            const input = picker.el.querySelector('input.o_input.o_datepicker_input');
+            constinput=picker.el.querySelector('input.o_input.o_datepicker_input');
 
-            await testUtils.dom.click(input);
-            await testUtils.dom.click(document.querySelectorAll('.datepicker table td')[3]); // next day
-            await testUtils.dom.click(document.querySelector('a[title="Select Time"]'));
-            await testUtils.dom.click(document.querySelector('.timepicker .timepicker-hour'));
-            await testUtils.dom.click(document.querySelectorAll('.timepicker .hour')[15]); // 15h
-            await testUtils.dom.click(document.querySelector('.timepicker .timepicker-minute'));
-            await testUtils.dom.click(document.querySelectorAll('.timepicker .minute')[9]); // 45m
-            await testUtils.dom.click(document.querySelector('.timepicker .timepicker-second'));
+            awaittestUtils.dom.click(input);
+            awaittestUtils.dom.click(document.querySelectorAll('.datepickertabletd')[3]);//nextday
+            awaittestUtils.dom.click(document.querySelector('a[title="SelectTime"]'));
+            awaittestUtils.dom.click(document.querySelector('.timepicker.timepicker-hour'));
+            awaittestUtils.dom.click(document.querySelectorAll('.timepicker.hour')[15]);//15h
+            awaittestUtils.dom.click(document.querySelector('.timepicker.timepicker-minute'));
+            awaittestUtils.dom.click(document.querySelectorAll('.timepicker.minute')[9]);//45m
+            awaittestUtils.dom.click(document.querySelector('.timepicker.timepicker-second'));
 
             assert.verifySteps([]);
-            await testUtils.dom.click(document.querySelectorAll('.timepicker .second')[1]); // 05s
+            awaittestUtils.dom.click(document.querySelectorAll('.timepicker.second')[1]);//05s
 
-            assert.strictEqual(input.value, '02 custSept., 1997 15:45:05');
+            assert.strictEqual(input.value,'02custSept.,199715:45:05');
             assert.verifySteps(['datetime-changed']);
 
-            await hasChanged;
+            awaithasChanged;
 
             moment.locale(originalLocale);
-            moment.updateLocale('frenchForTests', null);
+            moment.updateLocale('frenchForTests',null);
 
             picker.destroy();
         });
 
-        QUnit.test("enter a datetime value", async function (assert) {
+        QUnit.test("enteradatetimevalue",asyncfunction(assert){
             assert.expect(9);
 
-            const picker = await createComponent(DateTimePicker, {
-                props: { date: moment('01/09/1997 12:30:01') },
-                intercepts: {
-                    'datetime-changed': ev => {
+            constpicker=awaitcreateComponent(DateTimePicker,{
+                props:{date:moment('01/09/199712:30:01')},
+                intercepts:{
+                    'datetime-changed':ev=>{
                         assert.step('datetime-changed');
-                        assert.strictEqual(ev.detail.date.format('MM/DD/YYYY HH:mm:ss'), '02/08/1997 15:45:05',
-                            "Event should transmit the correct date");
+                        assert.strictEqual(ev.detail.date.format('MM/DD/YYYYHH:mm:ss'),'02/08/199715:45:05',
+                            "Eventshouldtransmitthecorrectdate");
                     },
                 }
             });
-            const input = picker.el.querySelector('.o_datepicker_input');
+            constinput=picker.el.querySelector('.o_datepicker_input');
 
             assert.verifySteps([]);
 
-            await testUtils.fields.editAndTrigger(input, '02/08/1997 15:45:05', ['change']);
+            awaittestUtils.fields.editAndTrigger(input,'02/08/199715:45:05',['change']);
 
             assert.verifySteps(['datetime-changed']);
 
-            await testUtils.dom.click(input);
+            awaittestUtils.dom.click(input);
 
-            assert.strictEqual(input.value, '02/08/1997 15:45:05');
+            assert.strictEqual(input.value,'02/08/199715:45:05');
             assert.strictEqual(
-                document.querySelector('.datepicker .day.active').dataset.day,
+                document.querySelector('.datepicker.day.active').dataset.day,
                 '02/08/1997',
-                "Datepicker should have set the correct day"
+                "Datepickershouldhavesetthecorrectday"
             );
-            assert.strictEqual(document.querySelector('.timepicker .timepicker-hour').innerText.trim(), '15',
-                "Datepicker should have set the correct hour");
-            assert.strictEqual(document.querySelector('.timepicker .timepicker-minute').innerText.trim(), '45',
-                "Datepicker should have set the correct minute");
-            assert.strictEqual(document.querySelector('.timepicker .timepicker-second').innerText.trim(), '05',
-                "Datepicker should have set the correct second");
+            assert.strictEqual(document.querySelector('.timepicker.timepicker-hour').innerText.trim(),'15',
+                "Datepickershouldhavesetthecorrecthour");
+            assert.strictEqual(document.querySelector('.timepicker.timepicker-minute').innerText.trim(),'45',
+                "Datepickershouldhavesetthecorrectminute");
+            assert.strictEqual(document.querySelector('.timepicker.timepicker-second').innerText.trim(),'05',
+                "Datepickershouldhavesetthecorrectsecond");
 
             picker.destroy();
         });
 
-        QUnit.test("Date time format is correctly set", async function (assert) {
+        QUnit.test("Datetimeformatiscorrectlyset",asyncfunction(assert){
             assert.expect(2);
 
-            testUtils.patch(time, { getLangDatetimeFormat: () => "hh:mm:ss YYYY/MM/DD" });
-            const picker = await createComponent(DateTimePicker, {
-                props: { date: moment('01/09/1997 12:30:01') },
+            testUtils.patch(time,{getLangDatetimeFormat:()=>"hh:mm:ssYYYY/MM/DD"});
+            constpicker=awaitcreateComponent(DateTimePicker,{
+                props:{date:moment('01/09/199712:30:01')},
             });
-            const input = picker.el.querySelector('.o_datepicker_input');
+            constinput=picker.el.querySelector('.o_datepicker_input');
 
-            assert.strictEqual(input.value, '12:30:01 1997/01/09');
+            assert.strictEqual(input.value,'12:30:011997/01/09');
 
-            // Forces an update to assert that the registered format is the correct one
-            await testUtils.dom.click(input);
+            //Forcesanupdatetoassertthattheregisteredformatisthecorrectone
+            awaittestUtils.dom.click(input);
 
-            assert.strictEqual(input.value, '12:30:01 1997/01/09');
+            assert.strictEqual(input.value,'12:30:011997/01/09');
 
             picker.destroy();
             testUtils.unpatch(time);

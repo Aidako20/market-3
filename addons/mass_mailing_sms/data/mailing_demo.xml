@@ -1,168 +1,168 @@
-<?xml version="1.0" encoding="utf-8"?>
-<flectra><data noupdate="0">
-    <record id="mailing_sms_0" model="mailing.mailing">
-        <field name="name">XMas Promo</field>
-        <field name="subject">XMas Promo</field>
-        <field name="mailing_type">sms</field>
-        <field name="state">done</field>
-        <field name="user_id" ref="base.user_admin"/>
-        <field name="sent_date" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
-        <field name="campaign_id" ref="utm_campaign_0"/>
-        <field name="mailing_model_id" ref="base.model_res_partner"/>
-        <field name="mailing_domain" eval="[('parent_id', '=', ref('base.res_partner_4'))]"/>
-        <field name="body_plaintext">This week-end, incredible promotion for XMas ! See http://sms.example.com !</field>
+<?xmlversion="1.0"encoding="utf-8"?>
+<flectra><datanoupdate="0">
+    <recordid="mailing_sms_0"model="mailing.mailing">
+        <fieldname="name">XMasPromo</field>
+        <fieldname="subject">XMasPromo</field>
+        <fieldname="mailing_type">sms</field>
+        <fieldname="state">done</field>
+        <fieldname="user_id"ref="base.user_admin"/>
+        <fieldname="sent_date"eval="(DateTime.today()-relativedelta(days=5)).strftime('%Y-%m-%d%H:%M:%S')"/>
+        <fieldname="campaign_id"ref="utm_campaign_0"/>
+        <fieldname="mailing_model_id"ref="base.model_res_partner"/>
+        <fieldname="mailing_domain"eval="[('parent_id','=',ref('base.res_partner_4'))]"/>
+        <fieldname="body_plaintext">Thisweek-end,incrediblepromotionforXMas!Seehttp://sms.example.com!</field>
     </record>
-    <!-- Generate link tracker information from it -->
-    <function model="mailing.mailing" name="convert_links" eval="[ref('mass_mailing_sms.mailing_sms_0')]"/>
-    <!-- Simulate traces -->
-    <record id="mailing_sms_0_trace_0" model="mailing.trace">
-        <field name="mass_mailing_id" ref="mailing_sms_0"/>
-        <field name="trace_type">sms</field>
-        <field name="sms_number">+32465000000</field>
-        <field name="model">res.partner</field>
-        <field name="res_id" ref="base.res_partner_address_7"/>
-        <field name="sent" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+    <!--Generatelinktrackerinformationfromit-->
+    <functionmodel="mailing.mailing"name="convert_links"eval="[ref('mass_mailing_sms.mailing_sms_0')]"/>
+    <!--Simulatetraces-->
+    <recordid="mailing_sms_0_trace_0"model="mailing.trace">
+        <fieldname="mass_mailing_id"ref="mailing_sms_0"/>
+        <fieldname="trace_type">sms</field>
+        <fieldname="sms_number">+32465000000</field>
+        <fieldname="model">res.partner</field>
+        <fieldname="res_id"ref="base.res_partner_address_7"/>
+        <fieldname="sent"eval="(DateTime.today()-relativedelta(days=5)).strftime('%Y-%m-%d%H:%M:%S')"/>
     </record>
-    <record id="mailing_sms_0_trace_1" model="mailing.trace">
-        <field name="mass_mailing_id" ref="mailing_sms_0"/>
-        <field name="trace_type">sms</field>
-        <field name="sms_number">+32465000001</field>
-        <field name="model">res.partner</field>
-        <field name="res_id" ref="base.res_partner_address_13"/>
-        <field name="sent" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+    <recordid="mailing_sms_0_trace_1"model="mailing.trace">
+        <fieldname="mass_mailing_id"ref="mailing_sms_0"/>
+        <fieldname="trace_type">sms</field>
+        <fieldname="sms_number">+32465000001</field>
+        <fieldname="model">res.partner</field>
+        <fieldname="res_id"ref="base.res_partner_address_13"/>
+        <fieldname="sent"eval="(DateTime.today()-relativedelta(days=5)).strftime('%Y-%m-%d%H:%M:%S')"/>
     </record>
-    <record id="mailing_sms_0_trace_2" model="mailing.trace">
-        <field name="mass_mailing_id" ref="mailing_sms_0"/>
-        <field name="trace_type">sms</field>
-        <field name="sms_number">+32465000002</field>
-        <field name="model">res.partner</field>
-        <field name="res_id" ref="base.res_partner_address_14"/>
-        <field name="sent" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+    <recordid="mailing_sms_0_trace_2"model="mailing.trace">
+        <fieldname="mass_mailing_id"ref="mailing_sms_0"/>
+        <fieldname="trace_type">sms</field>
+        <fieldname="sms_number">+32465000002</field>
+        <fieldname="model">res.partner</field>
+        <fieldname="res_id"ref="base.res_partner_address_14"/>
+        <fieldname="sent"eval="(DateTime.today()-relativedelta(days=5)).strftime('%Y-%m-%d%H:%M:%S')"/>
     </record>
-    <record id="mailing_sms_0_trace_3" model="mailing.trace">
-        <field name="mass_mailing_id" ref="mailing_sms_0"/>
-        <field name="trace_type">sms</field>
-        <field name="sms_number">+32465000003</field>
-        <field name="model">res.partner</field>
-        <field name="res_id" ref="base.res_partner_address_24"/>
-        <field name="sent" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+    <recordid="mailing_sms_0_trace_3"model="mailing.trace">
+        <fieldname="mass_mailing_id"ref="mailing_sms_0"/>
+        <fieldname="trace_type">sms</field>
+        <fieldname="sms_number">+32465000003</field>
+        <fieldname="model">res.partner</field>
+        <fieldname="res_id"ref="base.res_partner_address_24"/>
+        <fieldname="sent"eval="(DateTime.today()-relativedelta(days=5)).strftime('%Y-%m-%d%H:%M:%S')"/>
     </record>
-    <record id="mailing_sms_0_trace_4" model="mailing.trace">
-        <field name="mass_mailing_id" ref="mailing_sms_0"/>
-        <field name="trace_type">sms</field>
-        <field name="sms_number">+32465000004</field>
-        <field name="model">res.partner</field>
-        <field name="res_id" ref="base.res_partner_address_33"/>
-        <field name="sent" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
-        <field name="exception" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+    <recordid="mailing_sms_0_trace_4"model="mailing.trace">
+        <fieldname="mass_mailing_id"ref="mailing_sms_0"/>
+        <fieldname="trace_type">sms</field>
+        <fieldname="sms_number">+32465000004</field>
+        <fieldname="model">res.partner</field>
+        <fieldname="res_id"ref="base.res_partner_address_33"/>
+        <fieldname="sent"eval="(DateTime.today()-relativedelta(days=5)).strftime('%Y-%m-%d%H:%M:%S')"/>
+        <fieldname="exception"eval="(DateTime.today()-relativedelta(days=5)).strftime('%Y-%m-%d%H:%M:%S')"/>
     </record>
-    <record id="mailing_sms_0_trace_5" model="mailing.trace">
-        <field name="mass_mailing_id" ref="mailing_sms_0"/>
-        <field name="trace_type">sms</field>
-        <field name="sms_number">123123</field>
-        <field name="model">res.partner</field>
-        <field name="res_id" ref="base.res_partner_address_33"/>
-        <field name="sent" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
-        <field name="bounced" eval="(DateTime.today() - relativedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+    <recordid="mailing_sms_0_trace_5"model="mailing.trace">
+        <fieldname="mass_mailing_id"ref="mailing_sms_0"/>
+        <fieldname="trace_type">sms</field>
+        <fieldname="sms_number">123123</field>
+        <fieldname="model">res.partner</field>
+        <fieldname="res_id"ref="base.res_partner_address_33"/>
+        <fieldname="sent"eval="(DateTime.today()-relativedelta(days=5)).strftime('%Y-%m-%d%H:%M:%S')"/>
+        <fieldname="bounced"eval="(DateTime.today()-relativedelta(days=1)).strftime('%Y-%m-%d%H:%M:%S')"/>
     </record>
-    <record id="mailing_sms_0_trace_6" model="mailing.trace">
-        <field name="mass_mailing_id" ref="mailing_sms_0"/>
-        <field name="trace_type">sms</field>
-        <field name="sms_number"></field>
-        <field name="model">res.partner</field>
-        <field name="res_id" ref="base.res_partner_address_34"/>
-        <field name="sent" eval="False"/>
-        <field name="exception" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+    <recordid="mailing_sms_0_trace_6"model="mailing.trace">
+        <fieldname="mass_mailing_id"ref="mailing_sms_0"/>
+        <fieldname="trace_type">sms</field>
+        <fieldname="sms_number"></field>
+        <fieldname="model">res.partner</field>
+        <fieldname="res_id"ref="base.res_partner_address_34"/>
+        <fieldname="sent"eval="False"/>
+        <fieldname="exception"eval="(DateTime.today()-relativedelta(days=5)).strftime('%Y-%m-%d%H:%M:%S')"/>
     </record>
 
-    <!-- Generate some clicks -->
-    <function model="link.tracker.click" name="add_click">
-        <value model="link.tracker.code"
-            search="[('link_id.url', '=', 'http://sms.example.com')]"
+    <!--Generatesomeclicks-->
+    <functionmodel="link.tracker.click"name="add_click">
+        <valuemodel="link.tracker.code"
+            search="[('link_id.url','=','http://sms.example.com')]"
             use="code"/>
-        <value name="ip">100.01.02.03</value>
-        <value name="country_code">BE</value>
-        <value name="mailing_trace_id" eval="ref('mailing_sms_0_trace_0')"/>
+        <valuename="ip">100.01.02.03</value>
+        <valuename="country_code">BE</value>
+        <valuename="mailing_trace_id"eval="ref('mailing_sms_0_trace_0')"/>
     </function>
-    <function model="link.tracker.click" name="add_click">
-        <value model="link.tracker.code"
-            search="[('link_id.url', '=', 'http://sms.example.com')]"
+    <functionmodel="link.tracker.click"name="add_click">
+        <valuemodel="link.tracker.code"
+            search="[('link_id.url','=','http://sms.example.com')]"
             use="code"/>
-        <value name="ip">100.01.02.04</value>
-        <value name="country_code">BE</value>
-        <value name="mailing_trace_id" eval="ref('mailing_sms_0_trace_0')"/>
+        <valuename="ip">100.01.02.04</value>
+        <valuename="country_code">BE</value>
+        <valuename="mailing_trace_id"eval="ref('mailing_sms_0_trace_0')"/>
     </function>
-    <function model="link.tracker.click" name="add_click">
-        <value model="link.tracker.code"
-            search="[('link_id.url', '=', 'http://sms.example.com')]"
+    <functionmodel="link.tracker.click"name="add_click">
+        <valuemodel="link.tracker.code"
+            search="[('link_id.url','=','http://sms.example.com')]"
             use="code"/>
-        <value name="ip">100.01.02.05</value>
-        <value name="country_code">BE</value>
-        <value name="mailing_trace_id" eval="ref('mailing_sms_0_trace_1')"/>
+        <valuename="ip">100.01.02.05</value>
+        <valuename="country_code">BE</value>
+        <valuename="mailing_trace_id"eval="ref('mailing_sms_0_trace_1')"/>
     </function>
-    <function model="link.tracker.click" name="add_click">
-        <value model="link.tracker.code"
-            search="[('link_id.url', '=', 'http://sms.example')]"
+    <functionmodel="link.tracker.click"name="add_click">
+        <valuemodel="link.tracker.code"
+            search="[('link_id.url','=','http://sms.example')]"
             use="code"/>
-        <value name="ip">100.01.02.06</value>
-        <value name="country_code">BE</value>
-        <value name="mailing_trace_id" eval="ref('mailing_sms_0_trace_2')"/>
+        <valuename="ip">100.01.02.06</value>
+        <valuename="country_code">BE</value>
+        <valuename="mailing_trace_id"eval="ref('mailing_sms_0_trace_2')"/>
     </function>
 
-    <record id="mailing_sms_1" model="mailing.mailing">
-        <field name="name">Extra Promo</field>
-        <field name="subject">Extra Promo</field>
-        <field name="mailing_type">sms</field>
-        <field name="state">done</field>
-        <field name="user_id" ref="base.user_admin"/>
-        <field name="sent_date" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
-        <field name="campaign_id" ref="utm_campaign_0"/>
-        <field name="mailing_model_id" ref="mass_mailing.model_mailing_list"/>
-        <field name="contact_list_ids" eval="[(5, 0), (4, ref('mass_mailing_sms.mailing_list_sms_0'))]"/>
-        <field name="body_plaintext">Extra promotion for you !</field>
+    <recordid="mailing_sms_1"model="mailing.mailing">
+        <fieldname="name">ExtraPromo</field>
+        <fieldname="subject">ExtraPromo</field>
+        <fieldname="mailing_type">sms</field>
+        <fieldname="state">done</field>
+        <fieldname="user_id"ref="base.user_admin"/>
+        <fieldname="sent_date"eval="(DateTime.today()-relativedelta(days=5)).strftime('%Y-%m-%d%H:%M:%S')"/>
+        <fieldname="campaign_id"ref="utm_campaign_0"/>
+        <fieldname="mailing_model_id"ref="mass_mailing.model_mailing_list"/>
+        <fieldname="contact_list_ids"eval="[(5,0),(4,ref('mass_mailing_sms.mailing_list_sms_0'))]"/>
+        <fieldname="body_plaintext">Extrapromotionforyou!</field>
     </record>
-    <!-- Simulate traces -->
-    <record id="mailing_sms_1_trace_0" model="mailing.trace">
-        <field name="mass_mailing_id" ref="mailing_sms_1"/>
-        <field name="trace_type">sms</field>
-        <field name="sms_number">+32456001100</field>
-        <field name="model">mailing.contact</field>
-        <field name="res_id" ref="mass_mailing_sms.mailing_contact_0_0"/>
-        <field name="sent" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+    <!--Simulatetraces-->
+    <recordid="mailing_sms_1_trace_0"model="mailing.trace">
+        <fieldname="mass_mailing_id"ref="mailing_sms_1"/>
+        <fieldname="trace_type">sms</field>
+        <fieldname="sms_number">+32456001100</field>
+        <fieldname="model">mailing.contact</field>
+        <fieldname="res_id"ref="mass_mailing_sms.mailing_contact_0_0"/>
+        <fieldname="sent"eval="(DateTime.today()-relativedelta(days=5)).strftime('%Y-%m-%d%H:%M:%S')"/>
     </record>
-    <record id="mailing_sms_1_trace_1" model="mailing.trace">
-        <field name="mass_mailing_id" ref="mailing_sms_1"/>
-        <field name="trace_type">sms</field>
-        <field name="sms_number">+32456001111</field>
-        <field name="model">mailing.contact</field>
-        <field name="res_id" ref="mass_mailing_sms.mailing_contact_0_1"/>
-        <field name="sent" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+    <recordid="mailing_sms_1_trace_1"model="mailing.trace">
+        <fieldname="mass_mailing_id"ref="mailing_sms_1"/>
+        <fieldname="trace_type">sms</field>
+        <fieldname="sms_number">+32456001111</field>
+        <fieldname="model">mailing.contact</field>
+        <fieldname="res_id"ref="mass_mailing_sms.mailing_contact_0_1"/>
+        <fieldname="sent"eval="(DateTime.today()-relativedelta(days=5)).strftime('%Y-%m-%d%H:%M:%S')"/>
     </record>
-    <record id="mailing_sms_1_trace_2" model="mailing.trace">
-        <field name="mass_mailing_id" ref="mailing_sms_1"/>
-        <field name="trace_type">sms</field>
-        <field name="sms_number">+32456001122</field>
-        <field name="model">mailing.contact</field>
-        <field name="res_id" ref="mass_mailing_sms.mailing_contact_0_2"/>
-        <field name="sent" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+    <recordid="mailing_sms_1_trace_2"model="mailing.trace">
+        <fieldname="mass_mailing_id"ref="mailing_sms_1"/>
+        <fieldname="trace_type">sms</field>
+        <fieldname="sms_number">+32456001122</field>
+        <fieldname="model">mailing.contact</field>
+        <fieldname="res_id"ref="mass_mailing_sms.mailing_contact_0_2"/>
+        <fieldname="sent"eval="(DateTime.today()-relativedelta(days=5)).strftime('%Y-%m-%d%H:%M:%S')"/>
     </record>
-    <record id="mailing_sms_1_trace_3" model="mailing.trace">
-        <field name="mass_mailing_id" ref="mailing_sms_1"/>
-        <field name="trace_type">sms</field>
-        <field name="sms_number">+32456001133</field>
-        <field name="model">mailing.contact</field>
-        <field name="res_id" ref="mass_mailing_sms.mailing_contact_0_3"/>
-        <field name="exception" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
-        <field name="failure_type">sms_credit</field>
+    <recordid="mailing_sms_1_trace_3"model="mailing.trace">
+        <fieldname="mass_mailing_id"ref="mailing_sms_1"/>
+        <fieldname="trace_type">sms</field>
+        <fieldname="sms_number">+32456001133</field>
+        <fieldname="model">mailing.contact</field>
+        <fieldname="res_id"ref="mass_mailing_sms.mailing_contact_0_3"/>
+        <fieldname="exception"eval="(DateTime.today()-relativedelta(days=5)).strftime('%Y-%m-%d%H:%M:%S')"/>
+        <fieldname="failure_type">sms_credit</field>
     </record>
-    <record id="mailing_sms_1_trace_4" model="mailing.trace">
-        <field name="mass_mailing_id" ref="mailing_sms_1"/>
-        <field name="trace_type">sms</field>
-        <field name="sms_number">dummy</field>
-        <field name="model">mailing.contact</field>
-        <field name="res_id" ref="mass_mailing_sms.mailing_contact_0_4"/>
-        <field name="exception" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
-        <field name="failure_type">sms_number_format</field>
+    <recordid="mailing_sms_1_trace_4"model="mailing.trace">
+        <fieldname="mass_mailing_id"ref="mailing_sms_1"/>
+        <fieldname="trace_type">sms</field>
+        <fieldname="sms_number">dummy</field>
+        <fieldname="model">mailing.contact</field>
+        <fieldname="res_id"ref="mass_mailing_sms.mailing_contact_0_4"/>
+        <fieldname="exception"eval="(DateTime.today()-relativedelta(days=5)).strftime('%Y-%m-%d%H:%M:%S')"/>
+        <fieldname="failure_type">sms_number_format</field>
     </record>
 
 </data></flectra>

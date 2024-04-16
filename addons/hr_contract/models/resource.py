@@ -1,28 +1,28 @@
-# -*- coding:utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from datetime import datetime
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromdatetimeimportdatetime
 
-from flectra import models, fields, api
-from flectra.osv.expression import AND
+fromflectraimportmodels,fields,api
+fromflectra.osv.expressionimportAND
 
 
-class ResourceCalendar(models.Model):
-    _inherit = 'resource.calendar'
+classResourceCalendar(models.Model):
+    _inherit='resource.calendar'
 
-    def transfer_leaves_to(self, other_calendar, resources=None, from_date=None):
+    deftransfer_leaves_to(self,other_calendar,resources=None,from_date=None):
         """
-            Transfer some resource.calendar.leaves from 'self' to another calendar 'other_calendar'.
-            Transfered leaves linked to `resources` (or all if `resources` is None) and starting
-            after 'from_date' (or today if None).
+            Transfersomeresource.calendar.leavesfrom'self'toanothercalendar'other_calendar'.
+            Transferedleaveslinkedto`resources`(orallif`resources`isNone)andstarting
+            after'from_date'(ortodayifNone).
         """
-        from_date = from_date or fields.Datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-        domain = [
-            ('calendar_id', 'in', self.ids),
-            ('date_from', '>=', from_date),
+        from_date=from_dateorfields.Datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)
+        domain=[
+            ('calendar_id','in',self.ids),
+            ('date_from','>=',from_date),
         ]
-        domain = AND([domain, [('resource_id', 'in', resources.ids)]]) if resources else domain
+        domain=AND([domain,[('resource_id','in',resources.ids)]])ifresourceselsedomain
 
         self.env['resource.calendar.leaves'].search(domain).write({
-            'calendar_id': other_calendar.id,
+            'calendar_id':other_calendar.id,
         })
 

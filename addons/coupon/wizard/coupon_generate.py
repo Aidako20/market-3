@@ -1,55 +1,55 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import _, api, fields, models
+fromflectraimport_,api,fields,models
 
-import ast
-from flectra.osv import expression
+importast
+fromflectra.osvimportexpression
 
 
-class CouponGenerate(models.TransientModel):
-    _name = 'coupon.generate.wizard'
-    _description = 'Generate Coupon'
+classCouponGenerate(models.TransientModel):
+    _name='coupon.generate.wizard'
+    _description='GenerateCoupon'
 
-    nbr_coupons = fields.Integer(string="Number of Coupons", help="Number of coupons", default=1)
-    generation_type = fields.Selection([
-        ('nbr_coupon', 'Number of Coupons'),
-        ('nbr_customer', 'Number of Selected Customers')
-        ], default='nbr_coupon')
-    partners_domain = fields.Char(string="Customer", default='[]')
-    has_partner_email = fields.Boolean(compute='_compute_has_partner_email')
+    nbr_coupons=fields.Integer(string="NumberofCoupons",help="Numberofcoupons",default=1)
+    generation_type=fields.Selection([
+        ('nbr_coupon','NumberofCoupons'),
+        ('nbr_customer','NumberofSelectedCustomers')
+        ],default='nbr_coupon')
+    partners_domain=fields.Char(string="Customer",default='[]')
+    has_partner_email=fields.Boolean(compute='_compute_has_partner_email')
 
-    def generate_coupon(self):
-        """Generates the number of coupons entered in wizard field nbr_coupons
+    defgenerate_coupon(self):
+        """Generatesthenumberofcouponsenteredinwizardfieldnbr_coupons
         """
-        program = self.env['coupon.program'].browse(self.env.context.get('active_id'))
+        program=self.env['coupon.program'].browse(self.env.context.get('active_id'))
 
-        vals = {'program_id': program.id}
+        vals={'program_id':program.id}
 
-        if self.generation_type == 'nbr_coupon' and self.nbr_coupons > 0:
-            for count in range(0, self.nbr_coupons):
+        ifself.generation_type=='nbr_coupon'andself.nbr_coupons>0:
+            forcountinrange(0,self.nbr_coupons):
                 self.env['coupon.coupon'].create(vals)
 
-        if self.generation_type == 'nbr_customer' and self.partners_domain:
-            for partner in self.env['res.partner'].search(ast.literal_eval(self.partners_domain)):
-                vals.update({'partner_id': partner.id, 'state': 'sent' if partner.email else 'new'})
-                coupon = self.env['coupon.coupon'].create(vals)
-                context = dict(lang=partner.lang)
-                subject = _('%s, a coupon has been generated for you') % (partner.name)
-                del context
-                template = self.env.ref('coupon.mail_template_sale_coupon', raise_if_not_found=False)
-                if template:
-                    email_values = {'email_from': self.env.user.email or '', 'subject': subject}
-                    template.send_mail(coupon.id, email_values=email_values, notif_layout='mail.mail_notification_light')
+        ifself.generation_type=='nbr_customer'andself.partners_domain:
+            forpartnerinself.env['res.partner'].search(ast.literal_eval(self.partners_domain)):
+                vals.update({'partner_id':partner.id,'state':'sent'ifpartner.emailelse'new'})
+                coupon=self.env['coupon.coupon'].create(vals)
+                context=dict(lang=partner.lang)
+                subject=_('%s,acouponhasbeengeneratedforyou')%(partner.name)
+                delcontext
+                template=self.env.ref('coupon.mail_template_sale_coupon',raise_if_not_found=False)
+                iftemplate:
+                    email_values={'email_from':self.env.user.emailor'','subject':subject}
+                    template.send_mail(coupon.id,email_values=email_values,notif_layout='mail.mail_notification_light')
 
     @api.depends('partners_domain')
-    def _compute_has_partner_email(self):
-        for record in self:
-            partners_domain = ast.literal_eval(record.partners_domain)
-            if partners_domain == [['', '=', 1]]:
-                # The field name is not clear. It actually means "all partners have email".
-                # If domain is not set, we don't want to show the warning "there is a partner without email".
-                # So, we explicitly set value to True
-                record.has_partner_email = True
+    def_compute_has_partner_email(self):
+        forrecordinself:
+            partners_domain=ast.literal_eval(record.partners_domain)
+            ifpartners_domain==[['','=',1]]:
+                #Thefieldnameisnotclear.Itactuallymeans"allpartnershaveemail".
+                #Ifdomainisnotset,wedon'twanttoshowthewarning"thereisapartnerwithoutemail".
+                #So,weexplicitlysetvaluetoTrue
+                record.has_partner_email=True
                 continue
-            domain = expression.AND([partners_domain, [('email', '=', False)]])
-            record.has_partner_email = self.env['res.partner'].search_count(domain) == 0
+            domain=expression.AND([partners_domain,[('email','=',False)]])
+            record.has_partner_email=self.env['res.partner'].search_count(domain)==0

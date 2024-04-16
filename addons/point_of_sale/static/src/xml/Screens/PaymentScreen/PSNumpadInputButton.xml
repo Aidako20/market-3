@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="PSNumpadInputButton" owl="1">
-        <button t-attf-class="{{ _class }}"
-                t-on-click="trigger('input-from-numpad', { key: props.value })">
-            <t t-slot="default">
-                <t t-if="props.text">
-                    <t t-esc="props.text" />
+    <tt-name="PSNumpadInputButton"owl="1">
+        <buttont-attf-class="{{_class}}"
+                t-on-click="trigger('input-from-numpad',{key:props.value})">
+            <tt-slot="default">
+                <tt-if="props.text">
+                    <tt-esc="props.text"/>
                 </t>
-                <t t-else="">
-                    <t t-esc="props.value" />
+                <tt-else="">
+                    <tt-esc="props.value"/>
                 </t>
             </t>
         </button>

@@ -1,73 +1,73 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
+    <datanoupdate="1">
 
-        <record id="test_model_publish" model="ir.rule">
-            <field name="name">Public user: read only website published</field>
-            <field name="model_id" ref="test_website.model_test_model"/>
-            <field name="groups" eval="[(4, ref('base.group_public'))]"/>
-            <field name="domain_force">[('website_published','=', True)]</field>
-            <field name="perm_read" eval="True"/>
+        <recordid="test_model_publish"model="ir.rule">
+            <fieldname="name">Publicuser:readonlywebsitepublished</field>
+            <fieldname="model_id"ref="test_website.model_test_model"/>
+            <fieldname="groups"eval="[(4,ref('base.group_public'))]"/>
+            <fieldname="domain_force">[('website_published','=',True)]</field>
+            <fieldname="perm_read"eval="True"/>
         </record>
 
 
-        <!-- RECORDS FOR RESET VIEWS TESTS -->
-        <record id="test_view" model="ir.ui.view">
-            <field name="name">Test View</field>
-            <field name="type">qweb</field>
-            <field name="key">test_website.test_view</field>
-            <field name="arch" type="xml">
-                <t name="Test View" priority="29" t-name="test_website.test_view">
-                    <t t-call="website.layout">
-                        <p>Test View</p>
+        <!--RECORDSFORRESETVIEWSTESTS-->
+        <recordid="test_view"model="ir.ui.view">
+            <fieldname="name">TestView</field>
+            <fieldname="type">qweb</field>
+            <fieldname="key">test_website.test_view</field>
+            <fieldname="arch"type="xml">
+                <tname="TestView"priority="29"t-name="test_website.test_view">
+                    <tt-call="website.layout">
+                        <p>TestView</p>
                         <p>placeholder</p>
                     </t>
                 </t>
             </field>
         </record>
-        <record id="test_page_view" model="ir.ui.view">
-            <field name="name">Test Page View</field>
-            <field name="type">qweb</field>
-            <field name="key">test_website.test_page_view</field>
-            <field name="arch" type="xml">
-                <t name="Test Page View" priority="29" t-name="test_website.test_page_view">
-                    <t t-call="website.layout">
-                        <div id="oe_structure_test_website_page" class="oe_structure oe_empty"/>
-                        <p>Test Page View</p>
+        <recordid="test_page_view"model="ir.ui.view">
+            <fieldname="name">TestPageView</field>
+            <fieldname="type">qweb</field>
+            <fieldname="key">test_website.test_page_view</field>
+            <fieldname="arch"type="xml">
+                <tname="TestPageView"priority="29"t-name="test_website.test_page_view">
+                    <tt-call="website.layout">
+                        <divid="oe_structure_test_website_page"class="oe_structureoe_empty"/>
+                        <p>TestPageView</p>
                         <p>placeholder</p>
                     </t>
                 </t>
             </field>
         </record>
-        <record id="test_error_view" model="ir.ui.view">
-            <field name="name">Test Error View</field>
-            <field name="type">qweb</field>
-            <field name="key">test_website.test_error_view</field>
-            <field name="arch" type="xml">
-                <t name="Test Error View" t-name="test_website.test_error_view">
-                    <t t-call="website.layout">
-                    <div class="container">
-                        <h1>Test Error View</h1>
-                        <div class="row">
-                            <ul class="list-group http_error col-6">
-                                <li class="list-group-item list-group-item-primary"><h2>http Errors</h2></li>
-                                <li class="list-group-item"><a href="/test_user_error_http">http UserError (400)</a></li>
-                                <li class="list-group-item"><a href="/test_validation_error_http">http ValidationError (400)</a></li>
-                                <li class="list-group-item"><a href="/test_missing_error_http">http MissingError (400)</a></li>
-                                <li class="list-group-item"><a href="/test_access_error_http">http AccessError (403)</a></li>
-                                <li class="list-group-item"><a href="/test_access_denied_http">http AccessDenied (403)</a></li>
-                                <li class="list-group-item"><a href="/test_internal_error_http">http InternalServerError (500)</a></li>
-                                <li class="list-group-item"><a href="/test_not_found_http">http NotFound (404)</a></li>
+        <recordid="test_error_view"model="ir.ui.view">
+            <fieldname="name">TestErrorView</field>
+            <fieldname="type">qweb</field>
+            <fieldname="key">test_website.test_error_view</field>
+            <fieldname="arch"type="xml">
+                <tname="TestErrorView"t-name="test_website.test_error_view">
+                    <tt-call="website.layout">
+                    <divclass="container">
+                        <h1>TestErrorView</h1>
+                        <divclass="row">
+                            <ulclass="list-grouphttp_errorcol-6">
+                                <liclass="list-group-itemlist-group-item-primary"><h2>httpErrors</h2></li>
+                                <liclass="list-group-item"><ahref="/test_user_error_http">httpUserError(400)</a></li>
+                                <liclass="list-group-item"><ahref="/test_validation_error_http">httpValidationError(400)</a></li>
+                                <liclass="list-group-item"><ahref="/test_missing_error_http">httpMissingError(400)</a></li>
+                                <liclass="list-group-item"><ahref="/test_access_error_http">httpAccessError(403)</a></li>
+                                <liclass="list-group-item"><ahref="/test_access_denied_http">httpAccessDenied(403)</a></li>
+                                <liclass="list-group-item"><ahref="/test_internal_error_http">httpInternalServerError(500)</a></li>
+                                <liclass="list-group-item"><ahref="/test_not_found_http">httpNotFound(404)</a></li>
                             </ul>
-                            <ul class="list-group rpc_error col-6">
-                                <li class="list-group-item list-group-item-primary"><h2>rpc Warnings</h2></li>
-                                <li class="list-group-item"><a href="/test_user_error_json">rpc UserError</a></li>
-                                <li class="list-group-item"><a href="/test_validation_error_json">rpc ValidationError</a></li>
-                                <li class="list-group-item"><a href="/test_missing_error_json">rpc MissingError</a></li>
-                                <li class="list-group-item"><a href="/test_access_error_json">rpc AccessError</a></li>
-                                <li class="list-group-item"><a href="/test_access_denied_json">rpc AccessDenied</a></li>
-                                <li class="list-group-item list-group-item-primary"><h2>rpc Errors</h2></li>
-                                <li class="list-group-item"><a href="/test_internal_error_json">rpc InternalServerError</a></li>
+                            <ulclass="list-grouprpc_errorcol-6">
+                                <liclass="list-group-itemlist-group-item-primary"><h2>rpcWarnings</h2></li>
+                                <liclass="list-group-item"><ahref="/test_user_error_json">rpcUserError</a></li>
+                                <liclass="list-group-item"><ahref="/test_validation_error_json">rpcValidationError</a></li>
+                                <liclass="list-group-item"><ahref="/test_missing_error_json">rpcMissingError</a></li>
+                                <liclass="list-group-item"><ahref="/test_access_error_json">rpcAccessError</a></li>
+                                <liclass="list-group-item"><ahref="/test_access_denied_json">rpcAccessDenied</a></li>
+                                <liclass="list-group-itemlist-group-item-primary"><h2>rpcErrors</h2></li>
+                                <liclass="list-group-item"><ahref="/test_internal_error_json">rpcInternalServerError</a></li>
                             </ul>
                         </div>
                     </div>
@@ -75,44 +75,44 @@
                 </t>
             </field>
         </record>
-        <record id="test_page" model="website.page">
-            <field name="is_published">True</field>
-            <field name="url">/test_page_view</field>
-            <field name="view_id" ref="test_page_view"/>
-            <field name="website_indexed" eval="False"/>
+        <recordid="test_page"model="website.page">
+            <fieldname="is_published">True</field>
+            <fieldname="url">/test_page_view</field>
+            <fieldname="view_id"ref="test_page_view"/>
+            <fieldname="website_indexed"eval="False"/>
         </record>
-        <record id="test_view_to_be_t_called" model="ir.ui.view">
-            <field name="name">Test View To Be t-called</field>
-            <field name="type">qweb</field>
-            <field name="key">test_website.test_view_to_be_t_called</field>
-            <field name="arch" type="xml">
-                <t name="Test View To Be t-called" priority="29" t-name="test_website.test_view_to_be_t_called">
-                    <p>Test View To Be t-called</p>
+        <recordid="test_view_to_be_t_called"model="ir.ui.view">
+            <fieldname="name">TestViewToBet-called</field>
+            <fieldname="type">qweb</field>
+            <fieldname="key">test_website.test_view_to_be_t_called</field>
+            <fieldname="arch"type="xml">
+                <tname="TestViewToBet-called"priority="29"t-name="test_website.test_view_to_be_t_called">
+                    <p>TestViewToBet-called</p>
                     <p>placeholder</p>
                 </t>
             </field>
         </record>
-        <template id="test_view_child_broken" inherit_id="test_website.test_view" active="False">
-            <xpath expr="//p[last()]" position="replace">
-                <p>Test View Child Broken</p>
+        <templateid="test_view_child_broken"inherit_id="test_website.test_view"active="False">
+            <xpathexpr="//p[last()]"position="replace">
+                <p>TestViewChildBroken</p>
                 <p>placeholder</p>
             </xpath>
         </template>
 
-        <!-- RECORDS FOR MODULE OPERATION TESTS -->
-        <template id="update_module_base_view">
-            <div>I am a base view</div>
+        <!--RECORDSFORMODULEOPERATIONTESTS-->
+        <templateid="update_module_base_view">
+            <div>Iamabaseview</div>
         </template>
 
-        <!-- RECORDS FOR REDIRECT TESTS -->
-        <template id="test_redirect_view">
-            <t t-esc="country.name"/>
-            <t t-if="not request.env.user._is_public()" t-esc="'Logged In'"/>
-            <!-- `href` is send through `url_for` for non editor users -->
-            <a href="/test_website/country/andorra-1">I am a link</a>
+        <!--RECORDSFORREDIRECTTESTS-->
+        <templateid="test_redirect_view">
+            <tt-esc="country.name"/>
+            <tt-if="notrequest.env.user._is_public()"t-esc="'LoggedIn'"/>
+            <!--`href`issendthrough`url_for`fornoneditorusers-->
+            <ahref="/test_website/country/andorra-1">Iamalink</a>
         </template>
-        <template id="test_redirect_view_qs">
-            <a href="/empty_controller_test?a=a">Home</a>
+        <templateid="test_redirect_view_qs">
+            <ahref="/empty_controller_test?a=a">Home</a>
         </template>
 
     </data>

@@ -1,42 +1,42 @@
-flectra.define('website_crm.tour', function(require) {
-    'use strict';
+flectra.define('website_crm.tour',function(require){
+    'usestrict';
 
-    var tour = require('web_tour.tour');
+    vartour=require('web_tour.tour');
 
-    tour.register('website_crm_tour', {
-        test: true,
-        url: '/contactus',
-    }, [{
-        content: "Complete name",
-        trigger: "input[name=contact_name]",
-        run: "text John Smith",
-    }, {
-        content: "Complete phone number",
-        trigger: "input[name=phone]",
-        run: "text +32 485 118.218"
-    }, {
-        content: "Complete Email",
-        trigger: "input[name=email_from]",
-        run: "text john@smith.com"
-    }, {
-        content: "Complete Company",
-        trigger: "input[name=partner_name]",
-        run: "text FlectraHQ, Inc., Odoo S.A."
-    }, {
-        content: "Complete Subject",
-        trigger: "input[name=name]",
-        run: "text Useless message"
-    }, {
-        content: "Complete Subject",
-        trigger: "textarea[name=description]",
-        run: "text ### TOUR DATA ###"
-    }, {
-        content: "Send the form",
-        trigger: ".s_website_form_send"
-    }, {
-        content: "Check we were redirected to the success page",
-        trigger: "#wrap:has(h1:contains('Thank You!'))"
+    tour.register('website_crm_tour',{
+        test:true,
+        url:'/contactus',
+    },[{
+        content:"Completename",
+        trigger:"input[name=contact_name]",
+        run:"textJohnSmith",
+    },{
+        content:"Completephonenumber",
+        trigger:"input[name=phone]",
+        run:"text+32485118.218"
+    },{
+        content:"CompleteEmail",
+        trigger:"input[name=email_from]",
+        run:"textjohn@smith.com"
+    },{
+        content:"CompleteCompany",
+        trigger:"input[name=partner_name]",
+        run:"textFlectraS.A."
+    },{
+        content:"CompleteSubject",
+        trigger:"input[name=name]",
+        run:"textUselessmessage"
+    },{
+        content:"CompleteSubject",
+        trigger:"textarea[name=description]",
+        run:"text###TOURDATA###"
+    },{
+        content:"Sendtheform",
+        trigger:".s_website_form_send"
+    },{
+        content:"Checkwewereredirectedtothesuccesspage",
+        trigger:"#wrap:has(h1:contains('ThankYou!'))"
     }]);
 
-    return {};
+    return{};
 });

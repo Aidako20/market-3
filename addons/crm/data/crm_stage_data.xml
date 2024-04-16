@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
-<flectra noupdate="1">
-    <record model="crm.stage" id="stage_lead1">
-        <field name="name">New</field>
-        <field name="sequence">1</field>
+<?xmlversion="1.0"encoding="utf-8"?>
+<flectranoupdate="1">
+    <recordmodel="crm.stage"id="stage_lead1">
+        <fieldname="name">New</field>
+        <fieldname="sequence">1</field>
     </record>
-    <record model="crm.stage" id="stage_lead2">
-        <field name="name">Qualified</field>
-        <field name="sequence">2</field>
+    <recordmodel="crm.stage"id="stage_lead2">
+        <fieldname="name">Qualified</field>
+        <fieldname="sequence">2</field>
     </record>
-    <record model="crm.stage" id="stage_lead3">
-        <field name="name">Proposition</field>
-        <field name="sequence">3</field>
+    <recordmodel="crm.stage"id="stage_lead3">
+        <fieldname="name">Proposition</field>
+        <fieldname="sequence">3</field>
     </record>
-    <record model="crm.stage" id="stage_lead4">
-        <field name="name">Won</field>
-        <field name="fold" eval="False"/>
-        <field name="is_won">True</field>
-        <field name="sequence">70</field>
+    <recordmodel="crm.stage"id="stage_lead4">
+        <fieldname="name">Won</field>
+        <fieldname="fold"eval="False"/>
+        <fieldname="is_won">True</field>
+        <fieldname="sequence">70</field>
     </record>
-</flectra> 
+</flectra>

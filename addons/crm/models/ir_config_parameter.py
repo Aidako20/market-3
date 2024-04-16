@@ -1,31 +1,31 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models
+fromflectraimportapi,models
 
 
-class IrConfigParameter(models.Model):
-    _inherit = 'ir.config_parameter'
+classIrConfigParameter(models.Model):
+    _inherit='ir.config_parameter'
 
-    def write(self, vals):
-        result = super(IrConfigParameter, self).write(vals)
-        if any(record.key == "crm.pls_fields" for record in self):
+    defwrite(self,vals):
+        result=super(IrConfigParameter,self).write(vals)
+        ifany(record.key=="crm.pls_fields"forrecordinself):
             self.flush()
             self.env.registry.setup_models(self.env.cr)
-        return result
+        returnresult
 
     @api.model_create_multi
-    def create(self, vals_list):
-        records = super(IrConfigParameter, self).create(vals_list)
-        if any(record.key == "crm.pls_fields" for record in records):
+    defcreate(self,vals_list):
+        records=super(IrConfigParameter,self).create(vals_list)
+        ifany(record.key=="crm.pls_fields"forrecordinrecords):
             self.flush()
             self.env.registry.setup_models(self.env.cr)
-        return records
+        returnrecords
 
-    def unlink(self):
-        pls_emptied = any(record.key == "crm.pls_fields" for record in self)
-        result = super(IrConfigParameter, self).unlink()
-        if pls_emptied:
+    defunlink(self):
+        pls_emptied=any(record.key=="crm.pls_fields"forrecordinself)
+        result=super(IrConfigParameter,self).unlink()
+        ifpls_emptied:
             self.flush()
             self.env.registry.setup_models(self.env.cr)
-        return pls_emptied
+        returnpls_emptied

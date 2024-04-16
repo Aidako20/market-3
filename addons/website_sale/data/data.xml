@@ -1,127 +1,127 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
+    <datanoupdate="1">
 
-        <record id="menu_shop" model="website.menu">
-            <field name="name">Shop</field>
-            <field name="url">/shop</field>
-            <field name="parent_id" ref="website.main_menu"/>
-            <field name="sequence" type="int">20</field>
+        <recordid="menu_shop"model="website.menu">
+            <fieldname="name">Shop</field>
+            <fieldname="url">/shop</field>
+            <fieldname="parent_id"ref="website.main_menu"/>
+            <fieldname="sequence"type="int">20</field>
         </record>
-        <record id="action_open_website" model="ir.actions.act_url">
-            <field name="name">Website Shop</field>
-            <field name="target">self</field>
-            <field name="url">/shop</field>
+        <recordid="action_open_website"model="ir.actions.act_url">
+            <fieldname="name">WebsiteShop</field>
+            <fieldname="target">self</field>
+            <fieldname="url">/shop</field>
         </record>
-        <record id="base.open_menu" model="ir.actions.todo">
-            <field name="action_id" ref="action_open_website"/>
-            <field name="state">open</field>
-        </record>
-
-        <record id="website_sale.sale_ribbon" model="product.ribbon">
-            <field name="html">Sale</field>
-            <field name="html_class">bg-success o_ribbon_left</field>
+        <recordid="base.open_menu"model="ir.actions.todo">
+            <fieldname="action_id"ref="action_open_website"/>
+            <fieldname="state">open</field>
         </record>
 
-        <record id="website_sale.sold_out_ribbon" model="product.ribbon">
-            <field name="html">Sold out</field>
-            <field name="html_class">bg-danger o_ribbon_left</field>
+        <recordid="website_sale.sale_ribbon"model="product.ribbon">
+            <fieldname="html">Sale</field>
+            <fieldname="html_class">bg-successo_ribbon_left</field>
         </record>
 
-        <record id="website_sale.new_ribbon" model="product.ribbon">
-            <field name="html">New!</field>
-            <field name="html_class">bg-primary o_ribbon_left</field>
+        <recordid="website_sale.sold_out_ribbon"model="product.ribbon">
+            <fieldname="html">Soldout</field>
+            <fieldname="html_class">bg-dangero_ribbon_left</field>
         </record>
 
-        <record id="sales_team.salesteam_website_sales" model="crm.team">
-            <field name="active" eval="True"/>
+        <recordid="website_sale.new_ribbon"model="product.ribbon">
+            <fieldname="html">New!</field>
+            <fieldname="html_class">bg-primaryo_ribbon_left</field>
         </record>
 
-        <record model="website" id="website.default_website">
-            <field name="salesteam_id" ref="sales_team.salesteam_website_sales"/>
+        <recordid="sales_team.salesteam_website_sales"model="crm.team">
+            <fieldname="active"eval="True"/>
         </record>
 
-        <record model="product.pricelist" id="product.list0">
-            <field name="selectable" eval="True" />
-            <field name="website_id" eval="False"/>
+        <recordmodel="website"id="website.default_website">
+            <fieldname="salesteam_id"ref="sales_team.salesteam_website_sales"/>
+        </record>
+
+        <recordmodel="product.pricelist"id="product.list0">
+            <fieldname="selectable"eval="True"/>
+            <fieldname="website_id"eval="False"/>
         </record>
 
     </data>
     <data>
-        <!-- Action Server for Dynamic Filter -->
-        <record id="dynamic_snippet_products_action" model="ir.actions.server">
-            <field name="name">Products Dynamic Snippet</field>
-            <field name="model_id" ref="model_product_product"/>
-            <field name="state">code</field>
-            <field name="code">
-ProductProduct = model.env['product.product']
-FieldMonetary = model.env['ir.qweb.field.monetary']
+        <!--ActionServerforDynamicFilter-->
+        <recordid="dynamic_snippet_products_action"model="ir.actions.server">
+            <fieldname="name">ProductsDynamicSnippet</field>
+            <fieldname="model_id"ref="model_product_product"/>
+            <fieldname="state">code</field>
+            <fieldname="code">
+ProductProduct=model.env['product.product']
+FieldMonetary=model.env['ir.qweb.field.monetary']
 
-website = request.website.get_current_website()
-dynamic_filter = model.env.context.get('dynamic_filter')
-limit = model.env.context.get('limit')
-search_domain = model.env.context.get('search_domain')
-get_rendering_data_structure = model.env.context.get('get_rendering_data_structure')
-escape = dynamic_filter.escape_falsy_as_empty
+website=request.website.get_current_website()
+dynamic_filter=model.env.context.get('dynamic_filter')
+limit=model.env.context.get('limit')
+search_domain=model.env.context.get('search_domain')
+get_rendering_data_structure=model.env.context.get('get_rendering_data_structure')
+escape=dynamic_filter.escape_falsy_as_empty
 
-domain = [('website_published', '=', True)] + website.website_domain() + (search_domain or [])
-products = ProductProduct.search(domain, limit=limit)
-_ = products.mapped('name')
+domain=[('website_published','=',True)]+website.website_domain()+(search_domainor[])
+products=ProductProduct.search(domain,limit=limit)
+_=products.mapped('name')
 
-monetary_options = {
-    'display_currency': request.website.get_current_pricelist().currency_id,
+monetary_options={
+    'display_currency':request.website.get_current_pricelist().currency_id,
 }
 
-max_nb_chars = 100
-res_products = []
-for product in products:
-    res_product = product._read_format(['id', 'name', 'website_url', 'description_sale'])[0]
+max_nb_chars=100
+res_products=[]
+forproductinproducts:
+    res_product=product._read_format(['id','name','website_url','description_sale'])[0]
     res_product.update(product._get_combination_info_variant())
 
-    if res_product['description_sale'] and len(res_product['description_sale']) > max_nb_chars:
-        res_product['description_sale'] = "%s ..." % res_product['description_sale'][:max_nb_chars]
-    res_product['list_price'] = FieldMonetary.value_to_html(res_product['price'], monetary_options)
-    data = get_rendering_data_structure()
-    for field_name in dynamic_filter.field_names.split(","):
-        field = ProductProduct._fields.get(field_name)
-        if field and field.type == 'binary':
-            data['image_fields'][field_name] = escape(website.image_url(product, field_name))
-        elif field_name == 'list_price':
-            data['fields'][field_name] = res_product[field_name]
+    ifres_product['description_sale']andlen(res_product['description_sale'])>max_nb_chars:
+        res_product['description_sale']="%s..."%res_product['description_sale'][:max_nb_chars]
+    res_product['list_price']=FieldMonetary.value_to_html(res_product['price'],monetary_options)
+    data=get_rendering_data_structure()
+    forfield_nameindynamic_filter.field_names.split(","):
+        field=ProductProduct._fields.get(field_name)
+        iffieldandfield.type=='binary':
+            data['image_fields'][field_name]=escape(website.image_url(product,field_name))
+        eliffield_name=='list_price':
+            data['fields'][field_name]=res_product[field_name]
         else:
-            data['fields'][field_name] = escape(res_product[field_name])
-    data['fields']['call_to_action_url'] = escape(product['website_url'])
+            data['fields'][field_name]=escape(res_product[field_name])
+    data['fields']['call_to_action_url']=escape(product['website_url'])
     res_products.append(data)
 
-response = res_products
+response=res_products
             </field>
         </record>
-        <!-- Dynamic Filter -->
-        <record id="dynamic_filter_demo_products" model="website.snippet.filter">
-            <field name="action_server_id" ref="website_sale.dynamic_snippet_products_action"/>
-            <field name="field_names">display_name,description_sale,image_512,list_price</field>
-            <field name="limit" eval="16"/>
-            <field name="name">Products</field>
-            <field name="website_id" ref="website.default_website"/>
+        <!--DynamicFilter-->
+        <recordid="dynamic_filter_demo_products"model="website.snippet.filter">
+            <fieldname="action_server_id"ref="website_sale.dynamic_snippet_products_action"/>
+            <fieldname="field_names">display_name,description_sale,image_512,list_price</field>
+            <fieldname="limit"eval="16"/>
+            <fieldname="name">Products</field>
+            <fieldname="website_id"ref="website.default_website"/>
         </record>
-        <function model="ir.model.fields" name="formbuilder_whitelist">
+        <functionmodel="ir.model.fields"name="formbuilder_whitelist">
             <value>sale.order</value>
-            <value eval="[
+            <valueeval="[
                 'client_order_ref',
             ]"/>
         </function>
 
-        <record id="base.model_res_partner" model="ir.model">
-            <field name="website_form_key">create_customer</field>
-            <field name="website_form_access">True</field>
-            <field name="website_form_label">Create a Customer</field>
+        <recordid="base.model_res_partner"model="ir.model">
+            <fieldname="website_form_key">create_customer</field>
+            <fieldname="website_form_access">True</field>
+            <fieldname="website_form_label">CreateaCustomer</field>
         </record>
-        <function model="ir.model.fields" name="formbuilder_whitelist">
+        <functionmodel="ir.model.fields"name="formbuilder_whitelist">
             <value>res.partner</value>
-            <value eval="[
-                'name', 'phone', 'email',
-                'city', 'zip', 'street', 'street2', 'state_id', 'country_id',
-                'vat', 'company_name'
+            <valueeval="[
+                'name','phone','email',
+                'city','zip','street','street2','state_id','country_id',
+                'vat','company_name'
             ]"/>
         </function>
     </data>

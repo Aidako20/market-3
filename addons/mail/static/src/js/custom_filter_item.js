@@ -1,21 +1,21 @@
-flectra.define('mail.CustomFilterItem', function (require) {
-    "use strict";
+flectra.define('mail.CustomFilterItem',function(require){
+    "usestrict";
 
-    const CustomFilterItem = require('web.CustomFilterItem');
+    constCustomFilterItem=require('web.CustomFilterItem');
 
-    CustomFilterItem.patch('mail.CustomFilterItem', T => class extends T {
+    CustomFilterItem.patch('mail.CustomFilterItem',T=>classextendsT{
 
         /**
-         * With the `mail` module installed, we want to filter out some of the
-         * available fields in 'Add custom filter' menu (@see CustomFilterItem).
-         * @override
+         *Withthe`mail`moduleinstalled,wewanttofilteroutsomeofthe
+         *availablefieldsin'Addcustomfilter'menu(@seeCustomFilterItem).
+         *@override
          */
-        _validateField(field) {
-            return super._validateField(...arguments) &&
-                field.relation !== 'mail.message' &&
-                field.name !== 'message_ids';
+        _validateField(field){
+            returnsuper._validateField(...arguments)&&
+                field.relation!=='mail.message'&&
+                field.name!=='message_ids';
         }
     });
 
-    return CustomFilterItem;
+    returnCustomFilterItem;
 });

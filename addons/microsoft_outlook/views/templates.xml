@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-    <template id="microsoft_outlook_oauth_error">
-        <t t-call-assets="web.assets_frontend" t-js="false"/>
-        <div class="py-5">
-            <div class="alert alert-warning w-50 mx-auto" role="alert">
-                <t t-esc="error"/>
+    <templateid="microsoft_outlook_oauth_error">
+        <tt-call-assets="web.assets_frontend"t-js="false"/>
+        <divclass="py-5">
+            <divclass="alertalert-warningw-50mx-auto"role="alert">
+                <tt-esc="error"/>
                 <br/>
-                <a t-attf-href="/web?#id=#{rec_id}&amp;model=#{model_name}&amp;view_type=form">
-                    Go back to your mail server
+                <at-attf-href="/web?#id=#{rec_id}&amp;model=#{model_name}&amp;view_type=form">
+                    Gobacktoyourmailserver
                 </a>
             </div>
         </div>

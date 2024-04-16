@@ -1,87 +1,87 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, tools
+fromflectraimportapi,fields,models,tools
 
-STATE = [
-    ('none', 'Non Member'),
-    ('canceled', 'Cancelled Member'),
-    ('old', 'Old Member'),
-    ('waiting', 'Waiting Member'),
-    ('invoiced', 'Invoiced Member'),
-    ('free', 'Free Member'),
-    ('paid', 'Paid Member'),
+STATE=[
+    ('none','NonMember'),
+    ('canceled','CancelledMember'),
+    ('old','OldMember'),
+    ('waiting','WaitingMember'),
+    ('invoiced','InvoicedMember'),
+    ('free','FreeMember'),
+    ('paid','PaidMember'),
 ]
 
 
-class ReportMembership(models.Model):
-    '''Membership Analysis'''
+classReportMembership(models.Model):
+    '''MembershipAnalysis'''
 
-    _name = 'report.membership'
-    _description = 'Membership Analysis'
-    _auto = False
-    _rec_name = 'start_date'
+    _name='report.membership'
+    _description='MembershipAnalysis'
+    _auto=False
+    _rec_name='start_date'
 
-    start_date = fields.Date(string='Start Date', readonly=True)
-    date_to = fields.Date(string='End Date', readonly=True, help="End membership date")
-    num_waiting = fields.Integer(string='# Waiting', readonly=True)
-    num_invoiced = fields.Integer(string='# Invoiced', readonly=True)
-    num_paid = fields.Integer(string='# Paid', readonly=True)
-    tot_pending = fields.Float(string='Pending Amount', digits=0, readonly=True)
-    tot_earned = fields.Float(string='Earned Amount', digits=0, readonly=True)
-    partner_id = fields.Many2one('res.partner', string='Member', readonly=True)
-    associate_member_id = fields.Many2one('res.partner', string='Associate Member', readonly=True)
-    membership_id = fields.Many2one('product.product', string='Membership Product', readonly=True)
-    membership_state = fields.Selection(STATE, string='Current Membership State', readonly=True)
-    user_id = fields.Many2one('res.users', string='Salesperson', readonly=True)
-    company_id = fields.Many2one('res.company', string='Company', readonly=True)
-    quantity = fields.Integer(readonly=True)
+    start_date=fields.Date(string='StartDate',readonly=True)
+    date_to=fields.Date(string='EndDate',readonly=True,help="Endmembershipdate")
+    num_waiting=fields.Integer(string='#Waiting',readonly=True)
+    num_invoiced=fields.Integer(string='#Invoiced',readonly=True)
+    num_paid=fields.Integer(string='#Paid',readonly=True)
+    tot_pending=fields.Float(string='PendingAmount',digits=0,readonly=True)
+    tot_earned=fields.Float(string='EarnedAmount',digits=0,readonly=True)
+    partner_id=fields.Many2one('res.partner',string='Member',readonly=True)
+    associate_member_id=fields.Many2one('res.partner',string='AssociateMember',readonly=True)
+    membership_id=fields.Many2one('product.product',string='MembershipProduct',readonly=True)
+    membership_state=fields.Selection(STATE,string='CurrentMembershipState',readonly=True)
+    user_id=fields.Many2one('res.users',string='Salesperson',readonly=True)
+    company_id=fields.Many2one('res.company',string='Company',readonly=True)
+    quantity=fields.Integer(readonly=True)
 
-    def init(self):
-        '''Create the view'''
-        tools.drop_view_if_exists(self._cr, self._table)
+    definit(self):
+        '''Createtheview'''
+        tools.drop_view_if_exists(self._cr,self._table)
         self._cr.execute("""
-        CREATE OR REPLACE VIEW %s AS (
+        CREATEORREPLACEVIEW%sAS(
         SELECT
-        MIN(id) AS id,
+        MIN(id)ASid,
         partner_id,
-        count(membership_id) as quantity,
+        count(membership_id)asquantity,
         user_id,
         membership_state,
         associate_member_id,
         membership_amount,
         date_to,
         start_date,
-        COUNT(num_waiting) AS num_waiting,
-        COUNT(num_invoiced) AS num_invoiced,
-        COUNT(num_paid) AS num_paid,
-        SUM(tot_pending) AS tot_pending,
-        SUM(tot_earned) AS tot_earned,
+        COUNT(num_waiting)ASnum_waiting,
+        COUNT(num_invoiced)ASnum_invoiced,
+        COUNT(num_paid)ASnum_paid,
+        SUM(tot_pending)AStot_pending,
+        SUM(tot_earned)AStot_earned,
         membership_id,
         company_id
         FROM
         (SELECT
-            MIN(p.id) AS id,
-            p.id AS partner_id,
-            p.user_id AS user_id,
-            p.membership_state AS membership_state,
-            p.associate_member AS associate_member_id,
-            p.membership_amount AS membership_amount,
-            p.membership_stop AS date_to,
-            p.membership_start AS start_date,
-            CASE WHEN ml.state = 'waiting'  THEN ml.id END AS num_waiting,
-            CASE WHEN ml.state = 'invoiced' THEN ml.id END AS num_invoiced,
-            CASE WHEN ml.state = 'paid'     THEN ml.id END AS num_paid,
-            CASE WHEN ml.state IN ('waiting', 'invoiced') THEN SUM(aml.price_subtotal) ELSE 0 END AS tot_pending,
-            CASE WHEN ml.state = 'paid' OR p.membership_state = 'old' THEN SUM(aml.price_subtotal) ELSE 0 END AS tot_earned,
-            ml.membership_id AS membership_id,
-            p.company_id AS company_id
-            FROM res_partner p
-            LEFT JOIN membership_membership_line ml ON (ml.partner = p.id)
-            LEFT JOIN account_move_line aml ON (ml.account_invoice_line = aml.id)
-            LEFT JOIN account_move am ON (aml.move_id = am.id)
-            WHERE p.membership_state != 'none' and p.active = 'true'
-            GROUP BY
+            MIN(p.id)ASid,
+            p.idASpartner_id,
+            p.user_idASuser_id,
+            p.membership_stateASmembership_state,
+            p.associate_memberASassociate_member_id,
+            p.membership_amountASmembership_amount,
+            p.membership_stopASdate_to,
+            p.membership_startASstart_date,
+            CASEWHENml.state='waiting' THENml.idENDASnum_waiting,
+            CASEWHENml.state='invoiced'THENml.idENDASnum_invoiced,
+            CASEWHENml.state='paid'    THENml.idENDASnum_paid,
+            CASEWHENml.stateIN('waiting','invoiced')THENSUM(aml.price_subtotal)ELSE0ENDAStot_pending,
+            CASEWHENml.state='paid'ORp.membership_state='old'THENSUM(aml.price_subtotal)ELSE0ENDAStot_earned,
+            ml.membership_idASmembership_id,
+            p.company_idAScompany_id
+            FROMres_partnerp
+            LEFTJOINmembership_membership_linemlON(ml.partner=p.id)
+            LEFTJOINaccount_move_lineamlON(ml.account_invoice_line=aml.id)
+            LEFTJOINaccount_moveamON(aml.move_id=am.id)
+            WHEREp.membership_state!='none'andp.active='true'
+            GROUPBY
               p.id,
               p.user_id,
               p.membership_state,
@@ -92,8 +92,8 @@ class ReportMembership(models.Model):
               p.company_id,
               ml.state,
               ml.id
-        ) AS foo
-        GROUP BY
+        )ASfoo
+        GROUPBY
             start_date,
             date_to,
             partner_id,
@@ -103,4 +103,4 @@ class ReportMembership(models.Model):
             membership_state,
             associate_member_id,
             membership_amount
-        )""" % (self._table,))
+        )"""%(self._table,))

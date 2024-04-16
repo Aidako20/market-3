@@ -1,371 +1,371 @@
 <flectra>
-    <record id="account_journal_dashboard_kanban_view" model="ir.ui.view">
-        <field name="name">account.journal.dashboard.kanban</field>
-        <field name="model">account.journal</field>
-        <field name="arch" type="xml">
-            <kanban create="false" class="oe_background_grey o_kanban_dashboard o_account_kanban" banner_route="/account/account_dashboard_onboarding" js_class="account_dashboard_kanban">
-                <field name="id"/>
-                <field name="name"/>
-                <field name="type"/>
-                <field name="color"/>
-                <field name="show_on_dashboard"/>
-                <field name="kanban_dashboard"/>
-                <field name="activity_ids"/>
-                <field name="activity_state"/>
-                <field name="alias_domain"/>
+    <recordid="account_journal_dashboard_kanban_view"model="ir.ui.view">
+        <fieldname="name">account.journal.dashboard.kanban</field>
+        <fieldname="model">account.journal</field>
+        <fieldname="arch"type="xml">
+            <kanbancreate="false"class="oe_background_greyo_kanban_dashboardo_account_kanban"banner_route="/account/account_dashboard_onboarding"js_class="account_dashboard_kanban">
+                <fieldname="id"/>
+                <fieldname="name"/>
+                <fieldname="type"/>
+                <fieldname="color"/>
+                <fieldname="show_on_dashboard"/>
+                <fieldname="kanban_dashboard"/>
+                <fieldname="activity_ids"/>
+                <fieldname="activity_state"/>
+                <fieldname="alias_domain"/>
                 <templates>
-                    <t t-name="kanban-box">
-                        <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''}">
-                            <t t-value="JSON.parse(record.kanban_dashboard.raw_value)" t-set="dashboard"/>
-                            <t t-value="record.type.raw_value" t-set="journal_type"/>
-                            <t t-call="JournalTop"/>
-                            <div t-att-class="'container o_kanban_card_content' + (dashboard.is_sample_data ? ' o_sample_data' : '')">
-                                <div class="row">
-                                    <t t-if="(journal_type == 'bank' || journal_type == 'cash')" t-call="JournalBodyBankCash"/>
-                                    <t t-if="journal_type == 'sale' || journal_type == 'purchase'" t-call="JournalBodySalePurchase"/>
-                                    <t t-if="journal_type == 'general'" t-call="JournalMiscelaneous"/>
+                    <tt-name="kanban-box">
+                        <divt-attf-class="#{!selection_mode?kanban_color(record.color.raw_value):''}">
+                            <tt-value="JSON.parse(record.kanban_dashboard.raw_value)"t-set="dashboard"/>
+                            <tt-value="record.type.raw_value"t-set="journal_type"/>
+                            <tt-call="JournalTop"/>
+                            <divt-att-class="'containero_kanban_card_content'+(dashboard.is_sample_data?'o_sample_data':'')">
+                                <divclass="row">
+                                    <tt-if="(journal_type=='bank'||journal_type=='cash')"t-call="JournalBodyBankCash"/>
+                                    <tt-if="journal_type=='sale'||journal_type=='purchase'"t-call="JournalBodySalePurchase"/>
+                                    <tt-if="journal_type=='general'"t-call="JournalMiscelaneous"/>
                                 </div>
-                                <t t-if="journal_type == 'bank' || journal_type == 'cash' || journal_type == 'sale' || journal_type == 'purchase'" t-call="JournalBodyGraph"/>
-                            </div><div class="container o_kanban_card_manage_pane dropdown-menu" role="menu">
-                                <t t-call="JournalManage"/>
+                                <tt-if="journal_type=='bank'||journal_type=='cash'||journal_type=='sale'||journal_type=='purchase'"t-call="JournalBodyGraph"/>
+                            </div><divclass="containero_kanban_card_manage_panedropdown-menu"role="menu">
+                                <tt-call="JournalManage"/>
                             </div>
                         </div>
                     </t>
 
-                    <t t-name="JournalTop">
-                        <div t-attf-class="o_kanban_card_header">
-                            <div class="o_kanban_card_header_title">
-                                <div class="o_primary">
-                                    <a type="object" name="open_action"><field name="name"/></a>
-                                    <t t-if="dashboard.company_count > 1">
-                                        <span groups="base.group_multi_company" class="small">- <field name="company_id"/></span>
+                    <tt-name="JournalTop">
+                        <divt-attf-class="o_kanban_card_header">
+                            <divclass="o_kanban_card_header_title">
+                                <divclass="o_primary">
+                                    <atype="object"name="open_action"><fieldname="name"/></a>
+                                    <tt-if="dashboard.company_count>1">
+                                        <spangroups="base.group_multi_company"class="small">-<fieldname="company_id"/></span>
                                     </t>
                                 </div>
-                                <div class="o_secondary" t-att-title="dashboard.title" t-if="journal_type == 'purchase' &amp;&amp; record.alias_domain.raw_value">
-                                    <field name="alias_id"/>
+                                <divclass="o_secondary"t-att-title="dashboard.title"t-if="journal_type=='purchase'&amp;&amp;record.alias_domain.raw_value">
+                                    <fieldname="alias_id"/>
                                 </div>
                             </div>
-                            <div class="o_kanban_manage_button_section">
-                                <a class="o_kanban_manage_toggle_button" href="#"><i class="fa fa-ellipsis-v" aria-label="Selection" role="img" title="Selection"/></a>
+                            <divclass="o_kanban_manage_button_section">
+                                <aclass="o_kanban_manage_toggle_button"href="#"><iclass="fafa-ellipsis-v"aria-label="Selection"role="img"title="Selection"/></a>
                             </div>
                         </div>
                     </t>
 
-                    <t t-name="JournalManage">
+                    <tt-name="JournalManage">
 
-                        <!-- For bank and cash -->
-                        <div t-if="journal_type == 'bank' || journal_type == 'cash'" class="row">
-                             <div class="col-4 o_kanban_card_manage_section o_kanban_manage_view">
-                                <div class="o_kanban_card_manage_title">
-                                    <span role="separator">View</span>
+                        <!--Forbankandcash-->
+                        <divt-if="journal_type=='bank'||journal_type=='cash'"class="row">
+                             <divclass="col-4o_kanban_card_manage_sectiono_kanban_manage_view">
+                                <divclass="o_kanban_card_manage_title">
+                                    <spanrole="separator">View</span>
                                 </div>
                                 <div>
-                                    <a t-if="journal_type == 'bank'" role="menuitem" type="object" name="open_action_with_context" context="{'action_name': 'action_bank_statement_tree', 'search_default_journal': True}">Statements</a>
-                                    <a t-if="journal_type == 'cash'" role="menuitem" type="object" name="open_action_with_context" context="{'action_name': 'action_view_bank_statement_tree', 'search_default_journal': True}">Statements</a>
+                                    <at-if="journal_type=='bank'"role="menuitem"type="object"name="open_action_with_context"context="{'action_name':'action_bank_statement_tree','search_default_journal':True}">Statements</a>
+                                    <at-if="journal_type=='cash'"role="menuitem"type="object"name="open_action_with_context"context="{'action_name':'action_view_bank_statement_tree','search_default_journal':True}">Statements</a>
                                 </div>
                                 <div>
-                                    <a role="menuitem" type="object" name="open_action_with_context" context="{'action_name': 'action_bank_statement_line', 'search_default_journal': True}">Operations</a>
+                                    <arole="menuitem"type="object"name="open_action_with_context"context="{'action_name':'action_bank_statement_line','search_default_journal':True}">Operations</a>
                                 </div>
                                 <div>
-                                    <a role="menuitem" type="object" name="open_collect_money">Customer Payments</a>
+                                    <arole="menuitem"type="object"name="open_collect_money">CustomerPayments</a>
                                 </div>
                                 <div>
-                                    <a role="menuitem" type="object" name="open_spend_money">Vendor Payments</a>
+                                    <arole="menuitem"type="object"name="open_spend_money">VendorPayments</a>
                                 </div>
                                 <div>
-                                    <a role="menuitem" type="object" name="open_transfer_money">Internal Transfers</a>
+                                    <arole="menuitem"type="object"name="open_transfer_money">InternalTransfers</a>
                                 </div>
                                 <div>
-                                    <a role="menuitem" type="object" name="open_action" context="{'action_name': 'action_account_moves_all_a'}" groups="base.group_no_one">Journal Items</a>
+                                    <arole="menuitem"type="object"name="open_action"context="{'action_name':'action_account_moves_all_a'}"groups="base.group_no_one">JournalItems</a>
                                 </div>
                             </div>
 
-                             <div class="col-4 o_kanban_card_manage_section o_kanban_manage_new" groups="account.group_account_user">
-                                <div class="o_kanban_card_manage_title">
-                                    <span role="separator">New</span>
+                             <divclass="col-4o_kanban_card_manage_sectiono_kanban_manage_new"groups="account.group_account_user">
+                                <divclass="o_kanban_card_manage_title">
+                                    <spanrole="separator">New</span>
                                 </div>
-                                <div name="bank_cash_commands">
-                                    <t t-if="journal_type == 'bank'">
-                                        <a role="menuitem" type="object" name="create_bank_statement">Statement</a>
+                                <divname="bank_cash_commands">
+                                    <tt-if="journal_type=='bank'">
+                                        <arole="menuitem"type="object"name="create_bank_statement">Statement</a>
                                     </t>
-                                    <t t-if="journal_type == 'cash'">
-                                        <a role="menuitem" type="object" name="create_cash_statement">Statement</a>
+                                    <tt-if="journal_type=='cash'">
+                                        <arole="menuitem"type="object"name="create_cash_statement">Statement</a>
                                     </t>
                                 </div>
                                 <div>
-                                    <a role="menuitem" type="object" name="create_customer_payment">Customer Payment</a>
+                                    <arole="menuitem"type="object"name="create_customer_payment">CustomerPayment</a>
                                 </div>
                                 <div>
-                                    <a role="menuitem" type="object" name="create_supplier_payment">Vendor Payment</a>
+                                    <arole="menuitem"type="object"name="create_supplier_payment">VendorPayment</a>
                                 </div>
                                 <div>
-                                    <a role="menuitem" type="object" name="create_internal_transfer">Internal Transfer</a>
+                                    <arole="menuitem"type="object"name="create_internal_transfer">InternalTransfer</a>
                                 </div>
                             </div>
 
-                             <div class="col-4 o_kanban_card_manage_section o_kanban_manage_reconciliation">
-                                <div class="o_kanban_card_manage_title">
-                                    <span role="separator">Reconciliation</span>
+                             <divclass="col-4o_kanban_card_manage_sectiono_kanban_manage_reconciliation">
+                                <divclass="o_kanban_card_manage_title">
+                                    <spanrole="separator">Reconciliation</span>
                                 </div>
                                 <div>
-                                    <a role="menuitem" type="object" name="open_action_with_context" context="{'action_name': 'action_account_reconcile_model', 'use_domain': ['|', ('match_journal_ids', '=', False), ('match_journal_ids', 'in', active_id)]}" groups="account.group_account_manager">Reconciliation Models</a>
+                                    <arole="menuitem"type="object"name="open_action_with_context"context="{'action_name':'action_account_reconcile_model','use_domain':['|',('match_journal_ids','=',False),('match_journal_ids','in',active_id)]}"groups="account.group_account_manager">ReconciliationModels</a>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- For purchase and sale -->
-                        <div t-if="journal_type == 'purchase' || journal_type == 'sale'" class="row">
-                             <div class="col-4 o_kanban_card_manage_section o_kanban_manage_view">
-                                <div class="o_kanban_card_manage_title">
+                        <!--Forpurchaseandsale-->
+                        <divt-if="journal_type=='purchase'||journal_type=='sale'"class="row">
+                             <divclass="col-4o_kanban_card_manage_sectiono_kanban_manage_view">
+                                <divclass="o_kanban_card_manage_title">
                                     <span>View</span>
                                 </div>
                                 <div>
-                                    <a t-if="journal_type == 'sale'" type="object" name="open_action" context="{'action_name': 'action_move_out_invoice_type'}">Invoices</a>
-                                    <a t-if="journal_type == 'purchase'" type="object" name="open_action" context="{'action_name': 'action_move_in_invoice_type'}">Bills</a>
+                                    <at-if="journal_type=='sale'"type="object"name="open_action"context="{'action_name':'action_move_out_invoice_type'}">Invoices</a>
+                                    <at-if="journal_type=='purchase'"type="object"name="open_action"context="{'action_name':'action_move_in_invoice_type'}">Bills</a>
                                 </div>
-                                <div id="sale_purchase_refund">
-                                    <a t-if="journal_type == 'sale'" type="object" name="open_action" context="{'action_name': 'action_move_out_refund_type'}">Credit Notes</a>
-                                    <a t-if="journal_type == 'purchase'" type="object" name="open_action" context="{'action_name': 'action_move_in_refund_type'}">Refund</a>
+                                <divid="sale_purchase_refund">
+                                    <at-if="journal_type=='sale'"type="object"name="open_action"context="{'action_name':'action_move_out_refund_type'}">CreditNotes</a>
+                                    <at-if="journal_type=='purchase'"type="object"name="open_action"context="{'action_name':'action_move_in_refund_type'}">Refund</a>
                                 </div>
                                 <div>
-                                    <a type="object" name="open_action" context="{'action_name': 'action_account_moves_all_a'}" groups="base.group_no_one">Journal Items</a>
+                                    <atype="object"name="open_action"context="{'action_name':'action_account_moves_all_a'}"groups="base.group_no_one">JournalItems</a>
                                 </div>
                             </div>
 
-                             <div class="col-4 o_kanban_card_manage_section o_kanban_manage_new" groups="account.group_account_invoice">
-                                <div class="o_kanban_card_manage_title">
+                             <divclass="col-4o_kanban_card_manage_sectiono_kanban_manage_new"groups="account.group_account_invoice">
+                                <divclass="o_kanban_card_manage_title">
                                     <span>New</span>
                                 </div>
                                 <div>
-                                    <a type="object" name="action_create_new">
-                                        <span t-if="journal_type == 'sale'">Invoice</span>
-                                        <span t-if="journal_type == 'purchase'">Bill</span>
+                                    <atype="object"name="action_create_new">
+                                        <spant-if="journal_type=='sale'">Invoice</span>
+                                        <spant-if="journal_type=='purchase'">Bill</span>
                                     </a>
                                 </div>
                                 <div>
-                                    <a type="object" name="action_create_new"  context="{'refund':True}">
-                                        <span t-if="journal_type == 'sale'">Credit Note</span>
-                                        <span t-if="journal_type == 'purchase'">Refund</span>
+                                    <atype="object"name="action_create_new" context="{'refund':True}">
+                                        <spant-if="journal_type=='sale'">CreditNote</span>
+                                        <spant-if="journal_type=='purchase'">Refund</span>
                                     </a>
                                 </div>
-                                <div t-if="journal_type == 'sale'">
-                                    <a class="o_button_upload_bill" journal_type="sale" groups="account.group_account_invoice">
-                                        <span>Upload Invoices</span>
+                                <divt-if="journal_type=='sale'">
+                                    <aclass="o_button_upload_bill"journal_type="sale"groups="account.group_account_invoice">
+                                        <span>UploadInvoices</span>
                                     </a>
                                 </div>
                             </div>
 
-                             <div class="col-4 o_kanban_card_manage_section o_kanban_manage_reports">
-                                <div class="o_kanban_card_manage_title">
+                             <divclass="col-4o_kanban_card_manage_sectiono_kanban_manage_reports">
+                                <divclass="o_kanban_card_manage_title">
                                     <span>Reporting</span>
                                 </div>
                                 <div>
-                                    <a t-if="journal_type == 'sale'" type="action" name="%(action_account_invoice_report_all)d" groups="account.group_account_readonly">Invoices Analysis</a>
-                                    <a t-if="journal_type == 'purchase'" type="action" name="%(action_account_invoice_report_all_supp)d" groups="account.group_account_readonly">Bills Analysis</a>
+                                    <at-if="journal_type=='sale'"type="action"name="%(action_account_invoice_report_all)d"groups="account.group_account_readonly">InvoicesAnalysis</a>
+                                    <at-if="journal_type=='purchase'"type="action"name="%(action_account_invoice_report_all_supp)d"groups="account.group_account_readonly">BillsAnalysis</a>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- For general and situation -->
-                        <div t-if="journal_type == 'general' || journal_type == 'situation'" class="row">
-                             <div class="col-4 o_kanban_card_manage_section o_kanban_manage_view">
-                                <div class="o_kanban_card_manage_title">
+                        <!--Forgeneralandsituation-->
+                        <divt-if="journal_type=='general'||journal_type=='situation'"class="row">
+                             <divclass="col-4o_kanban_card_manage_sectiono_kanban_manage_view">
+                                <divclass="o_kanban_card_manage_title">
                                     <span>View</span>
                                 </div>
                                 <div>
-                                    <a type="object" name="open_action" context="{'action_name': 'action_move_journal_line'}">Journal Entries</a>
+                                    <atype="object"name="open_action"context="{'action_name':'action_move_journal_line'}">JournalEntries</a>
                                 </div>
                                 <div>
-                                    <a type="object" name="open_action" context="{'action_name': 'action_move_journal_line', 'search_default_unposted': 1}">Entries to Review</a>
+                                    <atype="object"name="open_action"context="{'action_name':'action_move_journal_line','search_default_unposted':1}">EntriestoReview</a>
                                 </div>
                                 <div>
-                                    <a type="object" name="open_action" context="{'action_name': 'action_account_moves_all_a'}" groups="base.group_no_one">Journal Items</a>
+                                    <atype="object"name="open_action"context="{'action_name':'action_account_moves_all_a'}"groups="base.group_no_one">JournalItems</a>
                                 </div>
                             </div>
 
-                             <div class="col-4 o_kanban_card_manage_section o_kanban_manage_new" groups="account.group_account_user">
-                                <div class="o_kanban_card_manage_title">
+                             <divclass="col-4o_kanban_card_manage_sectiono_kanban_manage_new"groups="account.group_account_user">
+                                <divclass="o_kanban_card_manage_title">
                                     <span>New</span>
                                 </div>
                                 <div>
-                                    <a type="object" name="action_create_new">Journal Entry</a>
+                                    <atype="object"name="action_create_new">JournalEntry</a>
                                 </div>
                             </div>
 
-                             <div class="col-4 o_kanban_card_manage_section o_kanban_manage_operations">
-                                <div class="o_kanban_card_manage_title">
+                             <divclass="col-4o_kanban_card_manage_sectiono_kanban_manage_operations">
+                                <divclass="o_kanban_card_manage_title">
                                     <span>Operations</span>
                                 </div>
                                 <div>
-                                    <a type="object" name="open_action_with_context" context="{'action_name': 'action_validate_account_move', 'search_default_journal': True}"  groups="account.group_account_user">Post All Entries</a>
+                                    <atype="object"name="open_action_with_context"context="{'action_name':'action_validate_account_move','search_default_journal':True}" groups="account.group_account_user">PostAllEntries</a>
                                 </div>
                             </div>
                         </div>
 
-                        <div t-if="widget.editable" class="o_kanban_card_manage_settings row">
-                            <div class="col-8">
-                                <ul class="oe_kanban_colorpicker" data-field="color"/>
+                        <divt-if="widget.editable"class="o_kanban_card_manage_settingsrow">
+                            <divclass="col-8">
+                                <ulclass="oe_kanban_colorpicker"data-field="color"/>
                             </div>
                         </div>
 
-                        <div groups="account.group_account_manager" class="row o_kanban_card_settings">
-                            <div class="col-6">
-                                <field name="show_on_dashboard" widget="boolean_favorite" />
+                        <divgroups="account.group_account_manager"class="rowo_kanban_card_settings">
+                            <divclass="col-6">
+                                <fieldname="show_on_dashboard"widget="boolean_favorite"/>
                             </div>
-                            <div class="col-6 text-right mt-1">
-                                <a class="dropdown-item" t-if="widget.editable" type="edit">Configuration</a>
+                            <divclass="col-6text-rightmt-1">
+                                <aclass="dropdown-item"t-if="widget.editable"type="edit">Configuration</a>
                             </div>
                         </div>
                     </t>
 
-                    <t t-name="JournalMiscelaneous">
-                        <div class="col-12 col-sm-4 mb-3 mb-sm-0 o_kanban_primary_left">
-                            <button type="object" name="action_create_new" class="btn btn-primary" groups="account.group_account_invoice">
-                                <span>New Entry</span>
+                    <tt-name="JournalMiscelaneous">
+                        <divclass="col-12col-sm-4mb-3mb-sm-0o_kanban_primary_left">
+                            <buttontype="object"name="action_create_new"class="btnbtn-primary"groups="account.group_account_invoice">
+                                <span>NewEntry</span>
                             </button>
                         </div>
-                        <div class="col-12 col-sm-8 o_kanban_primary_right">
-                            <field name="json_activity_data" widget="kanban_vat_activity"/>
-                            <t t-if="dashboard.number_to_check > 0">
-                                <div class="row">
-                                    <div class="col overflow-hidden text-left">
-                                        <a type="object" name="open_action" context="{'action_name': 'action_move_journal_line', 'search_default_to_check': True}"><t t-esc="dashboard.number_to_check"/> to check</a>
+                        <divclass="col-12col-sm-8o_kanban_primary_right">
+                            <fieldname="json_activity_data"widget="kanban_vat_activity"/>
+                            <tt-if="dashboard.number_to_check>0">
+                                <divclass="row">
+                                    <divclass="coloverflow-hiddentext-left">
+                                        <atype="object"name="open_action"context="{'action_name':'action_move_journal_line','search_default_to_check':True}"><tt-esc="dashboard.number_to_check"/>tocheck</a>
                                     </div>
-                                    <div class="col-auto text-right">
-                                        <span><t t-esc="dashboard.to_check_balance"/></span>
+                                    <divclass="col-autotext-right">
+                                        <span><tt-esc="dashboard.to_check_balance"/></span>
                                     </div>
                                 </div>
                             </t>
                         </div>
                     </t>
 
-                    <t t-name="JournalBodyBankCash">
-                        <!-- On the left, display :
-                            - A button corresponding to the bank_statements_source, if it wasn't configured, a button for each of them
-                            - If there are statements to reconcile, a link to reconcile them -->
-                        <div id="dashboard_bank_cash_left" class="col-12 col-sm-5 mb-3 mb-sm-0 o_kanban_primary_left">
-                            <t t-if="journal_type == 'bank'">
-                                <t t-if="dashboard.bank_statements_source == 'undefined'">
-                                    <a t-if="dashboard.number_to_reconcile > 0" name="action_configure_bank_journal" type="object" class="oe_inline" groups="account.group_account_invoice">Connect</a>
-                                    <button t-if="dashboard.number_to_reconcile == 0" name="action_configure_bank_journal" type="object" class="btn btn-primary" groups="account.group_account_invoice">Connect</button>
+                    <tt-name="JournalBodyBankCash">
+                        <!--Ontheleft,display:
+                            -Abuttoncorrespondingtothebank_statements_source,ifitwasn'tconfigured,abuttonforeachofthem
+                            -Iftherearestatementstoreconcile,alinktoreconcilethem-->
+                        <divid="dashboard_bank_cash_left"class="col-12col-sm-5mb-3mb-sm-0o_kanban_primary_left">
+                            <tt-if="journal_type=='bank'">
+                                <tt-if="dashboard.bank_statements_source=='undefined'">
+                                    <at-if="dashboard.number_to_reconcile>0"name="action_configure_bank_journal"type="object"class="oe_inline"groups="account.group_account_invoice">Connect</a>
+                                    <buttont-if="dashboard.number_to_reconcile==0"name="action_configure_bank_journal"type="object"class="btnbtn-primary"groups="account.group_account_invoice">Connect</button>
                                 </t>
-                                <div name="bank_journal_cta" class="mt-3 mt-sm-0">
-                                    <div name="bank_statement_create_button" groups="account.group_account_invoice">
-                                        <a type="object" name="create_bank_statement" class="oe_inline">Create</a><span name="button_import_placeholder"/> Statements
+                                <divname="bank_journal_cta"class="mt-3mt-sm-0">
+                                    <divname="bank_statement_create_button"groups="account.group_account_invoice">
+                                        <atype="object"name="create_bank_statement"class="oe_inline">Create</a><spanname="button_import_placeholder"/>Statements
                                     </div>
                                 </div>
                             </t>
-                            <t t-if="journal_type == 'cash'">
-                                <a t-if="dashboard.number_to_reconcile > 0" type="object" name="create_cash_statement" class="oe_inline" groups="account.group_account_invoice">New Transaction</a>
-                                <button t-if="dashboard.number_to_reconcile == 0" type="object" name="create_cash_statement" class="btn btn-primary" groups="account.group_account_invoice">New Transaction</button>
+                            <tt-if="journal_type=='cash'">
+                                <at-if="dashboard.number_to_reconcile>0"type="object"name="create_cash_statement"class="oe_inline"groups="account.group_account_invoice">NewTransaction</a>
+                                <buttont-if="dashboard.number_to_reconcile==0"type="object"name="create_cash_statement"class="btnbtn-primary"groups="account.group_account_invoice">NewTransaction</button>
                             </t>
                         </div>
-                        <!-- On the right, show other common informations/actions -->
-                        <div id="dashboard_bank_cash_right" class="col-12 col-sm-7 o_kanban_primary_right">
-                            <div class="row" t-if="dashboard.nb_lines_bank_account_balance > 0">
-                                <div id="dashboard_bank_cash_balance" class="col overflow-hidden text-left">
-                                    <span title="Balance in General Ledger">Balance in GL</span>
+                        <!--Ontheright,showothercommoninformations/actions-->
+                        <divid="dashboard_bank_cash_right"class="col-12col-sm-7o_kanban_primary_right">
+                            <divclass="row"t-if="dashboard.nb_lines_bank_account_balance>0">
+                                <divid="dashboard_bank_cash_balance"class="coloverflow-hiddentext-left">
+                                    <spantitle="BalanceinGeneralLedger">BalanceinGL</span>
                                 </div>
-                                <div class="col-auto text-right">
-                                    <span><t t-esc="dashboard.account_balance"/></span>
-                                </div>
-                            </div>
-                            <div class="row" t-if="dashboard.nb_lines_outstanding_pay_account_balance > 0">
-                                <div id="dashboard_bank_cash_outstanding_balance" class="col overflow-hidden text-left">
-                                    <span title="Outstanding Payments/Receipts">Outstanding Payments/Receipts</span>
-                                </div>
-                                <div class="col-auto text-right">
-                                    <span><t t-esc="dashboard.outstanding_pay_account_balance"/></span>
+                                <divclass="col-autotext-right">
+                                    <span><tt-esc="dashboard.account_balance"/></span>
                                 </div>
                             </div>
-                            <t t-if="dashboard.has_at_least_one_statement and dashboard.account_balance != dashboard.last_balance">
-                                <div class="row" name="latest_statement">
-                                    <div class="col overflow-hidden text-left">
-                                        <span title="Latest Statement">Latest Statement</span>
+                            <divclass="row"t-if="dashboard.nb_lines_outstanding_pay_account_balance>0">
+                                <divid="dashboard_bank_cash_outstanding_balance"class="coloverflow-hiddentext-left">
+                                    <spantitle="OutstandingPayments/Receipts">OutstandingPayments/Receipts</span>
+                                </div>
+                                <divclass="col-autotext-right">
+                                    <span><tt-esc="dashboard.outstanding_pay_account_balance"/></span>
+                                </div>
+                            </div>
+                            <tt-if="dashboard.has_at_least_one_statementanddashboard.account_balance!=dashboard.last_balance">
+                                <divclass="row"name="latest_statement">
+                                    <divclass="coloverflow-hiddentext-left">
+                                        <spantitle="LatestStatement">LatestStatement</span>
                                     </div>
-                                    <div class="col-auto text-right">
-                                        <span><t t-esc="dashboard.last_balance"/></span>
+                                    <divclass="col-autotext-right">
+                                        <span><tt-esc="dashboard.last_balance"/></span>
                                     </div>
                                 </div>
                             </t>
                         </div>
                     </t>
-                    <t t-name="JournalBodySalePurchase" id="account.JournalBodySalePurchase">
-                        <div class="col-12 col-sm-5 mb-3 mb-sm-0 o_kanban_primary_left">
-                            <t t-if="journal_type == 'sale'">
-                                <button type="object" name="action_create_new" class="btn btn-primary o_invoice_new" groups="account.group_account_invoice">
-                                    <span>New Invoice</span>
+                    <tt-name="JournalBodySalePurchase"id="account.JournalBodySalePurchase">
+                        <divclass="col-12col-sm-5mb-3mb-sm-0o_kanban_primary_left">
+                            <tt-if="journal_type=='sale'">
+                                <buttontype="object"name="action_create_new"class="btnbtn-primaryo_invoice_new"groups="account.group_account_invoice">
+                                    <span>NewInvoice</span>
                                 </button>
                             </t>
-                            <t t-if="journal_type == 'purchase'">
-                                <button class="btn btn-primary o_button_upload_bill oe_kanban_action_button" journal_type="purchase" groups="account.group_account_invoice">
+                            <tt-if="journal_type=='purchase'">
+                                <buttonclass="btnbtn-primaryo_button_upload_billoe_kanban_action_button"journal_type="purchase"groups="account.group_account_invoice">
                                     <span>Upload</span>
                                 </button>
-                                <a type="object" name="action_create_new" class="o_invoice_new" groups="account.group_account_invoice"><span>Create</span></a><span> Manually</span>
+                                <atype="object"name="action_create_new"class="o_invoice_new"groups="account.group_account_invoice"><span>Create</span></a><span>Manually</span>
                             </t>
                         </div>
-                        <div class="col-12 col-sm-7 o_kanban_primary_right">
-                            <div class="row" t-if="dashboard.number_draft">
-                                <div class="col overflow-hidden text-left">
-                                    <a type="object" name="open_action" context="{'search_default_draft': '1'}">
-                                        <span t-if="journal_type == 'sale'" title="Invoices to Validate"><t t-esc="dashboard.number_draft"/> Invoices to Validate</span>
-                                        <span t-if="journal_type == 'purchase'" title="Bills to Validate"><t t-esc="dashboard.number_draft"/> Bills to Validate</span>
+                        <divclass="col-12col-sm-7o_kanban_primary_right">
+                            <divclass="row"t-if="dashboard.number_draft">
+                                <divclass="coloverflow-hiddentext-left">
+                                    <atype="object"name="open_action"context="{'search_default_draft':'1'}">
+                                        <spant-if="journal_type=='sale'"title="InvoicestoValidate"><tt-esc="dashboard.number_draft"/>InvoicestoValidate</span>
+                                        <spant-if="journal_type=='purchase'"title="BillstoValidate"><tt-esc="dashboard.number_draft"/>BillstoValidate</span>
                                     </a>
                                 </div>
-                                <div class="col-auto text-right">
-                                    <span><t t-esc="dashboard.sum_draft"/></span>
+                                <divclass="col-autotext-right">
+                                    <span><tt-esc="dashboard.sum_draft"/></span>
                                 </div>
                             </div>
-                            <div class="row" t-if="dashboard.number_waiting">
-                                <div class="col overflow-hidden text-left">
-                                    <a type="object" t-if="journal_type == 'sale'" name="open_action"
-                                    context="{'search_default_unpaid':1, 'search_default_posted':1, 'search_default_partial': 1}" id="account_dashboard_sale_pay_link">
-                                        <t t-esc="dashboard.number_waiting"/> Unpaid Invoices
+                            <divclass="row"t-if="dashboard.number_waiting">
+                                <divclass="coloverflow-hiddentext-left">
+                                    <atype="object"t-if="journal_type=='sale'"name="open_action"
+                                    context="{'search_default_unpaid':1,'search_default_posted':1,'search_default_partial':1}"id="account_dashboard_sale_pay_link">
+                                        <tt-esc="dashboard.number_waiting"/>UnpaidInvoices
                                     </a>
 
-                                    <a type="object" t-if="journal_type == 'purchase'" name="open_action"
-                                    context="{'search_default_unpaid':1, 'search_default_posted':1, 'search_default_partial': 1}" id="account_dashboard_purchase_pay_link">
-                                        <t t-esc="dashboard.number_waiting"/> Bills to Pay
+                                    <atype="object"t-if="journal_type=='purchase'"name="open_action"
+                                    context="{'search_default_unpaid':1,'search_default_posted':1,'search_default_partial':1}"id="account_dashboard_purchase_pay_link">
+                                        <tt-esc="dashboard.number_waiting"/>BillstoPay
                                     </a>
                                 </div>
-                                <div class="col-auto text-right">
-                                    <span><t t-esc="dashboard.sum_waiting"/></span>
+                                <divclass="col-autotext-right">
+                                    <span><tt-esc="dashboard.sum_waiting"/></span>
                                 </div>
                             </div>
-                            <t t-if="dashboard.number_to_check > 0">
-                                <div class="row">
-                                    <div class="col overflow-hidden text-left">
-                                        <a type="object" name="open_action" context="{'search_default_to_check': True}"><t t-esc="dashboard.number_to_check"/> to check</a>
+                            <tt-if="dashboard.number_to_check>0">
+                                <divclass="row">
+                                    <divclass="coloverflow-hiddentext-left">
+                                        <atype="object"name="open_action"context="{'search_default_to_check':True}"><tt-esc="dashboard.number_to_check"/>tocheck</a>
                                     </div>
-                                    <div class="col-auto text-right">
-                                        <span><t t-esc="dashboard.to_check_balance"/></span>
+                                    <divclass="col-autotext-right">
+                                        <span><tt-esc="dashboard.to_check_balance"/></span>
                                     </div>
                                 </div>
                             </t>
                         </div>
                     </t>
-                    <t t-name="JournalBodyGraph">
-                        <field name="kanban_dashboard_graph" t-att-graph_type="_.contains(['cash','bank'],journal_type) ? 'line' : 'bar'" widget="dashboard_graph"/>
+                    <tt-name="JournalBodyGraph">
+                        <fieldname="kanban_dashboard_graph"t-att-graph_type="_.contains(['cash','bank'],journal_type)?'line':'bar'"widget="dashboard_graph"/>
                     </t>
             </templates>
             </kanban>
         </field>
     </record>
 
-    <record id="open_account_journal_dashboard_kanban" model="ir.actions.act_window">
-        <field name="name">Accounting Dashboard</field>
-        <field name="res_model">account.journal</field>
-        <field name="view_mode">kanban,form</field>
-        <field name="view_id" ref="account_journal_dashboard_kanban_view"/>
-        <field name="usage">menu</field>
-        <field name="context">{'search_default_dashboard':1}</field>
-        <field name="domain">[]</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_neutral_face">
-                This is the accounting dashboard
+    <recordid="open_account_journal_dashboard_kanban"model="ir.actions.act_window">
+        <fieldname="name">AccountingDashboard</field>
+        <fieldname="res_model">account.journal</field>
+        <fieldname="view_mode">kanban,form</field>
+        <fieldname="view_id"ref="account_journal_dashboard_kanban_view"/>
+        <fieldname="usage">menu</field>
+        <fieldname="context">{'search_default_dashboard':1}</field>
+        <fieldname="domain">[]</field>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_neutral_face">
+                Thisistheaccountingdashboard
             </p><p>
-                If you have not installed a chart of account, please install one first.<br/>
-               <a type="action" name="%(open_account_charts_modules)d" tabindex="-1">Browse available countries.</a>
+                Ifyouhavenotinstalledachartofaccount,pleaseinstallonefirst.<br/>
+               <atype="action"name="%(open_account_charts_modules)d"tabindex="-1">Browseavailablecountries.</a>
             </p>
         </field>
     </record>

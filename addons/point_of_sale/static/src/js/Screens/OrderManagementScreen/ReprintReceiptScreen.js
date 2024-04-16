@@ -1,32 +1,32 @@
-flectra.define('point_of_sale.ReprintReceiptScreen', function (require) {
-    'use strict';
+flectra.define('point_of_sale.ReprintReceiptScreen',function(require){
+    'usestrict';
 
-    const AbstractReceiptScreen = require('point_of_sale.AbstractReceiptScreen');
-    const Registries = require('point_of_sale.Registries');
+    constAbstractReceiptScreen=require('point_of_sale.AbstractReceiptScreen');
+    constRegistries=require('point_of_sale.Registries');
 
-    const ReprintReceiptScreen = (AbstractReceiptScreen) => {
-        class ReprintReceiptScreen extends AbstractReceiptScreen {
-            mounted() {
+    constReprintReceiptScreen=(AbstractReceiptScreen)=>{
+        classReprintReceiptScreenextendsAbstractReceiptScreen{
+            mounted(){
                 this.printReceipt();
             }
-            confirm() {
+            confirm(){
                 this.showScreen('OrderManagementScreen');
             }
-            async printReceipt() {
-                if(this.env.pos.proxy.printer && this.env.pos.config.iface_print_skip_screen) {
-                    let result = await this._printReceipt();
+            asyncprintReceipt(){
+                if(this.env.pos.proxy.printer&&this.env.pos.config.iface_print_skip_screen){
+                    letresult=awaitthis._printReceipt();
                     if(result)
                         this.showScreen('OrderManagementScreen');
                 }
             }
-            async tryReprint() {
-                await this._printReceipt();
+            asynctryReprint(){
+                awaitthis._printReceipt();
             }
         }
-        ReprintReceiptScreen.template = 'ReprintReceiptScreen';
-        return ReprintReceiptScreen;
+        ReprintReceiptScreen.template='ReprintReceiptScreen';
+        returnReprintReceiptScreen;
     };
-    Registries.Component.addByExtending(ReprintReceiptScreen, AbstractReceiptScreen);
+    Registries.Component.addByExtending(ReprintReceiptScreen,AbstractReceiptScreen);
 
-    return ReprintReceiptScreen;
+    returnReprintReceiptScreen;
 });

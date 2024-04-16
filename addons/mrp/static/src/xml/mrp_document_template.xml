@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-<div t-name="MrpDocumentsKanbanView.buttons">
-    <button type="button" t-attf-class="btn btn-primary o_mrp_documents_kanban_upload">
+<divt-name="MrpDocumentsKanbanView.buttons">
+    <buttontype="button"t-attf-class="btnbtn-primaryo_mrp_documents_kanban_upload">
         Upload
     </button>
 </div>

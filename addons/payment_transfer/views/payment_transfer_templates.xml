@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <template id="transfer_form">
-            <input type="hidden" name="data_set" t-att-data-action-url="tx_url" data-remove-me=""/>
-            <t t-if="return_url">
-                <input type="hidden" name='return_url' t-att-value='return_url'/>
+    <datanoupdate="1">
+        <templateid="transfer_form">
+            <inputtype="hidden"name="data_set"t-att-data-action-url="tx_url"data-remove-me=""/>
+            <tt-if="return_url">
+                <inputtype="hidden"name='return_url't-att-value='return_url'/>
             </t>
-            <input type="hidden" name='reference' t-att-value='reference'/>
-            <input type="hidden" name='amount' t-att-value='amount'/>
-            <input type="hidden" name='currency' t-att-value='currency.name'/>
+            <inputtype="hidden"name='reference't-att-value='reference'/>
+            <inputtype="hidden"name='amount't-att-value='amount'/>
+            <inputtype="hidden"name='currency't-att-value='currency.name'/>
         </template>
     </data>
 </flectra>

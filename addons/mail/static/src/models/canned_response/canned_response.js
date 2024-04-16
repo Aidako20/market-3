@@ -1,107 +1,107 @@
-flectra.define('mail/static/src/models/canned_response/canned_response.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/canned_response/canned_response.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr } = require('mail/static/src/model/model_field.js');
-const { cleanSearchTerm } = require('mail/static/src/utils/utils.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{attr}=require('mail/static/src/model/model_field.js');
+const{cleanSearchTerm}=require('mail/static/src/utils/utils.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class CannedResponse extends dependencies['mail.model'] {
-
-        /**
-         * Fetches canned responses matching the given search term to extend the
-         * JS knowledge and to update the suggestion list accordingly.
-         *
-         * In practice all canned responses are already fetched at init so this
-         * method does nothing.
-         *
-         * @static
-         * @param {string} searchTerm
-         * @param {Object} [options={}]
-         * @param {mail.thread} [options.thread] prioritize and/or restrict
-         *  result in the context of given thread
-         */
-        static fetchSuggestions(searchTerm, { thread } = {}) {}
+    classCannedResponseextendsdependencies['mail.model']{
 
         /**
-         * Returns a sort function to determine the order of display of canned
-         * responses in the suggestion list.
+         *Fetchescannedresponsesmatchingthegivensearchtermtoextendthe
+         *JSknowledgeandtoupdatethesuggestionlistaccordingly.
          *
-         * @static
-         * @param {string} searchTerm
-         * @param {Object} [options={}]
-         * @param {mail.thread} [options.thread] prioritize result in the
-         *  context of given thread
-         * @returns {function}
+         *Inpracticeallcannedresponsesarealreadyfetchedatinitsothis
+         *methoddoesnothing.
+         *
+         *@static
+         *@param{string}searchTerm
+         *@param{Object}[options={}]
+         *@param{mail.thread}[options.thread]prioritizeand/orrestrict
+         * resultinthecontextofgiventhread
          */
-        static getSuggestionSortFunction(searchTerm, { thread } = {}) {
-            const cleanedSearchTerm = cleanSearchTerm(searchTerm);
-            return (a, b) => {
-                const cleanedAName = cleanSearchTerm(a.source || '');
-                const cleanedBName = cleanSearchTerm(b.source || '');
-                if (cleanedAName.startsWith(cleanedSearchTerm) && !cleanedBName.startsWith(cleanedSearchTerm)) {
-                    return -1;
+        staticfetchSuggestions(searchTerm,{thread}={}){}
+
+        /**
+         *Returnsasortfunctiontodeterminetheorderofdisplayofcanned
+         *responsesinthesuggestionlist.
+         *
+         *@static
+         *@param{string}searchTerm
+         *@param{Object}[options={}]
+         *@param{mail.thread}[options.thread]prioritizeresultinthe
+         * contextofgiventhread
+         *@returns{function}
+         */
+        staticgetSuggestionSortFunction(searchTerm,{thread}={}){
+            constcleanedSearchTerm=cleanSearchTerm(searchTerm);
+            return(a,b)=>{
+                constcleanedAName=cleanSearchTerm(a.source||'');
+                constcleanedBName=cleanSearchTerm(b.source||'');
+                if(cleanedAName.startsWith(cleanedSearchTerm)&&!cleanedBName.startsWith(cleanedSearchTerm)){
+                    return-1;
                 }
-                if (!cleanedAName.startsWith(cleanedSearchTerm) && cleanedBName.startsWith(cleanedSearchTerm)) {
-                    return 1;
+                if(!cleanedAName.startsWith(cleanedSearchTerm)&&cleanedBName.startsWith(cleanedSearchTerm)){
+                    return1;
                 }
-                if (cleanedAName < cleanedBName) {
-                    return -1;
+                if(cleanedAName<cleanedBName){
+                    return-1;
                 }
-                if (cleanedAName > cleanedBName) {
-                    return 1;
+                if(cleanedAName>cleanedBName){
+                    return1;
                 }
-                return a.id - b.id;
+                returna.id-b.id;
             };
         }
 
         /*
-         * Returns canned responses that match the given search term.
+         *Returnscannedresponsesthatmatchthegivensearchterm.
          *
-         * @static
-         * @param {string} searchTerm
-         * @param {Object} [options={}]
-         * @param {mail.thread} [options.thread] prioritize and/or restrict
-         *  result in the context of given thread
-         * @returns {[mail.canned_response[], mail.canned_response[]]}
+         *@static
+         *@param{string}searchTerm
+         *@param{Object}[options={}]
+         *@param{mail.thread}[options.thread]prioritizeand/orrestrict
+         * resultinthecontextofgiventhread
+         *@returns{[mail.canned_response[],mail.canned_response[]]}
          */
-        static searchSuggestions(searchTerm, { thread } = {}) {
-            const cleanedSearchTerm = cleanSearchTerm(searchTerm);
-            return [this.env.messaging.cannedResponses.filter(cannedResponse =>
+        staticsearchSuggestions(searchTerm,{thread}={}){
+            constcleanedSearchTerm=cleanSearchTerm(searchTerm);
+            return[this.env.messaging.cannedResponses.filter(cannedResponse=>
                 cleanSearchTerm(cannedResponse.source).includes(cleanedSearchTerm)
             )];
         }
 
         /**
-         * Returns the text that identifies this canned response in a mention.
+         *Returnsthetextthatidentifiesthiscannedresponseinamention.
          *
-         * @returns {string}
+         *@returns{string}
          */
-        getMentionText() {
-            return this.substitution;
+        getMentionText(){
+            returnthis.substitution;
         }
 
     }
 
-    CannedResponse.fields = {
-        id: attr(),
+    CannedResponse.fields={
+        id:attr(),
         /**
-         *  The keyword to use a specific canned response.
+         * Thekeywordtouseaspecificcannedresponse.
          */
-        source: attr(),
+        source:attr(),
         /**
-         * The canned response itself which will replace the keyword previously
-         * entered.
+         *Thecannedresponseitselfwhichwillreplacethekeywordpreviously
+         *entered.
          */
-        substitution: attr(),
+        substitution:attr(),
     };
 
-    CannedResponse.modelName = 'mail.canned_response';
+    CannedResponse.modelName='mail.canned_response';
 
-    return CannedResponse;
+    returnCannedResponse;
 }
 
-registerNewModel('mail.canned_response', factory);
+registerNewModel('mail.canned_response',factory);
 
 });

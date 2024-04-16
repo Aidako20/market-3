@@ -1,130 +1,130 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import logging
+importlogging
 
-from flectra import _, api, fields, models
+fromflectraimport_,api,fields,models
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
 
-class AliasMixin(models.AbstractModel):
-    """ A mixin for models that inherits mail.alias. This mixin initializes the
-        alias_id column in database, and manages the expected one-to-one
-        relation between your model and mail aliases.
+classAliasMixin(models.AbstractModel):
+    """Amixinformodelsthatinheritsmail.alias.Thismixininitializesthe
+        alias_idcolumnindatabase,andmanagestheexpectedone-to-one
+        relationbetweenyourmodelandmailaliases.
     """
-    _name = 'mail.alias.mixin'
-    _inherits = {'mail.alias': 'alias_id'}
-    _description = 'Email Aliases Mixin'
-    ALIAS_WRITEABLE_FIELDS = ['alias_name', 'alias_contact', 'alias_defaults', 'alias_bounced_content']
+    _name='mail.alias.mixin'
+    _inherits={'mail.alias':'alias_id'}
+    _description='EmailAliasesMixin'
+    ALIAS_WRITEABLE_FIELDS=['alias_name','alias_contact','alias_defaults','alias_bounced_content']
 
-    alias_id = fields.Many2one('mail.alias', string='Alias', ondelete="restrict", required=True)
+    alias_id=fields.Many2one('mail.alias',string='Alias',ondelete="restrict",required=True)
 
-    # --------------------------------------------------
-    # CRUD
-    # --------------------------------------------------
+    #--------------------------------------------------
+    #CRUD
+    #--------------------------------------------------
 
     @api.model_create_multi
-    def create(self, vals_list):
-        """ Create a record with each ``vals`` or ``vals_list`` and create a corresponding alias. """
-        valid_vals_list = []
-        for vals in vals_list:
-            new_alias = not vals.get('alias_id')
-            if new_alias:
-                alias_vals, record_vals = self._alias_filter_fields(vals)
+    defcreate(self,vals_list):
+        """Createarecordwitheach``vals``or``vals_list``andcreateacorrespondingalias."""
+        valid_vals_list=[]
+        forvalsinvals_list:
+            new_alias=notvals.get('alias_id')
+            ifnew_alias:
+                alias_vals,record_vals=self._alias_filter_fields(vals)
                 alias_vals.update(self._alias_get_creation_values())
-                alias = self.env['mail.alias'].sudo().create(alias_vals)
-                record_vals['alias_id'] = alias.id
+                alias=self.env['mail.alias'].sudo().create(alias_vals)
+                record_vals['alias_id']=alias.id
                 valid_vals_list.append(record_vals)
             else:
                 valid_vals_list.append(vals)
 
-        records = super(AliasMixin, self).create(valid_vals_list)
+        records=super(AliasMixin,self).create(valid_vals_list)
 
-        for record in records:
+        forrecordinrecords:
             record.alias_id.sudo().write(record._alias_get_creation_values())
 
-        return records
+        returnrecords
 
-    def write(self, vals):
-        """ Split writable fields of mail.alias and other fields alias fields will
-        write with sudo and the other normally """
-        alias_vals, record_vals = self._alias_filter_fields(vals, filters=self.ALIAS_WRITEABLE_FIELDS)
-        if record_vals:
-            super(AliasMixin, self).write(record_vals)
-        if alias_vals and (record_vals or self.check_access_rights('write', raise_exception=False)):
+    defwrite(self,vals):
+        """Splitwritablefieldsofmail.aliasandotherfieldsaliasfieldswill
+        writewithsudoandtheothernormally"""
+        alias_vals,record_vals=self._alias_filter_fields(vals,filters=self.ALIAS_WRITEABLE_FIELDS)
+        ifrecord_vals:
+            super(AliasMixin,self).write(record_vals)
+        ifalias_valsand(record_valsorself.check_access_rights('write',raise_exception=False)):
             self.mapped('alias_id').sudo().write(alias_vals)
 
-        return True
+        returnTrue
 
-    def unlink(self):
-        """ Delete the given records, and cascade-delete their corresponding alias. """
-        aliases = self.mapped('alias_id')
-        res = super(AliasMixin, self).unlink()
+    defunlink(self):
+        """Deletethegivenrecords,andcascade-deletetheircorrespondingalias."""
+        aliases=self.mapped('alias_id')
+        res=super(AliasMixin,self).unlink()
         aliases.sudo().unlink()
-        return res
+        returnres
 
-    @api.returns(None, lambda value: value[0])
-    def copy_data(self, default=None):
-        data = super(AliasMixin, self).copy_data(default)[0]
-        for fields_not_writable in set(self.env['mail.alias']._fields.keys()) - set(self.ALIAS_WRITEABLE_FIELDS):
-            if fields_not_writable in data:
-                del data[fields_not_writable]
-        return [data]
+    @api.returns(None,lambdavalue:value[0])
+    defcopy_data(self,default=None):
+        data=super(AliasMixin,self).copy_data(default)[0]
+        forfields_not_writableinset(self.env['mail.alias']._fields.keys())-set(self.ALIAS_WRITEABLE_FIELDS):
+            iffields_not_writableindata:
+                deldata[fields_not_writable]
+        return[data]
 
-    def _init_column(self, name):
-        """ Create aliases for existing rows. """
-        super(AliasMixin, self)._init_column(name)
-        if name == 'alias_id':
-            # as 'mail.alias' records refer to 'ir.model' records, create
-            # aliases after the reflection of models
+    def_init_column(self,name):
+        """Createaliasesforexistingrows."""
+        super(AliasMixin,self)._init_column(name)
+        ifname=='alias_id':
+            #as'mail.alias'recordsreferto'ir.model'records,create
+            #aliasesafterthereflectionofmodels
             self.pool.post_init(self._init_column_alias_id)
 
-    def _init_column_alias_id(self):
-        # both self and the alias model must be present in 'ir.model'
-        child_ctx = {
-            'active_test': False,       # retrieve all records
-            'prefetch_fields': False,   # do not prefetch fields on records
+    def_init_column_alias_id(self):
+        #bothselfandthealiasmodelmustbepresentin'ir.model'
+        child_ctx={
+            'active_test':False,      #retrieveallrecords
+            'prefetch_fields':False,  #donotprefetchfieldsonrecords
         }
-        child_model = self.sudo().with_context(child_ctx)
+        child_model=self.sudo().with_context(child_ctx)
 
-        for record in child_model.search([('alias_id', '=', False)]):
-            # create the alias, and link it to the current record
-            alias = self.env['mail.alias'].sudo().create(record._alias_get_creation_values())
-            record.with_context(mail_notrack=True).alias_id = alias
-            _logger.info('Mail alias created for %s %s (id %s)',
-                         record._name, record.display_name, record.id)
+        forrecordinchild_model.search([('alias_id','=',False)]):
+            #createthealias,andlinkittothecurrentrecord
+            alias=self.env['mail.alias'].sudo().create(record._alias_get_creation_values())
+            record.with_context(mail_notrack=True).alias_id=alias
+            _logger.info('Mailaliascreatedfor%s%s(id%s)',
+                         record._name,record.display_name,record.id)
 
-    # --------------------------------------------------
-    # MIXIN TOOL OVERRIDE METHODS
-    # --------------------------------------------------
+    #--------------------------------------------------
+    #MIXINTOOLOVERRIDEMETHODS
+    #--------------------------------------------------
 
-    def _alias_get_creation_values(self):
-        """ Return values to create an alias, or to write on the alias after its
+    def_alias_get_creation_values(self):
+        """Returnvaluestocreateanalias,ortowriteonthealiasafterits
             creation.
         """
-        return {
-            'alias_parent_thread_id': self.id if self.id else False,
-            'alias_parent_model_id': self.env['ir.model']._get(self._name).id,
+        return{
+            'alias_parent_thread_id':self.idifself.idelseFalse,
+            'alias_parent_model_id':self.env['ir.model']._get(self._name).id,
         }
 
-    def _alias_filter_fields(self, values, filters=False):
-        """ Split the vals dict into two dictionnary of vals, one for alias
-        field and the other for other fields """
-        if not filters:
-            filters = self.env['mail.alias']._fields.keys()
-        alias_values, record_values = {}, {}
-        for fname in values.keys():
-            if fname in filters:
-                alias_values[fname] = values.get(fname)
+    def_alias_filter_fields(self,values,filters=False):
+        """Splitthevalsdictintotwodictionnaryofvals,oneforalias
+        fieldandtheotherforotherfields"""
+        ifnotfilters:
+            filters=self.env['mail.alias']._fields.keys()
+        alias_values,record_values={},{}
+        forfnameinvalues.keys():
+            iffnameinfilters:
+                alias_values[fname]=values.get(fname)
             else:
-                record_values[fname] = values.get(fname)
-        return alias_values, record_values
+                record_values[fname]=values.get(fname)
+        returnalias_values,record_values
 
-    # --------------------------------------------------
-    # GATEWAY
-    # --------------------------------------------------
+    #--------------------------------------------------
+    #GATEWAY
+    #--------------------------------------------------
 
-    def _alias_check_contact_on_record(self, record, message, message_dict, alias):
-        """ Move to ``BaseModel._alias_get_error_message() """
-        return record._alias_get_error_message(message, message_dict, alias)
+    def_alias_check_contact_on_record(self,record,message,message_dict,alias):
+        """Moveto``BaseModel._alias_get_error_message()"""
+        returnrecord._alias_get_error_message(message,message_dict,alias)

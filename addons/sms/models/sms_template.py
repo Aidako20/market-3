@@ -1,66 +1,66 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
+fromflectraimportapi,fields,models,_
 
 
-class SMSTemplate(models.Model):
-    "Templates for sending SMS"
-    _name = "sms.template"
-    _inherit = ['mail.render.mixin']
-    _description = 'SMS Templates'
+classSMSTemplate(models.Model):
+    "TemplatesforsendingSMS"
+    _name="sms.template"
+    _inherit=['mail.render.mixin']
+    _description='SMSTemplates'
 
     @api.model
-    def default_get(self, fields):
-        res = super(SMSTemplate, self).default_get(fields)
-        if not fields or 'model_id' in fields and not res.get('model_id') and res.get('model'):
-            res['model_id'] = self.env['ir.model']._get(res['model']).id
-        return res
+    defdefault_get(self,fields):
+        res=super(SMSTemplate,self).default_get(fields)
+        ifnotfieldsor'model_id'infieldsandnotres.get('model_id')andres.get('model'):
+            res['model_id']=self.env['ir.model']._get(res['model']).id
+        returnres
 
-    name = fields.Char('Name', translate=True)
-    model_id = fields.Many2one(
-        'ir.model', string='Applies to', required=True,
-        domain=['&', ('is_mail_thread_sms', '=', True), ('transient', '=', False)],
-        help="The type of document this template can be used with", ondelete='cascade')
-    model = fields.Char('Related Document Model', related='model_id.model', index=True, store=True, readonly=True)
-    body = fields.Char('Body', translate=True, required=True)
-    # Use to create contextual action (same as for email template)
-    sidebar_action_id = fields.Many2one('ir.actions.act_window', 'Sidebar action', readonly=True, copy=False,
-                                        help="Sidebar action to make this template available on records "
-                                        "of the related document model")
+    name=fields.Char('Name',translate=True)
+    model_id=fields.Many2one(
+        'ir.model',string='Appliesto',required=True,
+        domain=['&',('is_mail_thread_sms','=',True),('transient','=',False)],
+        help="Thetypeofdocumentthistemplatecanbeusedwith",ondelete='cascade')
+    model=fields.Char('RelatedDocumentModel',related='model_id.model',index=True,store=True,readonly=True)
+    body=fields.Char('Body',translate=True,required=True)
+    #Usetocreatecontextualaction(sameasforemailtemplate)
+    sidebar_action_id=fields.Many2one('ir.actions.act_window','Sidebaraction',readonly=True,copy=False,
+                                        help="Sidebaractiontomakethistemplateavailableonrecords"
+                                        "oftherelateddocumentmodel")
 
-    @api.returns('self', lambda value: value.id)
-    def copy(self, default=None):
-        default = dict(default or {},
-                       name=_("%s (copy)", self.name))
-        return super(SMSTemplate, self).copy(default=default)
+    @api.returns('self',lambdavalue:value.id)
+    defcopy(self,default=None):
+        default=dict(defaultor{},
+                       name=_("%s(copy)",self.name))
+        returnsuper(SMSTemplate,self).copy(default=default)
 
-    def unlink(self):
+    defunlink(self):
         self.sudo().mapped('sidebar_action_id').unlink()
-        return super(SMSTemplate, self).unlink()
+        returnsuper(SMSTemplate,self).unlink()
 
-    def action_create_sidebar_action(self):
-        ActWindow = self.env['ir.actions.act_window']
-        view = self.env.ref('sms.sms_composer_view_form')
+    defaction_create_sidebar_action(self):
+        ActWindow=self.env['ir.actions.act_window']
+        view=self.env.ref('sms.sms_composer_view_form')
 
-        for template in self:
-            button_name = _('Send SMS (%s)', template.name)
-            action = ActWindow.create({
-                'name': button_name,
-                'type': 'ir.actions.act_window',
-                'res_model': 'sms.composer',
-                # Add default_composition_mode to guess to determine if need to use mass or comment composer
-                'context': "{'default_template_id' : %d, 'sms_composition_mode': 'guess', 'default_res_ids': active_ids, 'default_res_id': active_id}" % (template.id),
-                'view_mode': 'form',
-                'view_id': view.id,
-                'target': 'new',
-                'binding_model_id': template.model_id.id,
+        fortemplateinself:
+            button_name=_('SendSMS(%s)',template.name)
+            action=ActWindow.create({
+                'name':button_name,
+                'type':'ir.actions.act_window',
+                'res_model':'sms.composer',
+                #Adddefault_composition_modetoguesstodetermineifneedtousemassorcommentcomposer
+                'context':"{'default_template_id':%d,'sms_composition_mode':'guess','default_res_ids':active_ids,'default_res_id':active_id}"%(template.id),
+                'view_mode':'form',
+                'view_id':view.id,
+                'target':'new',
+                'binding_model_id':template.model_id.id,
             })
-            template.write({'sidebar_action_id': action.id})
-        return True
+            template.write({'sidebar_action_id':action.id})
+        returnTrue
 
-    def action_unlink_sidebar_action(self):
-        for template in self:
-            if template.sidebar_action_id:
+    defaction_unlink_sidebar_action(self):
+        fortemplateinself:
+            iftemplate.sidebar_action_id:
                 template.sidebar_action_id.unlink()
-        return True
+        returnTrue

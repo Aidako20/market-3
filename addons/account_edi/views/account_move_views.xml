@@ -1,62 +1,62 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
 
-        <record id="account_edi.action_open_edi_documents" model="ir.actions.act_window">
-            <field name="name">Electronic invoicing</field>
-            <field name="res_model">account.edi.document</field>
-            <field name="view_mode">tree</field>
-            <field name="domain">[('move_id', '=', active_id), ('error', '!=', False)]</field>
+        <recordid="account_edi.action_open_edi_documents"model="ir.actions.act_window">
+            <fieldname="name">Electronicinvoicing</field>
+            <fieldname="res_model">account.edi.document</field>
+            <fieldname="view_mode">tree</field>
+            <fieldname="domain">[('move_id','=',active_id),('error','!=',False)]</field>
         </record>
 
-        <record id="view_move_form_inherit" model="ir.ui.view">
-            <field name="name">account.move.form.inherit</field>
-            <field name="model">account.move</field>
-            <field name="inherit_id" ref="account.view_move_form" />
-            <field name="arch" type="xml">
-                <xpath expr="//button[@name='button_cancel']" position="after">
-                    <field name="edi_show_cancel_button" invisible="1"/>
-                    <button name="button_cancel_posted_moves"
-                            string="Request EDI Cancellation"
+        <recordid="view_move_form_inherit"model="ir.ui.view">
+            <fieldname="name">account.move.form.inherit</field>
+            <fieldname="model">account.move</field>
+            <fieldname="inherit_id"ref="account.view_move_form"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//button[@name='button_cancel']"position="after">
+                    <fieldname="edi_show_cancel_button"invisible="1"/>
+                    <buttonname="button_cancel_posted_moves"
+                            string="RequestEDICancellation"
                             type="object"
                             groups="account.group_account_invoice"
-                            attrs="{'invisible' : [('edi_show_cancel_button', '=', False)]}"/>
+                            attrs="{'invisible':[('edi_show_cancel_button','=',False)]}"/>
                 </xpath>
-                <xpath expr="//header" position="after">
-                    <div class="alert alert-info" role="alert" style="margin-bottom:0px;"
-                        attrs="{'invisible': ['|', ('edi_web_services_to_process', 'in', ['', False]), ('state', '=', 'draft')]}">
-                         <div>The invoice will be sent asynchronously to :
-                            <field name="edi_web_services_to_process" class="oe_inline"/>
+                <xpathexpr="//header"position="after">
+                    <divclass="alertalert-info"role="alert"style="margin-bottom:0px;"
+                        attrs="{'invisible':['|',('edi_web_services_to_process','in',['',False]),('state','=','draft')]}">
+                         <div>Theinvoicewillbesentasynchronouslyto:
+                            <fieldname="edi_web_services_to_process"class="oe_inline"/>
                          </div>
-                         <button name="action_process_edi_web_services" type="object" class="oe_link" string="Send now" /> 
+                         <buttonname="action_process_edi_web_services"type="object"class="oe_link"string="Sendnow"/>
                     </div>
-                    <div class="alert alert-warning" role="alert" style="margin-bottom:0px;"
-                         attrs="{'invisible': [('edi_error_count', '=', 0)]}">
-                         <field name="edi_error_count"/>
-                         Electronic invoicing error(s)
-                         <button name="%(account_edi.action_open_edi_documents)d" type="action" class="oe_link oe_inline" string="⇒ See errors" /> 
+                    <divclass="alertalert-warning"role="alert"style="margin-bottom:0px;"
+                         attrs="{'invisible':[('edi_error_count','=',0)]}">
+                         <fieldname="edi_error_count"/>
+                         Electronicinvoicingerror(s)
+                         <buttonname="%(account_edi.action_open_edi_documents)d"type="action"class="oe_linkoe_inline"string="⇒Seeerrors"/>
                     </div>
                 </xpath>
-                <xpath expr="//div[@name='journal_div']" position="after">
-                    <field name="edi_state" attrs="{'invisible': ['|', ('edi_state', '=', False), ('state', '=', 'draft')]}"/>
+                <xpathexpr="//div[@name='journal_div']"position="after">
+                    <fieldname="edi_state"attrs="{'invisible':['|',('edi_state','=',False),('state','=','draft')]}"/>
                 </xpath>
-                <xpath expr="//page[@id='other_tab']" position="after">
-                    <page id="edi_documents"
-                          string="EDI Documents"
+                <xpathexpr="//page[@id='other_tab']"position="after">
+                    <pageid="edi_documents"
+                          string="EDIDocuments"
                           groups="base.group_no_one"
-                          attrs="{'invisible': [('edi_document_ids', '=', [])]}">
-                        <field name="edi_document_ids" options="{'no_open': '1'}">
-                            <tree create="false" delete="false" edit="false" decoration-danger="error">
-                                <field name="name"/>
-                                <field name="edi_format_name"/>
-                                <field name="state"/>
-                                <field name="error" invisible="1"/>
-                                <button name="action_export_xml"
+                          attrs="{'invisible':[('edi_document_ids','=',[])]}">
+                        <fieldname="edi_document_ids"options="{'no_open':'1'}">
+                            <treecreate="false"delete="false"edit="false"decoration-danger="error">
+                                <fieldname="name"/>
+                                <fieldname="edi_format_name"/>
+                                <fieldname="state"/>
+                                <fieldname="error"invisible="1"/>
+                                <buttonname="action_export_xml"
                                         type="object"
-                                        class="oe_link oe_inline"
+                                        class="oe_linkoe_inline"
                                         string="Download"
                                         groups="base.group_no_one"
-                                        attrs="{'invisible': [('error', '=', False)]}"/>
+                                        attrs="{'invisible':[('error','=',False)]}"/>
                             </tree>
                         </field>
                     </page>

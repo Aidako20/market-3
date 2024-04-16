@@ -1,20 +1,20 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-# @author -  Fekete Mihai <feketemihai@gmail.com>
-# Copyright (C) 2020 NextERP Romania (https://www.nexterp.ro) <contact@nexterp.ro>
-# Copyright (C) 2015 Forest and Biomass Services Romania (http://www.forbiom.eu).
-# Copyright (C) 2011 TOTAL PC SYSTEMS (http://www.erpsystems.ro).
-# Copyright (C) 2009 (<http://www.filsystem.ro>)
+#@author- FeketeMihai<feketemihai@gmail.com>
+#Copyright(C)2020NextERPRomania(https://www.nexterp.ro)<contact@nexterp.ro>
+#Copyright(C)2015ForestandBiomassServicesRomania(http://www.forbiom.eu).
+#Copyright(C)2011TOTALPCSYSTEMS(http://www.erpsystems.ro).
+#Copyright(C)2009(<http://www.filsystem.ro>)
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class ResPartner(models.Model):
-    _inherit = "res.partner"
+classResPartner(models.Model):
+    _inherit="res.partner"
 
     @api.model
-    def _commercial_fields(self):
-        return super(ResPartner, self)._commercial_fields() + ['nrc']
+    def_commercial_fields(self):
+        returnsuper(ResPartner,self)._commercial_fields()+['nrc']
 
-    nrc = fields.Char(string='NRC', help='Registration number at the Registry of Commerce')
+    nrc=fields.Char(string='NRC',help='RegistrationnumberattheRegistryofCommerce')

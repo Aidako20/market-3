@@ -1,14 +1,14 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra><data>
 
-    <menuitem id="event_quiz_menu"
+    <menuitemid="event_quiz_menu"
         name="Quizzes"
         action="event_quiz_action"
         parent="event.menu_event_configuration"
         groups="base.group_no_one"
         sequence="50"/>
-    <menuitem id="event_quiz_question_menu"
-        name="Quiz Questions"
+    <menuitemid="event_quiz_question_menu"
+        name="QuizQuestions"
         action="event_quiz_question_action"
         parent="event.menu_event_configuration"
         groups="base.group_no_one"

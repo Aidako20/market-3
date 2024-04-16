@@ -1,30 +1,30 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.da = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.da=factory()));
+}(this,function(){'usestrict';
 
-    var da = {
-        code: "da",
-        week: {
-            dow: 1,
-            doy: 4 // The week that contains Jan 4th is the first week of the year.
+    varda={
+        code:"da",
+        week:{
+            dow:1,
+            doy:4//TheweekthatcontainsJan4thisthefirstweekoftheyear.
         },
-        buttonText: {
-            prev: "Forrige",
-            next: "Næste",
-            today: "I dag",
-            month: "Måned",
-            week: "Uge",
-            day: "Dag",
-            list: "Agenda"
+        buttonText:{
+            prev:"Forrige",
+            next:"Næste",
+            today:"Idag",
+            month:"Måned",
+            week:"Uge",
+            day:"Dag",
+            list:"Agenda"
         },
-        weekLabel: "Uge",
-        allDayText: "Hele dagen",
-        eventLimitText: "flere",
-        noEventsMessage: "Ingen arrangementer at vise"
+        weekLabel:"Uge",
+        allDayText:"Heledagen",
+        eventLimitText:"flere",
+        noEventsMessage:"Ingenarrangementeratvise"
     };
 
-    return da;
+    returnda;
 
 }));

@@ -1,148 +1,148 @@
 /*
- * Fuzzy
- * https://github.com/myork/fuzzy
+ *Fuzzy
+ *https://github.com/myork/fuzzy
  *
- * Copyright (c) 2012 Matt York
- * Licensed under the MIT license.
+ *Copyright(c)2012MattYork
+ *LicensedundertheMITlicense.
  */
 
-(function() {
+(function(){
 
-var root = this;
+varroot=this;
 
-var fuzzy = {};
+varfuzzy={};
 
-// Use in node or in browser
-if (typeof exports !== 'undefined') {
-  module.exports = fuzzy;
-} else {
-  root.fuzzy = fuzzy;
+//Useinnodeorinbrowser
+if(typeofexports!=='undefined'){
+  module.exports=fuzzy;
+}else{
+  root.fuzzy=fuzzy;
 }
 
-// Return all elements of `array` that have a fuzzy
-// match against `pattern`.
-fuzzy.simpleFilter = function(pattern, array) {
-  return array.filter(function(string) {
-    return fuzzy.test(pattern, string);
+//Returnallelementsof`array`thathaveafuzzy
+//matchagainst`pattern`.
+fuzzy.simpleFilter=function(pattern,array){
+  returnarray.filter(function(string){
+    returnfuzzy.test(pattern,string);
   });
 };
 
-// Does `pattern` fuzzy match `string`?
-fuzzy.test = function(pattern, string) {
-  return fuzzy.match(pattern, string) !== null;
+//Does`pattern`fuzzymatch`string`?
+fuzzy.test=function(pattern,string){
+  returnfuzzy.match(pattern,string)!==null;
 };
 
-// If `pattern` matches `string`, wrap each matching character
-// in `opts.pre` and `opts.post`. If no match, return null
-fuzzy.match = function(pattern, string, opts) {
-  opts = opts || {};
-  var patternIdx = 0
-    , result = []
-    , len = string.length
-    , totalScore = 0
-    , currScore = 0
-    // prefix
-    , pre = opts.pre || ''
-    // suffix
-    , post = opts.post || ''
-    // String to compare against. This might be a lowercase version of the
-    // raw string
-    , compareString =  opts.caseSensitive && string || string.toLowerCase()
-    , ch, compareChar;
+//If`pattern`matches`string`,wrapeachmatchingcharacter
+//in`opts.pre`and`opts.post`.Ifnomatch,returnnull
+fuzzy.match=function(pattern,string,opts){
+  opts=opts||{};
+  varpatternIdx=0
+    ,result=[]
+    ,len=string.length
+    ,totalScore=0
+    ,currScore=0
+    //prefix
+    ,pre=opts.pre||''
+    //suffix
+    ,post=opts.post||''
+    //Stringtocompareagainst.Thismightbealowercaseversionofthe
+    //rawstring
+    ,compareString= opts.caseSensitive&&string||string.toLowerCase()
+    ,ch,compareChar;
 
-  pattern = opts.caseSensitive && pattern || pattern.toLowerCase();
+  pattern=opts.caseSensitive&&pattern||pattern.toLowerCase();
 
-  // For each character in the string, either add it to the result
-  // or wrap in template if it's the next string in the pattern
-  for(var idx = 0; idx < len; idx++) {
-    ch = string[idx];
-    if(compareString[idx] === pattern[patternIdx]) {
-      if (pattern[patternIdx] === ' ') {
-        // we don't want a space character to accumulate a larger score
-        currScore = 1 - idx/200;
-      } else {
-        // consecutive characters should increase the score more than linearly
-        currScore += 1 + currScore - idx/200;
+  //Foreachcharacterinthestring,eitheraddittotheresult
+  //orwrapintemplateifit'sthenextstringinthepattern
+  for(varidx=0;idx<len;idx++){
+    ch=string[idx];
+    if(compareString[idx]===pattern[patternIdx]){
+      if(pattern[patternIdx]===''){
+        //wedon'twantaspacecharactertoaccumulatealargerscore
+        currScore=1-idx/200;
+      }else{
+        //consecutivecharactersshouldincreasethescoremorethanlinearly
+        currScore+=1+currScore-idx/200;
       }
 
-      ch = pre + ch + post;
-      patternIdx += 1;
-    } else {
-      currScore = 0;
+      ch=pre+ch+post;
+      patternIdx+=1;
+    }else{
+      currScore=0;
     }
-    totalScore += currScore;
-    if (compareString[idx] === ' ') {
-      // we don't want characters after a space to accumulate a larger score
-      currScore = 0;
+    totalScore+=currScore;
+    if(compareString[idx]===''){
+      //wedon'twantcharactersafteraspacetoaccumulatealargerscore
+      currScore=0;
     }
-    result[result.length] = ch;
+    result[result.length]=ch;
   }
 
-  // return rendered string if we have a match for every char
-  if(patternIdx === pattern.length) {
-    return {rendered: result.join(''), score: totalScore};
+  //returnrenderedstringifwehaveamatchforeverychar
+  if(patternIdx===pattern.length){
+    return{rendered:result.join(''),score:totalScore};
   }
 
-  return null;
+  returnnull;
 };
 
-// The normal entry point. Filters `arr` for matches against `pattern`.
-// It returns an array with matching values of the type:
+//Thenormalentrypoint.Filters`arr`formatchesagainst`pattern`.
+//Itreturnsanarraywithmatchingvaluesofthetype:
 //
-//     [{
-//         string:   '<b>lah' // The rendered string
-//       , index:    2        // The index of the element in `arr`
-//       , original: 'blah'   // The original element in `arr`
-//     }]
+//    [{
+//        string:  '<b>lah'//Therenderedstring
+//      ,index:   2       //Theindexoftheelementin`arr`
+//      ,original:'blah'  //Theoriginalelementin`arr`
+//    }]
 //
-// `opts` is an optional argument bag. Details:
+//`opts`isanoptionalargumentbag.Details:
 //
-//    opts = {
-//        // string to put before a matching character
-//        pre:     '<b>'
+//   opts={
+//       //stringtoputbeforeamatchingcharacter
+//       pre:    '<b>'
 //
-//        // string to put after matching character
-//      , post:    '</b>'
+//       //stringtoputaftermatchingcharacter
+//     ,post:   '</b>'
 //
-//        // Optional function. Input is an entry in the given arr`,
-//        // output should be the string to test `pattern` against.
-//        // In this example, if `arr = [{crying: 'koala'}]` we would return
-//        // 'koala'.
-//      , extract: function(arg) { return arg.crying; }
-//    }
-fuzzy.filter = function(pattern, arr, opts) {
-  if(!arr || arr.length === 0) {
-    return []
+//       //Optionalfunction.Inputisanentryinthegivenarr`,
+//       //outputshouldbethestringtotest`pattern`against.
+//       //Inthisexample,if`arr=[{crying:'koala'}]`wewouldreturn
+//       //'koala'.
+//     ,extract:function(arg){returnarg.crying;}
+//   }
+fuzzy.filter=function(pattern,arr,opts){
+  if(!arr||arr.length===0){
+    return[]
   }
-  if (typeof pattern !== 'string') {
-    return arr
+  if(typeofpattern!=='string'){
+    returnarr
   }
-  opts = opts || {};
-  return arr
-    .reduce(function(prev, element, idx, arr) {
-      var str = element;
-      if(opts.extract) {
-        str = opts.extract(element);
+  opts=opts||{};
+  returnarr
+    .reduce(function(prev,element,idx,arr){
+      varstr=element;
+      if(opts.extract){
+        str=opts.extract(element);
       }
-      var rendered = fuzzy.match(pattern, str, opts);
-      if(rendered != null) {
-        prev[prev.length] = {
-            string: rendered.rendered
-          , score: rendered.score
-          , index: idx
-          , original: element
+      varrendered=fuzzy.match(pattern,str,opts);
+      if(rendered!=null){
+        prev[prev.length]={
+            string:rendered.rendered
+          ,score:rendered.score
+          ,index:idx
+          ,original:element
         };
       }
-      return prev;
-    }, [])
+      returnprev;
+    },[])
 
-    // Sort by score. Browsers are inconsistent wrt stable/unstable
-    // sorting, so force stable by using the index in the case of tie.
-    // See http://ofb.net/~sethml/is-sort-stable.html
-    .sort(function(a,b) {
-      var compare = b.score - a.score;
-      if(compare) return compare;
-      return a.index - b.index;
+    //Sortbyscore.Browsersareinconsistentwrtstable/unstable
+    //sorting,soforcestablebyusingtheindexinthecaseoftie.
+    //Seehttp://ofb.net/~sethml/is-sort-stable.html
+    .sort(function(a,b){
+      varcompare=b.score-a.score;
+      if(compare)returncompare;
+      returna.index-b.index;
     });
 };
 

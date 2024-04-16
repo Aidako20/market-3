@@ -1,25 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-    <record id="view_immediate_production" model="ir.ui.view">
-        <field name="name">mrp.immediate.production.view.form</field>
-        <field name="model">mrp.immediate.production</field>
-        <field name="arch" type="xml">
-            <form string="Immediate production?">
+    <recordid="view_immediate_production"model="ir.ui.view">
+        <fieldname="name">mrp.immediate.production.view.form</field>
+        <fieldname="model">mrp.immediate.production</field>
+        <fieldname="arch"type="xml">
+            <formstring="Immediateproduction?">
                 <group>
-                    <p>You have not recorded <i>produced</i> quantities yet, by clicking on <i>apply</i> Flectra will produce all the finished products and consume all components.</p>
+                    <p>Youhavenotrecorded<i>produced</i>quantitiesyet,byclickingon<i>apply</i>Flectrawillproduceallthefinishedproductsandconsumeallcomponents.</p>
                 </group>
 
-                <field name="show_productions" invisible="1"/>
-                <field name="immediate_production_line_ids" nolabel="1" attrs="{'invisible': [('show_productions', '=', False)]}">
-                    <tree create="0" delete="0" editable="top">
-                        <field name="production_id"/>
-                        <field name="to_immediate" widget="boolean_toggle"/>
+                <fieldname="show_productions"invisible="1"/>
+                <fieldname="immediate_production_line_ids"nolabel="1"attrs="{'invisible':[('show_productions','=',False)]}">
+                    <treecreate="0"delete="0"editable="top">
+                        <fieldname="production_id"/>
+                        <fieldname="to_immediate"widget="boolean_toggle"/>
                     </tree>
                 </field>
 
                 <footer>
-                    <button name="process" string="Apply" type="object" class="btn-primary"/>
-                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                    <buttonname="process"string="Apply"type="object"class="btn-primary"/>
+                    <buttonstring="Cancel"class="btn-secondary"special="cancel"/>
                 </footer>
             </form>
         </field>

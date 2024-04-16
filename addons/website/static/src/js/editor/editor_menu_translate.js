@@ -1,109 +1,109 @@
-flectra.define('website.editor.menu.translate', function (require) {
-'use strict';
+flectra.define('website.editor.menu.translate',function(require){
+'usestrict';
 
 require('web.dom_ready');
-var core = require('web.core');
-var Dialog = require('web.Dialog');
-var localStorage = require('web.local_storage');
-var Wysiwyg = require('web_editor.wysiwyg.root');
-var EditorMenu = require('website.editor.menu');
+varcore=require('web.core');
+varDialog=require('web.Dialog');
+varlocalStorage=require('web.local_storage');
+varWysiwyg=require('web_editor.wysiwyg.root');
+varEditorMenu=require('website.editor.menu');
 
-var _t = core._t;
+var_t=core._t;
 
-var localStorageNoDialogKey = 'website_translator_nodialog';
+varlocalStorageNoDialogKey='website_translator_nodialog';
 
-var TranslatorInfoDialog = Dialog.extend({
-    template: 'website.TranslatorInfoDialog',
-    xmlDependencies: Dialog.prototype.xmlDependencies.concat(
+varTranslatorInfoDialog=Dialog.extend({
+    template:'website.TranslatorInfoDialog',
+    xmlDependencies:Dialog.prototype.xmlDependencies.concat(
         ['/website/static/src/xml/translator.xml']
     ),
 
     /**
-     * @constructor
+     *@constructor
      */
-    init: function (parent, options) {
-        this._super(parent, _.extend({
-            title: _t("Translation Info"),
-            buttons: [
-                {text: _t("Ok, never show me this again"), classes: 'btn-primary', close: true, click: this._onStrongOk.bind(this)},
-                {text: _t("Ok"), close: true}
+    init:function(parent,options){
+        this._super(parent,_.extend({
+            title:_t("TranslationInfo"),
+            buttons:[
+                {text:_t("Ok,nevershowmethisagain"),classes:'btn-primary',close:true,click:this._onStrongOk.bind(this)},
+                {text:_t("Ok"),close:true}
             ],
-        }, options || {}));
+        },options||{}));
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when the "strong" ok is clicked -> adapt localstorage to make sure
-     * the dialog is never displayed again.
+     *Calledwhenthe"strong"okisclicked->adaptlocalstoragetomakesure
+     *thedialogisneverdisplayedagain.
      *
-     * @private
+     *@private
      */
-    _onStrongOk: function () {
-        localStorage.setItem(localStorageNoDialogKey, true);
+    _onStrongOk:function(){
+        localStorage.setItem(localStorageNoDialogKey,true);
     },
 });
 
-var WysiwygTranslate = Wysiwyg.extend({
-    assetLibs: Wysiwyg.prototype.assetLibs.concat(['website.compiled_assets_wysiwyg']),
-    _getWysiwygContructor: function () {
-        return flectra.__DEBUG__.services['web_editor.wysiwyg.multizone.translate'];
+varWysiwygTranslate=Wysiwyg.extend({
+    assetLibs:Wysiwyg.prototype.assetLibs.concat(['website.compiled_assets_wysiwyg']),
+    _getWysiwygContructor:function(){
+        returnflectra.__DEBUG__.services['web_editor.wysiwyg.multizone.translate'];
     }
 });
 
-var TranslatorMenu = EditorMenu.extend({
+varTranslatorMenu=EditorMenu.extend({
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        if (!localStorage.getItem(localStorageNoDialogKey)) {
-            new TranslatorInfoDialog(this).open();
+    start:function(){
+        if(!localStorage.getItem(localStorageNoDialogKey)){
+            newTranslatorInfoDialog(this).open();
         }
 
-        return this._super();
+        returnthis._super();
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Returns the editable areas on the page.
+     *Returnstheeditableareasonthepage.
      *
-     * @param {DOM} $wrapwrap
-     * @returns {jQuery}
+     *@param{DOM}$wrapwrap
+     *@returns{jQuery}
      */
-    editable: function ($wrapwrap) {
-    	var selector = '[data-oe-translation-id], '+
-        	'[data-oe-model][data-oe-id][data-oe-field], ' +
-        	'[placeholder*="data-oe-translation-id="], ' +
-        	'[title*="data-oe-translation-id="], ' +
+    editable:function($wrapwrap){
+    	varselector='[data-oe-translation-id],'+
+        	'[data-oe-model][data-oe-id][data-oe-field],'+
+        	'[placeholder*="data-oe-translation-id="],'+
+        	'[title*="data-oe-translation-id="],'+
         	'[alt*="data-oe-translation-id="]';
-        var $edit = $wrapwrap.find(selector);
-        $edit.filter(':has(' + selector + ')').attr('data-oe-readonly', true);
-        return $edit.not('[data-oe-readonly]');
+        var$edit=$wrapwrap.find(selector);
+        $edit.filter(':has('+selector+')').attr('data-oe-readonly',true);
+        return$edit.not('[data-oe-readonly]');
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _wysiwygInstance: function () {
-        var context;
-        this.trigger_up('context_get', {
-            callback: function (ctx) {
-                context = ctx;
+    _wysiwygInstance:function(){
+        varcontext;
+        this.trigger_up('context_get',{
+            callback:function(ctx){
+                context=ctx;
             },
         });
-        return new WysiwygTranslate(this, {lang: context.lang});
+        returnnewWysiwygTranslate(this,{lang:context.lang});
     },
 });
 
-return TranslatorMenu;
+returnTranslatorMenu;
 });

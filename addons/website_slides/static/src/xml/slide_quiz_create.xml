@@ -1,92 +1,92 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="slide.quiz.question.input">
-        <div t-attf-class="o_wsildes_quiz_question_input mt-3 #{!widget.update ? 'col' : ''}" t-att-data-id="widget.question.id || ''">
-            <form class="mb-3">
-                <div class="o_wslides_quiz_question row align-items-center mr-0 mb-2">
-                    <div class="input-group ml-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text o_wslides_quiz_question_sequence"><t t-esc="widget.sequence"/></span>
+    <tt-name="slide.quiz.question.input">
+        <divt-attf-class="o_wsildes_quiz_question_inputmt-3#{!widget.update?'col':''}"t-att-data-id="widget.question.id||''">
+            <formclass="mb-3">
+                <divclass="o_wslides_quiz_questionrowalign-items-centermr-0mb-2">
+                    <divclass="input-groupml-3">
+                        <divclass="input-group-prepend">
+                            <spanclass="input-group-texto_wslides_quiz_question_sequence"><tt-esc="widget.sequence"/></span>
                         </div>
-                        <input type="text" name="question-name" class="form-control col-11" placeholder="Enter your question"
+                        <inputtype="text"name="question-name"class="form-controlcol-11"placeholder="Enteryourquestion"
                             t-att-value="widget.question.text"/>
                     </div>
                 </div>
-                <div class="text-muted mb-2">
-                    <span>Select the correct answer below :</span>
+                <divclass="text-mutedmb-2">
+                    <span>Selectthecorrectanswerbelow:</span>
                 </div>
-                <div class="list-group">
-                    <t t-if="widget.question.answers" >
-                        <t t-foreach="widget.question.answers" t-as="answer" >
-                            <t t-call="slide.quiz.answer.line"/>
+                <divclass="list-group">
+                    <tt-if="widget.question.answers">
+                        <tt-foreach="widget.question.answers"t-as="answer">
+                            <tt-call="slide.quiz.answer.line"/>
                         </t>
                     </t>
-                    <t t-else="" >
-                        <t t-foreach="[1, 2, 3]">
-                            <t t-call="slide.quiz.answer.line" />
+                    <tt-else="">
+                        <tt-foreach="[1,2,3]">
+                            <tt-call="slide.quiz.answer.line"/>
                         </t>
                     </t>
                 </div>
             </form>
-            <t t-if="widget.update" t-call="slide.quiz.update.buttons"/>
-            <t t-else="" t-call="slide.quiz.create.buttons"/>
+            <tt-if="widget.update"t-call="slide.quiz.update.buttons"/>
+            <tt-else=""t-call="slide.quiz.create.buttons"/>
         </div>
     </t>
 
-    <t t-name="slide.quiz.answer.line">
-        <div class="o_wslides_js_quiz_answer row align-items-center mb-1" t-attf-data-answer-id="#{answer ? answer.id : ''}" >
-            <div class="col ml-3 ml-md-5">
-                <div class="row align-items-center">
-                    <div class="input-group col-9 p-0">
-                        <input type="text" class="o_wslides_js_quiz_answer_value form-control" placeholder="Enter your answer" t-attf-value="#{answer ? answer.text_value : ''}"/>
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <a class="o_wslides_js_quiz_is_correct" title="This is the correct answer">
-                                    <label class="my-0">
-                                        <input t-if="answer and answer.is_correct" class="d-none" type="radio" name="radio" checked="true" />
-                                        <input t-else="" class="d-none" type="radio" name="radio" />
-                                        <i class="o_wslides_js_quiz_icon fa fa-lg fa-check-circle-o text-muted" />
+    <tt-name="slide.quiz.answer.line">
+        <divclass="o_wslides_js_quiz_answerrowalign-items-centermb-1"t-attf-data-answer-id="#{answer?answer.id:''}">
+            <divclass="colml-3ml-md-5">
+                <divclass="rowalign-items-center">
+                    <divclass="input-groupcol-9p-0">
+                        <inputtype="text"class="o_wslides_js_quiz_answer_valueform-control"placeholder="Enteryouranswer"t-attf-value="#{answer?answer.text_value:''}"/>
+                        <divclass="input-group-append">
+                            <divclass="input-group-text">
+                                <aclass="o_wslides_js_quiz_is_correct"title="Thisisthecorrectanswer">
+                                    <labelclass="my-0">
+                                        <inputt-if="answerandanswer.is_correct"class="d-none"type="radio"name="radio"checked="true"/>
+                                        <inputt-else=""class="d-none"type="radio"name="radio"/>
+                                        <iclass="o_wslides_js_quiz_iconfafa-lgfa-check-circle-otext-muted"/>
                                     </label>
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <i t-attf-class="o_wslides_js_quiz_icon o_wslides_js_quiz_comment_answer fa fa-lg fa-info-circle p-md-2 py-2 pl-2 pr-1 #{answer &amp;&amp; answer.comment ? 'text-primary' : 'text-muted'}" title="Add comment on this answer" />
-                    <i class="o_wslides_js_quiz_icon o_wslides_js_quiz_add_answer fa fa-lg fa-plus-circle p-md-2 py-2 px-1 text-muted" title="Add an answer below this one" />
-                    <i class="o_wslides_js_quiz_icon o_wslides_js_quiz_remove_answer fa fa-lg fa-trash-o p-md-2 py-2 px-1 text-muted" title="Remove this answer" />
+                    <it-attf-class="o_wslides_js_quiz_icono_wslides_js_quiz_comment_answerfafa-lgfa-info-circlep-md-2py-2pl-2pr-1#{answer&amp;&amp;answer.comment?'text-primary':'text-muted'}"title="Addcommentonthisanswer"/>
+                    <iclass="o_wslides_js_quiz_icono_wslides_js_quiz_add_answerfafa-lgfa-plus-circlep-md-2py-2px-1text-muted"title="Addananswerbelowthisone"/>
+                    <iclass="o_wslides_js_quiz_icono_wslides_js_quiz_remove_answerfafa-lgfa-trash-op-md-2py-2px-1text-muted"title="Removethisanswer"/>
                 </div>
-                <div class="o_wslides_js_quiz_answer_comment row align-items-center d-none">
-                    <input type="text" class="form-control col-8 offset-1 mt-1" placeholder="This is the correct answer, congratulations"
-                        t-attf-value="#{answer ? answer.comment : ''}" />
-                    <i class="o_wslides_js_quiz_icon o_wslides_js_quiz_remove_answer_comment fa fa-lg fa-trash-o p-2 text-muted" title="Remove the answer comment" />
+                <divclass="o_wslides_js_quiz_answer_commentrowalign-items-centerd-none">
+                    <inputtype="text"class="form-controlcol-8offset-1mt-1"placeholder="Thisisthecorrectanswer,congratulations"
+                        t-attf-value="#{answer?answer.comment:''}"/>
+                    <iclass="o_wslides_js_quiz_icono_wslides_js_quiz_remove_answer_commentfafa-lgfa-trash-op-2text-muted"title="Removetheanswercomment"/>
                 </div>
             </div>
         </div>
     </t>
 
-    <t t-name="slide.quiz.create.buttons">
+    <tt-name="slide.quiz.create.buttons">
         <div>
-            <a class="o_wslides_js_quiz_validate_question btn btn-primary text-white border" role="button">
+            <aclass="o_wslides_js_quiz_validate_questionbtnbtn-primarytext-whiteborder"role="button">
                 <span>Save</span>
             </a>
-            <a class="o_wslides_js_quiz_cancel_question btn btn-light border" role="button">
+            <aclass="o_wslides_js_quiz_cancel_questionbtnbtn-lightborder"role="button">
                 <span>Cancel</span>
             </a>
         </div>
     </t>
 
-    <t t-name="slide.quiz.update.buttons">
-        <a class="o_wslides_js_quiz_validate_question o_wslides_js_quiz_update btn btn-primary text-white border" role="button">
+    <tt-name="slide.quiz.update.buttons">
+        <aclass="o_wslides_js_quiz_validate_questiono_wslides_js_quiz_updatebtnbtn-primarytext-whiteborder"role="button">
             <span>Update</span>
         </a>
-        <a class="o_wslides_js_quiz_cancel_question btn btn-light border" role="button">
+        <aclass="o_wslides_js_quiz_cancel_questionbtnbtn-lightborder"role="button">
             <span>Cancel</span>
         </a>
     </t>
 
-    <t t-name="slide.quiz.confirm.deletion">
-        <div>Are you sure you want to delete this question : <strong t-esc="widget.questionTitle"/> ?</div>
+    <tt-name="slide.quiz.confirm.deletion">
+        <div>Areyousureyouwanttodeletethisquestion:<strongt-esc="widget.questionTitle"/>?</div>
     </t>
 
 </templates>

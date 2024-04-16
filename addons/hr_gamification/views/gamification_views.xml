@@ -1,69 +1,69 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
 
-        <record id="hr_badge_form_view" model="ir.ui.view">
-            <field name="name">gamification.badge.form.inherit</field>
-            <field name="model">gamification.badge</field>
-            <field name="inherit_id" ref="gamification.badge_form_view"/>
-            <field name="arch" type="xml">
-                <div name="button_box" position="inside">
-                    <button class="oe_stat_button" type="object" name="get_granted_employees" attrs="{'invisible': [('granted_count','=',0)]}" icon="fa-user">
-                        <field name="granted_employees_count" string="Granted" widget="statinfo"/>
+        <recordid="hr_badge_form_view"model="ir.ui.view">
+            <fieldname="name">gamification.badge.form.inherit</field>
+            <fieldname="model">gamification.badge</field>
+            <fieldname="inherit_id"ref="gamification.badge_form_view"/>
+            <fieldname="arch"type="xml">
+                <divname="button_box"position="inside">
+                    <buttonclass="oe_stat_button"type="object"name="get_granted_employees"attrs="{'invisible':[('granted_count','=',0)]}"icon="fa-user">
+                        <fieldname="granted_employees_count"string="Granted"widget="statinfo"/>
                     </button>
                 </div>
             </field>
         </record>
 
-        <record id="goals_menu_groupby_action2" model="ir.actions.act_window">
-            <field name="res_model">gamification.goal</field>
-            <field name="name">Goals History</field>
-            <field name="view_mode">tree,kanban</field>
-            <field name="context">{'search_default_group_by_user': True, 'search_default_group_by_definition': True}</field>
-            <field name="domain">[('challenge_id.challenge_category', '=', 'hr')]</field>
-            <field name="help" type="html">
-                <p class="o_view_nocontent_smiling_face">
-                    Create a new goal
+        <recordid="goals_menu_groupby_action2"model="ir.actions.act_window">
+            <fieldname="res_model">gamification.goal</field>
+            <fieldname="name">GoalsHistory</field>
+            <fieldname="view_mode">tree,kanban</field>
+            <fieldname="context">{'search_default_group_by_user':True,'search_default_group_by_definition':True}</field>
+            <fieldname="domain">[('challenge_id.challenge_category','=','hr')]</field>
+            <fieldname="help"type="html">
+                <pclass="o_view_nocontent_smiling_face">
+                    Createanewgoal
                 </p><p>
-                    A goal is defined by a user and a goal type.
-                    Goals can be created automatically by using challenges.
+                    Agoalisdefinedbyauserandagoaltype.
+                    Goalscanbecreatedautomaticallybyusingchallenges.
                 </p>
             </field>
         </record>
 
 
-        <record id="challenge_list_action2" model="ir.actions.act_window">
-            <field name="name">Challenges</field>
-            <field name="res_model">gamification.challenge</field>
-            <field name="view_mode">kanban,tree,form</field>
-            <field name="domain">[('challenge_category', '=', 'hr')]</field>
-            <field name="context">{'search_default_inprogress':True, 'default_inprogress':True}</field>
-            <field name="help" type="html">
-                <p class="o_view_nocontent_smiling_face">
-                    Create a new challenge
+        <recordid="challenge_list_action2"model="ir.actions.act_window">
+            <fieldname="name">Challenges</field>
+            <fieldname="res_model">gamification.challenge</field>
+            <fieldname="view_mode">kanban,tree,form</field>
+            <fieldname="domain">[('challenge_category','=','hr')]</field>
+            <fieldname="context">{'search_default_inprogress':True,'default_inprogress':True}</field>
+            <fieldname="help"type="html">
+                <pclass="o_view_nocontent_smiling_face">
+                    Createanewchallenge
                 </p><p>
-                    Assign a list of goals to chosen users to evaluate them.
-                    The challenge can use a period (weekly, monthly...) for automatic creation of goals.
-                    The goals are created for the specified users or member of the group.
+                    Assignalistofgoalstochosenuserstoevaluatethem.
+                    Thechallengecanuseaperiod(weekly,monthly...)forautomaticcreationofgoals.
+                    Thegoalsarecreatedforthespecifiedusersormemberofthegroup.
                 </p>
             </field>
         </record>
-        <record id="challenge_list_action2_view1" model="ir.actions.act_window.view">
-            <field name="sequence" eval="1"/>
-            <field name="view_mode">kanban</field>
-            <field name="act_window_id" ref="challenge_list_action2"/>
-            <field name="view_id" ref="gamification.view_challenge_kanban"/>
+        <recordid="challenge_list_action2_view1"model="ir.actions.act_window.view">
+            <fieldname="sequence"eval="1"/>
+            <fieldname="view_mode">kanban</field>
+            <fieldname="act_window_id"ref="challenge_list_action2"/>
+            <fieldname="view_id"ref="gamification.view_challenge_kanban"/>
         </record>
-        <record id="challenge_list_action2_view2" model="ir.actions.act_window.view">
-            <field name="sequence" eval="10"/>
-            <field name="view_mode">form</field>
-            <field name="act_window_id" ref="challenge_list_action2"/>
-            <field name="view_id" ref="gamification.challenge_form_view"/>
+        <recordid="challenge_list_action2_view2"model="ir.actions.act_window.view">
+            <fieldname="sequence"eval="10"/>
+            <fieldname="view_mode">form</field>
+            <fieldname="act_window_id"ref="challenge_list_action2"/>
+            <fieldname="view_id"ref="gamification.challenge_form_view"/>
         </record>
 
-        <menuitem id="menu_hr_gamification" parent="hr.menu_human_resources_configuration" name="Challenges" sequence="100"/>
+        <menuitemid="menu_hr_gamification"parent="hr.menu_human_resources_configuration"name="Challenges"sequence="100"/>
 
-        <menuitem id="gamification_badge_menu_hr" parent="menu_hr_gamification" action="gamification.badge_list_action" />
-        <menuitem id="gamification_challenge_menu_hr" parent="menu_hr_gamification" action="challenge_list_action2" groups="hr.group_hr_user"/>
-        <menuitem id="gamification_goal_menu_hr" parent="menu_hr_gamification" action="goals_menu_groupby_action2" groups="hr.group_hr_user"/>
+        <menuitemid="gamification_badge_menu_hr"parent="menu_hr_gamification"action="gamification.badge_list_action"/>
+        <menuitemid="gamification_challenge_menu_hr"parent="menu_hr_gamification"action="challenge_list_action2"groups="hr.group_hr_user"/>
+        <menuitemid="gamification_goal_menu_hr"parent="menu_hr_gamification"action="goals_menu_groupby_action2"groups="hr.group_hr_user"/>
 
 </flectra>

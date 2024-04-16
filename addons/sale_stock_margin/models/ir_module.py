@@ -1,25 +1,25 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import api, models
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportapi,models
 
 
-class IrModule(models.Model):
-    _inherit = 'ir.module.module'
+classIrModule(models.Model):
+    _inherit='ir.module.module'
 
 
     @api.returns('self')
-    def downstream_dependencies(
+    defdownstream_dependencies(
             self,
             known_deps=None,
-            exclude_states=('uninstalled', 'uninstallable', 'to remove'),
+            exclude_states=('uninstalled','uninstallable','toremove'),
             ):
-        # sale_stock_margin implicitly depends on sale_stock, but sale_stock is not marked as one of
-        # its dependencies, thus uninstalling sale_stock without uninstalling sale_stock_margin
-        # will make the registry crash, the install works purely because sale_stock is auto-installed
-        # when the dependencies of sale_stock_margin are installed
-        if 'sale_stock' in self.mapped('name'):
-            # we force sale_stock_margin as a dependant of sale_stock
-            known_deps = (known_deps or self.browse()) | self.search([
-                ('name', '=', 'sale_stock_margin'),
-                ('state', '=', 'installed'),
-            ], limit=1)
-        return super().downstream_dependencies(known_deps, exclude_states)
+        #sale_stock_marginimplicitlydependsonsale_stock,butsale_stockisnotmarkedasoneof
+        #itsdependencies,thusuninstallingsale_stockwithoutuninstallingsale_stock_margin
+        #willmaketheregistrycrash,theinstallworkspurelybecausesale_stockisauto-installed
+        #whenthedependenciesofsale_stock_marginareinstalled
+        if'sale_stock'inself.mapped('name'):
+            #weforcesale_stock_marginasadependantofsale_stock
+            known_deps=(known_depsorself.browse())|self.search([
+                ('name','=','sale_stock_margin'),
+                ('state','=','installed'),
+            ],limit=1)
+        returnsuper().downstream_dependencies(known_deps,exclude_states)

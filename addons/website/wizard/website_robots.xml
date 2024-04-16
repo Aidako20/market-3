@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="view_edit_robots" model="ir.ui.view">
-        <field name="name">Edit Robots.txt</field>
-        <field name="model">website.robots</field>
-        <field name="arch" type="xml">
+    <recordid="view_edit_robots"model="ir.ui.view">
+        <fieldname="name">EditRobots.txt</field>
+        <fieldname="model">website.robots</field>
+        <fieldname="arch"type="xml">
             <form>
-                <field name="content"/>
+                <fieldname="content"/>
                 <small>
-                    <a role="button" class="btn btn-link" target="_blank" href="https://www.google.com/webmasters/tools/robots-testing-tool">
-                        Test your robots.txt with Google Search Console
+                    <arole="button"class="btnbtn-link"target="_blank"href="https://www.google.com/webmasters/tools/robots-testing-tool">
+                        Testyourrobots.txtwithGoogleSearchConsole
                     </a>
                     <br/><br/>
-                    Example of rule:<br/>
-                    <code t-translation="off" class='ml-4'>Disallow: /web/login</code><br/>
-                    <code t-translation="off" class='ml-4'>Allow: *</code>
+                    Exampleofrule:<br/>
+                    <codet-translation="off"class='ml-4'>Disallow:/web/login</code><br/>
+                    <codet-translation="off"class='ml-4'>Allow:*</code>
                 </small>
                 <footer>
-                    <button string="Save" name="action_save" type="object" class="oe_highlight"/>
-                    <button string="Cancel" class="btn btn-default" special="cancel"/>
+                    <buttonstring="Save"name="action_save"type="object"class="oe_highlight"/>
+                    <buttonstring="Cancel"class="btnbtn-default"special="cancel"/>
                 </footer>
             </form>
         </field>

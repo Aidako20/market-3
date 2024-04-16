@@ -1,44 +1,44 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import api, fields, models
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportapi,fields,models
 
 
-class ResCompany(models.Model):
-    _inherit = 'res.company'
+classResCompany(models.Model):
+    _inherit='res.company'
 
-    l10n_es_edi_certificate_id = fields.Many2one(
-        string="Certificate (ES)",
+    l10n_es_edi_certificate_id=fields.Many2one(
+        string="Certificate(ES)",
         store=True,
         readonly=False,
         comodel_name='l10n_es_edi.certificate',
         compute="_compute_l10n_es_edi_certificate",
     )
-    l10n_es_edi_certificate_ids = fields.One2many(
+    l10n_es_edi_certificate_ids=fields.One2many(
         comodel_name='l10n_es_edi.certificate',
         inverse_name='company_id',
     )
-    l10n_es_edi_tax_agency = fields.Selection(
-        string="Tax Agency for SII",
+    l10n_es_edi_tax_agency=fields.Selection(
+        string="TaxAgencyforSII",
         selection=[
-            ('aeat', "Agencia Tributaria española"),
-            ('gipuzkoa', "Hacienda Foral de Gipuzkoa"),
-            ('bizkaia', "Hacienda Foral de Bizkaia"),
+            ('aeat',"AgenciaTributariaespañola"),
+            ('gipuzkoa',"HaciendaForaldeGipuzkoa"),
+            ('bizkaia',"HaciendaForaldeBizkaia"),
         ],
         default=False,
     )
-    l10n_es_edi_test_env = fields.Boolean(
-        string="Test Mode",
-        help="Use the test environment",
+    l10n_es_edi_test_env=fields.Boolean(
+        string="TestMode",
+        help="Usethetestenvironment",
     )
 
-    @api.depends('country_id', 'l10n_es_edi_certificate_ids')
-    def _compute_l10n_es_edi_certificate(self):
-        for company in self:
-            if company.country_code == 'ES':
-                company.l10n_es_edi_certificate_id = self.env['l10n_es_edi.certificate'].search(
-                    [('company_id', '=', company.id)],
-                    order='date_end desc',
+    @api.depends('country_id','l10n_es_edi_certificate_ids')
+    def_compute_l10n_es_edi_certificate(self):
+        forcompanyinself:
+            ifcompany.country_code=='ES':
+                company.l10n_es_edi_certificate_id=self.env['l10n_es_edi.certificate'].search(
+                    [('company_id','=',company.id)],
+                    order='date_enddesc',
                     limit=1,
                 )
             else:
-                company.l10n_es_edi_certificate_id = False
+                company.l10n_es_edi_certificate_id=False

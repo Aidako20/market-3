@@ -1,38 +1,38 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra><data>
 
-    <record id="event_track_visitor_view_search" model="ir.ui.view" >
-        <field name="name">event.track.visitor.view.search</field>
-        <field name="model">event.track.visitor</field>
-        <field name="arch" type="xml">
-            <search string="Track Visitors">
-                <field name="track_id"/>
-                <field name="visitor_id"/>
-                <field name="partner_id"/>
-                <field name="is_wishlisted"/>
-                <group string="Group By" expand="0">
-                    <filter string="Track" name="groupby_track_id" context="{'group_by': 'track_id'}"/>
-                    <filter string="Visitor" name="groupby_visitor_id" context="{'group_by': 'visitor_id'}"/>
-                    <filter string="Customer" name="groupby_partner_id" context="{'group_by': 'partner_id'}"/>
+    <recordid="event_track_visitor_view_search"model="ir.ui.view">
+        <fieldname="name">event.track.visitor.view.search</field>
+        <fieldname="model">event.track.visitor</field>
+        <fieldname="arch"type="xml">
+            <searchstring="TrackVisitors">
+                <fieldname="track_id"/>
+                <fieldname="visitor_id"/>
+                <fieldname="partner_id"/>
+                <fieldname="is_wishlisted"/>
+                <groupstring="GroupBy"expand="0">
+                    <filterstring="Track"name="groupby_track_id"context="{'group_by':'track_id'}"/>
+                    <filterstring="Visitor"name="groupby_visitor_id"context="{'group_by':'visitor_id'}"/>
+                    <filterstring="Customer"name="groupby_partner_id"context="{'group_by':'partner_id'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <record id="event_track_visitor_view_form" model="ir.ui.view">
-        <field name="name">event.track.visitor.view.form</field>
-        <field name="model">event.track.visitor</field>
-        <field name="arch" type="xml">
-            <form string="Track Visitor">
-                <sheet string="Track Visitor">
+    <recordid="event_track_visitor_view_form"model="ir.ui.view">
+        <fieldname="name">event.track.visitor.view.form</field>
+        <fieldname="model">event.track.visitor</field>
+        <fieldname="arch"type="xml">
+            <formstring="TrackVisitor">
+                <sheetstring="TrackVisitor">
                     <group>
                         <group>
-                            <field name="track_id"/>
-                            <field name="is_wishlisted"/>
+                            <fieldname="track_id"/>
+                            <fieldname="is_wishlisted"/>
                         </group>
                         <group>
-                            <field name="visitor_id"/>
-                            <field name="partner_id"/>
+                            <fieldname="visitor_id"/>
+                            <fieldname="partner_id"/>
                         </group>
                     </group>
                 </sheet>
@@ -40,29 +40,29 @@
         </field>
     </record>
 
-    <record id="event_track_visitor_view_list" model="ir.ui.view">
-        <field name="name">event.track.visitor.view.list</field>
-        <field name="model">event.track.visitor</field>
-        <field name="arch" type="xml">
-            <tree string="Track Visitors">
-                <field name="track_id"/>
-                <field name="visitor_id"/>
-                <field name="partner_id"/>
-                <field name="is_wishlisted"/>
+    <recordid="event_track_visitor_view_list"model="ir.ui.view">
+        <fieldname="name">event.track.visitor.view.list</field>
+        <fieldname="model">event.track.visitor</field>
+        <fieldname="arch"type="xml">
+            <treestring="TrackVisitors">
+                <fieldname="track_id"/>
+                <fieldname="visitor_id"/>
+                <fieldname="partner_id"/>
+                <fieldname="is_wishlisted"/>
             </tree>
         </field>
     </record>
 
-    <record id="event_track_visitor_action" model="ir.actions.act_window">
-        <field name="name">Track Visitors</field>
-        <field name="res_model">event.track.visitor</field>
-        <field name="view_mode">tree,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-              Add a new track visitor
+    <recordid="event_track_visitor_action"model="ir.actions.act_window">
+        <fieldname="name">TrackVisitors</field>
+        <fieldname="res_model">event.track.visitor</field>
+        <fieldname="view_mode">tree,form</field>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_smiling_face">
+              Addanewtrackvisitor
             </p><p>
-              Track Visitors store statistics on track attendance, including
-              wishlist management.
+              TrackVisitorsstorestatisticsontrackattendance,including
+              wishlistmanagement.
             </p>
         </field>
     </record>

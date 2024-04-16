@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class MailMail(models.Model):
-    _inherit = 'mail.mail'
+classMailMail(models.Model):
+    _inherit='mail.mail'
 
-    fetchmail_server_id = fields.Many2one('fetchmail.server', "Inbound Mail Server", readonly=True, index=True)
+    fetchmail_server_id=fields.Many2one('fetchmail.server',"InboundMailServer",readonly=True,index=True)

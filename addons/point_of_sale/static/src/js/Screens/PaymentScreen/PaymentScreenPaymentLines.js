@@ -1,23 +1,23 @@
-flectra.define('point_of_sale.PaymentScreenPaymentLines', function(require) {
-    'use strict';
+flectra.define('point_of_sale.PaymentScreenPaymentLines',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
 
-    class PaymentScreenPaymentLines extends PosComponent {
-        formatLineAmount(paymentline) {
-            return this.env.pos.format_currency_no_symbol(paymentline.get_amount());
+    classPaymentScreenPaymentLinesextendsPosComponent{
+        formatLineAmount(paymentline){
+            returnthis.env.pos.format_currency_no_symbol(paymentline.get_amount());
         }
-        selectedLineClass(line) {
-            return { 'payment-terminal': line.get_payment_status() };
+        selectedLineClass(line){
+            return{'payment-terminal':line.get_payment_status()};
         }
-        unselectedLineClass(line) {
-            return {};
+        unselectedLineClass(line){
+            return{};
         }
     }
-    PaymentScreenPaymentLines.template = 'PaymentScreenPaymentLines';
+    PaymentScreenPaymentLines.template='PaymentScreenPaymentLines';
 
     Registries.Component.add(PaymentScreenPaymentLines);
 
-    return PaymentScreenPaymentLines;
+    returnPaymentScreenPaymentLines;
 });

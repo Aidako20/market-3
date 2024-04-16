@@ -1,172 +1,172 @@
-//! moment.js locale configuration
-//! locale : Czech [cs]
-//! author : petrbela : https://github.com/petrbela
+//!moment.jslocaleconfiguration
+//!locale:Czech[cs]
+//!author:petrbela:https://github.com/petrbela
 
-;(function (global, factory) {
-   typeof exports === 'object' && typeof module !== 'undefined'
-       && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+;(function(global,factory){
+   typeofexports==='object'&&typeofmodule!=='undefined'
+       &&typeofrequire==='function'?factory(require('../moment')):
+   typeofdefine==='function'&&define.amd?define(['../moment'],factory):
    factory(global.moment)
-}(this, (function (moment) { 'use strict';
+}(this,(function(moment){'usestrict';
 
 
-var months = 'leden_únor_březen_duben_květen_červen_červenec_srpen_září_říjen_listopad_prosinec'.split('_');
-var monthsShort = 'led_úno_bře_dub_kvě_čvn_čvc_srp_zář_říj_lis_pro'.split('_');
-function plural(n) {
-    return (n > 1) && (n < 5) && (~~(n / 10) !== 1);
+varmonths='leden_únor_březen_duben_květen_červen_červenec_srpen_září_říjen_listopad_prosinec'.split('_');
+varmonthsShort='led_úno_bře_dub_kvě_čvn_čvc_srp_zář_říj_lis_pro'.split('_');
+functionplural(n){
+    return(n>1)&&(n<5)&&(~~(n/10)!==1);
 }
-function translate(number, withoutSuffix, key, isFuture) {
-    var result = number + ' ';
-    switch (key) {
-        case 's':  // a few seconds / in a few seconds / a few seconds ago
-            return (withoutSuffix || isFuture) ? 'pár sekund' : 'pár sekundami';
-        case 'm':  // a minute / in a minute / a minute ago
-            return withoutSuffix ? 'minuta' : (isFuture ? 'minutu' : 'minutou');
-        case 'mm': // 9 minutes / in 9 minutes / 9 minutes ago
-            if (withoutSuffix || isFuture) {
-                return result + (plural(number) ? 'minuty' : 'minut');
-            } else {
-                return result + 'minutami';
+functiontranslate(number,withoutSuffix,key,isFuture){
+    varresult=number+'';
+    switch(key){
+        case's': //afewseconds/inafewseconds/afewsecondsago
+            return(withoutSuffix||isFuture)?'pársekund':'pársekundami';
+        case'm': //aminute/inaminute/aminuteago
+            returnwithoutSuffix?'minuta':(isFuture?'minutu':'minutou');
+        case'mm'://9minutes/in9minutes/9minutesago
+            if(withoutSuffix||isFuture){
+                returnresult+(plural(number)?'minuty':'minut');
+            }else{
+                returnresult+'minutami';
             }
             break;
-        case 'h':  // an hour / in an hour / an hour ago
-            return withoutSuffix ? 'hodina' : (isFuture ? 'hodinu' : 'hodinou');
-        case 'hh': // 9 hours / in 9 hours / 9 hours ago
-            if (withoutSuffix || isFuture) {
-                return result + (plural(number) ? 'hodiny' : 'hodin');
-            } else {
-                return result + 'hodinami';
+        case'h': //anhour/inanhour/anhourago
+            returnwithoutSuffix?'hodina':(isFuture?'hodinu':'hodinou');
+        case'hh'://9hours/in9hours/9hoursago
+            if(withoutSuffix||isFuture){
+                returnresult+(plural(number)?'hodiny':'hodin');
+            }else{
+                returnresult+'hodinami';
             }
             break;
-        case 'd':  // a day / in a day / a day ago
-            return (withoutSuffix || isFuture) ? 'den' : 'dnem';
-        case 'dd': // 9 days / in 9 days / 9 days ago
-            if (withoutSuffix || isFuture) {
-                return result + (plural(number) ? 'dny' : 'dní');
-            } else {
-                return result + 'dny';
+        case'd': //aday/inaday/adayago
+            return(withoutSuffix||isFuture)?'den':'dnem';
+        case'dd'://9days/in9days/9daysago
+            if(withoutSuffix||isFuture){
+                returnresult+(plural(number)?'dny':'dní');
+            }else{
+                returnresult+'dny';
             }
             break;
-        case 'M':  // a month / in a month / a month ago
-            return (withoutSuffix || isFuture) ? 'měsíc' : 'měsícem';
-        case 'MM': // 9 months / in 9 months / 9 months ago
-            if (withoutSuffix || isFuture) {
-                return result + (plural(number) ? 'měsíce' : 'měsíců');
-            } else {
-                return result + 'měsíci';
+        case'M': //amonth/inamonth/amonthago
+            return(withoutSuffix||isFuture)?'měsíc':'měsícem';
+        case'MM'://9months/in9months/9monthsago
+            if(withoutSuffix||isFuture){
+                returnresult+(plural(number)?'měsíce':'měsíců');
+            }else{
+                returnresult+'měsíci';
             }
             break;
-        case 'y':  // a year / in a year / a year ago
-            return (withoutSuffix || isFuture) ? 'rok' : 'rokem';
-        case 'yy': // 9 years / in 9 years / 9 years ago
-            if (withoutSuffix || isFuture) {
-                return result + (plural(number) ? 'roky' : 'let');
-            } else {
-                return result + 'lety';
+        case'y': //ayear/inayear/ayearago
+            return(withoutSuffix||isFuture)?'rok':'rokem';
+        case'yy'://9years/in9years/9yearsago
+            if(withoutSuffix||isFuture){
+                returnresult+(plural(number)?'roky':'let');
+            }else{
+                returnresult+'lety';
             }
             break;
     }
 }
 
-var cs = moment.defineLocale('cs', {
-    months : months,
-    monthsShort : monthsShort,
-    monthsParse : (function (months, monthsShort) {
-        var i, _monthsParse = [];
-        for (i = 0; i < 12; i++) {
-            // use custom parser to solve problem with July (červenec)
-            _monthsParse[i] = new RegExp('^' + months[i] + '$|^' + monthsShort[i] + '$', 'i');
+varcs=moment.defineLocale('cs',{
+    months:months,
+    monthsShort:monthsShort,
+    monthsParse:(function(months,monthsShort){
+        vari,_monthsParse=[];
+        for(i=0;i<12;i++){
+            //usecustomparsertosolveproblemwithJuly(červenec)
+            _monthsParse[i]=newRegExp('^'+months[i]+'$|^'+monthsShort[i]+'$','i');
         }
-        return _monthsParse;
-    }(months, monthsShort)),
-    shortMonthsParse : (function (monthsShort) {
-        var i, _shortMonthsParse = [];
-        for (i = 0; i < 12; i++) {
-            _shortMonthsParse[i] = new RegExp('^' + monthsShort[i] + '$', 'i');
+        return_monthsParse;
+    }(months,monthsShort)),
+    shortMonthsParse:(function(monthsShort){
+        vari,_shortMonthsParse=[];
+        for(i=0;i<12;i++){
+            _shortMonthsParse[i]=newRegExp('^'+monthsShort[i]+'$','i');
         }
-        return _shortMonthsParse;
+        return_shortMonthsParse;
     }(monthsShort)),
-    longMonthsParse : (function (months) {
-        var i, _longMonthsParse = [];
-        for (i = 0; i < 12; i++) {
-            _longMonthsParse[i] = new RegExp('^' + months[i] + '$', 'i');
+    longMonthsParse:(function(months){
+        vari,_longMonthsParse=[];
+        for(i=0;i<12;i++){
+            _longMonthsParse[i]=newRegExp('^'+months[i]+'$','i');
         }
-        return _longMonthsParse;
+        return_longMonthsParse;
     }(months)),
-    weekdays : 'neděle_pondělí_úterý_středa_čtvrtek_pátek_sobota'.split('_'),
-    weekdaysShort : 'ne_po_út_st_čt_pá_so'.split('_'),
-    weekdaysMin : 'ne_po_út_st_čt_pá_so'.split('_'),
-    longDateFormat : {
-        LT: 'H:mm',
-        LTS : 'H:mm:ss',
-        L : 'DD.MM.YYYY',
-        LL : 'D. MMMM YYYY',
-        LLL : 'D. MMMM YYYY H:mm',
-        LLLL : 'dddd D. MMMM YYYY H:mm',
-        l : 'D. M. YYYY'
+    weekdays:'neděle_pondělí_úterý_středa_čtvrtek_pátek_sobota'.split('_'),
+    weekdaysShort:'ne_po_út_st_čt_pá_so'.split('_'),
+    weekdaysMin:'ne_po_út_st_čt_pá_so'.split('_'),
+    longDateFormat:{
+        LT:'H:mm',
+        LTS:'H:mm:ss',
+        L:'DD.MM.YYYY',
+        LL:'D.MMMMYYYY',
+        LLL:'D.MMMMYYYYH:mm',
+        LLLL:'ddddD.MMMMYYYYH:mm',
+        l:'D.M.YYYY'
     },
-    calendar : {
-        sameDay: '[dnes v] LT',
-        nextDay: '[zítra v] LT',
-        nextWeek: function () {
-            switch (this.day()) {
-                case 0:
-                    return '[v neděli v] LT';
-                case 1:
-                case 2:
-                    return '[v] dddd [v] LT';
-                case 3:
-                    return '[ve středu v] LT';
-                case 4:
-                    return '[ve čtvrtek v] LT';
-                case 5:
-                    return '[v pátek v] LT';
-                case 6:
-                    return '[v sobotu v] LT';
+    calendar:{
+        sameDay:'[dnesv]LT',
+        nextDay:'[zítrav]LT',
+        nextWeek:function(){
+            switch(this.day()){
+                case0:
+                    return'[vneděliv]LT';
+                case1:
+                case2:
+                    return'[v]dddd[v]LT';
+                case3:
+                    return'[vestředuv]LT';
+                case4:
+                    return'[večtvrtekv]LT';
+                case5:
+                    return'[vpátekv]LT';
+                case6:
+                    return'[vsobotuv]LT';
             }
         },
-        lastDay: '[včera v] LT',
-        lastWeek: function () {
-            switch (this.day()) {
-                case 0:
-                    return '[minulou neděli v] LT';
-                case 1:
-                case 2:
-                    return '[minulé] dddd [v] LT';
-                case 3:
-                    return '[minulou středu v] LT';
-                case 4:
-                case 5:
-                    return '[minulý] dddd [v] LT';
-                case 6:
-                    return '[minulou sobotu v] LT';
+        lastDay:'[včerav]LT',
+        lastWeek:function(){
+            switch(this.day()){
+                case0:
+                    return'[minulouneděliv]LT';
+                case1:
+                case2:
+                    return'[minulé]dddd[v]LT';
+                case3:
+                    return'[minuloustředuv]LT';
+                case4:
+                case5:
+                    return'[minulý]dddd[v]LT';
+                case6:
+                    return'[minulousobotuv]LT';
             }
         },
-        sameElse: 'L'
+        sameElse:'L'
     },
-    relativeTime : {
-        future : 'za %s',
-        past : 'před %s',
-        s : translate,
-        m : translate,
-        mm : translate,
-        h : translate,
-        hh : translate,
-        d : translate,
-        dd : translate,
-        M : translate,
-        MM : translate,
-        y : translate,
-        yy : translate
+    relativeTime:{
+        future:'za%s',
+        past:'před%s',
+        s:translate,
+        m:translate,
+        mm:translate,
+        h:translate,
+        hh:translate,
+        d:translate,
+        dd:translate,
+        M:translate,
+        MM:translate,
+        y:translate,
+        yy:translate
     },
-    ordinalParse : /\d{1,2}\./,
-    ordinal : '%d.',
-    week : {
-        dow : 1, // Monday is the first day of the week.
-        doy : 4  // The week that contains Jan 4th is the first week of the year.
+    ordinalParse:/\d{1,2}\./,
+    ordinal:'%d.',
+    week:{
+        dow:1,//Mondayisthefirstdayoftheweek.
+        doy:4 //TheweekthatcontainsJan4thisthefirstweekoftheyear.
     }
 });
 
-return cs;
+returncs;
 
 })));

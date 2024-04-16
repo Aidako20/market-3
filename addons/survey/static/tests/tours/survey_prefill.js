@@ -1,154 +1,154 @@
-flectra.define('survey.tour_test_survey_prefill', function (require) {
-'use strict';
+flectra.define('survey.tour_test_survey_prefill',function(require){
+'usestrict';
 
-var tour = require('web_tour.tour');
+vartour=require('web_tour.tour');
 
-tour.register('test_survey_prefill', {
-    test: true,
-    url: '/survey/start/b137640d-14d4-4748-9ef6-344caaaaaae'
+tour.register('test_survey_prefill',{
+    test:true,
+    url:'/survey/start/b137640d-14d4-4748-9ef6-344caaaaaae'
 },
-[{      // Page-1
-        trigger: 'button.btn.btn-primary.btn-lg:contains("Start Survey")',
-    }, { // Question: Where do you live ?
-        trigger: 'div.js_question-wrapper:contains("Where do you live ?") input',
-        run: 'text Grand-Rosiere',
-    }, { // Question: When is your date of birth ?
-        trigger: 'div.js_question-wrapper:contains("When is your date of birth ?") input',
-        run: 'text 05/05/1980',
-    }, { // Question: How frequently do you buy products online ?
-        trigger: 'div.js_question-wrapper:contains("How frequently do you buy products online ?") label:contains("Once a week")',
-    }, { // Question: How many times did you order products on our website ?
-        trigger: 'div.js_question-wrapper:contains("How many times did you order products on our website ?") input',
-        run: 'text 42',
-    }, {
-        content: 'Click on Next Page',
-        trigger: 'button[value="next"]',
+[{     //Page-1
+        trigger:'button.btn.btn-primary.btn-lg:contains("StartSurvey")',
+    },{//Question:Wheredoyoulive?
+        trigger:'div.js_question-wrapper:contains("Wheredoyoulive?")input',
+        run:'textGrand-Rosiere',
+    },{//Question:Whenisyourdateofbirth?
+        trigger:'div.js_question-wrapper:contains("Whenisyourdateofbirth?")input',
+        run:'text05/05/1980',
+    },{//Question:Howfrequentlydoyoubuyproductsonline?
+        trigger:'div.js_question-wrapper:contains("Howfrequentlydoyoubuyproductsonline?")label:contains("Onceaweek")',
+    },{//Question:Howmanytimesdidyouorderproductsonourwebsite?
+        trigger:'div.js_question-wrapper:contains("Howmanytimesdidyouorderproductsonourwebsite?")input',
+        run:'text42',
+    },{
+        content:'ClickonNextPage',
+        trigger:'button[value="next"]',
     },
-    // Page-2
-    { // Question: Which of the following words would you use to describe our products ?
-        content: 'Answer Which of the following words would you use to describe our products (High Quality)',
-        trigger: 'div.js_question-wrapper:contains("Which of the following words would you use to describe our products") label:contains("High quality")',
-    }, {
-        content: 'Answer Which of the following words would you use to describe our products (Good value for money)',
-        trigger: 'div.js_question-wrapper:contains("Which of the following words would you use to describe our products") label:contains("Good value for money")',
-    }, {
-        content: 'Answer What do your think about our new eCommerce (The new layout and design is fresh and up-to-date)',
-        trigger: 'div.js_question-wrapper:contains("What do your think about our new eCommerce") tr:contains("The new layout and design is fresh and up-to-date") td:first',
-    }, {
-        content: 'Answer What do your think about our new eCommerce (It is easy to find the product that I want)',
-        trigger: 'div.js_question-wrapper:contains("What do your think about our new eCommerce") tr:contains("It is easy to find the product that I want") td:eq(2)',
-    }, {
-        content: 'Answer What do your think about our new eCommerce (The tool to compare the products is useful to make a choice)',
-        trigger: 'div.js_question-wrapper:contains("What do your think about our new eCommerce") tr:contains("The tool to compare the products is useful to make a choice") td:eq(3)',
-    }, {
-        content: 'Answer What do your think about our new eCommerce (The checkout process is clear and secure)',
-        trigger: 'div.js_question-wrapper:contains("What do your think about our new eCommerce") tr:contains("The checkout process is clear and secure") td:eq(2)',
-    }, {
-        content: 'Answer What do your think about our new eCommerce (I have added products to my wishlist)',
-        trigger: 'div.js_question-wrapper:contains("What do your think about our new eCommerce") tr:contains("I have added products to my wishlist") td:last',
-    }, {
-        content: 'Answer Do you have any other comments, questions, or concerns',
-        trigger: 'div.js_question-wrapper:contains("Do you have any other comments, questions, or concerns") textarea',
-        run: 'text Is the prefill working?',
-    }, {
-        // Go back to previous page
-        content: 'Click on the previous page name in the breadcrumb',
-        trigger: 'ol.breadcrumb a:first',
-    }, {
-        trigger: 'div.js_question-wrapper:contains("How many times did you order products on our website ?") input',
-        run: function () {
-            var $inputQ3 = $('div.js_question-wrapper:contains("How many times did you order products on our website ?") input');
-            if ($inputQ3.val() === '42.0') {
+    //Page-2
+    {//Question:Whichofthefollowingwordswouldyouusetodescribeourproducts?
+        content:'AnswerWhichofthefollowingwordswouldyouusetodescribeourproducts(HighQuality)',
+        trigger:'div.js_question-wrapper:contains("Whichofthefollowingwordswouldyouusetodescribeourproducts")label:contains("Highquality")',
+    },{
+        content:'AnswerWhichofthefollowingwordswouldyouusetodescribeourproducts(Goodvalueformoney)',
+        trigger:'div.js_question-wrapper:contains("Whichofthefollowingwordswouldyouusetodescribeourproducts")label:contains("Goodvalueformoney")',
+    },{
+        content:'AnswerWhatdoyourthinkaboutourneweCommerce(Thenewlayoutanddesignisfreshandup-to-date)',
+        trigger:'div.js_question-wrapper:contains("WhatdoyourthinkaboutourneweCommerce")tr:contains("Thenewlayoutanddesignisfreshandup-to-date")td:first',
+    },{
+        content:'AnswerWhatdoyourthinkaboutourneweCommerce(ItiseasytofindtheproductthatIwant)',
+        trigger:'div.js_question-wrapper:contains("WhatdoyourthinkaboutourneweCommerce")tr:contains("ItiseasytofindtheproductthatIwant")td:eq(2)',
+    },{
+        content:'AnswerWhatdoyourthinkaboutourneweCommerce(Thetooltocomparetheproductsisusefultomakeachoice)',
+        trigger:'div.js_question-wrapper:contains("WhatdoyourthinkaboutourneweCommerce")tr:contains("Thetooltocomparetheproductsisusefultomakeachoice")td:eq(3)',
+    },{
+        content:'AnswerWhatdoyourthinkaboutourneweCommerce(Thecheckoutprocessisclearandsecure)',
+        trigger:'div.js_question-wrapper:contains("WhatdoyourthinkaboutourneweCommerce")tr:contains("Thecheckoutprocessisclearandsecure")td:eq(2)',
+    },{
+        content:'AnswerWhatdoyourthinkaboutourneweCommerce(Ihaveaddedproductstomywishlist)',
+        trigger:'div.js_question-wrapper:contains("WhatdoyourthinkaboutourneweCommerce")tr:contains("Ihaveaddedproductstomywishlist")td:last',
+    },{
+        content:'AnswerDoyouhaveanyothercomments,questions,orconcerns',
+        trigger:'div.js_question-wrapper:contains("Doyouhaveanyothercomments,questions,orconcerns")textarea',
+        run:'textIstheprefillworking?',
+    },{
+        //Gobacktopreviouspage
+        content:'Clickonthepreviouspagenameinthebreadcrumb',
+        trigger:'ol.breadcrumba:first',
+    },{
+        trigger:'div.js_question-wrapper:contains("Howmanytimesdidyouorderproductsonourwebsite?")input',
+        run:function(){
+            var$inputQ3=$('div.js_question-wrapper:contains("Howmanytimesdidyouorderproductsonourwebsite?")input');
+            if($inputQ3.val()==='42.0'){
                 $('.o_survey_title').addClass('prefilled');
             }
         }
-    }, {
-        trigger: '.o_survey_title.prefilled',
-        run: function () {
-            // check that all the answers are prefilled in Page 1
-            var $inputQ1 = $('div.js_question-wrapper:contains("Where do you live ?") input');
-            if ($inputQ1.val() !== 'Grand-Rosiere') {
+    },{
+        trigger:'.o_survey_title.prefilled',
+        run:function(){
+            //checkthatalltheanswersareprefilledinPage1
+            var$inputQ1=$('div.js_question-wrapper:contains("Wheredoyoulive?")input');
+            if($inputQ1.val()!=='Grand-Rosiere'){
                 return;
             }
 
-            var $inputQ2 = $('div.js_question-wrapper:contains("When is your date of birth ?") input');
-            if ($inputQ2.val() !== '05/05/1980') {
+            var$inputQ2=$('div.js_question-wrapper:contains("Whenisyourdateofbirth?")input');
+            if($inputQ2.val()!=='05/05/1980'){
                 return;
             }
 
-            var $inputQ3 = $('div.js_question-wrapper:contains("How frequently do you buy products online ?") label:contains("Once a week") input');
-            if (!$inputQ3.is(':checked')) {
+            var$inputQ3=$('div.js_question-wrapper:contains("Howfrequentlydoyoubuyproductsonline?")label:contains("Onceaweek")input');
+            if(!$inputQ3.is(':checked')){
                 return;
             }
 
-            var $inputQ4 = $('div.js_question-wrapper:contains("How many times did you order products on our website ?") input');
-            if ($inputQ4.val() !== '42.0') {
+            var$inputQ4=$('div.js_question-wrapper:contains("Howmanytimesdidyouorderproductsonourwebsite?")input');
+            if($inputQ4.val()!=='42.0'){
                 return;
             }
 
             $('.o_survey_title').addClass('tour_success');
         }
-    }, {
-        trigger: '.o_survey_title.tour_success'
-    }, {
-        content: 'Click on Next Page',
-        trigger: 'button[value="next"]',
-    }, {
-        trigger: 'div.js_question-wrapper:contains("Do you have any other comments, questions, or concerns") textarea',
-        run: function () {
-            var $inputQ3 = $('div.js_question-wrapper:contains("Do you have any other comments, questions, or concerns") textarea');
-            if ($inputQ3.val() === "Is the prefill working?") {
+    },{
+        trigger:'.o_survey_title.tour_success'
+    },{
+        content:'ClickonNextPage',
+        trigger:'button[value="next"]',
+    },{
+        trigger:'div.js_question-wrapper:contains("Doyouhaveanyothercomments,questions,orconcerns")textarea',
+        run:function(){
+            var$inputQ3=$('div.js_question-wrapper:contains("Doyouhaveanyothercomments,questions,orconcerns")textarea');
+            if($inputQ3.val()==="Istheprefillworking?"){
                 $('.o_survey_title').addClass('prefilled2');
             }
         }
-    }, {
-        trigger: '.o_survey_title.prefilled2',
-        run: function () {
-            // check that all the answers are prefilled in Page 2
-            var $input1Q1 = $('div.js_question-wrapper:contains("Which of the following words would you use to describe our products") label:contains("High quality") input');
-            if (!$input1Q1.is(':checked')) {
+    },{
+        trigger:'.o_survey_title.prefilled2',
+        run:function(){
+            //checkthatalltheanswersareprefilledinPage2
+            var$input1Q1=$('div.js_question-wrapper:contains("Whichofthefollowingwordswouldyouusetodescribeourproducts")label:contains("Highquality")input');
+            if(!$input1Q1.is(':checked')){
                 return;
             }
 
-            var $input2Q1 = $('div.js_question-wrapper:contains("Which of the following words would you use to describe our products") label:contains("Good value for money") input');
-            if (!$input2Q1.is(':checked')) {
+            var$input2Q1=$('div.js_question-wrapper:contains("Whichofthefollowingwordswouldyouusetodescribeourproducts")label:contains("Goodvalueformoney")input');
+            if(!$input2Q1.is(':checked')){
                 return;
             }
 
-            var $input1Q2 = $('div.js_question-wrapper:contains("What do your think about our new eCommerce") tr:contains("The new layout and design is fresh and up-to-date") input:first');
-            if (!$input1Q2.is(':checked')) {
+            var$input1Q2=$('div.js_question-wrapper:contains("WhatdoyourthinkaboutourneweCommerce")tr:contains("Thenewlayoutanddesignisfreshandup-to-date")input:first');
+            if(!$input1Q2.is(':checked')){
                 return;
             }
 
-            var $input2Q2 = $('div.js_question-wrapper:contains("What do your think about our new eCommerce") tr:contains("It is easy to find the product that I want") input:eq(2)');
-            if (!$input2Q2.is(':checked')) {
+            var$input2Q2=$('div.js_question-wrapper:contains("WhatdoyourthinkaboutourneweCommerce")tr:contains("ItiseasytofindtheproductthatIwant")input:eq(2)');
+            if(!$input2Q2.is(':checked')){
                 return;
             }
 
-            var $input3Q2 = $('div.js_question-wrapper:contains("What do your think about our new eCommerce") tr:contains("The tool to compare the products is useful to make a choice") input:eq(3)');
-            if (!$input3Q2.is(':checked')) {
+            var$input3Q2=$('div.js_question-wrapper:contains("WhatdoyourthinkaboutourneweCommerce")tr:contains("Thetooltocomparetheproductsisusefultomakeachoice")input:eq(3)');
+            if(!$input3Q2.is(':checked')){
                 return;
             }
 
-            var $input4Q2 = $('div.js_question-wrapper:contains("What do your think about our new eCommerce") tr:contains("The checkout process is clear and secure") input:eq(2)');
-            if (!$input4Q2.is(':checked')) {
+            var$input4Q2=$('div.js_question-wrapper:contains("WhatdoyourthinkaboutourneweCommerce")tr:contains("Thecheckoutprocessisclearandsecure")input:eq(2)');
+            if(!$input4Q2.is(':checked')){
                 return;
             }
 
-            var $input5Q2 = $('div.js_question-wrapper:contains("What do your think about our new eCommerce") tr:contains("I have added products to my wishlist") input:last');
-            if (!$input5Q2.is(':checked')) {
+            var$input5Q2=$('div.js_question-wrapper:contains("WhatdoyourthinkaboutourneweCommerce")tr:contains("Ihaveaddedproductstomywishlist")input:last');
+            if(!$input5Q2.is(':checked')){
                 return;
             }
 
-            var $inputQ3 = $('div.js_question-wrapper:contains("Do you have any other comments, questions, or concerns") textarea');
-            if ($inputQ3.val() !== "Is the prefill working?") {
+            var$inputQ3=$('div.js_question-wrapper:contains("Doyouhaveanyothercomments,questions,orconcerns")textarea');
+            if($inputQ3.val()!=="Istheprefillworking?"){
                 return;
             }
 
             $('.o_survey_title').addClass('tour_success_2');
         }
-    }, {
-        trigger: '.o_survey_title.tour_success_2'
+    },{
+        trigger:'.o_survey_title.tour_success_2'
     }
 ]);
 

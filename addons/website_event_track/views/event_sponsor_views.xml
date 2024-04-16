@@ -1,133 +1,133 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
 <data>
-    <!-- EVENTS/CONFIGURATION/EVENT Sponsor Types -->
-    <record id="event_sponsor_type_view_form" model="ir.ui.view">
-        <field name="name">Sponsor Types</field>
-        <field name="model">event.sponsor.type</field>
-        <field name="arch" type="xml">
-            <form string="Event Sponsor Types">
+    <!--EVENTS/CONFIGURATION/EVENTSponsorTypes-->
+    <recordid="event_sponsor_type_view_form"model="ir.ui.view">
+        <fieldname="name">SponsorTypes</field>
+        <fieldname="model">event.sponsor.type</field>
+        <fieldname="arch"type="xml">
+            <formstring="EventSponsorTypes">
                 <sheet>
                     <group>
-                        <field name="name"/>
-                        <field name="display_ribbon_style"/>
-                        <field name="sequence" groups="base.group_no_one"/>
+                        <fieldname="name"/>
+                        <fieldname="display_ribbon_style"/>
+                        <fieldname="sequence"groups="base.group_no_one"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="event_sponsor_type_view_tree" model="ir.ui.view">
-        <field name="name">Sponsor Types</field>
-        <field name="model">event.sponsor.type</field>
-        <field name="arch" type="xml">
-            <tree editable="bottom" string="Event Sponsor Type">
-                <field name="sequence" widget="handle"/>
-                <field name="name"/>
-                <field name="display_ribbon_style"/>
+    <recordid="event_sponsor_type_view_tree"model="ir.ui.view">
+        <fieldname="name">SponsorTypes</field>
+        <fieldname="model">event.sponsor.type</field>
+        <fieldname="arch"type="xml">
+            <treeeditable="bottom"string="EventSponsorType">
+                <fieldname="sequence"widget="handle"/>
+                <fieldname="name"/>
+                <fieldname="display_ribbon_style"/>
             </tree>
         </field>
     </record>
 
-    <record id="event_sponsor_type_action" model="ir.actions.act_window">
-        <field name="name">Sponsor Types</field>
-        <field name="res_model">event.sponsor.type</field>
+    <recordid="event_sponsor_type_action"model="ir.actions.act_window">
+        <fieldname="name">SponsorTypes</field>
+        <fieldname="res_model">event.sponsor.type</field>
     </record>
 
-    <record id="event_sponsor_view_search" model="ir.ui.view">
-        <field name="name">event.sponsor.search</field>
-        <field name="model">event.sponsor</field>
-        <field name="arch" type="xml">
-            <search string="Event Sponsors">
-                <field name="partner_id"/>
-                <field name="event_id"/>
-                <field name="name"/>
-                <field name="email"/>
-                <field name="phone"/>
-                <filter string="Archived" name="archived" domain="[('active', '=', False)]"/>
-                <group string="Group By" expand="0">
-                    <filter string="Event" name="group_by_event_id" domain="[]" context="{'group_by': 'event_id'}"/>
-                    <filter string="Sponsorship" name="group_by_sponsor_type_id" domain="[]" context="{'group_by': 'sponsor_type_id'}"/>
+    <recordid="event_sponsor_view_search"model="ir.ui.view">
+        <fieldname="name">event.sponsor.search</field>
+        <fieldname="model">event.sponsor</field>
+        <fieldname="arch"type="xml">
+            <searchstring="EventSponsors">
+                <fieldname="partner_id"/>
+                <fieldname="event_id"/>
+                <fieldname="name"/>
+                <fieldname="email"/>
+                <fieldname="phone"/>
+                <filterstring="Archived"name="archived"domain="[('active','=',False)]"/>
+                <groupstring="GroupBy"expand="0">
+                    <filterstring="Event"name="group_by_event_id"domain="[]"context="{'group_by':'event_id'}"/>
+                    <filterstring="Sponsorship"name="group_by_sponsor_type_id"domain="[]"context="{'group_by':'sponsor_type_id'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <record id="event_sponsor_view_form" model="ir.ui.view">
-        <field name="name">event.sponsor.view.form</field>
-        <field name="model">event.sponsor</field>
-        <field name="arch" type="xml">
+    <recordid="event_sponsor_view_form"model="ir.ui.view">
+        <fieldname="name">event.sponsor.view.form</field>
+        <fieldname="model">event.sponsor</field>
+        <fieldname="arch"type="xml">
             <form>
                 <sheet>
-                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
-                    <field name="active" invisible="1"/>
-                    <field name="image_512" widget="image" class="oe_avatar"/>
-                    <div class="oe_title">
-                        <label for="name" class="oe_edit_only" string="Sponsor Name"/>
-                        <h1><field name="name" placeholder="e.g. : OpenWood Decoration"/></h1>
+                    <widgetname="web_ribbon"title="Archived"bg_color="bg-danger"attrs="{'invisible':[('active','=',True)]}"/>
+                    <fieldname="active"invisible="1"/>
+                    <fieldname="image_512"widget="image"class="oe_avatar"/>
+                    <divclass="oe_title">
+                        <labelfor="name"class="oe_edit_only"string="SponsorName"/>
+                        <h1><fieldname="name"placeholder="e.g.:OpenWoodDecoration"/></h1>
                     </div>
                     <group>
                         <group>
-                            <field name="event_id"/>
-                            <field name="partner_id" string="Partner"/>
-                            <field name="email" widget="email" string="Email"
-                                placeholder="e.g. : open.wood.decoration@example.com"/>
-                            <field name="url" widget="url" string="Website"
-                                placeholder=">e.g. : https://www.flectrahq.com"/>
+                            <fieldname="event_id"/>
+                            <fieldname="partner_id"string="Partner"/>
+                            <fieldname="email"widget="email"string="Email"
+                                placeholder="e.g.:open.wood.decoration@example.com"/>
+                            <fieldname="url"widget="url"string="Website"
+                                placeholder=">e.g.:https://www.flectrahq.com"/>
                         </group>
                         <group>
-                            <field name="sponsor_type_id"/>
-                            <field name="phone" widget="phone" string="Phone" options="{'enable_sms': True}"/>
-                            <field name="mobile" widget="phone" string="Mobile" options="{'enable_sms': True}"/>
+                            <fieldname="sponsor_type_id"/>
+                            <fieldname="phone"widget="phone"string="Phone"options="{'enable_sms':True}"/>
+                            <fieldname="mobile"widget="phone"string="Mobile"options="{'enable_sms':True}"/>
                         </group>
                     </group>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids" groups="base.group_user"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
+                <divclass="oe_chatter">
+                    <fieldname="message_follower_ids"groups="base.group_user"/>
+                    <fieldname="activity_ids"/>
+                    <fieldname="message_ids"/>
                 </div>
             </form>
         </field>
     </record>
 
-    <record id="event_sponsor_view_tree" model="ir.ui.view">
-        <field name="name">event.sponsor.view.tree</field>
-        <field name="model">event.sponsor</field>
-        <field name="arch" type="xml">
-            <tree multi_edit="1">
-                <field name="sequence" widget="handle"/>
-                <field name="partner_id" readonly="1"/>
-                <field name="name"/>
-                <field name="email"/>
-                <field name="phone"/>
-                <field name="mobile"/>
-                <field name="url" string="Website"/>
-                <field name="sponsor_type_id"/>
+    <recordid="event_sponsor_view_tree"model="ir.ui.view">
+        <fieldname="name">event.sponsor.view.tree</field>
+        <fieldname="model">event.sponsor</field>
+        <fieldname="arch"type="xml">
+            <treemulti_edit="1">
+                <fieldname="sequence"widget="handle"/>
+                <fieldname="partner_id"readonly="1"/>
+                <fieldname="name"/>
+                <fieldname="email"/>
+                <fieldname="phone"/>
+                <fieldname="mobile"/>
+                <fieldname="url"string="Website"/>
+                <fieldname="sponsor_type_id"/>
             </tree>
         </field>
     </record>
 
-    <record id="event_sponsor_view_kanban" model="ir.ui.view">
-        <field name="name">event.sponsor.view.kanban</field>
-        <field name="model">event.sponsor</field>
-        <field name="arch" type="xml">
+    <recordid="event_sponsor_view_kanban"model="ir.ui.view">
+        <fieldname="name">event.sponsor.view.kanban</field>
+        <fieldname="model">event.sponsor</field>
+        <fieldname="arch"type="xml">
             <kanban>
-                <field name="id"/>
-                <field name="url"/>
-                <field name="partner_email"/>
-                <field name="sponsor_type_id"/>
+                <fieldname="id"/>
+                <fieldname="url"/>
+                <fieldname="partner_email"/>
+                <fieldname="sponsor_type_id"/>
                 <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_global_click overflow-hidden">
-                            <div class="row my-auto">
-                                <img t-att-src="kanban_image('event.sponsor', 'image_128', record.id.raw_value)" alt="Sponsor image" class="col-4"/>
-                                <div class="col-8">
-                                    <h1 class="o_kanban_record_title"><field name="partner_id"/></h1>
-                                    <div>Level: <field name="sponsor_type_id"/></div>
-                                    <span class="o_text_overflow" t-esc="record.partner_email.value"/>
-                                    <span class="o_text_overflow" t-esc="record.url.value"/>
+                    <tt-name="kanban-box">
+                        <divclass="oe_kanban_global_clickoverflow-hidden">
+                            <divclass="rowmy-auto">
+                                <imgt-att-src="kanban_image('event.sponsor','image_128',record.id.raw_value)"alt="Sponsorimage"class="col-4"/>
+                                <divclass="col-8">
+                                    <h1class="o_kanban_record_title"><fieldname="partner_id"/></h1>
+                                    <div>Level:<fieldname="sponsor_type_id"/></div>
+                                    <spanclass="o_text_overflow"t-esc="record.partner_email.value"/>
+                                    <spanclass="o_text_overflow"t-esc="record.url.value"/>
                                 </div>
                             </div>
                         </div>
@@ -137,14 +137,14 @@
         </field>
     </record>
 
-    <record id="event_sponsor_action_from_event" model="ir.actions.act_window">
-        <field name="name">Event Sponsors</field>
-        <field name="res_model">event.sponsor</field>
-        <field name="view_mode">kanban,tree,form</field>
-        <field name="context">{'search_default_event_id': active_id, 'default_event_id': active_id}</field>
-        <field name="help" type="html">
-<p class="o_view_nocontent_smiling_face">
-  Create a Sponsor
+    <recordid="event_sponsor_action_from_event"model="ir.actions.act_window">
+        <fieldname="name">EventSponsors</field>
+        <fieldname="res_model">event.sponsor</field>
+        <fieldname="view_mode">kanban,tree,form</field>
+        <fieldname="context">{'search_default_event_id':active_id,'default_event_id':active_id}</field>
+        <fieldname="help"type="html">
+<pclass="o_view_nocontent_smiling_face">
+  CreateaSponsor
 </p>
         </field>
     </record>

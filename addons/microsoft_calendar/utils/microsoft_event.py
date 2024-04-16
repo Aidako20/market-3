@@ -1,260 +1,260 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra.api import model
-from typing import Iterator, Mapping
-from collections import abc
-from flectra.tools import ReadonlyDict
-from flectra.addons.microsoft_calendar.utils.event_id_storage import combine_ids
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectra.apiimportmodel
+fromtypingimportIterator,Mapping
+fromcollectionsimportabc
+fromflectra.toolsimportReadonlyDict
+fromflectra.addons.microsoft_calendar.utils.event_id_storageimportcombine_ids
 
 
-class MicrosoftEvent(abc.Set):
+classMicrosoftEvent(abc.Set):
     """
-    This helper class holds the values of a Microsoft event.
-    Inspired by Flectra recordset, one instance can be a single Microsoft event or a
-    (immutable) set of Microsoft events.
-    All usual set operations are supported (union, intersection, etc).
+    ThishelperclassholdsthevaluesofaMicrosoftevent.
+    InspiredbyFlectrarecordset,oneinstancecanbeasingleMicrosofteventora
+    (immutable)setofMicrosoftevents.
+    Allusualsetoperationsaresupported(union,intersection,etc).
 
-    :param iterable: iterable of MicrosoftCalendar instances or iterable of dictionnaries
+    :paramiterable:iterableofMicrosoftCalendarinstancesoriterableofdictionnaries
     """
 
-    def __init__(self, iterable=()):
-        _events = {}
-        for item in iterable:
-            if isinstance(item, self.__class__):
-                _events[item.id] = item._events[item.id]
-            elif isinstance(item, Mapping):
-                _events[item.get('id')] = item
+    def__init__(self,iterable=()):
+        _events={}
+        foriteminiterable:
+            ifisinstance(item,self.__class__):
+                _events[item.id]=item._events[item.id]
+            elifisinstance(item,Mapping):
+                _events[item.get('id')]=item
             else:
-                raise ValueError("Only %s or iterable of dict are supported" % self.__class__.__name__)
-        self._events = ReadonlyDict(_events)
+                raiseValueError("Only%soriterableofdictaresupported"%self.__class__.__name__)
+        self._events=ReadonlyDict(_events)
 
-    def __iter__(self) -> Iterator['MicrosoftEvent']:
-        return iter(MicrosoftEvent([vals]) for vals in self._events.values())
+    def__iter__(self)->Iterator['MicrosoftEvent']:
+        returniter(MicrosoftEvent([vals])forvalsinself._events.values())
 
-    def __contains__(self, microsoft_event):
-        return microsoft_event.id in self._events
+    def__contains__(self,microsoft_event):
+        returnmicrosoft_event.idinself._events
 
-    def __len__(self):
-        return len(self._events)
+    def__len__(self):
+        returnlen(self._events)
 
-    def __bool__(self):
-        return bool(self._events)
+    def__bool__(self):
+        returnbool(self._events)
 
-    def __getattr__(self, name):
-        # ensure_one
+    def__getattr__(self,name):
+        #ensure_one
         try:
-            event, = self._events.keys()
-        except ValueError:
-            raise ValueError("Expected singleton: %s" % self)
-        event_id = list(self._events.keys())[0]
-        return self._events[event_id].get(name)
+            event,=self._events.keys()
+        exceptValueError:
+            raiseValueError("Expectedsingleton:%s"%self)
+        event_id=list(self._events.keys())[0]
+        returnself._events[event_id].get(name)
 
-    def __repr__(self):
-        return '%s%s' % (self.__class__.__name__, self.ids)
-
-    @property
-    def ids(self):
-        """
-        Use 'id' to return an event identifier which is specific to a calendar
-        """
-        return tuple(e.id for e in self)
-
-    def microsoft_ids(self):
-        return tuple(e.id for e in self)
+    def__repr__(self):
+        return'%s%s'%(self.__class__.__name__,self.ids)
 
     @property
-    def uids(self):
+    defids(self):
         """
-        Use 'iCalUid' to return an identifier which is unique accross all calendars
+        Use'id'toreturnaneventidentifierwhichisspecifictoacalendar
         """
-        return tuple(e.iCalUId for e in self)
+        returntuple(e.idforeinself)
 
-    def flectra_id(self, env):
-        return self._flectra_id
-
-    def _meta_flectra_id(self, microsoft_guid):
-        """Returns the Flectra id stored in the Microsoft Event metadata.
-        This id might not actually exists in the database.
-        """
-        return None
+    defmicrosoft_ids(self):
+        returntuple(e.idforeinself)
 
     @property
-    def flectra_ids(self):
+    defuids(self):
         """
-        Get the list of Flectra event ids already mapped with Outlook events (self)
+        Use'iCalUid'toreturnanidentifierwhichisuniqueaccrossallcalendars
         """
-        return tuple(e._flectra_id for e in self if e._flectra_id)
+        returntuple(e.iCalUIdforeinself)
 
-    def _load_flectra_ids_from_db(self, env, force_model=None):
+    defflectra_id(self,env):
+        returnself._flectra_id
+
+    def_meta_flectra_id(self,microsoft_guid):
+        """ReturnstheFlectraidstoredintheMicrosoftEventmetadata.
+        Thisidmightnotactuallyexistsinthedatabase.
         """
-        Map Microsoft events to existing Flectra events:
-        1) extract unmapped events only,
-        2) match Flectra events and Outlook events which have both a ICalUId set,
-        3) match remaining events,
-        Returns the list of mapped events
+        returnNone
+
+    @property
+    defflectra_ids(self):
         """
-        mapped_events = [e.id for e in self if e._flectra_id]
+        GetthelistofFlectraeventidsalreadymappedwithOutlookevents(self)
+        """
+        returntuple(e._flectra_idforeinselfife._flectra_id)
 
-        # avoid mapping events if they are already all mapped
-        if len(self) == len(mapped_events):
-            return self
+    def_load_flectra_ids_from_db(self,env,force_model=None):
+        """
+        MapMicrosofteventstoexistingFlectraevents:
+        1)extractunmappedeventsonly,
+        2)matchFlectraeventsandOutlookeventswhichhavebothaICalUIdset,
+        3)matchremainingevents,
+        Returnsthelistofmappedevents
+        """
+        mapped_events=[e.idforeinselfife._flectra_id]
 
-        unmapped_events = self.filter(lambda e: e.id not in mapped_events)
+        #avoidmappingeventsiftheyarealreadyallmapped
+        iflen(self)==len(mapped_events):
+            returnself
 
-        model_env = force_model if force_model is not None else self._get_model(env)
-        flectra_events = model_env.with_context(active_test=False).search([
+        unmapped_events=self.filter(lambdae:e.idnotinmapped_events)
+
+        model_env=force_modelifforce_modelisnotNoneelseself._get_model(env)
+        flectra_events=model_env.with_context(active_test=False).search([
             '|',
-            ('ms_universal_event_id', "in", unmapped_events.uids),
-            ('ms_organizer_event_id', "in", unmapped_events.ids)
+            ('ms_universal_event_id',"in",unmapped_events.uids),
+            ('ms_organizer_event_id',"in",unmapped_events.ids)
         ]).with_env(env)
 
-        # 1. try to match unmapped events with Flectra events using their iCalUId
-        unmapped_events_with_uids = unmapped_events.filter(lambda e: e.iCalUId)
-        flectra_events_with_uids = flectra_events.filtered(lambda e: e.ms_universal_event_id)
-        mapping = {e.ms_universal_event_id: e.id for e in flectra_events_with_uids}
+        #1.trytomatchunmappedeventswithFlectraeventsusingtheiriCalUId
+        unmapped_events_with_uids=unmapped_events.filter(lambdae:e.iCalUId)
+        flectra_events_with_uids=flectra_events.filtered(lambdae:e.ms_universal_event_id)
+        mapping={e.ms_universal_event_id:e.idforeinflectra_events_with_uids}
 
-        for ms_event in unmapped_events_with_uids:
-            flectra_id = mapping.get(ms_event.iCalUId)
-            if flectra_id:
-                ms_event._events[ms_event.id]['_flectra_id'] = flectra_id
+        forms_eventinunmapped_events_with_uids:
+            flectra_id=mapping.get(ms_event.iCalUId)
+            ifflectra_id:
+                ms_event._events[ms_event.id]['_flectra_id']=flectra_id
                 mapped_events.append(ms_event.id)
 
-        # 2. try to match unmapped events with Flectra events using their id
-        unmapped_events = self.filter(lambda e: e.id not in mapped_events)
-        mapping = {e.ms_organizer_event_id: e for e in flectra_events}
+        #2.trytomatchunmappedeventswithFlectraeventsusingtheirid
+        unmapped_events=self.filter(lambdae:e.idnotinmapped_events)
+        mapping={e.ms_organizer_event_id:eforeinflectra_events}
 
-        for ms_event in unmapped_events:
-            flectra_event = mapping.get(ms_event.id)
-            if flectra_event:
-                ms_event._events[ms_event.id]['_flectra_id'] = flectra_event.id
+        forms_eventinunmapped_events:
+            flectra_event=mapping.get(ms_event.id)
+            ifflectra_event:
+                ms_event._events[ms_event.id]['_flectra_id']=flectra_event.id
                 mapped_events.append(ms_event.id)
 
-                # don't forget to also set the global event ID on the Flectra event to ease
-                # and improve reliability of future mappings
+                #don'tforgettoalsosettheglobaleventIDontheFlectraeventtoease
+                #andimprovereliabilityoffuturemappings
                 flectra_event.write({
-                    'microsoft_id': combine_ids(ms_event.id, ms_event.iCalUId),
-                    'need_sync_m': False,
+                    'microsoft_id':combine_ids(ms_event.id,ms_event.iCalUId),
+                    'need_sync_m':False,
                 })
 
-        return self.filter(lambda e: e.id in mapped_events)
+        returnself.filter(lambdae:e.idinmapped_events)
 
-    def owner_id(self, env):
+    defowner_id(self,env):
         """
-        Indicates who is the owner of an event (i.e the organizer of the event).
+        Indicateswhoistheownerofanevent(i.etheorganizeroftheevent).
 
-        There are several possible cases:
-        1) the current Flectra user is the organizer of the event according to Outlook event, so return his id.
-        2) the current Flectra user is NOT the organizer and:
-           2.1) we are able to find a Flectra user using the Outlook event organizer email address and we use his id,
-           2.2) we are NOT able to find a Flectra user matching the organizer email address and we return False, meaning
-                that no Flectra user will be able to modify this event. All modifications will be done from Outlook.
+        Thereareseveralpossiblecases:
+        1)thecurrentFlectrauseristheorganizeroftheeventaccordingtoOutlookevent,soreturnhisid.
+        2)thecurrentFlectrauserisNOTtheorganizerand:
+           2.1)weareabletofindaFlectrauserusingtheOutlookeventorganizeremailaddressandweusehisid,
+           2.2)weareNOTabletofindaFlectrausermatchingtheorganizeremailaddressandwereturnFalse,meaning
+                thatnoFlectrauserwillbeabletomodifythisevent.AllmodificationswillbedonefromOutlook.
         """
-        if self.isOrganizer:
-            return env.user.id
-        if self.organizer.get('emailAddress') and self.organizer.get('emailAddress').get('address'):
-            # Warning: In Microsoft: 1 email = 1 user; but in Flectra several users might have the same email
-            user = env['res.users'].search([('email', '=', self.organizer.get('emailAddress').get('address'))], limit=1)
-            return user.id if user else False
-        return False
+        ifself.isOrganizer:
+            returnenv.user.id
+        ifself.organizer.get('emailAddress')andself.organizer.get('emailAddress').get('address'):
+            #Warning:InMicrosoft:1email=1user;butinFlectraseveralusersmighthavethesameemail
+            user=env['res.users'].search([('email','=',self.organizer.get('emailAddress').get('address'))],limit=1)
+            returnuser.idifuserelseFalse
+        returnFalse
 
-    def filter(self, func) -> 'MicrosoftEvent':
-        return MicrosoftEvent(e for e in self if func(e))
+    deffilter(self,func)->'MicrosoftEvent':
+        returnMicrosoftEvent(eforeinselfiffunc(e))
 
-    def is_recurrence(self):
-        return self.type == 'seriesMaster'
+    defis_recurrence(self):
+        returnself.type=='seriesMaster'
 
-    def is_recurrent(self):
-        return bool(self.seriesMasterId or self.is_recurrence())
+    defis_recurrent(self):
+        returnbool(self.seriesMasterIdorself.is_recurrence())
 
-    def is_recurrent_not_master(self):
-        return bool(self.seriesMasterId)
+    defis_recurrent_not_master(self):
+        returnbool(self.seriesMasterId)
 
-    def get_recurrence(self):
-        if not self.recurrence:
-            return {}
-        pattern = self.recurrence['pattern']
-        range = self.recurrence['range']
-        end_type_dict = {
-            'endDate': 'end_date',
-            'noEnd': 'forever',
-            'numbered': 'count',
+    defget_recurrence(self):
+        ifnotself.recurrence:
+            return{}
+        pattern=self.recurrence['pattern']
+        range=self.recurrence['range']
+        end_type_dict={
+            'endDate':'end_date',
+            'noEnd':'forever',
+            'numbered':'count',
         }
-        type_dict = {
-            'absoluteMonthly': 'monthly',
-            'relativeMonthly': 'monthly',
-            'absoluteYearly': 'yearly',
-            'relativeYearly': 'yearly',
+        type_dict={
+            'absoluteMonthly':'monthly',
+            'relativeMonthly':'monthly',
+            'absoluteYearly':'yearly',
+            'relativeYearly':'yearly',
         }
-        index_dict = {
-            'first': '1',
-            'second': '2',
-            'third': '3',
-            'fourth': '4',
-            'last': '-1',
+        index_dict={
+            'first':'1',
+            'second':'2',
+            'third':'3',
+            'fourth':'4',
+            'last':'-1',
         }
-        rrule_type = type_dict.get(pattern['type'], pattern['type'])
-        interval = pattern['interval']
-        if rrule_type == 'yearly':
-            interval *= 12
-        result = {
-            'rrule_type': rrule_type,
-            'end_type': end_type_dict.get(range['type'], False),
-            'interval': interval,
-            'count': range['numberOfOccurrences'],
-            'day': pattern['dayOfMonth'],
-            'byday': index_dict.get(pattern['index'], False),
-            'until': range['type'] == 'endDate' and range['endDate'],
+        rrule_type=type_dict.get(pattern['type'],pattern['type'])
+        interval=pattern['interval']
+        ifrrule_type=='yearly':
+            interval*=12
+        result={
+            'rrule_type':rrule_type,
+            'end_type':end_type_dict.get(range['type'],False),
+            'interval':interval,
+            'count':range['numberOfOccurrences'],
+            'day':pattern['dayOfMonth'],
+            'byday':index_dict.get(pattern['index'],False),
+            'until':range['type']=='endDate'andrange['endDate'],
         }
 
-        month_by_dict = {
-            'absoluteMonthly': 'date',
-            'relativeMonthly': 'day',
-            'absoluteYearly': 'date',
-            'relativeYearly': 'day',
+        month_by_dict={
+            'absoluteMonthly':'date',
+            'relativeMonthly':'day',
+            'absoluteYearly':'date',
+            'relativeYearly':'day',
         }
-        month_by = month_by_dict.get(pattern['type'], False)
-        if month_by:
-            result['month_by'] = month_by
+        month_by=month_by_dict.get(pattern['type'],False)
+        ifmonth_by:
+            result['month_by']=month_by
 
-        # daysOfWeek contains the full name of the day, the fields contain the first 2 letters (mo, tu, etc)
-        week_days = [x[:2] for x in pattern.get('daysOfWeek', [])]
-        for week_day in ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']:
-            result[week_day] = week_day in week_days
-        if week_days:
-            result['weekday'] = week_days[0].upper()
-        return result
+        #daysOfWeekcontainsthefullnameoftheday,thefieldscontainthefirst2letters(mo,tu,etc)
+        week_days=[x[:2]forxinpattern.get('daysOfWeek',[])]
+        forweek_dayin['mo','tu','we','th','fr','sa','su']:
+            result[week_day]=week_dayinweek_days
+        ifweek_days:
+            result['weekday']=week_days[0].upper()
+        returnresult
 
-    def is_cancelled(self):
-        return bool(self.isCancelled) or self.is_removed()
+    defis_cancelled(self):
+        returnbool(self.isCancelled)orself.is_removed()
 
-    def is_removed(self):
-        return self.__getattr__('@removed') and self.__getattr__('@removed').get('reason') == 'deleted'
+    defis_removed(self):
+        returnself.__getattr__('@removed')andself.__getattr__('@removed').get('reason')=='deleted'
 
-    def is_recurrence_outlier(self):
-        return self.type == "exception"
+    defis_recurrence_outlier(self):
+        returnself.type=="exception"
 
-    def cancelled(self):
-        return self.filter(lambda e: e.is_cancelled())
+    defcancelled(self):
+        returnself.filter(lambdae:e.is_cancelled())
 
-    def match_with_flectra_events(self, env) -> 'MicrosoftEvent':
+    defmatch_with_flectra_events(self,env)->'MicrosoftEvent':
         """
-        Match Outlook events (self) with existing Flectra events, and return the list of matched events
+        MatchOutlookevents(self)withexistingFlectraevents,andreturnthelistofmatchedevents
         """
-        # first, try to match recurrences
-        # Note that when a recurrence is removed, there is no field in Outlook data to identify
-        # the item as a recurrence, so select all deleted items by default.
-        recurrence_candidates = self.filter(lambda x: x.is_recurrence() or x.is_removed())
-        mapped_recurrences = recurrence_candidates._load_flectra_ids_from_db(env, force_model=env["calendar.recurrence"])
+        #first,trytomatchrecurrences
+        #Notethatwhenarecurrenceisremoved,thereisnofieldinOutlookdatatoidentify
+        #theitemasarecurrence,soselectalldeleteditemsbydefault.
+        recurrence_candidates=self.filter(lambdax:x.is_recurrence()orx.is_removed())
+        mapped_recurrences=recurrence_candidates._load_flectra_ids_from_db(env,force_model=env["calendar.recurrence"])
 
-        # then, try to match events
-        events_candidates = (self - mapped_recurrences).filter(lambda x: not x.is_recurrence())
-        mapped_events = events_candidates._load_flectra_ids_from_db(env)
+        #then,trytomatchevents
+        events_candidates=(self-mapped_recurrences).filter(lambdax:notx.is_recurrence())
+        mapped_events=events_candidates._load_flectra_ids_from_db(env)
 
-        return mapped_recurrences | mapped_events
+        returnmapped_recurrences|mapped_events
 
-    def _get_model(self, env):
-        if all(e.is_recurrence() for e in self):
-            return env['calendar.recurrence']
-        if all(not e.is_recurrence() for e in self):
-            return env['calendar.event']
-        raise TypeError("Mixing Microsoft events and Microsoft recurrences")
+    def_get_model(self,env):
+        ifall(e.is_recurrence()foreinself):
+            returnenv['calendar.recurrence']
+        ifall(note.is_recurrence()foreinself):
+            returnenv['calendar.event']
+        raiseTypeError("MixingMicrosofteventsandMicrosoftrecurrences")

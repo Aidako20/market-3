@@ -1,95 +1,95 @@
-flectra.define('mail/static/src/components/notification_popover/notification_popover.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/notification_popover/notification_popover.js',function(require){
+'usestrict';
 
-const { Component } = owl;
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+const{Component}=owl;
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
 
-class NotificationPopover extends Component {
+classNotificationPopoverextendsComponent{
 
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
         useShouldUpdateBasedOnProps({
-            compareDepth: {
-                notificationLocalIds: 1,
+            compareDepth:{
+                notificationLocalIds:1,
             },
         });
-        useStore(props => {
-            const notifications = props.notificationLocalIds.map(
-                notificationLocalId => this.env.models['mail.notification'].get(notificationLocalId)
+        useStore(props=>{
+            constnotifications=props.notificationLocalIds.map(
+                notificationLocalId=>this.env.models['mail.notification'].get(notificationLocalId)
             );
-            return {
-                notifications: notifications.map(notification => notification ? notification.__state : undefined),
+            return{
+                notifications:notifications.map(notification=>notification?notification.__state:undefined),
             };
-        }, {
-            compareDepth: {
-                notifications: 1,
+        },{
+            compareDepth:{
+                notifications:1,
             },
         });
     }
 
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    get iconClass() {
-        switch (this.notification.notification_status) {
-            case 'sent':
-                return 'fa fa-check';
-            case 'bounce':
-                return 'fa fa-exclamation';
-            case 'exception':
-                return 'fa fa-exclamation';
-            case 'ready':
-                return 'fa fa-send-o';
-            case 'canceled':
-                return 'fa fa-trash-o';
+    geticonClass(){
+        switch(this.notification.notification_status){
+            case'sent':
+                return'fafa-check';
+            case'bounce':
+                return'fafa-exclamation';
+            case'exception':
+                return'fafa-exclamation';
+            case'ready':
+                return'fafa-send-o';
+            case'canceled':
+                return'fafa-trash-o';
         }
-        return '';
+        return'';
     }
 
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    get iconTitle() {
-        switch (this.notification.notification_status) {
-            case 'sent':
-                return this.env._t("Sent");
-            case 'bounce':
-                return this.env._t("Bounced");
-            case 'exception':
-                return this.env._t("Error");
-            case 'ready':
-                return this.env._t("Ready");
-            case 'canceled':
-                return this.env._t("Canceled");
+    geticonTitle(){
+        switch(this.notification.notification_status){
+            case'sent':
+                returnthis.env._t("Sent");
+            case'bounce':
+                returnthis.env._t("Bounced");
+            case'exception':
+                returnthis.env._t("Error");
+            case'ready':
+                returnthis.env._t("Ready");
+            case'canceled':
+                returnthis.env._t("Canceled");
         }
-        return '';
+        return'';
     }
 
     /**
-     * @returns {mail.notification[]}
+     *@returns{mail.notification[]}
      */
-    get notifications() {
-        return this.props.notificationLocalIds.map(
-            notificationLocalId => this.env.models['mail.notification'].get(notificationLocalId)
+    getnotifications(){
+        returnthis.props.notificationLocalIds.map(
+            notificationLocalId=>this.env.models['mail.notification'].get(notificationLocalId)
         );
     }
 
 }
 
-Object.assign(NotificationPopover, {
-    props: {
-        notificationLocalIds: {
-            type: Array,
-            element: String,
+Object.assign(NotificationPopover,{
+    props:{
+        notificationLocalIds:{
+            type:Array,
+            element:String,
         },
     },
-    template: 'mail.NotificationPopover',
+    template:'mail.NotificationPopover',
 });
 
-return NotificationPopover;
+returnNotificationPopover;
 
 });

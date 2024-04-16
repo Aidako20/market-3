@@ -1,22 +1,22 @@
-flectra.define('project.ProjectCalendarView', function (require) {
-"use strict";
+flectra.define('project.ProjectCalendarView',function(require){
+"usestrict";
 
-const CalendarController = require('web.CalendarController');
-const CalendarView = require('web.CalendarView');
-const viewRegistry = require('web.view_registry');
+constCalendarController=require('web.CalendarController');
+constCalendarView=require('web.CalendarView');
+constviewRegistry=require('web.view_registry');
 
-const ProjectCalendarController = CalendarController.extend({
-    _renderButtonsParameters() {
-        return _.extend({}, this._super(...arguments),  {scaleDrop: true});
+constProjectCalendarController=CalendarController.extend({
+    _renderButtonsParameters(){
+        return_.extend({},this._super(...arguments), {scaleDrop:true});
     },
 });
 
-const ProjectCalendarView = CalendarView.extend({
-        config: _.extend({}, CalendarView.prototype.config, {
-            Controller: ProjectCalendarController,
+constProjectCalendarView=CalendarView.extend({
+        config:_.extend({},CalendarView.prototype.config,{
+            Controller:ProjectCalendarController,
         }),
     });
 
-viewRegistry.add('project_calendar', ProjectCalendarView);
-return ProjectCalendarView;
+viewRegistry.add('project_calendar',ProjectCalendarView);
+returnProjectCalendarView;
 });

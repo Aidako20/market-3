@@ -1,43 +1,43 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="coupon_view_tree" model="ir.ui.view">
-        <field name="name">coupon.coupon.tree</field>
-        <field name="model">coupon.coupon</field>
-        <field name="arch" type="xml">
-            <tree string="Coupons" create="false" edit="false" delete="false">
-                <field name="code"/>
-                <field name="expiration_date"/>
-                <field name="program_id"/>
-                <field name="partner_id"/>
-                <field name="state"/>
+    <recordid="coupon_view_tree"model="ir.ui.view">
+        <fieldname="name">coupon.coupon.tree</field>
+        <fieldname="model">coupon.coupon</field>
+        <fieldname="arch"type="xml">
+            <treestring="Coupons"create="false"edit="false"delete="false">
+                <fieldname="code"/>
+                <fieldname="expiration_date"/>
+                <fieldname="program_id"/>
+                <fieldname="partner_id"/>
+                <fieldname="state"/>
             </tree>
         </field>
     </record>
 
-    <record id="coupon_action" model="ir.actions.act_window">
-        <field name="name">Coupons</field>
-        <field name="res_model">coupon.coupon</field>
-        <field name="view_id" ref="coupon_view_tree"/>
-        <field name="domain">[('program_id', '=', active_id)]</field>
-        <field name="context">{}</field>
+    <recordid="coupon_action"model="ir.actions.act_window">
+        <fieldname="name">Coupons</field>
+        <fieldname="res_model">coupon.coupon</field>
+        <fieldname="view_id"ref="coupon_view_tree"/>
+        <fieldname="domain">[('program_id','=',active_id)]</field>
+        <fieldname="context">{}</field>
     </record>
 
 
-    <record id="coupon_view_form" model="ir.ui.view">
-        <field name="name">coupon.coupon.form</field>
-        <field name="model">coupon.coupon</field>
-        <field name="arch" type="xml">
-            <form string="Coupons" create="false" edit="false" delete="false">
+    <recordid="coupon_view_form"model="ir.ui.view">
+        <fieldname="name">coupon.coupon.form</field>
+        <fieldname="model">coupon.coupon</field>
+        <fieldname="arch"type="xml">
+            <formstring="Coupons"create="false"edit="false"delete="false">
                 <header>
-                    <button name="action_coupon_sent" type="object" string="Send by Email" class="oe_highlight" attrs="{'invisible': [('state', 'not in', ['new', 'sent'])]}"/>
-                    <button name="action_coupon_cancel" type="object" string="Cancel" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'new')]}"/>
-                    <field name="state" widget="statusbar" statusbar_visible="new,sent,used,expired" context="{'state': state}"/>
+                    <buttonname="action_coupon_sent"type="object"string="SendbyEmail"class="oe_highlight"attrs="{'invisible':[('state','notin',['new','sent'])]}"/>
+                    <buttonname="action_coupon_cancel"type="object"string="Cancel"class="oe_highlight"attrs="{'invisible':[('state','!=','new')]}"/>
+                    <fieldname="state"widget="statusbar"statusbar_visible="new,sent,used,expired"context="{'state':state}"/>
                 </header>
                 <sheet>
                     <group>
-                        <field name="code"/>
-                        <field name="expiration_date"/>
-                        <field name="partner_id"/>
+                        <fieldname="code"/>
+                        <fieldname="expiration_date"/>
+                        <fieldname="partner_id"/>
                     </group>
                 </sheet>
             </form>

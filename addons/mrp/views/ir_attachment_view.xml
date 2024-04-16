@@ -1,54 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <!-- Files -->
-    <record model="ir.ui.view" id="view_document_file_kanban_mrp">
-        <field name="name">mrp.document kanban.mrp</field>
-        <field name="model">mrp.document</field>
-        <field name="arch" type="xml">
-            <kanban js_class="mrp_documents_kanban" create="false">
-                <field name="ir_attachment_id"/>
-                <field name="mimetype"/>
-                <field name="type"/>
-                <field name="name"/>
-                <field name="priority"/>
-                <field name="create_uid"/>
+        <!--Files-->
+    <recordmodel="ir.ui.view"id="view_document_file_kanban_mrp">
+        <fieldname="name">mrp.documentkanban.mrp</field>
+        <fieldname="model">mrp.document</field>
+        <fieldname="arch"type="xml">
+            <kanbanjs_class="mrp_documents_kanban"create="false">
+                <fieldname="ir_attachment_id"/>
+                <fieldname="mimetype"/>
+                <fieldname="type"/>
+                <fieldname="name"/>
+                <fieldname="priority"/>
+                <fieldname="create_uid"/>
                 <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_global_area o_kanban_attachment oe_kanban_global_click">
-                            <div class="o_kanban_image">
-                                <t t-set="binaryPreviewable"
-                                   t-value="new RegExp('(image|video|application/pdf|text)').test(record.mimetype.value) &amp;&amp; record.type.raw_value === 'binary'"/>
-                                <div t-attf-class="o_kanban_image_wrapper #{(webimage or binaryPreviewable) ? 'o_kanban_previewer' : ''}">
-                                    <t t-set="webimage" t-value="new RegExp('image.*(gif|jpeg|jpg|png)').test(record.mimetype.value)"/>
-                                    <div t-if="record.type.raw_value == 'url'" class="o_url_image fa fa-link fa-3x text-muted" aria-label="Image is a link"/>
-                                    <img t-elif="webimage" t-attf-src="/web/image/#{record.ir_attachment_id.raw_value}" width="100" height="100" alt="Document" class="o_attachment_image"/>
-                                    <div t-else="" class="o_image o_image_thumbnail" t-att-data-mimetype="record.mimetype.value"/>
+                    <tt-name="kanban-box">
+                        <divclass="oe_kanban_global_areao_kanban_attachmentoe_kanban_global_click">
+                            <divclass="o_kanban_image">
+                                <tt-set="binaryPreviewable"
+                                   t-value="newRegExp('(image|video|application/pdf|text)').test(record.mimetype.value)&amp;&amp;record.type.raw_value==='binary'"/>
+                                <divt-attf-class="o_kanban_image_wrapper#{(webimageorbinaryPreviewable)?'o_kanban_previewer':''}">
+                                    <tt-set="webimage"t-value="newRegExp('image.*(gif|jpeg|jpg|png)').test(record.mimetype.value)"/>
+                                    <divt-if="record.type.raw_value=='url'"class="o_url_imagefafa-linkfa-3xtext-muted"aria-label="Imageisalink"/>
+                                    <imgt-elif="webimage"t-attf-src="/web/image/#{record.ir_attachment_id.raw_value}"width="100"height="100"alt="Document"class="o_attachment_image"/>
+                                    <divt-else=""class="o_imageo_image_thumbnail"t-att-data-mimetype="record.mimetype.value"/>
                                 </div>
                             </div>
-                            <div class="o_kanban_details">
-                                <div class="o_kanban_details_wrapper">
-                                    <div class="o_kanban_record_title">
-                                        <field name="name" class="o_text_overflow"/>
+                            <divclass="o_kanban_details">
+                                <divclass="o_kanban_details_wrapper">
+                                    <divclass="o_kanban_record_title">
+                                        <fieldname="name"class="o_text_overflow"/>
                                     </div>
-                                    <div class="o_kanban_record_body">
-                                      <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+                                    <divclass="o_kanban_record_body">
+                                      <fieldname="url"widget="url"attrs="{'invisible':[('type','=','binary')]}"/>
                                     </div>
-                                    <div class="o_kanban_record_bottom">
-                                        <span class="oe_kanban_bottom_left">
-                                            <field name="priority" widget="priority"/>
+                                    <divclass="o_kanban_record_bottom">
+                                        <spanclass="oe_kanban_bottom_left">
+                                            <fieldname="priority"widget="priority"/>
                                         </span>
-                                        <div class="oe_kanban_bottom_right">
-                                            <field name="create_uid" widget="many2one_avatar_user"/>
+                                        <divclass="oe_kanban_bottom_right">
+                                            <fieldname="create_uid"widget="many2one_avatar_user"/>
                                         </div>
                                     </div>
-                                    <div class="o_dropdown_kanban dropdown" tabindex="-1">
-                                        <a class="dropdown-toggle o-no-caret btn" data-toggle="dropdown" href="#" role="button" aria-label="Dropdown menu" title="Dropdown menu">
-                                            <span class="fa fa-ellipsis-v"/>
+                                    <divclass="o_dropdown_kanbandropdown"tabindex="-1">
+                                        <aclass="dropdown-toggleo-no-caretbtn"data-toggle="dropdown"href="#"role="button"aria-label="Dropdownmenu"title="Dropdownmenu">
+                                            <spanclass="fafa-ellipsis-v"/>
                                         </a>
-                                        <div class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                            <a t-if="widget.editable" type="edit" class="dropdown-item">Edit</a>
-                                            <a t-if="widget.deletable" type="delete" class="dropdown-item">Delete</a>
-                                            <a class="dropdown-item o_mrp_download">Download</a>
+                                        <divclass="dropdown-menu"role="menu"aria-labelledby="dLabel">
+                                            <at-if="widget.editable"type="edit"class="dropdown-item">Edit</a>
+                                            <at-if="widget.deletable"type="delete"class="dropdown-item">Delete</a>
+                                            <aclass="dropdown-itemo_mrp_download">Download</a>
                                         </div>
                                     </div>
                                 </div>
@@ -60,31 +60,31 @@
         </field>
     </record>
 
-    <record id="view_mrp_document_form" model="ir.ui.view">
-        <field name="name">mrp.document.form</field>
-        <field name="model">mrp.document</field>
-        <field name="arch" type="xml">
-            <form string="Attachments">
+    <recordid="view_mrp_document_form"model="ir.ui.view">
+        <fieldname="name">mrp.document.form</field>
+        <fieldname="model">mrp.document</field>
+        <fieldname="arch"type="xml">
+            <formstring="Attachments">
                 <sheet>
-                    <label for="name" class="oe_edit_only"/>
+                    <labelfor="name"class="oe_edit_only"/>
                     <h1>
-                        <field name="name"/>
+                        <fieldname="name"/>
                     </h1>
                     <group>
                         <group>
-                            <field name="type"/>
-                            <field name="datas" filename="name" attrs="{'invisible':[('type','=','url')]}"/>
-                            <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+                            <fieldname="type"/>
+                            <fieldname="datas"filename="name"attrs="{'invisible':[('type','=','url')]}"/>
+                            <fieldname="url"widget="url"attrs="{'invisible':[('type','=','binary')]}"/>
                         </group>
-                        <group string="Attached To" groups="base.group_no_one">
-                            <field name="res_name"/>
-                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                        <groupstring="AttachedTo"groups="base.group_no_one">
+                            <fieldname="res_name"/>
+                            <fieldname="company_id"groups="base.group_multi_company"options="{'no_create':True}"/>
                         </group>
-                        <group string="History" groups="base.group_no_one" attrs="{'invisible':[('create_date','=',False)]}">
-                            <label for="create_uid" string="Creation"/>
-                            <div name="creation_div">
-                                <field name="create_uid" readonly="1" class="oe_inline"/> on
-                                <field name="create_date" readonly="1" class="oe_inline"/>
+                        <groupstring="History"groups="base.group_no_one"attrs="{'invisible':[('create_date','=',False)]}">
+                            <labelfor="create_uid"string="Creation"/>
+                            <divname="creation_div">
+                                <fieldname="create_uid"readonly="1"class="oe_inline"/>on
+                                <fieldname="create_date"readonly="1"class="oe_inline"/>
                             </div>
                         </group>
                     </group>

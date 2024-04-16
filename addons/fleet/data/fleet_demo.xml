@@ -1,863 +1,863 @@
-<?xml version="1.0" encoding="utf-8"?>
-<flectra noupdate="1">
+<?xmlversion="1.0"encoding="utf-8"?>
+<flectranoupdate="1">
       <!--Users-->
-      <record id="base.user_demo" model="res.users">
-        <field name="groups_id" eval="[(4, ref('fleet.fleet_group_manager'))]" />
+      <recordid="base.user_demo"model="res.users">
+        <fieldname="groups_id"eval="[(4,ref('fleet.fleet_group_manager'))]"/>
       </record>
 
-        <record id="fleet_vehicle_state_ordered" model="fleet.vehicle.state">
-            <field name="name">Ordered</field>
-            <field name="sequence">6</field>
+        <recordid="fleet_vehicle_state_ordered"model="fleet.vehicle.state">
+            <fieldname="name">Ordered</field>
+            <fieldname="sequence">6</field>
         </record>
 
-      <record id="fleet_vehicle_state_reserve" model="fleet.vehicle.state">
-          <field name="name">Reserve</field>
-          <field name="sequence">9</field>
+      <recordid="fleet_vehicle_state_reserve"model="fleet.vehicle.state">
+          <fieldname="name">Reserve</field>
+          <fieldname="sequence">9</field>
       </record>
 
-      <record id="fleet_vehicle_state_waiting_list" model="fleet.vehicle.state">
-          <field name="name">Waiting List</field>
-          <field name="sequence">10</field>
+      <recordid="fleet_vehicle_state_waiting_list"model="fleet.vehicle.state">
+          <fieldname="name">WaitingList</field>
+          <fieldname="sequence">10</field>
       </record>
 
-      <record id="type_service_service_1" model="fleet.service.type">
-          <field name="name">Calculation Benefit In Kind</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_1"model="fleet.service.type">
+          <fieldname="name">CalculationBenefitInKind</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_2" model="fleet.service.type">
-          <field name="name">Depreciation and Interests</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_2"model="fleet.service.type">
+          <fieldname="name">DepreciationandInterests</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_3" model="fleet.service.type">
-          <field name="name">Tax roll</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_3"model="fleet.service.type">
+          <fieldname="name">Taxroll</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_5" model="fleet.service.type">
-          <field name="name">Summer tires</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_5"model="fleet.service.type">
+          <fieldname="name">Summertires</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_6" model="fleet.service.type">
-          <field name="name">Snow tires</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_6"model="fleet.service.type">
+          <fieldname="name">Snowtires</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_7" model="fleet.service.type">
-          <field name="name">Summer tires</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_7"model="fleet.service.type">
+          <fieldname="name">Summertires</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_8" model="fleet.service.type">
-          <field name="name">Repair and maintenance</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_8"model="fleet.service.type">
+          <fieldname="name">Repairandmaintenance</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_9" model="fleet.service.type">
-          <field name="name">Assistance</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_9"model="fleet.service.type">
+          <fieldname="name">Assistance</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_10" model="fleet.service.type">
-          <field name="name">Replacement Vehicle</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_10"model="fleet.service.type">
+          <fieldname="name">ReplacementVehicle</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_11" model="fleet.service.type">
-          <field name="name">Management Fee</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_11"model="fleet.service.type">
+          <fieldname="name">ManagementFee</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_12" model="fleet.service.type">
-          <field name="name">Rent (Excluding VAT)</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_12"model="fleet.service.type">
+          <fieldname="name">Rent(ExcludingVAT)</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_13" model="fleet.service.type">
-          <field name="name">Entry into service tax</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_13"model="fleet.service.type">
+          <fieldname="name">Entryintoservicetax</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_14" model="fleet.service.type">
-          <field name="name">Total expenses (Excluding VAT)</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_14"model="fleet.service.type">
+          <fieldname="name">Totalexpenses(ExcludingVAT)</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_15" model="fleet.service.type">
-          <field name="name">Residual value (Excluding VAT)</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_15"model="fleet.service.type">
+          <fieldname="name">Residualvalue(ExcludingVAT)</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_16" model="fleet.service.type">
-          <field name="name">Options</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_16"model="fleet.service.type">
+          <fieldname="name">Options</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_17" model="fleet.service.type">
-          <field name="name">Emissions</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_17"model="fleet.service.type">
+          <fieldname="name">Emissions</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_18" model="fleet.service.type">
-          <field name="name">Touring Assistance</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_18"model="fleet.service.type">
+          <fieldname="name">TouringAssistance</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_service_19" model="fleet.service.type">
-          <field name="name">Residual value in %</field>
-          <field name="category">service</field>
+      <recordid="type_service_service_19"model="fleet.service.type">
+          <fieldname="name">Residualvaluein%</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_1" model="fleet.service.type">
-          <field name="name">A/C Compressor Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_1"model="fleet.service.type">
+          <fieldname="name">A/CCompressorReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_2" model="fleet.service.type">
-          <field name="name">A/C Condenser Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_2"model="fleet.service.type">
+          <fieldname="name">A/CCondenserReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_3" model="fleet.service.type">
-          <field name="name">A/C Diagnosis</field>
-          <field name="category">service</field>
+      <recordid="type_service_3"model="fleet.service.type">
+          <fieldname="name">A/CDiagnosis</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_4" model="fleet.service.type">
-          <field name="name">A/C Evaporator Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_4"model="fleet.service.type">
+          <fieldname="name">A/CEvaporatorReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_5" model="fleet.service.type">
-          <field name="name">A/C Recharge</field>
-          <field name="category">service</field>
+      <recordid="type_service_5"model="fleet.service.type">
+          <fieldname="name">A/CRecharge</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_6" model="fleet.service.type">
-          <field name="name">Air Filter Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_6"model="fleet.service.type">
+          <fieldname="name">AirFilterReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_7" model="fleet.service.type">
-          <field name="name">Alternator Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_7"model="fleet.service.type">
+          <fieldname="name">AlternatorReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_8" model="fleet.service.type">
-          <field name="name">Ball Joint Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_8"model="fleet.service.type">
+          <fieldname="name">BallJointReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_9" model="fleet.service.type">
-          <field name="name">Battery Inspection</field>
-          <field name="category">service</field>
+      <recordid="type_service_9"model="fleet.service.type">
+          <fieldname="name">BatteryInspection</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_10" model="fleet.service.type">
-          <field name="name">Battery Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_10"model="fleet.service.type">
+          <fieldname="name">BatteryReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_11" model="fleet.service.type">
-          <field name="name">Brake Caliper Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_11"model="fleet.service.type">
+          <fieldname="name">BrakeCaliperReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_12" model="fleet.service.type">
-          <field name="name">Brake Inspection</field>
-          <field name="category">service</field>
+      <recordid="type_service_12"model="fleet.service.type">
+          <fieldname="name">BrakeInspection</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_13" model="fleet.service.type">
-          <field name="name">Brake Pad(s) Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_13"model="fleet.service.type">
+          <fieldname="name">BrakePad(s)Replacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_14" model="fleet.service.type">
-          <field name="name">Car Wash</field>
-          <field name="category">service</field>
+      <recordid="type_service_14"model="fleet.service.type">
+          <fieldname="name">CarWash</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_15" model="fleet.service.type">
-          <field name="name">Catalytic Converter Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_15"model="fleet.service.type">
+          <fieldname="name">CatalyticConverterReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_16" model="fleet.service.type">
-          <field name="name">Charging System Diagnosis</field>
-          <field name="category">service</field>
+      <recordid="type_service_16"model="fleet.service.type">
+          <fieldname="name">ChargingSystemDiagnosis</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_17" model="fleet.service.type">
-          <field name="name">Door Window Motor/Regulator Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_17"model="fleet.service.type">
+          <fieldname="name">DoorWindowMotor/RegulatorReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_18" model="fleet.service.type">
-          <field name="name">Engine Belt Inspection</field>
-          <field name="category">service</field>
+      <recordid="type_service_18"model="fleet.service.type">
+          <fieldname="name">EngineBeltInspection</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_19" model="fleet.service.type">
-          <field name="name">Engine Coolant Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_19"model="fleet.service.type">
+          <fieldname="name">EngineCoolantReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_20" model="fleet.service.type">
-          <field name="name">Engine/Drive Belt(s) Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_20"model="fleet.service.type">
+          <fieldname="name">Engine/DriveBelt(s)Replacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_21" model="fleet.service.type">
-          <field name="name">Exhaust Manifold Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_21"model="fleet.service.type">
+          <fieldname="name">ExhaustManifoldReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_22" model="fleet.service.type">
-          <field name="name">Fuel Injector Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_22"model="fleet.service.type">
+          <fieldname="name">FuelInjectorReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_23" model="fleet.service.type">
-          <field name="name">Fuel Pump Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_23"model="fleet.service.type">
+          <fieldname="name">FuelPumpReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_24" model="fleet.service.type">
-          <field name="name">Head Gasket(s) Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_24"model="fleet.service.type">
+          <fieldname="name">HeadGasket(s)Replacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_25" model="fleet.service.type">
-          <field name="name">Heater Blower Motor Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_25"model="fleet.service.type">
+          <fieldname="name">HeaterBlowerMotorReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_26" model="fleet.service.type">
-          <field name="name">Heater Control Valve Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_26"model="fleet.service.type">
+          <fieldname="name">HeaterControlValveReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_27" model="fleet.service.type">
-          <field name="name">Heater Core Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_27"model="fleet.service.type">
+          <fieldname="name">HeaterCoreReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_28" model="fleet.service.type">
-          <field name="name">Heater Hose Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_28"model="fleet.service.type">
+          <fieldname="name">HeaterHoseReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_29" model="fleet.service.type">
-          <field name="name">Ignition Coil Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_29"model="fleet.service.type">
+          <fieldname="name">IgnitionCoilReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_30" model="fleet.service.type">
-          <field name="name">Intake Manifold Gasket Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_30"model="fleet.service.type">
+          <fieldname="name">IntakeManifoldGasketReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_31" model="fleet.service.type">
-          <field name="name">Oil Change</field>
-          <field name="category">service</field>
+      <recordid="type_service_31"model="fleet.service.type">
+          <fieldname="name">OilChange</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_32" model="fleet.service.type">
-          <field name="name">Oil Pump Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_32"model="fleet.service.type">
+          <fieldname="name">OilPumpReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_33" model="fleet.service.type">
-          <field name="name">Other Maintenance</field>
-          <field name="category">service</field>
+      <recordid="type_service_33"model="fleet.service.type">
+          <fieldname="name">OtherMaintenance</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_34" model="fleet.service.type">
-          <field name="name">Oxygen Sensor Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_34"model="fleet.service.type">
+          <fieldname="name">OxygenSensorReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_35" model="fleet.service.type">
-          <field name="name">Power Steering Hose Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_35"model="fleet.service.type">
+          <fieldname="name">PowerSteeringHoseReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_36" model="fleet.service.type">
-          <field name="name">Power Steering Pump Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_36"model="fleet.service.type">
+          <fieldname="name">PowerSteeringPumpReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_37" model="fleet.service.type">
-          <field name="name">Radiator Repair</field>
-          <field name="category">service</field>
+      <recordid="type_service_37"model="fleet.service.type">
+          <fieldname="name">RadiatorRepair</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_38" model="fleet.service.type">
-          <field name="name">Resurface Rotors</field>
-          <field name="category">service</field>
+      <recordid="type_service_38"model="fleet.service.type">
+          <fieldname="name">ResurfaceRotors</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_39" model="fleet.service.type">
-          <field name="name">Rotate Tires</field>
-          <field name="category">service</field>
+      <recordid="type_service_39"model="fleet.service.type">
+          <fieldname="name">RotateTires</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_40" model="fleet.service.type">
-          <field name="name">Rotor Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_40"model="fleet.service.type">
+          <fieldname="name">RotorReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_41" model="fleet.service.type">
-          <field name="name">Spark Plug Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_41"model="fleet.service.type">
+          <fieldname="name">SparkPlugReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_42" model="fleet.service.type">
-          <field name="name">Starter Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_42"model="fleet.service.type">
+          <fieldname="name">StarterReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_43" model="fleet.service.type">
-          <field name="name">Thermostat Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_43"model="fleet.service.type">
+          <fieldname="name">ThermostatReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_44" model="fleet.service.type">
-          <field name="name">Tie Rod End Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_44"model="fleet.service.type">
+          <fieldname="name">TieRodEndReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_45" model="fleet.service.type">
-          <field name="name">Tire Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_45"model="fleet.service.type">
+          <fieldname="name">TireReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_46" model="fleet.service.type">
-          <field name="name">Tire Service</field>
-          <field name="category">service</field>
+      <recordid="type_service_46"model="fleet.service.type">
+          <fieldname="name">TireService</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_47" model="fleet.service.type">
-          <field name="name">Transmission Filter Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_47"model="fleet.service.type">
+          <fieldname="name">TransmissionFilterReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_48" model="fleet.service.type">
-          <field name="name">Transmission Fluid Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_48"model="fleet.service.type">
+          <fieldname="name">TransmissionFluidReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_49" model="fleet.service.type">
-          <field name="name">Transmission Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_49"model="fleet.service.type">
+          <fieldname="name">TransmissionReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_50" model="fleet.service.type">
-          <field name="name">Water Pump Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_50"model="fleet.service.type">
+          <fieldname="name">WaterPumpReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_51" model="fleet.service.type">
-          <field name="name">Wheel Alignment</field>
-          <field name="category">service</field>
+      <recordid="type_service_51"model="fleet.service.type">
+          <fieldname="name">WheelAlignment</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_52" model="fleet.service.type">
-          <field name="name">Wheel Bearing Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_52"model="fleet.service.type">
+          <fieldname="name">WheelBearingReplacement</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="type_service_53" model="fleet.service.type">
-          <field name="name">Windshield Wiper(s) Replacement</field>
-          <field name="category">service</field>
+      <recordid="type_service_53"model="fleet.service.type">
+          <fieldname="name">WindshieldWiper(s)Replacement</field>
+          <fieldname="category">service</field>
       </record>
 
 
-      <record id="type_contract_omnium" model="fleet.service.type">
-          <field name="name">Omnium</field>
-          <field name="category">contract</field>
+      <recordid="type_contract_omnium"model="fleet.service.type">
+          <fieldname="name">Omnium</field>
+          <fieldname="category">contract</field>
       </record>
 
-      <record id="type_contract_leasing" model="fleet.service.type">
-          <field name="name">Leasing</field>
-          <field name="category">contract</field>
+      <recordid="type_contract_leasing"model="fleet.service.type">
+          <fieldname="name">Leasing</field>
+          <fieldname="category">contract</field>
       </record>
 
-       <record id="type_contract_repairing" model="fleet.service.type">
-          <field name="name">Repairing</field>
-          <field name="category">contract</field>
+       <recordid="type_contract_repairing"model="fleet.service.type">
+          <fieldname="name">Repairing</field>
+          <fieldname="category">contract</field>
       </record>
 
-      <record id="type_service_refueling" model="fleet.service.type">
-          <field name="name">Refueling</field>
-          <field name="category">service</field>
+      <recordid="type_service_refueling"model="fleet.service.type">
+          <fieldname="name">Refueling</field>
+          <fieldname="category">service</field>
       </record>
 
-      <record id="vehicle_tag_junior" model="fleet.vehicle.tag" >
-        <field name="name">Junior</field>
-        <field name="color" eval="1"/>
+      <recordid="vehicle_tag_junior"model="fleet.vehicle.tag">
+        <fieldname="name">Junior</field>
+        <fieldname="color"eval="1"/>
       </record>
 
-      <record id="vehicle_tag_senior" model="fleet.vehicle.tag" >
-        <field name="name">Senior</field>
-        <field name="color" eval="2"/>
+      <recordid="vehicle_tag_senior"model="fleet.vehicle.tag">
+        <fieldname="name">Senior</field>
+        <fieldname="color"eval="2"/>
       </record>
 
-      <record id="vehicle_tag_leasing" model="fleet.vehicle.tag" >
-        <field name="name">Employee Car</field>
-        <field name="color" eval="3"/>
+      <recordid="vehicle_tag_leasing"model="fleet.vehicle.tag">
+        <fieldname="name">EmployeeCar</field>
+        <fieldname="color"eval="3"/>
       </record>
 
-      <record id="vehicle_tag_purchased" model="fleet.vehicle.tag" >
-        <field name="name">Purchased</field>
-        <field name="color" eval="4"/>
+      <recordid="vehicle_tag_purchased"model="fleet.vehicle.tag">
+        <fieldname="name">Purchased</field>
+        <fieldname="color"eval="4"/>
       </record>
 
-      <record id="vehicle_tag_compact" model="fleet.vehicle.tag" >
-        <field name="name">Compact</field>
-        <field name="color" eval="5"/>
+      <recordid="vehicle_tag_compact"model="fleet.vehicle.tag">
+        <fieldname="name">Compact</field>
+        <fieldname="color"eval="5"/>
       </record>
 
-      <record id="vehicle_tag_sedan" model="fleet.vehicle.tag" >
-        <field name="name">Sedan</field>
-        <field name="color" eval="6"/>
+      <recordid="vehicle_tag_sedan"model="fleet.vehicle.tag">
+        <fieldname="name">Sedan</field>
+        <fieldname="color"eval="6"/>
       </record>
 
-      <record id="vehicle_tag_convertible" model="fleet.vehicle.tag" >
-        <field name="name">Convertible</field>
-        <field name="color" eval="7"/>
+      <recordid="vehicle_tag_convertible"model="fleet.vehicle.tag">
+        <fieldname="name">Convertible</field>
+        <fieldname="color"eval="7"/>
       </record>
 
-      <record id="vehicle_tag_break" model="fleet.vehicle.tag" >
-        <field name="name">Break</field>
-        <field name="color" eval="8"/>
+      <recordid="vehicle_tag_break"model="fleet.vehicle.tag">
+        <fieldname="name">Break</field>
+        <fieldname="color"eval="8"/>
       </record>
 
-      <record id="model_astra" model="fleet.vehicle.model">
-          <field name="manager_id" ref="base.user_admin"/>
+      <recordid="model_astra"model="fleet.vehicle.model">
+          <fieldname="manager_id"ref="base.user_admin"/>
       </record>
 
-      <record id="model_corsa" model="fleet.vehicle.model">
-          <field name="manager_id" ref="base.user_admin"/>
+      <recordid="model_corsa"model="fleet.vehicle.model">
+          <fieldname="manager_id"ref="base.user_admin"/>
       </record>
 
-      <record id="model_serie1" model="fleet.vehicle.model">
-          <field name="manager_id" ref="base.user_admin"/>
+      <recordid="model_serie1"model="fleet.vehicle.model">
+          <fieldname="manager_id"ref="base.user_admin"/>
       </record>
 
-      <record id="model_a1" model="fleet.vehicle.model">
-          <field name="manager_id" ref="base.user_admin"/>
+      <recordid="model_a1"model="fleet.vehicle.model">
+          <fieldname="manager_id"ref="base.user_admin"/>
       </record>
 
-      <record id="model_classa" model="fleet.vehicle.model">
-          <field name="manager_id" ref="base.user_admin"/>
+      <recordid="model_classa"model="fleet.vehicle.model">
+          <fieldname="manager_id"ref="base.user_admin"/>
       </record>
 
-      <record id="vehicle_1" model="fleet.vehicle">
-          <field name="license_plate">1-ACK-205</field>
-          <field name="vin_sn">5454541</field>
-          <field name="model_id" ref="model_astra"/>
-          <field name="color">Black</field>
-          <field name="location">Grand-Rosiere</field>
-          <field name="doors">5</field>
-          <field name="driver_id" ref="base.partner_demo" />
-          <field name="acquisition_date" eval="(DateTime.now() - timedelta(days=336)).strftime('%Y-%m-%d')" />
-          <field name="state_id" ref="fleet_vehicle_state_registered"/>
-          <field name="odometer_unit">kilometers</field>
-          <field name="car_value">20000</field>
-          <field eval="[(6,0,[ref('vehicle_tag_leasing'),ref('fleet.vehicle_tag_break'),ref('fleet.vehicle_tag_senior')])]" name="tag_ids"/>
+      <recordid="vehicle_1"model="fleet.vehicle">
+          <fieldname="license_plate">1-ACK-205</field>
+          <fieldname="vin_sn">5454541</field>
+          <fieldname="model_id"ref="model_astra"/>
+          <fieldname="color">Black</field>
+          <fieldname="location">Grand-Rosiere</field>
+          <fieldname="doors">5</field>
+          <fieldname="driver_id"ref="base.partner_demo"/>
+          <fieldname="acquisition_date"eval="(DateTime.now()-timedelta(days=336)).strftime('%Y-%m-%d')"/>
+          <fieldname="state_id"ref="fleet_vehicle_state_registered"/>
+          <fieldname="odometer_unit">kilometers</field>
+          <fieldname="car_value">20000</field>
+          <fieldeval="[(6,0,[ref('vehicle_tag_leasing'),ref('fleet.vehicle_tag_break'),ref('fleet.vehicle_tag_senior')])]"name="tag_ids"/>
       </record>
 
-      <record id="vehicle_2" model="fleet.vehicle">
-          <field name="license_plate">1-SYN-404</field>
-          <field name="vin_sn">1337</field>
-          <field name="model_id" ref="model_corsa"/>
-          <field name="color">Red</field>
-          <field name="location">Grand-Rosiere</field>
-          <field name="doors">5</field>
-          <field name="driver_id" ref="base.res_partner_address_25" />
-          <field name="acquisition_date" eval="(DateTime.now() - timedelta(days=233)).strftime('%Y-%m-%d')" />
-          <field name="state_id" ref="fleet_vehicle_state_downgraded"/>
-          <field name="odometer_unit">kilometers</field>
-          <field name="car_value">16000</field>
-          <field eval="[(6,0,[ref('vehicle_tag_leasing'),ref('fleet.vehicle_tag_compact'),ref('fleet.vehicle_tag_junior')])]" name="tag_ids"/>
+      <recordid="vehicle_2"model="fleet.vehicle">
+          <fieldname="license_plate">1-SYN-404</field>
+          <fieldname="vin_sn">1337</field>
+          <fieldname="model_id"ref="model_corsa"/>
+          <fieldname="color">Red</field>
+          <fieldname="location">Grand-Rosiere</field>
+          <fieldname="doors">5</field>
+          <fieldname="driver_id"ref="base.res_partner_address_25"/>
+          <fieldname="acquisition_date"eval="(DateTime.now()-timedelta(days=233)).strftime('%Y-%m-%d')"/>
+          <fieldname="state_id"ref="fleet_vehicle_state_downgraded"/>
+          <fieldname="odometer_unit">kilometers</field>
+          <fieldname="car_value">16000</field>
+          <fieldeval="[(6,0,[ref('vehicle_tag_leasing'),ref('fleet.vehicle_tag_compact'),ref('fleet.vehicle_tag_junior')])]"name="tag_ids"/>
       </record>
 
-      <record id="vehicle_3" model="fleet.vehicle">
-          <field name="license_plate">1-BMW-001</field>
-          <field name="vin_sn">54818</field>
-          <field name="model_id" ref="model_serie1"/>
-          <field name="color">Titanium Grey</field>
-          <field name="location">Grand-Rosiere</field>
-          <field name="doors">3</field>
-          <field name="driver_id" ref="base.res_partner_address_17" />
-          <field name="acquisition_date" eval="time.strftime('%Y-%m-%d 2:00:00')" />
-          <field name="state_id" ref="fleet_vehicle_state_registered"/>
-          <field name="odometer_unit">kilometers</field>
-          <field name="car_value">20000</field>
-          <field eval="[(6,0,[ref('vehicle_tag_leasing'),ref('fleet.vehicle_tag_compact'),ref('fleet.vehicle_tag_senior')])]" name="tag_ids"/>
+      <recordid="vehicle_3"model="fleet.vehicle">
+          <fieldname="license_plate">1-BMW-001</field>
+          <fieldname="vin_sn">54818</field>
+          <fieldname="model_id"ref="model_serie1"/>
+          <fieldname="color">TitaniumGrey</field>
+          <fieldname="location">Grand-Rosiere</field>
+          <fieldname="doors">3</field>
+          <fieldname="driver_id"ref="base.res_partner_address_17"/>
+          <fieldname="acquisition_date"eval="time.strftime('%Y-%m-%d2:00:00')"/>
+          <fieldname="state_id"ref="fleet_vehicle_state_registered"/>
+          <fieldname="odometer_unit">kilometers</field>
+          <fieldname="car_value">20000</field>
+          <fieldeval="[(6,0,[ref('vehicle_tag_leasing'),ref('fleet.vehicle_tag_compact'),ref('fleet.vehicle_tag_senior')])]"name="tag_ids"/>
       </record>
 
-       <record id="vehicle_4" model="fleet.vehicle">
-          <field name="license_plate">1-AUD-001</field>
-          <field name="vin_sn">455257985</field>
-          <field name="model_id" ref="model_a1"/>
-          <field name="color">White</field>
-          <field name="location">Grand-Rosiere</field>
-          <field name="doors">3</field>
-          <field name="driver_id" ref="base.res_partner_address_16" />
-          <field name="acquisition_date" eval="time.strftime('%Y-%m-%d 2:00:00')" />
-          <field name="state_id" ref="fleet_vehicle_state_registered"/>
-          <field name="odometer_unit">kilometers</field>
-          <field name="car_value">20000</field>
-          <field eval="[(6,0,[ref('vehicle_tag_leasing'),ref('fleet.vehicle_tag_compact'),ref('fleet.vehicle_tag_senior')])]" name="tag_ids"/>
+       <recordid="vehicle_4"model="fleet.vehicle">
+          <fieldname="license_plate">1-AUD-001</field>
+          <fieldname="vin_sn">455257985</field>
+          <fieldname="model_id"ref="model_a1"/>
+          <fieldname="color">White</field>
+          <fieldname="location">Grand-Rosiere</field>
+          <fieldname="doors">3</field>
+          <fieldname="driver_id"ref="base.res_partner_address_16"/>
+          <fieldname="acquisition_date"eval="time.strftime('%Y-%m-%d2:00:00')"/>
+          <fieldname="state_id"ref="fleet_vehicle_state_registered"/>
+          <fieldname="odometer_unit">kilometers</field>
+          <fieldname="car_value">20000</field>
+          <fieldeval="[(6,0,[ref('vehicle_tag_leasing'),ref('fleet.vehicle_tag_compact'),ref('fleet.vehicle_tag_senior')])]"name="tag_ids"/>
       </record>
 
-      <record id="vehicle_5" model="fleet.vehicle">
-          <field name="license_plate">1-MER-001</field>
-          <field name="vin_sn">789546128</field>
-          <field name="model_id" ref="model_classa"/>
-          <field name="color">Brown</field>
-          <field name="location">Grand-Rosiere</field>
-          <field name="doors">5</field>
-          <field name="driver_id" ref="base.res_partner_address_15" />
-          <field name="acquisition_date" eval="time.strftime('%Y-%m-%d 2:00:00')" />
-          <field name="state_id" ref="fleet_vehicle_state_registered"/>
-          <field name="odometer_unit">kilometers</field>
-          <field name="car_value">18000</field>
-          <field eval="[(6,0,[ref('vehicle_tag_leasing'),ref('fleet.vehicle_tag_compact'),ref('fleet.vehicle_tag_senior')])]" name="tag_ids"/>
+      <recordid="vehicle_5"model="fleet.vehicle">
+          <fieldname="license_plate">1-MER-001</field>
+          <fieldname="vin_sn">789546128</field>
+          <fieldname="model_id"ref="model_classa"/>
+          <fieldname="color">Brown</field>
+          <fieldname="location">Grand-Rosiere</field>
+          <fieldname="doors">5</field>
+          <fieldname="driver_id"ref="base.res_partner_address_15"/>
+          <fieldname="acquisition_date"eval="time.strftime('%Y-%m-%d2:00:00')"/>
+          <fieldname="state_id"ref="fleet_vehicle_state_registered"/>
+          <fieldname="odometer_unit">kilometers</field>
+          <fieldname="car_value">18000</field>
+          <fieldeval="[(6,0,[ref('vehicle_tag_leasing'),ref('fleet.vehicle_tag_compact'),ref('fleet.vehicle_tag_senior')])]"name="tag_ids"/>
       </record>
 
-      <record id="log_odometer_1" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=336)).strftime('%Y-%m-%d')" />
-          <field name="value">0</field>
+      <recordid="log_odometer_1"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_1"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=336)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">0</field>
       </record>
 
-      <record id="log_odometer_2" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=304)).strftime('%Y-%m-%d')" />
-          <field name="value">658</field>
+      <recordid="log_odometer_2"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_1"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=304)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">658</field>
       </record>
 
-      <record id="log_odometer_3" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=289)).strftime('%Y-%m-%d')" />
-          <field name="value">1360</field>
+      <recordid="log_odometer_3"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_1"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=289)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">1360</field>
       </record>
 
-      <record id="log_odometer_4" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=260)).strftime('%Y-%m-%d')" />
-          <field name="value">2044</field>
+      <recordid="log_odometer_4"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_1"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=260)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">2044</field>
       </record>
 
-      <record id="log_odometer_5" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=230)).strftime('%Y-%m-%d')" />
-          <field name="value">2756</field>
+      <recordid="log_odometer_5"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_1"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=230)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">2756</field>
       </record>
 
-      <record id="log_odometer_6" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=185)).strftime('%Y-%m-%d')" />
-          <field name="value">3410</field>
+      <recordid="log_odometer_6"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_1"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=185)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">3410</field>
       </record>
 
-      <record id="log_odometer_7" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=165)).strftime('%Y-%m-%d')" />
-          <field name="value">3750</field>
+      <recordid="log_odometer_7"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_1"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=165)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">3750</field>
       </record>
 
-      <record id="log_odometer_8" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=140)).strftime('%Y-%m-%d')" />
-          <field name="value">4115</field>
+      <recordid="log_odometer_8"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_1"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=140)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">4115</field>
       </record>
 
-      <record id="log_odometer_9" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=120)).strftime('%Y-%m-%d')" />
-          <field name="value">4750</field>
+      <recordid="log_odometer_9"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_1"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=120)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">4750</field>
       </record>
 
-      <record id="log_odometer_10" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=105)).strftime('%Y-%m-%d')" />
-          <field name="value">5171</field>
+      <recordid="log_odometer_10"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_1"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=105)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">5171</field>
       </record>
 
-      <record id="log_odometer_11" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=85)).strftime('%Y-%m-%d')" />
-          <field name="value">5873</field>
+      <recordid="log_odometer_11"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_1"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=85)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">5873</field>
       </record>
 
-      <record id="log_odometer_12" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=55)).strftime('%Y-%m-%d')" />
-          <field name="value">6571</field>
+      <recordid="log_odometer_12"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_1"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=55)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">6571</field>
       </record>
 
-      <record id="log_odometer_13" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=32)).strftime('%Y-%m-%d')" />
-          <field name="value">7954</field>
+      <recordid="log_odometer_13"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_1"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=32)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">7954</field>
       </record>
 
-      <record id="log_odometer_14" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=2)).strftime('%Y-%m-%d')" />
-          <field name="value">7981</field>
+      <recordid="log_odometer_14"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_1"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=2)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">7981</field>
       </record>
 
-      <record id="log_odometer_15" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=233)).strftime('%Y-%m-%d')" />
-          <field name="value">0</field>
+      <recordid="log_odometer_15"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_2"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=233)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">0</field>
       </record>
 
-      <record id="log_odometer_16" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=233)).strftime('%Y-%m-%d')" />
-          <field name="value">702</field>
+      <recordid="log_odometer_16"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_2"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=233)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">702</field>
       </record>
 
-      <record id="log_odometer_17" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=215)).strftime('%Y-%m-%d')" />
-          <field name="value">1205.4</field>
+      <recordid="log_odometer_17"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_2"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=215)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">1205.4</field>
       </record>
 
-      <record id="log_odometer_18" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=200)).strftime('%Y-%m-%d')" />
-          <field name="value">2122</field>
+      <recordid="log_odometer_18"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_2"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=200)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">2122</field>
       </record>
 
-      <record id="log_odometer_19" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=180)).strftime('%Y-%m-%d')" />
-          <field name="value">2430</field>
+      <recordid="log_odometer_19"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_2"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=180)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">2430</field>
       </record>
 
-      <record id="log_odometer_20" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=165)).strftime('%Y-%m-%d')" />
-          <field name="value">3015</field>
+      <recordid="log_odometer_20"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_2"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=165)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">3015</field>
       </record>
 
-      <record id="log_odometer_21" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=150)).strftime('%Y-%m-%d')" />
-          <field name="value">3602.1</field>
+      <recordid="log_odometer_21"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_2"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=150)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">3602.1</field>
       </record>
 
-      <record id="log_odometer_22" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=124)).strftime('%Y-%m-%d')" />
-          <field name="value">4205.5</field>
+      <recordid="log_odometer_22"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_2"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=124)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">4205.5</field>
       </record>
 
-      <record id="log_odometer_23" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=96)).strftime('%Y-%m-%d')" />
-          <field name="value">4935</field>
+      <recordid="log_odometer_23"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_2"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=96)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">4935</field>
       </record>
 
-      <record id="log_odometer_24" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=80)).strftime('%Y-%m-%d')" />
-          <field name="value">5555</field>
+      <recordid="log_odometer_24"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_2"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=80)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">5555</field>
       </record>
 
-      <record id="log_odometer_25" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=55)).strftime('%Y-%m-%d')" />
-          <field name="value">5987</field>
+      <recordid="log_odometer_25"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_2"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=55)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">5987</field>
       </record>
 
-      <record id="log_odometer_26" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=45)).strftime('%Y-%m-%d')" />
-          <field name="value">6571</field>
+      <recordid="log_odometer_26"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_2"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=45)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">6571</field>
       </record>
 
-      <record id="log_odometer_27" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=30)).strftime('%Y-%m-%d')" />
-          <field name="value">7201.5</field>
+      <recordid="log_odometer_27"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_2"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=30)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">7201.5</field>
       </record>
 
-      <record id="log_odometer_28" model="fleet.vehicle.odometer">
-          <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=10)).strftime('%Y-%m-%d')" />
-          <field name="value">8001.2</field>
+      <recordid="log_odometer_28"model="fleet.vehicle.odometer">
+          <fieldname="vehicle_id"ref="vehicle_2"/>
+          <fieldname="date"eval="(DateTime.now()-timedelta(days=10)).strftime('%Y-%m-%d')"/>
+          <fieldname="value">8001.2</field>
       </record>
 
 
-      <record id="log_service_1" model="fleet.vehicle.log.services" >
-        <field name="vehicle_id" ref="vehicle_2" />
-        <field name="amount">650</field>
-        <field name="service_type_id" ref="type_service_service_8"/>
-        <field name="date" eval="(DateTime.now() - timedelta(days=60)).strftime('%Y-%m-%d')" />
-        <field name="purchaser_id" ref="base.res_partner_address_18" />
-        <field name="inv_ref">4586</field>
-        <field name="vendor_id" ref="base.res_partner_2" />
-        <field name="notes">Usual vehicle repairing</field>
-        <field name="state">done</field>
+      <recordid="log_service_1"model="fleet.vehicle.log.services">
+        <fieldname="vehicle_id"ref="vehicle_2"/>
+        <fieldname="amount">650</field>
+        <fieldname="service_type_id"ref="type_service_service_8"/>
+        <fieldname="date"eval="(DateTime.now()-timedelta(days=60)).strftime('%Y-%m-%d')"/>
+        <fieldname="purchaser_id"ref="base.res_partner_address_18"/>
+        <fieldname="inv_ref">4586</field>
+        <fieldname="vendor_id"ref="base.res_partner_2"/>
+        <fieldname="notes">Usualvehiclerepairing</field>
+        <fieldname="state">done</field>
       </record>
 
-      <record id="log_service_2" model="fleet.vehicle.log.services" >
-        <field name="vehicle_id" ref="vehicle_2" />
-        <field name="amount">350</field>
-        <field name="service_type_id" ref="type_service_service_8"/>
-        <field name="date" eval="(DateTime.now() - timedelta(days=30)).strftime('%Y-%m-%d')" />
-        <field name="purchaser_id" ref="base.res_partner_address_18" />
-        <field name="inv_ref">4814</field>
-        <field name="vendor_id" ref="base.res_partner_2" />
-        <field name="notes">After crash repairing</field>
-        <field name="state">done</field>
+      <recordid="log_service_2"model="fleet.vehicle.log.services">
+        <fieldname="vehicle_id"ref="vehicle_2"/>
+        <fieldname="amount">350</field>
+        <fieldname="service_type_id"ref="type_service_service_8"/>
+        <fieldname="date"eval="(DateTime.now()-timedelta(days=30)).strftime('%Y-%m-%d')"/>
+        <fieldname="purchaser_id"ref="base.res_partner_address_18"/>
+        <fieldname="inv_ref">4814</field>
+        <fieldname="vendor_id"ref="base.res_partner_2"/>
+        <fieldname="notes">Aftercrashrepairing</field>
+        <fieldname="state">done</field>
       </record>
 
-      <record id="log_service_3" model="fleet.vehicle.log.services" >
-        <field name="vehicle_id" ref="vehicle_1" />
-        <field name="amount">513</field>
-        <field name="service_type_id" ref="type_service_service_8"/>
-        <field name="date" eval="(DateTime.now() - timedelta(days=15)).strftime('%Y-%m-%d')" />
-        <field name="purchaser_id" ref="base.res_partner_address_18" />
-        <field name="inv_ref">124</field>
-        <field name="vendor_id" ref="base.res_partner_2" />
-        <field name="notes">Maintenance</field>
-        <field name="state">done</field>
+      <recordid="log_service_3"model="fleet.vehicle.log.services">
+        <fieldname="vehicle_id"ref="vehicle_1"/>
+        <fieldname="amount">513</field>
+        <fieldname="service_type_id"ref="type_service_service_8"/>
+        <fieldname="date"eval="(DateTime.now()-timedelta(days=15)).strftime('%Y-%m-%d')"/>
+        <fieldname="purchaser_id"ref="base.res_partner_address_18"/>
+        <fieldname="inv_ref">124</field>
+        <fieldname="vendor_id"ref="base.res_partner_2"/>
+        <fieldname="notes">Maintenance</field>
+        <fieldname="state">done</field>
       </record>
 
-      <record id="log_service_4" model="fleet.vehicle.log.services" >
-        <field name="vehicle_id" ref="vehicle_3" />
-        <field name="amount">412</field>
-        <field name="service_type_id" ref="type_service_service_8"/>
-        <field name="date" eval="(DateTime.now() - timedelta(days=120)).strftime('%Y-%m-%d')" />
-        <field name="purchaser_id" ref="base.res_partner_address_18" />
-        <field name="inv_ref">20984</field>
-        <field name="vendor_id" ref="base.res_partner_2" />
-        <field name="notes">Maintenance</field>
-        <field name="state">done</field>
+      <recordid="log_service_4"model="fleet.vehicle.log.services">
+        <fieldname="vehicle_id"ref="vehicle_3"/>
+        <fieldname="amount">412</field>
+        <fieldname="service_type_id"ref="type_service_service_8"/>
+        <fieldname="date"eval="(DateTime.now()-timedelta(days=120)).strftime('%Y-%m-%d')"/>
+        <fieldname="purchaser_id"ref="base.res_partner_address_18"/>
+        <fieldname="inv_ref">20984</field>
+        <fieldname="vendor_id"ref="base.res_partner_2"/>
+        <fieldname="notes">Maintenance</field>
+        <fieldname="state">done</field>
       </record>
 
-      <record id="log_service_5" model="fleet.vehicle.log.services" >
-        <field name="vehicle_id" ref="vehicle_4" />
-        <field name="amount">275</field>
-        <field name="service_type_id" ref="type_service_service_8"/>
-        <field name="date" eval="(DateTime.now() - timedelta(days=100)).strftime('%Y-%m-%d')" />
-        <field name="purchaser_id" ref="base.res_partner_address_18" />
-        <field name="inv_ref">241</field>
-        <field name="vendor_id" ref="base.res_partner_2" />
-        <field name="notes">Maintenance</field>
-        <field name="state">done</field>
+      <recordid="log_service_5"model="fleet.vehicle.log.services">
+        <fieldname="vehicle_id"ref="vehicle_4"/>
+        <fieldname="amount">275</field>
+        <fieldname="service_type_id"ref="type_service_service_8"/>
+        <fieldname="date"eval="(DateTime.now()-timedelta(days=100)).strftime('%Y-%m-%d')"/>
+        <fieldname="purchaser_id"ref="base.res_partner_address_18"/>
+        <fieldname="inv_ref">241</field>
+        <fieldname="vendor_id"ref="base.res_partner_2"/>
+        <fieldname="notes">Maintenance</field>
+        <fieldname="state">done</field>
       </record>
 
-      <record id="log_service_6" model="fleet.vehicle.log.services" >
-        <field name="vehicle_id" ref="vehicle_5" />
-        <field name="amount">302</field>
-        <field name="service_type_id" ref="type_service_service_8"/>
-        <field name="date" eval="(DateTime.now() - timedelta(days=65)).strftime('%Y-%m-%d')" />
-        <field name="purchaser_id" ref="base.res_partner_address_18" />
-        <field name="inv_ref">22513</field>
-        <field name="vendor_id" ref="base.res_partner_2" />
-        <field name="notes">Maintenance</field>
-        <field name="state">done</field>
+      <recordid="log_service_6"model="fleet.vehicle.log.services">
+        <fieldname="vehicle_id"ref="vehicle_5"/>
+        <fieldname="amount">302</field>
+        <fieldname="service_type_id"ref="type_service_service_8"/>
+        <fieldname="date"eval="(DateTime.now()-timedelta(days=65)).strftime('%Y-%m-%d')"/>
+        <fieldname="purchaser_id"ref="base.res_partner_address_18"/>
+        <fieldname="inv_ref">22513</field>
+        <fieldname="vendor_id"ref="base.res_partner_2"/>
+        <fieldname="notes">Maintenance</field>
+        <fieldname="state">done</field>
       </record>
 
-      <record id="log_contract_1" model="fleet.vehicle.log.contract" >
-        <field name="vehicle_id" ref="vehicle_2" />
-        <field name="cost_subtype_id" ref="type_contract_leasing" />
-        <field name="amount">0</field>
-        <field name="name">Daily leasing contract</field>
-        <field name="cost_generated">20</field>
-        <field name="cost_frequency">daily</field>
-        <field name="expiration_date" eval="(DateTime.now() - timedelta(days=233)).strftime('%Y-%m-%d')" />
-        <field name="expiration_date" eval="(DateTime.now() + timedelta(5)).strftime('%Y-%m-%d')" />
-        <field name="purchaser_id" ref="base.res_partner_address_18" />
-        <field name="insurer_id" ref="base.res_partner_2" />
-        <field name="notes">Daily leasing contract</field>
-        <field name="state">open</field>
-        <field name="user_id" ref="base.user_admin"/>
-        <field eval="[(6,0,[ref('fleet.type_contract_omnium'),ref('fleet.type_service_service_3'),ref('fleet.type_service_service_2')])]" name="service_ids"/>
+      <recordid="log_contract_1"model="fleet.vehicle.log.contract">
+        <fieldname="vehicle_id"ref="vehicle_2"/>
+        <fieldname="cost_subtype_id"ref="type_contract_leasing"/>
+        <fieldname="amount">0</field>
+        <fieldname="name">Dailyleasingcontract</field>
+        <fieldname="cost_generated">20</field>
+        <fieldname="cost_frequency">daily</field>
+        <fieldname="expiration_date"eval="(DateTime.now()-timedelta(days=233)).strftime('%Y-%m-%d')"/>
+        <fieldname="expiration_date"eval="(DateTime.now()+timedelta(5)).strftime('%Y-%m-%d')"/>
+        <fieldname="purchaser_id"ref="base.res_partner_address_18"/>
+        <fieldname="insurer_id"ref="base.res_partner_2"/>
+        <fieldname="notes">Dailyleasingcontract</field>
+        <fieldname="state">open</field>
+        <fieldname="user_id"ref="base.user_admin"/>
+        <fieldeval="[(6,0,[ref('fleet.type_contract_omnium'),ref('fleet.type_service_service_3'),ref('fleet.type_service_service_2')])]"name="service_ids"/>
       </record>
 
-      <record id="log_contract_2" model="fleet.vehicle.log.contract" >
-        <field name="vehicle_id" ref="vehicle_1" />
-        <field name="cost_subtype_id" ref="type_contract_leasing" />
-        <field name="amount">0</field>
-        <field name="name">Weekly leasing contract</field>
-        <field name="cost_generated">150</field>
-        <field name="cost_frequency">weekly</field>
-        <field name="date" eval="time.strftime('%Y-01-01')" />
-        <field name="start_date" eval="(DateTime.now() - timedelta(days=289)).strftime('%Y-%m-%d')" />
-        <field name="expiration_date" eval="(DateTime.now() + timedelta(-1)).strftime('%Y-%m-%d')" />
-        <field name="purchaser_id" ref="base.res_partner_address_18" />
-        <field name="insurer_id" ref="base.res_partner_2" />
-        <field name="notes">Weekly leasing contract</field>
-        <field name="state">open</field>
-        <field name="user_id" ref="base.user_admin"/>
-        <field eval="[(6,0,[ref('fleet.type_contract_omnium'),ref('fleet.type_service_service_3'),ref('fleet.type_service_service_2')])]" name="service_ids"/>
+      <recordid="log_contract_2"model="fleet.vehicle.log.contract">
+        <fieldname="vehicle_id"ref="vehicle_1"/>
+        <fieldname="cost_subtype_id"ref="type_contract_leasing"/>
+        <fieldname="amount">0</field>
+        <fieldname="name">Weeklyleasingcontract</field>
+        <fieldname="cost_generated">150</field>
+        <fieldname="cost_frequency">weekly</field>
+        <fieldname="date"eval="time.strftime('%Y-01-01')"/>
+        <fieldname="start_date"eval="(DateTime.now()-timedelta(days=289)).strftime('%Y-%m-%d')"/>
+        <fieldname="expiration_date"eval="(DateTime.now()+timedelta(-1)).strftime('%Y-%m-%d')"/>
+        <fieldname="purchaser_id"ref="base.res_partner_address_18"/>
+        <fieldname="insurer_id"ref="base.res_partner_2"/>
+        <fieldname="notes">Weeklyleasingcontract</field>
+        <fieldname="state">open</field>
+        <fieldname="user_id"ref="base.user_admin"/>
+        <fieldeval="[(6,0,[ref('fleet.type_contract_omnium'),ref('fleet.type_service_service_3'),ref('fleet.type_service_service_2')])]"name="service_ids"/>
       </record>
 
-      <record id="log_contract_3" model="fleet.vehicle.log.contract" >
-        <field name="vehicle_id" ref="vehicle_3" />
-        <field name="cost_subtype_id" ref="type_contract_leasing" />
-        <field name="amount">0</field>
-        <field name="name">Monthly leasing</field>
-        <field name="cost_generated">400</field>
-        <field name="cost_frequency">monthly</field>
-        <field name="date" eval="time.strftime('%Y-01-01')"/>
-        <field name="start_date" eval="time.strftime('%Y-01-01')" />
-        <field name="expiration_date" eval="time.strftime('%Y-12-31')" />
-        <field name="purchaser_id" ref="base.res_partner_address_18" />
-        <field name="insurer_id" ref="base.res_partner_2" />
-        <field name="notes">Monthly leasing contract</field>
-        <field name="state">open</field>
-        <field name="user_id" ref="base.user_admin"/>
-        <field eval="[(6,0,[ref('fleet.type_contract_omnium'),ref('fleet.type_service_service_3'),ref('fleet.type_service_service_2')])]" name="service_ids"/>
+      <recordid="log_contract_3"model="fleet.vehicle.log.contract">
+        <fieldname="vehicle_id"ref="vehicle_3"/>
+        <fieldname="cost_subtype_id"ref="type_contract_leasing"/>
+        <fieldname="amount">0</field>
+        <fieldname="name">Monthlyleasing</field>
+        <fieldname="cost_generated">400</field>
+        <fieldname="cost_frequency">monthly</field>
+        <fieldname="date"eval="time.strftime('%Y-01-01')"/>
+        <fieldname="start_date"eval="time.strftime('%Y-01-01')"/>
+        <fieldname="expiration_date"eval="time.strftime('%Y-12-31')"/>
+        <fieldname="purchaser_id"ref="base.res_partner_address_18"/>
+        <fieldname="insurer_id"ref="base.res_partner_2"/>
+        <fieldname="notes">Monthlyleasingcontract</field>
+        <fieldname="state">open</field>
+        <fieldname="user_id"ref="base.user_admin"/>
+        <fieldeval="[(6,0,[ref('fleet.type_contract_omnium'),ref('fleet.type_service_service_3'),ref('fleet.type_service_service_2')])]"name="service_ids"/>
       </record>
 
-      <record id="log_contract_4" model="fleet.vehicle.log.contract" >
-        <field name="vehicle_id" ref="vehicle_4" />
-        <field name="cost_subtype_id" ref="type_contract_leasing" />
-        <field name="amount">0</field>
-        <field name="name">Yearly leasing</field>
-        <field name="cost_generated">4000</field>
-        <field name="cost_frequency">yearly</field>
-        <field name="date" eval="time.strftime('%Y-01-01')" />
-        <field name="start_date" eval="time.strftime('%Y-01-01')" />
-        <field name="expiration_date" eval="time.strftime('%Y-12-31')" />
-        <field name="purchaser_id" ref="base.res_partner_address_18" />
-        <field name="insurer_id" ref="base.res_partner_2" />
-        <field name="notes">Yearly leasing contract</field>
-        <field name="state">open</field>
-        <field name="user_id" ref="base.user_admin"/>
-        <field eval="[(6,0,[ref('fleet.type_contract_omnium'),ref('fleet.type_service_service_3'),ref('fleet.type_service_service_2')])]" name="service_ids"/>
+      <recordid="log_contract_4"model="fleet.vehicle.log.contract">
+        <fieldname="vehicle_id"ref="vehicle_4"/>
+        <fieldname="cost_subtype_id"ref="type_contract_leasing"/>
+        <fieldname="amount">0</field>
+        <fieldname="name">Yearlyleasing</field>
+        <fieldname="cost_generated">4000</field>
+        <fieldname="cost_frequency">yearly</field>
+        <fieldname="date"eval="time.strftime('%Y-01-01')"/>
+        <fieldname="start_date"eval="time.strftime('%Y-01-01')"/>
+        <fieldname="expiration_date"eval="time.strftime('%Y-12-31')"/>
+        <fieldname="purchaser_id"ref="base.res_partner_address_18"/>
+        <fieldname="insurer_id"ref="base.res_partner_2"/>
+        <fieldname="notes">Yearlyleasingcontract</field>
+        <fieldname="state">open</field>
+        <fieldname="user_id"ref="base.user_admin"/>
+        <fieldeval="[(6,0,[ref('fleet.type_contract_omnium'),ref('fleet.type_service_service_3'),ref('fleet.type_service_service_2')])]"name="service_ids"/>
       </record>
 
-      <record id="log_contract_5" model="fleet.vehicle.log.contract" >
-        <field name="vehicle_id" ref="vehicle_5" />
-        <field name="cost_subtype_id" ref="type_contract_leasing" />
-        <field name="amount">17000</field>
-        <field name="name">Unique leasing</field>
-        <field name="cost_generated">0</field>
-        <field name="cost_frequency">no</field>
-        <field name="date" eval="(DateTime.now() - timedelta(days=300)).strftime('%Y-%m-%d')" />
-        <field name="start_date" eval="(DateTime.now() - timedelta(days=300)).strftime('%Y-%m-%d')" />
-        <field name="expiration_date" eval="(DateTime.now() + timedelta(-60)).strftime('%Y-%m-%d')" />
-        <field name="purchaser_id" ref="base.res_partner_address_18" />
-        <field name="insurer_id" ref="base.res_partner_2" />
-        <field name="notes">Unique leasing contract</field>
-        <field name="state">open</field>
-        <field name="user_id" ref="base.user_admin"/>
-        <field eval="[(6,0,[ref('fleet.type_contract_omnium'),ref('fleet.type_service_service_3'),ref('fleet.type_service_service_2')])]" name="service_ids"/>
+      <recordid="log_contract_5"model="fleet.vehicle.log.contract">
+        <fieldname="vehicle_id"ref="vehicle_5"/>
+        <fieldname="cost_subtype_id"ref="type_contract_leasing"/>
+        <fieldname="amount">17000</field>
+        <fieldname="name">Uniqueleasing</field>
+        <fieldname="cost_generated">0</field>
+        <fieldname="cost_frequency">no</field>
+        <fieldname="date"eval="(DateTime.now()-timedelta(days=300)).strftime('%Y-%m-%d')"/>
+        <fieldname="start_date"eval="(DateTime.now()-timedelta(days=300)).strftime('%Y-%m-%d')"/>
+        <fieldname="expiration_date"eval="(DateTime.now()+timedelta(-60)).strftime('%Y-%m-%d')"/>
+        <fieldname="purchaser_id"ref="base.res_partner_address_18"/>
+        <fieldname="insurer_id"ref="base.res_partner_2"/>
+        <fieldname="notes">Uniqueleasingcontract</field>
+        <fieldname="state">open</field>
+        <fieldname="user_id"ref="base.user_admin"/>
+        <fieldeval="[(6,0,[ref('fleet.type_contract_omnium'),ref('fleet.type_service_service_3'),ref('fleet.type_service_service_2')])]"name="service_ids"/>
       </record>
 </flectra>

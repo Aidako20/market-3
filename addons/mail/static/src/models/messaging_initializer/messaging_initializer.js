@@ -1,108 +1,108 @@
-flectra.define('mail/static/src/models/messaging_initializer/messaging_initializer.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/messaging_initializer/messaging_initializer.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { one2one } = require('mail/static/src/model/model_field.js');
-const { executeGracefully } = require('mail/static/src/utils/utils.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{one2one}=require('mail/static/src/model/model_field.js');
+const{executeGracefully}=require('mail/static/src/utils/utils.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class MessagingInitializer extends dependencies['mail.model'] {
+    classMessagingInitializerextendsdependencies['mail.model']{
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * Fetch messaging data initially to populate the store specifically for
-         * the current user. This includes pinned channels for instance.
+         *Fetchmessagingdatainitiallytopopulatethestorespecificallyfor
+         *thecurrentuser.Thisincludespinnedchannelsforinstance.
          */
-        async start() {
+        asyncstart(){
             this.messaging.update({
-                history: [['create', {
-                    id: 'history',
-                    isServerPinned: true,
-                    model: 'mail.box',
-                    name: this.env._t("History"),
+                history:[['create',{
+                    id:'history',
+                    isServerPinned:true,
+                    model:'mail.box',
+                    name:this.env._t("History"),
                 }]],
-                inbox: [['create', {
-                    id: 'inbox',
-                    isServerPinned: true,
-                    model: 'mail.box',
-                    name: this.env._t("Inbox"),
+                inbox:[['create',{
+                    id:'inbox',
+                    isServerPinned:true,
+                    model:'mail.box',
+                    name:this.env._t("Inbox"),
                 }]],
-                moderation: [['create', {
-                    id: 'moderation',
-                    model: 'mail.box',
-                    name: this.env._t("Moderation"),
+                moderation:[['create',{
+                    id:'moderation',
+                    model:'mail.box',
+                    name:this.env._t("Moderation"),
                 }]],
-                starred: [['create', {
-                    id: 'starred',
-                    isServerPinned: true,
-                    model: 'mail.box',
-                    name: this.env._t("Starred"),
+                starred:[['create',{
+                    id:'starred',
+                    isServerPinned:true,
+                    model:'mail.box',
+                    name:this.env._t("Starred"),
                 }]],
             });
-            const device = this.messaging.device;
+            constdevice=this.messaging.device;
             device.start();
-            const context = Object.assign({
-                isMobile: device.isMobile,
-            }, this.env.session.user_context);
-            const discuss = this.messaging.discuss;
-            const data = await this.async(() => this.env.services.rpc({
-                route: '/mail/init_messaging',
-                params: { context: context }
-            }, { shadow: true }));
-            await this.async(() => this._init(data));
-            if (discuss.isOpen) {
+            constcontext=Object.assign({
+                isMobile:device.isMobile,
+            },this.env.session.user_context);
+            constdiscuss=this.messaging.discuss;
+            constdata=awaitthis.async(()=>this.env.services.rpc({
+                route:'/mail/init_messaging',
+                params:{context:context}
+            },{shadow:true}));
+            awaitthis.async(()=>this._init(data));
+            if(discuss.isOpen){
                 discuss.openInitThread();
             }
-            if (this.env.autofetchPartnerImStatus) {
+            if(this.env.autofetchPartnerImStatus){
                 this.env.models['mail.partner'].startLoopFetchImStatus();
             }
         }
 
         //----------------------------------------------------------------------
-        // Private
+        //Private
         //----------------------------------------------------------------------
 
         /**
-         * @private
-         * @param {Object} param0
-         * @param {Object} param0.channel_slots
-         * @param {Array} [param0.commands=[]]
-         * @param {Object} param0.current_partner
-         * @param {integer} param0.current_user_id
-         * @param {Object} [param0.mail_failures={}]
-         * @param {Object[]} [param0.mention_partner_suggestions=[]]
-         * @param {Object[]} [param0.moderation_channel_ids=[]]
-         * @param {integer} [param0.moderation_counter=0]
-         * @param {integer} [param0.needaction_inbox_counter=0]
-         * @param {Object} param0.partner_root
-         * @param {Object} param0.public_partner
-         * @param {Object[]} param0.public_partners
-         * @param {Object[]} [param0.shortcodes=[]]
-         * @param {integer} [param0.starred_counter=0]
+         *@private
+         *@param{Object}param0
+         *@param{Object}param0.channel_slots
+         *@param{Array}[param0.commands=[]]
+         *@param{Object}param0.current_partner
+         *@param{integer}param0.current_user_id
+         *@param{Object}[param0.mail_failures={}]
+         *@param{Object[]}[param0.mention_partner_suggestions=[]]
+         *@param{Object[]}[param0.moderation_channel_ids=[]]
+         *@param{integer}[param0.moderation_counter=0]
+         *@param{integer}[param0.needaction_inbox_counter=0]
+         *@param{Object}param0.partner_root
+         *@param{Object}param0.public_partner
+         *@param{Object[]}param0.public_partners
+         *@param{Object[]}[param0.shortcodes=[]]
+         *@param{integer}[param0.starred_counter=0]
          */
-        async _init({
+        async_init({
             channel_slots,
-            commands = [],
+            commands=[],
             current_partner,
             current_user_id,
-            mail_failures = {},
-            mention_partner_suggestions = [],
+            mail_failures={},
+            mention_partner_suggestions=[],
             menu_id,
-            moderation_channel_ids = [],
-            moderation_counter = 0,
-            needaction_inbox_counter = 0,
+            moderation_channel_ids=[],
+            moderation_counter=0,
+            needaction_inbox_counter=0,
             partner_root,
             public_partner,
             public_partners,
-            shortcodes = [],
-            starred_counter = 0
-        }) {
-            const discuss = this.messaging.discuss;
-            // partners first because the rest of the code relies on them
+            shortcodes=[],
+            starred_counter=0
+        }){
+            constdiscuss=this.messaging.discuss;
+            //partnersfirstbecausetherestofthecodereliesonthem
             this._initPartners({
                 current_partner,
                 current_user_id,
@@ -111,176 +111,176 @@ function factory(dependencies) {
                 public_partner,
                 public_partners,
             });
-            // mailboxes after partners and before other initializers that might
-            // manipulate threads or messages
+            //mailboxesafterpartnersandbeforeotherinitializersthatmight
+            //manipulatethreadsormessages
             this._initMailboxes({
                 moderation_channel_ids,
                 moderation_counter,
                 needaction_inbox_counter,
                 starred_counter,
             });
-            // various suggestions in no particular order
+            //varioussuggestionsinnoparticularorder
             this._initCannedResponses(shortcodes);
             this._initCommands(commands);
             this._initMentionPartnerSuggestions(mention_partner_suggestions);
-            // channels when the rest of messaging is ready
-            await this.async(() => this._initChannels(channel_slots));
-            // failures after channels
+            //channelswhentherestofmessagingisready
+            awaitthis.async(()=>this._initChannels(channel_slots));
+            //failuresafterchannels
             this._initMailFailures(mail_failures);
-            discuss.update({ menu_id });
+            discuss.update({menu_id});
         }
 
         /**
-         * @private
-         * @param {Object[]} cannedResponsesData
+         *@private
+         *@param{Object[]}cannedResponsesData
          */
-        _initCannedResponses(cannedResponsesData) {
+        _initCannedResponses(cannedResponsesData){
             this.messaging.update({
-                cannedResponses: [['insert', cannedResponsesData]],
+                cannedResponses:[['insert',cannedResponsesData]],
             });
         }
 
         /**
-         * @private
-         * @param {Object} [param0={}]
-         * @param {Object[]} [param0.channel_channel=[]]
-         * @param {Object[]} [param0.channel_direct_message=[]]
-         * @param {Object[]} [param0.channel_private_group=[]]
+         *@private
+         *@param{Object}[param0={}]
+         *@param{Object[]}[param0.channel_channel=[]]
+         *@param{Object[]}[param0.channel_direct_message=[]]
+         *@param{Object[]}[param0.channel_private_group=[]]
          */
-        async _initChannels({
-            channel_channel = [],
-            channel_direct_message = [],
-            channel_private_group = [],
-        } = {}) {
-            const channelsData = channel_channel.concat(channel_direct_message, channel_private_group);
-            return executeGracefully(channelsData.map(channelData => () => {
-                const convertedData = this.env.models['mail.thread'].convertData(channelData);
-                if (!convertedData.members) {
-                    // channel_info does not return all members of channel for
-                    // performance reasons, but code is expecting to know at
-                    // least if the current partner is member of it.
-                    // (e.g. to know when to display "invited" notification)
-                    // Current partner can always be assumed to be a member of
-                    // channels received at init.
-                    convertedData.members = [['link', this.env.messaging.currentPartner]];
+        async_initChannels({
+            channel_channel=[],
+            channel_direct_message=[],
+            channel_private_group=[],
+        }={}){
+            constchannelsData=channel_channel.concat(channel_direct_message,channel_private_group);
+            returnexecuteGracefully(channelsData.map(channelData=>()=>{
+                constconvertedData=this.env.models['mail.thread'].convertData(channelData);
+                if(!convertedData.members){
+                    //channel_infodoesnotreturnallmembersofchannelfor
+                    //performancereasons,butcodeisexpectingtoknowat
+                    //leastifthecurrentpartnerismemberofit.
+                    //(e.g.toknowwhentodisplay"invited"notification)
+                    //Currentpartnercanalwaysbeassumedtobeamemberof
+                    //channelsreceivedatinit.
+                    convertedData.members=[['link',this.env.messaging.currentPartner]];
                 }
-                const channel = this.env.models['mail.thread'].insert(
-                    Object.assign({ model: 'mail.channel' }, convertedData)
+                constchannel=this.env.models['mail.thread'].insert(
+                    Object.assign({model:'mail.channel'},convertedData)
                 );
-                // flux specific: channels received at init have to be
-                // considered pinned. task-2284357
-                if (!channel.isPinned) {
+                //fluxspecific:channelsreceivedatinithavetobe
+                //consideredpinned.task-2284357
+                if(!channel.isPinned){
                     channel.pin();
                 }
             }));
         }
 
         /**
-         * @private
-         * @param {Object[]} commandsData
+         *@private
+         *@param{Object[]}commandsData
          */
-        _initCommands(commandsData) {
+        _initCommands(commandsData){
             this.messaging.update({
-                commands: [['insert', commandsData]],
+                commands:[['insert',commandsData]],
             });
         }
 
         /**
-         * @private
-         * @param {Object} param0
-         * @param {Object[]} [param0.moderation_channel_ids=[]]
-         * @param {integer} param0.moderation_counter
-         * @param {integer} param0.needaction_inbox_counter
-         * @param {integer} param0.starred_counter
+         *@private
+         *@param{Object}param0
+         *@param{Object[]}[param0.moderation_channel_ids=[]]
+         *@param{integer}param0.moderation_counter
+         *@param{integer}param0.needaction_inbox_counter
+         *@param{integer}param0.starred_counter
          */
         _initMailboxes({
             moderation_channel_ids,
             moderation_counter,
             needaction_inbox_counter,
             starred_counter,
-        }) {
-            this.env.messaging.inbox.update({ counter: needaction_inbox_counter });
-            this.env.messaging.starred.update({ counter: starred_counter });
-            if (moderation_channel_ids.length > 0) {
+        }){
+            this.env.messaging.inbox.update({counter:needaction_inbox_counter});
+            this.env.messaging.starred.update({counter:starred_counter});
+            if(moderation_channel_ids.length>0){
                 this.messaging.moderation.update({
-                    counter: moderation_counter,
-                    isServerPinned: true,
+                    counter:moderation_counter,
+                    isServerPinned:true,
                 });
             }
         }
 
         /**
-         * @private
-         * @param {Object} mailFailuresData
+         *@private
+         *@param{Object}mailFailuresData
          */
-        async _initMailFailures(mailFailuresData) {
-            await executeGracefully(mailFailuresData.map(messageData => () => {
-                const message = this.env.models['mail.message'].insert(
+        async_initMailFailures(mailFailuresData){
+            awaitexecuteGracefully(mailFailuresData.map(messageData=>()=>{
+                constmessage=this.env.models['mail.message'].insert(
                     this.env.models['mail.message'].convertData(messageData)
                 );
-                // implicit: failures are sent by the server at initialization
-                // only if the current partner is author of the message
-                if (!message.author && this.messaging.currentPartner) {
-                    message.update({ author: [['link', this.messaging.currentPartner]] });
+                //implicit:failuresaresentbytheserveratinitialization
+                //onlyifthecurrentpartnerisauthorofthemessage
+                if(!message.author&&this.messaging.currentPartner){
+                    message.update({author:[['link',this.messaging.currentPartner]]});
                 }
             }));
             this.messaging.notificationGroupManager.computeGroups();
-            // manually force recompute of counter (after computing the groups)
+            //manuallyforcerecomputeofcounter(aftercomputingthegroups)
             this.messaging.messagingMenu.update();
         }
 
         /**
-         * @private
-         * @param {Object[]} mentionPartnerSuggestionsData
+         *@private
+         *@param{Object[]}mentionPartnerSuggestionsData
          */
-        async _initMentionPartnerSuggestions(mentionPartnerSuggestionsData) {
-            return executeGracefully(mentionPartnerSuggestionsData.map(suggestions => () => {
-                return executeGracefully(suggestions.map(suggestion => () => {
+        async_initMentionPartnerSuggestions(mentionPartnerSuggestionsData){
+            returnexecuteGracefully(mentionPartnerSuggestionsData.map(suggestions=>()=>{
+                returnexecuteGracefully(suggestions.map(suggestion=>()=>{
                     this.env.models['mail.partner'].insert(this.env.models['mail.partner'].convertData(suggestion));
                 }));
             }));
         }
 
         /**
-         * @private
-         * @param {Object} current_partner
-         * @param {integer} current_user_id
-         * @param {integer[]} moderation_channel_ids
-         * @param {Object} partner_root
-         * @param {Object} public_partner
-         * @param {Object[]} [public_partners=[]]
+         *@private
+         *@param{Object}current_partner
+         *@param{integer}current_user_id
+         *@param{integer[]}moderation_channel_ids
+         *@param{Object}partner_root
+         *@param{Object}public_partner
+         *@param{Object[]}[public_partners=[]]
          */
         _initPartners({
             current_partner,
-            current_user_id: currentUserId,
-            moderation_channel_ids = [],
+            current_user_id:currentUserId,
+            moderation_channel_ids=[],
             partner_root,
             public_partner,
-            public_partners = [],
-        }) {
-            const publicPartner = this.env.models['mail.partner'].convertData(public_partner);
+            public_partners=[],
+        }){
+            constpublicPartner=this.env.models['mail.partner'].convertData(public_partner);
             this.messaging.update({
-                currentPartner: [['insert', Object.assign(
+                currentPartner:[['insert',Object.assign(
                     this.env.models['mail.partner'].convertData(current_partner),
                     {
-                        moderatedChannels: [
-                            ['insert', moderation_channel_ids.map(id => {
-                                return {
+                        moderatedChannels:[
+                            ['insert',moderation_channel_ids.map(id=>{
+                                return{
                                     id,
-                                    model: 'mail.channel',
+                                    model:'mail.channel',
                                 };
                             })],
                         ],
-                        user: [['insert', { id: currentUserId }]],
+                        user:[['insert',{id:currentUserId}]],
                     }
                 )]],
-                currentUser: [['insert', { id: currentUserId }]],
-                partnerRoot: [['insert', this.env.models['mail.partner'].convertData(partner_root)]],
-                publicPartner: [['insert', publicPartner]],
-                publicPartners: [
-                    ['insert', publicPartner],
-                    ['insert', public_partners.map(
-                        publicPartner => this.env.models['mail.partner'].convertData(publicPartner))
+                currentUser:[['insert',{id:currentUserId}]],
+                partnerRoot:[['insert',this.env.models['mail.partner'].convertData(partner_root)]],
+                publicPartner:[['insert',publicPartner]],
+                publicPartners:[
+                    ['insert',publicPartner],
+                    ['insert',public_partners.map(
+                        publicPartner=>this.env.models['mail.partner'].convertData(publicPartner))
                     ],
                 ],
             });
@@ -288,17 +288,17 @@ function factory(dependencies) {
 
     }
 
-    MessagingInitializer.fields = {
-        messaging: one2one('mail.messaging', {
-            inverse: 'initializer',
+    MessagingInitializer.fields={
+        messaging:one2one('mail.messaging',{
+            inverse:'initializer',
         }),
     };
 
-    MessagingInitializer.modelName = 'mail.messaging_initializer';
+    MessagingInitializer.modelName='mail.messaging_initializer';
 
-    return MessagingInitializer;
+    returnMessagingInitializer;
 }
 
-registerNewModel('mail.messaging_initializer', factory);
+registerNewModel('mail.messaging_initializer',factory);
 
 });

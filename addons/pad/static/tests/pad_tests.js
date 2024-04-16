@@ -1,310 +1,310 @@
-flectra.define('pad.pad_tests', function (require) {
-"use strict";
+flectra.define('pad.pad_tests',function(require){
+"usestrict";
 
-var FieldPad = require('pad.pad');
-var FormView = require('web.FormView');
-var testUtils = require('web.test_utils');
+varFieldPad=require('pad.pad');
+varFormView=require('web.FormView');
+vartestUtils=require('web.test_utils');
 
-var createView = testUtils.createView;
+varcreateView=testUtils.createView;
 
-QUnit.module('pad widget', {
-    beforeEach: function () {
-        this.data = {
-            task: {
-                fields: {
-                    description: {string: "Description", type: "char"},
-                    use_pad: {string: "Use pad", type: "boolean"},
+QUnit.module('padwidget',{
+    beforeEach:function(){
+        this.data={
+            task:{
+                fields:{
+                    description:{string:"Description",type:"char"},
+                    use_pad:{string:"Usepad",type:"boolean"},
                 },
-                records: [
-                    {id: 1, description: false},
-                    {id: 2, description: "https://pad.flectra.pad/p/test-03AK6RCJT"},
+                records:[
+                    {id:1,description:false},
+                    {id:2,description:"https://pad.flectra.pad/p/test-03AK6RCJT"},
                 ],
-                pad_is_configured: function () {
-                    return true;
+                pad_is_configured:function(){
+                    returntrue;
                 },
-                pad_generate_url: function (route, args) {
-                    return {
-                        url:'https://pad.flectra.pad/p/test/' + args.context.object_id
+                pad_generate_url:function(route,args){
+                    return{
+                        url:'https://pad.flectra.pad/p/test/'+args.context.object_id
                     };
                 },
-                pad_get_content: function () {
-                    return "we should rewrite this server in haskell";
+                pad_get_content:function(){
+                    return"weshouldrewritethisserverinhaskell";
                 },
             },
         };
     },
 });
 
-    QUnit.test('pad widget display help if server not configured', async function (assert) {
+    QUnit.test('padwidgetdisplayhelpifservernotconfigured',asyncfunction(assert){
         assert.expect(4);
 
-        var form = await createView({
-            View: FormView,
-            model: 'task',
-            data: this.data,
-            arch:'<form>' +
-                    '<sheet>' +
-                        '<group>' +
-                            '<field name="description" widget="pad"/>' +
-                        '</group>' +
-                    '</sheet>' +
+        varform=awaitcreateView({
+            View:FormView,
+            model:'task',
+            data:this.data,
+            arch:'<form>'+
+                    '<sheet>'+
+                        '<group>'+
+                            '<fieldname="description"widget="pad"/>'+
+                        '</group>'+
+                    '</sheet>'+
                 '</form>',
-            res_id: 1,
-            mockRPC: function (route, args) {
-                if (args.method === 'pad_is_configured') {
-                    return Promise.resolve(false);
+            res_id:1,
+            mockRPC:function(route,args){
+                if(args.method==='pad_is_configured'){
+                    returnPromise.resolve(false);
                 }
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
         });
         assert.isVisible(form.$('p.oe_unconfigured'),
-            "help message should be visible");
-        assert.containsNone(form, 'p.oe_pad_content',
-            "content should not be displayed");
-        await testUtils.form.clickEdit(form);
+            "helpmessageshouldbevisible");
+        assert.containsNone(form,'p.oe_pad_content',
+            "contentshouldnotbedisplayed");
+        awaittestUtils.form.clickEdit(form);
         assert.isVisible(form.$('p.oe_unconfigured'),
-            "help message should be visible");
-        assert.containsNone(form, 'p.oe_pad_content',
-            "content should not be displayed");
+            "helpmessageshouldbevisible");
+        assert.containsNone(form,'p.oe_pad_content',
+            "contentshouldnotbedisplayed");
         form.destroy();
-        delete FieldPad.prototype.isPadConfigured;
+        deleteFieldPad.prototype.isPadConfigured;
     });
 
-    QUnit.test('pad widget works, basic case', async function (assert) {
+    QUnit.test('padwidgetworks,basiccase',asyncfunction(assert){
         assert.expect(5);
 
-        var form = await createView({
-            View: FormView,
-            model: 'task',
-            data: this.data,
-            arch:'<form>' +
-                    '<sheet>' +
-                        '<group>' +
-                            '<field name="description" widget="pad"/>' +
-                        '</group>' +
-                    '</sheet>' +
+        varform=awaitcreateView({
+            View:FormView,
+            model:'task',
+            data:this.data,
+            arch:'<form>'+
+                    '<sheet>'+
+                        '<group>'+
+                            '<fieldname="description"widget="pad"/>'+
+                        '</group>'+
+                    '</sheet>'+
                 '</form>',
-            res_id: 1,
-            mockRPC: function (route, args) {
-                if (route === 'https://pad.flectra.pad/p/test/1?showChat=false&userName=batman') {
-                    assert.ok(true, "should have an iframe with correct src");
-                    return Promise.resolve(true);
+            res_id:1,
+            mockRPC:function(route,args){
+                if(route==='https://pad.flectra.pad/p/test/1?showChat=false&userName=batman'){
+                    assert.ok(true,"shouldhaveaniframewithcorrectsrc");
+                    returnPromise.resolve(true);
                 }
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
-            session: {
-                name: "batman",
+            session:{
+                name:"batman",
             },
         });
         assert.isNotVisible(form.$('p.oe_unconfigured'),
-            "help message should not be visible");
+            "helpmessageshouldnotbevisible");
         assert.isVisible(form.$('.oe_pad_content'),
-            "content should be visible");
-        assert.containsOnce(form, '.oe_pad_content:contains(This pad will be)',
-            "content should display a message when not initialized");
+            "contentshouldbevisible");
+        assert.containsOnce(form,'.oe_pad_content:contains(Thispadwillbe)',
+            "contentshoulddisplayamessagewhennotinitialized");
 
-        await testUtils.form.clickEdit(form);
+        awaittestUtils.form.clickEdit(form);
 
-        assert.containsOnce(form, '.oe_pad_content iframe',
-            "should have an iframe");
+        assert.containsOnce(form,'.oe_pad_contentiframe',
+            "shouldhaveaniframe");
 
         form.destroy();
-        delete FieldPad.prototype.isPadConfigured;
+        deleteFieldPad.prototype.isPadConfigured;
     });
 
-    QUnit.test('pad widget works, with existing data', async function (assert) {
+    QUnit.test('padwidgetworks,withexistingdata',asyncfunction(assert){
         assert.expect(3);
 
-        var contentDef = testUtils.makeTestPromise();
+        varcontentDef=testUtils.makeTestPromise();
 
-        var form = await createView({
-            View: FormView,
-            model: 'task',
-            data: this.data,
-            arch:'<form>' +
-                    '<sheet>' +
-                        '<group>' +
-                            '<field name="description" widget="pad"/>' +
-                        '</group>' +
-                    '</sheet>' +
+        varform=awaitcreateView({
+            View:FormView,
+            model:'task',
+            data:this.data,
+            arch:'<form>'+
+                    '<sheet>'+
+                        '<group>'+
+                            '<fieldname="description"widget="pad"/>'+
+                        '</group>'+
+                    '</sheet>'+
                 '</form>',
-            res_id: 2,
-            mockRPC: function (route, args) {
-                if (_.str.startsWith(route, 'http')) {
-                    return Promise.resolve(true);
+            res_id:2,
+            mockRPC:function(route,args){
+                if(_.str.startsWith(route,'http')){
+                    returnPromise.resolve(true);
                 }
-                var result = this._super.apply(this, arguments);
-                if (args.method === 'pad_get_content') {
-                    return contentDef.then(_.constant(result));
+                varresult=this._super.apply(this,arguments);
+                if(args.method==='pad_get_content'){
+                    returncontentDef.then(_.constant(result));
                 }
-                if (args.method === 'write') {
-                    assert.ok('description' in args.args[1],
-                        "should always send the description value");
+                if(args.method==='write'){
+                    assert.ok('description'inargs.args[1],
+                        "shouldalwayssendthedescriptionvalue");
                 }
-                return result;
+                returnresult;
             },
-            session: {
-                name: "batman",
+            session:{
+                name:"batman",
             },
         });
-        assert.strictEqual(form.$('.oe_pad_content').text(), "Loading",
-            "should display loading message");
+        assert.strictEqual(form.$('.oe_pad_content').text(),"Loading",
+            "shoulddisplayloadingmessage");
         contentDef.resolve();
-        await testUtils.nextTick();
-        assert.strictEqual(form.$('.oe_pad_content').text(), "we should rewrite this server in haskell",
-            "should display proper value");
+        awaittestUtils.nextTick();
+        assert.strictEqual(form.$('.oe_pad_content').text(),"weshouldrewritethisserverinhaskell",
+            "shoulddisplaypropervalue");
 
-        await testUtils.form.clickEdit(form);
-        await testUtils.form.clickSave(form);
+        awaittestUtils.form.clickEdit(form);
+        awaittestUtils.form.clickSave(form);
         form.destroy();
-        delete FieldPad.prototype.isPadConfigured;
+        deleteFieldPad.prototype.isPadConfigured;
     });
 
-    QUnit.test('pad widget is not considered dirty at creation', async function (assert) {
+    QUnit.test('padwidgetisnotconsidereddirtyatcreation',asyncfunction(assert){
         assert.expect(2);
 
-        var form = await createView({
-            View: FormView,
-            model: 'task',
-            data: this.data,
-            arch:'<form>' +
-                    '<sheet>' +
-                        '<group>' +
-                            '<field name="description" widget="pad"/>' +
-                        '</group>' +
-                    '</sheet>' +
+        varform=awaitcreateView({
+            View:FormView,
+            model:'task',
+            data:this.data,
+            arch:'<form>'+
+                    '<sheet>'+
+                        '<group>'+
+                            '<fieldname="description"widget="pad"/>'+
+                        '</group>'+
+                    '</sheet>'+
                 '</form>',
-            mockRPC: function (route, args) {
-                if (!args.method) {
-                    return Promise.resolve(true);
+            mockRPC:function(route,args){
+                if(!args.method){
+                    returnPromise.resolve(true);
                 }
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
-            session: {
-                name: "batman",
+            session:{
+                name:"batman",
             },
         });
-        var def = form.canBeDiscarded();
-        var defState = 'unresolved';
-        def.then(function () {
-            defState = 'resolved';
+        vardef=form.canBeDiscarded();
+        vardefState='unresolved';
+        def.then(function(){
+            defState='resolved';
         });
 
-        assert.strictEqual($('.modal').length, 0,
-            "should have no confirmation modal opened");
-        await testUtils.nextTick();
-        assert.strictEqual(defState, 'resolved',
-            "can be discarded was successfully resolved");
+        assert.strictEqual($('.modal').length,0,
+            "shouldhavenoconfirmationmodalopened");
+        awaittestUtils.nextTick();
+        assert.strictEqual(defState,'resolved',
+            "canbediscardedwassuccessfullyresolved");
         form.destroy();
-        delete FieldPad.prototype.isPadConfigured;
+        deleteFieldPad.prototype.isPadConfigured;
     });
 
-    QUnit.test('pad widget is not considered dirty at edition', async function (assert) {
+    QUnit.test('padwidgetisnotconsidereddirtyatedition',asyncfunction(assert){
         assert.expect(2);
 
-        var form = await createView({
-            View: FormView,
-            model: 'task',
-            data: this.data,
-            arch:'<form>' +
-                    '<sheet>' +
-                        '<group>' +
-                            '<field name="description" widget="pad"/>' +
-                        '</group>' +
-                    '</sheet>' +
+        varform=awaitcreateView({
+            View:FormView,
+            model:'task',
+            data:this.data,
+            arch:'<form>'+
+                    '<sheet>'+
+                        '<group>'+
+                            '<fieldname="description"widget="pad"/>'+
+                        '</group>'+
+                    '</sheet>'+
                 '</form>',
-            res_id: 2,
-            mockRPC: function (route, args) {
-                if (!args.method) {
-                    return Promise.resolve(true);
+            res_id:2,
+            mockRPC:function(route,args){
+                if(!args.method){
+                    returnPromise.resolve(true);
                 }
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
-            session: {
-                name: "batman",
+            session:{
+                name:"batman",
             },
         });
-        await testUtils.form.clickEdit(form);
-        var def = form.canBeDiscarded();
-        var defState = 'unresolved';
-        def.then(function () {
-            defState = 'resolved';
+        awaittestUtils.form.clickEdit(form);
+        vardef=form.canBeDiscarded();
+        vardefState='unresolved';
+        def.then(function(){
+            defState='resolved';
         });
 
-        assert.strictEqual($('.modal').length, 0,
-            "should have no confirmation modal opened");
-        await testUtils.nextTick();
-        assert.strictEqual(defState, 'resolved',
-            "can be discarded was successfully resolved");
+        assert.strictEqual($('.modal').length,0,
+            "shouldhavenoconfirmationmodalopened");
+        awaittestUtils.nextTick();
+        assert.strictEqual(defState,'resolved',
+            "canbediscardedwassuccessfullyresolved");
         form.destroy();
-        delete FieldPad.prototype.isPadConfigured;
+        deleteFieldPad.prototype.isPadConfigured;
     });
 
-    QUnit.test('record should be discarded properly even if only pad has changed', async function (assert) {
+    QUnit.test('recordshouldbediscardedproperlyevenifonlypadhaschanged',asyncfunction(assert){
         assert.expect(1);
 
-        var form = await createView({
-            View: FormView,
-            model: 'task',
-            data: this.data,
-            arch:'<form>' +
-                    '<sheet>' +
-                        '<group>' +
-                            '<field name="description" widget="pad"/>' +
-                        '</group>' +
-                    '</sheet>' +
+        varform=awaitcreateView({
+            View:FormView,
+            model:'task',
+            data:this.data,
+            arch:'<form>'+
+                    '<sheet>'+
+                        '<group>'+
+                            '<fieldname="description"widget="pad"/>'+
+                        '</group>'+
+                    '</sheet>'+
                 '</form>',
-            res_id: 2,
-            mockRPC: function (route, args) {
-                if (!args.method) {
-                    return Promise.resolve(true);
+            res_id:2,
+            mockRPC:function(route,args){
+                if(!args.method){
+                    returnPromise.resolve(true);
                 }
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
-            session: {
-                name: "batman",
+            session:{
+                name:"batman",
             },
         });
-        await testUtils.form.clickEdit(form);
-        await testUtils.form.clickDiscard(form);
-        assert.strictEqual(form.$('.oe_pad_readonly').text(), this.data.task.pad_get_content(),
-            "pad content should not have changed");
+        awaittestUtils.form.clickEdit(form);
+        awaittestUtils.form.clickDiscard(form);
+        assert.strictEqual(form.$('.oe_pad_readonly').text(),this.data.task.pad_get_content(),
+            "padcontentshouldnothavechanged");
         form.destroy();
-        delete FieldPad.prototype.isPadConfigured;
+        deleteFieldPad.prototype.isPadConfigured;
     });
 
-    QUnit.test('no pad deadlock on form change modifying pad readonly modifier', async function (assert) {
+    QUnit.test('nopaddeadlockonformchangemodifyingpadreadonlymodifier',asyncfunction(assert){
         assert.expect(1);
 
-        var form = await createView({
-            View: FormView,
-            model: 'task',
-            data: this.data,
-            arch:'<form>' +
-                    '<sheet>' +
-                        '<group>' +
-                            '<field name="use_pad" widget="toggle_button"/>' +
-                            '<field name="description" widget="pad" attrs="{\'readonly\': [(\'use_pad\', \'=\', False)]}"/>' +
-                        '</group>' +
-                    '</sheet>' +
+        varform=awaitcreateView({
+            View:FormView,
+            model:'task',
+            data:this.data,
+            arch:'<form>'+
+                    '<sheet>'+
+                        '<group>'+
+                            '<fieldname="use_pad"widget="toggle_button"/>'+
+                            '<fieldname="description"widget="pad"attrs="{\'readonly\':[(\'use_pad\',\'=\',False)]}"/>'+
+                        '</group>'+
+                    '</sheet>'+
                 '</form>',
-            res_id: 2,
-            mockRPC: function (route, args) {
-                if (!args.method) {
-                    return Promise.resolve(true);
+            res_id:2,
+            mockRPC:function(route,args){
+                if(!args.method){
+                    returnPromise.resolve(true);
                 }
-                if (args.method === "write") {
+                if(args.method==="write"){
                     assert.strictEqual(args.args[1].description,
                         "https://pad.flectra.pad/p/test-03AK6RCJT");
                 }
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
         });
-        await testUtils.form.clickEdit(form);
-        await testUtils.dom.click(form.$('.o_field_widget[name="use_pad"]'));
-        await testUtils.form.clickSave(form);
+        awaittestUtils.form.clickEdit(form);
+        awaittestUtils.dom.click(form.$('.o_field_widget[name="use_pad"]'));
+        awaittestUtils.form.clickSave(form);
         form.destroy();
-        delete FieldPad.prototype.isPadConfigured;
+        deleteFieldPad.prototype.isPadConfigured;
     });
 
 });

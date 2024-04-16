@@ -1,33 +1,33 @@
-flectra.define('lunch.LunchKanbanView', function (require) {
-"use strict";
+flectra.define('lunch.LunchKanbanView',function(require){
+"usestrict";
 
-var LunchKanbanController = require('lunch.LunchKanbanController');
-var LunchKanbanRenderer = require('lunch.LunchKanbanRenderer');
+varLunchKanbanController=require('lunch.LunchKanbanController');
+varLunchKanbanRenderer=require('lunch.LunchKanbanRenderer');
 
-var core = require('web.core');
-var KanbanView = require('web.KanbanView');
-var view_registry = require('web.view_registry');
+varcore=require('web.core');
+varKanbanView=require('web.KanbanView');
+varview_registry=require('web.view_registry');
 
-var _lt = core._lt;
+var_lt=core._lt;
 
-var LunchKanbanView = KanbanView.extend({
-    config: _.extend({}, KanbanView.prototype.config, {
-        Controller: LunchKanbanController,
-        Renderer: LunchKanbanRenderer,
+varLunchKanbanView=KanbanView.extend({
+    config:_.extend({},KanbanView.prototype.config,{
+        Controller:LunchKanbanController,
+        Renderer:LunchKanbanRenderer,
     }),
-    display_name: _lt('Lunch Kanban'),
+    display_name:_lt('LunchKanban'),
 
     /**
-     * @override
+     *@override
      */
-    _createSearchModel(params, extraExtensions = {}) {
-        Object.assign(extraExtensions, { Lunch: {} });
-        return this._super(params, extraExtensions);
+    _createSearchModel(params,extraExtensions={}){
+        Object.assign(extraExtensions,{Lunch:{}});
+        returnthis._super(params,extraExtensions);
     },
 });
 
-view_registry.add('lunch_kanban', LunchKanbanView);
+view_registry.add('lunch_kanban',LunchKanbanView);
 
-return LunchKanbanView;
+returnLunchKanbanView;
 
 });

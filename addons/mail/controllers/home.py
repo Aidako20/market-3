@@ -1,42 +1,42 @@
-# -*- coding: utf-8 -*-
-import ipaddress
+#-*-coding:utf-8-*-
+importipaddress
 
-from flectra import _, SUPERUSER_ID
-from flectra.http import request
-from flectra.addons.web.controllers import main as web
+fromflectraimport_,SUPERUSER_ID
+fromflectra.httpimportrequest
+fromflectra.addons.web.controllersimportmainasweb
 
-def _admin_password_warn(uid):
-    """ Admin still has `admin` password, flash a message via chatter.
+def_admin_password_warn(uid):
+    """Adminstillhas`admin`password,flashamessageviachatter.
 
-    Uses a private mail.channel from the system (/ flectrabot) to the user, as
-    using a more generic mail.thread could send an email which is undesirable
+    Usesaprivatemail.channelfromthesystem(/flectrabot)totheuser,as
+    usingamoregenericmail.threadcouldsendanemailwhichisundesirable
 
-    Uses mail.channel directly because using mail.thread might send an email instead.
+    Usesmail.channeldirectlybecauseusingmail.threadmightsendanemailinstead.
     """
-    if request.params['password'] != 'admin':
+    ifrequest.params['password']!='admin':
         return
-    if ipaddress.ip_address(request.httprequest.remote_addr).is_private:
+    ifipaddress.ip_address(request.httprequest.remote_addr).is_private:
         return
-    env = request.env(user=SUPERUSER_ID, su=True)
-    admin = env.ref('base.partner_admin')
-    if uid not in admin.user_ids.ids:
+    env=request.env(user=SUPERUSER_ID,su=True)
+    admin=env.ref('base.partner_admin')
+    ifuidnotinadmin.user_ids.ids:
         return
-    has_demo = bool(env['ir.module.module'].search_count([('demo', '=', True)]))
-    if has_demo:
+    has_demo=bool(env['ir.module.module'].search_count([('demo','=',True)]))
+    ifhas_demo:
         return
 
-    user = request.env(user=uid)['res.users']
-    MailChannel = env(context=user.context_get())['mail.channel']
+    user=request.env(user=uid)['res.users']
+    MailChannel=env(context=user.context_get())['mail.channel']
     MailChannel.browse(MailChannel.channel_get([admin.id])['id'])\
         .message_post(
-            body=_("Your password is the default (admin)! If this system is exposed to untrusted users it is important to change it immediately for security reasons. I will keep nagging you about it!"),
+            body=_("Yourpasswordisthedefault(admin)!Ifthissystemisexposedtountrustedusersitisimportanttochangeitimmediatelyforsecurityreasons.Iwillkeepnaggingyouaboutit!"),
             message_type='comment',
             subtype_xmlid='mail.mt_comment'
         )
 
-class Home(web.Home):
-    def _login_redirect(self, uid, redirect=None):
-        if request.params.get('login_success'):
+classHome(web.Home):
+    def_login_redirect(self,uid,redirect=None):
+        ifrequest.params.get('login_success'):
             _admin_password_warn(uid)
 
-        return super()._login_redirect(uid, redirect)
+        returnsuper()._login_redirect(uid,redirect)

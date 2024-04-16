@@ -1,52 +1,52 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-<t t-name="hr_resume_data_row">
-    <tr class="o_data_row" t-attf-class="o_data_row #{is_last? 'o_data_row_last' : ''}" t-att-data-id="id">
-        <t t-if="data.display_type === 'classic'">
-            <td class="o_resume_timeline_cell position-relative pr-lg-2">
-                <div class="rounded-circle bg-info position-relative"/>
+<tt-name="hr_resume_data_row">
+    <trclass="o_data_row"t-attf-class="o_data_row#{is_last?'o_data_row_last':''}"t-att-data-id="id">
+        <tt-if="data.display_type==='classic'">
+            <tdclass="o_resume_timeline_cellposition-relativepr-lg-2">
+                <divclass="rounded-circlebg-infoposition-relative"/>
             </td>
-            <td class="o_data_cell pt-0 w-100">
-                <div class="o_resume_line" t-att-data-id="id">
-                    <small class="o_resume_line_dates">
-                        <b t-esc="data.date_start"/> - <b t-esc="data.date_end"/>
+            <tdclass="o_data_cellpt-0w-100">
+                <divclass="o_resume_line"t-att-data-id="id">
+                    <smallclass="o_resume_line_dates">
+                        <bt-esc="data.date_start"/>-<bt-esc="data.date_end"/>
                     </small>
-                    <h4 class="o_resume_line_title mt-2" t-esc="data.name"/>
-                    <p t-if="data.description" class="o_resume_line_desc" t-esc="data.description"/>
+                    <h4class="o_resume_line_titlemt-2"t-esc="data.name"/>
+                    <pt-if="data.description"class="o_resume_line_desc"t-esc="data.description"/>
                 </div>
             </td>
         </t>
     </tr>
 </t>
 
-<t t-name="hr_trash_button">
-    <td class="o_list_record_remove pr-3">
-        <button name="delete" arial-label="Delete row" class="btn btn-secondary">
-            <i class="fa fa-trash"/>
+<tt-name="hr_trash_button">
+    <tdclass="o_list_record_removepr-3">
+        <buttonname="delete"arial-label="Deleterow"class="btnbtn-secondary">
+            <iclass="fafa-trash"/>
         </button>
     </td>
 </t>
 
-<t t-name="hr_resume_group_row">
-    <tr class="o_resume_group_header">
-        <td class="o_group_name" colspan="100%"><span class="o_horizontal_separator my-0" t-esc="display_name"/></td>
+<tt-name="hr_resume_group_row">
+    <trclass="o_resume_group_header">
+        <tdclass="o_group_name"colspan="100%"><spanclass="o_horizontal_separatormy-0"t-esc="display_name"/></td>
     </tr>
 </t>
 
-<t t-name="group_add_item">
-    <t t-set="empty" t-value="Object.keys(context).length == 2"/>
+<tt-name="group_add_item">
+    <tt-set="empty"t-value="Object.keys(context).length==2"/>
 
-    <div t-attf-class="o_field_x2many_list_row_add #{empty? 'd-block w-100' : 'd-inline pull-right'}">
-        <div t-if="empty" class="o_resume_empty_helper o_horizontal_separator text-muted my-0">
-            <em>Resumé empty</em>
+    <divt-attf-class="o_field_x2many_list_row_add#{empty?'d-blockw-100':'d-inlinepull-right'}">
+        <divt-if="empty"class="o_resume_empty_helpero_horizontal_separatortext-mutedmy-0">
+            <em>Resuméempty</em>
         </div>
-        <a href="#"
+        <ahref="#"
             role="button"
-            t-attf-class="btn o-kanban-button-new #{empty? 'btn-primary mt-3' : 'btn-secondary btn-sm'}"
-            t-attf-data-context="{{ context }}">
-                <t t-if="empty">CREATE A NEW ENTRY</t>
-                <t t-else="">ADD</t>
+            t-attf-class="btno-kanban-button-new#{empty?'btn-primarymt-3':'btn-secondarybtn-sm'}"
+            t-attf-data-context="{{context}}">
+                <tt-if="empty">CREATEANEWENTRY</t>
+                <tt-else="">ADD</t>
             </a>
     </div>
 </t>

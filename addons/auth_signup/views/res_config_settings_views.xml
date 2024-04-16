@@ -1,40 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-        <record id="res_config_settings_view_form" model="ir.ui.view">
-            <field name="name">res.config.settings.view.form.inherit.auth.signup</field>
-            <field name="model">res.config.settings</field>
-            <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//div[@id='access_rights']" position="after">
-                    <div class="col-12 col-lg-6 o_setting_box"
+        <recordid="res_config_settings_view_form"model="ir.ui.view">
+            <fieldname="name">res.config.settings.view.form.inherit.auth.signup</field>
+            <fieldname="model">res.config.settings</field>
+            <fieldname="inherit_id"ref="base_setup.res_config_settings_view_form"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//div[@id='access_rights']"position="after">
+                    <divclass="col-12col-lg-6o_setting_box"
                         id="login_documents"
-                        title=" To send invitations in B2B mode, open a contact or select several ones in list view and click on 'Portal Access Management' option in the dropdown menu *Action*.">
-                        <div class="o_setting_left_pane">
+                        title="TosendinvitationsinB2Bmode,openacontactorselectseveralonesinlistviewandclickon'PortalAccessManagement'optioninthedropdownmenu*Action*.">
+                        <divclass="o_setting_left_pane">
                         </div>
-                        <div class="o_setting_right_pane">
-                            <label for="auth_signup_uninvited"/>
-                            <div class="text-muted">
-                                Let your customers log in to see their documents
+                        <divclass="o_setting_right_pane">
+                            <labelfor="auth_signup_uninvited"/>
+                            <divclass="text-muted">
+                                Letyourcustomerslogintoseetheirdocuments
                             </div>
-                            <div class="mt8">
-                                <field name="auth_signup_uninvited" class="o_light_label" widget="radio" required="True"/>
+                            <divclass="mt8">
+                                <fieldname="auth_signup_uninvited"class="o_light_label"widget="radio"required="True"/>
                             </div>
-                            <div class="content-group" attrs="{'invisible': [('auth_signup_uninvited','=','b2b')]}">
-                                <div class="mt8">
-                                    <button type="object" name="open_template_user" string="Default Access Rights" icon="fa-arrow-right" class="btn-link"/>
+                            <divclass="content-group"attrs="{'invisible':[('auth_signup_uninvited','=','b2b')]}">
+                                <divclass="mt8">
+                                    <buttontype="object"name="open_template_user"string="DefaultAccessRights"icon="fa-arrow-right"class="btn-link"/>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-6 o_setting_box" id="enable_password_reset">
-                        <div class="o_setting_left_pane">
-                            <field name="auth_signup_reset_password"/>
+                    <divclass="col-12col-lg-6o_setting_box"id="enable_password_reset">
+                        <divclass="o_setting_left_pane">
+                            <fieldname="auth_signup_reset_password"/>
                         </div>
-                        <div class="o_setting_right_pane">
-                            <label string="Password Reset" for="auth_signup_reset_password"/>
-                            <div class="text-muted">
-                                Enable password reset from Login page
+                        <divclass="o_setting_right_pane">
+                            <labelstring="PasswordReset"for="auth_signup_reset_password"/>
+                            <divclass="text-muted">
+                                EnablepasswordresetfromLoginpage
                             </div>
                         </div>
                     </div>

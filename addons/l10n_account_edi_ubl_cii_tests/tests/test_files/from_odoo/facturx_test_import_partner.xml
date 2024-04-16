@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<rsm:CrossIndustryInvoice xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
+<?xmlversion='1.0'encoding='UTF-8'?>
+<rsm:CrossIndustryInvoicexmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
                           xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"
                           xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100">
     <rsm:ExchangedDocumentContext>
@@ -11,10 +11,10 @@
         <ram:ID>INV/2017/01/0001</ram:ID>
         <ram:TypeCode>380</ram:TypeCode>
         <ram:IssueDateTime>
-            <udt:DateTimeString format="102">20170101</udt:DateTimeString>
+            <udt:DateTimeStringformat="102">20170101</udt:DateTimeString>
         </ram:IssueDateTime>
         <ram:IncludedNote>
-            <ram:Content>test narration</ram:Content>
+            <ram:Content>testnarration</ram:Content>
         </ram:IncludedNote>
     </rsm:ExchangedDocument>
     <rsm:SupplyChainTradeTransaction>
@@ -34,7 +34,7 @@
                 </ram:NetPriceProductTradePrice>
             </ram:SpecifiedLineTradeAgreement>
             <ram:SpecifiedLineTradeDelivery>
-                <ram:BilledQuantity unitCode="C62">1.0</ram:BilledQuantity>
+                <ram:BilledQuantityunitCode="C62">1.0</ram:BilledQuantity>
             </ram:SpecifiedLineTradeDelivery>
             <ram:SpecifiedLineTradeSettlement>
                 <ram:SpecifiedTradeSettlementLineMonetarySummation>
@@ -48,20 +48,20 @@
                 <ram:DefinedTradeContact>
                     <ram:PersonName>partner_1</ram:PersonName>
                     <ram:TelephoneUniversalCommunication>
-                        <ram:CompleteNumber>+1 (650) 555-0111</ram:CompleteNumber>
+                        <ram:CompleteNumber>+1(650)555-0111</ram:CompleteNumber>
                     </ram:TelephoneUniversalCommunication>
                     <ram:EmailURIUniversalCommunication>
-                        <ram:URIID schemeID="SMTP">partner1@yourcompany.com</ram:URIID>
+                        <ram:URIIDschemeID="SMTP">partner1@yourcompany.com</ram:URIID>
                     </ram:EmailURIUniversalCommunication>
                 </ram:DefinedTradeContact>
                 <ram:PostalTradeAddress>
                     <ram:PostcodeCode>75000</ram:PostcodeCode>
-                    <ram:LineOne>Rue Jean Jaur&#232;s, 42</ram:LineOne>
+                    <ram:LineOne>RueJeanJaur&#232;s,42</ram:LineOne>
                     <ram:CityName>Paris</ram:CityName>
                     <ram:CountryID>FR</ram:CountryID>
                 </ram:PostalTradeAddress>
                 <ram:SpecifiedTaxRegistration>
-                    <ram:ID schemeID="VA">FR05677404089</ram:ID>
+                    <ram:IDschemeID="VA">FR05677404089</ram:ID>
                 </ram:SpecifiedTaxRegistration>
             </ram:SellerTradeParty>
             <ram:BuyerTradeParty>
@@ -72,11 +72,11 @@
                         <ram:CompleteNumber>1111</ram:CompleteNumber>
                     </ram:TelephoneUniversalCommunication>
                     <ram:EmailURIUniversalCommunication>
-                        <ram:URIID schemeID="SMTP">buyer@yahoo.com</ram:URIID>
+                        <ram:URIIDschemeID="SMTP">buyer@yahoo.com</ram:URIID>
                     </ram:EmailURIUniversalCommunication>
                 </ram:DefinedTradeContact>
                 <ram:SpecifiedTaxRegistration>
-                    <ram:ID schemeID="VA">2222</ram:ID>
+                    <ram:IDschemeID="VA">2222</ram:ID>
                 </ram:SpecifiedTaxRegistration>
             </ram:BuyerTradeParty>
             <ram:BuyerOrderReferencedDocument>
@@ -92,13 +92,13 @@
                         <ram:CompleteNumber>1111</ram:CompleteNumber>
                     </ram:TelephoneUniversalCommunication>
                     <ram:EmailURIUniversalCommunication>
-                        <ram:URIID schemeID="SMTP">buyer@yahoo.com</ram:URIID>
+                        <ram:URIIDschemeID="SMTP">buyer@yahoo.com</ram:URIID>
                     </ram:EmailURIUniversalCommunication>
                 </ram:DefinedTradeContact>
             </ram:ShipToTradeParty>
             <ram:ActualDeliverySupplyChainEvent>
                 <ram:OccurrenceDateTime>
-                    <udt:DateTimeString format="102">20170101</udt:DateTimeString>
+                    <udt:DateTimeStringformat="102">20170101</udt:DateTimeString>
                 </ram:OccurrenceDateTime>
             </ram:ActualDeliverySupplyChainEvent>
         </ram:ApplicableHeaderTradeDelivery>
@@ -112,12 +112,12 @@
                 </ram:PayeePartyCreditorFinancialAccount>
             </ram:SpecifiedTradeSettlementPaymentMeans>
             <ram:SpecifiedTradePaymentTerms>
-                <ram:Description>30% Advance End of Following Month</ram:Description>
+                <ram:Description>30%AdvanceEndofFollowingMonth</ram:Description>
             </ram:SpecifiedTradePaymentTerms>
             <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
                 <ram:LineTotalAmount>0.00</ram:LineTotalAmount>
                 <ram:TaxBasisTotalAmount>0.00</ram:TaxBasisTotalAmount>
-                <ram:TaxTotalAmount currencyID="USD">0.00</ram:TaxTotalAmount>
+                <ram:TaxTotalAmountcurrencyID="USD">0.00</ram:TaxTotalAmount>
                 <ram:GrandTotalAmount>0.00</ram:GrandTotalAmount>
                 <ram:TotalPrepaidAmount>0.00</ram:TotalPrepaidAmount>
                 <ram:DuePayableAmount>0.00</ram:DuePayableAmount>

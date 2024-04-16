@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <record id="view_partner_form" model="ir.ui.view">
-            <field name="name">res.partner.vat.inherit</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='vat']" position="attributes">
-                    <attribute name="string">VAT</attribute>
+        <recordid="view_partner_form"model="ir.ui.view">
+            <fieldname="name">res.partner.vat.inherit</field>
+            <fieldname="model">res.partner</field>
+            <fieldname="inherit_id"ref="base.view_partner_form"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//field[@name='vat']"position="attributes">
+                    <attributename="string">VAT</attribute>
                 </xpath>
-                <xpath expr="//span[hasclass('o_vat_label')]" position="replace">
-                    <span class="o_vat_label">VAT</span>
+                <xpathexpr="//span[hasclass('o_vat_label')]"position="replace">
+                    <spanclass="o_vat_label">VAT</span>
                 </xpath>
             </field>
         </record>

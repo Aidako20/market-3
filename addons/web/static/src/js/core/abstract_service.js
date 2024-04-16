@@ -1,91 +1,91 @@
-flectra.define('web.AbstractService', function (require) {
-"use strict";
+flectra.define('web.AbstractService',function(require){
+"usestrict";
 
-var Class = require('web.Class');
-const { serviceRegistry } = require("web.core");
-var Mixins = require('web.mixins');
-var ServicesMixin = require('web.ServicesMixin');
+varClass=require('web.Class');
+const{serviceRegistry}=require("web.core");
+varMixins=require('web.mixins');
+varServicesMixin=require('web.ServicesMixin');
 
-var AbstractService = Class.extend(Mixins.EventDispatcherMixin, ServicesMixin, {
-    dependencies: [],
-    init: function (env) {
-        Mixins.EventDispatcherMixin.init.call(this, arguments);
-        this.env = env;
+varAbstractService=Class.extend(Mixins.EventDispatcherMixin,ServicesMixin,{
+    dependencies:[],
+    init:function(env){
+        Mixins.EventDispatcherMixin.init.call(this,arguments);
+        this.env=env;
     },
     /**
-     * @abstract
+     *@abstract
      */
-    start: function () {},
+    start:function(){},
     /**
-     * Directly calls the requested service, instead of triggering a
-     * 'call_service' event up, which wouldn't work as services have no parent
+     *Directlycallstherequestedservice,insteadoftriggeringa
+     *'call_service'eventup,whichwouldn'tworkasserviceshavenoparent
      *
-     * @param {FlectraEvent} ev
+     *@param{FlectraEvent}ev
      */
-    _trigger_up: function (ev) {
-        Mixins.EventDispatcherMixin._trigger_up.apply(this, arguments);
-        if (ev.is_stopped()) {
+    _trigger_up:function(ev){
+        Mixins.EventDispatcherMixin._trigger_up.apply(this,arguments);
+        if(ev.is_stopped()){
             return;
         }
-        const payload = ev.data;
-        if (ev.name === 'call_service') {
-            let args = payload.args || [];
-            if (payload.service === 'ajax' && payload.method === 'rpc') {
-                // ajax service uses an extra 'target' argument for rpc
-                args = args.concat(ev.target);
+        constpayload=ev.data;
+        if(ev.name==='call_service'){
+            letargs=payload.args||[];
+            if(payload.service==='ajax'&&payload.method==='rpc'){
+                //ajaxserviceusesanextra'target'argumentforrpc
+                args=args.concat(ev.target);
             }
-            const service = this.env.services[payload.service];
-            const result = service[payload.method].apply(service, args);
+            constservice=this.env.services[payload.service];
+            constresult=service[payload.method].apply(service,args);
             payload.callback(result);
-        } else if (ev.name === 'do_action') {
-            this.env.bus.trigger('do-action', payload);
+        }elseif(ev.name==='do_action'){
+            this.env.bus.trigger('do-action',payload);
         }
     },
 
     //--------------------------------------------------------------------------
-    // Static
+    //Static
     //--------------------------------------------------------------------------
 
     /**
-     * Deploy services in the env (specializations of AbstractService registered
-     * into the serviceRegistry).
+     *Deployservicesintheenv(specializationsofAbstractServiceregistered
+     *intotheserviceRegistry).
      *
-     * @static
-     * @param {Object} env
+     *@static
+     *@param{Object}env
      */
-    deployServices(env) {
-        const UndeployedServices = Object.assign({}, serviceRegistry.map);
-        function _deployServices() {
-            let done = false;
-            while (!done) {
-                // find a service with no missing dependency
-                const serviceName = Object.keys(UndeployedServices).find(serviceName => {
-                    const Service = UndeployedServices[serviceName];
-                    return Service.prototype.dependencies.every(depName => {
-                        return env.services[depName];
+    deployServices(env){
+        constUndeployedServices=Object.assign({},serviceRegistry.map);
+        function_deployServices(){
+            letdone=false;
+            while(!done){
+                //findaservicewithnomissingdependency
+                constserviceName=Object.keys(UndeployedServices).find(serviceName=>{
+                    constService=UndeployedServices[serviceName];
+                    returnService.prototype.dependencies.every(depName=>{
+                        returnenv.services[depName];
                     });
                 });
-                if (serviceName) {
-                    const Service = UndeployedServices[serviceName];
-                    const service = new Service(env);
-                    env.services[serviceName] = service;
-                    delete UndeployedServices[serviceName];
+                if(serviceName){
+                    constService=UndeployedServices[serviceName];
+                    constservice=newService(env);
+                    env.services[serviceName]=service;
+                    deleteUndeployedServices[serviceName];
                     service.start();
-                } else {
-                    done = true;
+                }else{
+                    done=true;
                 }
             }
         }
-        serviceRegistry.onAdd((serviceName, Service) => {
-            if (serviceName in env.services || serviceName in UndeployedServices) {
-                throw new Error(`Service ${serviceName} is already loaded.`);
+        serviceRegistry.onAdd((serviceName,Service)=>{
+            if(serviceNameinenv.services||serviceNameinUndeployedServices){
+                thrownewError(`Service${serviceName}isalreadyloaded.`);
             }
-            UndeployedServices[serviceName] = Service;
+            UndeployedServices[serviceName]=Service;
             _deployServices();
         });
         _deployServices();
     }
 });
 
-return AbstractService;
+returnAbstractService;
 });

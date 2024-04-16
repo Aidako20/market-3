@@ -1,33 +1,33 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class StockQuant(models.Model):
-    _inherit = 'stock.quant'
+classStockQuant(models.Model):
+    _inherit='stock.quant'
 
-    removal_date = fields.Datetime(related='lot_id.removal_date', store=True, readonly=False)
-    use_expiration_date = fields.Boolean(related='product_id.use_expiration_date', readonly=True)
+    removal_date=fields.Datetime(related='lot_id.removal_date',store=True,readonly=False)
+    use_expiration_date=fields.Boolean(related='product_id.use_expiration_date',readonly=True)
 
     @api.model
-    def _get_inventory_fields_create(self):
-        """ Returns a list of fields user can edit when he want to create a quant in `inventory_mode`.
+    def_get_inventory_fields_create(self):
+        """Returnsalistoffieldsusercaneditwhenhewanttocreateaquantin`inventory_mode`.
         """
-        res = super()._get_inventory_fields_create()
-        res += ['removal_date']
-        return res
+        res=super()._get_inventory_fields_create()
+        res+=['removal_date']
+        returnres
 
     @api.model
-    def _get_inventory_fields_write(self):
-        """ Returns a list of fields user can edit when he want to edit a quant in `inventory_mode`.
+    def_get_inventory_fields_write(self):
+        """Returnsalistoffieldsusercaneditwhenhewanttoeditaquantin`inventory_mode`.
         """
-        res = super()._get_inventory_fields_write()
-        res += ['removal_date']
-        return res
+        res=super()._get_inventory_fields_write()
+        res+=['removal_date']
+        returnres
 
     @api.model
-    def _get_removal_strategy_order(self, removal_strategy):
-        if removal_strategy == 'fefo':
-            return 'removal_date, in_date, id'
-        return super(StockQuant, self)._get_removal_strategy_order(removal_strategy)
+    def_get_removal_strategy_order(self,removal_strategy):
+        ifremoval_strategy=='fefo':
+            return'removal_date,in_date,id'
+        returnsuper(StockQuant,self)._get_removal_strategy_order(removal_strategy)

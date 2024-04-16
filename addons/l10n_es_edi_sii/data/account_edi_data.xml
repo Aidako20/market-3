@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
 
-        <record id="edi_es_sii" model="account.edi.format">
-            <field name="name">SII IVA Llevanza de libros registro (ES)</field>
-            <field name="code">es_sii</field>
+        <recordid="edi_es_sii"model="account.edi.format">
+            <fieldname="name">SIIIVALlevanzadelibrosregistro(ES)</field>
+            <fieldname="code">es_sii</field>
         </record>
 
     </data>

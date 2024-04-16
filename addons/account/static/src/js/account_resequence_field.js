@@ -1,32 +1,32 @@
-flectra.define('account.ShowResequenceRenderer', function (require) {
-"use strict";
+flectra.define('account.ShowResequenceRenderer',function(require){
+"usestrict";
 
-const { Component } = owl;
-const { useState } = owl.hooks;
-const AbstractFieldOwl = require('web.AbstractFieldOwl');
-const field_registry = require('web.field_registry_owl');
+const{Component}=owl;
+const{useState}=owl.hooks;
+constAbstractFieldOwl=require('web.AbstractFieldOwl');
+constfield_registry=require('web.field_registry_owl');
 
-class ChangeLine extends Component { }
-ChangeLine.template = 'account.ResequenceChangeLine';
-ChangeLine.props = ["changeLine", 'ordering'];
+classChangeLineextendsComponent{}
+ChangeLine.template='account.ResequenceChangeLine';
+ChangeLine.props=["changeLine",'ordering'];
 
 
-class ShowResequenceRenderer extends AbstractFieldOwl {
-    constructor(...args) {
+classShowResequenceRendererextendsAbstractFieldOwl{
+    constructor(...args){
         super(...args);
-        this.data = this.value ? JSON.parse(this.value) : {
-            changeLines: [],
-            ordering: 'date',
+        this.data=this.value?JSON.parse(this.value):{
+            changeLines:[],
+            ordering:'date',
         };
     }
-    async willUpdateProps(nextProps) {
-        await super.willUpdateProps(nextProps);
-        Object.assign(this.data, JSON.parse(this.value));
+    asyncwillUpdateProps(nextProps){
+        awaitsuper.willUpdateProps(nextProps);
+        Object.assign(this.data,JSON.parse(this.value));
     }
 }
-ShowResequenceRenderer.template = 'account.ResequenceRenderer';
-ShowResequenceRenderer.components = { ChangeLine }
+ShowResequenceRenderer.template='account.ResequenceRenderer';
+ShowResequenceRenderer.components={ChangeLine}
 
-field_registry.add('account_resequence_widget', ShowResequenceRenderer);
-return ShowResequenceRenderer;
+field_registry.add('account_resequence_widget',ShowResequenceRenderer);
+returnShowResequenceRenderer;
 });

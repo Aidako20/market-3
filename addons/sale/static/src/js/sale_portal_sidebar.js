@@ -1,117 +1,117 @@
-flectra.define('sale.SalePortalSidebar', function (require) {
-'use strict';
+flectra.define('sale.SalePortalSidebar',function(require){
+'usestrict';
 
-var publicWidget = require('web.public.widget');
-var PortalSidebar = require('portal.PortalSidebar');
+varpublicWidget=require('web.public.widget');
+varPortalSidebar=require('portal.PortalSidebar');
 
-publicWidget.registry.SalePortalSidebar = PortalSidebar.extend({
-    selector: '.o_portal_sale_sidebar',
+publicWidget.registry.SalePortalSidebar=PortalSidebar.extend({
+    selector:'.o_portal_sale_sidebar',
 
     /**
-     * @constructor
+     *@constructor
      */
-    init: function (parent, options) {
-        this._super.apply(this, arguments);
-        this.authorizedTextTag = ['em', 'b', 'i', 'u'];
-        this.spyWatched = $('body[data-target=".navspy"]');
+    init:function(parent,options){
+        this._super.apply(this,arguments);
+        this.authorizedTextTag=['em','b','i','u'];
+        this.spyWatched=$('body[data-target=".navspy"]');
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var def = this._super.apply(this, arguments);
-        var $spyWatcheElement = this.$el.find('[data-id="portal_sidebar"]');
+    start:function(){
+        vardef=this._super.apply(this,arguments);
+        var$spyWatcheElement=this.$el.find('[data-id="portal_sidebar"]');
         this._setElementId($spyWatcheElement);
-        // Nav Menu ScrollSpy
+        //NavMenuScrollSpy
         this._generateMenu();
-        // After singature, automatically open the popup for payment
-        if ($.bbq.getState('allow_payment') === 'yes' && this.$('#o_sale_portal_paynow').length) {
+        //Aftersingature,automaticallyopenthepopupforpayment
+        if($.bbq.getState('allow_payment')==='yes'&&this.$('#o_sale_portal_paynow').length){
             this.$('#o_sale_portal_paynow').trigger('click');
             $.bbq.removeState('allow_payment');
         }
-        return def;
+        returndef;
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //---------------------------------------------------------------------------
 
     /**
-     * create an unique id and added as a attribute of spyWatched element
+     *createanuniqueidandaddedasaattributeofspyWatchedelement
      *
-     * @private
-     * @param {string} prefix
-     * @param {Object} $el
+     *@private
+     *@param{string}prefix
+     *@param{Object}$el
      *
      */
-    _setElementId: function (prefix, $el) {
-        var id = _.uniqueId(prefix);
-        this.spyWatched.find($el).attr('id', id);
-        return id;
+    _setElementId:function(prefix,$el){
+        varid=_.uniqueId(prefix);
+        this.spyWatched.find($el).attr('id',id);
+        returnid;
     },
     /**
-     * generate the new spy menu
+     *generatethenewspymenu
      *
-     * @private
+     *@private
      *
      */
-    _generateMenu: function () {
-        var self = this,
-            lastLI = false,
-            lastUL = null,
-            $bsSidenav = this.$el.find('.bs-sidenav');
+    _generateMenu:function(){
+        varself=this,
+            lastLI=false,
+            lastUL=null,
+            $bsSidenav=this.$el.find('.bs-sidenav');
 
-        $("#quote_content [id^=quote_header_], #quote_content [id^=quote_]", this.spyWatched).attr("id", "");
-        _.each(this.spyWatched.find("#quote_content h2, #quote_content h3"), function (el) {
-            var id, text;
-            switch (el.tagName.toLowerCase()) {
-                case "h2":
-                    id = self._setElementId('quote_header_', el);
-                    text = self._extractText($(el));
-                    if (!text) {
+        $("#quote_content[id^=quote_header_],#quote_content[id^=quote_]",this.spyWatched).attr("id","");
+        _.each(this.spyWatched.find("#quote_contenth2,#quote_contenth3"),function(el){
+            varid,text;
+            switch(el.tagName.toLowerCase()){
+                case"h2":
+                    id=self._setElementId('quote_header_',el);
+                    text=self._extractText($(el));
+                    if(!text){
                         break;
                     }
-                    lastLI = $("<li class='nav-item'>").append($('<a class="nav-link" style="max-width: 200px;" href="#' + id + '"/>').text(text)).appendTo($bsSidenav);
-                    lastUL = false;
+                    lastLI=$("<liclass='nav-item'>").append($('<aclass="nav-link"style="max-width:200px;"href="#'+id+'"/>').text(text)).appendTo($bsSidenav);
+                    lastUL=false;
                     break;
-                case "h3":
-                    id = self._setElementId('quote_', el);
-                    text = self._extractText($(el));
-                    if (!text) {
+                case"h3":
+                    id=self._setElementId('quote_',el);
+                    text=self._extractText($(el));
+                    if(!text){
                         break;
                     }
-                    if (lastLI) {
-                        if (!lastUL) {
-                            lastUL = $("<ul class='nav flex-column'>").appendTo(lastLI);
+                    if(lastLI){
+                        if(!lastUL){
+                            lastUL=$("<ulclass='navflex-column'>").appendTo(lastLI);
                         }
-                        $("<li class='nav-item'>").append($('<a class="nav-link" style="max-width: 200px;" href="#' + id + '"/>').text(text)).appendTo(lastUL);
+                        $("<liclass='nav-item'>").append($('<aclass="nav-link"style="max-width:200px;"href="#'+id+'"/>').text(text)).appendTo(lastUL);
                     }
                     break;
             }
-            el.setAttribute('data-anchor', true);
+            el.setAttribute('data-anchor',true);
         });
-        this.trigger_up('widgets_start_request', {$target: $bsSidenav});
+        this.trigger_up('widgets_start_request',{$target:$bsSidenav});
     },
     /**
-     * extract text of menu title for sidebar
+     *extracttextofmenutitleforsidebar
      *
-     * @private
-     * @param {Object} $node
+     *@private
+     *@param{Object}$node
      *
      */
-    _extractText: function ($node) {
-        var self = this;
-        var rawText = [];
-        _.each($node.contents(), function (el) {
-            var current = $(el);
-            if ($.trim(current.text())) {
-                var tagName = current.prop("tagName");
-                if (_.isUndefined(tagName) || (!_.isUndefined(tagName) && _.contains(self.authorizedTextTag, tagName.toLowerCase()))) {
+    _extractText:function($node){
+        varself=this;
+        varrawText=[];
+        _.each($node.contents(),function(el){
+            varcurrent=$(el);
+            if($.trim(current.text())){
+                vartagName=current.prop("tagName");
+                if(_.isUndefined(tagName)||(!_.isUndefined(tagName)&&_.contains(self.authorizedTextTag,tagName.toLowerCase()))){
                     rawText.push($.trim(current.text()));
                 }
             }
         });
-        return rawText.join(' ');
+        returnrawText.join('');
     },
 });
 });

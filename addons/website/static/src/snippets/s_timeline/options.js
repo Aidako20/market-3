@@ -1,32 +1,32 @@
-flectra.define('website.s_timeline_options', function (require) {
-'use strict';
+flectra.define('website.s_timeline_options',function(require){
+'usestrict';
 
-const options = require('web_editor.snippets.options');
+constoptions=require('web_editor.snippets.options');
 
-options.registry.Timeline = options.Class.extend({
+options.registry.Timeline=options.Class.extend({
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var $buttons = this.$el.find('we-button');
-        var $overlayArea = this.$overlay.find('.o_overlay_options_wrap');
+    start:function(){
+        var$buttons=this.$el.find('we-button');
+        var$overlayArea=this.$overlay.find('.o_overlay_options_wrap');
         $overlayArea.append($('<div/>').append($buttons));
 
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * Moves the card to the right/left.
+     *Movesthecardtotheright/left.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    timelineCard: function (previewMode, widgetValue, params) {
-        const $timelineRow = this.$target.closest('.s_timeline_row');
-        $timelineRow.toggleClass('flex-row-reverse flex-row');
+    timelineCard:function(previewMode,widgetValue,params){
+        const$timelineRow=this.$target.closest('.s_timeline_row');
+        $timelineRow.toggleClass('flex-row-reverseflex-row');
     },
 });
 });

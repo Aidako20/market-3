@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import api, models
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportapi,models
 
 
-class Contact(models.AbstractModel):
-    _inherit = 'ir.qweb.field.contact'
-
-    @api.model
-    def value_to_html(self, value, options):
-        if self.env.context.get('snailmail_layout'):
-           value = value.with_context(snailmail_layout=self.env.context['snailmail_layout'])
-        return super(Contact, self).value_to_html(value, options)
+classContact(models.AbstractModel):
+    _inherit='ir.qweb.field.contact'
 
     @api.model
-    def record_to_html(self, record, field_name, options):
-        if self.env.context.get('snailmail_layout'):
-           record = record.with_context(snailmail_layout=self.env.context['snailmail_layout'])
-        return super(Contact, self).record_to_html(record, field_name, options)
+    defvalue_to_html(self,value,options):
+        ifself.env.context.get('snailmail_layout'):
+           value=value.with_context(snailmail_layout=self.env.context['snailmail_layout'])
+        returnsuper(Contact,self).value_to_html(value,options)
+
+    @api.model
+    defrecord_to_html(self,record,field_name,options):
+        ifself.env.context.get('snailmail_layout'):
+           record=record.with_context(snailmail_layout=self.env.context['snailmail_layout'])
+        returnsuper(Contact,self).record_to_html(record,field_name,options)

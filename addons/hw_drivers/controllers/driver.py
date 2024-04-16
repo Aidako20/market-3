@@ -1,116 +1,116 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from base64 import b64decode
-import json
-import logging
-import os
-import subprocess
-import time
+frombase64importb64decode
+importjson
+importlogging
+importos
+importsubprocess
+importtime
 
-from flectra import http, tools
-from flectra.http import send_file
-from flectra.modules.module import get_resource_path
+fromflectraimporthttp,tools
+fromflectra.httpimportsend_file
+fromflectra.modules.moduleimportget_resource_path
 
-from flectra.addons.hw_drivers.event_manager import event_manager
-from flectra.addons.hw_drivers.main import iot_devices, manager
-from flectra.addons.hw_drivers.tools import helpers
+fromflectra.addons.hw_drivers.event_managerimportevent_manager
+fromflectra.addons.hw_drivers.mainimportiot_devices,manager
+fromflectra.addons.hw_drivers.toolsimporthelpers
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
 
-class DriverController(http.Controller):
-    @http.route('/hw_drivers/action', type='json', auth='none', cors='*', csrf=False, save_session=False)
-    def action(self, session_id, device_identifier, data):
+classDriverController(http.Controller):
+    @http.route('/hw_drivers/action',type='json',auth='none',cors='*',csrf=False,save_session=False)
+    defaction(self,session_id,device_identifier,data):
         """
-        This route is called when we want to make a action with device (take picture, printing,...)
-        We specify in data from which session_id that action is called
-        And call the action of specific device
+        Thisrouteiscalledwhenwewanttomakeaactionwithdevice(takepicture,printing,...)
+        Wespecifyindatafromwhichsession_idthatactioniscalled
+        Andcalltheactionofspecificdevice
         """
-        iot_device = iot_devices.get(device_identifier)
-        if iot_device:
-            iot_device.data['owner'] = session_id
-            data = json.loads(data)
+        iot_device=iot_devices.get(device_identifier)
+        ifiot_device:
+            iot_device.data['owner']=session_id
+            data=json.loads(data)
 
-            # Skip the request if it was already executed (duplicated action calls)
-            iot_idempotent_id = data.get("iot_idempotent_id")
-            if iot_idempotent_id:
-                idempotent_session = iot_device._check_idempotency(iot_idempotent_id, session_id)
-                if idempotent_session:
-                    _logger.info("Ignored request from %s as iot_idempotent_id %s already received from session %s",
-                                 session_id, iot_idempotent_id, idempotent_session)
-                    return False
+            #Skiptherequestifitwasalreadyexecuted(duplicatedactioncalls)
+            iot_idempotent_id=data.get("iot_idempotent_id")
+            ifiot_idempotent_id:
+                idempotent_session=iot_device._check_idempotency(iot_idempotent_id,session_id)
+                ifidempotent_session:
+                    _logger.info("Ignoredrequestfrom%sasiot_idempotent_id%salreadyreceivedfromsession%s",
+                                 session_id,iot_idempotent_id,idempotent_session)
+                    returnFalse
             iot_device.action(data)
-            return True
-        return False
+            returnTrue
+        returnFalse
 
-    @http.route('/hw_drivers/check_certificate', type='http', auth='none', cors='*', csrf=False, save_session=False)
-    def check_certificate(self):
+    @http.route('/hw_drivers/check_certificate',type='http',auth='none',cors='*',csrf=False,save_session=False)
+    defcheck_certificate(self):
         """
-        This route is called when we want to check if certificate is up-to-date
-        Used in cron.daily
+        Thisrouteiscalledwhenwewanttocheckifcertificateisup-to-date
+        Usedincron.daily
         """
         helpers.get_certificate_status()
 
-    @http.route('/hw_drivers/event', type='json', auth='none', cors='*', csrf=False, save_session=False)
-    def event(self, listener):
+    @http.route('/hw_drivers/event',type='json',auth='none',cors='*',csrf=False,save_session=False)
+    defevent(self,listener):
         """
-        listener is a dict in witch there are a sessions_id and a dict of device_identifier to listen
+        listenerisadictinwitchthereareasessions_idandadictofdevice_identifiertolisten
         """
-        req = event_manager.add_request(listener)
+        req=event_manager.add_request(listener)
 
-        # Search for previous events and remove events older than 5 seconds
-        oldest_time = time.time() - 5
-        for event in list(event_manager.events):
-            if event['time'] < oldest_time:
-                del event_manager.events[0]
+        #Searchforpreviouseventsandremoveeventsolderthan5seconds
+        oldest_time=time.time()-5
+        foreventinlist(event_manager.events):
+            ifevent['time']<oldest_time:
+                delevent_manager.events[0]
                 continue
-            if event['device_identifier'] in listener['devices'] and event['time'] > listener['last_event']:
-                event['session_id'] = req['session_id']
-                return event
+            ifevent['device_identifier']inlistener['devices']andevent['time']>listener['last_event']:
+                event['session_id']=req['session_id']
+                returnevent
 
-        # Wait for new event
-        if req['event'].wait(50):
+        #Waitfornewevent
+        ifreq['event'].wait(50):
             req['event'].clear()
-            req['result']['session_id'] = req['session_id']
-            return req['result']
+            req['result']['session_id']=req['session_id']
+            returnreq['result']
 
-    @http.route('/hw_drivers/box/connect', type='http', auth='none', cors='*', csrf=False, save_session=False)
-    def connect_box(self, token):
+    @http.route('/hw_drivers/box/connect',type='http',auth='none',cors='*',csrf=False,save_session=False)
+    defconnect_box(self,token):
         """
-        This route is called when we want that a IoT Box will be connected to a Flectra DB
-        token is a base 64 encoded string and have 2 argument separate by |
-        1 - url of flectra DB
-        2 - token. This token will be compared to the token of Flectra. He have 1 hour lifetime
+        ThisrouteiscalledwhenwewantthataIoTBoxwillbeconnectedtoaFlectraDB
+        tokenisabase64encodedstringandhave2argumentseparateby|
+        1-urlofflectraDB
+        2-token.ThistokenwillbecomparedtothetokenofFlectra.Hehave1hourlifetime
         """
-        server = helpers.get_flectra_server_url()
-        image = get_resource_path('hw_drivers', 'static/img', 'False.jpg')
-        if not server:
-            credential = b64decode(token).decode('utf-8').split('|')
-            url = credential[0]
-            token = credential[1]
-            if len(credential) > 2:
-                # IoT Box send token with db_uuid and enterprise_code only since V13
-                db_uuid = credential[2]
-                enterprise_code = credential[3]
-                helpers.add_credential(db_uuid, enterprise_code)
+        server=helpers.get_flectra_server_url()
+        image=get_resource_path('hw_drivers','static/img','False.jpg')
+        ifnotserver:
+            credential=b64decode(token).decode('utf-8').split('|')
+            url=credential[0]
+            token=credential[1]
+            iflen(credential)>2:
+                #IoTBoxsendtokenwithdb_uuidandenterprise_codeonlysinceV13
+                db_uuid=credential[2]
+                enterprise_code=credential[3]
+                helpers.add_credential(db_uuid,enterprise_code)
             try:
-                subprocess.check_call([get_resource_path('point_of_sale', 'tools/posbox/configuration/connect_to_server.sh'), url, '', token, 'noreboot'])
+                subprocess.check_call([get_resource_path('point_of_sale','tools/posbox/configuration/connect_to_server.sh'),url,'',token,'noreboot'])
                 manager.send_alldevices()
-                image = get_resource_path('hw_drivers', 'static/img', 'True.jpg')
+                image=get_resource_path('hw_drivers','static/img','True.jpg')
                 helpers.flectra_restart(3)
-            except subprocess.CalledProcessError as e:
-                _logger.error('A error encountered : %s ' % e.output)
-        if os.path.isfile(image):
-            with open(image, 'rb') as f:
-                return f.read()
+            exceptsubprocess.CalledProcessErrorase:
+                _logger.error('Aerrorencountered:%s'%e.output)
+        ifos.path.isfile(image):
+            withopen(image,'rb')asf:
+                returnf.read()
 
-    @http.route('/hw_drivers/download_logs', type='http', auth='none', cors='*', csrf=False, save_session=False)
-    def download_logs(self):
+    @http.route('/hw_drivers/download_logs',type='http',auth='none',cors='*',csrf=False,save_session=False)
+    defdownload_logs(self):
         """
-        Downloads the log file
+        Downloadsthelogfile
         """
-        if tools.config['logfile']:
-            res = send_file(tools.config['logfile'], mimetype="text/plain", as_attachment=True)
-            res.headers['Cache-Control'] = 'no-cache'
-            return res
+        iftools.config['logfile']:
+            res=send_file(tools.config['logfile'],mimetype="text/plain",as_attachment=True)
+            res.headers['Cache-Control']='no-cache'
+            returnres

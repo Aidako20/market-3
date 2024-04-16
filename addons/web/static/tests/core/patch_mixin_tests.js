@@ -1,64 +1,64 @@
-flectra.define("web.patchMixin_tests", function (require) {
-"use strict";
+flectra.define("web.patchMixin_tests",function(require){
+"usestrict";
 
-const patchMixin = require('web.patchMixin');
+constpatchMixin=require('web.patchMixin');
 
-QUnit.module('core', {}, function () {
+QUnit.module('core',{},function(){
 
-    QUnit.module('patchMixin', {}, function () {
+    QUnit.module('patchMixin',{},function(){
 
-        QUnit.test('basic use', function (assert) {
+        QUnit.test('basicuse',function(assert){
             assert.expect(4);
 
-            const A = patchMixin(
-                class {
-                    constructor() {
+            constA=patchMixin(
+                class{
+                    constructor(){
                         assert.step('A.constructor');
                     }
-                    f() {
+                    f(){
                         assert.step('A.f');
                     }
                 }
             );
 
-            const a = new A();
+            consta=newA();
             a.f();
 
-            assert.ok(a instanceof A);
+            assert.ok(ainstanceofA);
             assert.verifySteps([
                 'A.constructor',
                 'A.f',
             ]);
         });
 
-        QUnit.test('simple patch', function (assert) {
+        QUnit.test('simplepatch',function(assert){
             assert.expect(5);
 
-            const A = patchMixin(
-                class {
-                    constructor() {
+            constA=patchMixin(
+                class{
+                    constructor(){
                         assert.step('A.constructor');
                     }
-                    f() {
+                    f(){
                         assert.step('A.f');
                     }
                 }
             );
 
-            A.patch('patch', T =>
-                class extends T {
-                    constructor() {
+            A.patch('patch',T=>
+                classextendsT{
+                    constructor(){
                         super();
                         assert.step('patch.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('patch.f');
                     }
                 }
             );
 
-            (new A()).f();
+            (newA()).f();
 
             assert.verifySteps([
                 'A.constructor',
@@ -68,47 +68,47 @@ QUnit.module('core', {}, function () {
             ]);
         });
 
-        QUnit.test('two patches on same base class', function (assert) {
+        QUnit.test('twopatchesonsamebaseclass',function(assert){
             assert.expect(7);
 
-            const A = patchMixin(
-                class {
-                    constructor() {
+            constA=patchMixin(
+                class{
+                    constructor(){
                         assert.step('A.constructor');
                     }
-                    f() {
+                    f(){
                         assert.step('A.f');
                     }
                 }
             );
 
-            A.patch('patch1', T =>
-                class extends T {
-                    constructor() {
+            A.patch('patch1',T=>
+                classextendsT{
+                    constructor(){
                         super();
                         assert.step('patch1.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('patch1.f');
                     }
                 }
             );
 
-            A.patch('patch2', T =>
-                class extends T {
-                    constructor() {
+            A.patch('patch2',T=>
+                classextendsT{
+                    constructor(){
                         super();
                         assert.step('patch2.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('patch2.f');
                     }
                 }
             );
 
-            (new A()).f();
+            (newA()).f();
 
             assert.verifySteps([
                 'A.constructor',
@@ -120,47 +120,47 @@ QUnit.module('core', {}, function () {
             ]);
         });
 
-        QUnit.test('two patches with same name on same base class', function (assert) {
+        QUnit.test('twopatcheswithsamenameonsamebaseclass',function(assert){
             assert.expect(1);
 
-            const A = patchMixin(class {});
+            constA=patchMixin(class{});
 
-            A.patch('patch', T => class extends T {});
+            A.patch('patch',T=>classextendsT{});
 
-            // keys should be unique
-            assert.throws(() => {
-                A.patch('patch', T => class extends T {});
+            //keysshouldbeunique
+            assert.throws(()=>{
+                A.patch('patch',T=>classextendsT{});
             });
         });
 
-        QUnit.test('unpatch', function (assert) {
+        QUnit.test('unpatch',function(assert){
             assert.expect(8);
 
-            const A = patchMixin(
-                class {
-                    constructor() {
+            constA=patchMixin(
+                class{
+                    constructor(){
                         assert.step('A.constructor');
                     }
-                    f() {
+                    f(){
                         assert.step('A.f');
                     }
                 }
             );
 
-            A.patch('patch', T =>
-                class extends T {
-                    constructor() {
+            A.patch('patch',T=>
+                classextendsT{
+                    constructor(){
                         super();
                         assert.step('patch.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('patch.f');
                     }
                 }
             );
 
-            (new A()).f();
+            (newA()).f();
 
             assert.verifySteps([
                 'A.constructor',
@@ -171,7 +171,7 @@ QUnit.module('core', {}, function () {
 
             A.unpatch('patch');
 
-            (new A()).f();
+            (newA()).f();
 
             assert.verifySteps([
                 'A.constructor',
@@ -179,47 +179,47 @@ QUnit.module('core', {}, function () {
             ]);
         });
 
-        QUnit.test('unpatch 2', function (assert) {
+        QUnit.test('unpatch2',function(assert){
             assert.expect(12);
 
-            const A = patchMixin(
-                class {
-                    constructor() {
+            constA=patchMixin(
+                class{
+                    constructor(){
                         assert.step('A.constructor');
                     }
-                    f() {
+                    f(){
                         assert.step('A.f');
                     }
                 }
             );
 
-            A.patch('patch1', T =>
-                class extends T {
-                    constructor() {
+            A.patch('patch1',T=>
+                classextendsT{
+                    constructor(){
                         super();
                         assert.step('patch1.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('patch1.f');
                     }
                 }
             );
 
-            A.patch('patch2', T =>
-                class extends T {
-                    constructor() {
+            A.patch('patch2',T=>
+                classextendsT{
+                    constructor(){
                         super();
                         assert.step('patch2.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('patch2.f');
                     }
                 }
             );
 
-            (new A()).f();
+            (newA()).f();
 
             assert.verifySteps([
                 'A.constructor',
@@ -232,7 +232,7 @@ QUnit.module('core', {}, function () {
 
             A.unpatch('patch1');
 
-            (new A()).f();
+            (newA()).f();
 
             assert.verifySteps([
                 'A.constructor',
@@ -242,95 +242,95 @@ QUnit.module('core', {}, function () {
             ]);
         });
 
-        QUnit.test('unpatch inexistent', function (assert) {
+        QUnit.test('unpatchinexistent',function(assert){
             assert.expect(1);
 
-            const A = patchMixin(class {});
-            A.patch('patch', T => class extends T {});
+            constA=patchMixin(class{});
+            A.patch('patch',T=>classextendsT{});
 
             A.unpatch('patch');
-            assert.throws(() => {
+            assert.throws(()=>{
                 A.unpatch('inexistent-patch');
             });
         });
 
-        QUnit.test('patch for specialization', function (assert) {
+        QUnit.test('patchforspecialization',function(assert){
             assert.expect(1);
 
-            let args = [];
+            letargs=[];
 
-            const A = patchMixin(
-                class {
-                    constructor() {
-                        args = ['A', ...arguments];
+            constA=patchMixin(
+                class{
+                    constructor(){
+                        args=['A',...arguments];
                     }
                 }
             );
 
-            A.patch('patch', T =>
-                class extends T {
-                    constructor() {
-                        super('patch', ...arguments);
+            A.patch('patch',T=>
+                classextendsT{
+                    constructor(){
+                        super('patch',...arguments);
                     }
                 }
             );
 
-            new A('instantiation');
+            newA('instantiation');
 
-            assert.deepEqual(args, ['A', 'patch', 'instantiation']);
+            assert.deepEqual(args,['A','patch','instantiation']);
         });
 
-        QUnit.test('instance fields', function (assert) {
+        QUnit.test('instancefields',function(assert){
             assert.expect(1);
 
-            const A = patchMixin(
-                class {
-                    constructor() {
-                        this.x = ['A'];
+            constA=patchMixin(
+                class{
+                    constructor(){
+                        this.x=['A'];
                     }
                 }
             );
 
-            A.patch('patch', T =>
-                class extends T {
-                    constructor() {
+            A.patch('patch',T=>
+                classextendsT{
+                    constructor(){
                         super();
                         this.x.push('patch');
                     }
                 }
             );
 
-            const a = new A();
-            assert.deepEqual(a.x, ['A', 'patch']);
+            consta=newA();
+            assert.deepEqual(a.x,['A','patch']);
         });
 
-        QUnit.test('call instance method defined in patch', function (assert) {
+        QUnit.test('callinstancemethoddefinedinpatch',function(assert){
             assert.expect(3);
 
-            const A = patchMixin(
-                class {}
+            constA=patchMixin(
+                class{}
             );
 
-            assert.notOk((new A()).f);
+            assert.notOk((newA()).f);
 
-            A.patch('patch', T =>
-                class extends T {
-                    f() {
+            A.patch('patch',T=>
+                classextendsT{
+                    f(){
                         assert.step('patch.f');
                     }
                 }
             );
 
-            (new A()).f();
+            (newA()).f();
             assert.verifySteps(['patch.f']);
         });
 
-        QUnit.test('class methods', function (assert) {
+        QUnit.test('classmethods',function(assert){
             assert.expect(7);
 
-            const A = patchMixin(
-                class {
-                    static f() {
+            constA=patchMixin(
+                class{
+                    staticf(){
                         assert.step('A');
                     }
                 }
@@ -339,9 +339,9 @@ QUnit.module('core', {}, function () {
             A.f();
             assert.verifySteps(['A']);
 
-            A.patch('patch', T =>
-                class extends T {
-                    static f() {
+            A.patch('patch',T=>
+                classextendsT{
+                    staticf(){
                         super.f();
                         assert.step('patch');
                     }
@@ -349,7 +349,7 @@ QUnit.module('core', {}, function () {
             );
 
             A.f();
-            assert.verifySteps(['A', 'patch']);
+            assert.verifySteps(['A','patch']);
 
             A.unpatch('patch');
 
@@ -357,57 +357,57 @@ QUnit.module('core', {}, function () {
             assert.verifySteps(['A']);
         });
 
-        QUnit.test('class fields', function (assert) {
+        QUnit.test('classfields',function(assert){
             assert.expect(4);
 
-            class A {}
-            A.foo = ['A'];
-            A.bar = 'A';
+            classA{}
+            A.foo=['A'];
+            A.bar='A';
 
-            const PatchableA = patchMixin(A);
+            constPatchableA=patchMixin(A);
 
-            PatchableA.patch('patch', T => {
-                class Patch extends T {}
+            PatchableA.patch('patch',T=>{
+                classPatchextendsT{}
 
-                Patch.foo = [...T.foo, 'patched A'];
-                Patch.bar = 'patched A';
+                Patch.foo=[...T.foo,'patchedA'];
+                Patch.bar='patchedA';
 
-                return Patch;
+                returnPatch;
             });
 
-            assert.deepEqual(PatchableA.foo, ['A', 'patched A']);
-            assert.strictEqual(PatchableA.bar, 'patched A');
+            assert.deepEqual(PatchableA.foo,['A','patchedA']);
+            assert.strictEqual(PatchableA.bar,'patchedA');
 
             PatchableA.unpatch('patch');
 
-            assert.deepEqual(PatchableA.foo, ['A']);
-            assert.strictEqual(PatchableA.bar, 'A');
+            assert.deepEqual(PatchableA.foo,['A']);
+            assert.strictEqual(PatchableA.bar,'A');
         });
 
-        QUnit.test('lazy patch', function (assert) {
+        QUnit.test('lazypatch',function(assert){
             assert.expect(4);
 
-            const A = patchMixin(
-                class {
-                    constructor() {
+            constA=patchMixin(
+                class{
+                    constructor(){
                         assert.step('A.constructor');
                     }
-                    f() {
+                    f(){
                         assert.step('A.f');
                     }
                 }
             );
 
-            const a = new A();
+            consta=newA();
 
-            A.patch('patch', T =>
-                class extends T {
-                    constructor() {
+            A.patch('patch',T=>
+                classextendsT{
+                    constructor(){
                         super();
-                        // will not be called
+                        //willnotbecalled
                         assert.step('patch.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('patch.f');
                     }
@@ -426,39 +426,39 @@ QUnit.module('core', {}, function () {
 
         QUnit.module('inheritance');
 
-        QUnit.test('inheriting a patchable class', function (assert) {
+        QUnit.test('inheritingapatchableclass',function(assert){
             assert.expect(8);
 
-            const A = patchMixin(
-                class {
-                    constructor() {
+            constA=patchMixin(
+                class{
+                    constructor(){
                         assert.step('A.constructor');
                     }
-                    f() {
+                    f(){
                         assert.step('A.f');
                     }
                 }
             );
 
-            class B extends A {
-                constructor() {
+            classBextendsA{
+                constructor(){
                     super();
                     assert.step('B.constructor');
                 }
-                f() {
+                f(){
                     super.f();
                     assert.step('B.f');
                 }
             }
 
-            (new A()).f();
+            (newA()).f();
 
             assert.verifySteps([
                 'A.constructor',
                 'A.f',
             ]);
 
-            (new B()).f();
+            (newB()).f();
 
             assert.verifySteps([
                 'A.constructor',
@@ -468,45 +468,45 @@ QUnit.module('core', {}, function () {
             ]);
         });
 
-        QUnit.test('inheriting a patchable class that has patch', function (assert) {
+        QUnit.test('inheritingapatchableclassthathaspatch',function(assert){
             assert.expect(12);
 
-            const A = patchMixin(
-                class {
-                    constructor() {
+            constA=patchMixin(
+                class{
+                    constructor(){
                         assert.step('A.constructor');
                     }
-                    f() {
+                    f(){
                         assert.step('A.f');
                     }
                 }
             );
 
-            A.patch('patch', T =>
-                class extends T {
-                    constructor() {
+            A.patch('patch',T=>
+                classextendsT{
+                    constructor(){
                         super();
                         assert.step('patch.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('patch.f');
                     }
                 }
             );
 
-            class B extends A {
-                constructor() {
+            classBextendsA{
+                constructor(){
                     super();
                     assert.step('B.constructor');
                 }
-                f() {
+                f(){
                     super.f();
                     assert.step('B.f');
                 }
             }
 
-            (new A()).f();
+            (newA()).f();
 
             assert.verifySteps([
                 'A.constructor',
@@ -515,7 +515,7 @@ QUnit.module('core', {}, function () {
                 'patch.f',
             ]);
 
-            (new B()).f();
+            (newB()).f();
 
             assert.verifySteps([
                 'A.constructor',
@@ -527,54 +527,54 @@ QUnit.module('core', {}, function () {
             ]);
         });
 
-        QUnit.test('patch inherited patchable class', function (assert) {
+        QUnit.test('patchinheritedpatchableclass',function(assert){
             assert.expect(10);
 
-            const A = patchMixin(
-                class {
-                    constructor() {
+            constA=patchMixin(
+                class{
+                    constructor(){
                         assert.step('A.constructor');
                     }
-                    f() {
+                    f(){
                         assert.step('A.f');
                     }
                 }
             );
 
-            const B = patchMixin(
-                class extends A {
-                    constructor() {
+            constB=patchMixin(
+                classextendsA{
+                    constructor(){
                         super();
                         assert.step('B.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('B.f');
                     }
                 }
             );
 
-            B.patch('patch', T =>
-                class extends T {
-                    constructor() {
+            B.patch('patch',T=>
+                classextendsT{
+                    constructor(){
                         super();
                         assert.step('patch.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('patch.f');
                     }
                 }
             );
 
-            (new A()).f();
+            (newA()).f();
 
             assert.verifySteps([
                 'A.constructor',
                 'A.f',
             ]);
 
-            (new B()).f();
+            (newB()).f();
 
             assert.verifySteps([
                 'A.constructor',
@@ -586,27 +586,27 @@ QUnit.module('core', {}, function () {
             ]);
         });
 
-        QUnit.test('patch inherited patched class', function (assert) {
+        QUnit.test('patchinheritedpatchedclass',function(assert){
             assert.expect(14);
 
-            const A = patchMixin(
-                class {
-                    constructor() {
+            constA=patchMixin(
+                class{
+                    constructor(){
                         assert.step('A.constructor');
                     }
-                    f() {
+                    f(){
                         assert.step('A.f');
                     }
                 }
             );
 
-            A.patch('patch', T =>
-                class extends T {
-                    constructor() {
+            A.patch('patch',T=>
+                classextendsT{
+                    constructor(){
                         super();
                         assert.step('A.patch.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('A.patch.f');
                     }
@@ -614,38 +614,38 @@ QUnit.module('core', {}, function () {
             );
 
             /**
-             * /!\ WARNING /!\
+             */!\WARNING/!\
              *
-             * If you want to patch class B, make it patchable
-             * otherwise it will patch class A!
+             *IfyouwanttopatchclassB,makeitpatchable
+             *otherwiseitwillpatchclassA!
              */
-            const B = patchMixin(
-                class extends A {
-                    constructor() {
+            constB=patchMixin(
+                classextendsA{
+                    constructor(){
                         super();
                         assert.step('B.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('B.f');
                     }
                 }
             );
 
-            B.patch('patch', T =>
-                class extends T {
-                    constructor() {
+            B.patch('patch',T=>
+                classextendsT{
+                    constructor(){
                         super();
                         assert.step('B.patch.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('B.patch.f');
                     }
                 }
             );
 
-            const a = new A();
+            consta=newA();
             a.f();
 
             assert.verifySteps([
@@ -655,7 +655,7 @@ QUnit.module('core', {}, function () {
                 'A.patch.f',
             ]);
 
-            const b = new B();
+            constb=newB();
             b.f();
 
             assert.verifySteps([
@@ -670,53 +670,53 @@ QUnit.module('core', {}, function () {
             ]);
         });
 
-        QUnit.test('unpatch inherited patched class', function (assert) {
+        QUnit.test('unpatchinheritedpatchedclass',function(assert){
             assert.expect(15);
 
-            const A = patchMixin(
-                class {
-                    constructor() {
+            constA=patchMixin(
+                class{
+                    constructor(){
                         assert.step('A.constructor');
                     }
-                    f() {
+                    f(){
                         assert.step('A.f');
                     }
                 }
             );
 
-            A.patch('patch', T =>
-                class extends T {
-                    constructor() {
+            A.patch('patch',T=>
+                classextendsT{
+                    constructor(){
                         super();
                         assert.step('A.patch.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('A.patch.f');
                     }
                 }
             );
 
-            const B = patchMixin(
-                class extends A {
-                    constructor() {
+            constB=patchMixin(
+                classextendsA{
+                    constructor(){
                         super();
                         assert.step('B.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('B.f');
                     }
                 }
             );
 
-            B.patch('patch', T =>
-                class extends T {
-                    constructor() {
+            B.patch('patch',T=>
+                classextendsT{
+                    constructor(){
                         super();
                         assert.step('B.patch.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('B.patch.f');
                     }
@@ -725,14 +725,14 @@ QUnit.module('core', {}, function () {
 
             A.unpatch('patch');
 
-            (new A()).f();
+            (newA()).f();
 
             assert.verifySteps([
                 'A.constructor',
                 'A.f',
             ]);
 
-            (new B()).f();
+            (newB()).f();
 
             assert.verifySteps([
                 'A.constructor',
@@ -745,7 +745,7 @@ QUnit.module('core', {}, function () {
 
             B.unpatch('patch');
 
-            (new B()).f();
+            (newB()).f();
 
             assert.verifySteps([
                 'A.constructor',
@@ -755,53 +755,53 @@ QUnit.module('core', {}, function () {
             ]);
         });
 
-        QUnit.test('unpatch inherited patched class 2', function (assert) {
+        QUnit.test('unpatchinheritedpatchedclass2',function(assert){
             assert.expect(12);
 
-            const A = patchMixin(
-                class {
-                    constructor() {
+            constA=patchMixin(
+                class{
+                    constructor(){
                         assert.step('A.constructor');
                     }
-                    f() {
+                    f(){
                         assert.step('A.f');
                     }
                 }
             );
 
-            A.patch('patch', T =>
-                class extends T {
-                    constructor() {
+            A.patch('patch',T=>
+                classextendsT{
+                    constructor(){
                         super();
                         assert.step('A.patch.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('A.patch.f');
                     }
                 }
             );
 
-            const B = patchMixin(
-                class extends A {
-                    constructor() {
+            constB=patchMixin(
+                classextendsA{
+                    constructor(){
                         super();
                         assert.step('B.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('B.f');
                     }
                 }
             );
 
-            B.patch('patch', T =>
-                class extends T {
-                    constructor() {
+            B.patch('patch',T=>
+                classextendsT{
+                    constructor(){
                         super();
                         assert.step('B.patch.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('B.patch.f');
                     }
@@ -810,7 +810,7 @@ QUnit.module('core', {}, function () {
 
             B.unpatch('patch');
 
-            (new B()).f();
+            (newB()).f();
 
             assert.verifySteps([
                 'A.constructor',
@@ -823,7 +823,7 @@ QUnit.module('core', {}, function () {
 
             A.unpatch('patch');
 
-            (new B()).f();
+            (newB()).f();
 
             assert.verifySteps([
                 'A.constructor',
@@ -833,38 +833,38 @@ QUnit.module('core', {}, function () {
             ]);
         });
 
-        QUnit.test('class methods', function (assert) {
+        QUnit.test('classmethods',function(assert){
             assert.expect(12);
 
-            const A = patchMixin(
-                class {
-                    static f() {
+            constA=patchMixin(
+                class{
+                    staticf(){
                         assert.step('A');
                     }
                 }
             );
 
-            const B = patchMixin(
-                class extends A {
-                    static f() {
+            constB=patchMixin(
+                classextendsA{
+                    staticf(){
                         super.f();
                         assert.step('B');
                     }
                 }
             );
 
-            A.patch('patch', T =>
-                class extends T {
-                    static f() {
+            A.patch('patch',T=>
+                classextendsT{
+                    staticf(){
                         super.f();
                         assert.step('A.patch');
                     }
                 }
             );
 
-            B.patch('patch', T =>
-                class extends T {
-                    static f() {
+            B.patch('patch',T=>
+                classextendsT{
+                    staticf(){
                         super.f();
                         assert.step('B.patch');
                     }
@@ -872,95 +872,95 @@ QUnit.module('core', {}, function () {
             );
 
             B.f();
-            assert.verifySteps(['A', 'A.patch', 'B', 'B.patch']);
+            assert.verifySteps(['A','A.patch','B','B.patch']);
 
             A.unpatch('patch');
 
             B.f();
-            assert.verifySteps(['A', 'B', 'B.patch']);
+            assert.verifySteps(['A','B','B.patch']);
 
             B.unpatch('patch');
 
             B.f();
-            assert.verifySteps(['A', 'B']);
+            assert.verifySteps(['A','B']);
         });
 
-        QUnit.test('class fields', function (assert) {
+        QUnit.test('classfields',function(assert){
             assert.expect(3);
 
-            class A {}
-            A.foo = ['A'];
-            A.bar = 'A';
+            classA{}
+            A.foo=['A'];
+            A.bar='A';
 
-            const PatchableA = patchMixin(A);
+            constPatchableA=patchMixin(A);
 
-            class B extends PatchableA {}
-            // /!\ This is not dynamic
-            // so if A.foo is patched after this assignment
-            // B.foo won't have the patches of A.foo
-            B.foo = [...PatchableA.foo, 'B'];
-            B.bar = 'B';
+            classBextendsPatchableA{}
+            ///!\Thisisnotdynamic
+            //soifA.fooispatchedafterthisassignment
+            //B.foowon'thavethepatchesofA.foo
+            B.foo=[...PatchableA.foo,'B'];
+            B.bar='B';
 
-            const PatchableB = patchMixin(B);
+            constPatchableB=patchMixin(B);
 
-            PatchableA.patch('patch', T => {
-                class Patch extends T {}
+            PatchableA.patch('patch',T=>{
+                classPatchextendsT{}
 
-                Patch.foo = [...T.foo, 'patched A'];
-                Patch.bar = 'patched A';
+                Patch.foo=[...T.foo,'patchedA'];
+                Patch.bar='patchedA';
 
-                return Patch;
+                returnPatch;
             });
 
-            PatchableB.patch('patch', T => {
-                class Patch extends T {}
+            PatchableB.patch('patch',T=>{
+                classPatchextendsT{}
 
-                Patch.foo = [...T.foo, 'patched B'];
-                Patch.bar = 'patched B';
+                Patch.foo=[...T.foo,'patchedB'];
+                Patch.bar='patchedB';
 
-                return Patch;
+                returnPatch;
             });
 
-            assert.deepEqual(PatchableB.foo, [ 'A', /* 'patched A', */ 'B', 'patched B' ]);
-            assert.deepEqual(PatchableA.foo, [ 'A', 'patched A' ]);
-            assert.strictEqual(PatchableB.bar, 'patched B');
+            assert.deepEqual(PatchableB.foo,['A',/*'patchedA',*/'B','patchedB']);
+            assert.deepEqual(PatchableA.foo,['A','patchedA']);
+            assert.strictEqual(PatchableB.bar,'patchedB');
         });
 
-        QUnit.test('inheritance and lazy patch', function (assert) {
+        QUnit.test('inheritanceandlazypatch',function(assert){
             assert.expect(6);
 
-            const A = patchMixin(
-                class {
-                    constructor() {
+            constA=patchMixin(
+                class{
+                    constructor(){
                         assert.step('A.constructor');
                     }
-                    f() {
+                    f(){
                         assert.step('A.f');
                     }
                 }
             );
 
-            class B extends A {
-                constructor() {
+            classBextendsA{
+                constructor(){
                     super();
                     assert.step('B.constructor');
                 }
-                f() {
+                f(){
                     super.f();
                     assert.step('B.f');
                 }
             }
 
-            const b = new B();
+            constb=newB();
 
-            A.patch('patch', T =>
-                class extends T {
-                    constructor() {
+            A.patch('patch',T=>
+                classextendsT{
+                    constructor(){
                         super();
-                        // will not be called
+                        //willnotbecalled
                         assert.step('patch.constructor');
                     }
-                    f() {
+                    f(){
                         super.f();
                         assert.step('patch.f');
                     }
@@ -978,15 +978,15 @@ QUnit.module('core', {}, function () {
             ]);
         });
 
-        QUnit.test('patch not patchable class that inherits patchable class', function (assert) {
+        QUnit.test('patchnotpatchableclassthatinheritspatchableclass',function(assert){
             assert.expect(1);
 
-            const A = patchMixin(class {});
-            class B extends A {}
+            constA=patchMixin(class{});
+            classBextendsA{}
 
-            // class B is not patchable
-            assert.throws(() => {
-                B.patch('patch', T => class extends T {});
+            //classBisnotpatchable
+            assert.throws(()=>{
+                B.patch('patch',T=>classextendsT{});
             });
         });
     });

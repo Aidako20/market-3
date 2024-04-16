@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResumeLine(models.Model):
-    _inherit = 'hr.resume.line'
+classResumeLine(models.Model):
+    _inherit='hr.resume.line'
 
-    display_type = fields.Selection(selection_add=[('course', 'Course')])
-    channel_id = fields.Many2one('slide.channel', string="Course", readonly=True)
+    display_type=fields.Selection(selection_add=[('course','Course')])
+    channel_id=fields.Many2one('slide.channel',string="Course",readonly=True)

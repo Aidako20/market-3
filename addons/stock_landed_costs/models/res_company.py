@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResCompany(models.Model):
-    _inherit = 'res.company'
+classResCompany(models.Model):
+    _inherit='res.company'
 
-    lc_journal_id = fields.Many2one('account.journal')
+    lc_journal_id=fields.Many2one('account.journal')
 

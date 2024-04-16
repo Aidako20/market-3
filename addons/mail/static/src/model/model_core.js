@@ -1,51 +1,51 @@
-flectra.define('mail/static/src/model/model_core.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/model/model_core.js',function(require){
+'usestrict';
 
 /**
- * Module that contains registry for adding new models or patching models.
- * Useful for model manager in order to generate model classes.
+ *Modulethatcontainsregistryforaddingnewmodelsorpatchingmodels.
+ *Usefulformodelmanagerinordertogeneratemodelclasses.
  *
- * This code is not in model manager because other JS modules should populate
- * a registry, and it's difficult to ensure availability of the model manager
- * when these JS modules are deployed.
+ *ThiscodeisnotinmodelmanagerbecauseotherJSmodulesshouldpopulate
+ *aregistry,andit'sdifficulttoensureavailabilityofthemodelmanager
+ *whentheseJSmodulesaredeployed.
  */
 
-const registry = {};
+constregistry={};
 
 //------------------------------------------------------------------------------
-// Private
+//Private
 //------------------------------------------------------------------------------
 
 /**
- * @private
- * @param {string} modelName
- * @returns {Object}
+ *@private
+ *@param{string}modelName
+ *@returns{Object}
  */
-function _getEntryFromModelName(modelName) {
-    if (!registry[modelName]) {
-        registry[modelName] = {
-            dependencies: [],
-            factory: undefined,
-            name: modelName,
-            patches: [],
+function_getEntryFromModelName(modelName){
+    if(!registry[modelName]){
+        registry[modelName]={
+            dependencies:[],
+            factory:undefined,
+            name:modelName,
+            patches:[],
         };
     }
-    return registry[modelName];
+    returnregistry[modelName];
 }
 
 /**
- * @private
- * @param {string} modelName
- * @param {string} patchName
- * @param {Object} patch
- * @param {Object} [param3={}]
- * @param {string} [param3.type='instance'] 'instance', 'class' or 'field'
+ *@private
+ *@param{string}modelName
+ *@param{string}patchName
+ *@param{Object}patch
+ *@param{Object}[param3={}]
+ *@param{string}[param3.type='instance']'instance','class'or'field'
  */
-function _registerPatchModel(modelName, patchName, patch, { type = 'instance' } = {}) {
-    const entry = _getEntryFromModelName(modelName);
-    Object.assign(entry, {
-        patches: (entry.patches || []).concat([{
-            name: patchName,
+function_registerPatchModel(modelName,patchName,patch,{type='instance'}={}){
+    constentry=_getEntryFromModelName(modelName);
+    Object.assign(entry,{
+        patches:(entry.patches||[]).concat([{
+            name:patchName,
             patch,
             type,
         }]),
@@ -53,68 +53,68 @@ function _registerPatchModel(modelName, patchName, patch, { type = 'instance' } 
 }
 
 //------------------------------------------------------------------------------
-// Public
+//Public
 //------------------------------------------------------------------------------
 
 /**
- * Register a patch for static methods in model.
+ *Registerapatchforstaticmethodsinmodel.
  *
- * @param {string} modelName
- * @param {string} patchName
- * @param {Object} patch
+ *@param{string}modelName
+ *@param{string}patchName
+ *@param{Object}patch
  */
-function registerClassPatchModel(modelName, patchName, patch) {
-    _registerPatchModel(modelName, patchName, patch, { type: 'class' });
+functionregisterClassPatchModel(modelName,patchName,patch){
+    _registerPatchModel(modelName,patchName,patch,{type:'class'});
 }
 
 /**
- * Register a patch for fields in model.
+ *Registerapatchforfieldsinmodel.
  *
- * @param {string} modelName
- * @param {string} patchName
- * @param {Object} patch
+ *@param{string}modelName
+ *@param{string}patchName
+ *@param{Object}patch
  */
-function registerFieldPatchModel(modelName, patchName, patch) {
-    _registerPatchModel(modelName, patchName, patch, { type: 'field' });
+functionregisterFieldPatchModel(modelName,patchName,patch){
+    _registerPatchModel(modelName,patchName,patch,{type:'field'});
 }
 
 /**
- * Register a patch for instance methods in model.
+ *Registerapatchforinstancemethodsinmodel.
  *
- * @param {string} modelName
- * @param {string} patchName
- * @param {Object} patch
+ *@param{string}modelName
+ *@param{string}patchName
+ *@param{Object}patch
  */
-function registerInstancePatchModel(modelName, patchName, patch) {
-    _registerPatchModel(modelName, patchName, patch, { type: 'instance' });
+functionregisterInstancePatchModel(modelName,patchName,patch){
+    _registerPatchModel(modelName,patchName,patch,{type:'instance'});
 }
 
 /**
- * @param {string} name
- * @param {function} factory
- * @param {string[]} [dependencies=[]]
+ *@param{string}name
+ *@param{function}factory
+ *@param{string[]}[dependencies=[]]
  */
-function registerNewModel(name, factory, dependencies = []) {
-    const entry = _getEntryFromModelName(name);
-    let entryDependencies = [...dependencies];
-    if (name !== 'mail.model') {
-        entryDependencies = [...new Set(entryDependencies.concat(['mail.model']))];
+functionregisterNewModel(name,factory,dependencies=[]){
+    constentry=_getEntryFromModelName(name);
+    letentryDependencies=[...dependencies];
+    if(name!=='mail.model'){
+        entryDependencies=[...newSet(entryDependencies.concat(['mail.model']))];
     }
-    if (entry.factory) {
-        throw new Error(`Model "${name}" has already been registered!`);
+    if(entry.factory){
+        thrownewError(`Model"${name}"hasalreadybeenregistered!`);
     }
-    Object.assign(entry, {
-        dependencies: entryDependencies,
+    Object.assign(entry,{
+        dependencies:entryDependencies,
         factory,
         name,
     });
 }
 
 //------------------------------------------------------------------------------
-// Export
+//Export
 //------------------------------------------------------------------------------
 
-return {
+return{
     registerClassPatchModel,
     registerFieldPatchModel,
     registerInstancePatchModel,

@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from functools import partial
+fromfunctoolsimportpartial
 
-from flectra import models, fields
+fromflectraimportmodels,fields
 
 
-class PosConfig(models.Model):
-    _inherit = 'pos.config'
+classPosConfig(models.Model):
+    _inherit='pos.config'
 
-    employee_ids = fields.Many2many(
-        'hr.employee', string="Employees with access",
-        help='If left empty, all employees can log in to the PoS session')
+    employee_ids=fields.Many2many(
+        'hr.employee',string="Employeeswithaccess",
+        help='Ifleftempty,allemployeescanlogintothePoSsession')

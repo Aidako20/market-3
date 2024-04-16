@@ -9,437 +9,437 @@ define([
   'summernote/editing/Typing',
   'summernote/editing/Table',
   'summernote/editing/Bullet'
-], function (agent, func, list, dom, range, async,
-             Style, Typing, Table, Bullet) {
+],function(agent,func,list,dom,range,async,
+             Style,Typing,Table,Bullet){
 
-  var KEY_BOGUS = 'bogus';
+  varKEY_BOGUS='bogus';
 
   /**
-   * @class editing.Editor
+   *@classediting.Editor
    *
-   * Editor
+   *Editor
    *
    */
-  var Editor = function (handler) {
+  varEditor=function(handler){
 
-    var self = this;
-    var style = new Style();
-    var table = new Table();
-    var typing = new Typing();
-    var bullet = new Bullet();
+    varself=this;
+    varstyle=newStyle();
+    vartable=newTable();
+    vartyping=newTyping();
+    varbullet=newBullet();
 
-    this.style = style;   // FLECTRA: allow access for override
-    this.table = table;   // FLECTRA: allow access for override
-    this.typing = typing; // FLECTRA: allow access for override
-    this.bullet = bullet; // FLECTRA: allow access for override
+    this.style=style;  //FLECTRA:allowaccessforoverride
+    this.table=table;  //FLECTRA:allowaccessforoverride
+    this.typing=typing;//FLECTRA:allowaccessforoverride
+    this.bullet=bullet;//FLECTRA:allowaccessforoverride
 
     /**
-     * @method createRange
+     *@methodcreateRange
      *
-     * create range
+     *createrange
      *
-     * @param {jQuery} $editable
-     * @return {WrappedRange}
+     *@param{jQuery}$editable
+     *@return{WrappedRange}
      */
-    this.createRange = function ($editable) {
+    this.createRange=function($editable){
       this.focus($editable);
-      return range.create();
+      returnrange.create();
     };
 
     /**
-     * @method saveRange
+     *@methodsaveRange
      *
-     * save current range
+     *savecurrentrange
      *
-     * @param {jQuery} $editable
-     * @param {Boolean} [thenCollapse=false]
+     *@param{jQuery}$editable
+     *@param{Boolean}[thenCollapse=false]
      */
-    this.saveRange = function ($editable, thenCollapse) {
-      // FLECTRA: scroll to top when click on input in editable m (start_modification
-      // this.focus($editable);
-      var r = range.create();
-      if (!r || ($editable[0] !== r.sc && !$.contains($editable[0], r.sc))) {
+    this.saveRange=function($editable,thenCollapse){
+      //FLECTRA:scrolltotopwhenclickoninputineditablem(start_modification
+      //this.focus($editable);
+      varr=range.create();
+      if(!r||($editable[0]!==r.sc&&!$.contains($editable[0],r.sc))){
         $editable.focus();
       }
-      // FLECTRA: end_modication)
-      $editable.data('range', range.create());
-      if (thenCollapse) {
+      //FLECTRA:end_modication)
+      $editable.data('range',range.create());
+      if(thenCollapse){
         range.create().collapse().select();
       }
     };
 
     /**
-     * @method saveRange
+     *@methodsaveRange
      *
-     * save current node list to $editable.data('childNodes')
+     *savecurrentnodelistto$editable.data('childNodes')
      *
-     * @param {jQuery} $editable
+     *@param{jQuery}$editable
      */
-    this.saveNode = function ($editable) {
-      // copy child node reference
-      var copy = [];
-      for (var key  = 0, len = $editable[0].childNodes.length; key < len; key++) {
+    this.saveNode=function($editable){
+      //copychildnodereference
+      varcopy=[];
+      for(varkey =0,len=$editable[0].childNodes.length;key<len;key++){
         copy.push($editable[0].childNodes[key]);
       }
-      $editable.data('childNodes', copy);
+      $editable.data('childNodes',copy);
     };
 
     /**
-     * @method restoreRange
+     *@methodrestoreRange
      *
-     * restore lately range
+     *restorelatelyrange
      *
-     * @param {jQuery} $editable
+     *@param{jQuery}$editable
      */
-    this.restoreRange = function ($editable) {
-      var rng = $editable.data('range');
-      if (rng) {
+    this.restoreRange=function($editable){
+      varrng=$editable.data('range');
+      if(rng){
         rng.select();
         this.focus($editable);
       }
     };
 
     /**
-     * @method restoreNode
+     *@methodrestoreNode
      *
-     * restore lately node list
+     *restorelatelynodelist
      *
-     * @param {jQuery} $editable
+     *@param{jQuery}$editable
      */
-    this.restoreNode = function ($editable) {
+    this.restoreNode=function($editable){
       $editable.html('');
-      var child = $editable.data('childNodes');
-      for (var index = 0, len = child.length; index < len; index++) {
+      varchild=$editable.data('childNodes');
+      for(varindex=0,len=child.length;index<len;index++){
         $editable[0].appendChild(child[index]);
       }
     };
 
     /**
-     * @method currentStyle
+     *@methodcurrentStyle
      *
-     * current style
+     *currentstyle
      *
-     * @param {Node} target
-     * @return {Object|Boolean} unfocus
+     *@param{Node}target
+     *@return{Object|Boolean}unfocus
      */
-    this.currentStyle = function (target) {
-      var rng = range.create();
-      var styleInfo =  rng && rng.isOnEditable() ? style.current(rng.normalize()) : {};
-      if (dom.isImg(target)) {
-        styleInfo.image = target;
+    this.currentStyle=function(target){
+      varrng=range.create();
+      varstyleInfo= rng&&rng.isOnEditable()?style.current(rng.normalize()):{};
+      if(dom.isImg(target)){
+        styleInfo.image=target;
       }
-      return styleInfo;
+      returnstyleInfo;
     };
 
     /**
-     * style from node
+     *stylefromnode
      *
-     * @param {jQuery} $node
-     * @return {Object}
+     *@param{jQuery}$node
+     *@return{Object}
      */
-    this.styleFromNode = function ($node) {
-      return style.fromNode($node);
+    this.styleFromNode=function($node){
+      returnstyle.fromNode($node);
     };
 
-    var triggerOnBeforeChange = function ($editable) {
-      var $holder = dom.makeLayoutInfo($editable).holder();
+    vartriggerOnBeforeChange=function($editable){
+      var$holder=dom.makeLayoutInfo($editable).holder();
       handler.bindCustomEvent(
-        $holder, $editable.data('callbacks'), 'before.command'
-      )($editable.html(), $editable);
+        $holder,$editable.data('callbacks'),'before.command'
+      )($editable.html(),$editable);
     };
 
-    var triggerOnChange = function ($editable) {
-      var $holder = dom.makeLayoutInfo($editable).holder();
+    vartriggerOnChange=function($editable){
+      var$holder=dom.makeLayoutInfo($editable).holder();
       handler.bindCustomEvent(
-        $holder, $editable.data('callbacks'), 'change'
-      )($editable.html(), $editable);
+        $holder,$editable.data('callbacks'),'change'
+      )($editable.html(),$editable);
     };
 
     /**
-     * @method undo
-     * undo
-     * @param {jQuery} $editable
+     *@methodundo
+     *undo
+     *@param{jQuery}$editable
      */
-    this.undo = function ($editable) {
+    this.undo=function($editable){
       triggerOnBeforeChange($editable);
       $editable.data('NoteHistory').undo();
       triggerOnChange($editable);
     };
 
     /**
-     * @method redo
-     * redo
-     * @param {jQuery} $editable
+     *@methodredo
+     *redo
+     *@param{jQuery}$editable
      */
-    this.redo = function ($editable) {
+    this.redo=function($editable){
       triggerOnBeforeChange($editable);
       $editable.data('NoteHistory').redo();
       triggerOnChange($editable);
     };
 
     /**
-     * @method beforeCommand
-     * before command
-     * @param {jQuery} $editable
+     *@methodbeforeCommand
+     *beforecommand
+     *@param{jQuery}$editable
      */
-    var beforeCommand = this.beforeCommand = function ($editable) {
+    varbeforeCommand=this.beforeCommand=function($editable){
       triggerOnBeforeChange($editable);
-      // keep focus on editable before command execution
+      //keepfocusoneditablebeforecommandexecution
       self.focus($editable);
     };
 
     /**
-     * @method afterCommand
-     * after command
-     * @param {jQuery} $editable
-     * @param {Boolean} isPreventTrigger
+     *@methodafterCommand
+     *aftercommand
+     *@param{jQuery}$editable
+     *@param{Boolean}isPreventTrigger
      */
-    var afterCommand = this.afterCommand = function ($editable, isPreventTrigger) {
+    varafterCommand=this.afterCommand=function($editable,isPreventTrigger){
       $editable.data('NoteHistory').recordUndo();
-      if (!isPreventTrigger) {
+      if(!isPreventTrigger){
         triggerOnChange($editable);
       }
     };
 
     /**
-     * @method bold
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@methodbold
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
     /**
-     * @method italic
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@methoditalic
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
     /**
-     * @method underline
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@methodunderline
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
     /**
-     * @method strikethrough
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@methodstrikethrough
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
     /**
-     * @method formatBlock
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@methodformatBlock
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
     /**
-     * @method superscript
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@methodsuperscript
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
     /**
-     * @method subscript
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@methodsubscript
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
     /**
-     * @method justifyLeft
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@methodjustifyLeft
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
     /**
-     * @method justifyCenter
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@methodjustifyCenter
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
     /**
-     * @method justifyRight
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@methodjustifyRight
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
     /**
-     * @method justifyFull
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@methodjustifyFull
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
     /**
-     * @method formatBlock
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@methodformatBlock
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
     /**
-     * @method removeFormat
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@methodremoveFormat
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
     /**
-     * @method backColor
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@methodbackColor
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
     /**
-     * @method foreColor
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@methodforeColor
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
     /**
-     * @method insertHorizontalRule
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@methodinsertHorizontalRule
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
     /**
-     * @method fontName
+     *@methodfontName
      *
-     * change font name
+     *changefontname
      *
-     * @param {jQuery} $editable
-     * @param {Mixed} value
+     *@param{jQuery}$editable
+     *@param{Mixed}value
      */
 
-    /* jshint ignore:start */
-    // native commands(with execCommand), generate function for execCommand
-    var commands = ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript',
-                    'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
-                    'formatBlock', 'removeFormat',
-                    'backColor', 'foreColor', 'fontName'];
+    /*jshintignore:start*/
+    //nativecommands(withexecCommand),generatefunctionforexecCommand
+    varcommands=['bold','italic','underline','strikethrough','superscript','subscript',
+                    'justifyLeft','justifyCenter','justifyRight','justifyFull',
+                    'formatBlock','removeFormat',
+                    'backColor','foreColor','fontName'];
 
-    for (var idx = 0, len = commands.length; idx < len; idx ++) {
-      this[commands[idx]] = (function (sCmd) {
-        return function ($editable, value) {
+    for(varidx=0,len=commands.length;idx<len;idx++){
+      this[commands[idx]]=(function(sCmd){
+        returnfunction($editable,value){
           beforeCommand($editable);
 
-          document.execCommand(sCmd, false, value);
+          document.execCommand(sCmd,false,value);
 
-          afterCommand($editable, true);
+          afterCommand($editable,true);
         };
       })(commands[idx]);
     }
-    /* jshint ignore:end */
+    /*jshintignore:end*/
 
     /**
-     * @method tab
+     *@methodtab
      *
-     * handle tab key
+     *handletabkey
      *
-     * @param {jQuery} $editable
-     * @param {Object} options
+     *@param{jQuery}$editable
+     *@param{Object}options
      */
-    this.tab = function ($editable, options) {
-      var rng = this.createRange($editable);
-      if (rng.isCollapsed() && rng.isOnCell()) {
+    this.tab=function($editable,options){
+      varrng=this.createRange($editable);
+      if(rng.isCollapsed()&&rng.isOnCell()){
         table.tab(rng);
-      } else {
+      }else{
         beforeCommand($editable);
-        typing.insertTab($editable, rng, options.tabsize);
+        typing.insertTab($editable,rng,options.tabsize);
         afterCommand($editable);
       }
     };
 
     /**
-     * @method untab
+     *@methoduntab
      *
-     * handle shift+tab key
+     *handleshift+tabkey
      *
      */
-    this.untab = function ($editable) {
-      var rng = this.createRange($editable);
-      if (rng.isCollapsed() && rng.isOnCell()) {
-        table.tab(rng, true);
+    this.untab=function($editable){
+      varrng=this.createRange($editable);
+      if(rng.isCollapsed()&&rng.isOnCell()){
+        table.tab(rng,true);
       }
     };
 
     /**
-     * @method insertParagraph
+     *@methodinsertParagraph
      *
-     * insert paragraph
+     *insertparagraph
      *
-     * @param {Node} $editable
+     *@param{Node}$editable
      */
-    this.insertParagraph = function ($editable) {
+    this.insertParagraph=function($editable){
       beforeCommand($editable);
       typing.insertParagraph($editable);
       afterCommand($editable);
     };
 
     /**
-     * @method insertOrderedList
+     *@methodinsertOrderedList
      *
-     * @param {jQuery} $editable
+     *@param{jQuery}$editable
      */
-    this.insertOrderedList = function ($editable) {
+    this.insertOrderedList=function($editable){
       beforeCommand($editable);
       bullet.insertOrderedList($editable);
       afterCommand($editable);
     };
 
     /**
-     * @param {jQuery} $editable
+     *@param{jQuery}$editable
      */
-    this.insertUnorderedList = function ($editable) {
+    this.insertUnorderedList=function($editable){
       beforeCommand($editable);
       bullet.insertUnorderedList($editable);
       afterCommand($editable);
     };
 
     /**
-     * @param {jQuery} $editable
+     *@param{jQuery}$editable
      */
-    this.indent = function ($editable) {
+    this.indent=function($editable){
       beforeCommand($editable);
       bullet.indent($editable);
       afterCommand($editable);
     };
 
     /**
-     * @param {jQuery} $editable
+     *@param{jQuery}$editable
      */
-    this.outdent = function ($editable) {
+    this.outdent=function($editable){
       beforeCommand($editable);
       bullet.outdent($editable);
       afterCommand($editable);
     };
 
     /**
-     * insert image
+     *insertimage
      *
-     * @param {jQuery} $editable
-     * @param {String} sUrl
+     *@param{jQuery}$editable
+     *@param{String}sUrl
      */
-    this.insertImage = function ($editable, sUrl, filename) {
-      async.createImage(sUrl, filename).then(function ($image) {
+    this.insertImage=function($editable,sUrl,filename){
+      async.createImage(sUrl,filename).then(function($image){
         beforeCommand($editable);
         $image.css({
-          display: '',
-          width: Math.min($editable.width(), $image.width())
+          display:'',
+          width:Math.min($editable.width(),$image.width())
         });
         range.create().insertNode($image[0]);
         range.createFromNodeAfter($image[0]).select();
         afterCommand($editable);
-      }).fail(function () {
-        var $holder = dom.makeLayoutInfo($editable).holder();
+      }).fail(function(){
+        var$holder=dom.makeLayoutInfo($editable).holder();
         handler.bindCustomEvent(
-          $holder, $editable.data('callbacks'), 'image.upload.error'
+          $holder,$editable.data('callbacks'),'image.upload.error'
         )();
       });
     };
 
     /**
-     * @method insertNode
-     * insert node
-     * @param {Node} $editable
-     * @param {Node} node
+     *@methodinsertNode
+     *insertnode
+     *@param{Node}$editable
+     *@param{Node}node
      */
-    this.insertNode = function ($editable, node) {
+    this.insertNode=function($editable,node){
       beforeCommand($editable);
       range.create().insertNode(node);
       range.createFromNodeAfter(node).select();
@@ -447,125 +447,125 @@ define([
     };
 
     /**
-     * insert text
-     * @param {Node} $editable
-     * @param {String} text
+     *inserttext
+     *@param{Node}$editable
+     *@param{String}text
      */
-    this.insertText = function ($editable, text) {
+    this.insertText=function($editable,text){
       beforeCommand($editable);
-      var textNode = range.create().insertNode(dom.createText(text));
-      range.create(textNode, dom.nodeLength(textNode)).select();
+      vartextNode=range.create().insertNode(dom.createText(text));
+      range.create(textNode,dom.nodeLength(textNode)).select();
       afterCommand($editable);
     };
 
     /**
-     * paste HTML
-     * @param {Node} $editable
-     * @param {String} markup
+     *pasteHTML
+     *@param{Node}$editable
+     *@param{String}markup
      */
-    this.pasteHTML = function ($editable, markup) {
+    this.pasteHTML=function($editable,markup){
       beforeCommand($editable);
-      var contents = range.create().pasteHTML(markup);
+      varcontents=range.create().pasteHTML(markup);
       range.createFromNodeAfter(list.last(contents)).select();
       afterCommand($editable);
     };
 
     /**
-     * formatBlock
+     *formatBlock
      *
-     * @param {jQuery} $editable
-     * @param {String} tagName
+     *@param{jQuery}$editable
+     *@param{String}tagName
      */
-    this.formatBlock = function ($editable, tagName) {
+    this.formatBlock=function($editable,tagName){
       beforeCommand($editable);
-      // [workaround] for MSIE, IE need `<`
-      tagName = agent.isMSIE ? '<' + tagName + '>' : tagName;
-      document.execCommand('FormatBlock', false, tagName);
+      //[workaround]forMSIE,IEneed`<`
+      tagName=agent.isMSIE?'<'+tagName+'>':tagName;
+      document.execCommand('FormatBlock',false,tagName);
       afterCommand($editable);
     };
 
-    this.formatPara = function ($editable) {
+    this.formatPara=function($editable){
       beforeCommand($editable);
-      this.formatBlock($editable, 'P');
+      this.formatBlock($editable,'P');
       afterCommand($editable);
     };
 
-    /* jshint ignore:start */
-    for (var idx = 1; idx <= 6; idx ++) {
-      this['formatH' + idx] = function (idx) {
-        return function ($editable) {
-          this.formatBlock($editable, 'H' + idx);
+    /*jshintignore:start*/
+    for(varidx=1;idx<=6;idx++){
+      this['formatH'+idx]=function(idx){
+        returnfunction($editable){
+          this.formatBlock($editable,'H'+idx);
         };
       }(idx);
     };
-    /* jshint ignore:end */
+    /*jshintignore:end*/
 
     /**
-     * fontSize
+     *fontSize
      *
-     * @param {jQuery} $editable
-     * @param {String} value - px
+     *@param{jQuery}$editable
+     *@param{String}value-px
      */
-    this.fontSize = function ($editable, value) {
-      var rng = range.create();
+    this.fontSize=function($editable,value){
+      varrng=range.create();
 
-      if (rng.isCollapsed()) {
-        var spans = style.styleNodes(rng);
-        var firstSpan = list.head(spans);
+      if(rng.isCollapsed()){
+        varspans=style.styleNodes(rng);
+        varfirstSpan=list.head(spans);
 
         $(spans).css({
-          'font-size': value + 'px'
+          'font-size':value+'px'
         });
 
-        // [workaround] added styled bogus span for style
-        //  - also bogus character needed for cursor position
-        if (firstSpan && !dom.nodeLength(firstSpan)) {
-          firstSpan.innerHTML = dom.ZERO_WIDTH_NBSP_CHAR;
+        //[workaround]addedstyledbogusspanforstyle
+        // -alsoboguscharacterneededforcursorposition
+        if(firstSpan&&!dom.nodeLength(firstSpan)){
+          firstSpan.innerHTML=dom.ZERO_WIDTH_NBSP_CHAR;
           range.createFromNodeAfter(firstSpan.firstChild).select();
-          $editable.data(KEY_BOGUS, firstSpan);
+          $editable.data(KEY_BOGUS,firstSpan);
         }
-      } else {
+      }else{
         beforeCommand($editable);
         $(style.styleNodes(rng)).css({
-          'font-size': value + 'px'
+          'font-size':value+'px'
         });
         afterCommand($editable);
       }
     };
 
     /**
-     * insert horizontal rule
-     * @param {jQuery} $editable
+     *inserthorizontalrule
+     *@param{jQuery}$editable
      */
-    this.insertHorizontalRule = function ($editable) {
+    this.insertHorizontalRule=function($editable){
       beforeCommand($editable);
 
-      var rng = range.create();
-      var hrNode = rng.insertNode($('<HR/>')[0]);
-      if (hrNode.nextSibling) {
-        range.create(hrNode.nextSibling, 0).normalize().select();
+      varrng=range.create();
+      varhrNode=rng.insertNode($('<HR/>')[0]);
+      if(hrNode.nextSibling){
+        range.create(hrNode.nextSibling,0).normalize().select();
       }
 
       afterCommand($editable);
     };
 
     /**
-     * remove bogus node and character
+     *removebogusnodeandcharacter
      */
-    this.removeBogus = function ($editable) {
-      var bogusNode = $editable.data(KEY_BOGUS);
-      if (!bogusNode) {
+    this.removeBogus=function($editable){
+      varbogusNode=$editable.data(KEY_BOGUS);
+      if(!bogusNode){
         return;
       }
 
-      var textNode = list.find(list.from(bogusNode.childNodes), dom.isText);
+      vartextNode=list.find(list.from(bogusNode.childNodes),dom.isText);
 
-      var bogusCharIdx = textNode.nodeValue.indexOf(dom.ZERO_WIDTH_NBSP_CHAR);
-      if (bogusCharIdx !== -1) {
-        textNode.deleteData(bogusCharIdx, 1);
+      varbogusCharIdx=textNode.nodeValue.indexOf(dom.ZERO_WIDTH_NBSP_CHAR);
+      if(bogusCharIdx!==-1){
+        textNode.deleteData(bogusCharIdx,1);
       }
 
-      if (dom.isEmpty(bogusNode)) {
+      if(dom.isEmpty(bogusNode)){
         dom.remove(bogusNode);
       }
 
@@ -573,30 +573,30 @@ define([
     };
 
     /**
-     * lineHeight
-     * @param {jQuery} $editable
-     * @param {String} value
+     *lineHeight
+     *@param{jQuery}$editable
+     *@param{String}value
      */
-    this.lineHeight = function ($editable, value) {
+    this.lineHeight=function($editable,value){
       beforeCommand($editable);
-      style.stylePara(range.create(), {
-        lineHeight: value
+      style.stylePara(range.create(),{
+        lineHeight:value
       });
       afterCommand($editable);
     };
 
     /**
-     * unlink
+     *unlink
      *
-     * @type command
+     *@typecommand
      *
-     * @param {jQuery} $editable
+     *@param{jQuery}$editable
      */
-    this.unlink = function ($editable) {
-      var rng = this.createRange($editable);
-      if (rng.isOnAnchor()) {
-        var anchor = dom.ancestor(rng.sc, dom.isAnchor);
-        rng = range.createFromNode(anchor);
+    this.unlink=function($editable){
+      varrng=this.createRange($editable);
+      if(rng.isOnAnchor()){
+        varanchor=dom.ancestor(rng.sc,dom.isAnchor);
+        rng=range.createFromNode(anchor);
         rng.select();
 
         beforeCommand($editable);
@@ -606,64 +606,64 @@ define([
     };
 
     /**
-     * create link (command)
+     *createlink(command)
      *
-     * @param {jQuery} $editable
-     * @param {Object} linkInfo
-     * @param {Object} options
+     *@param{jQuery}$editable
+     *@param{Object}linkInfo
+     *@param{Object}options
      */
-    this.createLink = function ($editable, linkInfo, options) {
-      var linkUrl = linkInfo.url;
-      var linkText = linkInfo.text;
-      var isNewWindow = linkInfo.isNewWindow;
-      var rng = linkInfo.range || this.createRange($editable);
-      var isTextChanged = rng.toString() !== linkText;
-      // Hack : This method was updated to create buttons as well (using the same logic as anchor nodes).
-      const nodeName = linkInfo.isButton ? 'BUTTON' : 'A';
-      const pred = dom.makePredByNodeName(nodeName);
+    this.createLink=function($editable,linkInfo,options){
+      varlinkUrl=linkInfo.url;
+      varlinkText=linkInfo.text;
+      varisNewWindow=linkInfo.isNewWindow;
+      varrng=linkInfo.range||this.createRange($editable);
+      varisTextChanged=rng.toString()!==linkText;
+      //Hack:Thismethodwasupdatedtocreatebuttonsaswell(usingthesamelogicasanchornodes).
+      constnodeName=linkInfo.isButton?'BUTTON':'A';
+      constpred=dom.makePredByNodeName(nodeName);
 
-      options = options || dom.makeLayoutInfo($editable).editor().data('options');
+      options=options||dom.makeLayoutInfo($editable).editor().data('options');
 
       beforeCommand($editable);
 
-      if (options.onCreateLink) {
-        linkUrl = options.onCreateLink(linkUrl);
+      if(options.onCreateLink){
+        linkUrl=options.onCreateLink(linkUrl);
       }
 
-      var anchors = [];
-      // FLECTRA: adding this branch to modify existing anchor if it fully contains the range
-      var ancestor_anchor = dom.ancestor(rng.sc, pred);
-      if (ancestor_anchor && ancestor_anchor === dom.ancestor(rng.ec, pred)) {
+      varanchors=[];
+      //FLECTRA:addingthisbranchtomodifyexistinganchorifitfullycontainstherange
+      varancestor_anchor=dom.ancestor(rng.sc,pred);
+      if(ancestor_anchor&&ancestor_anchor===dom.ancestor(rng.ec,pred)){
           anchors.push($(ancestor_anchor).html(linkText).get(0));
-      } else if (isTextChanged) {
-        // Create a new element when text changed.
-        var anchor = rng.insertNode($(`<${nodeName}>${linkText}</${nodeName}>`)[0]);
+      }elseif(isTextChanged){
+        //Createanewelementwhentextchanged.
+        varanchor=rng.insertNode($(`<${nodeName}>${linkText}</${nodeName}>`)[0]);
         anchors.push(anchor);
-      } else {
-        anchors = style.styleNodes(rng, {
-          nodeName: nodeName,
-          expandClosestSibling: true,
-          onlyPartialContains: true
+      }else{
+        anchors=style.styleNodes(rng,{
+          nodeName:nodeName,
+          expandClosestSibling:true,
+          onlyPartialContains:true
         });
       }
 
-      $.each(anchors, function (idx, anchor) {
-        if (!linkInfo.isButton) {
-          $(anchor).attr('href', linkUrl);
+      $.each(anchors,function(idx,anchor){
+        if(!linkInfo.isButton){
+          $(anchor).attr('href',linkUrl);
         }
-        $(anchor).attr('class', linkInfo.className || null); // FLECTRA: addition
-        $(anchor).css(linkInfo.style || {}); // FLECTRA: addition
-        if (isNewWindow) {
-          $(anchor).attr('target', '_blank');
-        } else {
+        $(anchor).attr('class',linkInfo.className||null);//FLECTRA:addition
+        $(anchor).css(linkInfo.style||{});//FLECTRA:addition
+        if(isNewWindow){
+          $(anchor).attr('target','_blank');
+        }else{
           $(anchor).removeAttr('target');
         }
       });
 
-      var startRange = range.createFromNodeBefore(list.head(anchors));
-      var startPoint = startRange.getStartPoint();
-      var endRange = range.createFromNodeAfter(list.last(anchors));
-      var endPoint = endRange.getEndPoint();
+      varstartRange=range.createFromNodeBefore(list.head(anchors));
+      varstartPoint=startRange.getStartPoint();
+      varendRange=range.createFromNodeAfter(list.last(anchors));
+      varendPoint=endRange.getEndPoint();
 
       range.create(
         startPoint.node,
@@ -676,140 +676,140 @@ define([
     };
 
     /**
-     * returns link info
-     * Hack : This method was updated to return a boolean attribute 'isButton' to allow
-     * handling buttons in linkDialog.
+     *returnslinkinfo
+     *Hack:Thismethodwasupdatedtoreturnabooleanattribute'isButton'toallow
+     *handlingbuttonsinlinkDialog.
      *
-     * @return {Object}
-     * @return {WrappedRange} return.range
-     * @return {String} return.text
-     * @return {Boolean} [return.isNewWindow=true]
-     * @return {String} [return.url=""]
+     *@return{Object}
+     *@return{WrappedRange}return.range
+     *@return{String}return.text
+     *@return{Boolean}[return.isNewWindow=true]
+     *@return{String}[return.url=""]
      */
-    this.getLinkInfo = function ($editable) {
-      // FLECTRA MODIFICATION START
-      var selection;
-      var currentSelection = null;
-      if (document.getSelection) {
-        selection = document.getSelection();
-        if (selection.getRangeAt && selection.rangeCount) {
-          currentSelection = selection.getRangeAt(0);
+    this.getLinkInfo=function($editable){
+      //FLECTRAMODIFICATIONSTART
+      varselection;
+      varcurrentSelection=null;
+      if(document.getSelection){
+        selection=document.getSelection();
+        if(selection.getRangeAt&&selection.rangeCount){
+          currentSelection=selection.getRangeAt(0);
         }
       }
-      // FLECTRA MODIFICATION END
+      //FLECTRAMODIFICATIONEND
 
       this.focus($editable);
 
-      // FLECTRA MODIFICATION START
-      if (currentSelection && document.getSelection) {
-        selection = document.getSelection();
-        if (!selection || selection.rangeCount === 0) {
+      //FLECTRAMODIFICATIONSTART
+      if(currentSelection&&document.getSelection){
+        selection=document.getSelection();
+        if(!selection||selection.rangeCount===0){
           selection.removeAllRanges();
           selection.addRange(currentSelection);
         }
       }
-      // FLECTRA MODIFICATION END
+      //FLECTRAMODIFICATIONEND
 
-      var rng = range.create().expand(dom.isAnchor);
+      varrng=range.create().expand(dom.isAnchor);
 
-      // Get the first anchor on range(for edit).
-      var anchor = list.head(rng.nodes(dom.isAnchor));
-      const $anchor = $(anchor);
+      //Getthefirstanchoronrange(foredit).
+      varanchor=list.head(rng.nodes(dom.isAnchor));
+      const$anchor=$(anchor);
 
-      if ($anchor.length && !rng.nodes()[0].isSameNode(anchor)) {
-        rng = range.createFromNode(anchor);
+      if($anchor.length&&!rng.nodes()[0].isSameNode(anchor)){
+        rng=range.createFromNode(anchor);
         rng.select();
       }
 
-      // Check if the target is a button element.
-      let isButton = false;
-      if (!$anchor.length) {
-        const pred = dom.makePredByNodeName('BUTTON');
-        const rngNew = range.create().expand(pred);
-        const target = list.head(rngNew.nodes(pred));
-        if (target && target.nodeName === 'BUTTON') {
-          isButton = true;
-          rng = rngNew;
+      //Checkifthetargetisabuttonelement.
+      letisButton=false;
+      if(!$anchor.length){
+        constpred=dom.makePredByNodeName('BUTTON');
+        constrngNew=range.create().expand(pred);
+        consttarget=list.head(rngNew.nodes(pred));
+        if(target&&target.nodeName==='BUTTON'){
+          isButton=true;
+          rng=rngNew;
         }
       }
 
-      return {
-        range: rng,
-        text: rng.toString(),
-        isNewWindow: $anchor.length ? $anchor.attr('target') === '_blank' : false,
-        url: $anchor.length ? $anchor.attr('href') : '',
-        isButton: isButton,
+      return{
+        range:rng,
+        text:rng.toString(),
+        isNewWindow:$anchor.length?$anchor.attr('target')==='_blank':false,
+        url:$anchor.length?$anchor.attr('href'):'',
+        isButton:isButton,
       };
     };
 
     /**
-     * setting color
+     *settingcolor
      *
-     * @param {Node} $editable
-     * @param {Object} sObjColor  color code
-     * @param {String} sObjColor.foreColor foreground color
-     * @param {String} sObjColor.backColor background color
+     *@param{Node}$editable
+     *@param{Object}sObjColor colorcode
+     *@param{String}sObjColor.foreColorforegroundcolor
+     *@param{String}sObjColor.backColorbackgroundcolor
      */
-    this.color = function ($editable, sObjColor) {
-      var oColor = JSON.parse(sObjColor);
-      var foreColor = oColor.foreColor, backColor = oColor.backColor;
+    this.color=function($editable,sObjColor){
+      varoColor=JSON.parse(sObjColor);
+      varforeColor=oColor.foreColor,backColor=oColor.backColor;
 
       beforeCommand($editable);
 
-      if (foreColor) { document.execCommand('foreColor', false, foreColor); }
-      if (backColor) { document.execCommand('backColor', false, backColor); }
+      if(foreColor){document.execCommand('foreColor',false,foreColor);}
+      if(backColor){document.execCommand('backColor',false,backColor);}
 
       afterCommand($editable);
     };
 
     /**
-     * insert Table
+     *insertTable
      *
-     * @param {Node} $editable
-     * @param {String} sDim dimension of table (ex : "5x5")
+     *@param{Node}$editable
+     *@param{String}sDimdimensionoftable(ex:"5x5")
      */
-    this.insertTable = function ($editable, sDim) {
-      var dimension = sDim.split('x');
+    this.insertTable=function($editable,sDim){
+      vardimension=sDim.split('x');
       beforeCommand($editable);
 
-      var rng = range.create().deleteContents();
-      rng.insertNode(table.createTable(dimension[0], dimension[1]));
+      varrng=range.create().deleteContents();
+      rng.insertNode(table.createTable(dimension[0],dimension[1]));
       afterCommand($editable);
     };
 
     /**
-     * float me
+     *floatme
      *
-     * @param {jQuery} $editable
-     * @param {String} value
-     * @param {jQuery} $target
+     *@param{jQuery}$editable
+     *@param{String}value
+     *@param{jQuery}$target
      */
-    this.floatMe = function ($editable, value, $target) {
+    this.floatMe=function($editable,value,$target){
       beforeCommand($editable);
-      // bootstrap
-      $target.removeClass('float-left float-right');
-      if (value && value !== 'none') {
-        $target.addClass('pull-' + value);
+      //bootstrap
+      $target.removeClass('float-leftfloat-right');
+      if(value&&value!=='none'){
+        $target.addClass('pull-'+value);
       }
 
-      // fallback for non-bootstrap
-      $target.css('float', value);
+      //fallbackfornon-bootstrap
+      $target.css('float',value);
       afterCommand($editable);
     };
 
     /**
-     * change image shape
+     *changeimageshape
      *
-     * @param {jQuery} $editable
-     * @param {String} value css class
-     * @param {Node} $target
+     *@param{jQuery}$editable
+     *@param{String}valuecssclass
+     *@param{Node}$target
      */
-    this.imageShape = function ($editable, value, $target) {
+    this.imageShape=function($editable,value,$target){
       beforeCommand($editable);
 
-      $target.removeClass('rounded rounded-circle img-thumbnail');
+      $target.removeClass('roundedrounded-circleimg-thumbnail');
 
-      if (value) {
+      if(value){
         $target.addClass(value);
       }
 
@@ -817,40 +817,40 @@ define([
     };
 
     /**
-     * resize overlay element
-     * @param {jQuery} $editable
-     * @param {String} value
-     * @param {jQuery} $target - target element
+     *resizeoverlayelement
+     *@param{jQuery}$editable
+     *@param{String}value
+     *@param{jQuery}$target-targetelement
      */
-    this.resize = function ($editable, value, $target) {
+    this.resize=function($editable,value,$target){
       beforeCommand($editable);
 
       $target.css({
-        width: value * 100 + '%',
-        height: ''
+        width:value*100+'%',
+        height:''
       });
 
       afterCommand($editable);
     };
 
     /**
-     * @param {Position} pos
-     * @param {jQuery} $target - target element
-     * @param {Boolean} [bKeepRatio] - keep ratio
+     *@param{Position}pos
+     *@param{jQuery}$target-targetelement
+     *@param{Boolean}[bKeepRatio]-keepratio
      */
-    this.resizeTo = function (pos, $target, bKeepRatio) {
-      var imageSize;
-      if (bKeepRatio) {
-        var newRatio = pos.y / pos.x;
-        var ratio = $target.data('ratio');
-        imageSize = {
-          width: ratio > newRatio ? pos.x : pos.y / ratio,
-          height: ratio > newRatio ? pos.x * ratio : pos.y
+    this.resizeTo=function(pos,$target,bKeepRatio){
+      varimageSize;
+      if(bKeepRatio){
+        varnewRatio=pos.y/pos.x;
+        varratio=$target.data('ratio');
+        imageSize={
+          width:ratio>newRatio?pos.x:pos.y/ratio,
+          height:ratio>newRatio?pos.x*ratio:pos.y
         };
-      } else {
-        imageSize = {
-          width: pos.x,
-          height: pos.y
+      }else{
+        imageSize={
+          width:pos.x,
+          height:pos.y
         };
       }
 
@@ -858,35 +858,35 @@ define([
     };
 
     /**
-     * remove media object
+     *removemediaobject
      *
-     * @param {jQuery} $editable
-     * @param {String} value - dummy argument (for keep interface)
-     * @param {jQuery} $target - target element
+     *@param{jQuery}$editable
+     *@param{String}value-dummyargument(forkeepinterface)
+     *@param{jQuery}$target-targetelement
      */
-    this.removeMedia = function ($editable, value, $target) {
+    this.removeMedia=function($editable,value,$target){
       beforeCommand($editable);
       $target.detach();
 
       handler.bindCustomEvent(
-        $(), $editable.data('callbacks'), 'media.delete'
-      )($target, $editable);
+        $(),$editable.data('callbacks'),'media.delete'
+      )($target,$editable);
 
       afterCommand($editable);
     };
 
     /**
-     * set focus
+     *setfocus
      *
-     * @param $editable
+     *@param$editable
      */
-    this.focus = function ($editable) {
+    this.focus=function($editable){
       $editable.focus();
 
-      // [workaround] for firefox bug http://goo.gl/lVfAaI
-      if (agent.isFF) {
-        var rng = range.create();
-        if (!rng || rng.isOnEditable()) {
+      //[workaround]forfirefoxbughttp://goo.gl/lVfAaI
+      if(agent.isFF){
+        varrng=range.create();
+        if(!rng||rng.isOnEditable()){
           return;
         }
 
@@ -898,15 +898,15 @@ define([
     };
 
     /**
-     * returns whether contents is empty or not.
+     *returnswhethercontentsisemptyornot.
      *
-     * @param {jQuery} $editable
-     * @return {Boolean}
+     *@param{jQuery}$editable
+     *@return{Boolean}
      */
-    this.isEmpty = function ($editable) {
-      return dom.isEmpty($editable[0]) || dom.emptyPara === $editable.html();
+    this.isEmpty=function($editable){
+      returndom.isEmpty($editable[0])||dom.emptyPara===$editable.html();
     };
   };
 
-  return Editor;
+  returnEditor;
 });

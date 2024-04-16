@@ -1,28 +1,28 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models, fields
-from flectra.http import request
-from flectra.addons.http_routing.models.ir_http import url_for
+fromflectraimportapi,models,fields
+fromflectra.httpimportrequest
+fromflectra.addons.http_routing.models.ir_httpimporturl_for
 
 
-class View(models.Model):
-    _inherit = "ir.ui.view"
+classView(models.Model):
+    _inherit="ir.ui.view"
 
-    customize_show = fields.Boolean("Show As Optional Inherit", default=False)
+    customize_show=fields.Boolean("ShowAsOptionalInherit",default=False)
 
     @api.model
-    def _prepare_qcontext(self):
-        """ Returns the qcontext : rendering context with portal specific value (required
-            to render portal layout template)
+    def_prepare_qcontext(self):
+        """Returnstheqcontext:renderingcontextwithportalspecificvalue(required
+            torenderportallayouttemplate)
         """
-        qcontext = super(View, self)._prepare_qcontext()
-        if request and getattr(request, 'is_frontend', False):
-            Lang = request.env['res.lang']
-            portal_lang_code = request.env['ir.http']._get_frontend_langs()
+        qcontext=super(View,self)._prepare_qcontext()
+        ifrequestandgetattr(request,'is_frontend',False):
+            Lang=request.env['res.lang']
+            portal_lang_code=request.env['ir.http']._get_frontend_langs()
             qcontext.update(dict(
                 self._context.copy(),
-                languages=[lang for lang in Lang.get_available() if lang[0] in portal_lang_code],
+                languages=[langforlanginLang.get_available()iflang[0]inportal_lang_code],
                 url_for=url_for,
             ))
-        return qcontext
+        returnqcontext

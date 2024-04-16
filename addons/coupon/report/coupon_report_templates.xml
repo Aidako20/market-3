@@ -1,85 +1,85 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <template id="report_coupon">
-                    <t t-call="web.internal_layout">
-                    <div class="card">
-                    <div class="card-body">
-                    <div class="page">
-                        <div class="row text-center">
-                            <div class="o_offer col-lg-12">
-                                <h4 t-if="o.partner_id.name">
+    <templateid="report_coupon">
+                    <tt-call="web.internal_layout">
+                    <divclass="card">
+                    <divclass="card-body">
+                    <divclass="page">
+                        <divclass="rowtext-center">
+                            <divclass="o_offercol-lg-12">
+                                <h4t-if="o.partner_id.name">
                                     Congratulations
-                                    <t t-esc="o.partner_id.name"/>,
+                                    <tt-esc="o.partner_id.name"/>,
                                 </h4>
-                                <t t-set="text">on your next order</t>
-                                <h4>Here is your reward from <t t-esc="o.program_id.company_id.name"/>.</h4>
-                                <t t-if="o.program_id.reward_type == 'discount'">
-                                    <t t-set="trans_text">off %s</t>
-                                    <t t-set="text" t-value="trans_text % text"/>
-                                    <h1 t-if="o.program_id.discount_type == 'fixed_amount'" style="font-size: 55px; color: #009EFB">
-                                        <strong><span t-field="o.program_id.discount_fixed_amount" t-options='{"widget": "monetary", "display_currency": o.program_id.currency_id}'/></strong>
+                                <tt-set="text">onyournextorder</t>
+                                <h4>Hereisyourrewardfrom<tt-esc="o.program_id.company_id.name"/>.</h4>
+                                <tt-if="o.program_id.reward_type=='discount'">
+                                    <tt-set="trans_text">off%s</t>
+                                    <tt-set="text"t-value="trans_text%text"/>
+                                    <h1t-if="o.program_id.discount_type=='fixed_amount'"style="font-size:55px;color:#009EFB">
+                                        <strong><spant-field="o.program_id.discount_fixed_amount"t-options='{"widget":"monetary","display_currency":o.program_id.currency_id}'/></strong>
                                     </h1>
-                                    <h1 t-if="o.program_id.discount_type == 'percentage'" style="font-size: 55px; color: #009EFB">
-                                        <strong><span t-field="o.program_id.discount_percentage"/> %</strong>
+                                    <h1t-if="o.program_id.discount_type=='percentage'"style="font-size:55px;color:#009EFB">
+                                        <strong><spant-field="o.program_id.discount_percentage"/>%</strong>
                                     </h1>
-                                    <t t-if="o.program_id.discount_apply_on == 'specific_products'">
-                                        <t t-if="len(o.program_id.discount_specific_product_ids) > 1">
-                                            <t t-set="text">off on some products*</t>
-                                            <t t-set="display_specific_products" t-value="True"/>
+                                    <tt-if="o.program_id.discount_apply_on=='specific_products'">
+                                        <tt-if="len(o.program_id.discount_specific_product_ids)>1">
+                                            <tt-set="text">offonsomeproducts*</t>
+                                            <tt-set="display_specific_products"t-value="True"/>
                                         </t>
-                                        <t t-else="">
-                                            <t t-set="trans_text">off on %s</t>                                            
-                                            <t t-set="text" t-value="trans_text % o.program_id.discount_specific_product_ids.name"/>
+                                        <tt-else="">
+                                            <tt-set="trans_text">offon%s</t>                                           
+                                            <tt-set="text"t-value="trans_text%o.program_id.discount_specific_product_ids.name"/>
                                         </t>
                                     </t>
-                                    <t t-if="o.program_id.discount_apply_on == 'cheapest_product'">
-                                        <t t-set="text">off on the cheapest product</t>
+                                    <tt-if="o.program_id.discount_apply_on=='cheapest_product'">
+                                        <tt-set="text">offonthecheapestproduct</t>
                                     </t>
                                 </t>
-                                <t t-if="o.program_id.reward_type == 'product'">
-                                    <strong style="font-size: 55px; color: #009EFB">
-                                        <t t-esc="'get %s free %s' % (o.program_id.reward_product_quantity, o.program_id.reward_product_id.name)"/>
+                                <tt-if="o.program_id.reward_type=='product'">
+                                    <strongstyle="font-size:55px;color:#009EFB">
+                                        <tt-esc="'get%sfree%s'%(o.program_id.reward_product_quantity,o.program_id.reward_product_id.name)"/>
                                     </strong>
                                 </t>
-                                <t t-if="o.program_id.reward_type == 'free_shipping'">
-                                    <strong style="font-size: 55px; color: #009EFB">get free shipping</strong>
+                                <tt-if="o.program_id.reward_type=='free_shipping'">
+                                    <strongstyle="font-size:55px;color:#009EFB">getfreeshipping</strong>
                                 </t>
-                                <h1 class="font-weight-bold" style="font-size: 34px" t-esc="text"/>
+                                <h1class="font-weight-bold"style="font-size:34px"t-esc="text"/>
                                 <br/>
-                                <h4 t-if="o.expiration_date">
-                                    Use this promo code before
-                                    <span t-field="o.expiration_date" t-options='{"format": "yyyy-MM-d"}'/>
+                                <h4t-if="o.expiration_date">
+                                    Usethispromocodebefore
+                                    <spant-field="o.expiration_date"t-options='{"format":"yyyy-MM-d"}'/>
                                 </h4>
-                                <h2 class="mt32" style="margin-top: 32px">
-                                    <strong class="bg-light" t-esc="o.code" style="padding: 20px 10px;"></strong>
+                                <h2class="mt32"style="margin-top:32px">
+                                    <strongclass="bg-light"t-esc="o.code"style="padding:20px10px;"></strong>
                                 </h2>
-                                <h4 t-if="o.program_id.rule_min_quantity > 1">
-                                    <span>Minimum purchase of</span>
-                                    <strong t-esc="o.program_id.rule_min_quantity"/> <span>products</span>
+                                <h4t-if="o.program_id.rule_min_quantity>1">
+                                    <span>Minimumpurchaseof</span>
+                                    <strongt-esc="o.program_id.rule_min_quantity"/><span>products</span>
                                 </h4>
-                                <h4 t-if="o.program_id.rule_minimum_amount">
-                                    <span>Valid for purchase above</span>
-                                    <strong t-esc="o.program_id.rule_minimum_amount" t-options="{'widget': 'monetary', 'display_currency': o.program_id.currency_id}"/>
+                                <h4t-if="o.program_id.rule_minimum_amount">
+                                    <span>Validforpurchaseabove</span>
+                                    <strongt-esc="o.program_id.rule_minimum_amount"t-options="{'widget':'monetary','display_currency':o.program_id.currency_id}"/>
                                 </h4>
-                                <p t-if="display_specific_products">
+                                <pt-if="display_specific_products">
                                     <small>
-                                        *Valid for following products: <t t-esc="', '.join(o.program_id.discount_specific_product_ids.mapped('name'))"/>
+                                        *Validforfollowingproducts:<tt-esc="','.join(o.program_id.discount_specific_product_ids.mapped('name'))"/>
                                     </small>
                                 </p>
                                 <br/>
-                                <img alt="Barcode" t-att-src="'/report/barcode/Code128/%s' % o.code"/>
+                                <imgalt="Barcode"t-att-src="'/report/barcode/Code128/%s'%o.code"/>
                                 <br/><br/>
-                                <h4>Thank you,</h4>
+                                <h4>Thankyou,</h4>
                                 <br/>
-                                <div class="mt32">
-                                    <div class="text-center">
-                                        <img alt="Logo" t-att-src="'/logo?company=%d' % (o.program_id.company_id)" t-att-alt="'%s' % (o.program_id.company_id.name)" style="border:0px solid transparent; height: 50; width: 200px;" height="50"/>
+                                <divclass="mt32">
+                                    <divclass="text-center">
+                                        <imgalt="Logo"t-att-src="'/logo?company=%d'%(o.program_id.company_id)"t-att-alt="'%s'%(o.program_id.company_id.name)"style="border:0pxsolidtransparent;height:50;width:200px;"height="50"/>
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="text-center d-inline-block">
-                                        <span t-field="o.program_id.company_id.partner_id"
-                                            t-options='{"widget": "contact", "fields": ["address", "email"], "no_marker": True}'/>
+                                    <divclass="text-centerd-inline-block">
+                                        <spant-field="o.program_id.company_id.partner_id"
+                                            t-options='{"widget":"contact","fields":["address","email"],"no_marker":True}'/>
                                     </div>
                                 </div>
                             </div>
@@ -90,11 +90,11 @@
         </t>
     </template>
 
-    <template id="report_coupon_i18n">
-        <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="o">
-                <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang or o.env.lang)"/>
-                <t t-call="coupon.report_coupon" t-lang="o.partner_id.lang or o.env.lang"/>
+    <templateid="report_coupon_i18n">
+        <tt-call="web.html_container">
+            <tt-foreach="docs"t-as="o">
+                <tt-set="o"t-value="o.with_context(lang=o.partner_id.langoro.env.lang)"/>
+                <tt-call="coupon.report_coupon"t-lang="o.partner_id.langoro.env.lang"/>
             </t>
         </t>
     </template>

@@ -1,167 +1,167 @@
-flectra.define('pos_mercury.PaymentScreen', function (require) {
-    'use strict';
+flectra.define('pos_mercury.PaymentScreen',function(require){
+    'usestrict';
 
-    const { _t } = require('web.core');
-    const PaymentScreen = require('point_of_sale.PaymentScreen');
-    const Registries = require('point_of_sale.Registries');
-    const NumberBuffer = require('point_of_sale.NumberBuffer');
-    const { useBarcodeReader } = require('point_of_sale.custom_hooks');
+    const{_t}=require('web.core');
+    constPaymentScreen=require('point_of_sale.PaymentScreen');
+    constRegistries=require('point_of_sale.Registries');
+    constNumberBuffer=require('point_of_sale.NumberBuffer');
+    const{useBarcodeReader}=require('point_of_sale.custom_hooks');
 
-    // Lookup table to store status and error messages
-    const lookUpCodeTransaction = {
-        Approved: {
-            '000000': _t('Transaction approved'),
+    //Lookuptabletostorestatusanderrormessages
+    constlookUpCodeTransaction={
+        Approved:{
+            '000000':_t('Transactionapproved'),
         },
-        TimeoutError: {
-            '001006': 'Global API Not Initialized',
-            '001007': 'Timeout on Response',
-            '003003': 'Socket Error sending request',
-            '003004': 'Socket already open or in use',
-            '003005': 'Socket Creation Failed',
-            '003006': 'Socket Connection Failed',
-            '003007': 'Connection Lost',
-            '003008': 'TCP/IP Failed to Initialize',
-            '003010': 'Time Out waiting for server response',
-            '003011': 'Connect Canceled',
-            '003053': 'Initialize Failed',
-            '009999': 'Unknown Error',
+        TimeoutError:{
+            '001006':'GlobalAPINotInitialized',
+            '001007':'TimeoutonResponse',
+            '003003':'SocketErrorsendingrequest',
+            '003004':'Socketalreadyopenorinuse',
+            '003005':'SocketCreationFailed',
+            '003006':'SocketConnectionFailed',
+            '003007':'ConnectionLost',
+            '003008':'TCP/IPFailedtoInitialize',
+            '003010':'TimeOutwaitingforserverresponse',
+            '003011':'ConnectCanceled',
+            '003053':'InitializeFailed',
+            '009999':'UnknownError',
         },
-        FatalError: {
-            '-1': 'Timeout error',
-            '001001': 'General Failure',
-            '001003': 'Invalid Command Format',
-            '001004': 'Insufficient Fields',
-            '001011': 'Empty Command String',
-            '002000': 'Password Verified',
-            '002001': 'Queue Full',
-            '002002': 'Password Failed – Disconnecting',
-            '002003': 'System Going Offline',
-            '002004': 'Disconnecting Socket',
-            '002006': 'Refused ‘Max Connections’',
-            '002008': 'Duplicate Serial Number Detected',
-            '002009': 'Password Failed (Client / Server)',
-            '002010': 'Password failed (Challenge / Response)',
-            '002011': 'Internal Server Error – Call Provider',
-            '003002': 'In Process with server',
-            '003009': 'Control failed to find branded serial (password lookup failed)',
-            '003012': '128 bit CryptoAPI failed',
-            '003014': 'Threaded Auth Started Expect Response',
-            '003017': 'Failed to start Event Thread.',
-            '003050': 'XML Parse Error',
-            '003051': 'All Connections Failed',
-            '003052': 'Server Login Failed',
-            '004001': 'Global Response Length Error (Too Short)',
-            '004002': 'Unable to Parse Response from Global (Indistinguishable)',
-            '004003': 'Global String Error',
-            '004004': 'Weak Encryption Request Not Supported',
-            '004005': 'Clear Text Request Not Supported',
-            '004010': 'Unrecognized Request Format',
-            '004011': 'Error Occurred While Decrypting Request',
-            '004017': 'Invalid Check Digit',
-            '004018': 'Merchant ID Missing',
-            '004019': 'TStream Type Missing',
-            '004020': 'Could Not Encrypt Response- Call Provider',
-            '100201': 'Invalid Transaction Type',
-            '100202': 'Invalid Operator ID',
-            '100203': 'Invalid Memo',
-            '100204': 'Invalid Account Number',
-            '100205': 'Invalid Expiration Date',
-            '100206': 'Invalid Authorization Code',
-            '100207': 'Invalid Authorization Code',
-            '100208': 'Invalid Authorization Amount',
-            '100209': 'Invalid Cash Back Amount',
-            '100210': 'Invalid Gratuity Amount',
-            '100211': 'Invalid Purchase Amount',
-            '100212': 'Invalid Magnetic Stripe Data',
-            '100213': 'Invalid PIN Block Data',
-            '100214': 'Invalid Derived Key Data',
-            '100215': 'Invalid State Code',
-            '100216': 'Invalid Date of Birth',
-            '100217': 'Invalid Check Type',
-            '100218': 'Invalid Routing Number',
-            '100219': 'Invalid TranCode',
-            '100220': 'Invalid Merchant ID',
-            '100221': 'Invalid TStream Type',
-            '100222': 'Invalid Batch Number',
-            '100223': 'Invalid Batch Item Count',
-            '100224': 'Invalid MICR Input Type',
-            '100225': 'Invalid Driver’s License',
-            '100226': 'Invalid Sequence Number',
-            '100227': 'Invalid Pass Data',
-            '100228': 'Invalid Card Type',
+        FatalError:{
+            '-1':'Timeouterror',
+            '001001':'GeneralFailure',
+            '001003':'InvalidCommandFormat',
+            '001004':'InsufficientFields',
+            '001011':'EmptyCommandString',
+            '002000':'PasswordVerified',
+            '002001':'QueueFull',
+            '002002':'PasswordFailed–Disconnecting',
+            '002003':'SystemGoingOffline',
+            '002004':'DisconnectingSocket',
+            '002006':'Refused‘MaxConnections’',
+            '002008':'DuplicateSerialNumberDetected',
+            '002009':'PasswordFailed(Client/Server)',
+            '002010':'Passwordfailed(Challenge/Response)',
+            '002011':'InternalServerError–CallProvider',
+            '003002':'InProcesswithserver',
+            '003009':'Controlfailedtofindbrandedserial(passwordlookupfailed)',
+            '003012':'128bitCryptoAPIfailed',
+            '003014':'ThreadedAuthStartedExpectResponse',
+            '003017':'FailedtostartEventThread.',
+            '003050':'XMLParseError',
+            '003051':'AllConnectionsFailed',
+            '003052':'ServerLoginFailed',
+            '004001':'GlobalResponseLengthError(TooShort)',
+            '004002':'UnabletoParseResponsefromGlobal(Indistinguishable)',
+            '004003':'GlobalStringError',
+            '004004':'WeakEncryptionRequestNotSupported',
+            '004005':'ClearTextRequestNotSupported',
+            '004010':'UnrecognizedRequestFormat',
+            '004011':'ErrorOccurredWhileDecryptingRequest',
+            '004017':'InvalidCheckDigit',
+            '004018':'MerchantIDMissing',
+            '004019':'TStreamTypeMissing',
+            '004020':'CouldNotEncryptResponse-CallProvider',
+            '100201':'InvalidTransactionType',
+            '100202':'InvalidOperatorID',
+            '100203':'InvalidMemo',
+            '100204':'InvalidAccountNumber',
+            '100205':'InvalidExpirationDate',
+            '100206':'InvalidAuthorizationCode',
+            '100207':'InvalidAuthorizationCode',
+            '100208':'InvalidAuthorizationAmount',
+            '100209':'InvalidCashBackAmount',
+            '100210':'InvalidGratuityAmount',
+            '100211':'InvalidPurchaseAmount',
+            '100212':'InvalidMagneticStripeData',
+            '100213':'InvalidPINBlockData',
+            '100214':'InvalidDerivedKeyData',
+            '100215':'InvalidStateCode',
+            '100216':'InvalidDateofBirth',
+            '100217':'InvalidCheckType',
+            '100218':'InvalidRoutingNumber',
+            '100219':'InvalidTranCode',
+            '100220':'InvalidMerchantID',
+            '100221':'InvalidTStreamType',
+            '100222':'InvalidBatchNumber',
+            '100223':'InvalidBatchItemCount',
+            '100224':'InvalidMICRInputType',
+            '100225':'InvalidDriver’sLicense',
+            '100226':'InvalidSequenceNumber',
+            '100227':'InvalidPassData',
+            '100228':'InvalidCardType',
         },
     };
 
-    const PosMercuryPaymentScreen = (PaymentScreen) =>
-        class extends PaymentScreen {
-            constructor() {
+    constPosMercuryPaymentScreen=(PaymentScreen)=>
+        classextendsPaymentScreen{
+            constructor(){
                 super(...arguments);
-                if (this.env.pos.getOnlinePaymentMethods().length !== 0) {
+                if(this.env.pos.getOnlinePaymentMethods().length!==0){
                     useBarcodeReader({
-                        credit: this.credit_code_action,
+                        credit:this.credit_code_action,
                     });
                 }
-                // How long we wait for the flectra server to deliver the response of
-                // a Vantiv transaction
-                this.server_timeout_in_ms = 95000;
+                //Howlongwewaitfortheflectraservertodelivertheresponseof
+                //aVantivtransaction
+                this.server_timeout_in_ms=95000;
 
-                // How many Vantiv transactions we send without receiving a
-                // response
-                this.server_retries = 3;
+                //HowmanyVantivtransactionswesendwithoutreceivinga
+                //response
+                this.server_retries=3;
             }
 
             /**
-             * The card reader acts as a barcode scanner. This sets up
-             * the NumberBuffer to not immediately act on keyboard
-             * input.
+             *Thecardreaderactsasabarcodescanner.Thissetsup
+             *theNumberBuffertonotimmediatelyactonkeyboard
+             *input.
              *
-             * @override
+             *@override
              */
-            get _getNumberBufferConfig() {
-                const res = super._getNumberBufferConfig;
-                res['useWithBarcode'] = true;
-                return res;
+            get_getNumberBufferConfig(){
+                constres=super._getNumberBufferConfig;
+                res['useWithBarcode']=true;
+                returnres;
             }
 
             /**
-             * Finish any pending input before trying to validate.
+             *Finishanypendinginputbeforetryingtovalidate.
              *
-             * @override
+             *@override
              */
-            async validateOrder(isForceValidate) {
+            asyncvalidateOrder(isForceValidate){
                 NumberBuffer.capture();
-                return super.validateOrder(...arguments);
+                returnsuper.validateOrder(...arguments);
             }
 
-            _get_swipe_pending_line() {
-                var i = 0;
-                var lines = this.env.pos.get_order().get_paymentlines();
+            _get_swipe_pending_line(){
+                vari=0;
+                varlines=this.env.pos.get_order().get_paymentlines();
 
-                for (i = 0; i < lines.length; i++) {
-                    if (lines[i].mercury_swipe_pending) {
-                        return lines[i];
+                for(i=0;i<lines.length;i++){
+                    if(lines[i].mercury_swipe_pending){
+                        returnlines[i];
                     }
                 }
 
-                return 0;
+                return0;
             }
 
-            _does_credit_payment_line_exist(amount, card_number, card_brand, card_owner_name) {
-                var i = 0;
-                var lines = this.env.pos.get_order().get_paymentlines();
+            _does_credit_payment_line_exist(amount,card_number,card_brand,card_owner_name){
+                vari=0;
+                varlines=this.env.pos.get_order().get_paymentlines();
 
-                for (i = 0; i < lines.length; i++) {
-                    if (
-                        lines[i].mercury_amount === amount &&
-                        lines[i].mercury_card_number === card_number &&
-                        lines[i].mercury_card_brand === card_brand &&
-                        lines[i].mercury_card_owner_name === card_owner_name
-                    ) {
-                        return true;
+                for(i=0;i<lines.length;i++){
+                    if(
+                        lines[i].mercury_amount===amount&&
+                        lines[i].mercury_card_number===card_number&&
+                        lines[i].mercury_card_brand===card_brand&&
+                        lines[i].mercury_card_owner_name===card_owner_name
+                    ){
+                        returntrue;
                     }
                 }
 
-                return false;
+                returnfalse;
             }
 
             retry_mercury_transaction(
@@ -171,422 +171,422 @@ flectra.define('pos_mercury.PaymentScreen', function (require) {
                 can_connect_to_server,
                 callback,
                 args
-            ) {
-                var self = this;
-                var message = '';
+            ){
+                varself=this;
+                varmessage='';
 
-                if (retry_nr < self.server_retries) {
-                    if (response) {
-                        message = 'Retry #' + (retry_nr + 1) + '...<br/><br/>' + response.message;
-                    } else {
-                        message = 'Retry #' + (retry_nr + 1) + '...';
+                if(retry_nr<self.server_retries){
+                    if(response){
+                        message='Retry#'+(retry_nr+1)+'...<br/><br/>'+response.message;
+                    }else{
+                        message='Retry#'+(retry_nr+1)+'...';
                     }
                     def.notify({
-                        message: message,
+                        message:message,
                     });
 
-                    setTimeout(function () {
-                        callback.apply(self, args);
-                    }, 1000);
-                } else {
-                    if (response) {
-                        message =
-                            'Error ' +
-                            response.error +
-                            ': ' +
-                            lookUpCodeTransaction['TimeoutError'][response.error] +
-                            '<br/>' +
+                    setTimeout(function(){
+                        callback.apply(self,args);
+                    },1000);
+                }else{
+                    if(response){
+                        message=
+                            'Error'+
+                            response.error+
+                            ':'+
+                            lookUpCodeTransaction['TimeoutError'][response.error]+
+                            '<br/>'+
                             response.message;
-                    } else {
-                        if (can_connect_to_server) {
-                            message = self.env._t('No response from Vantiv (Vantiv down?)');
-                        } else {
-                            message = self.env._t(
-                                'No response from server (connected to network?)'
+                    }else{
+                        if(can_connect_to_server){
+                            message=self.env._t('NoresponsefromVantiv(Vantivdown?)');
+                        }else{
+                            message=self.env._t(
+                                'Noresponsefromserver(connectedtonetwork?)'
                             );
                         }
                     }
                     def.resolve({
-                        message: message,
-                        auto_close: false,
+                        message:message,
+                        auto_close:false,
                     });
                 }
             }
 
-            // Handler to manage the card reader string
-            credit_code_transaction(parsed_result, old_deferred, retry_nr) {
-                var order = this.env.pos.get_order();
-                if (order.get_due(order.selected_paymentline) < 0) {
-                    this.showPopup('ErrorPopup', {
-                        title: this.env._t('Refunds not supported'),
-                        body: this.env._t(
-                            "Credit card refunds are not supported. Instead select your credit card payment method, click 'Validate' and refund the original charge manually through the Vantiv backend."
+            //Handlertomanagethecardreaderstring
+            credit_code_transaction(parsed_result,old_deferred,retry_nr){
+                varorder=this.env.pos.get_order();
+                if(order.get_due(order.selected_paymentline)<0){
+                    this.showPopup('ErrorPopup',{
+                        title:this.env._t('Refundsnotsupported'),
+                        body:this.env._t(
+                            "Creditcardrefundsarenotsupported.Insteadselectyourcreditcardpaymentmethod,click'Validate'andrefundtheoriginalchargemanuallythroughtheVantivbackend."
                         ),
                     });
                     return;
                 }
 
-                if (this.env.pos.getOnlinePaymentMethods().length === 0) {
+                if(this.env.pos.getOnlinePaymentMethods().length===0){
                     return;
                 }
 
-                var self = this;
-                var decodedMagtek = self.env.pos.decodeMagtek(parsed_result.code);
+                varself=this;
+                vardecodedMagtek=self.env.pos.decodeMagtek(parsed_result.code);
 
-                if (!decodedMagtek) {
-                    this.showPopup('ErrorPopup', {
-                        title: this.env._t('Could not read card'),
-                        body: this.env._t(
-                            'This can be caused by a badly executed swipe or by not having your keyboard layout set to US QWERTY (not US International).'
+                if(!decodedMagtek){
+                    this.showPopup('ErrorPopup',{
+                        title:this.env._t('Couldnotreadcard'),
+                        body:this.env._t(
+                            'ThiscanbecausedbyabadlyexecutedswipeorbynothavingyourkeyboardlayoutsettoUSQWERTY(notUSInternational).'
                         ),
                     });
                     return;
                 }
 
-                var swipe_pending_line = self._get_swipe_pending_line();
-                var purchase_amount = 0;
+                varswipe_pending_line=self._get_swipe_pending_line();
+                varpurchase_amount=0;
 
-                if (swipe_pending_line) {
-                    purchase_amount = swipe_pending_line.get_amount();
-                } else {
-                    purchase_amount = self.env.pos.get_order().get_due();
+                if(swipe_pending_line){
+                    purchase_amount=swipe_pending_line.get_amount();
+                }else{
+                    purchase_amount=self.env.pos.get_order().get_due();
                 }
 
-                var transaction = {
-                    encrypted_key: decodedMagtek['encrypted_key'],
-                    encrypted_block: decodedMagtek['encrypted_block'],
-                    transaction_type: 'Credit',
-                    transaction_code: 'Sale',
-                    invoice_no: self.env.pos.get_order().uid.replace(/-/g, ''),
-                    purchase: purchase_amount,
-                    payment_method_id: parsed_result.payment_method_id,
+                vartransaction={
+                    encrypted_key:decodedMagtek['encrypted_key'],
+                    encrypted_block:decodedMagtek['encrypted_block'],
+                    transaction_type:'Credit',
+                    transaction_code:'Sale',
+                    invoice_no:self.env.pos.get_order().uid.replace(/-/g,''),
+                    purchase:purchase_amount,
+                    payment_method_id:parsed_result.payment_method_id,
                 };
 
-                var def = old_deferred || new $.Deferred();
-                retry_nr = retry_nr || 0;
+                vardef=old_deferred||new$.Deferred();
+                retry_nr=retry_nr||0;
 
-                // show the transaction popup.
-                // the transaction deferred is used to update transaction status
-                // if we have a previous deferred it indicates that this is a retry
-                if (!old_deferred) {
-                    self.showPopup('PaymentTransactionPopup', {
-                        transaction: def,
+                //showthetransactionpopup.
+                //thetransactiondeferredisusedtoupdatetransactionstatus
+                //ifwehaveapreviousdeferreditindicatesthatthisisaretry
+                if(!old_deferred){
+                    self.showPopup('PaymentTransactionPopup',{
+                        transaction:def,
                     });
                     def.notify({
-                        message: this.env._t('Handling transaction...'),
+                        message:this.env._t('Handlingtransaction...'),
                     });
                 }
 
                 this.rpc(
                     {
-                        model: 'pos_mercury.mercury_transaction',
-                        method: 'do_payment',
-                        args: [transaction],
+                        model:'pos_mercury.mercury_transaction',
+                        method:'do_payment',
+                        args:[transaction],
                     },
                     {
-                        timeout: self.server_timeout_in_ms,
+                        timeout:self.server_timeout_in_ms,
                     }
                 )
-                    .then(function (data) {
-                        // if not receiving a response from Vantiv, we should retry
-                        if (data === 'timeout') {
+                    .then(function(data){
+                        //ifnotreceivingaresponsefromVantiv,weshouldretry
+                        if(data==='timeout'){
                             self.retry_mercury_transaction(
                                 def,
                                 null,
                                 retry_nr,
                                 true,
                                 self.credit_code_transaction,
-                                [parsed_result, def, retry_nr + 1]
+                                [parsed_result,def,retry_nr+1]
                             );
                             return;
                         }
 
-                        if (data === 'not setup') {
+                        if(data==='notsetup'){
                             def.resolve({
-                                message: self.env._t('Please setup your Vantiv merchant account.'),
+                                message:self.env._t('PleasesetupyourVantivmerchantaccount.'),
                             });
                             return;
                         }
 
-                        if (data === 'internal error') {
+                        if(data==='internalerror'){
                             def.resolve({
-                                message: self.env._t('Flectra error while processing transaction.'),
+                                message:self.env._t('Flectraerrorwhileprocessingtransaction.'),
                             });
                             return;
                         }
 
-                        var response = self.env.pos.decodeMercuryResponse(data);
-                        response.payment_method_id = parsed_result.payment_method_id;
+                        varresponse=self.env.pos.decodeMercuryResponse(data);
+                        response.payment_method_id=parsed_result.payment_method_id;
 
-                        if (response.status === 'Approved') {
-                            // AP* indicates a duplicate request, so don't add anything for those
-                            if (
-                                response.message === 'AP*' &&
+                        if(response.status==='Approved'){
+                            //AP*indicatesaduplicaterequest,sodon'taddanythingforthose
+                            if(
+                                response.message==='AP*'&&
                                 self._does_credit_payment_line_exist(
                                     response.authorize,
                                     decodedMagtek['number'],
                                     response.card_type,
                                     decodedMagtek['name']
                                 )
-                            ) {
+                            ){
                                 def.resolve({
-                                    message: lookUpCodeTransaction['Approved'][response.error],
-                                    auto_close: true,
+                                    message:lookUpCodeTransaction['Approved'][response.error],
+                                    auto_close:true,
                                 });
-                            } else {
-                                // If the payment is approved, add a payment line
-                                var order = self.env.pos.get_order();
+                            }else{
+                                //Ifthepaymentisapproved,addapaymentline
+                                varorder=self.env.pos.get_order();
 
-                                if (swipe_pending_line) {
+                                if(swipe_pending_line){
                                     order.select_paymentline(swipe_pending_line);
-                                } else {
+                                }else{
                                     order.add_paymentline(
                                         self.payment_methods_by_id[parsed_result.payment_method_id]
                                     );
                                 }
 
-                                order.selected_paymentline.paid = true;
-                                order.selected_paymentline.mercury_swipe_pending = false;
-                                order.selected_paymentline.mercury_amount = response.authorize;
+                                order.selected_paymentline.paid=true;
+                                order.selected_paymentline.mercury_swipe_pending=false;
+                                order.selected_paymentline.mercury_amount=response.authorize;
                                 order.selected_paymentline.set_amount(response.authorize);
-                                order.selected_paymentline.mercury_card_number =
+                                order.selected_paymentline.mercury_card_number=
                                     decodedMagtek['number'];
-                                order.selected_paymentline.mercury_card_brand = response.card_type;
-                                order.selected_paymentline.mercury_card_owner_name =
+                                order.selected_paymentline.mercury_card_brand=response.card_type;
+                                order.selected_paymentline.mercury_card_owner_name=
                                     decodedMagtek['name'];
-                                order.selected_paymentline.mercury_ref_no = response.ref_no;
-                                order.selected_paymentline.mercury_record_no = response.record_no;
-                                order.selected_paymentline.mercury_invoice_no = response.invoice_no;
-                                order.selected_paymentline.mercury_auth_code = response.auth_code;
-                                order.selected_paymentline.mercury_data = response; // used to reverse transactions
+                                order.selected_paymentline.mercury_ref_no=response.ref_no;
+                                order.selected_paymentline.mercury_record_no=response.record_no;
+                                order.selected_paymentline.mercury_invoice_no=response.invoice_no;
+                                order.selected_paymentline.mercury_auth_code=response.auth_code;
+                                order.selected_paymentline.mercury_data=response;//usedtoreversetransactions
                                 order.selected_paymentline.set_credit_card_name();
 
                                 NumberBuffer.reset();
-                                order.trigger('change', order); // needed so that export_to_JSON gets triggered
+                                order.trigger('change',order);//neededsothatexport_to_JSONgetstriggered
                                 self.render();
 
-                                if (response.message === 'PARTIAL AP') {
+                                if(response.message==='PARTIALAP'){
                                     def.resolve({
-                                        message: self.env._t('Partially approved'),
-                                        auto_close: false,
+                                        message:self.env._t('Partiallyapproved'),
+                                        auto_close:false,
                                     });
-                                } else {
+                                }else{
                                     def.resolve({
-                                        message: lookUpCodeTransaction['Approved'][response.error],
-                                        auto_close: true,
+                                        message:lookUpCodeTransaction['Approved'][response.error],
+                                        auto_close:true,
                                     });
                                 }
                             }
                         }
 
-                        // if an error related to timeout or connectivity issues arised, then retry the same transaction
-                        else {
-                            if (lookUpCodeTransaction['TimeoutError'][response.error]) {
-                                // recoverable error
+                        //ifanerrorrelatedtotimeoutorconnectivityissuesarised,thenretrythesametransaction
+                        else{
+                            if(lookUpCodeTransaction['TimeoutError'][response.error]){
+                                //recoverableerror
                                 self.retry_mercury_transaction(
                                     def,
                                     response,
                                     retry_nr,
                                     true,
                                     self.credit_code_transaction,
-                                    [parsed_result, def, retry_nr + 1]
+                                    [parsed_result,def,retry_nr+1]
                                 );
-                            } else {
-                                // not recoverable
+                            }else{
+                                //notrecoverable
                                 def.resolve({
                                     message:
-                                        'Error ' + response.error + ':<br/>' + response.message,
-                                    auto_close: false,
+                                        'Error'+response.error+':<br/>'+response.message,
+                                    auto_close:false,
                                 });
                             }
                         }
                     })
-                    .catch(function () {
+                    .catch(function(){
                         self.retry_mercury_transaction(
                             def,
                             null,
                             retry_nr,
                             false,
                             self.credit_code_transaction,
-                            [parsed_result, def, retry_nr + 1]
+                            [parsed_result,def,retry_nr+1]
                         );
                     });
             }
 
-            credit_code_cancel() {
+            credit_code_cancel(){
                 return;
             }
 
-            credit_code_action(parsed_result) {
-                var online_payment_methods = this.env.pos.getOnlinePaymentMethods();
+            credit_code_action(parsed_result){
+                varonline_payment_methods=this.env.pos.getOnlinePaymentMethods();
 
-                if (online_payment_methods.length === 1) {
-                    parsed_result.payment_method_id = online_payment_methods[0].item;
+                if(online_payment_methods.length===1){
+                    parsed_result.payment_method_id=online_payment_methods[0].item;
                     this.credit_code_transaction(parsed_result);
-                } else {
-                    // this is for supporting another payment system like mercury
-                    const selectionList = online_payment_methods.map((paymentMethod) => ({
-                        id: paymentMethod.item,
-                        label: paymentMethod.label,
-                        isSelected: false,
-                        item: paymentMethod.item,
+                }else{
+                    //thisisforsupportinganotherpaymentsystemlikemercury
+                    constselectionList=online_payment_methods.map((paymentMethod)=>({
+                        id:paymentMethod.item,
+                        label:paymentMethod.label,
+                        isSelected:false,
+                        item:paymentMethod.item,
                     }));
-                    this.showPopup('SelectionPopup', {
-                        title: this.env._t('Pay with: '),
-                        list: selectionList,
-                    }).then(({ confirmed, payload: selectedPaymentMethod }) => {
-                        if (confirmed) {
-                            parsed_result.payment_method_id = selectedPaymentMethod;
+                    this.showPopup('SelectionPopup',{
+                        title:this.env._t('Paywith:'),
+                        list:selectionList,
+                    }).then(({confirmed,payload:selectedPaymentMethod})=>{
+                        if(confirmed){
+                            parsed_result.payment_method_id=selectedPaymentMethod;
                             this.credit_code_transaction(parsed_result);
-                        } else {
+                        }else{
                             this.credit_code_cancel();
                         }
                     });
                 }
             }
 
-            remove_paymentline_by_ref(line) {
+            remove_paymentline_by_ref(line){
                 this.env.pos.get_order().remove_paymentline(line);
                 NumberBuffer.reset();
                 this.render();
             }
 
-            do_reversal(line, is_voidsale, old_deferred, retry_nr) {
-                var def = old_deferred || new $.Deferred();
-                var self = this;
-                retry_nr = retry_nr || 0;
+            do_reversal(line,is_voidsale,old_deferred,retry_nr){
+                vardef=old_deferred||new$.Deferred();
+                varself=this;
+                retry_nr=retry_nr||0;
 
-                // show the transaction popup.
-                // the transaction deferred is used to update transaction status
-                this.showPopup('PaymentTransactionPopup', {
-                    transaction: def,
+                //showthetransactionpopup.
+                //thetransactiondeferredisusedtoupdatetransactionstatus
+                this.showPopup('PaymentTransactionPopup',{
+                    transaction:def,
                 });
 
-                var request_data = _.extend(
+                varrequest_data=_.extend(
                     {
-                        transaction_type: 'Credit',
-                        transaction_code: 'VoidSaleByRecordNo',
+                        transaction_type:'Credit',
+                        transaction_code:'VoidSaleByRecordNo',
                     },
                     line.mercury_data
                 );
 
-                var message = '';
-                var rpc_method = '';
+                varmessage='';
+                varrpc_method='';
 
-                if (is_voidsale) {
-                    message = this.env._t('Reversal failed, sending VoidSale...');
-                    rpc_method = 'do_voidsale';
-                } else {
-                    message = this.env._t('Sending reversal...');
-                    rpc_method = 'do_reversal';
+                if(is_voidsale){
+                    message=this.env._t('Reversalfailed,sendingVoidSale...');
+                    rpc_method='do_voidsale';
+                }else{
+                    message=this.env._t('Sendingreversal...');
+                    rpc_method='do_reversal';
                 }
 
-                if (!old_deferred) {
+                if(!old_deferred){
                     def.notify({
-                        message: message,
+                        message:message,
                     });
                 }
 
                 this.rpc(
                     {
-                        model: 'pos_mercury.mercury_transaction',
-                        method: rpc_method,
-                        args: [request_data],
+                        model:'pos_mercury.mercury_transaction',
+                        method:rpc_method,
+                        args:[request_data],
                     },
                     {
-                        timeout: self.server_timeout_in_ms,
+                        timeout:self.server_timeout_in_ms,
                     }
                 )
-                    .then(function (data) {
-                        if (data === 'timeout') {
+                    .then(function(data){
+                        if(data==='timeout'){
                             self.retry_mercury_transaction(
                                 def,
                                 null,
                                 retry_nr,
                                 true,
                                 self.do_reversal,
-                                [line, is_voidsale, def, retry_nr + 1]
+                                [line,is_voidsale,def,retry_nr+1]
                             );
                             return;
                         }
 
-                        if (data === 'internal error') {
+                        if(data==='internalerror'){
                             def.resolve({
-                                message: self.env._t('Flectra error while processing transaction.'),
+                                message:self.env._t('Flectraerrorwhileprocessingtransaction.'),
                             });
                             return;
                         }
 
-                        var response = self.env.pos.decodeMercuryResponse(data);
+                        varresponse=self.env.pos.decodeMercuryResponse(data);
 
-                        if (!is_voidsale) {
-                            if (response.status != 'Approved' || response.message != 'REVERSED') {
-                                // reversal was not successful, send voidsale
-                                self.do_reversal(line, true);
-                            } else {
-                                // reversal was successful
+                        if(!is_voidsale){
+                            if(response.status!='Approved'||response.message!='REVERSED'){
+                                //reversalwasnotsuccessful,sendvoidsale
+                                self.do_reversal(line,true);
+                            }else{
+                                //reversalwassuccessful
                                 def.resolve({
-                                    message: self.env._t('Reversal succeeded'),
+                                    message:self.env._t('Reversalsucceeded'),
                                 });
 
                                 self.remove_paymentline_by_ref(line);
                             }
-                        } else {
-                            // voidsale ended, nothing more we can do
-                            if (response.status === 'Approved') {
+                        }else{
+                            //voidsaleended,nothingmorewecando
+                            if(response.status==='Approved'){
                                 def.resolve({
-                                    message: self.env._t('VoidSale succeeded'),
+                                    message:self.env._t('VoidSalesucceeded'),
                                 });
 
                                 self.remove_paymentline_by_ref(line);
-                            } else {
+                            }else{
                                 def.resolve({
                                     message:
-                                        'Error ' + response.error + ':<br/>' + response.message,
+                                        'Error'+response.error+':<br/>'+response.message,
                                 });
                             }
                         }
                     })
-                    .catch(function () {
+                    .catch(function(){
                         self.retry_mercury_transaction(
                             def,
                             null,
                             retry_nr,
                             false,
                             self.do_reversal,
-                            [line, is_voidsale, def, retry_nr + 1]
+                            [line,is_voidsale,def,retry_nr+1]
                         );
                     });
             }
 
             /**
-             * @override
+             *@override
              */
-            deletePaymentLine(event) {
-                const { cid } = event.detail;
-                const line = this.paymentLines.find((line) => line.cid === cid);
-                if (line.mercury_data) {
-                    this.do_reversal(line, false);
-                } else {
+            deletePaymentLine(event){
+                const{cid}=event.detail;
+                constline=this.paymentLines.find((line)=>line.cid===cid);
+                if(line.mercury_data){
+                    this.do_reversal(line,false);
+                }else{
                     super.deletePaymentLine(event);
                 }
             }
 
             /**
-             * @override
+             *@override
              */
-            addNewPaymentLine({ detail: paymentMethod }) {
-                const order = this.env.pos.get_order();
-                const res = super.addNewPaymentLine(...arguments);
-                if (res && paymentMethod.pos_mercury_config_id) {
-                    order.selected_paymentline.mercury_swipe_pending = true;
-                    order.trigger('change', order);
+            addNewPaymentLine({detail:paymentMethod}){
+                constorder=this.env.pos.get_order();
+                constres=super.addNewPaymentLine(...arguments);
+                if(res&&paymentMethod.pos_mercury_config_id){
+                    order.selected_paymentline.mercury_swipe_pending=true;
+                    order.trigger('change',order);
                     this.render();
                 }
             }
         };
 
-    Registries.Component.extend(PaymentScreen, PosMercuryPaymentScreen);
+    Registries.Component.extend(PaymentScreen,PosMercuryPaymentScreen);
 
-    return PaymentScreen;
+    returnPaymentScreen;
 });

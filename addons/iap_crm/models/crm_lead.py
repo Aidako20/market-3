@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class Lead(models.Model):
-    _inherit = 'crm.lead'
+classLead(models.Model):
+    _inherit='crm.lead'
 
-    reveal_id = fields.Char(string='Reveal ID', help="Technical ID of reveal request done by IAP.")
+    reveal_id=fields.Char(string='RevealID',help="TechnicalIDofrevealrequestdonebyIAP.")

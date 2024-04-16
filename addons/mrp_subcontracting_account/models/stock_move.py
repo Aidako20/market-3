@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class StockMove(models.Model):
-    _inherit = 'stock.move'
+classStockMove(models.Model):
+    _inherit='stock.move'
 
-    def _should_force_price_unit(self):
+    def_should_force_price_unit(self):
         self.ensure_one()
-        return self.is_subcontract or super()._should_force_price_unit()
+        returnself.is_subcontractorsuper()._should_force_price_unit()

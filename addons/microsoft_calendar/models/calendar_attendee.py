@@ -1,48 +1,48 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
-from flectra.addons.microsoft_calendar.models.microsoft_sync import microsoft_calendar_token
-from flectra.addons.microsoft_calendar.utils.microsoft_calendar import MicrosoftCalendarService
+fromflectra.addons.microsoft_calendar.models.microsoft_syncimportmicrosoft_calendar_token
+fromflectra.addons.microsoft_calendar.utils.microsoft_calendarimportMicrosoftCalendarService
 
 
-class Attendee(models.Model):
-    _name = 'calendar.attendee'
-    _inherit = 'calendar.attendee'
+classAttendee(models.Model):
+    _name='calendar.attendee'
+    _inherit='calendar.attendee'
 
-    def _send_mail_to_attendees(self, template_xmlid, force_send=False, ignore_recurrence=False):
-        """ Override the super method
-        If not synced with Microsoft Outlook, let Flectra in charge of sending emails
-        Otherwise, Microsoft Outlook will send them
+    def_send_mail_to_attendees(self,template_xmlid,force_send=False,ignore_recurrence=False):
+        """Overridethesupermethod
+        IfnotsyncedwithMicrosoftOutlook,letFlectrainchargeofsendingemails
+        Otherwise,MicrosoftOutlookwillsendthem
         """
-        with microsoft_calendar_token(self.env.user.sudo()) as token:
-            if not token:
-                super()._send_mail_to_attendees(template_xmlid, force_send, ignore_recurrence)
+        withmicrosoft_calendar_token(self.env.user.sudo())astoken:
+            ifnottoken:
+                super()._send_mail_to_attendees(template_xmlid,force_send,ignore_recurrence)
 
-    def do_tentative(self):
-        # Synchronize event after state change
-        res = super().do_tentative()
+    defdo_tentative(self):
+        #Synchronizeeventafterstatechange
+        res=super().do_tentative()
         self._microsoft_sync_event('tentativelyAccept')
-        return res
+        returnres
 
-    def do_accept(self):
-        # Synchronize event after state change
-        res = super().do_accept()
+    defdo_accept(self):
+        #Synchronizeeventafterstatechange
+        res=super().do_accept()
         self._microsoft_sync_event('accept')
-        return res
+        returnres
 
-    def do_decline(self):
-        # Synchronize event after state change
-        res = super().do_decline()
+    defdo_decline(self):
+        #Synchronizeeventafterstatechange
+        res=super().do_decline()
         self._microsoft_sync_event('decline')
-        return res
+        returnres
 
-    def _microsoft_sync_event(self, answer):
-        params = {"comment": "", "sendResponse": True}
-        # Microsoft prevent user to answer the meeting when they are the organizer
-        linked_events = self.event_id._get_synced_events()
-        for event in linked_events.filtered(lambda e: e.user_id != self.env.user):
+    def_microsoft_sync_event(self,answer):
+        params={"comment":"","sendResponse":True}
+        #Microsoftpreventusertoanswerthemeetingwhentheyaretheorganizer
+        linked_events=self.event_id._get_synced_events()
+        foreventinlinked_events.filtered(lambdae:e.user_id!=self.env.user):
             event._microsoft_patch(
                 event._get_organizer(),
                 event.ms_organizer_event_id,

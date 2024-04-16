@@ -1,40 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <!-- UTM Stage -->
-        <record id="campaign_stage_1" model="utm.stage">
-            <field name="name">Schedule</field>
-            <field name="sequence">10</field>
+        <!--UTMStage-->
+        <recordid="campaign_stage_1"model="utm.stage">
+            <fieldname="name">Schedule</field>
+            <fieldname="sequence">10</field>
         </record>
-        <record id="campaign_stage_2" model="utm.stage">
-            <field name="name">Design</field>
-            <field name="sequence">20</field>
+        <recordid="campaign_stage_2"model="utm.stage">
+            <fieldname="name">Design</field>
+            <fieldname="sequence">20</field>
         </record>
-        <record id="campaign_stage_3" model="utm.stage">
-            <field name="name">Sent</field>
-            <field name="sequence">30</field>
+        <recordid="campaign_stage_3"model="utm.stage">
+            <fieldname="name">Sent</field>
+            <fieldname="sequence">30</field>
         </record>
 
-        <!-- UTM Campaigns -->
-        <record model="utm.campaign" id="utm_campaign_fall_drive">
-            <field name="name">Sale</field>
-            <field name="stage_id" ref="utm.default_utm_stage" />
-            <field name="is_website" eval="True" />
+        <!--UTMCampaigns-->
+        <recordmodel="utm.campaign"id="utm_campaign_fall_drive">
+            <fieldname="name">Sale</field>
+            <fieldname="stage_id"ref="utm.default_utm_stage"/>
+            <fieldname="is_website"eval="True"/>
         </record>
-        <record model="utm.campaign" id="utm_campaign_christmas_special">
-            <field name="name">Christmas Special</field>
-            <field name="stage_id" ref="utm.default_utm_stage" />
-            <field name="is_website" eval="True" />
+        <recordmodel="utm.campaign"id="utm_campaign_christmas_special">
+            <fieldname="name">ChristmasSpecial</field>
+            <fieldname="stage_id"ref="utm.default_utm_stage"/>
+            <fieldname="is_website"eval="True"/>
         </record>
-        <record model="utm.campaign" id="utm_campaign_email_campaign_services">
-            <field name="name">Email Campaign - Services</field>
-            <field name="stage_id" ref="utm.default_utm_stage" />
-            <field name="is_website" eval="True" />
+        <recordmodel="utm.campaign"id="utm_campaign_email_campaign_services">
+            <fieldname="name">EmailCampaign-Services</field>
+            <fieldname="stage_id"ref="utm.default_utm_stage"/>
+            <fieldname="is_website"eval="True"/>
         </record>
-        <record model="utm.campaign" id="utm_campaign_email_campaign_products">
-            <field name="name">Email Campaign - Products</field>
-            <field name="stage_id" ref="utm.default_utm_stage" />
-            <field name="is_website" eval="True" />
+        <recordmodel="utm.campaign"id="utm_campaign_email_campaign_products">
+            <fieldname="name">EmailCampaign-Products</field>
+            <fieldname="stage_id"ref="utm.default_utm_stage"/>
+            <fieldname="is_website"eval="True"/>
         </record>
     </data>
 </flectra>

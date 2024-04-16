@@ -1,25 +1,25 @@
-flectra.define('pos_restaurant.SplitOrderline', function(require) {
-    'use strict';
+flectra.define('pos_restaurant.SplitOrderline',function(require){
+    'usestrict';
 
-    const { useListener } = require('web.custom_hooks');
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+    const{useListener}=require('web.custom_hooks');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
 
-    class SplitOrderline extends PosComponent {
-        constructor() {
+    classSplitOrderlineextendsPosComponent{
+        constructor(){
             super(...arguments);
-            useListener('click', this.onClick);
+            useListener('click',this.onClick);
         }
-        get isSelected() {
-            return this.props.split.quantity !== 0;
+        getisSelected(){
+            returnthis.props.split.quantity!==0;
         }
-        onClick() {
-            this.trigger('click-line', this.props.line);
+        onClick(){
+            this.trigger('click-line',this.props.line);
         }
     }
-    SplitOrderline.template = 'SplitOrderline';
+    SplitOrderline.template='SplitOrderline';
 
     Registries.Component.add(SplitOrderline);
 
-    return SplitOrderline;
+    returnSplitOrderline;
 });

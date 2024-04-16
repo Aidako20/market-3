@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class ResCompany(models.Model):
-    _inherit = "res.company"
+classResCompany(models.Model):
+    _inherit="res.company"
 
-    def _get_social_media_links(self):
-        social_media_links = super()._get_social_media_links()
-        website_id = self.env['website'].get_current_website()
+    def_get_social_media_links(self):
+        social_media_links=super()._get_social_media_links()
+        website_id=self.env['website'].get_current_website()
         social_media_links.update({
-            'social_facebook': website_id.social_facebook or social_media_links.get('social_facebook'),
-            'social_linkedin': website_id.social_linkedin or social_media_links.get('social_linkedin'),
-            'social_twitter': website_id.social_twitter or social_media_links.get('social_twitter'),
-            'social_instagram': website_id.social_instagram or social_media_links.get('social_instagram')
+            'social_facebook':website_id.social_facebookorsocial_media_links.get('social_facebook'),
+            'social_linkedin':website_id.social_linkedinorsocial_media_links.get('social_linkedin'),
+            'social_twitter':website_id.social_twitterorsocial_media_links.get('social_twitter'),
+            'social_instagram':website_id.social_instagramorsocial_media_links.get('social_instagram')
         })
-        return social_media_links
+        returnsocial_media_links

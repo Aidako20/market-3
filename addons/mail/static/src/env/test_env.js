@@ -1,146 +1,146 @@
-flectra.define('mail/static/src/env/test_env.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/env/test_env.js',function(require){
+'usestrict';
 
-const { makeDeferred } = require('mail/static/src/utils/deferred/deferred.js');
-const { nextTick } = require('mail/static/src/utils/utils.js');
+const{makeDeferred}=require('mail/static/src/utils/deferred/deferred.js');
+const{nextTick}=require('mail/static/src/utils/utils.js');
 
-const { Store } = owl;
-const { EventBus } = owl.core;
+const{Store}=owl;
+const{EventBus}=owl.core;
 
 /**
- * @param {Object} [providedEnv={}]
- * @returns {Object}
+ *@param{Object}[providedEnv={}]
+ *@returns{Object}
  */
-function addMessagingToEnv(providedEnv = {}) {
-    const env = Object.assign(providedEnv);
+functionaddMessagingToEnv(providedEnv={}){
+    constenv=Object.assign(providedEnv);
 
     /**
-     * Messaging store
+     *Messagingstore
      */
-    const store = new Store({
+    conststore=newStore({
         env,
-        state: {
-            messagingRevNumber: 0,
+        state:{
+            messagingRevNumber:0,
         },
     });
 
     /**
-     * Registry of models.
+     *Registryofmodels.
      */
-    env.models = {};
+    env.models={};
     /**
-     * Environment keys used in messaging.
+     *Environmentkeysusedinmessaging.
      */
-    Object.assign(env, {
-        autofetchPartnerImStatus: false,
-        browser: Object.assign({
-            innerHeight: 1080,
-            innerWidth: 1920,
-            Notification: Object.assign({
-                permission: 'denied',
-                async requestPermission() {
-                    return this.permission;
+    Object.assign(env,{
+        autofetchPartnerImStatus:false,
+        browser:Object.assign({
+            innerHeight:1080,
+            innerWidth:1920,
+            Notification:Object.assign({
+                permission:'denied',
+                asyncrequestPermission(){
+                    returnthis.permission;
                 },
-            }, (env.browser && env.browser.Notification) || {}),
-        }, env.browser),
-        destroyMessaging() {
-            if (env.modelManager) {
+            },(env.browser&&env.browser.Notification)||{}),
+        },env.browser),
+        destroyMessaging(){
+            if(env.modelManager){
                 env.modelManager.deleteAll();
-                env.messaging = undefined;
+                env.messaging=undefined;
             }
         },
-        disableAnimation: true,
-        isMessagingInitialized() {
-            if (!this.messaging) {
-                return false;
+        disableAnimation:true,
+        isMessagingInitialized(){
+            if(!this.messaging){
+                returnfalse;
             }
-            return this.messaging.isInitialized;
+            returnthis.messaging.isInitialized;
         },
         /**
-         * States whether the environment is in QUnit test or not.
+         *StateswhethertheenvironmentisinQUnittestornot.
          *
-         * Useful to prevent some behaviour in QUnit tests, like applying
-         * style of attachment that uses url.
+         *UsefultopreventsomebehaviourinQUnittests,likeapplying
+         *styleofattachmentthatusesurl.
          */
-        isQUnitTest: true,
-        loadingBaseDelayDuration: providedEnv.loadingBaseDelayDuration || 0,
-        messaging: undefined,
-        messagingCreatedPromise: makeDeferred(),
-        messagingInitializedDeferred: makeDeferred(),
-        messagingBus: new EventBus(),
-        modelManager: undefined,
+        isQUnitTest:true,
+        loadingBaseDelayDuration:providedEnv.loadingBaseDelayDuration||0,
+        messaging:undefined,
+        messagingCreatedPromise:makeDeferred(),
+        messagingInitializedDeferred:makeDeferred(),
+        messagingBus:newEventBus(),
+        modelManager:undefined,
         store,
     });
 
-    return env;
+    returnenv;
 }
 
 /**
- * @param {Object} [providedEnv={}]
- * @returns {Object}
+ *@param{Object}[providedEnv={}]
+ *@returns{Object}
  */
-function addTimeControlToEnv(providedEnv = {}) {
+functionaddTimeControlToEnv(providedEnv={}){
 
-    let env = Object.assign({}, providedEnv);
+    letenv=Object.assign({},providedEnv);
 
-    if (!env.browser) {
-        env.browser = {};
+    if(!env.browser){
+        env.browser={};
     }
-    // list of timeout ids that have timed out.
-    let timedOutIds = [];
-    // key: timeoutId, value: func + remaining duration
-    const timeouts = new Map();
-    Object.assign(env.browser, {
-        clearTimeout: id => {
+    //listoftimeoutidsthathavetimedout.
+    lettimedOutIds=[];
+    //key:timeoutId,value:func+remainingduration
+    consttimeouts=newMap();
+    Object.assign(env.browser,{
+        clearTimeout:id=>{
             timeouts.delete(id);
-            timedOutIds = timedOutIds.filter(i => i !== id);
+            timedOutIds=timedOutIds.filter(i=>i!==id);
         },
-        setTimeout: (func, duration) => {
-            const timeoutId = _.uniqueId('timeout_');
-            const timeout = {
-                id: timeoutId,
-                isTimedOut: false,
+        setTimeout:(func,duration)=>{
+            consttimeoutId=_.uniqueId('timeout_');
+            consttimeout={
+                id:timeoutId,
+                isTimedOut:false,
                 func,
                 duration,
             };
-            timeouts.set(timeoutId, timeout);
-            if (duration === 0) {
+            timeouts.set(timeoutId,timeout);
+            if(duration===0){
                 timedOutIds.push(timeoutId);
-                timeout.isTimedOut = true;
+                timeout.isTimedOut=true;
             }
-            return timeoutId;
+            returntimeoutId;
         },
     });
-    if (!env.testUtils) {
-        env.testUtils = {};
+    if(!env.testUtils){
+        env.testUtils={};
     }
-    Object.assign(env.testUtils, {
-        advanceTime: async duration => {
-            await nextTick();
-            for (const id of timeouts.keys()) {
-                const timeout = timeouts.get(id);
-                if (timeout.isTimedOut) {
+    Object.assign(env.testUtils,{
+        advanceTime:asyncduration=>{
+            awaitnextTick();
+            for(constidoftimeouts.keys()){
+                consttimeout=timeouts.get(id);
+                if(timeout.isTimedOut){
                     continue;
                 }
-                timeout.duration = Math.max(timeout.duration - duration, 0);
-                if (timeout.duration === 0) {
+                timeout.duration=Math.max(timeout.duration-duration,0);
+                if(timeout.duration===0){
                     timedOutIds.push(id);
                 }
             }
-            while (timedOutIds.length > 0) {
-                const id = timedOutIds.shift();
-                const timeout = timeouts.get(id);
+            while(timedOutIds.length>0){
+                constid=timedOutIds.shift();
+                consttimeout=timeouts.get(id);
                 timeouts.delete(id);
                 timeout.func();
-                await nextTick();
+                awaitnextTick();
             }
-            await nextTick();
+            awaitnextTick();
         },
     });
-    return env;
+    returnenv;
 }
 
-return {
+return{
     addMessagingToEnv,
     addTimeControlToEnv,
 };

@@ -1,145 +1,145 @@
-//! moment.js locale configuration
-//! locale : Croatian [hr]
-//! author : Bojan Marković : https://github.com/bmarkovic
+//!moment.jslocaleconfiguration
+//!locale:Croatian[hr]
+//!author:BojanMarković:https://github.com/bmarkovic
 
-;(function (global, factory) {
-   typeof exports === 'object' && typeof module !== 'undefined'
-       && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+;(function(global,factory){
+   typeofexports==='object'&&typeofmodule!=='undefined'
+       &&typeofrequire==='function'?factory(require('../moment')):
+   typeofdefine==='function'&&define.amd?define(['../moment'],factory):
    factory(global.moment)
-}(this, (function (moment) { 'use strict';
+}(this,(function(moment){'usestrict';
 
 
-function translate(number, withoutSuffix, key) {
-    var result = number + ' ';
-    switch (key) {
-        case 'm':
-            return withoutSuffix ? 'jedna minuta' : 'jedne minute';
-        case 'mm':
-            if (number === 1) {
-                result += 'minuta';
-            } else if (number === 2 || number === 3 || number === 4) {
-                result += 'minute';
-            } else {
-                result += 'minuta';
+functiontranslate(number,withoutSuffix,key){
+    varresult=number+'';
+    switch(key){
+        case'm':
+            returnwithoutSuffix?'jednaminuta':'jedneminute';
+        case'mm':
+            if(number===1){
+                result+='minuta';
+            }elseif(number===2||number===3||number===4){
+                result+='minute';
+            }else{
+                result+='minuta';
             }
-            return result;
-        case 'h':
-            return withoutSuffix ? 'jedan sat' : 'jednog sata';
-        case 'hh':
-            if (number === 1) {
-                result += 'sat';
-            } else if (number === 2 || number === 3 || number === 4) {
-                result += 'sata';
-            } else {
-                result += 'sati';
+            returnresult;
+        case'h':
+            returnwithoutSuffix?'jedansat':'jednogsata';
+        case'hh':
+            if(number===1){
+                result+='sat';
+            }elseif(number===2||number===3||number===4){
+                result+='sata';
+            }else{
+                result+='sati';
             }
-            return result;
-        case 'dd':
-            if (number === 1) {
-                result += 'dan';
-            } else {
-                result += 'dana';
+            returnresult;
+        case'dd':
+            if(number===1){
+                result+='dan';
+            }else{
+                result+='dana';
             }
-            return result;
-        case 'MM':
-            if (number === 1) {
-                result += 'mjesec';
-            } else if (number === 2 || number === 3 || number === 4) {
-                result += 'mjeseca';
-            } else {
-                result += 'mjeseci';
+            returnresult;
+        case'MM':
+            if(number===1){
+                result+='mjesec';
+            }elseif(number===2||number===3||number===4){
+                result+='mjeseca';
+            }else{
+                result+='mjeseci';
             }
-            return result;
-        case 'yy':
-            if (number === 1) {
-                result += 'godina';
-            } else if (number === 2 || number === 3 || number === 4) {
-                result += 'godine';
-            } else {
-                result += 'godina';
+            returnresult;
+        case'yy':
+            if(number===1){
+                result+='godina';
+            }elseif(number===2||number===3||number===4){
+                result+='godine';
+            }else{
+                result+='godina';
             }
-            return result;
+            returnresult;
     }
 }
 
-var hr = moment.defineLocale('hr', {
-    months : {
-        format: 'siječnja_veljače_ožujka_travnja_svibnja_lipnja_srpnja_kolovoza_rujna_listopada_studenoga_prosinca'.split('_'),
-        standalone: 'siječanj_veljača_ožujak_travanj_svibanj_lipanj_srpanj_kolovoz_rujan_listopad_studeni_prosinac'.split('_')
+varhr=moment.defineLocale('hr',{
+    months:{
+        format:'siječnja_veljače_ožujka_travnja_svibnja_lipnja_srpnja_kolovoza_rujna_listopada_studenoga_prosinca'.split('_'),
+        standalone:'siječanj_veljača_ožujak_travanj_svibanj_lipanj_srpanj_kolovoz_rujan_listopad_studeni_prosinac'.split('_')
     },
-    monthsShort : 'sij._velj._ožu._tra._svi._lip._srp._kol._ruj._lis._stu._pro.'.split('_'),
-    monthsParseExact: true,
-    weekdays : 'nedjelja_ponedjeljak_utorak_srijeda_četvrtak_petak_subota'.split('_'),
-    weekdaysShort : 'ned._pon._uto._sri._čet._pet._sub.'.split('_'),
-    weekdaysMin : 'ne_po_ut_sr_če_pe_su'.split('_'),
-    weekdaysParseExact : true,
-    longDateFormat : {
-        LT : 'H:mm',
-        LTS : 'H:mm:ss',
-        L : 'DD.MM.YYYY',
-        LL : 'D. MMMM YYYY',
-        LLL : 'D. MMMM YYYY H:mm',
-        LLLL : 'dddd, D. MMMM YYYY H:mm'
+    monthsShort:'sij._velj._ožu._tra._svi._lip._srp._kol._ruj._lis._stu._pro.'.split('_'),
+    monthsParseExact:true,
+    weekdays:'nedjelja_ponedjeljak_utorak_srijeda_četvrtak_petak_subota'.split('_'),
+    weekdaysShort:'ned._pon._uto._sri._čet._pet._sub.'.split('_'),
+    weekdaysMin:'ne_po_ut_sr_če_pe_su'.split('_'),
+    weekdaysParseExact:true,
+    longDateFormat:{
+        LT:'H:mm',
+        LTS:'H:mm:ss',
+        L:'DD.MM.YYYY',
+        LL:'D.MMMMYYYY',
+        LLL:'D.MMMMYYYYH:mm',
+        LLLL:'dddd,D.MMMMYYYYH:mm'
     },
-    calendar : {
-        sameDay  : '[danas u] LT',
-        nextDay  : '[sutra u] LT',
-        nextWeek : function () {
-            switch (this.day()) {
-                case 0:
-                    return '[u] [nedjelju] [u] LT';
-                case 3:
-                    return '[u] [srijedu] [u] LT';
-                case 6:
-                    return '[u] [subotu] [u] LT';
-                case 1:
-                case 2:
-                case 4:
-                case 5:
-                    return '[u] dddd [u] LT';
+    calendar:{
+        sameDay :'[danasu]LT',
+        nextDay :'[sutrau]LT',
+        nextWeek:function(){
+            switch(this.day()){
+                case0:
+                    return'[u][nedjelju][u]LT';
+                case3:
+                    return'[u][srijedu][u]LT';
+                case6:
+                    return'[u][subotu][u]LT';
+                case1:
+                case2:
+                case4:
+                case5:
+                    return'[u]dddd[u]LT';
             }
         },
-        lastDay  : '[jučer u] LT',
-        lastWeek : function () {
-            switch (this.day()) {
-                case 0:
-                case 3:
-                    return '[prošlu] dddd [u] LT';
-                case 6:
-                    return '[prošle] [subote] [u] LT';
-                case 1:
-                case 2:
-                case 4:
-                case 5:
-                    return '[prošli] dddd [u] LT';
+        lastDay :'[jučeru]LT',
+        lastWeek:function(){
+            switch(this.day()){
+                case0:
+                case3:
+                    return'[prošlu]dddd[u]LT';
+                case6:
+                    return'[prošle][subote][u]LT';
+                case1:
+                case2:
+                case4:
+                case5:
+                    return'[prošli]dddd[u]LT';
             }
         },
-        sameElse : 'L'
+        sameElse:'L'
     },
-    relativeTime : {
-        future : 'za %s',
-        past   : 'prije %s',
-        s      : 'par sekundi',
-        m      : translate,
-        mm     : translate,
-        h      : translate,
-        hh     : translate,
-        d      : 'dan',
-        dd     : translate,
-        M      : 'mjesec',
-        MM     : translate,
-        y      : 'godinu',
-        yy     : translate
+    relativeTime:{
+        future:'za%s',
+        past  :'prije%s',
+        s     :'parsekundi',
+        m     :translate,
+        mm    :translate,
+        h     :translate,
+        hh    :translate,
+        d     :'dan',
+        dd    :translate,
+        M     :'mjesec',
+        MM    :translate,
+        y     :'godinu',
+        yy    :translate
     },
-    ordinalParse: /\d{1,2}\./,
-    ordinal : '%d.',
-    week : {
-        dow : 1, // Monday is the first day of the week.
-        doy : 7  // The week that contains Jan 1st is the first week of the year.
+    ordinalParse:/\d{1,2}\./,
+    ordinal:'%d.',
+    week:{
+        dow:1,//Mondayisthefirstdayoftheweek.
+        doy:7 //TheweekthatcontainsJan1stisthefirstweekoftheyear.
     }
 });
 
-return hr;
+returnhr;
 
 })));

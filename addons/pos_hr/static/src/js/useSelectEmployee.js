@@ -1,46 +1,46 @@
-flectra.define('pos_hr.useSelectEmployee', function (require) {
-    'use strict';
+flectra.define('pos_hr.useSelectEmployee',function(require){
+    'usestrict';
 
-    const { Component } = owl;
+    const{Component}=owl;
 
-    function useSelectEmployee() {
-        const current = Component.current;
+    functionuseSelectEmployee(){
+        constcurrent=Component.current;
 
-        async function askPin(employee) {
-            const { confirmed, payload: inputPin } = await this.showPopup('NumberPopup', {
-                isPassword: true,
-                title: this.env._t('Password ?'),
-                startingValue: null,
+        asyncfunctionaskPin(employee){
+            const{confirmed,payload:inputPin}=awaitthis.showPopup('NumberPopup',{
+                isPassword:true,
+                title:this.env._t('Password?'),
+                startingValue:null,
             });
 
-            if (!confirmed) return false;
+            if(!confirmed)returnfalse;
 
-            if (employee.pin === Sha1.hash(inputPin)) {
-                return employee;
-            } else {
-                await this.showPopup('ErrorPopup', {
-                    title: this.env._t('Incorrect Password'),
+            if(employee.pin===Sha1.hash(inputPin)){
+                returnemployee;
+            }else{
+                awaitthis.showPopup('ErrorPopup',{
+                    title:this.env._t('IncorrectPassword'),
                 });
-                return false;
+                returnfalse;
             }
         }
 
-        async function selectEmployee(selectionList) {
-            const { confirmed, payload: employee } = await this.showPopup('SelectionPopup', {
-                title: this.env._t('Change Cashier'),
-                list: selectionList,
+        asyncfunctionselectEmployee(selectionList){
+            const{confirmed,payload:employee}=awaitthis.showPopup('SelectionPopup',{
+                title:this.env._t('ChangeCashier'),
+                list:selectionList,
             });
 
-            if (!confirmed) return false;
+            if(!confirmed)returnfalse;
 
-            if (!employee.pin) {
-                return employee;
+            if(!employee.pin){
+                returnemployee;
             }
 
-            return await askPin.call(current, employee);
+            returnawaitaskPin.call(current,employee);
         }
-        return { askPin: askPin.bind(current), selectEmployee: selectEmployee.bind(current) };
+        return{askPin:askPin.bind(current),selectEmployee:selectEmployee.bind(current)};
     }
 
-    return useSelectEmployee;
+    returnuseSelectEmployee;
 });

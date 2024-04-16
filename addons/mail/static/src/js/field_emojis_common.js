@@ -1,136 +1,136 @@
-flectra.define('mail.field_emojis_common', function (require) {
-"use strict";
+flectra.define('mail.field_emojis_common',function(require){
+"usestrict";
 
-var basicFields = require('web.basic_fields');
-var core = require('web.core');
-var emojis = require('mail.emojis');
-var MailEmojisMixin = require('mail.emoji_mixin');
-var _onEmojiClickMixin = MailEmojisMixin._onEmojiClick;
-var QWeb = core.qweb;
+varbasicFields=require('web.basic_fields');
+varcore=require('web.core');
+varemojis=require('mail.emojis');
+varMailEmojisMixin=require('mail.emoji_mixin');
+var_onEmojiClickMixin=MailEmojisMixin._onEmojiClick;
+varQWeb=core.qweb;
 
 /*
- * Common code for FieldTextEmojis and FieldCharEmojis
+ *CommoncodeforFieldTextEmojisandFieldCharEmojis
  */
-var FieldEmojiCommon = {
+varFieldEmojiCommon={
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    init: function () {
-        this._super.apply(this, arguments);
-        this._triggerOnchange = _.throttle(this._triggerOnchange, 1000, {leading: false});
-        this.emojis = emojis;
+    init:function(){
+        this._super.apply(this,arguments);
+        this._triggerOnchange=_.throttle(this._triggerOnchange,1000,{leading:false});
+        this.emojis=emojis;
     },
 
     /**
-     * @override
+     *@override
      */
-    on_attach_callback: function () {
+    on_attach_callback:function(){
         this._attachEmojisDropdown();
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _render: function () {
-        this._super.apply(this, arguments);
+    _render:function(){
+        this._super.apply(this,arguments);
 
-        if (this.mode !== 'edit') {
+        if(this.mode!=='edit'){
             this.$el.html(this._formatText(this.$el.text()));
         }
     },
 
     /**
-     * Overridden because we need to add the Emoji to the input AND trigger
-     * the 'change' event to refresh the value.
+     *OverriddenbecauseweneedtoaddtheEmojitotheinputANDtrigger
+     *the'change'eventtorefreshthevalue.
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onEmojiClick: function () {
-        _onEmojiClickMixin.apply(this, arguments);
-        this._isDirty = true;
+    _onEmojiClick:function(){
+        _onEmojiClickMixin.apply(this,arguments);
+        this._isDirty=true;
         this.$input.trigger('change');
     },
 
     /**
      *
-     * By default, the 'change' event is only triggered when the text element is blurred.
+     *Bydefault,the'change'eventisonlytriggeredwhenthetextelementisblurred.
      *
-     * We override this method because we want to update the value while
-     * the user is typing his message (and not only on blur).
+     *Weoverridethismethodbecausewewanttoupdatethevaluewhile
+     *theuseristypinghismessage(andnotonlyonblur).
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onKeydown: function () {
-        this._super.apply(this, arguments);
-        if (this.nodeOptions.onchange_on_keydown) {
+    _onKeydown:function(){
+        this._super.apply(this,arguments);
+        if(this.nodeOptions.onchange_on_keydown){
             this._triggerOnchange();
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Used by MailEmojisMixin, check its document for more info.
+     *UsedbyMailEmojisMixin,checkitsdocumentformoreinfo.
      *
-     * @private
+     *@private
      */
-    _getTargetTextElement() {
-        return this.$el;
+    _getTargetTextElement(){
+        returnthis.$el;
     },
 
     /**
-     * Triggers the 'change' event to refresh the value.
-     * This method is throttled to run at most once every second.
-     * (to avoid spamming the server while the user is typing his message)
+     *Triggersthe'change'eventtorefreshthevalue.
+     *Thismethodisthrottledtorunatmostonceeverysecond.
+     *(toavoidspammingtheserverwhiletheuseristypinghismessage)
      *
-     * @private
+     *@private
      */
-    _triggerOnchange: function () {
+    _triggerOnchange:function(){
         this.$input.trigger('change');
     },
 
     /**
-     * This will add an emoji button that shows the emojis selection dropdown.
+     *Thiswilladdanemojibuttonthatshowstheemojisselectiondropdown.
      *
-     * Should be used inside 'on_attach_callback' because we need the element to be attached to the form first.
-     * That's because the $emojisIcon element needs to be rendered outside of this $el
-     * (which is an text element, that can't 'contain' any other elements).
-     * 
-     * @private
+     *Shouldbeusedinside'on_attach_callback'becauseweneedtheelementtobeattachedtotheformfirst.
+     *That'sbecausethe$emojisIconelementneedstoberenderedoutsideofthis$el
+     *(whichisantextelement,thatcan't'contain'anyotherelements).
+     *
+     *@private
      */
-    _attachEmojisDropdown: function () {
-        if (!this.$emojisIcon) {
-            this.$emojisIcon = $(QWeb.render('mail.EmojisDropdown', {widget: this}));
-            this.$emojisIcon.find('.o_mail_emoji').on('click', this._onEmojiClick.bind(this));
+    _attachEmojisDropdown:function(){
+        if(!this.$emojisIcon){
+            this.$emojisIcon=$(QWeb.render('mail.EmojisDropdown',{widget:this}));
+            this.$emojisIcon.find('.o_mail_emoji').on('click',this._onEmojiClick.bind(this));
 
-            if (this.$el.filter('span.o_field_translate').length) {
-                // multi-languages activated, place the button on the left of the translation button
+            if(this.$el.filter('span.o_field_translate').length){
+                //multi-languagesactivated,placethebuttonontheleftofthetranslationbutton
                 this.$emojisIcon.addClass('o_mail_emojis_dropdown_translation');
             }
-            if (this.$el.filter('textarea').length) {
+            if(this.$el.filter('textarea').length){
                 this.$emojisIcon.addClass('o_mail_emojis_dropdown_textarea');
             }
             this.$el.last().after(this.$emojisIcon);
         }
 
-        if (this.mode === 'edit') {
+        if(this.mode==='edit'){
             this.$emojisIcon.show();
-        } else {
+        }else{
             this.$emojisIcon.hide();
         }
     }
 };
 
-return FieldEmojiCommon;
+returnFieldEmojiCommon;
 
 });

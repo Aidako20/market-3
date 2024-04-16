@@ -1,24 +1,24 @@
-flectra.define('pos_restaurant.PaymentInterface', function (require) {
-    "use strict";
+flectra.define('pos_restaurant.PaymentInterface',function(require){
+    "usestrict";
 
-    var PaymentInterface = require('point_of_sale.PaymentInterface');
+    varPaymentInterface=require('point_of_sale.PaymentInterface');
 
     PaymentInterface.include({
         /**
-         * Return true if the amount that was authorized can be modified,
-         * false otherwise
-         * @param {string} cid - The id of the paymentline
+         *Returntrueiftheamountthatwasauthorizedcanbemodified,
+         *falseotherwise
+         *@param{string}cid-Theidofthepaymentline
          */
-        canBeAdjusted(cid) {
-            return false;
+        canBeAdjusted(cid){
+            returnfalse;
         },
 
         /**
-         * Called when the amount authorized by a payment request should
-         * be adjusted to account for a new order line, it can only be called if
-         * canBeAdjusted returns True
-         * @param {string} cid - The id of the paymentline
+         *Calledwhentheamountauthorizedbyapaymentrequestshould
+         *beadjustedtoaccountforaneworderline,itcanonlybecalledif
+         *canBeAdjustedreturnsTrue
+         *@param{string}cid-Theidofthepaymentline
          */
-        send_payment_adjust: function (cid) {},
+        send_payment_adjust:function(cid){},
     });
 });

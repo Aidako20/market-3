@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class BaseModuleUninstall(models.TransientModel):
-    _inherit = "base.module.uninstall"
+classBaseModuleUninstall(models.TransientModel):
+    _inherit="base.module.uninstall"
 
-    def _get_models(self):
-        # consider mail-thread models only
-        models = super(BaseModuleUninstall, self)._get_models()
-        return models.filtered('is_mail_thread')
+    def_get_models(self):
+        #considermail-threadmodelsonly
+        models=super(BaseModuleUninstall,self)._get_models()
+        returnmodels.filtered('is_mail_thread')

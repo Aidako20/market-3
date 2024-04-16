@@ -1,131 +1,131 @@
-flectra.define('web.basic_fields_owl', function (require) {
-    "use strict";
+flectra.define('web.basic_fields_owl',function(require){
+    "usestrict";
 
-    const AbstractField = require('web.AbstractFieldOwl');
-    const CustomCheckbox = require('web.CustomCheckbox');
-    const { _lt } = require('web.translation');
+    constAbstractField=require('web.AbstractFieldOwl');
+    constCustomCheckbox=require('web.CustomCheckbox');
+    const{_lt}=require('web.translation');
 
 
     /**
-     * FieldBadge displays the field's value inside a bootstrap pill badge.
-     * The supported field's types are 'char', 'selection' and 'many2one'.
+     *FieldBadgedisplaysthefield'svalueinsideabootstrappillbadge.
+     *Thesupportedfield'stypesare'char','selection'and'many2one'.
      *
-     * By default, the background color of the badge is a light gray, but it can
-     * be customized by setting a 'decoration-xxx' attribute on the field.
-     * For instance,
-     *   <field name="some_field" widget="badge" decoration-danger="state == 'cancel'"/>
-     * renders a badge with a red background on records matching the condition.
+     *Bydefault,thebackgroundcolorofthebadgeisalightgray,butitcan
+     *becustomizedbysettinga'decoration-xxx'attributeonthefield.
+     *Forinstance,
+     *  <fieldname="some_field"widget="badge"decoration-danger="state=='cancel'"/>
+     *rendersabadgewitharedbackgroundonrecordsmatchingthecondition.
      */
-    class FieldBadge extends AbstractField {
-        _getClassFromDecoration(decoration) {
-            return `bg-${decoration.split('-')[1]}-light`;
+    classFieldBadgeextendsAbstractField{
+        _getClassFromDecoration(decoration){
+            return`bg-${decoration.split('-')[1]}-light`;
         }
     }
-    FieldBadge.description = _lt("Badge");
-    FieldBadge.supportedFieldTypes = ['selection', 'many2one', 'char'];
-    FieldBadge.template = 'web.FieldBadge';
+    FieldBadge.description=_lt("Badge");
+    FieldBadge.supportedFieldTypes=['selection','many2one','char'];
+    FieldBadge.template='web.FieldBadge';
 
 
-    class FieldBoolean extends AbstractField {
-        patched() {
+    classFieldBooleanextendsAbstractField{
+        patched(){
             super.patched();
-            if (this.props.event && this.props.event.target === this) {
+            if(this.props.event&&this.props.event.target===this){
                 this.activate();
             }
         }
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * @override
-         * @returns {HTMLElement|null} the focusable checkbox input
+         *@override
+         *@returns{HTMLElement|null}thefocusablecheckboxinput
          */
-        get focusableElement() {
-            return this.mode === 'readonly' ? null : this.el.querySelector('input');
+        getfocusableElement(){
+            returnthis.mode==='readonly'?null:this.el.querySelector('input');
         }
         /**
-         * A boolean field is always set since false is a valid value.
+         *Abooleanfieldisalwayssetsincefalseisavalidvalue.
          *
-         * @override
+         *@override
          */
-        get isSet() {
-            return true;
+        getisSet(){
+            returntrue;
         }
         /**
-         * Toggle the checkbox if it is activated due to a click on itself.
+         *Togglethecheckboxifitisactivatedduetoaclickonitself.
          *
-         * @override
-         * @param {Object} [options]
-         * @param {Event} [options.event] the event which fired this activation
-         * @returns {boolean} true if the component was activated, false if the
-         *                    focusable element was not found or invisible
+         *@override
+         *@param{Object}[options]
+         *@param{Event}[options.event]theeventwhichfiredthisactivation
+         *@returns{boolean}trueifthecomponentwasactivated,falseifthe
+         *                   focusableelementwasnotfoundorinvisible
          */
-        activate(options) {
-            const activated = super.activate(options);
-            // The event might have been fired on the non field version of
-            // this field, we can still test the presence of its custom class.
-            if (activated && options && options.event && options.event.target
-                .closest('.custom-control.custom-checkbox')) {
-                this._setValue(!this.value);  // Toggle the checkbox
+        activate(options){
+            constactivated=super.activate(options);
+            //Theeventmighthavebeenfiredonthenonfieldversionof
+            //thisfield,wecanstilltestthepresenceofitscustomclass.
+            if(activated&&options&&options.event&&options.event.target
+                .closest('.custom-control.custom-checkbox')){
+                this._setValue(!this.value); //Togglethecheckbox
             }
-            return activated;
+            returnactivated;
         }
         /**
-         * Associates the 'for' attribute of the internal label.
+         *Associatesthe'for'attributeoftheinternallabel.
          *
-         * @override
+         *@override
          */
-        setIdForLabel(id) {
+        setIdForLabel(id){
             super.setIdForLabel(id);
-            this.el.querySelector('label').setAttribute('for', id);
+            this.el.querySelector('label').setAttribute('for',id);
         }
 
         //----------------------------------------------------------------------
-        // Handlers
+        //Handlers
         //----------------------------------------------------------------------
 
         /**
-         * Properly update the value when the checkbox is (un)ticked to trigger
-         * possible onchanges.
+         *Properlyupdatethevaluewhenthecheckboxis(un)tickedtotrigger
+         *possibleonchanges.
          *
-         * @private
+         *@private
          */
-        _onChange(ev) {
+        _onChange(ev){
             this._setValue(ev.target.checked);
         }
         /**
-         * Implement keyboard movements. Mostly useful for its environment, such
-         * as a list view.
+         *Implementkeyboardmovements.Mostlyusefulforitsenvironment,such
+         *asalistview.
          *
-         * @override
-         * @private
-         * @param {KeyEvent} ev
+         *@override
+         *@private
+         *@param{KeyEvent}ev
          */
-        _onKeydown(ev) {
-            switch (ev.which) {
-                case $.ui.keyCode.ENTER:
-                    // prevent subsequent 'click' event (see _onKeydown of AbstractField)
+        _onKeydown(ev){
+            switch(ev.which){
+                case$.ui.keyCode.ENTER:
+                    //preventsubsequent'click'event(see_onKeydownofAbstractField)
                     ev.preventDefault();
                     this._setValue(!this.value);
                     return;
-                case $.ui.keyCode.UP:
-                case $.ui.keyCode.RIGHT:
-                case $.ui.keyCode.DOWN:
-                case $.ui.keyCode.LEFT:
+                case$.ui.keyCode.UP:
+                case$.ui.keyCode.RIGHT:
+                case$.ui.keyCode.DOWN:
+                case$.ui.keyCode.LEFT:
                     ev.preventDefault();
             }
             super._onKeydown(ev);
         }
     }
-    FieldBoolean.components = { CustomCheckbox };
-    FieldBoolean.description = _lt("Checkbox");
-    FieldBoolean.supportedFieldTypes = ['boolean'];
-    FieldBoolean.template = 'web.FieldBoolean';
+    FieldBoolean.components={CustomCheckbox};
+    FieldBoolean.description=_lt("Checkbox");
+    FieldBoolean.supportedFieldTypes=['boolean'];
+    FieldBoolean.template='web.FieldBoolean';
 
 
-    return {
+    return{
         FieldBadge,
         FieldBoolean,
     };

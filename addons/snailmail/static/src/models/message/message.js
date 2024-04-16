@@ -1,67 +1,67 @@
-flectra.define('snailmail/static/src/models/message.message.js', function (require) {
-'use strict';
+flectra.define('snailmail/static/src/models/message.message.js',function(require){
+'usestrict';
 
-const { registerInstancePatchModel } = require('mail/static/src/model/model_core.js');
+const{registerInstancePatchModel}=require('mail/static/src/model/model_core.js');
 
-registerInstancePatchModel('mail.message', 'snailmail/static/src/models/message.message.js', {
+registerInstancePatchModel('mail.message','snailmail/static/src/models/message.message.js',{
 
     //----------------------------------------------------------------------
-    // Public
+    //Public
     //----------------------------------------------------------------------
 
     /**
-     * Cancels the 'snailmail.letter' corresponding to this message.
+     *Cancelsthe'snailmail.letter'correspondingtothismessage.
      *
-     * @returns {Deferred}
+     *@returns{Deferred}
      */
-    async cancelLetter() {
-        // the result will come from longpolling: message_notification_update
-        await this.async(() => this.env.services.rpc({
-            model: 'mail.message',
-            method: 'cancel_letter',
-            args: [[this.id]],
+    asynccancelLetter(){
+        //theresultwillcomefromlongpolling:message_notification_update
+        awaitthis.async(()=>this.env.services.rpc({
+            model:'mail.message',
+            method:'cancel_letter',
+            args:[[this.id]],
         }));
     },
     /**
-     * Opens the action about 'snailmail.letter' format error.
+     *Openstheactionabout'snailmail.letter'formaterror.
      */
-    openFormatLetterAction() {
-        this.env.bus.trigger('do-action', {
-            action: 'snailmail.snailmail_letter_format_error_action',
-            options: {
-                additional_context: {
-                    message_id: this.id,
+    openFormatLetterAction(){
+        this.env.bus.trigger('do-action',{
+            action:'snailmail.snailmail_letter_format_error_action',
+            options:{
+                additional_context:{
+                    message_id:this.id,
                 },
             },
         });
     },
     /**
-     * Opens the action about 'snailmail.letter' missing fields.
+     *Openstheactionabout'snailmail.letter'missingfields.
      */
-    async openMissingFieldsLetterAction() {
-        const letterIds = await this.async(() => this.env.services.rpc({
-            model: 'snailmail.letter',
-            method: 'search',
-            args: [[['message_id', '=', this.id]]],
+    asyncopenMissingFieldsLetterAction(){
+        constletterIds=awaitthis.async(()=>this.env.services.rpc({
+            model:'snailmail.letter',
+            method:'search',
+            args:[[['message_id','=',this.id]]],
         }));
-        this.env.bus.trigger('do-action', {
-            action: 'snailmail.snailmail_letter_missing_required_fields_action',
-            options: {
-                additional_context: {
-                    default_letter_id: letterIds[0],
+        this.env.bus.trigger('do-action',{
+            action:'snailmail.snailmail_letter_missing_required_fields_action',
+            options:{
+                additional_context:{
+                    default_letter_id:letterIds[0],
                 },
             },
         });
     },
     /**
-     * Retries to send the 'snailmail.letter' corresponding to this message.
+     *Retriestosendthe'snailmail.letter'correspondingtothismessage.
      */
-    async resendLetter() {
-        // the result will come from longpolling: message_notification_update
-        await this.async(() => this.env.services.rpc({
-            model: 'mail.message',
-            method: 'send_letter',
-            args: [[this.id]],
+    asyncresendLetter(){
+        //theresultwillcomefromlongpolling:message_notification_update
+        awaitthis.async(()=>this.env.services.rpc({
+            model:'mail.message',
+            method:'send_letter',
+            args:[[this.id]],
         }));
     },
 });

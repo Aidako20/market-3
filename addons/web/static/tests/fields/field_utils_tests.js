@@ -1,457 +1,457 @@
-flectra.define('web.field_utils_tests', function (require) {
-"use strict";
+flectra.define('web.field_utils_tests',function(require){
+"usestrict";
 
-var core = require('web.core');
-var session = require('web.session');
-var fieldUtils = require('web.field_utils');
+varcore=require('web.core');
+varsession=require('web.session');
+varfieldUtils=require('web.field_utils');
 
-QUnit.module('fields', {}, function () {
+QUnit.module('fields',{},function(){
 
 QUnit.module('field_utils');
 
-QUnit.test('format integer', function(assert) {
+QUnit.test('formatinteger',function(assert){
     assert.expect(5);
 
-    var originalGrouping = core._t.database.parameters.grouping;
+    varoriginalGrouping=core._t.database.parameters.grouping;
 
-    core._t.database.parameters.grouping = [3, 3, 3, 3];
-    assert.strictEqual(fieldUtils.format.integer(1000000), '1,000,000');
+    core._t.database.parameters.grouping=[3,3,3,3];
+    assert.strictEqual(fieldUtils.format.integer(1000000),'1,000,000');
 
-    core._t.database.parameters.grouping = [3, 2, -1];
-    assert.strictEqual(fieldUtils.format.integer(106500), '1,06,500');
+    core._t.database.parameters.grouping=[3,2,-1];
+    assert.strictEqual(fieldUtils.format.integer(106500),'1,06,500');
 
-    core._t.database.parameters.grouping = [1, 2, -1];
-    assert.strictEqual(fieldUtils.format.integer(106500), '106,50,0');
+    core._t.database.parameters.grouping=[1,2,-1];
+    assert.strictEqual(fieldUtils.format.integer(106500),'106,50,0');
 
-    assert.strictEqual(fieldUtils.format.integer(0), "0");
-    assert.strictEqual(fieldUtils.format.integer(false), "");
+    assert.strictEqual(fieldUtils.format.integer(0),"0");
+    assert.strictEqual(fieldUtils.format.integer(false),"");
 
-    core._t.database.parameters.grouping = originalGrouping;
+    core._t.database.parameters.grouping=originalGrouping;
 });
 
-QUnit.test('format float', function(assert) {
+QUnit.test('formatfloat',function(assert){
     assert.expect(5);
 
-    var originalParameters = $.extend(true, {}, core._t.database.parameters);
+    varoriginalParameters=$.extend(true,{},core._t.database.parameters);
 
-    core._t.database.parameters.grouping = [3, 3, 3, 3];
-    assert.strictEqual(fieldUtils.format.float(1000000), '1,000,000.00');
+    core._t.database.parameters.grouping=[3,3,3,3];
+    assert.strictEqual(fieldUtils.format.float(1000000),'1,000,000.00');
 
-    core._t.database.parameters.grouping = [3, 2, -1];
-    assert.strictEqual(fieldUtils.format.float(106500), '1,06,500.00');
+    core._t.database.parameters.grouping=[3,2,-1];
+    assert.strictEqual(fieldUtils.format.float(106500),'1,06,500.00');
 
-    core._t.database.parameters.grouping = [1, 2, -1];
-    assert.strictEqual(fieldUtils.format.float(106500), '106,50,0.00');
+    core._t.database.parameters.grouping=[1,2,-1];
+    assert.strictEqual(fieldUtils.format.float(106500),'106,50,0.00');
 
-    _.extend(core._t.database.parameters, {
-        grouping: [3, 0],
-        decimal_point: ',',
-        thousands_sep: '.'
+    _.extend(core._t.database.parameters,{
+        grouping:[3,0],
+        decimal_point:',',
+        thousands_sep:'.'
     });
-    assert.strictEqual(fieldUtils.format.float(6000), '6.000,00');
-    assert.strictEqual(fieldUtils.format.float(false), '');
+    assert.strictEqual(fieldUtils.format.float(6000),'6.000,00');
+    assert.strictEqual(fieldUtils.format.float(false),'');
 
-    core._t.database.parameters = originalParameters;
+    core._t.database.parameters=originalParameters;
 });
 
-QUnit.test("format_datetime", function (assert) {
+QUnit.test("format_datetime",function(assert){
     assert.expect(1);
 
-    var date_string = "2009-05-04 12:34:23";
-    var date = fieldUtils.parse.datetime(date_string, {}, {timezone: false});
-    var str = fieldUtils.format.datetime(date, {}, {timezone: false});
-    assert.strictEqual(str, moment(date).format("MM/DD/YYYY HH:mm:ss"));
+    vardate_string="2009-05-0412:34:23";
+    vardate=fieldUtils.parse.datetime(date_string,{},{timezone:false});
+    varstr=fieldUtils.format.datetime(date,{},{timezone:false});
+    assert.strictEqual(str,moment(date).format("MM/DD/YYYYHH:mm:ss"));
 });
 
-QUnit.test("format_datetime (with different timezone offset)", function (assert) {
+QUnit.test("format_datetime(withdifferenttimezoneoffset)",function(assert){
     assert.expect(2);
 
-    // mock the date format to avoid issues due to localisation
-    var dateFormat = core._t.database.parameters.date_format;
-    core._t.database.parameters.date_format = '%m/%d/%Y';
-    session.getTZOffset = function (date) {
-        // simulate daylight saving time
-        var startDate = new Date(2017, 2, 26);
-        var endDate   = new Date(2017, 9, 29);
-        if (startDate < date && date < endDate) {
-            return 120; // UTC+2
-        } else {
-            return 60; // UTC+1
+    //mockthedateformattoavoidissuesduetolocalisation
+    vardateFormat=core._t.database.parameters.date_format;
+    core._t.database.parameters.date_format='%m/%d/%Y';
+    session.getTZOffset=function(date){
+        //simulatedaylightsavingtime
+        varstartDate=newDate(2017,2,26);
+        varendDate  =newDate(2017,9,29);
+        if(startDate<date&&date<endDate){
+            return120;//UTC+2
+        }else{
+            return60;//UTC+1
         }
     };
 
-    var str = fieldUtils.format.datetime(moment.utc('2017-01-01T10:00:00Z'));
-    assert.strictEqual(str, '01/01/2017 11:00:00');
-    str = fieldUtils.format.datetime(moment.utc('2017-06-01T10:00:00Z'));
-    assert.strictEqual(str, '06/01/2017 12:00:00');
+    varstr=fieldUtils.format.datetime(moment.utc('2017-01-01T10:00:00Z'));
+    assert.strictEqual(str,'01/01/201711:00:00');
+    str=fieldUtils.format.datetime(moment.utc('2017-06-01T10:00:00Z'));
+    assert.strictEqual(str,'06/01/201712:00:00');
 
-    core._t.database.parameters.date_format = dateFormat;
+    core._t.database.parameters.date_format=dateFormat;
 });
 
-QUnit.test("format_many2one", function (assert) {
+QUnit.test("format_many2one",function(assert){
     assert.expect(2);
 
-    assert.strictEqual('', fieldUtils.format.many2one(null));
-    assert.strictEqual('A M2O value', fieldUtils.format.many2one({
-        data: { display_name: 'A M2O value' },
+    assert.strictEqual('',fieldUtils.format.many2one(null));
+    assert.strictEqual('AM2Ovalue',fieldUtils.format.many2one({
+        data:{display_name:'AM2Ovalue'},
     }));
 });
 
-QUnit.test('format monetary', function(assert) {
+QUnit.test('formatmonetary',function(assert){
     assert.expect(1);
 
-    assert.strictEqual(fieldUtils.format.monetary(false), '');
+    assert.strictEqual(fieldUtils.format.monetary(false),'');
 });
 
-QUnit.test('format char', function(assert) {
+QUnit.test('formatchar',function(assert){
     assert.expect(1);
 
-    assert.strictEqual(fieldUtils.format.char(), '',
-        "undefined char should be formatted as an empty string");
+    assert.strictEqual(fieldUtils.format.char(),'',
+        "undefinedcharshouldbeformattedasanemptystring");
 });
 
-QUnit.test('format many2many', function(assert) {
+QUnit.test('formatmany2many',function(assert){
     assert.expect(3);
 
-    assert.strictEqual(fieldUtils.format.many2many({data: []}), 'No records');
-    assert.strictEqual(fieldUtils.format.many2many({data: [1]}), '1 record');
-    assert.strictEqual(fieldUtils.format.many2many({data: [1, 2]}), '2 records');
+    assert.strictEqual(fieldUtils.format.many2many({data:[]}),'Norecords');
+    assert.strictEqual(fieldUtils.format.many2many({data:[1]}),'1record');
+    assert.strictEqual(fieldUtils.format.many2many({data:[1,2]}),'2records');
 });
 
-QUnit.test('format one2many', function(assert) {
+QUnit.test('formatone2many',function(assert){
     assert.expect(3);
 
-    assert.strictEqual(fieldUtils.format.one2many({data: []}), 'No records');
-    assert.strictEqual(fieldUtils.format.one2many({data: [1]}), '1 record');
-    assert.strictEqual(fieldUtils.format.one2many({data: [1, 2]}), '2 records');
+    assert.strictEqual(fieldUtils.format.one2many({data:[]}),'Norecords');
+    assert.strictEqual(fieldUtils.format.one2many({data:[1]}),'1record');
+    assert.strictEqual(fieldUtils.format.one2many({data:[1,2]}),'2records');
 });
 
-QUnit.test('format binary', function (assert) {
+QUnit.test('formatbinary',function(assert){
     assert.expect(1);
 
-    // base64 estimated size (bytes) = value.length / 1.37 (http://en.wikipedia.org/wiki/Base64#MIME)
-    // Here: 4 / 1.37 = 2.91970800 => 2.92 (rounded 2 decimals by utils.human_size)
-    assert.strictEqual(fieldUtils.format.binary('Cg=='), '2.92 Bytes');
+    //base64estimatedsize(bytes)=value.length/1.37(http://en.wikipedia.org/wiki/Base64#MIME)
+    //Here:4/1.37=2.91970800=>2.92(rounded2decimalsbyutils.human_size)
+    assert.strictEqual(fieldUtils.format.binary('Cg=='),'2.92Bytes');
 });
 
-QUnit.test('format percentage', function (assert) {
+QUnit.test('formatpercentage',function(assert){
     assert.expect(12);
 
-    var originalParameters = _.clone(core._t.database.parameters);
+    varoriginalParameters=_.clone(core._t.database.parameters);
 
-    assert.strictEqual(fieldUtils.format.percentage(0), '0%');
-    assert.strictEqual(fieldUtils.format.percentage(0.5), '50%');
-    assert.strictEqual(fieldUtils.format.percentage(1), '100%');
+    assert.strictEqual(fieldUtils.format.percentage(0),'0%');
+    assert.strictEqual(fieldUtils.format.percentage(0.5),'50%');
+    assert.strictEqual(fieldUtils.format.percentage(1),'100%');
 
-    assert.strictEqual(fieldUtils.format.percentage(-0.2), '-20%');
-    assert.strictEqual(fieldUtils.format.percentage(2.5), '250%');
+    assert.strictEqual(fieldUtils.format.percentage(-0.2),'-20%');
+    assert.strictEqual(fieldUtils.format.percentage(2.5),'250%');
 
-    assert.strictEqual(fieldUtils.format.percentage(0.125), '12.5%');
-    assert.strictEqual(fieldUtils.format.percentage(0.666666), '66.67%');
+    assert.strictEqual(fieldUtils.format.percentage(0.125),'12.5%');
+    assert.strictEqual(fieldUtils.format.percentage(0.666666),'66.67%');
 
-    assert.strictEqual(fieldUtils.format.percentage(false), '0%');
-    assert.strictEqual(fieldUtils.format.percentage(50, null,
-        {humanReadable: function (val) {return true;}}), '5k%'
+    assert.strictEqual(fieldUtils.format.percentage(false),'0%');
+    assert.strictEqual(fieldUtils.format.percentage(50,null,
+        {humanReadable:function(val){returntrue;}}),'5k%'
     );
 
-    _.extend(core._t.database.parameters, {
-        grouping: [3, 0],
-        decimal_point: ',',
-        thousands_sep: '.'
+    _.extend(core._t.database.parameters,{
+        grouping:[3,0],
+        decimal_point:',',
+        thousands_sep:'.'
     });
-    assert.strictEqual(fieldUtils.format.percentage(0.125), '12,5%');
-    assert.strictEqual(fieldUtils.format.percentage(0.666666), '66,67%');
-    assert.strictEqual(fieldUtils.format.percentage(0.5, null, { noSymbol: true }), '50');
+    assert.strictEqual(fieldUtils.format.percentage(0.125),'12,5%');
+    assert.strictEqual(fieldUtils.format.percentage(0.666666),'66,67%');
+    assert.strictEqual(fieldUtils.format.percentage(0.5,null,{noSymbol:true}),'50');
 
-    core._t.database.parameters = originalParameters;
+    core._t.database.parameters=originalParameters;
 });
 
-QUnit.test('format float time', function (assert) {
+QUnit.test('formatfloattime',function(assert){
     assert.expect(7);
 
-    assert.strictEqual(fieldUtils.format.float_time(2), '02:00');
-    assert.strictEqual(fieldUtils.format.float_time(3.5), '03:30');
-    assert.strictEqual(fieldUtils.format.float_time(0.25), '00:15');
+    assert.strictEqual(fieldUtils.format.float_time(2),'02:00');
+    assert.strictEqual(fieldUtils.format.float_time(3.5),'03:30');
+    assert.strictEqual(fieldUtils.format.float_time(0.25),'00:15');
 
-    assert.strictEqual(fieldUtils.format.float_time(-0.5), '-00:30');
+    assert.strictEqual(fieldUtils.format.float_time(-0.5),'-00:30');
 
-    const options = {
-        noLeadingZeroHour: true,
+    constoptions={
+        noLeadingZeroHour:true,
     };
-    assert.strictEqual(fieldUtils.format.float_time(2, null, options), '2:00');
-    assert.strictEqual(fieldUtils.format.float_time(3.5, null, options), '3:30');
-    assert.strictEqual(fieldUtils.format.float_time(-0.5, null, options), '-0:30');
+    assert.strictEqual(fieldUtils.format.float_time(2,null,options),'2:00');
+    assert.strictEqual(fieldUtils.format.float_time(3.5,null,options),'3:30');
+    assert.strictEqual(fieldUtils.format.float_time(-0.5,null,options),'-0:30');
 });
 
-QUnit.test('parse float', function(assert) {
+QUnit.test('parsefloat',function(assert){
     assert.expect(10);
 
-    var originalParameters = _.clone(core._t.database.parameters);
+    varoriginalParameters=_.clone(core._t.database.parameters);
 
-    _.extend(core._t.database.parameters, {
-        grouping: [3, 0],
-        decimal_point: '.',
-        thousands_sep: ','
+    _.extend(core._t.database.parameters,{
+        grouping:[3,0],
+        decimal_point:'.',
+        thousands_sep:','
     });
 
-    assert.strictEqual(fieldUtils.parse.float(""), 0);
-    assert.strictEqual(fieldUtils.parse.float("0"), 0);
-    assert.strictEqual(fieldUtils.parse.float("100.00"), 100);
-    assert.strictEqual(fieldUtils.parse.float("-100.00"), -100);
-    assert.strictEqual(fieldUtils.parse.float("1,000.00"), 1000);
-    assert.strictEqual(fieldUtils.parse.float("1,000,000.00"), 1000000);
-    assert.strictEqual(fieldUtils.parse.float('1,234.567'), 1234.567);
-    assert.throws(function () {
+    assert.strictEqual(fieldUtils.parse.float(""),0);
+    assert.strictEqual(fieldUtils.parse.float("0"),0);
+    assert.strictEqual(fieldUtils.parse.float("100.00"),100);
+    assert.strictEqual(fieldUtils.parse.float("-100.00"),-100);
+    assert.strictEqual(fieldUtils.parse.float("1,000.00"),1000);
+    assert.strictEqual(fieldUtils.parse.float("1,000,000.00"),1000000);
+    assert.strictEqual(fieldUtils.parse.float('1,234.567'),1234.567);
+    assert.throws(function(){
         fieldUtils.parse.float("1.000.000");
-    }, "Throw an exception if it's not a valid number");
+    },"Throwanexceptionifit'snotavalidnumber");
 
-    _.extend(core._t.database.parameters, {
-        grouping: [3, 0],
-        decimal_point: ',',
-        thousands_sep: '.'
+    _.extend(core._t.database.parameters,{
+        grouping:[3,0],
+        decimal_point:',',
+        thousands_sep:'.'
     });
 
-    assert.strictEqual(fieldUtils.parse.float('1.234,567'), 1234.567);
-    assert.throws(function () {
+    assert.strictEqual(fieldUtils.parse.float('1.234,567'),1234.567);
+    assert.throws(function(){
         fieldUtils.parse.float("1,000,000");
-    }, "Throw an exception if it's not a valid number");
+    },"Throwanexceptionifit'snotavalidnumber");
 
-    _.extend(core._t.database.parameters, originalParameters);
+    _.extend(core._t.database.parameters,originalParameters);
 });
 
-QUnit.test('parse integer', function(assert) {
+QUnit.test('parseinteger',function(assert){
     assert.expect(11);
 
-    var originalParameters = _.clone(core._t.database.parameters);
+    varoriginalParameters=_.clone(core._t.database.parameters);
 
-    _.extend(core._t.database.parameters, {
-        grouping: [3, 0],
-        decimal_point: '.',
-        thousands_sep: ','
+    _.extend(core._t.database.parameters,{
+        grouping:[3,0],
+        decimal_point:'.',
+        thousands_sep:','
     });
 
-    assert.strictEqual(fieldUtils.parse.integer(""), 0);
-    assert.strictEqual(fieldUtils.parse.integer("0"), 0);
-    assert.strictEqual(fieldUtils.parse.integer("100"), 100);
-    assert.strictEqual(fieldUtils.parse.integer("-100"), -100);
-    assert.strictEqual(fieldUtils.parse.integer("1,000"), 1000);
-    assert.strictEqual(fieldUtils.parse.integer("1,000,000"), 1000000);
-    assert.throws(function () {
+    assert.strictEqual(fieldUtils.parse.integer(""),0);
+    assert.strictEqual(fieldUtils.parse.integer("0"),0);
+    assert.strictEqual(fieldUtils.parse.integer("100"),100);
+    assert.strictEqual(fieldUtils.parse.integer("-100"),-100);
+    assert.strictEqual(fieldUtils.parse.integer("1,000"),1000);
+    assert.strictEqual(fieldUtils.parse.integer("1,000,000"),1000000);
+    assert.throws(function(){
         fieldUtils.parse.integer("1.000.000");
-    }, "Throw an exception if it's not a valid number");
-    assert.throws(function () {
+    },"Throwanexceptionifit'snotavalidnumber");
+    assert.throws(function(){
         fieldUtils.parse.integer("1,234.567");
-    }, "Throw an exception if the number is a float");
+    },"Throwanexceptionifthenumberisafloat");
 
-    _.extend(core._t.database.parameters, {
-        grouping: [3, 0],
-        decimal_point: ',',
-        thousands_sep: '.'
+    _.extend(core._t.database.parameters,{
+        grouping:[3,0],
+        decimal_point:',',
+        thousands_sep:'.'
     });
 
-    assert.strictEqual(fieldUtils.parse.integer("1.000.000"), 1000000);
-    assert.throws(function () {
+    assert.strictEqual(fieldUtils.parse.integer("1.000.000"),1000000);
+    assert.throws(function(){
         fieldUtils.parse.integer("1,000,000");
-    }, "Throw an exception if it's not a valid number");
-    assert.throws(function () {
+    },"Throwanexceptionifit'snotavalidnumber");
+    assert.throws(function(){
         fieldUtils.parse.integer("1.234,567");
-    }, "Throw an exception if the number is a float");
+    },"Throwanexceptionifthenumberisafloat");
 
-    _.extend(core._t.database.parameters, originalParameters);
+    _.extend(core._t.database.parameters,originalParameters);
 });
 
-QUnit.test('parse monetary', function(assert) {
+QUnit.test('parsemonetary',function(assert){
     assert.expect(16);
-    var originalCurrencies = session.currencies;
-    const originalParameters = _.clone(core._t.database.parameters);
-    session.currencies = {
-        1: {
-            digits: [69, 2],
-            position: "after",
-            symbol: "€"
+    varoriginalCurrencies=session.currencies;
+    constoriginalParameters=_.clone(core._t.database.parameters);
+    session.currencies={
+        1:{
+            digits:[69,2],
+            position:"after",
+            symbol:"€"
         },
-        2: {
-            digits: [69, 2],
-            symbol: "¥"
+        2:{
+            digits:[69,2],
+            symbol:"¥"
         },
-        3: {
-            digits: [69, 2],
-            position: "before",
-            symbol: "$"
+        3:{
+            digits:[69,2],
+            position:"before",
+            symbol:"$"
         }
     };
 
-    assert.strictEqual(fieldUtils.parse.monetary(""), 0);
-    assert.strictEqual(fieldUtils.parse.monetary("0"), 0);
-    assert.strictEqual(fieldUtils.parse.monetary("100.00"), 100);
-    assert.strictEqual(fieldUtils.parse.monetary("-100.00"), -100);
-    assert.strictEqual(fieldUtils.parse.monetary("1,000.00"), 1000);
-    assert.strictEqual(fieldUtils.parse.monetary("1,000,000.00"), 1000000);
-    assert.strictEqual(fieldUtils.parse.monetary("$&nbsp;125.00", {}, {currency_id: 3}), 125);
-    assert.strictEqual(fieldUtils.parse.monetary("1,000.00&nbsp;€", {}, {currency_id: 1}), 1000);
-    const formated_value = fieldUtils.format.monetary(100, {}, {currency_id: 2});
-    assert.strictEqual(fieldUtils.parse.monetary(formated_value, {}, {currency_id: 2}), 100);
-    assert.throws(function() {fieldUtils.parse.monetary("$ 12.00", {}, {currency_id: 3})}, /is not a correct/);
-    assert.throws(function() {fieldUtils.parse.monetary("$&nbsp;12.00", {}, {currency_id: 1})}, /is not a correct/);
-    assert.throws(function() {fieldUtils.parse.monetary("$&nbsp;12.00&nbsp;34", {}, {currency_id: 3})}, /is not a correct/);
+    assert.strictEqual(fieldUtils.parse.monetary(""),0);
+    assert.strictEqual(fieldUtils.parse.monetary("0"),0);
+    assert.strictEqual(fieldUtils.parse.monetary("100.00"),100);
+    assert.strictEqual(fieldUtils.parse.monetary("-100.00"),-100);
+    assert.strictEqual(fieldUtils.parse.monetary("1,000.00"),1000);
+    assert.strictEqual(fieldUtils.parse.monetary("1,000,000.00"),1000000);
+    assert.strictEqual(fieldUtils.parse.monetary("$&nbsp;125.00",{},{currency_id:3}),125);
+    assert.strictEqual(fieldUtils.parse.monetary("1,000.00&nbsp;€",{},{currency_id:1}),1000);
+    constformated_value=fieldUtils.format.monetary(100,{},{currency_id:2});
+    assert.strictEqual(fieldUtils.parse.monetary(formated_value,{},{currency_id:2}),100);
+    assert.throws(function(){fieldUtils.parse.monetary("$12.00",{},{currency_id:3})},/isnotacorrect/);
+    assert.throws(function(){fieldUtils.parse.monetary("$&nbsp;12.00",{},{currency_id:1})},/isnotacorrect/);
+    assert.throws(function(){fieldUtils.parse.monetary("$&nbsp;12.00&nbsp;34",{},{currency_id:3})},/isnotacorrect/);
 
-    // In some languages, the non-breaking space character is used as thousands separator.
-    const nbsp = '\u00a0';
-    _.extend(core._t.database.parameters, {
-        grouping: [3, 0],
-        decimal_point: '.',
-        thousands_sep: nbsp,
+    //Insomelanguages,thenon-breakingspacecharacterisusedasthousandsseparator.
+    constnbsp='\u00a0';
+    _.extend(core._t.database.parameters,{
+        grouping:[3,0],
+        decimal_point:'.',
+        thousands_sep:nbsp,
     });
-    assert.strictEqual(fieldUtils.parse.monetary(`1${nbsp}000.00${nbsp}€`, {}, {currency_id: 1}), 1000);
-    assert.strictEqual(fieldUtils.parse.monetary(`$${nbsp}1${nbsp}000.00`, {}, {currency_id: 3}), 1000);
-    assert.strictEqual(fieldUtils.parse.monetary(`1${nbsp}000.00`), 1000);
-    assert.strictEqual(fieldUtils.parse.monetary(`1${nbsp}000${nbsp}000.00`), 1000000);
+    assert.strictEqual(fieldUtils.parse.monetary(`1${nbsp}000.00${nbsp}€`,{},{currency_id:1}),1000);
+    assert.strictEqual(fieldUtils.parse.monetary(`$${nbsp}1${nbsp}000.00`,{},{currency_id:3}),1000);
+    assert.strictEqual(fieldUtils.parse.monetary(`1${nbsp}000.00`),1000);
+    assert.strictEqual(fieldUtils.parse.monetary(`1${nbsp}000${nbsp}000.00`),1000000);
 
-    session.currencies = originalCurrencies;
-    core._t.database.parameters = originalParameters;
+    session.currencies=originalCurrencies;
+    core._t.database.parameters=originalParameters;
 });
 
-QUnit.test('parse percentage', function(assert) {
+QUnit.test('parsepercentage',function(assert){
     assert.expect(7);
 
-    var originalParameters = _.clone(core._t.database.parameters);
+    varoriginalParameters=_.clone(core._t.database.parameters);
 
-    assert.strictEqual(fieldUtils.parse.percentage(""), 0);
-    assert.strictEqual(fieldUtils.parse.percentage("0"), 0);
-    assert.strictEqual(fieldUtils.parse.percentage("0.5"), 0.005);
-    assert.strictEqual(fieldUtils.parse.percentage("1"), 0.01);
-    assert.strictEqual(fieldUtils.parse.percentage("100"), 1);
+    assert.strictEqual(fieldUtils.parse.percentage(""),0);
+    assert.strictEqual(fieldUtils.parse.percentage("0"),0);
+    assert.strictEqual(fieldUtils.parse.percentage("0.5"),0.005);
+    assert.strictEqual(fieldUtils.parse.percentage("1"),0.01);
+    assert.strictEqual(fieldUtils.parse.percentage("100"),1);
 
-    _.extend(core._t.database.parameters, {
-        grouping: [3, 0],
-        decimal_point: ',',
-        thousands_sep: '.'
+    _.extend(core._t.database.parameters,{
+        grouping:[3,0],
+        decimal_point:',',
+        thousands_sep:'.'
     });
 
-    assert.strictEqual(fieldUtils.parse.percentage("1.234,56"), 12.3456);
-    assert.strictEqual(fieldUtils.parse.percentage("6,02"), 0.0602);
+    assert.strictEqual(fieldUtils.parse.percentage("1.234,56"),12.3456);
+    assert.strictEqual(fieldUtils.parse.percentage("6,02"),0.0602);
 
-    core._t.database.parameters = originalParameters;
+    core._t.database.parameters=originalParameters;
 
 });
 
-QUnit.test('parse datetime', function (assert) {
+QUnit.test('parsedatetime',function(assert){
     assert.expect(7);
 
-    var originalParameters = _.clone(core._t.database.parameters);
-    var originalLocale = moment.locale();
-    var dateStr, date1, date2;
+    varoriginalParameters=_.clone(core._t.database.parameters);
+    varoriginalLocale=moment.locale();
+    vardateStr,date1,date2;
 
-    moment.defineLocale('englishForTest', {
-        dayOfMonthOrdinalParse: /\d{1,2}(st|nd|rd|th)/,
-        ordinal: function (number) {
-            var b = number % 10,
-                output = (~~(number % 100 / 10) === 1) ? 'th' :
-                (b === 1) ? 'st' :
-                (b === 2) ? 'nd' :
-                (b === 3) ? 'rd' : 'th';
-            return number + output;
+    moment.defineLocale('englishForTest',{
+        dayOfMonthOrdinalParse:/\d{1,2}(st|nd|rd|th)/,
+        ordinal:function(number){
+            varb=number%10,
+                output=(~~(number%100/10)===1)?'th':
+                (b===1)?'st':
+                (b===2)?'nd':
+                (b===3)?'rd':'th';
+            returnnumber+output;
         },
     });
 
-    moment.defineLocale('norvegianForTest', {
-        monthsShort: 'jan._feb._mars_april_mai_juni_juli_aug._sep._okt._nov._des.'.split('_'),
-        monthsParseExact: true,
-        dayOfMonthOrdinalParse: /\d{1,2}\./,
-        ordinal: '%d.',
+    moment.defineLocale('norvegianForTest',{
+        monthsShort:'jan._feb._mars_april_mai_juni_juli_aug._sep._okt._nov._des.'.split('_'),
+        monthsParseExact:true,
+        dayOfMonthOrdinalParse:/\d{1,2}\./,
+        ordinal:'%d.',
     });
 
     moment.locale('englishForTest');
-    _.extend(core._t.database.parameters, {date_format: '%m/%d/%Y', time_format: '%H:%M:%S'});
-    assert.throws(function () {
-        fieldUtils.parse.datetime("13/01/2019 12:00:00", {}, {});
-    }, /is not a correct/, "Wrongly formated dates should be invalid");
-    assert.throws(function () {
-        fieldUtils.parse.datetime("10000-01-01 12:00:00", {}, {});
-    }, /is not a correct/, "Dates after 9999 should be invalid");
-    assert.throws(function () {
-        fieldUtils.parse.datetime("999-01-01 12:00:00", {}, {});
-    }, /is not a correct/, "Dates before 1000 should be invalid");
+    _.extend(core._t.database.parameters,{date_format:'%m/%d/%Y',time_format:'%H:%M:%S'});
+    assert.throws(function(){
+        fieldUtils.parse.datetime("13/01/201912:00:00",{},{});
+    },/isnotacorrect/,"Wronglyformateddatesshouldbeinvalid");
+    assert.throws(function(){
+        fieldUtils.parse.datetime("10000-01-0112:00:00",{},{});
+    },/isnotacorrect/,"Datesafter9999shouldbeinvalid");
+    assert.throws(function(){
+        fieldUtils.parse.datetime("999-01-0112:00:00",{},{});
+    },/isnotacorrect/,"Datesbefore1000shouldbeinvalid");
 
-    dateStr = '01/13/2019 10:05:45';
-    date1 = fieldUtils.parse.datetime(dateStr);
-    date2 = moment.utc(dateStr, ['MM/DD/YYYY HH:mm:ss'], true);
-    assert.equal(date1.format(), date2.format(), "Date with leading 0");
+    dateStr='01/13/201910:05:45';
+    date1=fieldUtils.parse.datetime(dateStr);
+    date2=moment.utc(dateStr,['MM/DD/YYYYHH:mm:ss'],true);
+    assert.equal(date1.format(),date2.format(),"Datewithleading0");
 
-    dateStr = '1/14/2019 10:5:45';
-    date1 = fieldUtils.parse.datetime(dateStr);
-    date2 = moment.utc(dateStr, ['M/D/YYYY H:m:s'], true);
-    assert.equal(date1.format(), date2.format(), "Date without leading 0");
+    dateStr='1/14/201910:5:45';
+    date1=fieldUtils.parse.datetime(dateStr);
+    date2=moment.utc(dateStr,['M/D/YYYYH:m:s'],true);
+    assert.equal(date1.format(),date2.format(),"Datewithoutleading0");
 
-    dateStr = '01/01/1000 10:15:45';
-    date1 = fieldUtils.parse.datetime(dateStr);
-    date2 = moment.utc(dateStr, ['MM/DD/YYYY HH:mm:ss'], true);
-    assert.equal(date1.format(), date2.format(), "can parse dates of year 1");
+    dateStr='01/01/100010:15:45';
+    date1=fieldUtils.parse.datetime(dateStr);
+    date2=moment.utc(dateStr,['MM/DD/YYYYHH:mm:ss'],true);
+    assert.equal(date1.format(),date2.format(),"canparsedatesofyear1");
 
     moment.locale('norvegianForTest');
-    _.extend(core._t.database.parameters, {date_format: '%d. %b %Y', time_format: '%H:%M:%S'});
-    dateStr = '16. jan. 2019 10:05:45';
-    date1 = fieldUtils.parse.datetime(dateStr);
-    date2 = moment.utc(dateStr, ['DD. MMM YYYY HH:mm:ss'], true);
-    assert.equal(date1.format(), date2.format(), "Day/month inverted + month i18n");
+    _.extend(core._t.database.parameters,{date_format:'%d.%b%Y',time_format:'%H:%M:%S'});
+    dateStr='16.jan.201910:05:45';
+    date1=fieldUtils.parse.datetime(dateStr);
+    date2=moment.utc(dateStr,['DD.MMMYYYYHH:mm:ss'],true);
+    assert.equal(date1.format(),date2.format(),"Day/monthinverted+monthi18n");
 
     moment.locale(originalLocale);
-    moment.updateLocale("englishForTest", null);
-    moment.updateLocale("norvegianForTest", null);
-    core._t.database.parameters = originalParameters;
+    moment.updateLocale("englishForTest",null);
+    moment.updateLocale("norvegianForTest",null);
+    core._t.database.parameters=originalParameters;
 });
 
-QUnit.test('parse date without separator', function (assert) {
+QUnit.test('parsedatewithoutseparator',function(assert){
     assert.expect(8);
 
-    var originalParameters = _.clone(core._t.database.parameters);
+    varoriginalParameters=_.clone(core._t.database.parameters);
 
-    _.extend(core._t.database.parameters, {date_format: '%d.%m/%Y'});
-    var dateFormat = "DD.MM/YYYY";
+    _.extend(core._t.database.parameters,{date_format:'%d.%m/%Y'});
+    vardateFormat="DD.MM/YYYY";
 
-    assert.throws(function () {fieldUtils.parse.date("1197")}, /is not a correct/, "Wrongly formated dates should be invalid");
-    assert.throws(function () {fieldUtils.parse.date("0131")}, /is not a correct/, "Wrongly formated dates should be invalid");
-    assert.throws(function () {fieldUtils.parse.date("970131")}, /is not a correct/, "Wrongly formated dates should be invalid");
-    assert.equal(fieldUtils.parse.date("3101").format(dateFormat), "31.01/" + moment.utc().year());
-    assert.equal(fieldUtils.parse.date("31.01").format(dateFormat), "31.01/" + moment.utc().year());
-    assert.equal(fieldUtils.parse.date("310197").format(dateFormat), "31.01/1997");
-    assert.equal(fieldUtils.parse.date("310117").format(dateFormat), "31.01/2017");
-    assert.equal(fieldUtils.parse.date("31011985").format(dateFormat), "31.01/1985");
+    assert.throws(function(){fieldUtils.parse.date("1197")},/isnotacorrect/,"Wronglyformateddatesshouldbeinvalid");
+    assert.throws(function(){fieldUtils.parse.date("0131")},/isnotacorrect/,"Wronglyformateddatesshouldbeinvalid");
+    assert.throws(function(){fieldUtils.parse.date("970131")},/isnotacorrect/,"Wronglyformateddatesshouldbeinvalid");
+    assert.equal(fieldUtils.parse.date("3101").format(dateFormat),"31.01/"+moment.utc().year());
+    assert.equal(fieldUtils.parse.date("31.01").format(dateFormat),"31.01/"+moment.utc().year());
+    assert.equal(fieldUtils.parse.date("310197").format(dateFormat),"31.01/1997");
+    assert.equal(fieldUtils.parse.date("310117").format(dateFormat),"31.01/2017");
+    assert.equal(fieldUtils.parse.date("31011985").format(dateFormat),"31.01/1985");
 
-    core._t.database.parameters = originalParameters;
+    core._t.database.parameters=originalParameters;
 });
 
-QUnit.test('parse datetime without separator', function (assert) {
+QUnit.test('parsedatetimewithoutseparator',function(assert){
     assert.expect(3);
 
-    var originalParameters = _.clone(core._t.database.parameters);
+    varoriginalParameters=_.clone(core._t.database.parameters);
 
-    _.extend(core._t.database.parameters, {date_format: '%d.%m/%Y', time_format: '%H:%M/%S'});
-    var dateTimeFormat = "DD.MM/YYYY HH:mm/ss";
+    _.extend(core._t.database.parameters,{date_format:'%d.%m/%Y',time_format:'%H:%M/%S'});
+    vardateTimeFormat="DD.MM/YYYYHH:mm/ss";
 
-    assert.equal(fieldUtils.parse.datetime("3101198508").format(dateTimeFormat), "31.01/1985 08:00/00");
-    assert.equal(fieldUtils.parse.datetime("310119850833").format(dateTimeFormat), "31.01/1985 08:33/00");
-    assert.equal(fieldUtils.parse.datetime("31/01/1985 08").format(dateTimeFormat), "31.01/1985 08:00/00");
+    assert.equal(fieldUtils.parse.datetime("3101198508").format(dateTimeFormat),"31.01/198508:00/00");
+    assert.equal(fieldUtils.parse.datetime("310119850833").format(dateTimeFormat),"31.01/198508:33/00");
+    assert.equal(fieldUtils.parse.datetime("31/01/198508").format(dateTimeFormat),"31.01/198508:00/00");
 
-    core._t.database.parameters = originalParameters;
+    core._t.database.parameters=originalParameters;
 });
 });
 
-QUnit.test('parse smart date input', function (assert) {
+QUnit.test('parsesmartdateinput',function(assert){
     assert.expect(10);
 
-    const format = "DD MM YYYY";
-    assert.strictEqual(fieldUtils.parse.date("+1d").format(format), moment().add(1, 'days').format(format));
-    assert.strictEqual(fieldUtils.parse.datetime("+2w").format(format), moment().add(2, 'weeks').format(format));
-    assert.strictEqual(fieldUtils.parse.date("+3m").format(format), moment().add(3, 'months').format(format));
-    assert.strictEqual(fieldUtils.parse.datetime("+4y").format(format), moment().add(4, 'years').format(format));
+    constformat="DDMMYYYY";
+    assert.strictEqual(fieldUtils.parse.date("+1d").format(format),moment().add(1,'days').format(format));
+    assert.strictEqual(fieldUtils.parse.datetime("+2w").format(format),moment().add(2,'weeks').format(format));
+    assert.strictEqual(fieldUtils.parse.date("+3m").format(format),moment().add(3,'months').format(format));
+    assert.strictEqual(fieldUtils.parse.datetime("+4y").format(format),moment().add(4,'years').format(format));
 
-    assert.strictEqual(fieldUtils.parse.date("+5").format(format), moment().add(5, 'days').format(format));
-    assert.strictEqual(fieldUtils.parse.datetime("-5").format(format), moment().subtract(5, 'days').format(format));
+    assert.strictEqual(fieldUtils.parse.date("+5").format(format),moment().add(5,'days').format(format));
+    assert.strictEqual(fieldUtils.parse.datetime("-5").format(format),moment().subtract(5,'days').format(format));
 
-    assert.strictEqual(fieldUtils.parse.date("-4y").format(format), moment().subtract(4, 'years').format(format));
-    assert.strictEqual(fieldUtils.parse.datetime("-3m").format(format), moment().subtract(3, 'months').format(format));
-    assert.strictEqual(fieldUtils.parse.date("-2w").format(format), moment().subtract(2, 'weeks').format(format));
-    assert.strictEqual(fieldUtils.parse.datetime("-1d").format(format), moment().subtract(1, 'days').format(format));
+    assert.strictEqual(fieldUtils.parse.date("-4y").format(format),moment().subtract(4,'years').format(format));
+    assert.strictEqual(fieldUtils.parse.datetime("-3m").format(format),moment().subtract(3,'months').format(format));
+    assert.strictEqual(fieldUtils.parse.date("-2w").format(format),moment().subtract(2,'weeks').format(format));
+    assert.strictEqual(fieldUtils.parse.datetime("-1d").format(format),moment().subtract(1,'days').format(format));
 });
 });

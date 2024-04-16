@@ -1,244 +1,244 @@
-flectra.define('web.qunit_asserts', function (require) {
-    "use strict";
+flectra.define('web.qunit_asserts',function(require){
+    "usestrict";
 
     /**
-     * In this file, we extend QUnit by adding some specialized assertions. The goal
-     * of these new assertions is twofold:
-     * - ease of use: they should allow us to simplify some common complex assertions
-     * - safer: these assertions will fail when some preconditions are not met.
+     *Inthisfile,weextendQUnitbyaddingsomespecializedassertions.Thegoal
+     *ofthesenewassertionsistwofold:
+     *-easeofuse:theyshouldallowustosimplifysomecommoncomplexassertions
+     *-safer:theseassertionswillfailwhensomepreconditionsarenotmet.
      *
-     * For example, the assert.isVisible assertion will also check that the target
-     * matches exactly one element.
+     *Forexample,theassert.isVisibleassertionwillalsocheckthatthetarget
+     *matchesexactlyoneelement.
      */
 
-    const Widget = require('web.Widget');
+    constWidget=require('web.Widget');
 
-    /** @todo use testUtilsDom.getNode to extract the element from the 'w' argument */
+    /**@todousetestUtilsDom.getNodetoextracttheelementfromthe'w'argument*/
 
     //-------------------------------------------------------------------------
-    // Private functions
+    //Privatefunctions
     //-------------------------------------------------------------------------
 
     /**
-     * Helper function, to check if a given element
-     * - is unique (if it is a jquery node set)
-     * - has (or has not) a css class
+     *Helperfunction,tocheckifagivenelement
+     *-isunique(ifitisajquerynodeset)
+     *-has(orhasnot)acssclass
      *
-     * @private
-     * @param {Widget|jQuery|HTMLElement|owl.Component} w
-     * @param {string} className
-     * @param {boolean} shouldHaveClass
-     * @param {string} [msg]
+     *@private
+     *@param{Widget|jQuery|HTMLElement|owl.Component}w
+     *@param{string}className
+     *@param{boolean}shouldHaveClass
+     *@param{string}[msg]
      */
-    function _checkClass(w, className, shouldHaveClass, msg) {
-        if (w instanceof jQuery && w.length !== 1) {
-            const assertion = shouldHaveClass ? 'hasClass' : 'doesNotHaveClass';
-            QUnit.assert.ok(false, `Assertion '${assertion} ${className}' targets ${w.length} elements instead of 1`);
+    function_checkClass(w,className,shouldHaveClass,msg){
+        if(winstanceofjQuery&&w.length!==1){
+            constassertion=shouldHaveClass?'hasClass':'doesNotHaveClass';
+            QUnit.assert.ok(false,`Assertion'${assertion}${className}'targets${w.length}elementsinsteadof1`);
         }
 
-        const el = w instanceof Widget || w instanceof owl.Component ? w.el :
-            w instanceof jQuery ? w[0] : w;
+        constel=winstanceofWidget||winstanceofowl.Component?w.el:
+            winstanceofjQuery?w[0]:w;
 
-        msg = msg || `target should ${shouldHaveClass ? 'have' : 'not have'} class ${className}`;
-        const isFalse = className.split(" ").some(cls => {
-            const hasClass = el.classList.contains(cls);
-            return shouldHaveClass ? !hasClass : hasClass;
+        msg=msg||`targetshould${shouldHaveClass?'have':'nothave'}class${className}`;
+        constisFalse=className.split("").some(cls=>{
+            consthasClass=el.classList.contains(cls);
+            returnshouldHaveClass?!hasClass:hasClass;
         });
-        QUnit.assert.ok(!isFalse, msg);
+        QUnit.assert.ok(!isFalse,msg);
     }
 
     /**
-     * Helper function, to check if a given element
-     * - is unique (if it is a jquery node set)
-     * - is (or not) visible
+     *Helperfunction,tocheckifagivenelement
+     *-isunique(ifitisajquerynodeset)
+     *-is(ornot)visible
      *
-     * @private
-     * @param {Widget|jQuery|HTMLElement|owl.Component} w
-     * @param {boolean} shouldBeVisible
-     * @param {string} [msg]
+     *@private
+     *@param{Widget|jQuery|HTMLElement|owl.Component}w
+     *@param{boolean}shouldBeVisible
+     *@param{string}[msg]
      */
-    function _checkVisible(w, shouldBeVisible, msg) {
-        if (w instanceof jQuery && w.length !== 1) {
-            const assertion = shouldBeVisible ? 'isVisible' : 'isNotVisible';
-            QUnit.assert.ok(false, `Assertion '${assertion}' targets ${w.length} elements instead of 1`);
+    function_checkVisible(w,shouldBeVisible,msg){
+        if(winstanceofjQuery&&w.length!==1){
+            constassertion=shouldBeVisible?'isVisible':'isNotVisible';
+            QUnit.assert.ok(false,`Assertion'${assertion}'targets${w.length}elementsinsteadof1`);
         }
 
-        const el = w instanceof Widget || w instanceof owl.Component ? w.el :
-            w instanceof jQuery ? w[0] : w;
+        constel=winstanceofWidget||winstanceofowl.Component?w.el:
+            winstanceofjQuery?w[0]:w;
 
-        msg = msg || `target should ${shouldBeVisible ? '' : 'not'} be visible`;
-        let isVisible = el &&
-            el.offsetWidth &&
+        msg=msg||`targetshould${shouldBeVisible?'':'not'}bevisible`;
+        letisVisible=el&&
+            el.offsetWidth&&
             el.offsetHeight;
-        if (isVisible) {
-            // This computation is a little more heavy and we only want to perform it
-            // if the above assertion has failed.
-            const rect = el.getBoundingClientRect();
-            isVisible = rect.width + rect.height;
+        if(isVisible){
+            //Thiscomputationisalittlemoreheavyandweonlywanttoperformit
+            //iftheaboveassertionhasfailed.
+            constrect=el.getBoundingClientRect();
+            isVisible=rect.width+rect.height;
         }
-        const condition = shouldBeVisible ? isVisible : !isVisible;
-        QUnit.assert.ok(condition, msg);
+        constcondition=shouldBeVisible?isVisible:!isVisible;
+        QUnit.assert.ok(condition,msg);
     }
 
     //-------------------------------------------------------------------------
-    // Public functions
+    //Publicfunctions
     //-------------------------------------------------------------------------
 
     /**
-     * Checks that the target element (described by widget/jquery or html element)
-     * contains exactly n matches for the selector.
+     *Checksthatthetargetelement(describedbywidget/jqueryorhtmlelement)
+     *containsexactlynmatchesfortheselector.
      *
-     * Example: assert.containsN(document.body, '.modal', 0)
+     *Example:assert.containsN(document.body,'.modal',0)
      *
-     * @param {Widget|jQuery|HTMLElement|owl.Component} w
-     * @param {string} selector
-     * @param {number} n
-     * @param {string} [msg]
+     *@param{Widget|jQuery|HTMLElement|owl.Component}w
+     *@param{string}selector
+     *@param{number}n
+     *@param{string}[msg]
      */
-    function containsN(w, selector, n, msg) {
-        if (typeof n !== 'number') {
-            throw new Error("containsN assert should be called with a number as third argument");
+    functioncontainsN(w,selector,n,msg){
+        if(typeofn!=='number'){
+            thrownewError("containsNassertshouldbecalledwithanumberasthirdargument");
         }
-        let matches = [];
-        if (w instanceof owl.Component) {
-            if (!w.el) {
-                throw new Error(`containsN assert with selector '${selector}' called on an unmounted component`);
+        letmatches=[];
+        if(winstanceofowl.Component){
+            if(!w.el){
+                thrownewError(`containsNassertwithselector'${selector}'calledonanunmountedcomponent`);
             }
-            matches = w.el.querySelectorAll(selector);
-        } else {
-            const $el = w instanceof Widget ? w.$el :
-                w instanceof HTMLElement ? $(w) :
-                    w;  // jquery element
-            matches = $el.find(selector);
+            matches=w.el.querySelectorAll(selector);
+        }else{
+            const$el=winstanceofWidget?w.$el:
+                winstanceofHTMLElement?$(w):
+                    w; //jqueryelement
+            matches=$el.find(selector);
         }
-        if (!msg) {
-            msg = `Selector '${selector}' should have exactly ${n} matches (inside the target)`;
+        if(!msg){
+            msg=`Selector'${selector}'shouldhaveexactly${n}matches(insidethetarget)`;
         }
-        QUnit.assert.strictEqual(matches.length, n, msg);
+        QUnit.assert.strictEqual(matches.length,n,msg);
     }
 
     /**
-     * Checks that the target element (described by widget/jquery or html element)
-     * contains exactly 0 match for the selector.
+     *Checksthatthetargetelement(describedbywidget/jqueryorhtmlelement)
+     *containsexactly0matchfortheselector.
      *
-     * @param {Widget|jQuery|HTMLElement|owl.Component} w
-     * @param {string} selector
-     * @param {string} [msg]
+     *@param{Widget|jQuery|HTMLElement|owl.Component}w
+     *@param{string}selector
+     *@param{string}[msg]
      */
-    function containsNone(w, selector, msg) {
-        containsN(w, selector, 0, msg);
+    functioncontainsNone(w,selector,msg){
+        containsN(w,selector,0,msg);
     }
 
     /**
-     * Checks that the target element (described by widget/jquery or html element)
-     * contains exactly 1 match for the selector.
+     *Checksthatthetargetelement(describedbywidget/jqueryorhtmlelement)
+     *containsexactly1matchfortheselector.
      *
-     * @param {Widget|jQuery|HTMLElement|owl.Component} w
-     * @param {string} selector
-     * @param {string} [msg]
+     *@param{Widget|jQuery|HTMLElement|owl.Component}w
+     *@param{string}selector
+     *@param{string}[msg]
      */
-    function containsOnce(w, selector, msg) {
-        containsN(w, selector, 1, msg);
+    functioncontainsOnce(w,selector,msg){
+        containsN(w,selector,1,msg);
     }
 
     /**
-     * Checks that the target element (described by widget/jquery or html element)
-     * - exists
-     * - is unique
-     * - has the given class (specified by className)
+     *Checksthatthetargetelement(describedbywidget/jqueryorhtmlelement)
+     *-exists
+     *-isunique
+     *-hasthegivenclass(specifiedbyclassName)
      *
-     * Note that it uses the hasClass jQuery method, so it can be used to check the
-     * presence of more than one class ('some-class other-class'), but it is a
-     * little brittle, because it depends on the order of these classes:
+     *NotethatitusesthehasClassjQuerymethod,soitcanbeusedtocheckthe
+     *presenceofmorethanoneclass('some-classother-class'),butitisa
+     *littlebrittle,becauseitdependsontheorderoftheseclasses:
      *
-     *  div.a.b.c: has class 'a b c', but does not have class 'a c b'
+     * div.a.b.c:hasclass'abc',butdoesnothaveclass'acb'
      *
-     * @param {Widget|jQuery|HTMLElement|owl.Component} w
-     * @param {string} className
-     * @param {string} [msg]
+     *@param{Widget|jQuery|HTMLElement|owl.Component}w
+     *@param{string}className
+     *@param{string}[msg]
      */
-    function hasClass(w, className, msg) {
-        _checkClass(w, className, true, msg);
+    functionhasClass(w,className,msg){
+        _checkClass(w,className,true,msg);
     }
 
     /**
-     * Checks that the target element (described by widget/jquery or html element)
-     * - exists
-     * - is unique
-     * - does not have the given class (specified by className)
+     *Checksthatthetargetelement(describedbywidget/jqueryorhtmlelement)
+     *-exists
+     *-isunique
+     *-doesnothavethegivenclass(specifiedbyclassName)
      *
-     * @param {Widget|jQuery|HTMLElement|owl.Component} w
-     * @param {string} className
-     * @param {string} [msg]
+     *@param{Widget|jQuery|HTMLElement|owl.Component}w
+     *@param{string}className
+     *@param{string}[msg]
      */
-    function doesNotHaveClass(w, className, msg) {
-        _checkClass(w, className, false, msg);
+    functiondoesNotHaveClass(w,className,msg){
+        _checkClass(w,className,false,msg);
     }
 
     /**
-     * Checks that the target element (described by widget/jquery or html element)
-     * - exists
-     * - is unique
-     * - has the given attribute with the proper value
+     *Checksthatthetargetelement(describedbywidget/jqueryorhtmlelement)
+     *-exists
+     *-isunique
+     *-hasthegivenattributewiththepropervalue
      *
-     * @param {Widget|jQuery|HTMLElement|owl.Component} w
-     * @param {string} attr
-     * @param {string} value
-     * @param {string} [msg]
+     *@param{Widget|jQuery|HTMLElement|owl.Component}w
+     *@param{string}attr
+     *@param{string}value
+     *@param{string}[msg]
      */
-    function hasAttrValue(w, attr, value, msg) {
-        const $el = w instanceof Widget ? w.$el :
-            w instanceof HTMLElement ? $(w) :
-                w;  // jquery element
+    functionhasAttrValue(w,attr,value,msg){
+        const$el=winstanceofWidget?w.$el:
+            winstanceofHTMLElement?$(w):
+                w; //jqueryelement
 
-        if ($el.length !== 1) {
-            const descr = `hasAttrValue (${attr}: ${value})`;
+        if($el.length!==1){
+            constdescr=`hasAttrValue(${attr}:${value})`;
             QUnit.assert.ok(false,
-                `Assertion '${descr}' targets ${$el.length} elements instead of 1`
+                `Assertion'${descr}'targets${$el.length}elementsinsteadof1`
             );
-        } else {
-            msg = msg || `attribute '${attr}' of target should be '${value}'`;
-            QUnit.assert.strictEqual($el.attr(attr), value, msg);
+        }else{
+            msg=msg||`attribute'${attr}'oftargetshouldbe'${value}'`;
+            QUnit.assert.strictEqual($el.attr(attr),value,msg);
         }
     }
 
     /**
-     * Checks that the target element (described by widget/jquery or html element)
-     * - exists
-     * - is visible (as far as jQuery can tell: not in display none, ...)
+     *Checksthatthetargetelement(describedbywidget/jqueryorhtmlelement)
+     *-exists
+     *-isvisible(asfarasjQuerycantell:notindisplaynone,...)
      *
-     * @param {Widget|jQuery|HTMLElement|owl.Component} w
-     * @param {string} [msg]
+     *@param{Widget|jQuery|HTMLElement|owl.Component}w
+     *@param{string}[msg]
      */
-    function isVisible(w, msg) {
-        _checkVisible(w, true, msg);
+    functionisVisible(w,msg){
+        _checkVisible(w,true,msg);
     }
 
     /**
-     * Checks that the target element (described by widget/jquery or html element)
-     * - exists
-     * - is not visible (as far as jQuery can tell: display none, ...)
+     *Checksthatthetargetelement(describedbywidget/jqueryorhtmlelement)
+     *-exists
+     *-isnotvisible(asfarasjQuerycantell:displaynone,...)
      *
-     * @param {Widget|jQuery|HTMLElement|owl.Component} w
-     * @param {string} [msg]
+     *@param{Widget|jQuery|HTMLElement|owl.Component}w
+     *@param{string}[msg]
      */
-    function isNotVisible(w, msg) {
-        _checkVisible(w, false, msg);
+    functionisNotVisible(w,msg){
+        _checkVisible(w,false,msg);
     }
 
     //-------------------------------------------------------------------------
-    // Exposed API
+    //ExposedAPI
     //-------------------------------------------------------------------------
 
-    QUnit.assert.containsN = containsN;
-    QUnit.assert.containsNone = containsNone;
-    QUnit.assert.containsOnce = containsOnce;
+    QUnit.assert.containsN=containsN;
+    QUnit.assert.containsNone=containsNone;
+    QUnit.assert.containsOnce=containsOnce;
 
-    QUnit.assert.hasClass = hasClass;
-    QUnit.assert.doesNotHaveClass = doesNotHaveClass;
+    QUnit.assert.hasClass=hasClass;
+    QUnit.assert.doesNotHaveClass=doesNotHaveClass;
 
-    QUnit.assert.hasAttrValue = hasAttrValue;
+    QUnit.assert.hasAttrValue=hasAttrValue;
 
-    QUnit.assert.isVisible = isVisible;
-    QUnit.assert.isNotVisible = isNotVisible;
+    QUnit.assert.isVisible=isVisible;
+    QUnit.assert.isNotVisible=isNotVisible;
 });

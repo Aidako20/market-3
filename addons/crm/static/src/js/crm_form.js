@@ -1,118 +1,118 @@
-flectra.define("crm.crm_form", function (require) {
-    "use strict";
+flectra.define("crm.crm_form",function(require){
+    "usestrict";
 
     /**
-     * This From Controller makes sure we display a rainbowman message
-     * when the stage is won, even when we click on the statusbar.
-     * When the stage of a lead is changed and data are saved, we check
-     * if the lead is won and if a message should be displayed to the user
-     * with a rainbowman like when the user click on the button "Mark Won".
+     *ThisFromControllermakessurewedisplayarainbowmanmessage
+     *whenthestageiswon,evenwhenweclickonthestatusbar.
+     *Whenthestageofaleadischangedanddataaresaved,wecheck
+     *iftheleadiswonandifamessageshouldbedisplayedtotheuser
+     *witharainbowmanlikewhentheuserclickonthebutton"MarkWon".
      */
 
-    var FormController = require('web.FormController');
-    var FormView = require('web.FormView');
-    var viewRegistry = require('web.view_registry');
+    varFormController=require('web.FormController');
+    varFormView=require('web.FormView');
+    varviewRegistry=require('web.view_registry');
 
-    var CrmFormController = FormController.extend({
+    varCrmFormController=FormController.extend({
         /**
-         * Main method used when saving the record hitting the "Save" button.
-         * We check if the stage_id field was altered and if we need to display a rainbowman
-         * message.
+         *Mainmethodusedwhensavingtherecordhittingthe"Save"button.
+         *Wecheckifthestage_idfieldwasalteredandifweneedtodisplayarainbowman
+         *message.
          *
-         * This method will also simulate a real "force_save" on the email and phone
-         * when needed. The "force_save" attribute only works on readonly field. For our
-         * use case, we need to write the email and the phone even if the user didn't
-         * change them, to synchronize those values with the partner (so the email / phone
-         * inverse method can be called).
+         *Thismethodwillalsosimulateareal"force_save"ontheemailandphone
+         *whenneeded.The"force_save"attributeonlyworksonreadonlyfield.Forour
+         *usecase,weneedtowritetheemailandthephoneeveniftheuserdidn't
+         *changethem,tosynchronizethosevalueswiththepartner(sotheemail/phone
+         *inversemethodcanbecalled).
          *
-         * We base this synchronization on the value of "ribbon_message", which is a
-         * computed field that hold a value whenever we need to synch.
+         *Webasethissynchronizationonthevalueof"ribbon_message",whichisa
+         *computedfieldthatholdavaluewheneverweneedtosynch.
          *
-         * @override
+         *@override
          */
-        saveRecord: function (recordID, options) {
-            recordID = recordID || this.handle;
-            const localData = this.model.localData[recordID];
-            const changes = localData._changes || {};
+        saveRecord:function(recordID,options){
+            recordID=recordID||this.handle;
+            constlocalData=this.model.localData[recordID];
+            constchanges=localData._changes||{};
 
-            const needsSynchronization = changes.ribbon_message === undefined
-                ? localData.data.ribbon_message // original value
-                : changes.ribbon_message; // new value
+            constneedsSynchronization=changes.ribbon_message===undefined
+                ?localData.data.ribbon_message//originalvalue
+                :changes.ribbon_message;//newvalue
 
-            if (needsSynchronization && changes.email_from === undefined && localData.data.email_from) {
-                changes.email_from = localData.data.email_from;
+            if(needsSynchronization&&changes.email_from===undefined&&localData.data.email_from){
+                changes.email_from=localData.data.email_from;
             }
-            if (needsSynchronization && changes.phone === undefined && localData.data.phone) {
-                changes.phone = localData.data.phone;
+            if(needsSynchronization&&changes.phone===undefined&&localData.data.phone){
+                changes.phone=localData.data.phone;
             }
-            if (!localData._changes && Object.keys(changes).length) {
-                localData._changes = changes;
+            if(!localData._changes&&Object.keys(changes).length){
+                localData._changes=changes;
             }
 
-            return this._super(...arguments).then((modifiedFields) => {
-                if (modifiedFields.indexOf('stage_id') !== -1) {
+            returnthis._super(...arguments).then((modifiedFields)=>{
+                if(modifiedFields.indexOf('stage_id')!==-1){
                     this._checkRainbowmanMessage(this.renderer.state.res_id)
                 }
             });
         },
 
         //--------------------------------------------------------------------------
-        // Private
+        //Private
         //--------------------------------------------------------------------------
 
         /**
-         * Apply change may be called with 'event.data.force_save' set to True.
-         * This typically happens when directly clicking in the statusbar widget on a new stage.
-         * If it's the case, we check for a modified stage_id field and if we need to display a
-         * rainbowman message.
+         *Applychangemaybecalledwith'event.data.force_save'settoTrue.
+         *Thistypicallyhappenswhendirectlyclickinginthestatusbarwidgetonanewstage.
+         *Ifit'sthecase,wecheckforamodifiedstage_idfieldandifweneedtodisplaya
+         *rainbowmanmessage.
          *
-         * @param {string} dataPointID
-         * @param {Object} changes
-         * @param {FlectraEvent} event
-         * @override
-         * @private
+         *@param{string}dataPointID
+         *@param{Object}changes
+         *@param{FlectraEvent}event
+         *@override
+         *@private
          */
-        _applyChanges: function (dataPointID, changes, event) {
-            return this._super(...arguments).then(() => {
-                if (event.data.force_save && 'stage_id' in changes) {
+        _applyChanges:function(dataPointID,changes,event){
+            returnthis._super(...arguments).then(()=>{
+                if(event.data.force_save&&'stage_id'inchanges){
                     this._checkRainbowmanMessage(parseInt(event.target.res_id));
                 }
             });
         },
 
         /**
-         * When updating a crm.lead, through direct use of the status bar or when saving the
-         * record, we check for a rainbowman message to display.
+         *Whenupdatingacrm.lead,throughdirectuseofthestatusbarorwhensavingthe
+         *record,wecheckforarainbowmanmessagetodisplay.
          *
-         * (see Widget docstring for more information).
+         *(seeWidgetdocstringformoreinformation).
          *
-         * @param {integer} recordId
+         *@param{integer}recordId
          */
-        _checkRainbowmanMessage: async function(recordId) {
-            const message = await this._rpc({
-                model: 'crm.lead',
-                method : 'get_rainbowman_message',
-                args: [[recordId]],
+        _checkRainbowmanMessage:asyncfunction(recordId){
+            constmessage=awaitthis._rpc({
+                model:'crm.lead',
+                method:'get_rainbowman_message',
+                args:[[recordId]],
             });
-            if (message) {
-                this.trigger_up('show_effect', {
-                    message: message,
-                    type: 'rainbow_man',
+            if(message){
+                this.trigger_up('show_effect',{
+                    message:message,
+                    type:'rainbow_man',
                 });
             }
         }
     });
 
-    var CrmFormView = FormView.extend({
-        config: _.extend({}, FormView.prototype.config, {
-            Controller: CrmFormController,
+    varCrmFormView=FormView.extend({
+        config:_.extend({},FormView.prototype.config,{
+            Controller:CrmFormController,
         }),
     });
 
-    viewRegistry.add('crm_form', CrmFormView);
+    viewRegistry.add('crm_form',CrmFormView);
 
-    return {
-        CrmFormController: CrmFormController,
-        CrmFormView: CrmFormView,
+    return{
+        CrmFormController:CrmFormController,
+        CrmFormView:CrmFormView,
     };
 });

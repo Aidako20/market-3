@@ -1,56 +1,56 @@
-flectra.define('website.s_countdown', function (require) {
-'use strict';
+flectra.define('website.s_countdown',function(require){
+'usestrict';
 
-const {ColorpickerWidget} = require('web.Colorpicker');
-const core = require('web.core');
-const publicWidget = require('web.public.widget');
-const weUtils = require('web_editor.utils');
+const{ColorpickerWidget}=require('web.Colorpicker');
+constcore=require('web.core');
+constpublicWidget=require('web.public.widget');
+constweUtils=require('web_editor.utils');
 
-const qweb = core.qweb;
-const _t = core._t;
+constqweb=core.qweb;
+const_t=core._t;
 
-const CountdownWidget = publicWidget.Widget.extend({
-    selector: '.s_countdown',
-    xmlDependencies: ['/website/static/src/snippets/s_countdown/000.xml'],
-    disabledInEditableMode: false,
-    defaultColor: 'rgba(0, 0, 0, 255)',
+constCountdownWidget=publicWidget.Widget.extend({
+    selector:'.s_countdown',
+    xmlDependencies:['/website/static/src/snippets/s_countdown/000.xml'],
+    disabledInEditableMode:false,
+    defaultColor:'rgba(0,0,0,255)',
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        this.$wrapper = this.$('.s_countdown_canvas_wrapper');
-        this.hereBeforeTimerEnds = false;
-        this.endAction = this.el.dataset.endAction;
-        this.endTime = parseInt(this.el.dataset.endTime);
-        this.size = parseInt(this.el.dataset.size);
-        this.display = this.el.dataset.display;
+    start:function(){
+        this.$wrapper=this.$('.s_countdown_canvas_wrapper');
+        this.hereBeforeTimerEnds=false;
+        this.endAction=this.el.dataset.endAction;
+        this.endTime=parseInt(this.el.dataset.endTime);
+        this.size=parseInt(this.el.dataset.size);
+        this.display=this.el.dataset.display;
 
-        this.layout = this.el.dataset.layout;
-        this.layoutBackground = this.el.dataset.layoutBackground;
-        this.progressBarStyle = this.el.dataset.progressBarStyle;
-        this.progressBarWeight = this.el.dataset.progressBarWeight;
+        this.layout=this.el.dataset.layout;
+        this.layoutBackground=this.el.dataset.layoutBackground;
+        this.progressBarStyle=this.el.dataset.progressBarStyle;
+        this.progressBarWeight=this.el.dataset.progressBarWeight;
 
-        this.textColor = this._ensureCssColor(this.el.dataset.textColor);
-        this.layoutBackgroundColor = this._ensureCssColor(this.el.dataset.layoutBackgroundColor);
-        this.progressBarColor = this._ensureCssColor(this.el.dataset.progressBarColor);
+        this.textColor=this._ensureCssColor(this.el.dataset.textColor);
+        this.layoutBackgroundColor=this._ensureCssColor(this.el.dataset.layoutBackgroundColor);
+        this.progressBarColor=this._ensureCssColor(this.el.dataset.progressBarColor);
 
-        this.onlyOneUnit = this.display === 'd';
-        this.width = parseInt(this.size);
-        if (this.layout === 'boxes') {
-            this.width /= 1.75;
+        this.onlyOneUnit=this.display==='d';
+        this.width=parseInt(this.size);
+        if(this.layout==='boxes'){
+            this.width/=1.75;
         }
         this._initTimeDiff();
 
         this._render();
 
-        this.setInterval = setInterval(this._render.bind(this), 1000);
-        return this._super(...arguments);
+        this.setInterval=setInterval(this._render.bind(this),1000);
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
+    destroy:function(){
         this.$('.s_countdown_end_redirect_message').remove();
         this.$('canvas').remove();
         this.$('.s_countdown_end_message').addClass('d-none');
@@ -62,361 +62,361 @@ const CountdownWidget = publicWidget.Widget.extend({
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Ensures the color is an actual css color. In case of a color variable,
-     * the color will be mapped to hexa.
+     *Ensuresthecolorisanactualcsscolor.Incaseofacolorvariable,
+     *thecolorwillbemappedtohexa.
      *
-     * @private
-     * @param {string} color
-     * @returns {string}
+     *@private
+     *@param{string}color
+     *@returns{string}
      */
-    _ensureCssColor: function (color) {
-        if (ColorpickerWidget.isCSSColor(color)) {
-            return color;
+    _ensureCssColor:function(color){
+        if(ColorpickerWidget.isCSSColor(color)){
+            returncolor;
         }
-        return weUtils.getCSSVariableValue(color) || this.defaultColor;
+        returnweUtils.getCSSVariableValue(color)||this.defaultColor;
     },
     /**
-     * Gets the time difference in seconds between now and countdown due date.
+     *Getsthetimedifferenceinsecondsbetweennowandcountdownduedate.
      *
-     * @private
+     *@private
      */
-    _getDelta: function () {
-        const currentTimestamp = Date.now() / 1000;
-        return this.endTime - currentTimestamp;
+    _getDelta:function(){
+        constcurrentTimestamp=Date.now()/1000;
+        returnthis.endTime-currentTimestamp;
     },
     /**
-     * Handles the action that should be executed once the countdown ends.
+     *Handlestheactionthatshouldbeexecutedoncethecountdownends.
      *
-     * @private
+     *@private
      */
-    _handleEndCountdownAction: function () {
-        if (this.endAction === 'redirect') {
-            const redirectUrl = this.el.dataset.redirectUrl || '/';
-            if (this.hereBeforeTimerEnds) {
-                // Wait a bit, if the landing page has the same publish date
-                setTimeout(() => window.location = redirectUrl, 500);
-            } else {
-                // Show (non editable) msg when user lands on already finished countdown
-                if (!this.$('.s_countdown_end_redirect_message').length) {
-                    const $container = this.$('> .container, > .container-fluid, > .o_container_small');
+    _handleEndCountdownAction:function(){
+        if(this.endAction==='redirect'){
+            constredirectUrl=this.el.dataset.redirectUrl||'/';
+            if(this.hereBeforeTimerEnds){
+                //Waitabit,ifthelandingpagehasthesamepublishdate
+                setTimeout(()=>window.location=redirectUrl,500);
+            }else{
+                //Show(noneditable)msgwhenuserlandsonalreadyfinishedcountdown
+                if(!this.$('.s_countdown_end_redirect_message').length){
+                    const$container=this.$('>.container,>.container-fluid,>.o_container_small');
                     $container.append(
-                        $(qweb.render('website.s_countdown.end_redirect_message', {
-                            redirectUrl: redirectUrl,
+                        $(qweb.render('website.s_countdown.end_redirect_message',{
+                            redirectUrl:redirectUrl,
                         }))
                     );
                 }
             }
-        } else if (this.endAction === 'message') {
+        }elseif(this.endAction==='message'){
             this.$('.s_countdown_end_message').removeClass('d-none');
         }
     },
     /**
-     * Initializes the `diff` object. It will contains every visible time unit
-     * which will each contain its related canvas, total step, label..
+     *Initializesthe`diff`object.Itwillcontainseveryvisibletimeunit
+     *whichwilleachcontainitsrelatedcanvas,totalstep,label..
      *
-     * @private
+     *@private
      */
-    _initTimeDiff: function () {
-        const delta = this._getDelta();
-        this.diff = [];
-        if (this._isUnitVisible('d') && !(this.onlyOneUnit && delta < 86400)) {
+    _initTimeDiff:function(){
+        constdelta=this._getDelta();
+        this.diff=[];
+        if(this._isUnitVisible('d')&&!(this.onlyOneUnit&&delta<86400)){
             this.diff.push({
-                canvas: $('<canvas/>', {class: 'o_temp_auto_element'}).appendTo(this.$wrapper)[0],
-                // There is no logical number of unit (total) on which day units
-                //  can be compared against, so we use an arbitrary number.
-                total: 15,
-                label: _t("Days"),
-                nbSeconds: 86400,
+                canvas:$('<canvas/>',{class:'o_temp_auto_element'}).appendTo(this.$wrapper)[0],
+                //Thereisnologicalnumberofunit(total)onwhichdayunits
+                // canbecomparedagainst,soweuseanarbitrarynumber.
+                total:15,
+                label:_t("Days"),
+                nbSeconds:86400,
             });
         }
-        if (this._isUnitVisible('h') || (this.onlyOneUnit && delta < 86400 && delta > 3600)) {
+        if(this._isUnitVisible('h')||(this.onlyOneUnit&&delta<86400&&delta>3600)){
             this.diff.push({
-                canvas: $('<canvas/>', {class: 'o_temp_auto_element'}).appendTo(this.$wrapper)[0],
-                total: 24,
-                label: _t("Hours"),
-                nbSeconds: 3600,
+                canvas:$('<canvas/>',{class:'o_temp_auto_element'}).appendTo(this.$wrapper)[0],
+                total:24,
+                label:_t("Hours"),
+                nbSeconds:3600,
             });
         }
-        if (this._isUnitVisible('m') || (this.onlyOneUnit && delta < 3600 && delta > 60)) {
+        if(this._isUnitVisible('m')||(this.onlyOneUnit&&delta<3600&&delta>60)){
             this.diff.push({
-                canvas: $('<canvas/>', {class: 'o_temp_auto_element'}).appendTo(this.$wrapper)[0],
-                total: 60,
-                label: _t("Minutes"),
-                nbSeconds: 60,
+                canvas:$('<canvas/>',{class:'o_temp_auto_element'}).appendTo(this.$wrapper)[0],
+                total:60,
+                label:_t("Minutes"),
+                nbSeconds:60,
             });
         }
-        if (this._isUnitVisible('s') || (this.onlyOneUnit && delta < 60)) {
+        if(this._isUnitVisible('s')||(this.onlyOneUnit&&delta<60)){
             this.diff.push({
-                canvas: $('<canvas/>', {class: 'o_temp_auto_element'}).appendTo(this.$wrapper)[0],
-                total: 60,
-                label: _t("Seconds"),
-                nbSeconds: 1,
+                canvas:$('<canvas/>',{class:'o_temp_auto_element'}).appendTo(this.$wrapper)[0],
+                total:60,
+                label:_t("Seconds"),
+                nbSeconds:1,
             });
         }
     },
     /**
-     * Returns weither or not the countdown should be displayed for the given
-     * unit (days, sec..).
+     *Returnsweitherornotthecountdownshouldbedisplayedforthegiven
+     *unit(days,sec..).
      *
-     * @private
-     * @param {string} unit - either 'd', 'm', 'h', or 's'
-     * @returns {boolean}
+     *@private
+     *@param{string}unit-either'd','m','h',or's'
+     *@returns{boolean}
      */
-    _isUnitVisible: function (unit) {
-        return this.display.includes(unit);
+    _isUnitVisible:function(unit){
+        returnthis.display.includes(unit);
     },
     /**
-     * Draws the whole countdown, including one countdown for each time unit.
+     *Drawsthewholecountdown,includingonecountdownforeachtimeunit.
      *
-     * @private
+     *@private
      */
-    _render: function () {
-        // If only one unit mode, restart widget on unit change to populate diff
-        if (this.onlyOneUnit && this._getDelta() < this.diff[0].nbSeconds) {
+    _render:function(){
+        //Ifonlyoneunitmode,restartwidgetonunitchangetopopulatediff
+        if(this.onlyOneUnit&&this._getDelta()<this.diff[0].nbSeconds){
             this.$('canvas').remove();
             this._initTimeDiff();
         }
         this._updateTimeDiff();
 
-        const hideCountdown = this.isFinished && !this.editableMode && this.$el.hasClass('hide-countdown');
-        if (this.layout === 'text') {
+        consthideCountdown=this.isFinished&&!this.editableMode&&this.$el.hasClass('hide-countdown');
+        if(this.layout==='text'){
             this.$('canvas').addClass('d-none');
-            if (!this.$textWrapper) {
-                this.$textWrapper = $('<span/>').attr({
-                    class: 's_countdown_text_wrapper d-none',
+            if(!this.$textWrapper){
+                this.$textWrapper=$('<span/>').attr({
+                    class:'s_countdown_text_wrapperd-none',
                 });
-                this.$textWrapper.text(_t("Countdown ends in"));
+                this.$textWrapper.text(_t("Countdownendsin"));
                 this.$textWrapper.append($('<span/>').attr({
-                    class: 's_countdown_text ml-1',
+                    class:'s_countdown_textml-1',
                 }));
                 this.$textWrapper.appendTo(this.$wrapper);
             }
 
-            this.$textWrapper.toggleClass('d-none', hideCountdown);
+            this.$textWrapper.toggleClass('d-none',hideCountdown);
 
-            const countdownText = this.diff.map(e => e.nb + ' ' + e.label).join(', ');
+            constcountdownText=this.diff.map(e=>e.nb+''+e.label).join(',');
             this.$('.s_countdown_text').text(countdownText.toLowerCase());
-        } else {
-            for (const val of this.diff) {
-                const canvas = val.canvas;
-                const ctx = canvas.getContext("2d");
-                ctx.canvas.width = this.width;
-                ctx.canvas.height = this.size;
+        }else{
+            for(constvalofthis.diff){
+                constcanvas=val.canvas;
+                constctx=canvas.getContext("2d");
+                ctx.canvas.width=this.width;
+                ctx.canvas.height=this.size;
                 this._clearCanvas(ctx);
 
-                $(canvas).toggleClass('d-none', hideCountdown);
-                if (hideCountdown) {
+                $(canvas).toggleClass('d-none',hideCountdown);
+                if(hideCountdown){
                     continue;
                 }
 
-                // Draw canvas elements
-                if (this.layoutBackground !== 'none') {
-                    this._drawBgShape(ctx, this.layoutBackground === 'plain');
+                //Drawcanvaselements
+                if(this.layoutBackground!=='none'){
+                    this._drawBgShape(ctx,this.layoutBackground==='plain');
                 }
-                this._drawText(canvas, val.nb, val.label, this.layoutBackground === 'plain');
-                if (this.progressBarStyle === 'surrounded') {
-                    this._drawProgressBarBg(ctx, this.progressBarWeight === 'thin');
+                this._drawText(canvas,val.nb,val.label,this.layoutBackground==='plain');
+                if(this.progressBarStyle==='surrounded'){
+                    this._drawProgressBarBg(ctx,this.progressBarWeight==='thin');
                 }
-                if (this.progressBarStyle !== 'none') {
-                    this._drawProgressBar(ctx, val.nb, val.total, this.progressBarWeight === 'thin');
+                if(this.progressBarStyle!=='none'){
+                    this._drawProgressBar(ctx,val.nb,val.total,this.progressBarWeight==='thin');
                 }
-                $(canvas).toggleClass('mx-2', this.layout === 'boxes');
+                $(canvas).toggleClass('mx-2',this.layout==='boxes');
             }
         }
 
-        if (this.isFinished) {
+        if(this.isFinished){
             clearInterval(this.setInterval);
-            if (!this.editableMode) {
+            if(!this.editableMode){
                 this._handleEndCountdownAction();
             }
         }
     },
     /**
-     * Updates the remaining units into the `diff` object.
+     *Updatestheremainingunitsintothe`diff`object.
      *
-     * @private
+     *@private
      */
-    _updateTimeDiff: function () {
-        let delta = this._getDelta();
-        this.isFinished = delta < 0;
-        if (this.isFinished) {
-            for (const unitData of this.diff) {
-                  unitData.nb = 0;
+    _updateTimeDiff:function(){
+        letdelta=this._getDelta();
+        this.isFinished=delta<0;
+        if(this.isFinished){
+            for(constunitDataofthis.diff){
+                  unitData.nb=0;
             }
             return;
         }
 
-        this.hereBeforeTimerEnds = true;
-        for (const unitData of this.diff) {
-              unitData.nb = Math.floor(delta / unitData.nbSeconds);
-              delta -= unitData.nb * unitData.nbSeconds;
+        this.hereBeforeTimerEnds=true;
+        for(constunitDataofthis.diff){
+              unitData.nb=Math.floor(delta/unitData.nbSeconds);
+              delta-=unitData.nb*unitData.nbSeconds;
         }
     },
 
     //--------------------------------------------------------------------------
-    // Canvas drawing methods
+    //Canvasdrawingmethods
     //--------------------------------------------------------------------------
 
     /**
-     * Erases the canvas.
+     *Erasesthecanvas.
      *
-     * @private
-     * @param {RenderingContext} ctx - Context of the canvas
+     *@private
+     *@param{RenderingContext}ctx-Contextofthecanvas
      */
-    _clearCanvas: function (ctx) {
-        ctx.clearRect(0, 0, this.size, this.size);
+    _clearCanvas:function(ctx){
+        ctx.clearRect(0,0,this.size,this.size);
     },
     /**
-     * Draws a text into the canvas.
+     *Drawsatextintothecanvas.
      *
-     * @private
-     * @param {HTMLCanvasElement} canvas
-     * @param {string} textNb - text to display in the center of the canvas, in big
-     * @param {string} textUnit - text to display bellow `textNb` in small
-     * @param {boolean} full - if true, the shape will be drawn up to the progressbar
+     *@private
+     *@param{HTMLCanvasElement}canvas
+     *@param{string}textNb-texttodisplayinthecenterofthecanvas,inbig
+     *@param{string}textUnit-texttodisplaybellow`textNb`insmall
+     *@param{boolean}full-iftrue,theshapewillbedrawnuptotheprogressbar
      */
-    _drawText: function (canvas, textNb, textUnit, full = false) {
-        const ctx = canvas.getContext("2d");
-        const nbSize = this.size / 4;
-        ctx.font = `${nbSize}px Arial`;
-        ctx.fillStyle = this.textColor;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(textNb, canvas.width / 2, canvas.height / 2);
+    _drawText:function(canvas,textNb,textUnit,full=false){
+        constctx=canvas.getContext("2d");
+        constnbSize=this.size/4;
+        ctx.font=`${nbSize}pxArial`;
+        ctx.fillStyle=this.textColor;
+        ctx.textAlign='center';
+        ctx.textBaseline='middle';
+        ctx.fillText(textNb,canvas.width/2,canvas.height/2);
 
-        const unitSize = this.size / 12;
-        ctx.font = `${unitSize}px Arial`;
-        ctx.fillText(textUnit, canvas.width / 2, canvas.height / 2 + nbSize / 1.5, this.width);
+        constunitSize=this.size/12;
+        ctx.font=`${unitSize}pxArial`;
+        ctx.fillText(textUnit,canvas.width/2,canvas.height/2+nbSize/1.5,this.width);
 
-        if (this.layout === 'boxes' && this.layoutBackground !== 'none' && this.progressBarStyle === 'none') {
-            let barWidth = this.size / (this.progressBarWeight === 'thin' ? 31 : 10);
-            if (full) {
-                barWidth = 0;
+        if(this.layout==='boxes'&&this.layoutBackground!=='none'&&this.progressBarStyle==='none'){
+            letbarWidth=this.size/(this.progressBarWeight==='thin'?31:10);
+            if(full){
+                barWidth=0;
             }
             ctx.beginPath();
-            ctx.moveTo(barWidth, this.size / 2);
-            ctx.lineTo(this.width - barWidth, this.size / 2);
+            ctx.moveTo(barWidth,this.size/2);
+            ctx.lineTo(this.width-barWidth,this.size/2);
             ctx.stroke();
         }
     },
     /**
-     * Draws a plain shape into the canvas.
+     *Drawsaplainshapeintothecanvas.
      *
-     * @private
-     * @param {RenderingContext} ctx - Context of the canvas
-     * @param {boolean} full - if true, the shape will be drawn up to the progressbar
+     *@private
+     *@param{RenderingContext}ctx-Contextofthecanvas
+     *@param{boolean}full-iftrue,theshapewillbedrawnuptotheprogressbar
      */
-    _drawBgShape: function (ctx, full = false) {
-        ctx.fillStyle = this.layoutBackgroundColor;
+    _drawBgShape:function(ctx,full=false){
+        ctx.fillStyle=this.layoutBackgroundColor;
         ctx.beginPath();
-        if (this.layout === 'circle') {
-            let rayon = this.size / 2;
-            if (this.progressBarWeight === 'thin') {
-                rayon -= full ? this.size / 29 : this.size / 15;
-            } else {
-                rayon -= full ? 0 : this.size / 10;
+        if(this.layout==='circle'){
+            letrayon=this.size/2;
+            if(this.progressBarWeight==='thin'){
+                rayon-=full?this.size/29:this.size/15;
+            }else{
+                rayon-=full?0:this.size/10;
             }
-            ctx.arc(this.size / 2, this.size / 2, rayon, 0, Math.PI * 2);
+            ctx.arc(this.size/2,this.size/2,rayon,0,Math.PI*2);
             ctx.fill();
-        } else if (this.layout === 'boxes') {
-            let barWidth = this.size / (this.progressBarWeight === 'thin' ? 31 : 10);
-            if (full) {
-                barWidth = 0;
+        }elseif(this.layout==='boxes'){
+            letbarWidth=this.size/(this.progressBarWeight==='thin'?31:10);
+            if(full){
+                barWidth=0;
             }
 
-            ctx.fillStyle = this.layoutBackgroundColor;
-            ctx.rect(barWidth, barWidth, this.width - barWidth * 2, this.size - barWidth * 2);
+            ctx.fillStyle=this.layoutBackgroundColor;
+            ctx.rect(barWidth,barWidth,this.width-barWidth*2,this.size-barWidth*2);
             ctx.fill();
 
-            const gradient = ctx.createLinearGradient(0, this.width, 0, 0);
-            gradient.addColorStop(0, '#ffffff24');
-            gradient.addColorStop(1, this.layoutBackgroundColor);
-            ctx.fillStyle = gradient;
-            ctx.rect(barWidth, barWidth, this.width - barWidth * 2, this.size - barWidth * 2);
+            constgradient=ctx.createLinearGradient(0,this.width,0,0);
+            gradient.addColorStop(0,'#ffffff24');
+            gradient.addColorStop(1,this.layoutBackgroundColor);
+            ctx.fillStyle=gradient;
+            ctx.rect(barWidth,barWidth,this.width-barWidth*2,this.size-barWidth*2);
             ctx.fill();
-            $(ctx.canvas).css({'border-radius': '8px'});
+            $(ctx.canvas).css({'border-radius':'8px'});
         }
     },
     /**
-     * Draws a progress bar around the countdown shape.
+     *Drawsaprogressbararoundthecountdownshape.
      *
-     * @private
-     * @param {RenderingContext} ctx - Context of the canvas
-     * @param {string} nbUnit - how many unit should fill progress bar
-     * @param {string} totalUnit - number of unit to do a complete progress bar
-     * @param {boolean} thinLine - if true, the progress bar will be thiner
+     *@private
+     *@param{RenderingContext}ctx-Contextofthecanvas
+     *@param{string}nbUnit-howmanyunitshouldfillprogressbar
+     *@param{string}totalUnit-numberofunittodoacompleteprogressbar
+     *@param{boolean}thinLine-iftrue,theprogressbarwillbethiner
      */
-    _drawProgressBar: function (ctx, nbUnit, totalUnit, thinLine) {
-        ctx.strokeStyle = this.progressBarColor;
-        ctx.lineWidth = thinLine ? this.size / 35 : this.size / 10;
-        if (this.layout === 'circle') {
+    _drawProgressBar:function(ctx,nbUnit,totalUnit,thinLine){
+        ctx.strokeStyle=this.progressBarColor;
+        ctx.lineWidth=thinLine?this.size/35:this.size/10;
+        if(this.layout==='circle'){
             ctx.beginPath();
-            ctx.arc(this.size / 2, this.size / 2, this.size / 2 - this.size / 20, Math.PI / -2, (Math.PI * 2) * (nbUnit / totalUnit) + (Math.PI / -2));
+            ctx.arc(this.size/2,this.size/2,this.size/2-this.size/20,Math.PI/-2,(Math.PI*2)*(nbUnit/totalUnit)+(Math.PI/-2));
             ctx.stroke();
-        } else if (this.layout === 'boxes') {
-            ctx.lineWidth *= 2;
-            let pc = nbUnit / totalUnit * 100;
+        }elseif(this.layout==='boxes'){
+            ctx.lineWidth*=2;
+            letpc=nbUnit/totalUnit*100;
 
-            // Lines: Top(x1,y1,x2,y2) Right(x1,y1,x2,y2) Bottom(x1,y1,x2,y2) Left(x1,y1,x2,y2)
-            const linesCoordFuncs = [
-                (linePc) => [0 + ctx.lineWidth / 2, 0, (this.width - ctx.lineWidth / 2) * linePc / 25 + ctx.lineWidth / 2, 0],
-                (linePc) => [this.width, 0 + ctx.lineWidth / 2, this.width, (this.size - ctx.lineWidth / 2) * linePc / 25 + ctx.lineWidth / 2],
-                (linePc) => [this.width - ((this.width - ctx.lineWidth / 2) * linePc / 25) - ctx.lineWidth / 2, this.size, this.width - ctx.lineWidth / 2, this.size],
-                (linePc) => [0, this.size - ((this.size - ctx.lineWidth / 2) * linePc / 25) - ctx.lineWidth / 2, 0, this.size - ctx.lineWidth / 2],
+            //Lines:Top(x1,y1,x2,y2)Right(x1,y1,x2,y2)Bottom(x1,y1,x2,y2)Left(x1,y1,x2,y2)
+            constlinesCoordFuncs=[
+                (linePc)=>[0+ctx.lineWidth/2,0,(this.width-ctx.lineWidth/2)*linePc/25+ctx.lineWidth/2,0],
+                (linePc)=>[this.width,0+ctx.lineWidth/2,this.width,(this.size-ctx.lineWidth/2)*linePc/25+ctx.lineWidth/2],
+                (linePc)=>[this.width-((this.width-ctx.lineWidth/2)*linePc/25)-ctx.lineWidth/2,this.size,this.width-ctx.lineWidth/2,this.size],
+                (linePc)=>[0,this.size-((this.size-ctx.lineWidth/2)*linePc/25)-ctx.lineWidth/2,0,this.size-ctx.lineWidth/2],
             ];
-            while (pc > 0 && linesCoordFuncs.length) {
-                const linePc = Math.min(pc, 25);
-                const lineCoord = (linesCoordFuncs.shift())(linePc);
+            while(pc>0&&linesCoordFuncs.length){
+                constlinePc=Math.min(pc,25);
+                constlineCoord=(linesCoordFuncs.shift())(linePc);
                 ctx.beginPath();
-                ctx.moveTo(lineCoord[0], lineCoord[1]);
-                ctx.lineTo(lineCoord[2], lineCoord[3]);
+                ctx.moveTo(lineCoord[0],lineCoord[1]);
+                ctx.lineTo(lineCoord[2],lineCoord[3]);
                 ctx.stroke();
-                pc -= linePc;
+                pc-=linePc;
             }
         }
     },
     /**
-     * Draws a full lighter background progressbar around the shape.
+     *Drawsafulllighterbackgroundprogressbararoundtheshape.
      *
-     * @private
-     * @param {RenderingContext} ctx - Context of the canvas
-     * @param {boolean} thinLine - if true, the progress bar will be thiner
+     *@private
+     *@param{RenderingContext}ctx-Contextofthecanvas
+     *@param{boolean}thinLine-iftrue,theprogressbarwillbethiner
      */
-    _drawProgressBarBg: function (ctx, thinLine) {
-        ctx.strokeStyle = this.progressBarColor;
-        ctx.globalAlpha = 0.2;
-        ctx.lineWidth = thinLine ? this.size / 35 : this.size / 10;
-        if (this.layout === 'circle') {
+    _drawProgressBarBg:function(ctx,thinLine){
+        ctx.strokeStyle=this.progressBarColor;
+        ctx.globalAlpha=0.2;
+        ctx.lineWidth=thinLine?this.size/35:this.size/10;
+        if(this.layout==='circle'){
             ctx.beginPath();
-            ctx.arc(this.size / 2, this.size / 2, this.size / 2 - this.size / 20, 0, Math.PI * 2);
+            ctx.arc(this.size/2,this.size/2,this.size/2-this.size/20,0,Math.PI*2);
             ctx.stroke();
-        } else if (this.layout === 'boxes') {
-            ctx.lineWidth *= 2;
+        }elseif(this.layout==='boxes'){
+            ctx.lineWidth*=2;
 
-            // Lines: Top(x1,y1,x2,y2) Right(x1,y1,x2,y2) Bottom(x1,y1,x2,y2) Left(x1,y1,x2,y2)
-            const points = [
-                [0 + ctx.lineWidth / 2, 0, this.width, 0],
-                [this.width, 0 + ctx.lineWidth / 2, this.width, this.size],
-                [0, this.size, this.width - ctx.lineWidth / 2, this.size],
-                [0, 0, 0, this.size - ctx.lineWidth / 2],
+            //Lines:Top(x1,y1,x2,y2)Right(x1,y1,x2,y2)Bottom(x1,y1,x2,y2)Left(x1,y1,x2,y2)
+            constpoints=[
+                [0+ctx.lineWidth/2,0,this.width,0],
+                [this.width,0+ctx.lineWidth/2,this.width,this.size],
+                [0,this.size,this.width-ctx.lineWidth/2,this.size],
+                [0,0,0,this.size-ctx.lineWidth/2],
             ];
-            while (points.length) {
-                const point = points.shift();
+            while(points.length){
+                constpoint=points.shift();
                 ctx.beginPath();
-                ctx.moveTo(point[0], point[1]);
-                ctx.lineTo(point[2], point[3]);
+                ctx.moveTo(point[0],point[1]);
+                ctx.lineTo(point[2],point[3]);
                 ctx.stroke();
             }
         }
-        ctx.globalAlpha = 1;
+        ctx.globalAlpha=1;
     },
 });
 
-publicWidget.registry.countdown = CountdownWidget;
+publicWidget.registry.countdown=CountdownWidget;
 
-return CountdownWidget;
+returnCountdownWidget;
 });

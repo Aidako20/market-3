@@ -1,267 +1,267 @@
-flectra.define('sale_product_configurator.ProductConfiguratorFormController', function (require) {
-"use strict";
+flectra.define('sale_product_configurator.ProductConfiguratorFormController',function(require){
+"usestrict";
 
-var core = require('web.core');
-var _t = core._t;
-var FormController = require('web.FormController');
-var OptionalProductsModal = require('sale_product_configurator.OptionalProductsModal');
+varcore=require('web.core');
+var_t=core._t;
+varFormController=require('web.FormController');
+varOptionalProductsModal=require('sale_product_configurator.OptionalProductsModal');
 
-var ProductConfiguratorFormController = FormController.extend({
-    custom_events: _.extend({}, FormController.prototype.custom_events, {
-        field_changed: '_onFieldChanged',
-        handle_add: '_handleAdd'
+varProductConfiguratorFormController=FormController.extend({
+    custom_events:_.extend({},FormController.prototype.custom_events,{
+        field_changed:'_onFieldChanged',
+        handle_add:'_handleAdd'
     }),
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var self = this;
-        return this._super.apply(this, arguments).then(function () {
+    start:function(){
+        varself=this;
+        returnthis._super.apply(this,arguments).then(function(){
             self.$el.addClass('o_product_configurator');
         });
     },
     /**
-     * We need to first load the template of the selected product and then render the content
-     * to avoid a flicker when the modal is opened.
+     *Weneedtofirstloadthetemplateoftheselectedproductandthenrenderthecontent
+     *toavoidaflickerwhenthemodalisopened.
      *
-     * @override
+     *@override
      */
-    willStart: function () {
-        var def = this._super.apply(this, arguments);
-        if (this.initialState.data.product_template_id) {
-            return this._configureProduct(
+    willStart:function(){
+        vardef=this._super.apply(this,arguments);
+        if(this.initialState.data.product_template_id){
+            returnthis._configureProduct(
                 this.initialState.data.product_template_id.data.id
-            ).then(function () {
-                return def;
+            ).then(function(){
+                returndef;
             });
         }
 
-        return def;
+        returndef;
     },
     /**
-     * Showing this window is useless for configuratorMode 'options' as this form view
-     * is used as a bridge between SO lines and optional products.
+     *ShowingthiswindowisuselessforconfiguratorMode'options'asthisformview
+     *isusedasabridgebetweenSOlinesandoptionalproducts.
      *
-     * Placed here because it's the only method that is called after the modal is rendered.
+     *Placedherebecauseit'stheonlymethodthatiscalledafterthemodalisrendered.
      *
-     * @override
+     *@override
      */
-    renderButtons: function () {
-        this._super.apply(this, arguments);
+    renderButtons:function(){
+        this._super.apply(this,arguments);
 
-        if (this.renderer.state.context.configuratorMode === 'options') {
+        if(this.renderer.state.context.configuratorMode==='options'){
             this.$el.closest('.modal').addClass('d-none');
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
 
     /**
-    * We need to override the default click behavior for our "Add" button
-    * because there is a possibility that this product has optional products.
-    * If so, we need to display an extra modal to choose the options.
+    *Weneedtooverridethedefaultclickbehaviorforour"Add"button
+    *becausethereisapossibilitythatthisproducthasoptionalproducts.
+    *Ifso,weneedtodisplayanextramodaltochoosetheoptions.
     *
-    * @override
+    *@override
     */
-    _onButtonClicked: function (event) {
-        if (event.stopPropagation) {
+    _onButtonClicked:function(event){
+        if(event.stopPropagation){
             event.stopPropagation();
         }
-        var attrs = event.data.attrs;
-        if (attrs.special === 'cancel') {
-            this._super.apply(this, arguments);
-        } else {
-            if (!this.$el
+        varattrs=event.data.attrs;
+        if(attrs.special==='cancel'){
+            this._super.apply(this,arguments);
+        }else{
+            if(!this.$el
                     .parents('.modal')
                     .find('.o_sale_product_configurator_add')
-                    .hasClass('disabled')) {
+                    .hasClass('disabled')){
                 this._handleAdd();
             }
         }
     },
     /**
-     * This is overridden to allow catching the "select" event on our product template select field.
+     *Thisisoverriddentoallowcatchingthe"select"eventonourproducttemplateselectfield.
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onFieldChanged: function (event) {
-        this._super.apply(this, arguments);
+    _onFieldChanged:function(event){
+        this._super.apply(this,arguments);
 
-        var self = this;
-        var productId = event.data.changes.product_template_id.id;
+        varself=this;
+        varproductId=event.data.changes.product_template_id.id;
 
-        // check to prevent traceback when emptying the field
-        if (!productId) {
+        //checktopreventtracebackwhenemptyingthefield
+        if(!productId){
             return;
         }
 
         this._configureProduct(event.data.changes.product_template_id.id)
-            .then(function () {
+            .then(function(){
                 self.renderer.renderConfigurator(self.renderer.configuratorHtml);
             });
     },
 
     /**
-     * Renders the "variants" part of the wizard
+     *Rendersthe"variants"partofthewizard
      *
-     * @param {integer} productTemplateId
+     *@param{integer}productTemplateId
      */
-    _configureProduct: function (productTemplateId) {
-        var self = this;
-        var initialProduct = this.initialState.data.product_template_id;
-        var changed = initialProduct && initialProduct.data.id !== productTemplateId;
-        var data = this.renderer.state.data;
-        var quantity = initialProduct.context && initialProduct.context.default_quantity ? initialProduct.context.default_quantity : data.quantity;
-        return this._rpc({
-            route: '/sale_product_configurator/configure',
-            params: {
-                product_template_id: productTemplateId,
-                pricelist_id: this.renderer.pricelistId,
-                add_qty: quantity,
-                product_template_attribute_value_ids: changed ? [] : this._getAttributeValueIds(
+    _configureProduct:function(productTemplateId){
+        varself=this;
+        varinitialProduct=this.initialState.data.product_template_id;
+        varchanged=initialProduct&&initialProduct.data.id!==productTemplateId;
+        vardata=this.renderer.state.data;
+        varquantity=initialProduct.context&&initialProduct.context.default_quantity?initialProduct.context.default_quantity:data.quantity;
+        returnthis._rpc({
+            route:'/sale_product_configurator/configure',
+            params:{
+                product_template_id:productTemplateId,
+                pricelist_id:this.renderer.pricelistId,
+                add_qty:quantity,
+                product_template_attribute_value_ids:changed?[]:this._getAttributeValueIds(
                     data.product_template_attribute_value_ids
                 ),
-                product_no_variant_attribute_value_ids: changed ? [] : this._getAttributeValueIds(
+                product_no_variant_attribute_value_ids:changed?[]:this._getAttributeValueIds(
                     data.product_no_variant_attribute_value_ids
                 )
             }
-        }).then(function (configurator) {
-            self.renderer.configuratorHtml = configurator;
+        }).then(function(configurator){
+            self.renderer.configuratorHtml=configurator;
         });
     },
     /**
-    * When the user adds a product that has optional products, we need to display
-    * a window to allow the user to choose these extra options.
+    *Whentheuseraddsaproductthathasoptionalproducts,weneedtodisplay
+    *awindowtoallowtheusertochoosetheseextraoptions.
     *
-    * This will also create the product if it's in "dynamic" mode
-    * (see product_attribute.create_variant)
+    *Thiswillalsocreatetheproductifit'sin"dynamic"mode
+    *(seeproduct_attribute.create_variant)
     *
-    * If "self.renderer.state.context.configuratorMode" is 'edit', this will only send
-    * the main product with its changes.
+    *If"self.renderer.state.context.configuratorMode"is'edit',thiswillonlysend
+    *themainproductwithitschanges.
     *
-    * As opposed to the 'add' mode that will add the main product AND all the configured optional products.
+    *Asopposedtothe'add'modethatwilladdthemainproductANDalltheconfiguredoptionalproducts.
     *
-    * A third mode, 'options', is available for products that don't have a configuration but have
-    * optional products to select. This will bypass the configuration step and open the
-    * options modal directly.
+    *Athirdmode,'options',isavailableforproductsthatdon'thaveaconfigurationbuthave
+    *optionalproductstoselect.Thiswillbypasstheconfigurationstepandopenthe
+    *optionsmodaldirectly.
     *
-    * @private
+    *@private
     */
-    _handleAdd: function () {
-        var self = this;
-        var $modal = this.$el;
-        var productSelector = [
+    _handleAdd:function(){
+        varself=this;
+        var$modal=this.$el;
+        varproductSelector=[
             'input[type="hidden"][name="product_id"]',
             'input[type="radio"][name="product_id"]:checked'
         ];
 
-        var productId = parseInt($modal.find(productSelector.join(', ')).first().val(), 10);
-        var productTemplateId = $modal.find('.product_template_id').val();
+        varproductId=parseInt($modal.find(productSelector.join(',')).first().val(),10);
+        varproductTemplateId=$modal.find('.product_template_id').val();
         this.renderer.selectOrCreateProduct(
             $modal,
             productId,
             productTemplateId,
             false
-        ).then(function (productId) {
-            $modal.find(productSelector.join(', ')).val(productId);
+        ).then(function(productId){
+            $modal.find(productSelector.join(',')).val(productId);
 
-            var variantValues = self
+            varvariantValues=self
                 .renderer
                 .getSelectedVariantValues($modal.find('.js_product'));
 
-            var productCustomVariantValues = self
+            varproductCustomVariantValues=self
                 .renderer
                 .getCustomVariantValues($modal.find('.js_product'));
 
-            var noVariantAttributeValues = self
+            varnoVariantAttributeValues=self
                 .renderer
                 .getNoVariantAttributeValues($modal.find('.js_product'));
 
-            self.rootProduct = {
-                product_id: productId,
-                product_template_id: parseInt(productTemplateId),
-                quantity: parseFloat($modal.find('input[name="add_qty"]').val() || 1),
-                variant_values: variantValues,
-                product_custom_attribute_values: productCustomVariantValues,
-                no_variant_attribute_values: noVariantAttributeValues
+            self.rootProduct={
+                product_id:productId,
+                product_template_id:parseInt(productTemplateId),
+                quantity:parseFloat($modal.find('input[name="add_qty"]').val()||1),
+                variant_values:variantValues,
+                product_custom_attribute_values:productCustomVariantValues,
+                no_variant_attribute_values:noVariantAttributeValues
             };
 
-            if (self.renderer.state.context.configuratorMode === 'edit') {
-                // edit mode only takes care of main product
+            if(self.renderer.state.context.configuratorMode==='edit'){
+                //editmodeonlytakescareofmainproduct
                 self._onAddRootProductOnly();
                 return;
             }
 
-            self.optionalProductsModal = new OptionalProductsModal($('body'), {
-                rootProduct: self.rootProduct,
-                pricelistId: self.renderer.pricelistId,
-                okButtonText: _t('Confirm'),
-                cancelButtonText: _t('Back'),
-                title: _t('Configure'),
-                context: self.initialState.context,
-                previousModalHeight: self.$el.closest('.modal-content').height()
+            self.optionalProductsModal=newOptionalProductsModal($('body'),{
+                rootProduct:self.rootProduct,
+                pricelistId:self.renderer.pricelistId,
+                okButtonText:_t('Confirm'),
+                cancelButtonText:_t('Back'),
+                title:_t('Configure'),
+                context:self.initialState.context,
+                previousModalHeight:self.$el.closest('.modal-content').height()
             }).open();
 
-            self.optionalProductsModal.on('options_empty', null,
-                // no optional products found for this product, only add the root product
+            self.optionalProductsModal.on('options_empty',null,
+                //nooptionalproductsfoundforthisproduct,onlyaddtherootproduct
                 self._onAddRootProductOnly.bind(self));
 
-            self.optionalProductsModal.on('update_quantity', null,
+            self.optionalProductsModal.on('update_quantity',null,
                 self._onOptionsUpdateQuantity.bind(self));
 
-            self.optionalProductsModal.on('confirm', null,
+            self.optionalProductsModal.on('confirm',null,
                 self._onModalConfirm.bind(self));
 
-            self.optionalProductsModal.on('closed', null,
+            self.optionalProductsModal.on('closed',null,
                 self._onModalClose.bind(self));
         });
     },
 
     /**
-     * Add root product only and forget optional products.
-     * Used when product has no optional products and in 'edit' mode.
+     *Addrootproductonlyandforgetoptionalproducts.
+     *Usedwhenproducthasnooptionalproductsandin'edit'mode.
      *
-     * @private
+     *@private
      */
-    _onAddRootProductOnly: function () {
+    _onAddRootProductOnly:function(){
         this._addProducts([this.rootProduct]);
     },
 
     /**
-     * Add all selected products
+     *Addallselectedproducts
      *
-     * @private
+     *@private
      */
-    _onModalConfirm: function () {
-        this._wasConfirmed = true;
+    _onModalConfirm:function(){
+        this._wasConfirmed=true;
         this._addProducts(this.optionalProductsModal.getSelectedProducts());
     },
 
     /**
-     * When the optional products modal is closed (and not confirmed) on 'options' mode,
-     * this window should also be closed immediately.
+     *Whentheoptionalproductsmodalisclosed(andnotconfirmed)on'options'mode,
+     *thiswindowshouldalsobeclosedimmediately.
      *
-     * @private
+     *@private
      */
-    _onModalClose: function () {
-        if (this.renderer.state.context.configuratorMode === 'options'
-            && this._wasConfirmed !== true) {
-              this.do_action({type: 'ir.actions.act_window_close'});
+    _onModalClose:function(){
+        if(this.renderer.state.context.configuratorMode==='options'
+            &&this._wasConfirmed!==true){
+              this.do_action({type:'ir.actions.act_window_close'});
         }
     },
 
     /**
-     * Update product configurator form
-     * when quantity is updated in the optional products window
+     *Updateproductconfiguratorform
+     *whenquantityisupdatedintheoptionalproductswindow
      *
-     * @private
-     * @param {integer} quantity
+     *@private
+     *@param{integer}quantity
      */
-    _onOptionsUpdateQuantity: function (quantity) {
+    _onOptionsUpdateQuantity:function(quantity){
         this.$el
             .find('input[name="add_qty"]')
             .val(quantity)
@@ -269,46 +269,46 @@ var ProductConfiguratorFormController = FormController.extend({
     },
 
     /**
-    * This triggers the close action for the window and
-    * adds the product as the "infos" parameter.
-    * It will allow the caller (typically the product_configurator widget) of this window
-    * to handle the added products.
+    *Thistriggersthecloseactionforthewindowand
+    *addstheproductasthe"infos"parameter.
+    *Itwillallowthecaller(typicallytheproduct_configuratorwidget)ofthiswindow
+    *tohandletheaddedproducts.
     *
-    * @private
-    * @param {Array} products the list of added products
-    *   {integer} products.product_id: the id of the product
-    *   {integer} products.quantity: the added quantity for this product
-    *   {Array} products.product_custom_attribute_values:
-    *     see variant_mixin.getCustomVariantValues
-    *   {Array} products.no_variant_attribute_values:
-    *     see variant_mixin.getNoVariantAttributeValues
+    *@private
+    *@param{Array}productsthelistofaddedproducts
+    *  {integer}products.product_id:theidoftheproduct
+    *  {integer}products.quantity:theaddedquantityforthisproduct
+    *  {Array}products.product_custom_attribute_values:
+    *    seevariant_mixin.getCustomVariantValues
+    *  {Array}products.no_variant_attribute_values:
+    *    seevariant_mixin.getNoVariantAttributeValues
     */
-    _addProducts: function (products) {
-        this.do_action({type: 'ir.actions.act_window_close', infos: {
-            mainProduct: products[0],
-            options: products.slice(1)
+    _addProducts:function(products){
+        this.do_action({type:'ir.actions.act_window_close',infos:{
+            mainProduct:products[0],
+            options:products.slice(1)
         }});
     },
     /**
-     * Extracts the ids from the passed attributeValueIds and returns them
-     * as a plain array.
+     *ExtractstheidsfromthepassedattributeValueIdsandreturnsthem
+     *asaplainarray.
      *
-     * @param {Array} attributeValueIds
+     *@param{Array}attributeValueIds
      */
-    _getAttributeValueIds: function (attributeValueIds) {
-        if (!attributeValueIds || attributeValueIds.length === 0) {
-            return false;
+    _getAttributeValueIds:function(attributeValueIds){
+        if(!attributeValueIds||attributeValueIds.length===0){
+            returnfalse;
         }
 
-        var result = [];
-        _.each(attributeValueIds.data, function (attributeValue) {
+        varresult=[];
+        _.each(attributeValueIds.data,function(attributeValue){
             result.push(attributeValue.data.id);
         });
 
-        return result;
+        returnresult;
     }
 });
 
-return ProductConfiguratorFormController;
+returnProductConfiguratorFormController;
 
 });

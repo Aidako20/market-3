@@ -1,28 +1,28 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from operator import itemgetter
-from flectra import api, models
+fromoperatorimportitemgetter
+fromflectraimportapi,models
 
-class IrUiView(models.Model):
-    _inherit = 'ir.ui.view'
+classIrUiView(models.Model):
+    _inherit='ir.ui.view'
 
     @api.model
-    def _validate_custom_views(self, model):
-        # views from imported modules should be considered as custom views
-        result = super(IrUiView, self)._validate_custom_views(model)
+    def_validate_custom_views(self,model):
+        #viewsfromimportedmodulesshouldbeconsideredascustomviews
+        result=super(IrUiView,self)._validate_custom_views(model)
 
         self._cr.execute("""
-            SELECT max(v.id)
-               FROM ir_ui_view v
-          LEFT JOIN ir_model_data md ON (md.model = 'ir.ui.view' AND md.res_id = v.id)
-          LEFT JOIN ir_module_module m ON (m.name = md.module)
-              WHERE m.imported = true
-                AND v.model = %s
-                AND v.active = true
-           GROUP BY coalesce(v.inherit_id, v.id)
-        """, [model])
+            SELECTmax(v.id)
+               FROMir_ui_viewv
+          LEFTJOINir_model_datamdON(md.model='ir.ui.view'ANDmd.res_id=v.id)
+          LEFTJOINir_module_modulemON(m.name=md.module)
+              WHEREm.imported=true
+                ANDv.model=%s
+                ANDv.active=true
+           GROUPBYcoalesce(v.inherit_id,v.id)
+        """,[model])
 
-        ids = (row[0] for row in self._cr.fetchall())
-        views = self.with_context(load_all_views=True).browse(ids)
-        return views._check_xml() and result
+        ids=(row[0]forrowinself._cr.fetchall())
+        views=self.with_context(load_all_views=True).browse(ids)
+        returnviews._check_xml()andresult

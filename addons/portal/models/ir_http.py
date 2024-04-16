@@ -1,20 +1,20 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
-from flectra.http import request
+fromflectraimportmodels
+fromflectra.httpimportrequest
 
 
-class IrHttp(models.AbstractModel):
-    _inherit = 'ir.http'
-
-    @classmethod
-    def _get_translation_frontend_modules_name(cls):
-        mods = super(IrHttp, cls)._get_translation_frontend_modules_name()
-        return mods + ['portal']
+classIrHttp(models.AbstractModel):
+    _inherit='ir.http'
 
     @classmethod
-    def _get_frontend_langs(cls):
-        if request and request.is_frontend:
-            return [lang[0] for lang in filter(lambda l: l[3], request.env['res.lang'].get_available())]
-        return super()._get_frontend_langs()
+    def_get_translation_frontend_modules_name(cls):
+        mods=super(IrHttp,cls)._get_translation_frontend_modules_name()
+        returnmods+['portal']
+
+    @classmethod
+    def_get_frontend_langs(cls):
+        ifrequestandrequest.is_frontend:
+            return[lang[0]forlanginfilter(lambdal:l[3],request.env['res.lang'].get_available())]
+        returnsuper()._get_frontend_langs()

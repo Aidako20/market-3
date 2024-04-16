@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import http
-from flectra.http import request
+fromflectraimporthttp
+fromflectra.httpimportrequest
 
 
-class HrAttendance(http.Controller):
-    @http.route('/hr_attendance/kiosk_keepalive', auth='user', type='json')
-    def kiosk_keepalive(self):
-        request.httprequest.session.modified = True
-        return {}
+classHrAttendance(http.Controller):
+    @http.route('/hr_attendance/kiosk_keepalive',auth='user',type='json')
+    defkiosk_keepalive(self):
+        request.httprequest.session.modified=True
+        return{}

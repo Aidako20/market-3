@@ -1,34 +1,34 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, api
+fromflectraimportmodels,api
 
 
-class SaleOrder(models.Model):
-    _inherit = "sale.order"
+classSaleOrder(models.Model):
+    _inherit="sale.order"
 
-    def _action_confirm(self):
-        """ If the product of an order line is a 'course', we add the client of the sale_order
-        as a member of the channel(s) on which this product is configured (see slide.channel.product_id). """
-        result = super(SaleOrder, self)._action_confirm()
+    def_action_confirm(self):
+        """Iftheproductofanorderlineisa'course',weaddtheclientofthesale_order
+        asamemberofthechannel(s)onwhichthisproductisconfigured(seeslide.channel.product_id)."""
+        result=super(SaleOrder,self)._action_confirm()
 
-        so_lines = self.env['sale.order.line'].search(
-            [('order_id', 'in', self.ids)]
+        so_lines=self.env['sale.order.line'].search(
+            [('order_id','in',self.ids)]
         )
-        products = so_lines.mapped('product_id')
-        related_channels = self.env['slide.channel'].search(
-            [('product_id', 'in', products.ids)]
+        products=so_lines.mapped('product_id')
+        related_channels=self.env['slide.channel'].search(
+            [('product_id','in',products.ids)]
         )
-        channel_products = related_channels.mapped('product_id')
+        channel_products=related_channels.mapped('product_id')
 
-        channels_per_so = {sale_order: self.env['slide.channel'] for sale_order in self}
-        for so_line in so_lines:
-            if so_line.product_id in channel_products:
-                for related_channel in related_channels:
-                    if related_channel.product_id == so_line.product_id:
-                        channels_per_so[so_line.order_id] = channels_per_so[so_line.order_id] | related_channel
+        channels_per_so={sale_order:self.env['slide.channel']forsale_orderinself}
+        forso_lineinso_lines:
+            ifso_line.product_idinchannel_products:
+                forrelated_channelinrelated_channels:
+                    ifrelated_channel.product_id==so_line.product_id:
+                        channels_per_so[so_line.order_id]=channels_per_so[so_line.order_id]|related_channel
 
-        for sale_order, channels in channels_per_so.items():
+        forsale_order,channelsinchannels_per_so.items():
             channels.sudo()._action_add_members(sale_order.partner_id)
 
-        return result
+        returnresult

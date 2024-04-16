@@ -1,20 +1,20 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models, modules
+fromflectraimportapi,models,modules
 
 
-class Users(models.Model):
-    _name = 'res.users'
-    _inherit = ['res.users']
+classUsers(models.Model):
+    _name='res.users'
+    _inherit=['res.users']
 
     @api.model
-    def systray_get_activities(self):
-        """ Update the systray icon of res.partner activities to use the
-        contact application one instead of base icon. """
-        activities = super(Users, self).systray_get_activities()
-        for activity in activities:
-            if activity['model'] != 'res.partner':
+    defsystray_get_activities(self):
+        """Updatethesystrayiconofres.partneractivitiestousethe
+        contactapplicationoneinsteadofbaseicon."""
+        activities=super(Users,self).systray_get_activities()
+        foractivityinactivities:
+            ifactivity['model']!='res.partner':
                 continue
-            activity['icon'] = modules.module.get_module_icon('contacts')
-        return activities
+            activity['icon']=modules.module.get_module_icon('contacts')
+        returnactivities

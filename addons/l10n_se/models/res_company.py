@@ -1,22 +1,22 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
-import re
+fromflectraimportapi,fields,models
+importre
 
 
-class ResCompany(models.Model):
-    _inherit = 'res.company'
+classResCompany(models.Model):
+    _inherit='res.company'
 
-    org_number = fields.Char(compute='_compute_org_number')
+    org_number=fields.Char(compute='_compute_org_number')
 
     @api.depends('vat')
-    def _compute_org_number(self):
-        for company in self:
-            if company.country_id.code == "SE" and company.vat:
-                org_number = re.sub(r'\D', '', company.vat)[:-2]
-                org_number = org_number[:6] + '-' + org_number[6:]
+    def_compute_org_number(self):
+        forcompanyinself:
+            ifcompany.country_id.code=="SE"andcompany.vat:
+                org_number=re.sub(r'\D','',company.vat)[:-2]
+                org_number=org_number[:6]+'-'+org_number[6:]
 
-                company.org_number = org_number
+                company.org_number=org_number
             else:
-                company.org_number = ''
+                company.org_number=''

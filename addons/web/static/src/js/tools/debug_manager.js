@@ -1,127 +1,127 @@
-flectra.define('web.DebugManager', function (require) {
-"use strict";
+flectra.define('web.DebugManager',function(require){
+"usestrict";
 
-var core = require('web.core');
-var session = require('web.session');
-var utils = require('web.utils');
-var Widget = require('web.Widget');
+varcore=require('web.core');
+varsession=require('web.session');
+varutils=require('web.utils');
+varWidget=require('web.Widget');
 
-var QWeb = core.qweb;
+varQWeb=core.qweb;
 
 /**
- * DebugManager base + general features (applicable to any context)
+ *DebugManagerbase+generalfeatures(applicabletoanycontext)
  */
-var DebugManager = Widget.extend({
-    template: "WebClient.DebugManager",
-    xmlDependencies: ['/web/static/src/xml/debug.xml'],
-    events: {
-        "click a[data-action]": "perform_callback",
+varDebugManager=Widget.extend({
+    template:"WebClient.DebugManager",
+    xmlDependencies:['/web/static/src/xml/debug.xml'],
+    events:{
+        "clicka[data-action]":"perform_callback",
     },
-    init: function () {
-        this._super.apply(this, arguments);
-        this._events = null;
-        var debug = flectra.debug;
-        this.debug_mode = debug;
-        this.debug_mode_help = debug && debug !== '1' ? ' (' + debug + ')' : '';
+    init:function(){
+        this._super.apply(this,arguments);
+        this._events=null;
+        vardebug=flectra.debug;
+        this.debug_mode=debug;
+        this.debug_mode_help=debug&&debug!=='1'?'('+debug+')':'';
     },
-    start: function () {
-        core.bus.on('rpc:result', this, function (req, resp) {
+    start:function(){
+        core.bus.on('rpc:result',this,function(req,resp){
             this._debug_events(resp.debug);
         });
 
-        this.$dropdown = this.$(".o_debug_dropdown");
-        // whether the current user is an administrator
-        this._is_admin = session.is_system;
-        return Promise.resolve(
+        this.$dropdown=this.$(".o_debug_dropdown");
+        //whetherthecurrentuserisanadministrator
+        this._is_admin=session.is_system;
+        returnPromise.resolve(
             this._super()
-        ).then(function () {
-            return this.update();
+        ).then(function(){
+            returnthis.update();
         }.bind(this));
     },
     /**
-     * Calls the appropriate callback when clicking on a Debug option
+     *CallstheappropriatecallbackwhenclickingonaDebugoption
      */
-    perform_callback: function (evt) {
+    perform_callback:function(evt){
         evt.preventDefault();
-        var params = $(evt.target).data();
-        var callback = params.action;
+        varparams=$(evt.target).data();
+        varcallback=params.action;
 
-        if (callback && this[callback]) {
-            // Perform the callback corresponding to the option
-            this[callback](params, evt);
-        } else {
-            console.warn("No handler for ", callback);
+        if(callback&&this[callback]){
+            //Performthecallbackcorrespondingtotheoption
+            this[callback](params,evt);
+        }else{
+            console.warn("Nohandlerfor",callback);
         }
     },
 
-    _debug_events: function (events) {
-        if (!this._events) {
+    _debug_events:function(events){
+        if(!this._events){
             return;
         }
-        if (events && events.length) {
+        if(events&&events.length){
             this._events.push(events);
         }
-        this.trigger('update-stats', this._events);
+        this.trigger('update-stats',this._events);
     },
 
     /**
-     * Update the debug manager: reinserts all "universal" controls
+     *Updatethedebugmanager:reinsertsall"universal"controls
      */
-    update: function () {
+    update:function(){
         this.$dropdown
             .empty()
-            .append(QWeb.render('WebClient.DebugManager.Global', {
-                manager: this,
+            .append(QWeb.render('WebClient.DebugManager.Global',{
+                manager:this,
             }));
-        return Promise.resolve();
+        returnPromise.resolve();
     },
-    split_assets: function () {
-        window.location = $.param.querystring(window.location.href, 'debug=assets');
+    split_assets:function(){
+        window.location=$.param.querystring(window.location.href,'debug=assets');
     },
-    tests_assets: function () {
-        // Enable also 'assets' to see non minimized assets
-        window.location = $.param.querystring(window.location.href, 'debug=assets,tests');
+    tests_assets:function(){
+        //Enablealso'assets'toseenonminimizedassets
+        window.location=$.param.querystring(window.location.href,'debug=assets,tests');
     },
     /**
-     * Delete assets bundles to force their regeneration
+     *Deleteassetsbundlestoforcetheirregeneration
      *
-     * @returns {void}
+     *@returns{void}
      */
-    regenerateAssets: function () {
-        var self = this;
-        var domain = utils.assetsDomain();
+    regenerateAssets:function(){
+        varself=this;
+        vardomain=utils.assetsDomain();
         this._rpc({
-            model: 'ir.attachment',
-            method: 'search',
-            args: [domain],
-        }).then(function (ids) {
+            model:'ir.attachment',
+            method:'search',
+            args:[domain],
+        }).then(function(ids){
             self._rpc({
-                model: 'ir.attachment',
-                method: 'unlink',
-                args: [ids],
+                model:'ir.attachment',
+                method:'unlink',
+                args:[ids],
             }).then(window.location.reload());
         });
     },
-    leave_debug_mode: function () {
-        var qs = $.deparam.querystring();
-        qs.debug = '';
-        window.location.search = '?' + $.param(qs);
+    leave_debug_mode:function(){
+        varqs=$.deparam.querystring();
+        qs.debug='';
+        window.location.search='?'+$.param(qs);
     },
     /**
-     * @private
-     * @param {string} model
-     * @param {string} operation
-     * @returns {Promise<boolean>}
+     *@private
+     *@param{string}model
+     *@param{string}operation
+     *@returns{Promise<boolean>}
      */
-    _checkAccessRight(model, operation) {
-        return this._rpc({
-            model: model,
-            method: 'check_access_rights',
-            kwargs: {operation, raise_exception: false},
+    _checkAccessRight(model,operation){
+        returnthis._rpc({
+            model:model,
+            method:'check_access_rights',
+            kwargs:{operation,raise_exception:false},
         })
     },
 });
 
-return DebugManager;
+returnDebugManager;
 
 });

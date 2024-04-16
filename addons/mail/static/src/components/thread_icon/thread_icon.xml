@@ -1,56 +1,56 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="mail.ThreadIcon" owl="1">
-        <div class="o_ThreadIcon">
-            <t t-if="thread" name="rootCondition">
-                <t t-if="thread.channel_type === 'channel'">
-                    <t t-if="thread.public === 'private'">
-                        <div class="o_ThreadIcon_channelPrivate fa fa-lock" title="Private channel"/>
+    <tt-name="mail.ThreadIcon"owl="1">
+        <divclass="o_ThreadIcon">
+            <tt-if="thread"name="rootCondition">
+                <tt-if="thread.channel_type==='channel'">
+                    <tt-if="thread.public==='private'">
+                        <divclass="o_ThreadIcon_channelPrivatefafa-lock"title="Privatechannel"/>
                     </t>
-                    <t t-if="thread.public === 'public'">
-                        <div class="o_ThreadIcon_channelPublic fa fa-globe" title="Public channel"/>
+                    <tt-if="thread.public==='public'">
+                        <divclass="o_ThreadIcon_channelPublicfafa-globe"title="Publicchannel"/>
                     </t>
-                    <t t-if="thread.public === 'groups'">
-                        <div class="o_ThreadIcon_channelGroups fa fa-hashtag" title="Selected group of users"/>
+                    <tt-if="thread.public==='groups'">
+                        <divclass="o_ThreadIcon_channelGroupsfafa-hashtag"title="Selectedgroupofusers"/>
                     </t>
                 </t>
-                <t t-elif="thread.channel_type === 'chat' and thread.correspondent">
-                    <t t-if="thread.orderedOtherTypingMembers.length > 0">
+                <tt-elif="thread.channel_type==='chat'andthread.correspondent">
+                    <tt-if="thread.orderedOtherTypingMembers.length>0">
                         <ThreadTypingIcon
                             class="o_ThreadIcon_typing"
                             animation="'pulse'"
                             title="thread.typingStatusText"
                         />
                     </t>
-                    <t t-elif="thread.correspondent.im_status === 'online'">
-                        <div class="o_ThreadIcon_online fa fa-circle" title="Online"/>
+                    <tt-elif="thread.correspondent.im_status==='online'">
+                        <divclass="o_ThreadIcon_onlinefafa-circle"title="Online"/>
                     </t>
-                    <t t-elif="thread.correspondent.im_status === 'offline'">
-                        <div class="o_ThreadIcon_offline fa fa-circle-o" title="Offline"/>
+                    <tt-elif="thread.correspondent.im_status==='offline'">
+                        <divclass="o_ThreadIcon_offlinefafa-circle-o"title="Offline"/>
                     </t>
-                    <t t-elif="thread.correspondent.im_status === 'away'">
-                        <div class="o_ThreadIcon_away fa fa-circle" title="Away"/>
+                    <tt-elif="thread.correspondent.im_status==='away'">
+                        <divclass="o_ThreadIcon_awayfafa-circle"title="Away"/>
                     </t>
-                    <t t-elif="thread.correspondent === env.messaging.partnerRoot">
-                        <div class="o_ThreadIcon_online fa fa-heart" title="Bot"/>
+                    <tt-elif="thread.correspondent===env.messaging.partnerRoot">
+                        <divclass="o_ThreadIcon_onlinefafa-heart"title="Bot"/>
                     </t>
-                    <t t-else="" name="noImStatusCondition">
-                        <div class="o_ThreadIcon_noImStatus fa fa-question-circle" title="No IM status available"/>
+                    <tt-else=""name="noImStatusCondition">
+                        <divclass="o_ThreadIcon_noImStatusfafa-question-circle"title="NoIMstatusavailable"/>
                     </t>
                 </t>
-                <t t-elif="thread.model === 'mail.box'">
-                    <t t-if="thread === env.messaging.inbox">
-                        <div class="o_ThreadIcon_mailboxInbox fa fa-inbox"/>
+                <tt-elif="thread.model==='mail.box'">
+                    <tt-if="thread===env.messaging.inbox">
+                        <divclass="o_ThreadIcon_mailboxInboxfafa-inbox"/>
                     </t>
-                    <t t-elif="thread === env.messaging.starred">
-                        <div class="o_ThreadIcon_mailboxStarred fa fa-star-o"/>
+                    <tt-elif="thread===env.messaging.starred">
+                        <divclass="o_ThreadIcon_mailboxStarredfafa-star-o"/>
                     </t>
-                    <t t-elif="thread === env.messaging.history">
-                        <div class="o_ThreadIcon_mailboxHistory fa fa-history"/>
+                    <tt-elif="thread===env.messaging.history">
+                        <divclass="o_ThreadIcon_mailboxHistoryfafa-history"/>
                     </t>
-                    <t t-elif="thread === env.messaging.moderation">
-                        <div class="o_ThreadIcon_mailboxModeration fa fa-envelope"/>
+                    <tt-elif="thread===env.messaging.moderation">
+                        <divclass="o_ThreadIcon_mailboxModerationfafa-envelope"/>
                     </t>
                 </t>
             </t>

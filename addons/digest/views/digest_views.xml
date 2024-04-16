@@ -1,104 +1,104 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="digest_digest_view_tree" model="ir.ui.view">
-        <field name="name">digest.digest.view.tree</field>
-        <field name="model">digest.digest</field>
-        <field name="arch" type="xml">
-            <tree string="KPI Digest">
-                <field name="name"/>
-                <field name="periodicity"/>
-                <field name="next_run_date" groups="base.group_no_one"/>
-                <field name="company_id" groups="base.group_multi_company"/>
+    <recordid="digest_digest_view_tree"model="ir.ui.view">
+        <fieldname="name">digest.digest.view.tree</field>
+        <fieldname="model">digest.digest</field>
+        <fieldname="arch"type="xml">
+            <treestring="KPIDigest">
+                <fieldname="name"/>
+                <fieldname="periodicity"/>
+                <fieldname="next_run_date"groups="base.group_no_one"/>
+                <fieldname="company_id"groups="base.group_multi_company"/>
             </tree>
         </field>
     </record>
-    <record id="digest_digest_view_form" model="ir.ui.view">
-        <field name="name">digest.digest.view.form</field>
-        <field name="model">digest.digest</field>
-        <field name="arch" type="xml">
-            <form string="KPI Digest">
-                <field name="is_subscribed" invisible="1"/>
+    <recordid="digest_digest_view_form"model="ir.ui.view">
+        <fieldname="name">digest.digest.view.form</field>
+        <fieldname="model">digest.digest</field>
+        <fieldname="arch"type="xml">
+            <formstring="KPIDigest">
+                <fieldname="is_subscribed"invisible="1"/>
                 <header>
-                    <button type="object" name="action_subscribe" string="Subscribe"
+                    <buttontype="object"name="action_subscribe"string="Subscribe"
                         class="oe_highlight"
-                        attrs="{'invisible': ['|',('is_subscribed', '=', True), ('state','=','deactivated')]}"/>
-                    <button type="object" name="action_unsubcribe" string="Unsubscribe me"
+                        attrs="{'invisible':['|',('is_subscribed','=',True),('state','=','deactivated')]}"/>
+                    <buttontype="object"name="action_unsubcribe"string="Unsubscribeme"
                         class="oe_highlight"
-                        attrs="{'invisible': ['|',('is_subscribed', '=', False), ('state','=','deactivated')]}"/>
-                    <button type="object" name="action_deactivate" string="Deactivate for everyone"
+                        attrs="{'invisible':['|',('is_subscribed','=',False),('state','=','deactivated')]}"/>
+                    <buttontype="object"name="action_deactivate"string="Deactivateforeveryone"
                         class="oe_highlight"
-                        attrs="{'invisible': [('state','=','deactivated')]}" groups="base.group_system"/>
-                    <button type="object" name="action_activate" string="Activate"
+                        attrs="{'invisible':[('state','=','deactivated')]}"groups="base.group_system"/>
+                    <buttontype="object"name="action_activate"string="Activate"
                         class="oe_highlight"
-                        attrs="{'invisible': [('state','=','activated')]}" groups="base.group_system"/>
-                    <button type="object" name="action_send" string="Send Now"
+                        attrs="{'invisible':[('state','=','activated')]}"groups="base.group_system"/>
+                    <buttontype="object"name="action_send"string="SendNow"
                         class="oe_highlight"
-                        attrs="{'invisible': [('state','=','deactivated')]}" groups="base.group_system"/>
-                    <field name="state" widget="statusbar"/>
+                        attrs="{'invisible':[('state','=','deactivated')]}"groups="base.group_system"/>
+                    <fieldname="state"widget="statusbar"/>
                 </header>
                 <sheet>
-                    <div class="oe_title">
-                        <label for="name" class="oe_edit_only"/>
+                    <divclass="oe_title">
+                        <labelfor="name"class="oe_edit_only"/>
                         <h1>
-                            <field name="name"/>
+                            <fieldname="name"/>
                         </h1>
                     </div>
                     <group>
                         <group>
-                            <field name="periodicity" widget="radio" options="{'horizontal': true}"/>
-                            <field name="next_run_date" groups="base.group_system"/>
-                            <field name="company_id" options="{'no_create': True}" invisible="1"/>
+                            <fieldname="periodicity"widget="radio"options="{'horizontal':true}"/>
+                            <fieldname="next_run_date"groups="base.group_system"/>
+                            <fieldname="company_id"options="{'no_create':True}"invisible="1"/>
                         </group>
                     </group>
                     <notebook>
-                        <page name="kpis" string="KPIs">
-                            <group name="kpis">
-                                <group name="kpi_general" string="General" groups="base.group_system">
-                                    <field name="kpi_res_users_connected"/>
-                                    <field name="kpi_mail_message_total"/>
+                        <pagename="kpis"string="KPIs">
+                            <groupname="kpis">
+                                <groupname="kpi_general"string="General"groups="base.group_system">
+                                    <fieldname="kpi_res_users_connected"/>
+                                    <fieldname="kpi_mail_message_total"/>
                                 </group>
-                                <group name="kpi_sales"/>
+                                <groupname="kpi_sales"/>
                             </group>
                         </page>
-                        <page name="recipients" string="Recipients" groups="base.group_system">
+                        <pagename="recipients"string="Recipients"groups="base.group_system">
                             <group>
-                                <field name="user_ids" options="{'no_create': True}">
-                                    <tree string="Recipients">
-                                        <field name="name"/>
-                                        <field name="email"/>
+                                <fieldname="user_ids"options="{'no_create':True}">
+                                    <treestring="Recipients">
+                                        <fieldname="name"/>
+                                        <fieldname="email"/>
                                     </tree>
                                 </field>
                             </group>
                         </page>
-                        <page name="how_to" string="How to customize your digest?" groups="base.group_no_one">
-                            <div class="alert alert-info" role="alert">
-                                In order to build your customized digest, follow these steps:
+                        <pagename="how_to"string="Howtocustomizeyourdigest?"groups="base.group_no_one">
+                            <divclass="alertalert-info"role="alert">
+                                Inordertobuildyourcustomizeddigest,followthesesteps:
                                 <ol>
                                     <li>
-                                        You may want to add new computed fields with Flectra Studio:
+                                        YoumaywanttoaddnewcomputedfieldswithFlectraStudio:
                                         <ul>
                                             <li>
-                                                you must create 2 fields on the
+                                                youmustcreate2fieldsonthe
                                                 <code>digest</code>
                                                 object:
                                             </li>
                                             <li>
-                                                first create a boolean field called
+                                                firstcreateabooleanfieldcalled
                                                 <code>kpi_myfield</code>
-                                                and display it in the KPI's tab;
+                                                anddisplayitintheKPI'stab;
                                             </li>
                                             <li>
-                                                then create a computed field called
+                                                thencreateacomputedfieldcalled
                                                 <code>kpi_myfield_value</code>
-                                                that will compute your customized KPI.
+                                                thatwillcomputeyourcustomizedKPI.
                                             </li>
                                         </ul>
                                     </li>
-                                    <li>Select your KPIs in the KPI's tab.</li>
+                                    <li>SelectyourKPIsintheKPI'stab.</li>
                                     <li>
-                                        Create or edit the mail template: you may get computed KPI's value using these fields:
+                                        Createoreditthemailtemplate:youmaygetcomputedKPI'svalueusingthesefields:
                                         <code>
-                                            <field name="available_fields" class="oe_inline" />
+                                            <fieldname="available_fields"class="oe_inline"/>
                                         </code>
                                     </li>
                                 </ol>
@@ -109,77 +109,77 @@
             </form>
         </field>
     </record>
-    <record id="digest_digest_view_search" model="ir.ui.view">
-        <field name="name">digest.digest.view.search</field>
-        <field name="model">digest.digest</field>
-        <field name="arch" type="xml">
+    <recordid="digest_digest_view_search"model="ir.ui.view">
+        <fieldname="name">digest.digest.view.search</field>
+        <fieldname="model">digest.digest</field>
+        <fieldname="arch"type="xml">
             <search>
-                <field name="name"/>
-                <field name="user_ids"/>
-                <group expand="1" string="Group by">
-                    <filter string="Periodicity" name="periodicity" context="{'group_by': 'periodicity'}"/>
+                <fieldname="name"/>
+                <fieldname="user_ids"/>
+                <groupexpand="1"string="Groupby">
+                    <filterstring="Periodicity"name="periodicity"context="{'group_by':'periodicity'}"/>
                 </group>
             </search>
         </field>
     </record>
-    <record id="digest_digest_action" model="ir.actions.act_window">
-        <field name="name">Digest Emails</field>
-        <field name="res_model">digest.digest</field>
-        <field name="search_view_id" ref="digest_digest_view_search"/>
+    <recordid="digest_digest_action"model="ir.actions.act_window">
+        <fieldname="name">DigestEmails</field>
+        <fieldname="res_model">digest.digest</field>
+        <fieldname="search_view_id"ref="digest_digest_view_search"/>
     </record>
 
-    <menuitem id="digest_menu"
+    <menuitemid="digest_menu"
         action="digest_digest_action"
         parent="base.menu_email"
         groups="base.group_erp_manager"
         sequence="80"/>
 
-    <!-- DIGEST.TIP -->
-    <record id="digest_tip_view_tree" model="ir.ui.view">
-        <field name="name">digest.tip.view.tree</field>
-        <field name="model">digest.tip</field>
-        <field name="arch" type="xml">
-            <tree string="KPI Digest Tips">
-                <field name="sequence" widget="handle"/>
-                <field name="name"/>
-                <field name="group_id"/>
+    <!--DIGEST.TIP-->
+    <recordid="digest_tip_view_tree"model="ir.ui.view">
+        <fieldname="name">digest.tip.view.tree</field>
+        <fieldname="model">digest.tip</field>
+        <fieldname="arch"type="xml">
+            <treestring="KPIDigestTips">
+                <fieldname="sequence"widget="handle"/>
+                <fieldname="name"/>
+                <fieldname="group_id"/>
             </tree>
         </field>
     </record>
-    <record id="digest_tip_view_form" model="ir.ui.view">
-        <field name="name">digest.tip.view.form</field>
-        <field name="model">digest.tip</field>
-        <field name="arch" type="xml">
-            <form string="KPI Digest Tip">
+    <recordid="digest_tip_view_form"model="ir.ui.view">
+        <fieldname="name">digest.tip.view.form</field>
+        <fieldname="model">digest.tip</field>
+        <fieldname="arch"type="xml">
+            <formstring="KPIDigestTip">
                 <sheet>
                     <group>
-                        <field name="name"/>
-                        <field name="tip_description"/>
-                        <field name="group_id"/>
-                        <field name="user_ids" widget="many2many_tags"/>
+                        <fieldname="name"/>
+                        <fieldname="tip_description"/>
+                        <fieldname="group_id"/>
+                        <fieldname="user_ids"widget="many2many_tags"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
-    <record id="digest_tip_view_search" model="ir.ui.view">
-        <field name="name">digest.tip.view.search</field>
-        <field name="model">digest.tip</field>
-        <field name="arch" type="xml">
+    <recordid="digest_tip_view_search"model="ir.ui.view">
+        <fieldname="name">digest.tip.view.search</field>
+        <fieldname="model">digest.tip</field>
+        <fieldname="arch"type="xml">
             <search>
-                <field name="name"/>
-                <field name="tip_description"/>
-                <field name="group_id"/>
+                <fieldname="name"/>
+                <fieldname="tip_description"/>
+                <fieldname="group_id"/>
             </search>
         </field>
     </record>
-    <record id="digest_tip_action" model="ir.actions.act_window">
-        <field name="name">Digest Tips</field>
-        <field name="res_model">digest.tip</field>
-        <field name="search_view_id" ref="digest_tip_view_search"/>
+    <recordid="digest_tip_action"model="ir.actions.act_window">
+        <fieldname="name">DigestTips</field>
+        <fieldname="res_model">digest.tip</field>
+        <fieldname="search_view_id"ref="digest_tip_view_search"/>
     </record>
 
-    <menuitem id="digest_tip_menu"
+    <menuitemid="digest_tip_menu"
         action="digest_tip_action"
         parent="base.menu_email"
         groups="base.group_erp_manager"

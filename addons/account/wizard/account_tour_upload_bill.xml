@@ -1,46 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="account_tour_upload_bill" model="ir.ui.view">
-            <field name="name">account.tour.upload.bill</field>
-            <field name="model">account.tour.upload.bill</field>
-            <field name="arch" type="xml">
+        <recordid="account_tour_upload_bill"model="ir.ui.view">
+            <fieldname="name">account.tour.upload.bill</field>
+            <fieldname="model">account.tour.upload.bill</field>
+            <fieldname="arch"type="xml">
                 <form>
                     <sheet>
-                        <h2>With Flectra, you won't have to records bills manually</h2>
-                        <p>We process bills automatically so that you only have to validate them. Choose how you want to test our artificial intelligence engine:</p>
+                        <h2>WithFlectra,youwon'thavetorecordsbillsmanually</h2>
+                        <p>Weprocessbillsautomaticallysothatyouonlyhavetovalidatethem.Choosehowyouwanttotestourartificialintelligenceengine:</p>
                         <group>
                             <group>
-                                <field name="selection" widget="radio" nolabel="1"/>
+                                <fieldname="selection"widget="radio"nolabel="1"/>
                             </group>
-                            <group attrs="{'invisible': [('selection', '!=', 'sample')]}">
-                                <field name="sample_bill_preview" widget="pdf_viewer" nolabel="1"/>
+                            <groupattrs="{'invisible':[('selection','!=','sample')]}">
+                                <fieldname="sample_bill_preview"widget="pdf_viewer"nolabel="1"/>
                             </group>
-                            <group attrs="{'invisible': [('selection', '!=', 'upload')]}">
-                                <field name="attachment_ids" widget="many2many_binary" string="Attach a file" nolabel="1" colspan="2"/>
+                            <groupattrs="{'invisible':[('selection','!=','upload')]}">
+                                <fieldname="attachment_ids"widget="many2many_binary"string="Attachafile"nolabel="1"colspan="2"/>
                             </group>
                         </group>
                     </sheet>
                     <footer>
-                        <button string="Continue" type="object" name="apply" class="btn-primary"/>
-                        <button string="Discard" class="btn-secondary" special="cancel" />
+                        <buttonstring="Continue"type="object"name="apply"class="btn-primary"/>
+                        <buttonstring="Discard"class="btn-secondary"special="cancel"/>
                     </footer>
                </form>
             </field>
         </record>
 
-        <record id="account_tour_upload_bill_email_confirm" model="ir.ui.view">
-            <field name="name">account.tour.upload.bill.email.confirm</field>
-            <field name="model">account.tour.upload.bill.email.confirm</field>
-            <field name="arch" type="xml">
+        <recordid="account_tour_upload_bill_email_confirm"model="ir.ui.view">
+            <fieldname="name">account.tour.upload.bill.email.confirm</field>
+            <fieldname="model">account.tour.upload.bill.email.confirm</field>
+            <fieldname="arch"type="xml">
                 <form>
                     <sheet>
-                        <p>Send your email to <field name="email_alias" class="oe_inline"/> with a pdf of an invoice as attachment.</p>
-                        <p>Once done, press continue.</p>
+                        <p>Sendyouremailto<fieldname="email_alias"class="oe_inline"/>withapdfofaninvoiceasattachment.</p>
+                        <p>Oncedone,presscontinue.</p>
                     </sheet>
                     <footer>
-                        <button string="Continue" type="object" name="apply" class="btn-primary"/>
-                        <button string="Discard" class="btn-secondary" special="cancel" />
+                        <buttonstring="Continue"type="object"name="apply"class="btn-primary"/>
+                        <buttonstring="Discard"class="btn-secondary"special="cancel"/>
                     </footer>
                </form>
             </field>

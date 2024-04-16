@@ -1,53 +1,53 @@
 <templates>
-    <t t-name="set-from-attribute-literal">
-        <t t-set="value" t-value="'ok'"/>
-        <t t-esc="value"/>
+    <tt-name="set-from-attribute-literal">
+        <tt-set="value"t-value="'ok'"/>
+        <tt-esc="value"/>
     </t>
-    <result id="set-from-attribute-literal">
+    <resultid="set-from-attribute-literal">
         ok
     </result>
 
-    <t t-name="set-from-body-literal">
-        <t t-set="value">ok</t>
-        <t t-esc="value"/>
+    <tt-name="set-from-body-literal">
+        <tt-set="value">ok</t>
+        <tt-esc="value"/>
     </t>
-    <result id="set-from-body-literal">
+    <resultid="set-from-body-literal">
         ok
     </result>
 
-    <t t-name="set-from-attribute-lookup">
-        <t t-set="stuff" t-value="value"/>
-        <t t-esc="stuff"/>
+    <tt-name="set-from-attribute-lookup">
+        <tt-set="stuff"t-value="value"/>
+        <tt-esc="stuff"/>
     </t>
-    <params id="set-from-attribute-lookup">
-        {"value": "ok"}
+    <paramsid="set-from-attribute-lookup">
+        {"value":"ok"}
     </params>
-    <result id="set-from-attribute-lookup">
+    <resultid="set-from-attribute-lookup">
         ok
     </result>
 
-    <t t-name="set-from-body-lookup">
-        <t t-set="stuff">
-            <t t-esc="value"/>
+    <tt-name="set-from-body-lookup">
+        <tt-set="stuff">
+            <tt-esc="value"/>
         </t>
-        <t t-esc="stuff"/>
+        <tt-esc="stuff"/>
     </t>
-    <params id="set-from-body-lookup">
-        {"value": "ok"}
+    <paramsid="set-from-body-lookup">
+        {"value":"ok"}
     </params>
-    <result id="set-from-body-lookup">
+    <resultid="set-from-body-lookup">
         ok
     </result>
 
-    <t t-name="set-empty-body">
-        <t t-set="stuff"/>
-        <t t-esc="stuff"/>
+    <tt-name="set-empty-body">
+        <tt-set="stuff"/>
+        <tt-esc="stuff"/>
     </t>
-    <result id="set-empty-body"/>
+    <resultid="set-empty-body"/>
 
-    <t t-name="t-value-priority">
-        <t t-set="value" t-value="1">2</t>
-        <t t-esc="value"/>
+    <tt-name="t-value-priority">
+        <tt-set="value"t-value="1">2</t>
+        <tt-esc="value"/>
     </t>
-    <result id="t-value-priority">1</result>
+    <resultid="t-value-priority">1</result>
 </templates>

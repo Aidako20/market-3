@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="purchase_report_view_search" model="ir.ui.view">
-        <field name="name">purchase.report.search.stock</field>
-        <field name="model">purchase.report</field>
-        <field name="inherit_id" ref="purchase.view_purchase_order_search"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='user_id']" position="after">
-                <field name="picking_type_id"/>
+    <recordid="purchase_report_view_search"model="ir.ui.view">
+        <fieldname="name">purchase.report.search.stock</field>
+        <fieldname="model">purchase.report</field>
+        <fieldname="inherit_id"ref="purchase.view_purchase_order_search"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='user_id']"position="after">
+                <fieldname="picking_type_id"/>
             </xpath>
         </field>
     </record>

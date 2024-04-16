@@ -1,116 +1,116 @@
-flectra.define('mail/static/src/models/suggested_recipient_info/suggested_recipient_info.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/suggested_recipient_info/suggested_recipient_info.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr, many2one } = require('mail/static/src/model/model_field.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{attr,many2one}=require('mail/static/src/model/model_field.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class SuggestedRecipientInfo extends dependencies['mail.model'] {
+    classSuggestedRecipientInfoextendsdependencies['mail.model']{
 
         //----------------------------------------------------------------------
-        // private
+        //private
         //----------------------------------------------------------------------
 
         /**
-         * @private
-         * @returns {string}
+         *@private
+         *@returns{string}
          */
-        _computeEmail() {
-            return this.partner && this.partner.email || this.email;
+        _computeEmail(){
+            returnthis.partner&&this.partner.email||this.email;
         }
 
         /**
-         * Prevents selecting a recipient that does not have a partner.
+         *Preventsselectingarecipientthatdoesnothaveapartner.
          *
-         * @private
-         * @returns {boolean}
+         *@private
+         *@returns{boolean}
          */
-        _computeIsSelected() {
-            return this.partner ? this.isSelected : false;
+        _computeIsSelected(){
+            returnthis.partner?this.isSelected:false;
         }
 
         /**
-         * @private
-         * @returns {string}
+         *@private
+         *@returns{string}
          */
-        _computeName() {
-            return this.partner && this.partner.nameOrDisplayName || this.name;
+        _computeName(){
+            returnthis.partner&&this.partner.nameOrDisplayName||this.name;
         }
 
     }
 
-    SuggestedRecipientInfo.fields = {
+    SuggestedRecipientInfo.fields={
         /**
-         * Determines the email of `this`. It serves as visual clue when
-         * displaying `this`, and also serves as default partner email when
-         * creating a new partner from `this`.
+         *Determinestheemailof`this`.Itservesasvisualcluewhen
+         *displaying`this`,andalsoservesasdefaultpartneremailwhen
+         *creatinganewpartnerfrom`this`.
          */
-        email: attr({
-            compute: '_computeEmail',
-            dependencies: [
+        email:attr({
+            compute:'_computeEmail',
+            dependencies:[
                 'email',
                 'partnerEmail',
             ],
         }),
         /**
-         * Determines whether `this` will be added to recipients when posting a
-         * new message on `this.thread`.
+         *Determineswhether`this`willbeaddedtorecipientswhenpostinga
+         *newmessageon`this.thread`.
          */
-        isSelected: attr({
-            compute: '_computeIsSelected',
-            default: true,
-            dependencies: [
+        isSelected:attr({
+            compute:'_computeIsSelected',
+            default:true,
+            dependencies:[
                 'isSelected',
                 'partner',
             ],
         }),
         /**
-         * Determines the name of `this`. It serves as visual clue when
-         * displaying `this`, and also serves as default partner name when
-         * creating a new partner from `this`.
+         *Determinesthenameof`this`.Itservesasvisualcluewhen
+         *displaying`this`,andalsoservesasdefaultpartnernamewhen
+         *creatinganewpartnerfrom`this`.
          */
-        name: attr({
-            compute: '_computeName',
-            dependencies: [
+        name:attr({
+            compute:'_computeName',
+            dependencies:[
                 'name',
                 'partnerNameOrDisplayName',
             ],
         }),
         /**
-         * Determines the optional `mail.partner` associated to `this`.
+         *Determinestheoptional`mail.partner`associatedto`this`.
          */
-        partner: many2one('mail.partner'),
+        partner:many2one('mail.partner'),
         /**
-         * Serves as compute dependency.
+         *Servesascomputedependency.
          */
-        partnerEmail: attr({
-            related: 'partner.email'
+        partnerEmail:attr({
+            related:'partner.email'
         }),
         /**
-         * Serves as compute dependency.
+         *Servesascomputedependency.
          */
-        partnerNameOrDisplayName: attr({
-            related: 'partner.nameOrDisplayName'
+        partnerNameOrDisplayName:attr({
+            related:'partner.nameOrDisplayName'
         }),
         /**
-         * Determines why `this` is a suggestion for `this.thread`. It serves as
-         * visual clue when displaying `this`.
+         *Determineswhy`this`isasuggestionfor`this.thread`.Itservesas
+         *visualcluewhendisplaying`this`.
          */
-        reason: attr(),
+        reason:attr(),
         /**
-         * Determines the `mail.thread` concerned by `this.`
+         *Determinesthe`mail.thread`concernedby`this.`
          */
-        thread: many2one('mail.thread', {
-            inverse: 'suggestedRecipientInfoList',
+        thread:many2one('mail.thread',{
+            inverse:'suggestedRecipientInfoList',
         }),
     };
 
-    SuggestedRecipientInfo.modelName = 'mail.suggested_recipient_info';
+    SuggestedRecipientInfo.modelName='mail.suggested_recipient_info';
 
-    return SuggestedRecipientInfo;
+    returnSuggestedRecipientInfo;
 }
 
-registerNewModel('mail.suggested_recipient_info', factory);
+registerNewModel('mail.suggested_recipient_info',factory);
 
 });

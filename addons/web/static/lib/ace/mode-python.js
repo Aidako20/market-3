@@ -1,181 +1,181 @@
-define("ace/mode/python_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(require, exports, module) {
-"use strict";
+define("ace/mode/python_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"],function(require,exports,module){
+"usestrict";
 
-var oop = require("../lib/oop");
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+varoop=require("../lib/oop");
+varTextHighlightRules=require("./text_highlight_rules").TextHighlightRules;
 
-var PythonHighlightRules = function() {
+varPythonHighlightRules=function(){
 
-    var keywords = (
-        "and|as|assert|break|class|continue|def|del|elif|else|except|exec|" +
-        "finally|for|from|global|if|import|in|is|lambda|not|or|pass|print|" +
+    varkeywords=(
+        "and|as|assert|break|class|continue|def|del|elif|else|except|exec|"+
+        "finally|for|from|global|if|import|in|is|lambda|not|or|pass|print|"+
         "raise|return|try|while|with|yield|async|await"
     );
 
-    var builtinConstants = (
+    varbuiltinConstants=(
         "True|False|None|NotImplemented|Ellipsis|__debug__"
     );
 
-    var builtinFunctions = (
-        "abs|divmod|input|open|staticmethod|all|enumerate|int|ord|str|any|" +
-        "eval|isinstance|pow|sum|basestring|execfile|issubclass|print|super|" +
-        "binfile|iter|property|tuple|bool|filter|len|range|type|bytearray|" +
-        "float|list|raw_input|unichr|callable|format|locals|reduce|unicode|" +
-        "chr|frozenset|long|reload|vars|classmethod|getattr|map|repr|xrange|" +
-        "cmp|globals|max|reversed|zip|compile|hasattr|memoryview|round|" +
-        "__import__|complex|hash|min|set|apply|delattr|help|next|setattr|" +
+    varbuiltinFunctions=(
+        "abs|divmod|input|open|staticmethod|all|enumerate|int|ord|str|any|"+
+        "eval|isinstance|pow|sum|basestring|execfile|issubclass|print|super|"+
+        "binfile|iter|property|tuple|bool|filter|len|range|type|bytearray|"+
+        "float|list|raw_input|unichr|callable|format|locals|reduce|unicode|"+
+        "chr|frozenset|long|reload|vars|classmethod|getattr|map|repr|xrange|"+
+        "cmp|globals|max|reversed|zip|compile|hasattr|memoryview|round|"+
+        "__import__|complex|hash|min|set|apply|delattr|help|next|setattr|"+
         "buffer|dict|hex|object|slice|coerce|dir|id|oct|sorted|intern"
     );
-    var keywordMapper = this.createKeywordMapper({
-        "invalid.deprecated": "debugger",
-        "support.function": builtinFunctions,
-        "constant.language": builtinConstants,
-        "keyword": keywords
-    }, "identifier");
+    varkeywordMapper=this.createKeywordMapper({
+        "invalid.deprecated":"debugger",
+        "support.function":builtinFunctions,
+        "constant.language":builtinConstants,
+        "keyword":keywords
+    },"identifier");
 
-    var strPre = "(?:r|u|ur|R|U|UR|Ur|uR)?";
+    varstrPre="(?:r|u|ur|R|U|UR|Ur|uR)?";
 
-    var decimalInteger = "(?:(?:[1-9]\\d*)|(?:0))";
-    var octInteger = "(?:0[oO]?[0-7]+)";
-    var hexInteger = "(?:0[xX][\\dA-Fa-f]+)";
-    var binInteger = "(?:0[bB][01]+)";
-    var integer = "(?:" + decimalInteger + "|" + octInteger + "|" + hexInteger + "|" + binInteger + ")";
+    vardecimalInteger="(?:(?:[1-9]\\d*)|(?:0))";
+    varoctInteger="(?:0[oO]?[0-7]+)";
+    varhexInteger="(?:0[xX][\\dA-Fa-f]+)";
+    varbinInteger="(?:0[bB][01]+)";
+    varinteger="(?:"+decimalInteger+"|"+octInteger+"|"+hexInteger+"|"+binInteger+")";
 
-    var exponent = "(?:[eE][+-]?\\d+)";
-    var fraction = "(?:\\.\\d+)";
-    var intPart = "(?:\\d+)";
-    var pointFloat = "(?:(?:" + intPart + "?" + fraction + ")|(?:" + intPart + "\\.))";
-    var exponentFloat = "(?:(?:" + pointFloat + "|" +  intPart + ")" + exponent + ")";
-    var floatNumber = "(?:" + exponentFloat + "|" + pointFloat + ")";
+    varexponent="(?:[eE][+-]?\\d+)";
+    varfraction="(?:\\.\\d+)";
+    varintPart="(?:\\d+)";
+    varpointFloat="(?:(?:"+intPart+"?"+fraction+")|(?:"+intPart+"\\.))";
+    varexponentFloat="(?:(?:"+pointFloat+"|"+ intPart+")"+exponent+")";
+    varfloatNumber="(?:"+exponentFloat+"|"+pointFloat+")";
 
-    var stringEscape =  "\\\\(x[0-9A-Fa-f]{2}|[0-7]{3}|[\\\\abfnrtv'\"]|U[0-9A-Fa-f]{8}|u[0-9A-Fa-f]{4})";
+    varstringEscape= "\\\\(x[0-9A-Fa-f]{2}|[0-7]{3}|[\\\\abfnrtv'\"]|U[0-9A-Fa-f]{8}|u[0-9A-Fa-f]{4})";
 
-    this.$rules = {
-        "start" : [ {
-            token : "comment",
-            regex : "#.*$"
-        }, {
-            token : "string",           // multi line """ string start
-            regex : strPre + '"{3}',
-            next : "qqstring3"
-        }, {
-            token : "string",           // " string
-            regex : strPre + '"(?=.)',
-            next : "qqstring"
-        }, {
-            token : "string",           // multi line ''' string start
-            regex : strPre + "'{3}",
-            next : "qstring3"
-        }, {
-            token : "string",           // ' string
-            regex : strPre + "'(?=.)",
-            next : "qstring"
-        }, {
-            token : "constant.numeric", // imaginary
-            regex : "(?:" + floatNumber + "|\\d+)[jJ]\\b"
-        }, {
-            token : "constant.numeric", // float
-            regex : floatNumber
-        }, {
-            token : "constant.numeric", // long integer
-            regex : integer + "[lL]\\b"
-        }, {
-            token : "constant.numeric", // integer
-            regex : integer + "\\b"
-        }, {
-            token : keywordMapper,
-            regex : "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
-        }, {
-            token : "keyword.operator",
-            regex : "\\+|\\-|\\*|\\*\\*|\\/|\\/\\/|%|<<|>>|&|\\||\\^|~|<|>|<=|=>|==|!=|<>|="
-        }, {
-            token : "paren.lparen",
-            regex : "[\\[\\(\\{]"
-        }, {
-            token : "paren.rparen",
-            regex : "[\\]\\)\\}]"
-        }, {
-            token : "text",
-            regex : "\\s+"
-        } ],
-        "qqstring3" : [ {
-            token : "constant.language.escape",
-            regex : stringEscape
-        }, {
-            token : "string", // multi line """ string end
-            regex : '"{3}',
-            next : "start"
-        }, {
-            defaultToken : "string"
-        } ],
-        "qstring3" : [ {
-            token : "constant.language.escape",
-            regex : stringEscape
-        }, {
-            token : "string",  // multi line ''' string end
-            regex : "'{3}",
-            next : "start"
-        }, {
-            defaultToken : "string"
-        } ],
-        "qqstring" : [{
-            token : "constant.language.escape",
-            regex : stringEscape
-        }, {
-            token : "string",
-            regex : "\\\\$",
-            next  : "qqstring"
-        }, {
-            token : "string",
-            regex : '"|$',
-            next  : "start"
-        }, {
-            defaultToken: "string"
+    this.$rules={
+        "start":[{
+            token:"comment",
+            regex:"#.*$"
+        },{
+            token:"string",          //multiline"""stringstart
+            regex:strPre+'"{3}',
+            next:"qqstring3"
+        },{
+            token:"string",          //"string
+            regex:strPre+'"(?=.)',
+            next:"qqstring"
+        },{
+            token:"string",          //multiline'''stringstart
+            regex:strPre+"'{3}",
+            next:"qstring3"
+        },{
+            token:"string",          //'string
+            regex:strPre+"'(?=.)",
+            next:"qstring"
+        },{
+            token:"constant.numeric",//imaginary
+            regex:"(?:"+floatNumber+"|\\d+)[jJ]\\b"
+        },{
+            token:"constant.numeric",//float
+            regex:floatNumber
+        },{
+            token:"constant.numeric",//longinteger
+            regex:integer+"[lL]\\b"
+        },{
+            token:"constant.numeric",//integer
+            regex:integer+"\\b"
+        },{
+            token:keywordMapper,
+            regex:"[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
+        },{
+            token:"keyword.operator",
+            regex:"\\+|\\-|\\*|\\*\\*|\\/|\\/\\/|%|<<|>>|&|\\||\\^|~|<|>|<=|=>|==|!=|<>|="
+        },{
+            token:"paren.lparen",
+            regex:"[\\[\\(\\{]"
+        },{
+            token:"paren.rparen",
+            regex:"[\\]\\)\\}]"
+        },{
+            token:"text",
+            regex:"\\s+"
         }],
-        "qstring" : [{
-            token : "constant.language.escape",
-            regex : stringEscape
-        }, {
-            token : "string",
-            regex : "\\\\$",
-            next  : "qstring"
-        }, {
-            token : "string",
-            regex : "'|$",
-            next  : "start"
-        }, {
-            defaultToken: "string"
+        "qqstring3":[{
+            token:"constant.language.escape",
+            regex:stringEscape
+        },{
+            token:"string",//multiline"""stringend
+            regex:'"{3}',
+            next:"start"
+        },{
+            defaultToken:"string"
+        }],
+        "qstring3":[{
+            token:"constant.language.escape",
+            regex:stringEscape
+        },{
+            token:"string", //multiline'''stringend
+            regex:"'{3}",
+            next:"start"
+        },{
+            defaultToken:"string"
+        }],
+        "qqstring":[{
+            token:"constant.language.escape",
+            regex:stringEscape
+        },{
+            token:"string",
+            regex:"\\\\$",
+            next :"qqstring"
+        },{
+            token:"string",
+            regex:'"|$',
+            next :"start"
+        },{
+            defaultToken:"string"
+        }],
+        "qstring":[{
+            token:"constant.language.escape",
+            regex:stringEscape
+        },{
+            token:"string",
+            regex:"\\\\$",
+            next :"qstring"
+        },{
+            token:"string",
+            regex:"'|$",
+            next :"start"
+        },{
+            defaultToken:"string"
         }]
     };
 };
 
-oop.inherits(PythonHighlightRules, TextHighlightRules);
+oop.inherits(PythonHighlightRules,TextHighlightRules);
 
-exports.PythonHighlightRules = PythonHighlightRules;
+exports.PythonHighlightRules=PythonHighlightRules;
 });
 
-define("ace/mode/folding/pythonic",["require","exports","module","ace/lib/oop","ace/mode/folding/fold_mode"], function(require, exports, module) {
-"use strict";
+define("ace/mode/folding/pythonic",["require","exports","module","ace/lib/oop","ace/mode/folding/fold_mode"],function(require,exports,module){
+"usestrict";
 
-var oop = require("../../lib/oop");
-var BaseFoldMode = require("./fold_mode").FoldMode;
+varoop=require("../../lib/oop");
+varBaseFoldMode=require("./fold_mode").FoldMode;
 
-var FoldMode = exports.FoldMode = function(markers) {
-    this.foldingStartMarker = new RegExp("([\\[{])(?:\\s*)$|(" + markers + ")(?:\\s*)(?:#.*)?$");
+varFoldMode=exports.FoldMode=function(markers){
+    this.foldingStartMarker=newRegExp("([\\[{])(?:\\s*)$|("+markers+")(?:\\s*)(?:#.*)?$");
 };
-oop.inherits(FoldMode, BaseFoldMode);
+oop.inherits(FoldMode,BaseFoldMode);
 
-(function() {
+(function(){
 
-    this.getFoldWidgetRange = function(session, foldStyle, row) {
-        var line = session.getLine(row);
-        var match = line.match(this.foldingStartMarker);
-        if (match) {
-            if (match[1])
-                return this.openingBracketBlock(session, match[1], row, match.index);
-            if (match[2])
-                return this.indentationBlock(session, row, match.index + match[2].length);
-            return this.indentationBlock(session, row);
+    this.getFoldWidgetRange=function(session,foldStyle,row){
+        varline=session.getLine(row);
+        varmatch=line.match(this.foldingStartMarker);
+        if(match){
+            if(match[1])
+                returnthis.openingBracketBlock(session,match[1],row,match.index);
+            if(match[2])
+                returnthis.indentationBlock(session,row,match.index+match[2].length);
+            returnthis.indentationBlock(session,row);
         }
     };
 
@@ -183,83 +183,83 @@ oop.inherits(FoldMode, BaseFoldMode);
 
 });
 
-define("ace/mode/python",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/python_highlight_rules","ace/mode/folding/pythonic","ace/range"], function(require, exports, module) {
-"use strict";
+define("ace/mode/python",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/python_highlight_rules","ace/mode/folding/pythonic","ace/range"],function(require,exports,module){
+"usestrict";
 
-var oop = require("../lib/oop");
-var TextMode = require("./text").Mode;
-var PythonHighlightRules = require("./python_highlight_rules").PythonHighlightRules;
-var PythonFoldMode = require("./folding/pythonic").FoldMode;
-var Range = require("../range").Range;
+varoop=require("../lib/oop");
+varTextMode=require("./text").Mode;
+varPythonHighlightRules=require("./python_highlight_rules").PythonHighlightRules;
+varPythonFoldMode=require("./folding/pythonic").FoldMode;
+varRange=require("../range").Range;
 
-var Mode = function() {
-    this.HighlightRules = PythonHighlightRules;
-    this.foldingRules = new PythonFoldMode("\\:");
-    this.$behaviour = this.$defaultBehaviour;
+varMode=function(){
+    this.HighlightRules=PythonHighlightRules;
+    this.foldingRules=newPythonFoldMode("\\:");
+    this.$behaviour=this.$defaultBehaviour;
 };
-oop.inherits(Mode, TextMode);
+oop.inherits(Mode,TextMode);
 
-(function() {
+(function(){
 
-    this.lineCommentStart = "#";
+    this.lineCommentStart="#";
 
-    this.getNextLineIndent = function(state, line, tab) {
-        var indent = this.$getIndent(line);
+    this.getNextLineIndent=function(state,line,tab){
+        varindent=this.$getIndent(line);
 
-        var tokenizedLine = this.getTokenizer().getLineTokens(line, state);
-        var tokens = tokenizedLine.tokens;
+        vartokenizedLine=this.getTokenizer().getLineTokens(line,state);
+        vartokens=tokenizedLine.tokens;
 
-        if (tokens.length && tokens[tokens.length-1].type == "comment") {
-            return indent;
+        if(tokens.length&&tokens[tokens.length-1].type=="comment"){
+            returnindent;
         }
 
-        if (state == "start") {
-            var match = line.match(/^.*[\{\(\[:]\s*$/);
-            if (match) {
-                indent += tab;
+        if(state=="start"){
+            varmatch=line.match(/^.*[\{\(\[:]\s*$/);
+            if(match){
+                indent+=tab;
             }
         }
 
-        return indent;
+        returnindent;
     };
 
-    var outdents = {
-        "pass": 1,
-        "return": 1,
-        "raise": 1,
-        "break": 1,
-        "continue": 1
+    varoutdents={
+        "pass":1,
+        "return":1,
+        "raise":1,
+        "break":1,
+        "continue":1
     };
     
-    this.checkOutdent = function(state, line, input) {
-        if (input !== "\r\n" && input !== "\r" && input !== "\n")
-            return false;
+    this.checkOutdent=function(state,line,input){
+        if(input!=="\r\n"&&input!=="\r"&&input!=="\n")
+            returnfalse;
 
-        var tokens = this.getTokenizer().getLineTokens(line.trim(), state).tokens;
+        vartokens=this.getTokenizer().getLineTokens(line.trim(),state).tokens;
         
-        if (!tokens)
-            return false;
-        do {
-            var last = tokens.pop();
-        } while (last && (last.type == "comment" || (last.type == "text" && last.value.match(/^\s+$/))));
+        if(!tokens)
+            returnfalse;
+        do{
+            varlast=tokens.pop();
+        }while(last&&(last.type=="comment"||(last.type=="text"&&last.value.match(/^\s+$/))));
         
-        if (!last)
-            return false;
+        if(!last)
+            returnfalse;
         
-        return (last.type == "keyword" && outdents[last.value]);
+        return(last.type=="keyword"&&outdents[last.value]);
     };
 
-    this.autoOutdent = function(state, doc, row) {
+    this.autoOutdent=function(state,doc,row){
         
-        row += 1;
-        var indent = this.$getIndent(doc.getLine(row));
-        var tab = doc.getTabString();
-        if (indent.slice(-tab.length) == tab)
-            doc.remove(new Range(row, indent.length-tab.length, row, indent.length));
+        row+=1;
+        varindent=this.$getIndent(doc.getLine(row));
+        vartab=doc.getTabString();
+        if(indent.slice(-tab.length)==tab)
+            doc.remove(newRange(row,indent.length-tab.length,row,indent.length));
     };
 
-    this.$id = "ace/mode/python";
+    this.$id="ace/mode/python";
 }).call(Mode.prototype);
 
-exports.Mode = Mode;
+exports.Mode=Mode;
 });

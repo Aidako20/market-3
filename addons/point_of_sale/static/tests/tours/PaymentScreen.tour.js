@@ -1,39 +1,39 @@
-flectra.define('point_of_sale.tour.PaymentScreen', function (require) {
-    'use strict';
+flectra.define('point_of_sale.tour.PaymentScreen',function(require){
+    'usestrict';
 
-    const { ProductScreen } = require('point_of_sale.tour.ProductScreenTourMethods');
-    const { PaymentScreen } = require('point_of_sale.tour.PaymentScreenTourMethods');
-    const { getSteps, startSteps } = require('point_of_sale.tour.utils');
-    var Tour = require('web_tour.tour');
+    const{ProductScreen}=require('point_of_sale.tour.ProductScreenTourMethods');
+    const{PaymentScreen}=require('point_of_sale.tour.PaymentScreenTourMethods');
+    const{getSteps,startSteps}=require('point_of_sale.tour.utils');
+    varTour=require('web_tour.tour');
 
     startSteps();
 
-    ProductScreen.exec.addOrderline('Letter Tray', '10');
-    ProductScreen.check.selectedOrderlineHas('Letter Tray', '10.0');
+    ProductScreen.exec.addOrderline('LetterTray','10');
+    ProductScreen.check.selectedOrderlineHas('LetterTray','10.0');
     ProductScreen.do.clickPayButton();
     PaymentScreen.check.emptyPaymentlines('52.8');
 
     PaymentScreen.do.clickPaymentMethod('Cash');
-    PaymentScreen.do.pressNumpad('1 1');
-    PaymentScreen.check.selectedPaymentlineHas('Cash', '11.00');
+    PaymentScreen.do.pressNumpad('11');
+    PaymentScreen.check.selectedPaymentlineHas('Cash','11.00');
     PaymentScreen.check.remainingIs('41.8');
     PaymentScreen.check.changeIs('0.0');
     PaymentScreen.check.validateButtonIsHighlighted(false);
-    // remove the selected paymentline with multiple backspace presses
-    PaymentScreen.do.pressNumpad('Backspace Backspace');
-    PaymentScreen.check.selectedPaymentlineHas('Cash', '0.00');
+    //removetheselectedpaymentlinewithmultiplebackspacepresses
+    PaymentScreen.do.pressNumpad('BackspaceBackspace');
+    PaymentScreen.check.selectedPaymentlineHas('Cash','0.00');
     PaymentScreen.do.pressNumpad('Backspace');
     PaymentScreen.check.emptyPaymentlines('52.8');
 
-    // Pay with bank, the selected line should have full amount
+    //Paywithbank,theselectedlineshouldhavefullamount
     PaymentScreen.do.clickPaymentMethod('Bank');
     PaymentScreen.check.remainingIs('0.0');
     PaymentScreen.check.changeIs('0.0');
     PaymentScreen.check.validateButtonIsHighlighted(true);
-    // remove the line using the delete button
-    PaymentScreen.do.clickPaymentlineDelButton('Bank', '52.8');
+    //removethelineusingthedeletebutton
+    PaymentScreen.do.clickPaymentlineDelButton('Bank','52.8');
 
-    // Use +10 and +50 to increment the amount of the paymentline
+    //Use+10and+50toincrementtheamountofthepaymentline
     PaymentScreen.do.clickPaymentMethod('Cash');
     PaymentScreen.do.pressNumpad('+10');
     PaymentScreen.check.remainingIs('42.8');
@@ -43,9 +43,9 @@ flectra.define('point_of_sale.tour.PaymentScreen', function (require) {
     PaymentScreen.check.remainingIs('0.0');
     PaymentScreen.check.changeIs('7.2');
     PaymentScreen.check.validateButtonIsHighlighted(true);
-    PaymentScreen.do.clickPaymentlineDelButton('Cash', '60.0');
+    PaymentScreen.do.clickPaymentlineDelButton('Cash','60.0');
 
-    // Multiple paymentlines
+    //Multiplepaymentlines
     PaymentScreen.do.clickPaymentMethod('Cash');
     PaymentScreen.do.pressNumpad('1');
     PaymentScreen.check.remainingIs('51.8');
@@ -57,7 +57,7 @@ flectra.define('point_of_sale.tour.PaymentScreen', function (require) {
     PaymentScreen.check.changeIs('0.0');
     PaymentScreen.check.validateButtonIsHighlighted(false);
     PaymentScreen.do.clickPaymentMethod('Bank');
-    PaymentScreen.do.pressNumpad('2 0');
+    PaymentScreen.do.pressNumpad('20');
     PaymentScreen.check.remainingIs('26.8');
     PaymentScreen.check.changeIs('0.0');
     PaymentScreen.check.validateButtonIsHighlighted(false);
@@ -66,5 +66,5 @@ flectra.define('point_of_sale.tour.PaymentScreen', function (require) {
     PaymentScreen.check.changeIs('0.0');
     PaymentScreen.check.validateButtonIsHighlighted(true);
 
-    Tour.register('PaymentScreenTour', { test: true, url: '/pos/ui' }, getSteps());
+    Tour.register('PaymentScreenTour',{test:true,url:'/pos/ui'},getSteps());
 });

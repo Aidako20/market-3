@@ -1,43 +1,43 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
-from flectra.exceptions import ValidationError
-from flectra.osv import expression
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportValidationError
+fromflectra.osvimportexpression
 
 try:
-    from cn2an import an2cn
-except ImportError:
-    an2cn = None
+    fromcn2animportan2cn
+exceptImportError:
+    an2cn=None
 
-class AccountMove(models.Model):
-    _inherit = 'account.move'
+classAccountMove(models.Model):
+    _inherit='account.move'
 
-    fapiao = fields.Char(string='Fapiao Number', size=8, copy=False, tracking=True)
+    fapiao=fields.Char(string='FapiaoNumber',size=8,copy=False,tracking=True)
 
     @api.constrains('fapiao')
-    def _check_fapiao(self):
-        for record in self:
-            if record.fapiao and (len(record.fapiao) != 8 or not record.fapiao.isdecimal()):
-                raise ValidationError(_("Fapiao number is an 8-digit number. Please enter a correct one."))
+    def_check_fapiao(self):
+        forrecordinself:
+            ifrecord.fapiaoand(len(record.fapiao)!=8ornotrecord.fapiao.isdecimal()):
+                raiseValidationError(_("Fapiaonumberisan8-digitnumber.Pleaseenteracorrectone."))
 
     @api.model
-    def check_cn2an(self):
-        return an2cn
+    defcheck_cn2an(self):
+        returnan2cn
 
     @api.model
-    def _convert_to_amount_in_word(self, number):
-        """Convert number to ``amount in words`` for Chinese financial usage."""
-        if not self.check_cn2an():
-            return None
-        return an2cn(number, 'rmb')
+    def_convert_to_amount_in_word(self,number):
+        """Convertnumberto``amountinwords``forChinesefinancialusage."""
+        ifnotself.check_cn2an():
+            returnNone
+        returnan2cn(number,'rmb')
 
-    def _count_attachments(self):
-        domains = [[('res_model', '=', 'account.move'), ('res_id', '=', self.id)]]
-        statement_ids = self.line_ids.mapped('statement_id')
-        payment_ids = self.line_ids.mapped('payment_id')
-        if statement_ids:
-            domains.append([('res_model', '=', 'account.bank.statement'), ('res_id', 'in', statement_ids.ids)])
-        if payment_ids:
-            domains.append([('res_model', '=', 'account.payment'), ('res_id', 'in', payment_ids.ids)])
-        return self.env['ir.attachment'].search_count(expression.OR(domains))
+    def_count_attachments(self):
+        domains=[[('res_model','=','account.move'),('res_id','=',self.id)]]
+        statement_ids=self.line_ids.mapped('statement_id')
+        payment_ids=self.line_ids.mapped('payment_id')
+        ifstatement_ids:
+            domains.append([('res_model','=','account.bank.statement'),('res_id','in',statement_ids.ids)])
+        ifpayment_ids:
+            domains.append([('res_model','=','account.payment'),('res_id','in',payment_ids.ids)])
+        returnself.env['ir.attachment'].search_count(expression.OR(domains))

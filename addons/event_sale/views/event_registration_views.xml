@@ -1,53 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra><data>
 
-    <record id="view_event_registration_ticket_tree" model="ir.ui.view">
-        <field name="name">event.registration.tree.inherit</field>
-        <field name="model">event.registration</field>
-        <field name="inherit_id" ref="event.view_event_registration_tree" />
-        <field name="arch" type="xml">
-            <field name="event_id" position="after">
-                <field name="sale_order_id" optional="hide"/>
+    <recordid="view_event_registration_ticket_tree"model="ir.ui.view">
+        <fieldname="name">event.registration.tree.inherit</field>
+        <fieldname="model">event.registration</field>
+        <fieldname="inherit_id"ref="event.view_event_registration_tree"/>
+        <fieldname="arch"type="xml">
+            <fieldname="event_id"position="after">
+                <fieldname="sale_order_id"optional="hide"/>
             </field>
         </field>
     </record>
 
-    <record id="event_registration_view_kanban" model="ir.ui.view">
-        <field name="name">event.registration.kanban.inherit.event.sale</field>
-        <field name="model">event.registration</field>
-        <field name="inherit_id" ref="event.event_registration_view_kanban"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[@id='event_attendees_kanban_icons_desktop']" position="inside">
-                <div class="mt-auto pt-2">
-                    <field name="payment_status"/>
+    <recordid="event_registration_view_kanban"model="ir.ui.view">
+        <fieldname="name">event.registration.kanban.inherit.event.sale</field>
+        <fieldname="model">event.registration</field>
+        <fieldname="inherit_id"ref="event.event_registration_view_kanban"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//div[@id='event_attendees_kanban_icons_desktop']"position="inside">
+                <divclass="mt-autopt-2">
+                    <fieldname="payment_status"/>
                 </div>
             </xpath>
-            <xpath expr="//div[@id='event_ticket_id']" position="before">
-                <div class="d-md-none" >
-                    <field name="payment_status"/>
+            <xpathexpr="//div[@id='event_ticket_id']"position="before">
+                <divclass="d-md-none">
+                    <fieldname="payment_status"/>
                 </div>
             </xpath>
         </field>
     </record>
 
-    <record id="event_registration_ticket_view_form" model="ir.ui.view">
-        <field name="name">event.registration.form.inherit</field>
-        <field name="model">event.registration</field>
-        <field name="inherit_id" ref="event.view_event_registration_form" />
-        <field name="arch" type="xml">
-            <xpath expr="//div[@name='button_box']" position="inside">
-                <button name="action_view_sale_order" type="object"
-                        class="oe_stat_button" icon="fa-usd" string="Sale Order">
+    <recordid="event_registration_ticket_view_form"model="ir.ui.view">
+        <fieldname="name">event.registration.form.inherit</field>
+        <fieldname="model">event.registration</field>
+        <fieldname="inherit_id"ref="event.view_event_registration_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//div[@name='button_box']"position="inside">
+                <buttonname="action_view_sale_order"type="object"
+                        class="oe_stat_button"icon="fa-usd"string="SaleOrder">
                 </button>
             </xpath>
-            <xpath expr="//group" position="before">
-                <field name="is_paid" invisible="1"/>
-                <widget name="web_ribbon" title="Paid" bg_color="bg-success" attrs="{'invisible': [('is_paid', '=', False)]}"/>
+            <xpathexpr="//group"position="before">
+                <fieldname="is_paid"invisible="1"/>
+                <widgetname="web_ribbon"title="Paid"bg_color="bg-success"attrs="{'invisible':[('is_paid','=',False)]}"/>
             </xpath>
-            <group name="utm_link" position="before">
-                <group string="Transaction" groups="base.group_no_one">
-                    <field name="sale_order_id"/>
-                    <field name="sale_order_line_id" readonly="1" attrs="{'invisible': [('sale_order_id', '=', False)]}"/>
+            <groupname="utm_link"position="before">
+                <groupstring="Transaction"groups="base.group_no_one">
+                    <fieldname="sale_order_id"/>
+                    <fieldname="sale_order_line_id"readonly="1"attrs="{'invisible':[('sale_order_id','=',False)]}"/>
                 </group>
             </group>
         </field>

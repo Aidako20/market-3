@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, fields
+fromflectraimportmodels,fields
 
 
-class StockMoveLine(models.Model):
-    _inherit = 'stock.move.line'
+classStockMoveLine(models.Model):
+    _inherit='stock.move.line'
 
-    def _should_bypass_reservation(self, location):
-        """ If the move line is subcontracted then ignore the reservation. """
-        should_bypass_reservation = super(StockMoveLine, self)._should_bypass_reservation(location)
-        if not should_bypass_reservation and self.move_id.is_subcontract:
-            return True
-        return should_bypass_reservation
+    def_should_bypass_reservation(self,location):
+        """Ifthemovelineissubcontractedthenignorethereservation."""
+        should_bypass_reservation=super(StockMoveLine,self)._should_bypass_reservation(location)
+        ifnotshould_bypass_reservationandself.move_id.is_subcontract:
+            returnTrue
+        returnshould_bypass_reservation

@@ -1,92 +1,92 @@
-flectra.define('web.viewUtils', function (require) {
-"use strict";
+flectra.define('web.viewUtils',function(require){
+"usestrict";
 
-var dom = require('web.dom');
-var utils = require('web.utils');
+vardom=require('web.dom');
+varutils=require('web.utils');
 
-var viewUtils = {
+varviewUtils={
     /**
-     * Returns the value of a group dataPoint, i.e. the value of the groupBy
-     * field for the records in that group.
+     *ReturnsthevalueofagroupdataPoint,i.e.thevalueofthegroupBy
+     *fieldfortherecordsinthatgroup.
      *
-     * @param {Object} group dataPoint of type list, corresponding to a group
-     * @param {string} groupByField the name of the groupBy field
-     * @returns {string | integer | false}
+     *@param{Object}groupdataPointoftypelist,correspondingtoagroup
+     *@param{string}groupByFieldthenameofthegroupByfield
+     *@returns{string|integer|false}
      */
-    getGroupValue: function (group, groupByField) {
-        var groupedByField = group.fields[groupByField];
-        switch (groupedByField.type) {
-            case 'many2one':
-                return group.res_id || false;
-            case 'selection':
-                var descriptor = _.find(groupedByField.selection, function (option) {
-                    return option[1] === group.value;
+    getGroupValue:function(group,groupByField){
+        vargroupedByField=group.fields[groupByField];
+        switch(groupedByField.type){
+            case'many2one':
+                returngroup.res_id||false;
+            case'selection':
+                vardescriptor=_.find(groupedByField.selection,function(option){
+                    returnoption[1]===group.value;
                 });
-                return descriptor && descriptor[0];
-            case 'char':
-            case 'boolean':
-                return group.value;
+                returndescriptor&&descriptor[0];
+            case'char':
+            case'boolean':
+                returngroup.value;
             default:
-                return false; // other field types are not handled
+                returnfalse;//otherfieldtypesarenothandled
         }
     },
     /**
-     * States whether or not the quick create feature is available for the given
-     * datapoint, depending on its groupBy field.
+     *Stateswhetherornotthequickcreatefeatureisavailableforthegiven
+     *datapoint,dependingonitsgroupByfield.
      *
-     * @param {Object} list dataPoint of type list
-     * @returns {Boolean} true iff the kanban quick create feature is available
+     *@param{Object}listdataPointoftypelist
+     *@returns{Boolean}trueiffthekanbanquickcreatefeatureisavailable
      */
-    isQuickCreateEnabled: function (list) {
-        var groupByField = list.groupedBy[0] && list.groupedBy[0].split(':')[0];
-        if (!groupByField) {
-            return false;
+    isQuickCreateEnabled:function(list){
+        vargroupByField=list.groupedBy[0]&&list.groupedBy[0].split(':')[0];
+        if(!groupByField){
+            returnfalse;
         }
-        var availableTypes = ['char', 'boolean', 'many2one', 'selection'];
-        if (!_.contains(availableTypes, list.fields[groupByField].type)) {
-            return false;
+        varavailableTypes=['char','boolean','many2one','selection'];
+        if(!_.contains(availableTypes,list.fields[groupByField].type)){
+            returnfalse;
         }
-        return true;
+        returntrue;
     },
     /**
-     * @param {string} arch view arch
-     * @returns {Object} parsed arch
+     *@param{string}archviewarch
+     *@returns{Object}parsedarch
      */
-    parseArch: function (arch) {
-        var doc = $.parseXML(arch).documentElement;
-        var stripWhitespaces = doc.nodeName.toLowerCase() !== 'kanban';
-        return utils.xml_to_json(doc, stripWhitespaces);
+    parseArch:function(arch){
+        vardoc=$.parseXML(arch).documentElement;
+        varstripWhitespaces=doc.nodeName.toLowerCase()!=='kanban';
+        returnutils.xml_to_json(doc,stripWhitespaces);
     },
     /**
-     * Renders a button according to a given arch node element.
+     *Rendersabuttonaccordingtoagivenarchnodeelement.
      *
-     * @param {Object} node
-     * @param {Object} [options]
-     * @param {string} [options.extraClass]
-     * @param {boolean} [options.textAsTitle=false]
-     * @returns {jQuery}
+     *@param{Object}node
+     *@param{Object}[options]
+     *@param{string}[options.extraClass]
+     *@param{boolean}[options.textAsTitle=false]
+     *@returns{jQuery}
      */
-    renderButtonFromNode: function (node, options) {
-        var btnOptions = {
-            attrs: _.omit(node.attrs, 'icon', 'string', 'type', 'attrs', 'modifiers', 'options', 'effect'),
-            icon: node.attrs.icon,
+    renderButtonFromNode:function(node,options){
+        varbtnOptions={
+            attrs:_.omit(node.attrs,'icon','string','type','attrs','modifiers','options','effect'),
+            icon:node.attrs.icon,
         };
-        if (options && options.extraClass) {
-            var classes = btnOptions.attrs.class ? btnOptions.attrs.class.split(' ') : [];
-            btnOptions.attrs.class = _.uniq(classes.concat(options.extraClass.split(' '))).join(' ');
+        if(options&&options.extraClass){
+            varclasses=btnOptions.attrs.class?btnOptions.attrs.class.split(''):[];
+            btnOptions.attrs.class=_.uniq(classes.concat(options.extraClass.split(''))).join('');
         }
-        var str = (node.attrs.string || '').replace(/_/g, '');
-        if (str) {
-            if (options && options.textAsTitle) {
-                btnOptions.attrs.title = str;
-            } else {
-                btnOptions.text = str;
+        varstr=(node.attrs.string||'').replace(/_/g,'');
+        if(str){
+            if(options&&options.textAsTitle){
+                btnOptions.attrs.title=str;
+            }else{
+                btnOptions.text=str;
             }
         }
-        return dom.renderButton(btnOptions);
+        returndom.renderButton(btnOptions);
     },
 };
 
-return viewUtils;
+returnviewUtils;
 
 });

@@ -1,14 +1,14 @@
-flectra.define("website.tour.unsplash_beacon", function (require) {
-"use strict";
+flectra.define("website.tour.unsplash_beacon",function(require){
+"usestrict";
 
-const tour = require("web_tour.tour");
+consttour=require("web_tour.tour");
 
-tour.register("test_unsplash_beacon", {
-    test: true,
-    url: "/",
-}, [{
-    content: "Verify whether beacon was sent.",
-    trigger: 'img[data-beacon="sent"]',
-    run: () => {}, // This is a check.
+tour.register("test_unsplash_beacon",{
+    test:true,
+    url:"/",
+},[{
+    content:"Verifywhetherbeaconwassent.",
+    trigger:'img[data-beacon="sent"]',
+    run:()=>{},//Thisisacheck.
 }]);
 });

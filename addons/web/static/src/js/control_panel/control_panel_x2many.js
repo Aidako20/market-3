@@ -1,40 +1,40 @@
-flectra.define('web.ControlPanelX2Many', function (require) {
+flectra.define('web.ControlPanelX2Many',function(require){
 
-    const ControlPanel = require('web.ControlPanel');
+    constControlPanel=require('web.ControlPanel');
 
     /**
-     * Control panel (adaptation for x2many fields)
+     *Controlpanel(adaptationforx2manyfields)
      *
-     * Smaller version of the control panel with an abridged template (buttons and
-     * pager only). We still extend the main version for the injection of `cp_content`
-     * keys.
-     * The pager of this control panel is only displayed if the amount of records
-     * cannot be displayed in a single page.
-     * @extends ControlPanel
+     *Smallerversionofthecontrolpanelwithanabridgedtemplate(buttonsand
+     *pageronly).Westillextendthemainversionfortheinjectionof`cp_content`
+     *keys.
+     *Thepagerofthiscontrolpanelisonlydisplayediftheamountofrecords
+     *cannotbedisplayedinasinglepage.
+     *@extendsControlPanel
      */
-    class ControlPanelX2Many extends ControlPanel {
+    classControlPanelX2ManyextendsControlPanel{
 
         /**
-         * @private
-         * @returns {boolean}
+         *@private
+         *@returns{boolean}
          */
-        _shouldShowPager() {
-            if (!this.props.pager || !this.props.pager.limit) {
-                return false;
+        _shouldShowPager(){
+            if(!this.props.pager||!this.props.pager.limit){
+                returnfalse;
             }
-            const { currentMinimum, limit, size } = this.props.pager;
-            const maximum = Math.min(currentMinimum + limit - 1, size);
-            const singlePage = (1 === currentMinimum) && (maximum === size);
-            return !singlePage;
+            const{currentMinimum,limit,size}=this.props.pager;
+            constmaximum=Math.min(currentMinimum+limit-1,size);
+            constsinglePage=(1===currentMinimum)&&(maximum===size);
+            return!singlePage;
         }
     }
 
-    ControlPanelX2Many.defaultProps = {};
-    ControlPanelX2Many.props = {
-        cp_content: { type: Object, optional: 1 },
-        pager: Object,
+    ControlPanelX2Many.defaultProps={};
+    ControlPanelX2Many.props={
+        cp_content:{type:Object,optional:1},
+        pager:Object,
     };
-    ControlPanelX2Many.template = 'web.ControlPanelX2Many';
+    ControlPanelX2Many.template='web.ControlPanelX2Many';
 
-    return ControlPanelX2Many;
+    returnControlPanelX2Many;
 });

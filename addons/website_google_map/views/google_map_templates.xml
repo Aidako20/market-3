@@ -1,27 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-<template id="google_map">
-&lt;!DOCTYPE html&gt;
+<templateid="google_map">
+&lt;!DOCTYPEhtml&gt;
 <html>
     <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-        <title>World Map</title>
-        <link rel="stylesheet" type="text/css" href="/website_google_map/static/src/css/website_google_map.css"/>
+        <metacharset="utf-8"/>
+        <metaname="viewport"content="initial-scale=1.0,user-scalable=no"/>
+        <title>WorldMap</title>
+        <linkrel="stylesheet"type="text/css"href="/website_google_map/static/src/css/website_google_map.css"/>
     </head>
-    <body t-att-data-partner-url="partner_url or None">
+    <bodyt-att-data-partner-url="partner_urlorNone">
         <script>
-            var flectra_partner_data = <t t-raw="partner_data"/>;
+            varflectra_partner_data=<tt-raw="partner_data"/>;
         </script>
-        <div id="flectra-google-map"></div>
-        <t t-if="google_maps_api_key">
-            <script t-attf-src="//maps.google.com/maps/api/js?key=#{google_maps_api_key}"></script>
+        <divid="flectra-google-map"></div>
+        <tt-if="google_maps_api_key">
+            <scriptt-attf-src="//maps.google.com/maps/api/js?key=#{google_maps_api_key}"></script>
         </t>
-        <t t-else="1">
-            <script src="//maps.google.com/maps/api/js"></script>
+        <tt-else="1">
+            <scriptsrc="//maps.google.com/maps/api/js"></script>
         </t>
-        <script type="text/javascript" src="/website_google_map/static/src/lib/markerclusterer.js"></script>
-        <script type="text/javascript" src="/website_google_map/static/src/js/website_google_map.js"></script>
+        <scripttype="text/javascript"src="/website_google_map/static/src/lib/markerclusterer.js"></script>
+        <scripttype="text/javascript"src="/website_google_map/static/src/js/website_google_map.js"></script>
     </body>
 </html>
 </template>

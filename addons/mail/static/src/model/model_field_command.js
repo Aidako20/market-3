@@ -1,70 +1,70 @@
-flectra.define('mail/static/src/model/model_field_command.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/model/model_field_command.js',function(require){
+'usestrict';
 
 /**
- * Allows field update to detect if the value it received is a command to
- * execute (in which was it will be an instance of this class) or an actual
- * value to set (in all other cases).
+ *Allowsfieldupdatetodetectifthevalueitreceivedisacommandto
+ *execute(inwhichwasitwillbeaninstanceofthisclass)oranactual
+ *valuetoset(inallothercases).
  */
-class FieldCommand {
+classFieldCommand{
     /**
-     * @constructor
-     * @param {function} func function to call when executing this command. 
-     * The function should ALWAYS return a boolean value 
-     * to indicate whether the value changed.
+     *@constructor
+     *@param{function}funcfunctiontocallwhenexecutingthiscommand.
+     *ThefunctionshouldALWAYSreturnabooleanvalue
+     *toindicatewhetherthevaluechanged.
      */
-    constructor(func) {
-        this.func = func;
+    constructor(func){
+        this.func=func;
     }
 
     /**
-     * @param {ModelField} field
-     * @param {mail.model} record
-     * @param {options} [options]
-     * @returns {boolean} whether the value changed for the current field
+     *@param{ModelField}field
+     *@param{mail.model}record
+     *@param{options}[options]
+     *@returns{boolean}whetherthevaluechangedforthecurrentfield
      */
-    execute(field, record, options) {
-        return this.func(field, record, options);
+    execute(field,record,options){
+        returnthis.func(field,record,options);
     }
 }
 
 /**
- * Returns a clear command to give to the model manager at create/update.
+ *Returnsaclearcommandtogivetothemodelmanageratcreate/update.
  */
-function clear() {
-    return new FieldCommand((field, record, options) =>
-        field.clear(record, options)
+functionclear(){
+    returnnewFieldCommand((field,record,options)=>
+        field.clear(record,options)
     );
 }
 
 /**
- * Returns a decrement command to give to the model manager at create/update.
+ *Returnsadecrementcommandtogivetothemodelmanageratcreate/update.
  *
- * @param {number} [amount=1]
+ *@param{number}[amount=1]
  */
-function decrement(amount = 1) {
-    return new FieldCommand((field, record, options) => {
-        const oldValue = field.get(record);
-        return field.set(record, oldValue - amount, options);
+functiondecrement(amount=1){
+    returnnewFieldCommand((field,record,options)=>{
+        constoldValue=field.get(record);
+        returnfield.set(record,oldValue-amount,options);
     });
 }
 
 /**
- * Returns a increment command to give to the model manager at create/update.
+ *Returnsaincrementcommandtogivetothemodelmanageratcreate/update.
  *
- * @param {number} [amount=1]
+ *@param{number}[amount=1]
  */
-function increment(amount = 1) {
-    return new FieldCommand((field, record, options) => {
-        const oldValue = field.get(record);
-        return field.set(record, oldValue + amount, options);
+functionincrement(amount=1){
+    returnnewFieldCommand((field,record,options)=>{
+        constoldValue=field.get(record);
+        returnfield.set(record,oldValue+amount,options);
     });
 }
 
-return {
-    // class
+return{
+    //class
     FieldCommand,
-    // shortcuts
+    //shortcuts
     clear,
     decrement,
     increment,

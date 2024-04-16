@@ -1,52 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="event_quiz_view_search" model="ir.ui.view">
-        <field name="name">event.quiz.view.search</field>
-        <field name="model">event.quiz</field>
-        <field name="arch" type="xml">
-            <search string="Quizzes">
-                <field name="name"/>
-                <field name="event_track_id"/>
-                <field name="event_id"/>
-                <group string="Group By" expand="0">
-                    <filter string="Track" name="groupby_event_track_id" context="{'group_by': 'event_track_id'}"/>
-                    <filter string="Event" name="groupby_event_id" context="{'group_by': 'event_id'}"/>
+    <recordid="event_quiz_view_search"model="ir.ui.view">
+        <fieldname="name">event.quiz.view.search</field>
+        <fieldname="model">event.quiz</field>
+        <fieldname="arch"type="xml">
+            <searchstring="Quizzes">
+                <fieldname="name"/>
+                <fieldname="event_track_id"/>
+                <fieldname="event_id"/>
+                <groupstring="GroupBy"expand="0">
+                    <filterstring="Track"name="groupby_event_track_id"context="{'group_by':'event_track_id'}"/>
+                    <filterstring="Event"name="groupby_event_id"context="{'group_by':'event_id'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <record id="event_quiz_view_tree" model="ir.ui.view">
-        <field name="name">event.quiz.view.tree</field>
-        <field name="model">event.quiz</field>
-        <field name="arch" type="xml">
-            <tree string="Quizzes">
-                <field name="name"/>
-                <field name="event_id"/>
-                <field name="event_track_id"/>
+    <recordid="event_quiz_view_tree"model="ir.ui.view">
+        <fieldname="name">event.quiz.view.tree</field>
+        <fieldname="model">event.quiz</field>
+        <fieldname="arch"type="xml">
+            <treestring="Quizzes">
+                <fieldname="name"/>
+                <fieldname="event_id"/>
+                <fieldname="event_track_id"/>
             </tree>
         </field>
     </record>
 
-    <record id="event_quiz_view_form" model="ir.ui.view">
-        <field name="name">event.quiz.view.form</field>
-        <field name="model">event.quiz</field>
-        <field name="arch" type="xml">
-            <form string="Quiz">
+    <recordid="event_quiz_view_form"model="ir.ui.view">
+        <fieldname="name">event.quiz.view.form</field>
+        <fieldname="model">event.quiz</field>
+        <fieldname="arch"type="xml">
+            <formstring="Quiz">
                 <sheet>
                     <h1>
-                        <field name="name" default_focus="1"
-                            placeholder="e.g. Test your Knowledge"/>
+                        <fieldname="name"default_focus="1"
+                            placeholder="e.g.TestyourKnowledge"/>
                     </h1>
                     <group>
-                        <field name="event_track_id"/>
-                        <field name="event_id"/>
+                        <fieldname="event_track_id"/>
+                        <fieldname="event_id"/>
                     </group>
-                    <group name="questions" string="Questions">
-                        <field name="question_ids" nolabel="1"
+                    <groupname="questions"string="Questions">
+                        <fieldname="question_ids"nolabel="1"
                             context="{
-                                'tree_view_ref': 'website_event_track_quiz.event_quiz_question_view_tree_from_quiz',
-                                'form_view_ref': 'website_event_track_quiz.event_quiz_question_view_form_from_quiz'
+                                'tree_view_ref':'website_event_track_quiz.event_quiz_question_view_tree_from_quiz',
+                                'form_view_ref':'website_event_track_quiz.event_quiz_question_view_form_from_quiz'
                             }"/>
                     </group>
                 </sheet>
@@ -54,24 +54,24 @@
         </field>
     </record>
 
-    <record id="event_quiz_view_form_from_track" model="ir.ui.view">
-        <field name="name">event.quiz.view.form</field>
-        <field name="model">event.quiz</field>
-        <field name="inherit_id" ref="website_event_track_quiz.event_quiz_view_form"/>
-        <field name="mode">primary</field>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='event_track_id']" position="replace"></xpath>
-            <xpath expr="//field[@name='event_id']" position="replace"></xpath>
+    <recordid="event_quiz_view_form_from_track"model="ir.ui.view">
+        <fieldname="name">event.quiz.view.form</field>
+        <fieldname="model">event.quiz</field>
+        <fieldname="inherit_id"ref="website_event_track_quiz.event_quiz_view_form"/>
+        <fieldname="mode">primary</field>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='event_track_id']"position="replace"></xpath>
+            <xpathexpr="//field[@name='event_id']"position="replace"></xpath>
         </field>
     </record>
 
-    <record id="event_quiz_action" model="ir.actions.act_window">
-        <field name="name">Event Quizzes</field>
-        <field name="res_model">event.quiz</field>
-        <field name="view_mode">tree,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-              Create a Quiz
+    <recordid="event_quiz_action"model="ir.actions.act_window">
+        <fieldname="name">EventQuizzes</field>
+        <fieldname="res_model">event.quiz</field>
+        <fieldname="view_mode">tree,form</field>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_smiling_face">
+              CreateaQuiz
             </p>
         </field>
     </record>

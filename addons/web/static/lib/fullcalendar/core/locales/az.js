@@ -1,32 +1,32 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.az = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.az=factory()));
+}(this,function(){'usestrict';
 
-    var az = {
-        code: "az",
-        week: {
-            dow: 1,
-            doy: 4 // The week that contains Jan 4th is the first week of the year.
+    varaz={
+        code:"az",
+        week:{
+            dow:1,
+            doy:4//TheweekthatcontainsJan4thisthefirstweekoftheyear.
         },
-        buttonText: {
-            prev: "Əvvəl",
-            next: "Sonra",
-            today: "Bu Gün",
-            month: "Ay",
-            week: "Həftə",
-            day: "Gün",
-            list: "Gündəm"
+        buttonText:{
+            prev:"Əvvəl",
+            next:"Sonra",
+            today:"BuGün",
+            month:"Ay",
+            week:"Həftə",
+            day:"Gün",
+            list:"Gündəm"
         },
-        weekLabel: "Həftə",
-        allDayText: "Bütün Gün",
-        eventLimitText: function (n) {
-            return "+ daha çox " + n;
+        weekLabel:"Həftə",
+        allDayText:"BütünGün",
+        eventLimitText:function(n){
+            return"+dahaçox"+n;
         },
-        noEventsMessage: "Göstərmək üçün hadisə yoxdur"
+        noEventsMessage:"Göstərməküçünhadisəyoxdur"
     };
 
-    return az;
+    returnaz;
 
 }));

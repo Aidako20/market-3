@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="mail.Composer" owl="1">
-        <div class="o_Composer"
+    <tt-name="mail.Composer"owl="1">
+        <divclass="o_Composer"
             t-att-class="{
-                'o-focused': composer and composer.hasFocus,
-                'o-has-current-partner-avatar': props.hasCurrentPartnerAvatar,
-                'o-has-footer': hasFooter,
-                'o-has-header': hasHeader,
-                'o-is-compact': props.isCompact,
+                'o-focused':composerandcomposer.hasFocus,
+                'o-has-current-partner-avatar':props.hasCurrentPartnerAvatar,
+                'o-has-footer':hasFooter,
+                'o-has-header':hasHeader,
+                'o-is-compact':props.isCompact,
             }"
             t-on-keydown="_onKeydown"
         >
-            <t t-if="composer">
-                <t t-if="isDropZoneVisible.value and composer.hasDropZone">
+            <tt-if="composer">
+                <tt-if="isDropZoneVisible.valueandcomposer.hasDropZone">
                     <DropZone
                         class="o_Composer_dropZone"
                         t-on-o-dropzone-files-dropped="_onDropZoneFilesDropped"
@@ -21,28 +21,28 @@
                     />
                 </t>
                 <FileUploader
-                    attachmentLocalIds="composer.attachments.map(attachment => attachment.localId)"
+                    attachmentLocalIds="composer.attachments.map(attachment=>attachment.localId)"
                     newAttachmentExtraData="newAttachmentExtraData"
                     t-ref="fileUploader"
                 />
-                <t t-if="hasHeader">
-                    <div class="o_Composer_coreHeader">
-                        <t t-if="props.hasThreadName and composer.thread">
-                            <span class="o_Composer_threadName">
-                                on: <b><t t-esc="composer.thread.displayName"/></b>
+                <tt-if="hasHeader">
+                    <divclass="o_Composer_coreHeader">
+                        <tt-if="props.hasThreadNameandcomposer.thread">
+                            <spanclass="o_Composer_threadName">
+                                on:<b><tt-esc="composer.thread.displayName"/></b>
                             </span>
                         </t>
-                        <t t-if="props.hasFollowers and !composer.isLog">
-                            <!-- Text for followers -->
-                            <small class="o_Composer_followers">
-                                <b class="text-muted">To: </b>
-                                <em class="text-muted">Followers of </em>
+                        <tt-if="props.hasFollowersand!composer.isLog">
+                            <!--Textforfollowers-->
+                            <smallclass="o_Composer_followers">
+                                <bclass="text-muted">To:</b>
+                                <emclass="text-muted">Followersof</em>
                                 <b>
-                                    <t t-if="composer.thread and composer.thread.name">
-                                        &#32;&quot;<t t-esc="composer.thread.name"/>&quot;
+                                    <tt-if="composer.threadandcomposer.thread.name">
+                                        &#32;&quot;<tt-esc="composer.thread.name"/>&quot;
                                     </t>
-                                    <t t-else="">
-                                        this document
+                                    <tt-else="">
+                                        thisdocument
                                     </t>
                                 </b>
                             </small>
@@ -52,29 +52,29 @@
                         </t>
                     </div>
                 </t>
-                <t t-if="composer.thread and composer.thread.model === 'mail.channel' and composer.thread.mass_mailing">
-                    <div class="o_Composer_subject">
-                        <input class="o_Composer_subjectInput" type="text" placeholder="Subject" t-on-input="_onInputSubject" t-ref="subject"/>
+                <tt-if="composer.threadandcomposer.thread.model==='mail.channel'andcomposer.thread.mass_mailing">
+                    <divclass="o_Composer_subject">
+                        <inputclass="o_Composer_subjectInput"type="text"placeholder="Subject"t-on-input="_onInputSubject"t-ref="subject"/>
                     </div>
                 </t>
-                <t t-if="props.hasCurrentPartnerAvatar">
-                    <div class="o_Composer_sidebarMain">
-                        <img class="o_Composer_currentPartnerAvatar rounded-circle" t-att-src="currentPartnerAvatar" alt=""/>
+                <tt-if="props.hasCurrentPartnerAvatar">
+                    <divclass="o_Composer_sidebarMain">
+                        <imgclass="o_Composer_currentPartnerAvatarrounded-circle"t-att-src="currentPartnerAvatar"alt=""/>
                     </div>
                 </t>
                 <div
                     class="o_Composer_coreMain"
                     t-att-class="{
-                        'o-composer-is-compact': props.isCompact,
-                        'o-composer-is-extended': composer.thread and composer.thread.mass_mailing,
+                        'o-composer-is-compact':props.isCompact,
+                        'o-composer-is-extended':composer.threadandcomposer.thread.mass_mailing,
                     }"
                 >
                     <TextInput
                         class="o_Composer_textInput"
                         t-att-class="{
-                            'o-composer-is-compact': props.isCompact,
-                            'o_Composer_textInput-mobile': env.messaging.device.isMobile,
-                            'o-has-current-partner-avatar': props.hasCurrentPartnerAvatar,
+                            'o-composer-is-compact':props.isCompact,
+                            'o_Composer_textInput-mobile':env.messaging.device.isMobile,
+                            'o-has-current-partner-avatar':props.hasCurrentPartnerAvatar,
                         }"
                         composerLocalId="composer.localId"
                         hasMentionSuggestionsBelowPosition="props.hasMentionSuggestionsBelowPosition"
@@ -86,65 +86,65 @@
                         t-key="composer.localId"
                         t-ref="textInput"
                     />
-                    <div class="o_Composer_buttons" t-att-class="{ 'o-composer-is-compact': props.isCompact, 'o-mobile': env.messaging.device.isMobile }">
-                        <div class="o_Composer_toolButtons"
+                    <divclass="o_Composer_buttons"t-att-class="{'o-composer-is-compact':props.isCompact,'o-mobile':env.messaging.device.isMobile}">
+                        <divclass="o_Composer_toolButtons"
                             t-att-class="{
-                                'o-composer-has-current-partner-avatar': props.hasCurrentPartnerAvatar,
-                                'o-composer-is-compact': props.isCompact,
+                                'o-composer-has-current-partner-avatar':props.hasCurrentPartnerAvatar,
+                                'o-composer-is-compact':props.isCompact,
                             }">
-                            <t t-if="props.isCompact">
-                                <div class="o_Composer_toolButtonSeparator"/>
+                            <tt-if="props.isCompact">
+                                <divclass="o_Composer_toolButtonSeparator"/>
                             </t>
-                            <div class="o_Composer_primaryToolButtons" t-att-class="{ 'o-composer-is-compact': props.isCompact }">
-                                <Popover position="'top'" t-on-o-emoji-selection="_onEmojiSelection">
-                                    <!-- TODO FIXME o-open and aria-expanded not possible to code due to https://github.com/flectra/owl/issues/693 -->
-                                    <button class="o_Composer_button o_Composer_buttonEmojis o_Composer_toolButton btn btn-light"
+                            <divclass="o_Composer_primaryToolButtons"t-att-class="{'o-composer-is-compact':props.isCompact}">
+                                <Popoverposition="'top'"t-on-o-emoji-selection="_onEmojiSelection">
+                                    <!--TODOFIXMEo-openandaria-expandednotpossibletocodeduetohttps://github.com/flectra/owl/issues/693-->
+                                    <buttonclass="o_Composer_buttono_Composer_buttonEmojiso_Composer_toolButtonbtnbtn-light"
                                         t-att-class="{
-                                            'o-open': false and state.displayed,
-                                            'o-mobile': env.messaging.device.isMobile,
+                                            'o-open':falseandstate.displayed,
+                                            'o-mobile':env.messaging.device.isMobile,
                                         }"
                                         t-on-keydown="_onKeydownEmojiButton"
                                         aria-label="Emojis"
-                                        t-att-aria-expanded="false and (state.displayed ? 'true' : 'false')"
+                                        t-att-aria-expanded="falseand(state.displayed?'true':'false')"
                                     >
-                                        <i class="fa fa-smile-o"/>
+                                        <iclass="fafa-smile-o"/>
                                     </button>
-                                    <t t-set="opened">
-                                        <EmojisPopover t-ref="emojisPopover"/>
+                                    <tt-set="opened">
+                                        <EmojisPopovert-ref="emojisPopover"/>
                                     </t>
                                 </Popover>
-                                <button class="o_Composer_button o_Composer_buttonAttachment o_Composer_toolButton btn btn-light fa fa-paperclip" t-att-class="{ 'o-mobile': env.messaging.device.isMobile }" title="Add attachment" aria-label="Add attachment" type="button" t-on-click="_onClickAddAttachment"/>
+                                <buttonclass="o_Composer_buttono_Composer_buttonAttachmento_Composer_toolButtonbtnbtn-lightfafa-paperclip"t-att-class="{'o-mobile':env.messaging.device.isMobile}"title="Addattachment"aria-label="Addattachment"type="button"t-on-click="_onClickAddAttachment"/>
                             </div>
-                            <t t-if="props.isExpandable">
-                                <div class="o_Composer_secondaryToolButtons">
-                                    <button class="btn btn-light fa fa-expand o_Composer_button o_Composer_buttonFullComposer o_Composer_toolButton" t-att-class="{ 'o-mobile': env.messaging.device.isMobile }" title="Full composer" aria-label="Full composer" type="button" t-on-click="_onClickFullComposer"/>
+                            <tt-if="props.isExpandable">
+                                <divclass="o_Composer_secondaryToolButtons">
+                                    <buttonclass="btnbtn-lightfafa-expando_Composer_buttono_Composer_buttonFullComposero_Composer_toolButton"t-att-class="{'o-mobile':env.messaging.device.isMobile}"title="Fullcomposer"aria-label="Fullcomposer"type="button"t-on-click="_onClickFullComposer"/>
                                 </div>
                             </t>
                         </div>
-                        <t t-if="props.isCompact">
-                            <t t-call="mail.Composer.actionButtons"/>
+                        <tt-if="props.isCompact">
+                            <tt-call="mail.Composer.actionButtons"/>
                         </t>
                     </div>
                 </div>
-                <t t-if="hasFooter">
-                    <div class="o_Composer_coreFooter" t-att-class="{ 'o-composer-is-compact': props.isCompact }">
-                        <t t-if="props.hasThreadTyping">
-                            <ThreadTextualTypingStatus class="o_Composer_threadTextualTypingStatus" threadLocalId="composer.thread.localId"/>
+                <tt-if="hasFooter">
+                    <divclass="o_Composer_coreFooter"t-att-class="{'o-composer-is-compact':props.isCompact}">
+                        <tt-if="props.hasThreadTyping">
+                            <ThreadTextualTypingStatusclass="o_Composer_threadTextualTypingStatus"threadLocalId="composer.thread.localId"/>
                         </t>
-                        <t t-if="composer.attachments.length > 0">
+                        <tt-if="composer.attachments.length>0">
                             <AttachmentList
                                 class="o_Composer_attachmentList"
-                                t-att-class="{ 'o-composer-is-compact': props.isCompact }"
+                                t-att-class="{'o-composer-is-compact':props.isCompact}"
                                 areAttachmentsEditable="true"
                                 attachmentsDetailsMode="props.attachmentsDetailsMode"
                                 attachmentsImageSize="'small'"
-                                attachmentLocalIds="composer.attachments.map(attachment => attachment.localId)"
+                                attachmentLocalIds="composer.attachments.map(attachment=>attachment.localId)"
                                 showAttachmentsExtensions="props.showAttachmentsExtensions"
                                 showAttachmentsFilenames="props.showAttachmentsFilenames"
                             />
                         </t>
-                        <t t-if="!props.isCompact">
-                            <t t-call="mail.Composer.actionButtons"/>
+                        <tt-if="!props.isCompact">
+                            <tt-call="mail.Composer.actionButtons"/>
                         </t>
                     </div>
                 </t>
@@ -152,26 +152,26 @@
         </div>
     </t>
 
-    <t t-name="mail.Composer.actionButtons" owl="1">
-        <div class="o_Composer_actionButtons" t-att-class="{ 'o-composer-is-compact': props.isCompact }">
-            <t t-if="props.hasSendButton">
-                <button class="o_Composer_actionButton o_Composer_button o_Composer_buttonSend btn btn-primary"
+    <tt-name="mail.Composer.actionButtons"owl="1">
+        <divclass="o_Composer_actionButtons"t-att-class="{'o-composer-is-compact':props.isCompact}">
+            <tt-if="props.hasSendButton">
+                <buttonclass="o_Composer_actionButtono_Composer_buttono_Composer_buttonSendbtnbtn-primary"
                     t-att-class="{
-                        'fa': env.messaging.device.isMobile,
-                        'fa-paper-plane-o': env.messaging.device.isMobile,
-                        'o-last': env.messaging.device.isMobile or !props.hasDiscardButton,
-                        'o-composer-is-compact': props.isCompact,
-                        'o-has-current-partner-avatar': props.hasCurrentPartnerAvatar,
+                        'fa':env.messaging.device.isMobile,
+                        'fa-paper-plane-o':env.messaging.device.isMobile,
+                        'o-last':env.messaging.device.isMobileor!props.hasDiscardButton,
+                        'o-composer-is-compact':props.isCompact,
+                        'o-has-current-partner-avatar':props.hasCurrentPartnerAvatar,
                     }"
-                    t-att-disabled="!composer.canPostMessage ? 'disabled' : ''"
+                    t-att-disabled="!composer.canPostMessage?'disabled':''"
                     type="button"
                     t-on-click="_onClickSend"
                 >
-                    <t t-if="!env.messaging.device.isMobile"><t t-if="composer.isLog">Log</t><t t-else="">Send</t></t>
+                    <tt-if="!env.messaging.device.isMobile"><tt-if="composer.isLog">Log</t><tt-else="">Send</t></t>
                 </button>
             </t>
-            <t t-if="!env.messaging.device.isMobile and props.hasDiscardButton">
-                <button class="o_Composer_actionButton o-last o_Composer_button o_Composer_buttonDiscard btn btn-secondary" t-att-class="{ 'o-composer-is-compact': props.isCompact, 'o-has-current-partner-avatar': props.hasCurrentPartnerAvatar }" type="button" t-on-click="_onClickDiscard">
+            <tt-if="!env.messaging.device.isMobileandprops.hasDiscardButton">
+                <buttonclass="o_Composer_actionButtono-lasto_Composer_buttono_Composer_buttonDiscardbtnbtn-secondary"t-att-class="{'o-composer-is-compact':props.isCompact,'o-has-current-partner-avatar':props.hasCurrentPartnerAvatar}"type="button"t-on-click="_onClickDiscard">
                     Discard
                 </button>
             </t>

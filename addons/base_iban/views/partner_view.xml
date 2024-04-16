@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="view_partner_property_iban_form" model="ir.ui.view">
-        <field name="name">res.partner.form.inherit</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="account.view_partner_property_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='acc_number']" position="attributes">
-                <attribute name="widget">iban</attribute>
+    <recordid="view_partner_property_iban_form"model="ir.ui.view">
+        <fieldname="name">res.partner.form.inherit</field>
+        <fieldname="model">res.partner</field>
+        <fieldname="inherit_id"ref="account.view_partner_property_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='acc_number']"position="attributes">
+                <attributename="widget">iban</attribute>
             </xpath>
         </field>
     </record>

@@ -1,26 +1,26 @@
-flectra.define('sms/static/src/components/notification_group/notification_group.js', function (require) {
-'use strict';
+flectra.define('sms/static/src/components/notification_group/notification_group.js',function(require){
+'usestrict';
 
-const components = {
-    NotificationGroup: require('mail/static/src/components/notification_group/notification_group.js'),
+constcomponents={
+    NotificationGroup:require('mail/static/src/components/notification_group/notification_group.js'),
 };
 
-const { patch } = require('web.utils');
+const{patch}=require('web.utils');
 
-patch(components.NotificationGroup, 'sms/static/src/components/notification_group/notification_group.js', {
+patch(components.NotificationGroup,'sms/static/src/components/notification_group/notification_group.js',{
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    image() {
-        if (this.group.notification_type === 'sms') {
-            return '/sms/static/img/sms_failure.svg';
+    image(){
+        if(this.group.notification_type==='sms'){
+            return'/sms/static/img/sms_failure.svg';
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 });
 

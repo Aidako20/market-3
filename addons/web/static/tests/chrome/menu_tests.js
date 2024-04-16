@@ -1,43 +1,43 @@
-flectra.define('web.menu_tests', function (require) {
-    "use strict";
+flectra.define('web.menu_tests',function(require){
+    "usestrict";
 
-    const testUtils = require('web.test_utils');
-    const Menu = require('web.Menu');
-    const SystrayMenu = require('web.SystrayMenu');
-    const Widget = require('web.Widget');
+    consttestUtils=require('web.test_utils');
+    constMenu=require('web.Menu');
+    constSystrayMenu=require('web.SystrayMenu');
+    constWidget=require('web.Widget');
 
 
-    QUnit.module('chrome', {}, function () {
+    QUnit.module('chrome',{},function(){
         QUnit.module('Menu');
 
-        QUnit.test('Systray on_attach_callback is called', async function (assert) {
+        QUnit.test('Systrayon_attach_callbackiscalled',asyncfunction(assert){
             assert.expect(4);
 
-            const parent = await testUtils.createParent({});
+            constparent=awaittestUtils.createParent({});
 
-            // Add some widgets to the systray
-            const Widget1 = Widget.extend({
-                on_attach_callback: () => assert.step('on_attach_callback widget1')
+            //Addsomewidgetstothesystray
+            constWidget1=Widget.extend({
+                on_attach_callback:()=>assert.step('on_attach_callbackwidget1')
             });
-            const Widget2 = Widget.extend({
-                on_attach_callback: () => assert.step('on_attach_callback widget2')
+            constWidget2=Widget.extend({
+                on_attach_callback:()=>assert.step('on_attach_callbackwidget2')
             });
-            SystrayMenu.Items = [Widget1, Widget2];
+            SystrayMenu.Items=[Widget1,Widget2];
 
-            testUtils.mock.patch(SystrayMenu, {
-                on_attach_callback: function () {
-                    assert.step('on_attach_callback systray');
+            testUtils.mock.patch(SystrayMenu,{
+                on_attach_callback:function(){
+                    assert.step('on_attach_callbacksystray');
                     this._super(...arguments);
                 }
             });
 
-            const menu = new Menu(parent, {children: []});
-            await menu.appendTo($('#qunit-fixture'));
+            constmenu=newMenu(parent,{children:[]});
+            awaitmenu.appendTo($('#qunit-fixture'));
 
             assert.verifySteps([
-                'on_attach_callback systray',
-                'on_attach_callback widget1',
-                'on_attach_callback widget2',
+                'on_attach_callbacksystray',
+                'on_attach_callbackwidget1',
+                'on_attach_callbackwidget2',
             ]);
             testUtils.mock.unpatch(SystrayMenu);
             parent.destroy();

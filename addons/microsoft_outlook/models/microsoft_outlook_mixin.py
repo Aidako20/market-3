@@ -1,196 +1,196 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import json
-import logging
-import time
-import requests
+importjson
+importlogging
+importtime
+importrequests
 
-from werkzeug.urls import url_encode, url_join
+fromwerkzeug.urlsimporturl_encode,url_join
 
-from flectra import _, api, fields, models
-from flectra.exceptions import AccessError, UserError
-from flectra.tools.misc import hmac
+fromflectraimport_,api,fields,models
+fromflectra.exceptionsimportAccessError,UserError
+fromflectra.tools.miscimporthmac
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
 
-class MicrosoftOutlookMixin(models.AbstractModel):
+classMicrosoftOutlookMixin(models.AbstractModel):
 
-    _name = 'microsoft.outlook.mixin'
-    _description = 'Microsoft Outlook Mixin'
+    _name='microsoft.outlook.mixin'
+    _description='MicrosoftOutlookMixin'
 
-    _OUTLOOK_SCOPE = None
+    _OUTLOOK_SCOPE=None
 
-    use_microsoft_outlook_service = fields.Boolean('Outlook Authentication')
-    is_microsoft_outlook_configured = fields.Boolean('Is Outlook Credential Configured',
+    use_microsoft_outlook_service=fields.Boolean('OutlookAuthentication')
+    is_microsoft_outlook_configured=fields.Boolean('IsOutlookCredentialConfigured',
         compute='_compute_is_microsoft_outlook_configured')
-    microsoft_outlook_refresh_token = fields.Char(string='Outlook Refresh Token',
-        groups='base.group_system', copy=False)
-    microsoft_outlook_access_token = fields.Char(string='Outlook Access Token',
-        groups='base.group_system', copy=False)
-    microsoft_outlook_access_token_expiration = fields.Integer(string='Outlook Access Token Expiration Timestamp',
-        groups='base.group_system', copy=False)
-    microsoft_outlook_uri = fields.Char(compute='_compute_outlook_uri', string='Authentication URI',
-        help='The URL to generate the authorization code from Outlook', groups='base.group_system')
+    microsoft_outlook_refresh_token=fields.Char(string='OutlookRefreshToken',
+        groups='base.group_system',copy=False)
+    microsoft_outlook_access_token=fields.Char(string='OutlookAccessToken',
+        groups='base.group_system',copy=False)
+    microsoft_outlook_access_token_expiration=fields.Integer(string='OutlookAccessTokenExpirationTimestamp',
+        groups='base.group_system',copy=False)
+    microsoft_outlook_uri=fields.Char(compute='_compute_outlook_uri',string='AuthenticationURI',
+        help='TheURLtogeneratetheauthorizationcodefromOutlook',groups='base.group_system')
 
     @api.depends('use_microsoft_outlook_service')
-    def _compute_is_microsoft_outlook_configured(self):
-        Config = self.env['ir.config_parameter'].sudo()
-        microsoft_outlook_client_id = Config.get_param('microsoft_outlook_client_id')
-        microsoft_outlook_client_secret = Config.get_param('microsoft_outlook_client_secret')
-        self.is_microsoft_outlook_configured = microsoft_outlook_client_id and microsoft_outlook_client_secret
+    def_compute_is_microsoft_outlook_configured(self):
+        Config=self.env['ir.config_parameter'].sudo()
+        microsoft_outlook_client_id=Config.get_param('microsoft_outlook_client_id')
+        microsoft_outlook_client_secret=Config.get_param('microsoft_outlook_client_secret')
+        self.is_microsoft_outlook_configured=microsoft_outlook_client_idandmicrosoft_outlook_client_secret
 
     @api.depends('use_microsoft_outlook_service')
-    def _compute_outlook_uri(self):
-        Config = self.env['ir.config_parameter'].sudo()
-        base_url = self.get_base_url()
-        microsoft_outlook_client_id = Config.get_param('microsoft_outlook_client_id')
+    def_compute_outlook_uri(self):
+        Config=self.env['ir.config_parameter'].sudo()
+        base_url=self.get_base_url()
+        microsoft_outlook_client_id=Config.get_param('microsoft_outlook_client_id')
 
-        for record in self:
-            if not record.id or not record.use_microsoft_outlook_service or not record.is_microsoft_outlook_configured:
-                record.microsoft_outlook_uri = False
+        forrecordinself:
+            ifnotrecord.idornotrecord.use_microsoft_outlook_serviceornotrecord.is_microsoft_outlook_configured:
+                record.microsoft_outlook_uri=False
                 continue
 
-            record.microsoft_outlook_uri = url_join(self._get_microsoft_endpoint(), 'authorize?%s' % url_encode({
-                'client_id': microsoft_outlook_client_id,
-                'response_type': 'code',
-                'redirect_uri': url_join(base_url, '/microsoft_outlook/confirm'),
-                'response_mode': 'query',
-                # offline_access is needed to have the refresh_token
-                'scope': 'offline_access %s' % self._OUTLOOK_SCOPE,
-                'state': json.dumps({
-                    'model': record._name,
-                    'id': record.id,
-                    'csrf_token': record._get_outlook_csrf_token(),
+            record.microsoft_outlook_uri=url_join(self._get_microsoft_endpoint(),'authorize?%s'%url_encode({
+                'client_id':microsoft_outlook_client_id,
+                'response_type':'code',
+                'redirect_uri':url_join(base_url,'/microsoft_outlook/confirm'),
+                'response_mode':'query',
+                #offline_accessisneededtohavetherefresh_token
+                'scope':'offline_access%s'%self._OUTLOOK_SCOPE,
+                'state':json.dumps({
+                    'model':record._name,
+                    'id':record.id,
+                    'csrf_token':record._get_outlook_csrf_token(),
                 })
             }))
 
-    def open_microsoft_outlook_uri(self):
-        """Open the URL to accept the Outlook permission.
+    defopen_microsoft_outlook_uri(self):
+        """OpentheURLtoaccepttheOutlookpermission.
 
-        This is done with an action, so we can force the user the save the form.
-        We need him to save the form so the current mail server record exist in DB, and
-        we can include the record ID in the URL.
+        Thisisdonewithanaction,sowecanforcetheuserthesavetheform.
+        WeneedhimtosavetheformsothecurrentmailserverrecordexistinDB,and
+        wecanincludetherecordIDintheURL.
         """
         self.ensure_one()
 
-        if not self.env.user.has_group('base.group_system'):
-            raise AccessError(_('Only the administrator can link an Outlook mail server.'))
+        ifnotself.env.user.has_group('base.group_system'):
+            raiseAccessError(_('OnlytheadministratorcanlinkanOutlookmailserver.'))
 
-        if not self.use_microsoft_outlook_service or not self.is_microsoft_outlook_configured:
-            raise UserError(_('Please configure your Outlook credentials.'))
+        ifnotself.use_microsoft_outlook_serviceornotself.is_microsoft_outlook_configured:
+            raiseUserError(_('PleaseconfigureyourOutlookcredentials.'))
 
-        return {
-            'type': 'ir.actions.act_url',
-            'url': self.microsoft_outlook_uri,
+        return{
+            'type':'ir.actions.act_url',
+            'url':self.microsoft_outlook_uri,
         }
 
-    def _fetch_outlook_refresh_token(self, authorization_code):
-        """Request the refresh token and the initial access token from the authorization code.
+    def_fetch_outlook_refresh_token(self,authorization_code):
+        """Requesttherefreshtokenandtheinitialaccesstokenfromtheauthorizationcode.
 
         :return:
-            refresh_token, access_token, access_token_expiration
+            refresh_token,access_token,access_token_expiration
         """
-        response = self._fetch_outlook_token('authorization_code', code=authorization_code)
-        return (
+        response=self._fetch_outlook_token('authorization_code',code=authorization_code)
+        return(
             response['refresh_token'],
             response['access_token'],
-            int(time.time()) + response['expires_in'],
+            int(time.time())+response['expires_in'],
         )
 
-    def _fetch_outlook_access_token(self, refresh_token):
-        """Refresh the access token thanks to the refresh token.
+    def_fetch_outlook_access_token(self,refresh_token):
+        """Refreshtheaccesstokenthankstotherefreshtoken.
 
         :return:
-            access_token, access_token_expiration
+            access_token,access_token_expiration
         """
-        response = self._fetch_outlook_token('refresh_token', refresh_token=refresh_token)
-        return (
+        response=self._fetch_outlook_token('refresh_token',refresh_token=refresh_token)
+        return(
             response['refresh_token'],
             response['access_token'],
-            int(time.time()) + response['expires_in'],
+            int(time.time())+response['expires_in'],
         )
 
-    def _fetch_outlook_token(self, grant_type, **values):
-        """Generic method to request an access token or a refresh token.
+    def_fetch_outlook_token(self,grant_type,**values):
+        """Genericmethodtorequestanaccesstokenorarefreshtoken.
 
-        Return the JSON response of the Outlook API and manage the errors which can occur.
+        ReturntheJSONresponseoftheOutlookAPIandmanagetheerrorswhichcanoccur.
 
-        :param grant_type: Depends the action we want to do (refresh_token or authorization_code)
-        :param values: Additional parameters that will be given to the Outlook endpoint
+        :paramgrant_type:Dependstheactionwewanttodo(refresh_tokenorauthorization_code)
+        :paramvalues:AdditionalparametersthatwillbegiventotheOutlookendpoint
         """
-        Config = self.env['ir.config_parameter'].sudo()
-        base_url = self.get_base_url()
-        microsoft_outlook_client_id = Config.get_param('microsoft_outlook_client_id')
-        microsoft_outlook_client_secret = Config.get_param('microsoft_outlook_client_secret')
+        Config=self.env['ir.config_parameter'].sudo()
+        base_url=self.get_base_url()
+        microsoft_outlook_client_id=Config.get_param('microsoft_outlook_client_id')
+        microsoft_outlook_client_secret=Config.get_param('microsoft_outlook_client_secret')
 
-        response = requests.post(
-            url_join(self._get_microsoft_endpoint(), 'token'),
+        response=requests.post(
+            url_join(self._get_microsoft_endpoint(),'token'),
             data={
-                'client_id': microsoft_outlook_client_id,
-                'client_secret': microsoft_outlook_client_secret,
-                'scope': 'offline_access %s' % self._OUTLOOK_SCOPE,
-                'redirect_uri': url_join(base_url, '/microsoft_outlook/confirm'),
-                'grant_type': grant_type,
+                'client_id':microsoft_outlook_client_id,
+                'client_secret':microsoft_outlook_client_secret,
+                'scope':'offline_access%s'%self._OUTLOOK_SCOPE,
+                'redirect_uri':url_join(base_url,'/microsoft_outlook/confirm'),
+                'grant_type':grant_type,
                 **values,
             },
             timeout=10,
         )
 
-        if not response.ok:
+        ifnotresponse.ok:
             try:
-                error_description = response.json()['error_description']
-            except Exception:
-                error_description = _('Unknown error.')
-            raise UserError(_('An error occurred when fetching the access token. %s') % error_description)
+                error_description=response.json()['error_description']
+            exceptException:
+                error_description=_('Unknownerror.')
+            raiseUserError(_('Anerroroccurredwhenfetchingtheaccesstoken.%s')%error_description)
 
-        return response.json()
+        returnresponse.json()
 
-    def _generate_outlook_oauth2_string(self, login):
-        """Generate a OAuth2 string which can be used for authentication.
+    def_generate_outlook_oauth2_string(self,login):
+        """GenerateaOAuth2stringwhichcanbeusedforauthentication.
 
-        :param user: Email address of the Outlook account to authenticate
-        :return: The SASL argument for the OAuth2 mechanism.
+        :paramuser:EmailaddressoftheOutlookaccounttoauthenticate
+        :return:TheSASLargumentfortheOAuth2mechanism.
         """
         self.ensure_one()
-        now_timestamp = int(time.time())
-        if not self.microsoft_outlook_access_token \
-           or not self.microsoft_outlook_access_token_expiration \
-           or self.microsoft_outlook_access_token_expiration < now_timestamp:
-            if not self.microsoft_outlook_refresh_token:
-                raise UserError(_('Please login your Outlook mail server before using it.'))
+        now_timestamp=int(time.time())
+        ifnotself.microsoft_outlook_access_token\
+           ornotself.microsoft_outlook_access_token_expiration\
+           orself.microsoft_outlook_access_token_expiration<now_timestamp:
+            ifnotself.microsoft_outlook_refresh_token:
+                raiseUserError(_('PleaseloginyourOutlookmailserverbeforeusingit.'))
             (
                 self.microsoft_outlook_refresh_token,
                 self.microsoft_outlook_access_token,
                 self.microsoft_outlook_access_token_expiration,
-            ) = self._fetch_outlook_access_token(self.microsoft_outlook_refresh_token)
+            )=self._fetch_outlook_access_token(self.microsoft_outlook_refresh_token)
             _logger.info(
-                'Microsoft Outlook: fetch new access token. It expires in %i minutes',
-                (self.microsoft_outlook_access_token_expiration - now_timestamp) // 60)
+                'MicrosoftOutlook:fetchnewaccesstoken.Itexpiresin%iminutes',
+                (self.microsoft_outlook_access_token_expiration-now_timestamp)//60)
         else:
             _logger.info(
-                'Microsoft Outlook: reuse existing access token. It expires in %i minutes',
-                (self.microsoft_outlook_access_token_expiration - now_timestamp) // 60)
+                'MicrosoftOutlook:reuseexistingaccesstoken.Itexpiresin%iminutes',
+                (self.microsoft_outlook_access_token_expiration-now_timestamp)//60)
 
-        return 'user=%s\1auth=Bearer %s\1\1' % (login, self.microsoft_outlook_access_token)
+        return'user=%s\1auth=Bearer%s\1\1'%(login,self.microsoft_outlook_access_token)
 
-    def _get_outlook_csrf_token(self):
-        """Generate a CSRF token that will be verified in `microsoft_outlook_callback`.
+    def_get_outlook_csrf_token(self):
+        """GenerateaCSRFtokenthatwillbeverifiedin`microsoft_outlook_callback`.
 
-        This will prevent a malicious person to make an admin user disconnect the mail servers.
+        Thiswillpreventamaliciouspersontomakeanadminuserdisconnectthemailservers.
         """
         self.ensure_one()
-        _logger.info('Microsoft Outlook: generate CSRF token for %s #%i', self._name, self.id)
-        return hmac(
+        _logger.info('MicrosoftOutlook:generateCSRFtokenfor%s#%i',self._name,self.id)
+        returnhmac(
             env=self.env(su=True),
             scope='microsoft_outlook_oauth',
-            message=(self._name, self.id),
+            message=(self._name,self.id),
         )
 
     @api.model
-    def _get_microsoft_endpoint(self):
-        return self.env["ir.config_parameter"].sudo().get_param(
+    def_get_microsoft_endpoint(self):
+        returnself.env["ir.config_parameter"].sudo().get_param(
             'microsoft_outlook.endpoint',
             'https://login.microsoftonline.com/common/oauth2/v2.0/',
         )

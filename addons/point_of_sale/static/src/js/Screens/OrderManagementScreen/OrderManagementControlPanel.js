@@ -1,124 +1,124 @@
-flectra.define('point_of_sale.OrderManagementControlPanel', function (require) {
-    'use strict';
+flectra.define('point_of_sale.OrderManagementControlPanel',function(require){
+    'usestrict';
 
-    const { useContext } = owl.hooks;
-    const { useAutofocus, useListener } = require('web.custom_hooks');
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
-    const OrderFetcher = require('point_of_sale.OrderFetcher');
-    const contexts = require('point_of_sale.PosContext');
+    const{useContext}=owl.hooks;
+    const{useAutofocus,useListener}=require('web.custom_hooks');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
+    constOrderFetcher=require('point_of_sale.OrderFetcher');
+    constcontexts=require('point_of_sale.PosContext');
 
-    // NOTE: These are constants so that they are only instantiated once
-    // and they can be used efficiently by the OrderManagementControlPanel.
-    const VALID_SEARCH_TAGS = new Set(['date', 'customer', 'client', 'name', 'order']);
-    const FIELD_MAP = {
-        date: 'date_order',
-        customer: 'partner_id.display_name',
-        client: 'partner_id.display_name',
-        name: 'pos_reference',
-        order: 'pos_reference',
+    //NOTE:Theseareconstantssothattheyareonlyinstantiatedonce
+    //andtheycanbeusedefficientlybytheOrderManagementControlPanel.
+    constVALID_SEARCH_TAGS=newSet(['date','customer','client','name','order']);
+    constFIELD_MAP={
+        date:'date_order',
+        customer:'partner_id.display_name',
+        client:'partner_id.display_name',
+        name:'pos_reference',
+        order:'pos_reference',
     };
-    const SEARCH_FIELDS = ['pos_reference', 'partner_id.display_name', 'date_order'];
+    constSEARCH_FIELDS=['pos_reference','partner_id.display_name','date_order'];
 
-    function getDomainForSingleCondition(fields, toSearch) {
-        const orSymbols = Array(fields.length - 1).fill('|');
-        return orSymbols.concat(fields.map((field) => [field, 'ilike', `%${toSearch}%`]));
+    functiongetDomainForSingleCondition(fields,toSearch){
+        constorSymbols=Array(fields.length-1).fill('|');
+        returnorSymbols.concat(fields.map((field)=>[field,'ilike',`%${toSearch}%`]));
     }
 
     /**
-     * @emits close-screen
-     * @emits prev-page
-     * @emits next-page
-     * @emits search
+     *@emitsclose-screen
+     *@emitsprev-page
+     *@emitsnext-page
+     *@emitssearch
      */
-    class OrderManagementControlPanel extends PosComponent {
-        constructor() {
+    classOrderManagementControlPanelextendsPosComponent{
+        constructor(){
             super(...arguments);
-            // We are using context because we want the `searchString` to be alive
-            // even if this component is destroyed (unmounted).
-            this.orderManagementContext = useContext(contexts.orderManagement);
-            useListener('clear-search', this._onClearSearch);
-            useAutofocus({ selector: 'input' });
+            //Weareusingcontextbecausewewantthe`searchString`tobealive
+            //evenifthiscomponentisdestroyed(unmounted).
+            this.orderManagementContext=useContext(contexts.orderManagement);
+            useListener('clear-search',this._onClearSearch);
+            useAutofocus({selector:'input'});
         }
-        onInputKeydown(event) {
-            if (event.key === 'Enter') {
-                this.trigger('search', this._computeDomain());
+        onInputKeydown(event){
+            if(event.key==='Enter'){
+                this.trigger('search',this._computeDomain());
             }
         }
-        get showPageControls() {
-            return OrderFetcher.lastPage > 1;
+        getshowPageControls(){
+            returnOrderFetcher.lastPage>1;
         }
-        get pageNumber() {
-            const currentPage = OrderFetcher.currentPage;
-            const lastPage = OrderFetcher.lastPage;
-            return isNaN(lastPage) ? '' : `(${currentPage}/${lastPage})`;
+        getpageNumber(){
+            constcurrentPage=OrderFetcher.currentPage;
+            constlastPage=OrderFetcher.lastPage;
+            returnisNaN(lastPage)?'':`(${currentPage}/${lastPage})`;
         }
-        get validSearchTags() {
-            return VALID_SEARCH_TAGS;
+        getvalidSearchTags(){
+            returnVALID_SEARCH_TAGS;
         }
-        get fieldMap() {
-            return FIELD_MAP;
+        getfieldMap(){
+            returnFIELD_MAP;
         }
-        get searchFields() {
-            return SEARCH_FIELDS;
+        getsearchFields(){
+            returnSEARCH_FIELDS;
         }
         /**
-         * E.g. 1
-         * ```
-         *   searchString = 'Customer 1'
-         *   result = [
-         *      '|',
-         *      '|',
-         *      ['pos_reference', 'ilike', '%Customer 1%'],
-         *      ['partner_id.display_name', 'ilike', '%Customer 1%'],
-         *      ['date_order', 'ilike', '%Customer 1%']
-         *   ]
-         * ```
+         *E.g.1
+         *```
+         *  searchString='Customer1'
+         *  result=[
+         *     '|',
+         *     '|',
+         *     ['pos_reference','ilike','%Customer1%'],
+         *     ['partner_id.display_name','ilike','%Customer1%'],
+         *     ['date_order','ilike','%Customer1%']
+         *  ]
+         *```
          *
-         * E.g. 2
-         * ```
-         *   searchString = 'date: 2020-05'
-         *   result = [
-         *      ['date_order', 'ilike', '%2020-05%']
-         *   ]
-         * ```
+         *E.g.2
+         *```
+         *  searchString='date:2020-05'
+         *  result=[
+         *     ['date_order','ilike','%2020-05%']
+         *  ]
+         *```
          *
-         * E.g. 3
-         * ```
-         *   searchString = 'customer: Steward, date: 2020-05-01'
-         *   result = [
-         *      ['partner_id.display_name', 'ilike', '%Steward%'],
-         *      ['date_order', 'ilike', '%2020-05-01%']
-         *   ]
-         * ```
+         *E.g.3
+         *```
+         *  searchString='customer:Steward,date:2020-05-01'
+         *  result=[
+         *     ['partner_id.display_name','ilike','%Steward%'],
+         *     ['date_order','ilike','%2020-05-01%']
+         *  ]
+         *```
          */
-        _computeDomain() {
-            const input = this.orderManagementContext.searchString.trim();
-            if (!input) return;
+        _computeDomain(){
+            constinput=this.orderManagementContext.searchString.trim();
+            if(!input)return;
 
-            const searchConditions = this.orderManagementContext.searchString.split(/[,&]\s*/);
-            if (searchConditions.length === 1) {
-                let cond = searchConditions[0].split(/:\s*/);
-                if (cond.length === 1) {
-                    return getDomainForSingleCondition(this.searchFields, cond[0]);
+            constsearchConditions=this.orderManagementContext.searchString.split(/[,&]\s*/);
+            if(searchConditions.length===1){
+                letcond=searchConditions[0].split(/:\s*/);
+                if(cond.length===1){
+                    returngetDomainForSingleCondition(this.searchFields,cond[0]);
                 }
             }
-            const domain = [];
-            for (let cond of searchConditions) {
-                let [tag, value] = cond.split(/:\s*/);
-                if (!this.validSearchTags.has(tag)) continue;
-                domain.push([this.fieldMap[tag], 'ilike', `%${value}%`]);
+            constdomain=[];
+            for(letcondofsearchConditions){
+                let[tag,value]=cond.split(/:\s*/);
+                if(!this.validSearchTags.has(tag))continue;
+                domain.push([this.fieldMap[tag],'ilike',`%${value}%`]);
             }
-            return domain;
+            returndomain;
         }
-        _onClearSearch() {
-            this.orderManagementContext.searchString = '';
-            this.onInputKeydown({ key: 'Enter' });
+        _onClearSearch(){
+            this.orderManagementContext.searchString='';
+            this.onInputKeydown({key:'Enter'});
         }
     }
-    OrderManagementControlPanel.template = 'OrderManagementControlPanel';
+    OrderManagementControlPanel.template='OrderManagementControlPanel';
 
     Registries.Component.add(OrderManagementControlPanel);
 
-    return OrderManagementControlPanel;
+    returnOrderManagementControlPanel;
 });

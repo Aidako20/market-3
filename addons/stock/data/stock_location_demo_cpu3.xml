@@ -1,27 +1,27 @@
 <flectra>
-    <data noupdate="1"> 
-        <record id="location_order" model="stock.location">
-            <field name="name">Order Processing</field>
-            <field name="usage">internal</field>
-            <field name="location_id" ref="stock.stock_location_company"/>
+    <datanoupdate="1">
+        <recordid="location_order"model="stock.location">
+            <fieldname="name">OrderProcessing</field>
+            <fieldname="usage">internal</field>
+            <fieldname="location_id"ref="stock.stock_location_company"/>
         </record>
 
-        <record id="location_dispatch_zone" model="stock.location">
-            <field name="name">Dispatch Zone</field>
-            <field name="usage">internal</field>
-            <field name="location_id" ref="stock.location_order"/>
+        <recordid="location_dispatch_zone"model="stock.location">
+            <fieldname="name">DispatchZone</field>
+            <fieldname="usage">internal</field>
+            <fieldname="location_id"ref="stock.location_order"/>
         </record>
 
-        <record id="location_gate_a" model="stock.location">
-            <field name="name">Gate A</field>
-            <field name="usage">internal</field>
-            <field name="location_id" ref="stock.location_dispatch_zone"/>
+        <recordid="location_gate_a"model="stock.location">
+            <fieldname="name">GateA</field>
+            <fieldname="usage">internal</field>
+            <fieldname="location_id"ref="stock.location_dispatch_zone"/>
         </record>
 
-        <record id="location_gate_b" model="stock.location">
-            <field name="name">Gate B</field>
-            <field name="usage">internal</field>
-            <field name="location_id" ref="stock.location_dispatch_zone"/>
+        <recordid="location_gate_b"model="stock.location">
+            <fieldname="name">GateB</field>
+            <fieldname="usage">internal</field>
+            <fieldname="location_id"ref="stock.location_dispatch_zone"/>
         </record>
     </data>
 </flectra>

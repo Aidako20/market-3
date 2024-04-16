@@ -1,125 +1,125 @@
-flectra.define('rating.portal.composer', function (require) {
-'use strict';
+flectra.define('rating.portal.composer',function(require){
+'usestrict';
 
-var core = require('web.core');
-var portalComposer = require('portal.composer');
+varcore=require('web.core');
+varportalComposer=require('portal.composer');
 
-var _t = core._t;
+var_t=core._t;
 
-var PortalComposer = portalComposer.PortalComposer;
+varPortalComposer=portalComposer.PortalComposer;
 
 /**
- * PortalComposer
+ *PortalComposer
  *
- * Extends Portal Composer to handle rating submission
+ *ExtendsPortalComposertohandleratingsubmission
  */
 PortalComposer.include({
-    events: _.extend({}, PortalComposer.prototype.events, {
-        'click .stars i': '_onClickStar',
-        'mouseleave .stars': '_onMouseleaveStarBlock',
-        'mousemove .stars i': '_onMoveStar',
-        'mouseleave .stars i': '_onMoveLeaveStar',
+    events:_.extend({},PortalComposer.prototype.events,{
+        'click.starsi':'_onClickStar',
+        'mouseleave.stars':'_onMouseleaveStarBlock',
+        'mousemove.starsi':'_onMoveStar',
+        'mouseleave.starsi':'_onMoveLeaveStar',
     }),
 
     /**
-     * @constructor
+     *@constructor
      */
-    init: function (parent, options) {
-        this._super.apply(this, arguments);
+    init:function(parent,options){
+        this._super.apply(this,arguments);
 
-        // apply ratio to default rating value
-        if (options.default_rating_value) {
-            options.default_rating_value = parseFloat(options.default_rating_value);
+        //applyratiotodefaultratingvalue
+        if(options.default_rating_value){
+            options.default_rating_value=parseFloat(options.default_rating_value);
         }
 
-        // default options
-        this.options = _.defaults(this.options, {
-            'default_message': false,
-            'default_message_id': false,
-            'default_rating_value': 0.0,
-            'force_submit_url': false,
+        //defaultoptions
+        this.options=_.defaults(this.options,{
+            'default_message':false,
+            'default_message_id':false,
+            'default_rating_value':0.0,
+            'force_submit_url':false,
         });
-        // star input widget
-        this.labels = {
-            '0': "",
-            '1': _t("I hate it"),
-            '2': _t("I don't like it"),
-            '3': _t("It's okay"),
-            '4': _t("I like it"),
-            '5': _t("I love it"),
+        //starinputwidget
+        this.labels={
+            '0':"",
+            '1':_t("Ihateit"),
+            '2':_t("Idon'tlikeit"),
+            '3':_t("It'sokay"),
+            '4':_t("Ilikeit"),
+            '5':_t("Iloveit"),
         };
-        this.user_click = false; // user has click or not
-        this.set("star_value", this.options.default_rating_value);
-        this.on("change:star_value", this, this._onChangeStarValue);
+        this.user_click=false;//userhasclickornot
+        this.set("star_value",this.options.default_rating_value);
+        this.on("change:star_value",this,this._onChangeStarValue);
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var self = this;
-        return this._super.apply(this, arguments).then(function () {
-            // rating stars
-            self.$input = self.$('input[name="rating_value"]');
-            self.$star_list = self.$('.stars').find('i');
+    start:function(){
+        varself=this;
+        returnthis._super.apply(this,arguments).then(function(){
+            //ratingstars
+            self.$input=self.$('input[name="rating_value"]');
+            self.$star_list=self.$('.stars').find('i');
 
-            // set the default value to trigger the display of star widget and update the hidden input value.
-            self.set("star_value", self.options.default_rating_value); 
+            //setthedefaultvaluetotriggerthedisplayofstarwidgetandupdatethehiddeninputvalue.
+            self.set("star_value",self.options.default_rating_value);
             self.$input.val(self.options.default_rating_value);
         });
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onChangeStarValue: function () {
-        var val = this.get("star_value");
-        var index = Math.floor(val);
-        var decimal = val - index;
-        // reset the stars
-        this.$star_list.removeClass('fa-star fa-star-half-o').addClass('fa-star-o');
+    _onChangeStarValue:function(){
+        varval=this.get("star_value");
+        varindex=Math.floor(val);
+        vardecimal=val-index;
+        //resetthestars
+        this.$star_list.removeClass('fa-starfa-star-half-o').addClass('fa-star-o');
 
-        this.$('.stars').find("i:lt(" + index + ")").removeClass('fa-star-o fa-star-half-o').addClass('fa-star');
-        if (decimal) {
-            this.$('.stars').find("i:eq(" + index + ")").removeClass('fa-star-o fa-star fa-star-half-o').addClass('fa-star-half-o');
+        this.$('.stars').find("i:lt("+index+")").removeClass('fa-star-ofa-star-half-o').addClass('fa-star');
+        if(decimal){
+            this.$('.stars').find("i:eq("+index+")").removeClass('fa-star-ofa-starfa-star-half-o').addClass('fa-star-half-o');
         }
-        this.$('.rate_text .badge').text(this.labels[index]);
+        this.$('.rate_text.badge').text(this.labels[index]);
     },
     /**
-     * @private
+     *@private
      */
-    _onClickStar: function (ev) {
-        var index = this.$('.stars i').index(ev.currentTarget);
-        this.set("star_value", index + 1);
-        this.user_click = true;
+    _onClickStar:function(ev){
+        varindex=this.$('.starsi').index(ev.currentTarget);
+        this.set("star_value",index+1);
+        this.user_click=true;
         this.$input.val(this.get("star_value"));
     },
     /**
-     * @private
+     *@private
      */
-    _onMouseleaveStarBlock: function () {
+    _onMouseleaveStarBlock:function(){
         this.$('.rate_text').hide();
     },
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onMoveStar: function (ev) {
-        var index = this.$('.stars i').index(ev.currentTarget);
+    _onMoveStar:function(ev){
+        varindex=this.$('.starsi').index(ev.currentTarget);
         this.$('.rate_text').show();
-        this.set("star_value", index + 1);
+        this.set("star_value",index+1);
     },
     /**
-     * @private
+     *@private
      */
-    _onMoveLeaveStar: function () {
-        if (!this.user_click) {
-            this.set("star_value", parseInt(this.$input.val()));
+    _onMoveLeaveStar:function(){
+        if(!this.user_click){
+            this.set("star_value",parseInt(this.$input.val()));
         }
-        this.user_click = false;
+        this.user_click=false;
     },
 });
 });

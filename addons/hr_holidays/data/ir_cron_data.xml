@@ -1,14 +1,14 @@
-<?xml version='1.0' encoding='UTF-8' ?>
+<?xmlversion='1.0'encoding='UTF-8'?>
 <flectra>
 
-    <record id="hr_leave_allocation_cron_accrual" model="ir.cron">
-        <field name="name">Accrual Time Off: Updates the number of time off</field>
-        <field name="model_id" ref="model_hr_leave_allocation"/>
-        <field name="state">code</field>
-        <field name="code">model._update_accrual()</field>
-        <field name="interval_number">1</field>
-        <field name="interval_type">days</field>
-        <field name="numbercall">-1</field>
-        <field name="doall" eval="True"/>
+    <recordid="hr_leave_allocation_cron_accrual"model="ir.cron">
+        <fieldname="name">AccrualTimeOff:Updatesthenumberoftimeoff</field>
+        <fieldname="model_id"ref="model_hr_leave_allocation"/>
+        <fieldname="state">code</field>
+        <fieldname="code">model._update_accrual()</field>
+        <fieldname="interval_number">1</field>
+        <fieldname="interval_type">days</field>
+        <fieldname="numbercall">-1</field>
+        <fieldname="doall"eval="True"/>
     </record>
 </flectra>

@@ -1,36 +1,36 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class AccountMove(models.Model):
-    _inherit = 'account.move'
+classAccountMove(models.Model):
+    _inherit='account.move'
 
-    l10n_es_edi_is_required = fields.Boolean(
-        string="Is the Spanish EDI needed",
+    l10n_es_edi_is_required=fields.Boolean(
+        string="IstheSpanishEDIneeded",
         compute='_compute_l10n_es_edi_is_required'
     )
-    l10n_es_edi_csv = fields.Char(string="CSV return code", copy=False)
-    l10n_es_registration_date = fields.Date(
-        string="Registration Date", copy=False,
-        help="Technical field to keep the date the invoice was sent the first time as the date the invoice was "
-             "registered into the system.",
+    l10n_es_edi_csv=fields.Char(string="CSVreturncode",copy=False)
+    l10n_es_registration_date=fields.Date(
+        string="RegistrationDate",copy=False,
+        help="Technicalfieldtokeepthedatetheinvoicewassentthefirsttimeasthedatetheinvoicewas"
+             "registeredintothesystem.",
     )
 
-    # -------------------------------------------------------------------------
-    # COMPUTE METHODS
-    # -------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
+    #COMPUTEMETHODS
+    #-------------------------------------------------------------------------
 
-    @api.depends('move_type', 'company_id')
-    def _compute_l10n_es_edi_is_required(self):
-        for move in self:
-            move.l10n_es_edi_is_required = move.is_invoice() \
-                                           and move.country_code == 'ES' \
-                                           and move.company_id.l10n_es_edi_tax_agency
+    @api.depends('move_type','company_id')
+    def_compute_l10n_es_edi_is_required(self):
+        formoveinself:
+            move.l10n_es_edi_is_required=move.is_invoice()\
+                                           andmove.country_code=='ES'\
+                                           andmove.company_id.l10n_es_edi_tax_agency
 
     @api.depends('l10n_es_edi_is_required')
-    def _compute_edi_show_cancel_button(self):
+    def_compute_edi_show_cancel_button(self):
         super()._compute_edi_show_cancel_button()
-        for move in self.filtered('l10n_es_edi_is_required'):
-            move.edi_show_cancel_button = False
+        formoveinself.filtered('l10n_es_edi_is_required'):
+            move.edi_show_cancel_button=False

@@ -1,221 +1,221 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="bs_debug_view" model="ir.ui.view">
-            <field name="name">BS Debug</field>
-            <field name="type">qweb</field>
-            <field name="key">website.bs_debug_page_view</field>
-            <field name="arch" type="xml">
-                <t name="Debug" t-name="website.bs_debug_page_view">
-                    <t t-call="website.layout">
-                        <t t-set="flectra_theme_colors" t-value="[['o-color-1', 'Color 1'], ['o-color-2', 'Color 2'], ['o-color-3', 'Color 3'], ['o-color-4', 'Color 4'], ['o-color-5', 'Color 5']]"/>
-                        <t t-set="bs_theme_colors" t-value="[['primary', 'Primary'], ['secondary', 'Secondary'], ['success', 'Success'], ['info', 'Info'], ['warning', 'Warning'], ['danger', 'Danger'], ['light', 'Light'], ['dark', 'Dark']]"/>
-                        <t t-set="bs_gray_colors" t-value="[['white', 'White'], ['100', '100'], ['200', '200'], ['300', '300'], ['400', '400'], ['500', '500'], ['600', '600'], ['700', '700'], ['800', '800'], ['900', '900'], ['black', 'Black']]"/>
-                        <div id="wrap" class="oe_structure">
-                            <section class="py-2">
-                                <div class="container">
+        <recordid="bs_debug_view"model="ir.ui.view">
+            <fieldname="name">BSDebug</field>
+            <fieldname="type">qweb</field>
+            <fieldname="key">website.bs_debug_page_view</field>
+            <fieldname="arch"type="xml">
+                <tname="Debug"t-name="website.bs_debug_page_view">
+                    <tt-call="website.layout">
+                        <tt-set="flectra_theme_colors"t-value="[['o-color-1','Color1'],['o-color-2','Color2'],['o-color-3','Color3'],['o-color-4','Color4'],['o-color-5','Color5']]"/>
+                        <tt-set="bs_theme_colors"t-value="[['primary','Primary'],['secondary','Secondary'],['success','Success'],['info','Info'],['warning','Warning'],['danger','Danger'],['light','Light'],['dark','Dark']]"/>
+                        <tt-set="bs_gray_colors"t-value="[['white','White'],['100','100'],['200','200'],['300','300'],['400','400'],['500','500'],['600','600'],['700','700'],['800','800'],['900','900'],['black','Black']]"/>
+                        <divid="wrap"class="oe_structure">
+                            <sectionclass="py-2">
+                                <divclass="container">
                                     <h1>Components</h1>
-                                    <div class="row">
-                                        <div class="col-md">
+                                    <divclass="row">
+                                        <divclass="col-md">
                                             <h2>Badge</h2>
-                                            <t t-foreach="bs_theme_colors" t-as="color">
-                                                <span t-attf-class="badge mb-1 badge-#{color[0]}"><t t-esc="color[1]"/></span>
+                                            <tt-foreach="bs_theme_colors"t-as="color">
+                                                <spant-attf-class="badgemb-1badge-#{color[0]}"><tt-esc="color[1]"/></span>
                                             </t>
-                                            <h3 class="mt-2 h6">Pill</h3>
-                                            <t t-foreach="bs_theme_colors" t-as="color">
-                                                <span t-attf-class="badge mb-1 badge-pill badge-#{color[0]}"><t t-esc="color[1]"/></span>
+                                            <h3class="mt-2h6">Pill</h3>
+                                            <tt-foreach="bs_theme_colors"t-as="color">
+                                                <spant-attf-class="badgemb-1badge-pillbadge-#{color[0]}"><tt-esc="color[1]"/></span>
                                             </t>
-                                            <h3 class="mt-2 h6">Link</h3>
-                                            <t t-foreach="bs_theme_colors" t-as="color">
-                                                <a href="#" t-attf-class="badge mb-1 badge-#{color[0]}"><t t-esc="color[1]"/></a>
+                                            <h3class="mt-2h6">Link</h3>
+                                            <tt-foreach="bs_theme_colors"t-as="color">
+                                                <ahref="#"t-attf-class="badgemb-1badge-#{color[0]}"><tt-esc="color[1]"/></a>
                                             </t>
-                                            <h3 class="mt-2 h6">Autosizing</h3>
-                                            <div class="h3">
-                                                <t t-foreach="bs_theme_colors" t-as="color">
-                                                    <span t-attf-class="badge mb-1 badge-#{color[0]}"><t t-esc="color[1]"/></span>
+                                            <h3class="mt-2h6">Autosizing</h3>
+                                            <divclass="h3">
+                                                <tt-foreach="bs_theme_colors"t-as="color">
+                                                    <spant-attf-class="badgemb-1badge-#{color[0]}"><tt-esc="color[1]"/></span>
                                                 </t>
                                             </div>
 
-                                            <h2 class="mt-4">Button</h2>
-                                            <t t-foreach="bs_theme_colors" t-as="color">
-                                                <button type="button" t-attf-class="btn mb-1 btn-#{color[0]}"><t t-esc="color[1]"/></button>
+                                            <h2class="mt-4">Button</h2>
+                                            <tt-foreach="bs_theme_colors"t-as="color">
+                                                <buttontype="button"t-attf-class="btnmb-1btn-#{color[0]}"><tt-esc="color[1]"/></button>
                                             </t>
-                                            <h3 class="mt-2 h6">Outline</h3>
-                                            <t t-foreach="bs_theme_colors" t-as="color">
-                                                <button type="button" t-attf-class="btn mb-1 btn-outline-#{color[0]}"><t t-esc="color[1]"/></button>
+                                            <h3class="mt-2h6">Outline</h3>
+                                            <tt-foreach="bs_theme_colors"t-as="color">
+                                                <buttontype="button"t-attf-class="btnmb-1btn-outline-#{color[0]}"><tt-esc="color[1]"/></button>
                                             </t>
-                                            <h3 class="mt-2 h6">Small</h3>
-                                            <t t-foreach="bs_theme_colors" t-as="color">
-                                                <button type="button" t-attf-class="btn mb-1 btn-sm btn-#{color[0]}"><t t-esc="color[1]"/></button>
+                                            <h3class="mt-2h6">Small</h3>
+                                            <tt-foreach="bs_theme_colors"t-as="color">
+                                                <buttontype="button"t-attf-class="btnmb-1btn-smbtn-#{color[0]}"><tt-esc="color[1]"/></button>
                                             </t>
-                                            <h3 class="mt-2 h6">Large</h3>
-                                            <t t-foreach="bs_theme_colors" t-as="color">
-                                                <button type="button" t-attf-class="btn mb-1 btn-lg btn-#{color[0]}"><t t-esc="color[1]"/></button>
+                                            <h3class="mt-2h6">Large</h3>
+                                            <tt-foreach="bs_theme_colors"t-as="color">
+                                                <buttontype="button"t-attf-class="btnmb-1btn-lgbtn-#{color[0]}"><tt-esc="color[1]"/></button>
                                             </t>
 
-                                            <h2 class="mt-4">Dropdown</h2>
-                                            <div class="dropdown">
-                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Toggle</button>
-                                                <div class="dropdown-menu">
-                                                    <div class="dropdown-header">Header</div>
-                                                    <a class="dropdown-item" href="#">Action</a>
-                                                    <a class="dropdown-item" href="#">Something else here</a>
-                                                    <div class="dropdown-divider"/>
-                                                    <a class="dropdown-item" href="#">Separated link</a>
+                                            <h2class="mt-4">Dropdown</h2>
+                                            <divclass="dropdown">
+                                                <buttontype="button"class="btnbtn-primarydropdown-toggle"data-toggle="dropdown">Toggle</button>
+                                                <divclass="dropdown-menu">
+                                                    <divclass="dropdown-header">Header</div>
+                                                    <aclass="dropdown-item"href="#">Action</a>
+                                                    <aclass="dropdown-item"href="#">Somethingelsehere</a>
+                                                    <divclass="dropdown-divider"/>
+                                                    <aclass="dropdown-item"href="#">Separatedlink</a>
                                                 </div>
                                             </div>
 
-                                            <h2 class="mt-4">Navbar</h2>
-                                            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                                                <a class="navbar-brand" href="#">Navbar</a>
-                                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                                                <span class="navbar-toggler-icon"></span>
+                                            <h2class="mt-4">Navbar</h2>
+                                            <navclass="navbarnavbar-expand-lgnavbar-lightbg-light">
+                                                <aclass="navbar-brand"href="#">Navbar</a>
+                                                <buttonclass="navbar-toggler"type="button"data-toggle="collapse"data-target="#navbarSupportedContent"aria-controls="navbarSupportedContent"aria-expanded="false"aria-label="Togglenavigation">
+                                                <spanclass="navbar-toggler-icon"></span>
                                                 </button>
 
-                                                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                                                    <ul class="navbar-nav mr-auto">
-                                                        <li class="nav-item active">
-                                                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                                                <divclass="collapsenavbar-collapse"id="navbarSupportedContent">
+                                                    <ulclass="navbar-navmr-auto">
+                                                        <liclass="nav-itemactive">
+                                                            <aclass="nav-link"href="#">Home<spanclass="sr-only">(current)</span></a>
                                                         </li>
-                                                        <li class="nav-item">
-                                                            <a class="nav-link" href="#">Link</a>
+                                                        <liclass="nav-item">
+                                                            <aclass="nav-link"href="#">Link</a>
                                                         </li>
-                                                        <li class="nav-item">
-                                                            <a class="nav-link disabled" href="#">Disabled</a>
+                                                        <liclass="nav-item">
+                                                            <aclass="nav-linkdisabled"href="#">Disabled</a>
                                                         </li>
                                                     </ul>
-                                                    <form class="form-inline my-2 my-lg-0">
-                                                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-                                                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                                                    <formclass="form-inlinemy-2my-lg-0">
+                                                        <inputclass="form-controlmr-sm-2"type="search"placeholder="Search"aria-label="Search"/>
+                                                        <buttonclass="btnbtn-outline-successmy-2my-sm-0"type="submit">Search</button>
                                                     </form>
                                                 </div>
                                             </nav>
 
-                                            <h2 class="mt-4">Form</h2>
+                                            <h2class="mt-4">Form</h2>
                                             <form>
-                                                <div class="form-group">
-                                                    <label for="exampleInputEmail1">Email address</label>
-                                                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"/>
-                                                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                                                <divclass="form-group">
+                                                    <labelfor="exampleInputEmail1">Emailaddress</label>
+                                                    <inputtype="email"class="form-control"id="exampleInputEmail1"aria-describedby="emailHelp"placeholder="Enteremail"/>
+                                                    <smallid="emailHelp"class="form-texttext-muted">We'llnevershareyouremailwithanyoneelse.</small>
                                                 </div>
                                             </form>
 
-                                            <h2 class="mt-4">Pagination</h2>
+                                            <h2class="mt-4">Pagination</h2>
                                             <nav>
-                                                <ul class="pagination">
-                                                    <li class="page-item disabled">
-                                                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                                <ulclass="pagination">
+                                                    <liclass="page-itemdisabled">
+                                                        <aclass="page-link"href="#"tabindex="-1">Previous</a>
                                                     </li>
-                                                    <li class="page-item">
-                                                        <a class="page-link" href="#">1</a>
+                                                    <liclass="page-item">
+                                                        <aclass="page-link"href="#">1</a>
                                                     </li>
-                                                    <li class="page-item active">
-                                                        <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                                                    <liclass="page-itemactive">
+                                                        <aclass="page-link"href="#">2<spanclass="sr-only">(current)</span></a>
                                                     </li>
-                                                    <li class="page-item">
-                                                        <a class="page-link" href="#">3</a>
+                                                    <liclass="page-item">
+                                                        <aclass="page-link"href="#">3</a>
                                                     </li>
-                                                    <li class="page-item">
-                                                        <a class="page-link" href="#">Next</a>
+                                                    <liclass="page-item">
+                                                        <aclass="page-link"href="#">Next</a>
                                                     </li>
                                                 </ul>
                                             </nav>
                                         </div>
-                                        <div class="col-md-auto">
+                                        <divclass="col-md-auto">
                                             <h2>Alert</h2>
-                                            <t t-foreach="bs_theme_colors" t-as="color">
-                                                <div t-attf-class="alert alert-#{color[0]}">
-                                                    This is a "<t t-esc="color[1]"/>" alert with a <a href="#" class="alert-link">link</a>.
+                                            <tt-foreach="bs_theme_colors"t-as="color">
+                                                <divt-attf-class="alertalert-#{color[0]}">
+                                                    Thisisa"<tt-esc="color[1]"/>"alertwitha<ahref="#"class="alert-link">link</a>.
                                                 </div>
                                             </t>
 
-                                            <h2 class="mt-4">Breadcrumb</h2>
-                                            <nav aria-label="breadcrumb">
-                                                <ol class="breadcrumb">
-                                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                                    <li class="breadcrumb-item"><a href="#">Library</a></li>
-                                                    <li class="breadcrumb-item active" aria-current="page">Data</li>
+                                            <h2class="mt-4">Breadcrumb</h2>
+                                            <navaria-label="breadcrumb">
+                                                <olclass="breadcrumb">
+                                                    <liclass="breadcrumb-item"><ahref="#">Home</a></li>
+                                                    <liclass="breadcrumb-item"><ahref="#">Library</a></li>
+                                                    <liclass="breadcrumb-itemactive"aria-current="page">Data</li>
                                                 </ol>
                                             </nav>
 
-                                            <h2 class="mt-4">Card</h2>
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    Card Header
+                                            <h2class="mt-4">Card</h2>
+                                            <divclass="card">
+                                                <divclass="card-header">
+                                                    CardHeader
                                                 </div>
-                                                <div class="card-body">
-                                                    Card Body
+                                                <divclass="card-body">
+                                                    CardBody
                                                 </div>
-                                                <ul class="list-group list-group-flush">
-                                                    <li class="list-group-item">Item 1</li>
-                                                    <li class="list-group-item">Item 2</li>
+                                                <ulclass="list-grouplist-group-flush">
+                                                    <liclass="list-group-item">Item1</li>
+                                                    <liclass="list-group-item">Item2</li>
                                                 </ul>
-                                                <div class="card-footer">
-                                                    Card Footer
+                                                <divclass="card-footer">
+                                                    CardFooter
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </section>
-                            <section class="py-2">
-                                <div class="container">
-                                    <h1>Utilities &amp; Typography</h1>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="row no-gutters">
-                                                <t t-foreach="flectra_theme_colors" t-as="color">
-                                                    <div t-attf-class="col-auto bg-#{color[0]}">
-                                                        <div class="py-1 px-3"><t t-esc="color[1]"/></div>
+                            <sectionclass="py-2">
+                                <divclass="container">
+                                    <h1>Utilities&amp;Typography</h1>
+                                    <divclass="row">
+                                        <divclass="col-md">
+                                            <divclass="rowno-gutters">
+                                                <tt-foreach="flectra_theme_colors"t-as="color">
+                                                    <divt-attf-class="col-autobg-#{color[0]}">
+                                                        <divclass="py-1px-3"><tt-esc="color[1]"/></div>
                                                     </div>
                                                 </t>
                                             </div>
-                                            <div class="row no-gutters mt-2">
-                                                <t t-foreach="bs_theme_colors" t-as="color">
-                                                    <div t-attf-class="col-auto bg-#{color[0]}">
-                                                        <div class="py-1 px-3"><t t-esc="color[1]"/></div>
+                                            <divclass="rowno-guttersmt-2">
+                                                <tt-foreach="bs_theme_colors"t-as="color">
+                                                    <divt-attf-class="col-autobg-#{color[0]}">
+                                                        <divclass="py-1px-3"><tt-esc="color[1]"/></div>
                                                     </div>
                                                 </t>
                                             </div>
-                                            <div class="row no-gutters mt-2">
-                                                <t t-foreach="bs_gray_colors" t-as="color">
-                                                    <div t-attf-class="col-auto bg-#{color[0]}">
-                                                        <div class="py-1 px-3"><t t-esc="color[1]"/></div>
+                                            <divclass="rowno-guttersmt-2">
+                                                <tt-foreach="bs_gray_colors"t-as="color">
+                                                    <divt-attf-class="col-autobg-#{color[0]}">
+                                                        <divclass="py-1px-3"><tt-esc="color[1]"/></div>
                                                     </div>
                                                 </t>
                                             </div>
-                                            <div class="row no-gutters mt-4">
-                                                <t t-foreach="flectra_theme_colors" t-as="color">
-                                                    <div t-attf-class="col-auto text-#{color[0]}">
-                                                        <div class="py-1 px-3"><t t-esc="color[1]"/></div>
+                                            <divclass="rowno-guttersmt-4">
+                                                <tt-foreach="flectra_theme_colors"t-as="color">
+                                                    <divt-attf-class="col-autotext-#{color[0]}">
+                                                        <divclass="py-1px-3"><tt-esc="color[1]"/></div>
                                                     </div>
                                                 </t>
                                             </div>
-                                            <div class="row no-gutters mt-2">
-                                                <t t-foreach="bs_theme_colors" t-as="color">
-                                                    <div t-attf-class="col-auto text-#{color[0]}">
-                                                        <div class="py-1 px-3"><t t-esc="color[1]"/></div>
+                                            <divclass="rowno-guttersmt-2">
+                                                <tt-foreach="bs_theme_colors"t-as="color">
+                                                    <divt-attf-class="col-autotext-#{color[0]}">
+                                                        <divclass="py-1px-3"><tt-esc="color[1]"/></div>
                                                     </div>
                                                 </t>
                                             </div>
-                                            <div class="row no-gutters mt-2">
-                                                <t t-foreach="bs_gray_colors" t-as="color">
-                                                    <div t-attf-class="col-auto text-#{color[0]}">
-                                                        <div class="py-1 px-3"><t t-esc="color[1]"/></div>
+                                            <divclass="rowno-guttersmt-2">
+                                                <tt-foreach="bs_gray_colors"t-as="color">
+                                                    <divt-attf-class="col-autotext-#{color[0]}">
+                                                        <divclass="py-1px-3"><tt-esc="color[1]"/></div>
                                                     </div>
                                                 </t>
                                             </div>
                                         </div>
-                                        <div class="col-md-auto">
-                                            <h1>Headings 1</h1>
-                                            <h2>Headings 2</h2>
-                                            <h3>Headings 3</h3>
-                                            <h4>Headings 4</h4>
-                                            <h5>Headings 5</h5>
-                                            <h6>Headings 6</h6>
-                                            <p>Paragraph with <strong>bold</strong>, <span class="text-muted">muted</span> and <em>italic</em> texts</p>
-                                            <p><a href="#">Link</a></p>
-                                            <p><button type="button" class="btn btn-link">Link button</button></p>
+                                        <divclass="col-md-auto">
+                                            <h1>Headings1</h1>
+                                            <h2>Headings2</h2>
+                                            <h3>Headings3</h3>
+                                            <h4>Headings4</h4>
+                                            <h5>Headings5</h5>
+                                            <h6>Headings6</h6>
+                                            <p>Paragraphwith<strong>bold</strong>,<spanclass="text-muted">muted</span>and<em>italic</em>texts</p>
+                                            <p><ahref="#">Link</a></p>
+                                            <p><buttontype="button"class="btnbtn-link">Linkbutton</button></p>
                                         </div>
                                     </div>
                                 </div>
@@ -226,38 +226,38 @@
             </field>
         </record>
 
-        <record id="color_combinations_debug_view" model="ir.ui.view">
-            <field name="name">Color Combinations Debug</field>
-            <field name="type">qweb</field>
-            <field name="key">website.color_combinations_debug_page_view</field>
-            <field name="arch" type="xml">
-                <t name="Debug" t-name="website.color_combinations_debug_page_view">
-                    <t t-call="website.layout">
-                        <div id="#wrap" class="oe_structure" style="background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAH0lEQVQYV2NkQAL/GRikGGF8KOcZWADGAbEZkTkgAQDXKwcebKRDwQAAAABJRU5ErkJggg==) repeat;">
-                            <section class="py-1">
-                                <div class="container">
-                                    <div class="d-flex mb-3">
-                                        <div class="card w-100">
-                                            <div class="card-body">
-                                                <table class="table table-borderless">
+        <recordid="color_combinations_debug_view"model="ir.ui.view">
+            <fieldname="name">ColorCombinationsDebug</field>
+            <fieldname="type">qweb</field>
+            <fieldname="key">website.color_combinations_debug_page_view</field>
+            <fieldname="arch"type="xml">
+                <tname="Debug"t-name="website.color_combinations_debug_page_view">
+                    <tt-call="website.layout">
+                        <divid="#wrap"class="oe_structure"style="background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAH0lEQVQYV2NkQAL/GRikGGF8KOcZWADGAbEZkTkgAQDXKwcebKRDwQAAAABJRU5ErkJggg==)repeat;">
+                            <sectionclass="py-1">
+                                <divclass="container">
+                                    <divclass="d-flexmb-3">
+                                        <divclass="cardw-100">
+                                            <divclass="card-body">
+                                                <tableclass="tabletable-borderless">
                                                     <tr>
-                                                        <th colspan="2" class="align-middle">Theme Colors</th>
-                                                        <td t-foreach="[1, 2, 3, 4, 5]" t-as="i">
-                                                            <div class="media">
-                                                                <span t-attf-class="border p-3 mr-1 bg-o-color-#{i}"></span>
-                                                                <div class="media-body align-self-center">
-                                                                    <h5 class="m-0">o-color-<t t-esc="i"/></h5>
+                                                        <thcolspan="2"class="align-middle">ThemeColors</th>
+                                                        <tdt-foreach="[1,2,3,4,5]"t-as="i">
+                                                            <divclass="media">
+                                                                <spant-attf-class="borderp-3mr-1bg-o-color-#{i}"></span>
+                                                                <divclass="media-bodyalign-self-center">
+                                                                    <h5class="m-0">o-color-<tt-esc="i"/></h5>
                                                                 </div>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <th colspan="2" class="align-middle">BTS Base Colors</th>
-                                                        <td t-foreach="['primary', 'secondary', 'light', 'dark']" t-as="i">
-                                                            <div class="media">
-                                                                <span t-attf-class="border p-3 mr-1 bg-#{i}"></span>
-                                                                <div class="media-body align-self-center">
-                                                                    <h5 class="m-0" t-esc="i"></h5>
+                                                        <thcolspan="2"class="align-middle">BTSBaseColors</th>
+                                                        <tdt-foreach="['primary','secondary','light','dark']"t-as="i">
+                                                            <divclass="media">
+                                                                <spant-attf-class="borderp-3mr-1bg-#{i}"></span>
+                                                                <divclass="media-bodyalign-self-center">
+                                                                    <h5class="m-0"t-esc="i"></h5>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -266,73 +266,73 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-6 mt-3" t-foreach="[1, 2, 3, 4, 5]" t-as="i">
-                                            <div t-attf-class="o_cc o_cc#{i} p-3 border">
-                                                <div class="row">
-                                                    <div class="col-7">
+                                    <divclass="row">
+                                        <divclass="col-6mt-3"t-foreach="[1,2,3,4,5]"t-as="i">
+                                            <divt-attf-class="o_cco_cc#{i}p-3border">
+                                                <divclass="row">
+                                                    <divclass="col-7">
                                                         <h2>
-                                                            Preset <t t-esc="i"/>
+                                                            Preset<tt-esc="i"/>
                                                         </h2>
-                                                        <p>Paragraph text. Lorem <b>ipsum dolor sit amet</b>, consectetur adipiscing elit. <i>Integer posuere erat a ante</i>. <a href="#">Link text</a></p>
-                                                        <p class="text-muted">Text muted. Lorem <b>ipsum dolor sit amet</b>, consectetur.</p>
-                                                        <p class="small">Small text. Lorem <b>ipsum dolor sit amet</b>, consectetur adipiscing elit. <i>Integer posuere erat a ante</i>.</p>
+                                                        <p>Paragraphtext.Lorem<b>ipsumdolorsitamet</b>,consecteturadipiscingelit.<i>Integerposuereerataante</i>.<ahref="#">Linktext</a></p>
+                                                        <pclass="text-muted">Textmuted.Lorem<b>ipsumdolorsitamet</b>,consectetur.</p>
+                                                        <pclass="small">Smalltext.Lorem<b>ipsumdolorsitamet</b>,consecteturadipiscingelit.<i>Integerposuereerataante</i>.</p>
                                                     </div>
-                                                    <div class="col-5 border-left">
-                                                        <a href="#" class="mb-3 btn-block btn btn-primary">btn-primary</a>
-                                                        <a href="#" class="mb-3 btn-block btn btn-secondary">btn-secondary</a>
-                                                        <a href="#" class="mb-3 btn-block btn btn-outline-primary">btn-outline-primary</a>
-                                                        <a href="#" class="mb-3 btn-block btn btn-outline-secondary">btn-outline-secondary</a>
+                                                    <divclass="col-5border-left">
+                                                        <ahref="#"class="mb-3btn-blockbtnbtn-primary">btn-primary</a>
+                                                        <ahref="#"class="mb-3btn-blockbtnbtn-secondary">btn-secondary</a>
+                                                        <ahref="#"class="mb-3btn-blockbtnbtn-outline-primary">btn-outline-primary</a>
+                                                        <ahref="#"class="mb-3btn-blockbtnbtn-outline-secondary">btn-outline-secondary</a>
                                                     </div>
                                                 </div>
-                                                <hr class="my-4"/>
-                                                <div class="row">
-                                                    <div class="col-7">
-                                                        <div class="form-group row">
-                                                            <label class="col-2 col-form-label">Label</label>
-                                                            <div class="col-10">
-                                                                <input type="email" class="form-control" placeholder="placeholder"/>
-                                                                <small id="emailHelp" class="form-text text-muted">Form field help text</small>
+                                                <hrclass="my-4"/>
+                                                <divclass="row">
+                                                    <divclass="col-7">
+                                                        <divclass="form-grouprow">
+                                                            <labelclass="col-2col-form-label">Label</label>
+                                                            <divclass="col-10">
+                                                                <inputtype="email"class="form-control"placeholder="placeholder"/>
+                                                                <smallid="emailHelp"class="form-texttext-muted">Formfieldhelptext</small>
                                                             </div>
                                                         </div>
-                                                        <div class="card w-100 mb-3">
-                                                        <div class="card-body">
-                                                                <h4 class="card-title">H4 Card title</h4>
-                                                                <h5 class="card-subtitle mb-2 text-muted">H5 Card subtitle</h5>
-                                                                <p class="card-text">Paragraph. <a href="#">text link</a></p>
+                                                        <divclass="cardw-100mb-3">
+                                                        <divclass="card-body">
+                                                                <h4class="card-title">H4Cardtitle</h4>
+                                                                <h5class="card-subtitlemb-2text-muted">H5Cardsubtitle</h5>
+                                                                <pclass="card-text">Paragraph.<ahref="#">textlink</a></p>
 
-                                                                <t t-foreach="['primary','secondary', 'info', 'warning', 'danger', 'success']" t-as="btn">
-                                                                    <a href="#" t-attf-class="mb-2 btn-sm btn btn-#{btn}" t-esc="'btn-' + btn"/>
+                                                                <tt-foreach="['primary','secondary','info','warning','danger','success']"t-as="btn">
+                                                                    <ahref="#"t-attf-class="mb-2btn-smbtnbtn-#{btn}"t-esc="'btn-'+btn"/>
                                                                 </t>
                                                             </div>
                                                         </div>
-                                                        <nav aria-label="breadcrumb">
-                                                            <ol class="breadcrumb">
-                                                                <li class="breadcrumb-item"><a href="#">Breadcrumb</a></li>
-                                                                <li class="breadcrumb-item"><a href="#">Library</a></li>
-                                                                <li class="breadcrumb-item active">Data</li>
+                                                        <navaria-label="breadcrumb">
+                                                            <olclass="breadcrumb">
+                                                                <liclass="breadcrumb-item"><ahref="#">Breadcrumb</a></li>
+                                                                <liclass="breadcrumb-item"><ahref="#">Library</a></li>
+                                                                <liclass="breadcrumb-itemactive">Data</li>
                                                             </ol>
                                                         </nav>
                                                         <small>TABS</small>
-                                                        <ul class="nav nav-tabs mb-3">
-                                                            <li class="nav-item">
-                                                                <a class="nav-link active" href="#">Active</a>
+                                                        <ulclass="navnav-tabsmb-3">
+                                                            <liclass="nav-item">
+                                                                <aclass="nav-linkactive"href="#">Active</a>
                                                             </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link" href="#">Link</a>
+                                                            <liclass="nav-item">
+                                                                <aclass="nav-link"href="#">Link</a>
                                                             </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link disabled" href="#">Disabled</a>
+                                                            <liclass="nav-item">
+                                                                <aclass="nav-linkdisabled"href="#">Disabled</a>
                                                             </li>
                                                         </ul>
-                                                        <div class="progress">
-                                                            <div class="progress-bar" style="width: 25%;">25%</div>
+                                                        <divclass="progress">
+                                                            <divclass="progress-bar"style="width:25%;">25%</div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-5 border-left">
-                                                        <div t-foreach="['info', 'warning', 'danger', 'success']" t-as="btn">
-                                                            <a href="#" t-attf-class="mb-2 btn-block btn btn-#{btn}" t-esc="'btn-' + btn"/>
-                                                            <a href="#" t-attf-class="mb-3 btn-block btn btn-outline-#{btn}" t-esc="'btn-outline-' + btn"/>
+                                                    <divclass="col-5border-left">
+                                                        <divt-foreach="['info','warning','danger','success']"t-as="btn">
+                                                            <ahref="#"t-attf-class="mb-2btn-blockbtnbtn-#{btn}"t-esc="'btn-'+btn"/>
+                                                            <ahref="#"t-attf-class="mb-3btn-blockbtnbtn-outline-#{btn}"t-esc="'btn-outline-'+btn"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -347,33 +347,33 @@
             </field>
         </record>
 
-        <record id="snippets_debug_view" model="ir.ui.view">
-            <field name="name">Snippet Debug</field>
-            <field name="type">qweb</field>
-            <field name="key">website.snippets_debug_page_view</field>
-            <field name="arch" type="xml">
-                <t name="Debug" t-name="website.snippets_debug_page_view">
-                    <t t-call="website.layout">
+        <recordid="snippets_debug_view"model="ir.ui.view">
+            <fieldname="name">SnippetDebug</field>
+            <fieldname="type">qweb</field>
+            <fieldname="key">website.snippets_debug_page_view</field>
+            <fieldname="arch"type="xml">
+                <tname="Debug"t-name="website.snippets_debug_page_view">
+                    <tt-call="website.layout">
                         <style>
-                            #snippets_menu, #o_scroll > .o_panel > .o_panel_header {
-                                display: none !important;
+                            #snippets_menu,#o_scroll>.o_panel>.o_panel_header{
+                                display:none!important;
                             }
-                            [data-oe-type="snippet"]:not([data-module-id])::before {
-                                content: attr(name);
-                                display: block;
-                                padding: 16px;
-                                background-color: lightgray;
-                                color: black;
-                                font-size: 24px;
+                            [data-oe-type="snippet"]:not([data-module-id])::before{
+                                content:attr(name);
+                                display:block;
+                                padding:16px;
+                                background-color:lightgray;
+                                color:black;
+                                font-size:24px;
                             }
-                            [data-oe-type="snippet"]:not([data-module-id])::after {
-                                content: "";
-                                display: table;
-                                clear: both;
+                            [data-oe-type="snippet"]:not([data-module-id])::after{
+                                content:"";
+                                display:table;
+                                clear:both;
                             }
                         </style>
-                        <div id="wrap" class="oe_structure">
-                            <t t-call="website.snippets"/>
+                        <divid="wrap"class="oe_structure">
+                            <tt-call="website.snippets"/>
                         </div>
                     </t>
                 </t>
@@ -381,33 +381,33 @@
         </record>
     </data>
 
-    <data noupdate="1">
-        <record id="website2" model="website">
-            <field name="name">My Website 2</field>
-            <field name="domain"></field>
+    <datanoupdate="1">
+        <recordid="website2"model="website">
+            <fieldname="name">MyWebsite2</field>
+            <fieldname="domain"></field>
         </record>
 
-        <!-- BS Debug Page -->
-        <!-- Showcase all (most?) BS components and utilities -->
-        <record id="bs_debug_page" model="website.page">
-            <field name="url">/website/demo/bootstrap</field>
-            <field name="is_published">False</field>
-            <field name="view_id" ref="bs_debug_view"/>
+        <!--BSDebugPage-->
+        <!--Showcaseall(most?)BScomponentsandutilities-->
+        <recordid="bs_debug_page"model="website.page">
+            <fieldname="url">/website/demo/bootstrap</field>
+            <fieldname="is_published">False</field>
+            <fieldname="view_id"ref="bs_debug_view"/>
         </record>
 
-        <!-- Presets Debug Page -->
-        <record id="color_combinations_debug_page" model="website.page">
-            <field name="url">/website/demo/color-combinations</field>
-            <field name="is_published">False</field>
-            <field name="view_id" ref="color_combinations_debug_view"/>
+        <!--PresetsDebugPage-->
+        <recordid="color_combinations_debug_page"model="website.page">
+            <fieldname="url">/website/demo/color-combinations</field>
+            <fieldname="is_published">False</field>
+            <fieldname="view_id"ref="color_combinations_debug_view"/>
         </record>
 
-        <!-- Snippet Debug Page -->
-        <!-- Showcase all snippets -->
-        <record id="snippets_debug_page" model="website.page">
-            <field name="url">/website/demo/snippets</field>
-            <field name="is_published">False</field>
-            <field name="view_id" ref="snippets_debug_view"/>
+        <!--SnippetDebugPage-->
+        <!--Showcaseallsnippets-->
+        <recordid="snippets_debug_page"model="website.page">
+            <fieldname="url">/website/demo/snippets</field>
+            <fieldname="is_published">False</field>
+            <fieldname="view_id"ref="snippets_debug_view"/>
         </record>
     </data>
 </flectra>

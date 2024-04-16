@@ -1,80 +1,80 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="res_config_settings_view_form" model="ir.ui.view">
-        <field name="name">res.config.settings.view.form.inherit.website.slides</field>
-        <field name="model">res.config.settings</field>
-        <field name="inherit_id" ref="website.res_config_settings_view_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[@id='google_maps_setting']" position="after">
-                <div class="col-12 col-lg-6 o_setting_box" id="slides_install_setting">
-                    <div class="o_setting_right_pane">
-                        <span class="o_form_label">Slides</span>
-                        <span class="fa fa-lg fa-globe" title="Values set here are website-specific." groups="website.group_multi_website"/>
-                        <div class="text-muted">
-                            Google Drive API Key
+    <recordid="res_config_settings_view_form"model="ir.ui.view">
+        <fieldname="name">res.config.settings.view.form.inherit.website.slides</field>
+        <fieldname="model">res.config.settings</field>
+        <fieldname="inherit_id"ref="website.res_config_settings_view_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//div[@id='google_maps_setting']"position="after">
+                <divclass="col-12col-lg-6o_setting_box"id="slides_install_setting">
+                    <divclass="o_setting_right_pane">
+                        <spanclass="o_form_label">Slides</span>
+                        <spanclass="fafa-lgfa-globe"title="Valuessetherearewebsite-specific."groups="website.group_multi_website"/>
+                        <divclass="text-muted">
+                            GoogleDriveAPIKey
                         </div>
-                        <div class="content-group">
-                            <div class="row mt16">
-                                <label for="website_slide_google_app_key" class="col-lg-3 o_light_label" string="API Key"/>
-                                <field name="website_slide_google_app_key" class="oe_inline"/>
+                        <divclass="content-group">
+                            <divclass="rowmt16">
+                                <labelfor="website_slide_google_app_key"class="col-lg-3o_light_label"string="APIKey"/>
+                                <fieldname="website_slide_google_app_key"class="oe_inline"/>
                             </div>
-                            <div class="oe_link">
-                                <a href="https://console.developers.google.com/flows/enableapi?apiid=drive,youtube"><span class="fa fa-arrow-right"/>
-                                    Create a Google Project and Get a Key
+                            <divclass="oe_link">
+                                <ahref="https://console.developers.google.com/flows/enableapi?apiid=drive,youtube"><spanclass="fafa-arrow-right"/>
+                                    CreateaGoogleProjectandGetaKey
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </xpath>
-            <xpath expr="//div[hasclass('settings')]" position="inside">
-                <div class="app_settings_block" data-string="eLearning" string="eLearning" data-key="website_slides">
+            <xpathexpr="//div[hasclass('settings')]"position="inside">
+                <divclass="app_settings_block"data-string="eLearning"string="eLearning"data-key="website_slides">
                     <h2>eLearning</h2>
-                    <div class="row mt16 o_settings_container" id="elearning_selection_settings">
-                        <div class="col-12 col-lg-6 o_setting_box" id="elearning_install_forum">
-                            <div class="o_setting_left_pane">
-                                <field name="module_website_slides_forum"/>
+                    <divclass="rowmt16o_settings_container"id="elearning_selection_settings">
+                        <divclass="col-12col-lg-6o_setting_box"id="elearning_install_forum">
+                            <divclass="o_setting_left_pane">
+                                <fieldname="module_website_slides_forum"/>
                             </div>
-                            <div class="o_setting_right_pane">
-                                <label for="module_website_slides_forum"/>
-                                <div class="text-muted">
-                                    Create a community and let the members help each others
+                            <divclass="o_setting_right_pane">
+                                <labelfor="module_website_slides_forum"/>
+                                <divclass="text-muted">
+                                    Createacommunityandletthemembershelpeachothers
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-lg-6"></div>
-                        <div class="col-12 col-lg-6 o_setting_box" id="website_slides_install_mass_mailing_slides">
-                            <div class="o_setting_left_pane">
-                                <field name="module_mass_mailing_slides"/>
+                        <divclass="col-12col-lg-6"></div>
+                        <divclass="col-12col-lg-6o_setting_box"id="website_slides_install_mass_mailing_slides">
+                            <divclass="o_setting_left_pane">
+                                <fieldname="module_mass_mailing_slides"/>
                             </div>
-                            <div class="o_setting_right_pane">
-                                <label for="module_mass_mailing_slides"/>
-                                <div class="text-muted">
-                                    Contact all the members of a course via mass mailing
+                            <divclass="o_setting_right_pane">
+                                <labelfor="module_mass_mailing_slides"/>
+                                <divclass="text-muted">
+                                    Contactallthemembersofacourseviamassmailing
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-lg-6"></div>
-                        <div class="col-12 col-lg-6 o_setting_box" id="elearning_install_certif">
-                            <div class="o_setting_left_pane">
-                                <field name="module_website_slides_survey"/>
+                        <divclass="col-12col-lg-6"></div>
+                        <divclass="col-12col-lg-6o_setting_box"id="elearning_install_certif">
+                            <divclass="o_setting_left_pane">
+                                <fieldname="module_website_slides_survey"/>
                             </div>
-                            <div class="o_setting_right_pane">
-                                <label for="module_website_slides_survey"/>
-                                <div class="text-muted">
-                                    Evaluate your students and certify them
+                            <divclass="o_setting_right_pane">
+                                <labelfor="module_website_slides_survey"/>
+                                <divclass="text-muted">
+                                    Evaluateyourstudentsandcertifythem
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-lg-6"></div>
-                        <div class="col-12 col-lg-6 o_setting_box" id="elearning_install_sell">
-                            <div class="o_setting_left_pane">
-                                <field name="module_website_sale_slides"/>
+                        <divclass="col-12col-lg-6"></div>
+                        <divclass="col-12col-lg-6o_setting_box"id="elearning_install_sell">
+                            <divclass="o_setting_left_pane">
+                                <fieldname="module_website_sale_slides"/>
                             </div>
-                            <div class="o_setting_right_pane">
-                                <label for="module_website_sale_slides"/>
-                                <div class="text-muted">
-                                    Generate revenues thanks to your courses
+                            <divclass="o_setting_right_pane">
+                                <labelfor="module_website_sale_slides"/>
+                                <divclass="text-muted">
+                                    Generaterevenuesthankstoyourcourses
                                 </div>
                             </div>
                         </div>
@@ -84,12 +84,12 @@
         </field>
     </record>
 
-    <record id="website_slides_action_settings" model="ir.actions.act_window">
-        <field name="name">Settings</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">res.config.settings</field>
-        <field name="view_mode">form</field>
-        <field name="target">inline</field>
-        <field name="context">{'module': 'website_slides', 'bin_size': False}</field>
+    <recordid="website_slides_action_settings"model="ir.actions.act_window">
+        <fieldname="name">Settings</field>
+        <fieldname="type">ir.actions.act_window</field>
+        <fieldname="res_model">res.config.settings</field>
+        <fieldname="view_mode">form</field>
+        <fieldname="target">inline</field>
+        <fieldname="context">{'module':'website_slides','bin_size':False}</field>
     </record>
 </flectra>

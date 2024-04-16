@@ -1,87 +1,87 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-    <record id="mail_activity_type_view_form" model="ir.ui.view">
-        <field name="name">mail.activity.type.view.form</field>
-        <field name="model">mail.activity.type</field>
-        <field name="arch" type="xml">
-            <form string="Activities">
+    <recordid="mail_activity_type_view_form"model="ir.ui.view">
+        <fieldname="name">mail.activity.type.view.form</field>
+        <fieldname="model">mail.activity.type</field>
+        <fieldname="arch"type="xml">
+            <formstring="Activities">
                 <sheet>
-                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
-                    <div class="oe_title">
-                        <label for="name" class="oe_edit_only"/>
-                        <h1><field name="name"/></h1>
+                    <widgetname="web_ribbon"title="Archived"bg_color="bg-danger"attrs="{'invisible':[('active','=',True)]}"/>
+                    <divclass="oe_title">
+                        <labelfor="name"class="oe_edit_only"/>
+                        <h1><fieldname="name"/></h1>
                     </div>
                     <group>
-                        <group name="activity_details">
-                            <field name="active" invisible="1"/>
-                            <field name="category"/>
-                            <field name="default_user_id" options="{'no_create': True, 'no_edit': True}" domain="[('share', '=', False)]"/>
-                            <field name="res_model_id" groups="base.group_no_one"/>
-                            <field name="res_model_change" invisible="1"/>
-                            <field name="initial_res_model_id" invisible="1"/>
-                            <field name="summary"/>
-                            <field name="icon" groups="base.group_no_one"/>
-                            <field name="decoration_type" groups="base.group_no_one"/>
+                        <groupname="activity_details">
+                            <fieldname="active"invisible="1"/>
+                            <fieldname="category"/>
+                            <fieldname="default_user_id"options="{'no_create':True,'no_edit':True}"domain="[('share','=',False)]"/>
+                            <fieldname="res_model_id"groups="base.group_no_one"/>
+                            <fieldname="res_model_change"invisible="1"/>
+                            <fieldname="initial_res_model_id"invisible="1"/>
+                            <fieldname="summary"/>
+                            <fieldname="icon"groups="base.group_no_one"/>
+                            <fieldname="decoration_type"groups="base.group_no_one"/>
                         </group>
-                        <group name="activity_planning">
-                            <field name="force_next"/>
-                            <field name="default_next_type_id" attrs="{'required': [('force_next', '=', True)]}" context="{'default_res_model_id': res_model_id}"/>
-                            <field name="next_type_ids" widget="many2many_tags"
-                                attrs="{'invisible': ['|', ('force_next', '=', True), ('category', '=', 'upload_file')]}" context="{'default_res_model_id': res_model_id}"/>
-                            <field name="mail_template_ids" widget="many2many_tags"
-                                domain="[('model_id', '=', res_model_id)]"
-                                attrs="{'invisible': [('res_model_id', '=', False)]}"
-                                context="{'default_model_id': res_model_id}"/>
-                            <label for="delay_count"/>
+                        <groupname="activity_planning">
+                            <fieldname="force_next"/>
+                            <fieldname="default_next_type_id"attrs="{'required':[('force_next','=',True)]}"context="{'default_res_model_id':res_model_id}"/>
+                            <fieldname="next_type_ids"widget="many2many_tags"
+                                attrs="{'invisible':['|',('force_next','=',True),('category','=','upload_file')]}"context="{'default_res_model_id':res_model_id}"/>
+                            <fieldname="mail_template_ids"widget="many2many_tags"
+                                domain="[('model_id','=',res_model_id)]"
+                                attrs="{'invisible':[('res_model_id','=',False)]}"
+                                context="{'default_model_id':res_model_id}"/>
+                            <labelfor="delay_count"/>
                             <div>
-                                <div class="o_row">
-                                    <field name="delay_count"/>
-                                    <field name="delay_unit"/>
+                                <divclass="o_row">
+                                    <fieldname="delay_count"/>
+                                    <fieldname="delay_unit"/>
                                 </div>
-                                <field name="delay_from"/>
+                                <fieldname="delay_from"/>
                             </div>
                         </group>
                     </group>
                     <group>
-                        <field name="default_description"/>
+                        <fieldname="default_description"/>
                     </group>
-                    <p class="alert alert-info" role="alert" attrs="{'invisible': [('res_model_change', '=', False)]}">Modifying the model can have an impact on existing activities using this activity type, be careful.</p>
+                    <pclass="alertalert-info"role="alert"attrs="{'invisible':[('res_model_change','=',False)]}">Modifyingthemodelcanhaveanimpactonexistingactivitiesusingthisactivitytype,becareful.</p>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="mail_activity_type_view_search" model="ir.ui.view">
-        <field name="name">mail.activity.type.search</field>
-        <field name="model">mail.activity.type</field>
-        <field name="arch" type="xml">
-            <search string="Activities">
-                <field name="name"/>
-                <filter string="Archived" domain="[('active', '=', False)]" name="archived"/>
+    <recordid="mail_activity_type_view_search"model="ir.ui.view">
+        <fieldname="name">mail.activity.type.search</field>
+        <fieldname="model">mail.activity.type</field>
+        <fieldname="arch"type="xml">
+            <searchstring="Activities">
+                <fieldname="name"/>
+                <filterstring="Archived"domain="[('active','=',False)]"name="archived"/>
             </search>
         </field>
     </record>
 
-    <record id="mail_activity_type_view_tree" model="ir.ui.view">
-        <field name="name">mail.activity.type.view.tree</field>
-        <field name="model">mail.activity.type</field>
-        <field name="arch" type="xml">
-            <tree string="Activities" sample="1">
-                <field name="sequence" widget="handle"/>
-                <field name="name"/>
-                <field name="summary"/>
-                <field name="delay_label" string="Planned in" class="text-right"/>
-                <field name="delay_from" string="Type"/>
-                <field name="res_model_id" groups="base.group_no_one"/>
-                <field name="icon" groups="base.group_no_one"/>
+    <recordid="mail_activity_type_view_tree"model="ir.ui.view">
+        <fieldname="name">mail.activity.type.view.tree</field>
+        <fieldname="model">mail.activity.type</field>
+        <fieldname="arch"type="xml">
+            <treestring="Activities"sample="1">
+                <fieldname="sequence"widget="handle"/>
+                <fieldname="name"/>
+                <fieldname="summary"/>
+                <fieldname="delay_label"string="Plannedin"class="text-right"/>
+                <fieldname="delay_from"string="Type"/>
+                <fieldname="res_model_id"groups="base.group_no_one"/>
+                <fieldname="icon"groups="base.group_no_one"/>
             </tree>
         </field>
     </record>
 
-    <record id="mail_activity_type_action" model="ir.actions.act_window">
-        <field name="name">Activity Types</field>
-        <field name="res_model">mail.activity.type</field>
-        <field name="view_mode">tree,form</field>
+    <recordid="mail_activity_type_action"model="ir.actions.act_window">
+        <fieldname="name">ActivityTypes</field>
+        <fieldname="res_model">mail.activity.type</field>
+        <fieldname="view_mode">tree,form</field>
     </record>
 
     <menuitem
@@ -91,10 +91,10 @@
       sequence="10"
     />
 
-    <record id="mail_activity_action" model="ir.actions.act_window">
-        <field name="name">Activities</field>
-        <field name="res_model">mail.activity</field>
-        <field name="view_mode">tree,form</field>
+    <recordid="mail_activity_action"model="ir.actions.act_window">
+        <fieldname="name">Activities</field>
+        <fieldname="res_model">mail.activity</field>
+        <fieldname="view_mode">tree,form</field>
     </record>
 
     <menuitem
@@ -104,115 +104,115 @@
       sequence="11"
     />
 
-    <record id="mail_activity_view_form_popup" model="ir.ui.view">
-        <field name="name">mail.activity.view.form.popup</field>
-        <field name="model">mail.activity</field>
-        <field name="priority">20</field>
-        <field name="arch" type="xml">
-            <form string="Log an Activity" create="false">
-                <sheet string="Activity">
-                    <group invisible="1">
-                        <field name="activity_category" invisible="1" />
-                        <field name="res_model" invisible="1"/>
-                        <field name="res_model_id" invisible="1"/>
-                        <field name="res_id" invisible="1" widget="integer"/>
-                        <field name="force_next" invisible="1"/>
-                        <field name="previous_activity_type_id"/>
-                        <field name="has_recommended_activities"/>
+    <recordid="mail_activity_view_form_popup"model="ir.ui.view">
+        <fieldname="name">mail.activity.view.form.popup</field>
+        <fieldname="model">mail.activity</field>
+        <fieldname="priority">20</field>
+        <fieldname="arch"type="xml">
+            <formstring="LoganActivity"create="false">
+                <sheetstring="Activity">
+                    <groupinvisible="1">
+                        <fieldname="activity_category"invisible="1"/>
+                        <fieldname="res_model"invisible="1"/>
+                        <fieldname="res_model_id"invisible="1"/>
+                        <fieldname="res_id"invisible="1"widget="integer"/>
+                        <fieldname="force_next"invisible="1"/>
+                        <fieldname="previous_activity_type_id"/>
+                        <fieldname="has_recommended_activities"/>
                     </group>
-                    <group attrs="{'invisible': [('has_recommended_activities','=',False)]}">
-                        <div class="o_row">
-                            <strong>Recommended Activities</strong>
-                            <field name="recommended_activity_type_id" widget="selection_badge"
-                                domain="[('previous_type_ids', '=', previous_activity_type_id)]"
+                    <groupattrs="{'invisible':[('has_recommended_activities','=',False)]}">
+                        <divclass="o_row">
+                            <strong>RecommendedActivities</strong>
+                            <fieldname="recommended_activity_type_id"widget="selection_badge"
+                                domain="[('previous_type_ids','=',previous_activity_type_id)]"
                                 nolabel="1"/>
                         </div>
                     </group>
                     <group>
                         <group>
-                            <field name="activity_type_id" required="1" options="{'no_create': True, 'no_open': True}"/>
-                            <field name="summary" placeholder="e.g. Discuss proposal"/>
+                            <fieldname="activity_type_id"required="1"options="{'no_create':True,'no_open':True}"/>
+                            <fieldname="summary"placeholder="e.g.Discussproposal"/>
                         </group>
                         <group>
-                            <field name="date_deadline"/>
-                            <field name="user_id"/>
+                            <fieldname="date_deadline"/>
+                            <fieldname="user_id"/>
                         </group>
                     </group>
-                    <field name="note" placeholder="Log a note..."/>
+                    <fieldname="note"placeholder="Loganote..."/>
                     <footer>
-                        <field name="id" invisible="1"/>
-                        <button string="Schedule" name="action_close_dialog" type="object" class="btn-primary"
-                            attrs="{'invisible': [('id', '!=', False)]}"/>
-                        <button string="Save" name="action_close_dialog" type="object" class="btn-primary"
-                            attrs="{'invisible': [('id', '=', False)]}"/>
-                        <button attrs="{'invisible': [('force_next', '=', True)]}" string="Mark as Done" name="action_done"
-                            type="object" class="btn-secondary"
-                            context="{'mail_activity_quick_update': True}"/>
-                        <button attrs="{'invisible': [('force_next', '=', True)]}" string="Done &amp; Schedule Next" name="action_done_schedule_next"
-                            type="object" class="btn-secondary"
-                            context="{'mail_activity_quick_update': True}"/>
-                        <button attrs="{'invisible': [('force_next', '=', False)]}" string="Done &amp; Launch Next" name="action_done_schedule_next"
-                            type="object" class="btn-secondary"
-                            context="{'mail_activity_quick_update': True}"/>
-                        <button string="Discard" class="btn-secondary" special="cancel" />
+                        <fieldname="id"invisible="1"/>
+                        <buttonstring="Schedule"name="action_close_dialog"type="object"class="btn-primary"
+                            attrs="{'invisible':[('id','!=',False)]}"/>
+                        <buttonstring="Save"name="action_close_dialog"type="object"class="btn-primary"
+                            attrs="{'invisible':[('id','=',False)]}"/>
+                        <buttonattrs="{'invisible':[('force_next','=',True)]}"string="MarkasDone"name="action_done"
+                            type="object"class="btn-secondary"
+                            context="{'mail_activity_quick_update':True}"/>
+                        <buttonattrs="{'invisible':[('force_next','=',True)]}"string="Done&amp;ScheduleNext"name="action_done_schedule_next"
+                            type="object"class="btn-secondary"
+                            context="{'mail_activity_quick_update':True}"/>
+                        <buttonattrs="{'invisible':[('force_next','=',False)]}"string="Done&amp;LaunchNext"name="action_done_schedule_next"
+                            type="object"class="btn-secondary"
+                            context="{'mail_activity_quick_update':True}"/>
+                        <buttonstring="Discard"class="btn-secondary"special="cancel"/>
                     </footer>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="mail_activity_view_search" model="ir.ui.view">
-        <field name="name">mail.activity.view.search</field>
-        <field name="model">mail.activity</field>
-        <field name="arch" type="xml">
-            <search string="Activity">
-                <field name="res_model_id"/>
-                <field name="summary"/>
-                <field name="activity_type_id"/>
-                <filter invisible="1" string="Late Activities" name="activities_overdue"
-                        domain="[('date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
-                        help="Show all records which has next action date is before today"/>
-                <filter invisible="1" string="Today Activities" name="activities_today"
-                        domain="[('date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
-                <filter invisible="1" string="Future Activities" name="activities_upcoming_all"
-                        domain="[('date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))
+    <recordid="mail_activity_view_search"model="ir.ui.view">
+        <fieldname="name">mail.activity.view.search</field>
+        <fieldname="model">mail.activity</field>
+        <fieldname="arch"type="xml">
+            <searchstring="Activity">
+                <fieldname="res_model_id"/>
+                <fieldname="summary"/>
+                <fieldname="activity_type_id"/>
+                <filterinvisible="1"string="LateActivities"name="activities_overdue"
+                        domain="[('date_deadline','&lt;',context_today().strftime('%Y-%m-%d'))]"
+                        help="Showallrecordswhichhasnextactiondateisbeforetoday"/>
+                <filterinvisible="1"string="TodayActivities"name="activities_today"
+                        domain="[('date_deadline','=',context_today().strftime('%Y-%m-%d'))]"/>
+                <filterinvisible="1"string="FutureActivities"name="activities_upcoming_all"
+                        domain="[('date_deadline','&gt;',context_today().strftime('%Y-%m-%d'))
                         ]"/>
-                <group expand="0" string="Group By">
-                    <filter string="Deadline" name="date_deadline" context="{'group_by': 'date_deadline'}"/>
-                    <filter string="Created By" name="createdby" context="{'group_by': 'create_uid'}"/>
-                    <filter string="Activity Type" name="activittype" context="{'group_by': 'activity_type_id'}"/>
+                <groupexpand="0"string="GroupBy">
+                    <filterstring="Deadline"name="date_deadline"context="{'group_by':'date_deadline'}"/>
+                    <filterstring="CreatedBy"name="createdby"context="{'group_by':'create_uid'}"/>
+                    <filterstring="ActivityType"name="activittype"context="{'group_by':'activity_type_id'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <record id="mail_activity_view_tree" model="ir.ui.view">
-        <field name="name">mail.activity.view.tree</field>
-        <field name="model">mail.activity</field>
-        <field name="arch" type="xml">
-            <tree string="Next Activities"
-                    decoration-danger="date_deadline &lt; current_date"
-                    decoration-success="date_deadline == current_date"
-                    default_order="date_deadline" create="false">
-                <field name="res_name"/>
-                <field name="activity_type_id"/>
-                <field name="summary"/>
-                <field name="date_deadline"/>
+    <recordid="mail_activity_view_tree"model="ir.ui.view">
+        <fieldname="name">mail.activity.view.tree</field>
+        <fieldname="model">mail.activity</field>
+        <fieldname="arch"type="xml">
+            <treestring="NextActivities"
+                    decoration-danger="date_deadline&lt;current_date"
+                    decoration-success="date_deadline==current_date"
+                    default_order="date_deadline"create="false">
+                <fieldname="res_name"/>
+                <fieldname="activity_type_id"/>
+                <fieldname="summary"/>
+                <fieldname="date_deadline"/>
             </tree>
         </field>
     </record>
 
-    <record id="mail_activity_view_calendar" model="ir.ui.view">
-        <field name="name">mail.activity.view.calendar</field>
-        <field name="model">mail.activity</field>
-        <field name="priority" eval="2"/>
-        <field name="arch" type="xml">
-            <calendar string="Activity" date_start="date_deadline" color="activity_type_id">
-                <field name="user_id" avatar_field="image_128"/>
-                <field name="res_name"/>
-                <field name="date_deadline"/>
-                <field name="summary"/>
-                <field name="activity_type_id" filters="1" invisible="1"/>
+    <recordid="mail_activity_view_calendar"model="ir.ui.view">
+        <fieldname="name">mail.activity.view.calendar</field>
+        <fieldname="model">mail.activity</field>
+        <fieldname="priority"eval="2"/>
+        <fieldname="arch"type="xml">
+            <calendarstring="Activity"date_start="date_deadline"color="activity_type_id">
+                <fieldname="user_id"avatar_field="image_128"/>
+                <fieldname="res_name"/>
+                <fieldname="date_deadline"/>
+                <fieldname="summary"/>
+                <fieldname="activity_type_id"filters="1"invisible="1"/>
             </calendar>
         </field>
     </record>

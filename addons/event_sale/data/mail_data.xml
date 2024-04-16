@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template id="event_ticket_id_change_exception" name="Message: Alert on event ticket id change">
+<templateid="event_ticket_id_change_exception"name="Message:Alertoneventticketidchange">
     <div>
         <p>
-            <span>Registration modification for attendee:</span>
-            <a href="#" data-oe-model="event.registration" t-att-data-oe-id="registration.id"><t t-esc="registration.name"/></a>.
-            <span>Manual actions may be needed.</span>
+            <span>Registrationmodificationforattendee:</span>
+            <ahref="#"data-oe-model="event.registration"t-att-data-oe-id="registration.id"><tt-esc="registration.name"/></a>.
+            <span>Manualactionsmaybeneeded.</span>
         </p>
-        <div class="mt16">
+        <divclass="mt16">
             <p>Exception:</p>
             <ul>
                 <li>
-                    <a href="#" data-oe-model="event.registration" t-att-data-oe-id="registration.id"><t t-esc="registration.name"/></a>:
-                    <span>Ticket changed from <strong><t t-esc="old_ticket_name"/></strong> to <strong><t t-esc="new_ticket_name"/></strong></span>
+                    <ahref="#"data-oe-model="event.registration"t-att-data-oe-id="registration.id"><tt-esc="registration.name"/></a>:
+                    <span>Ticketchangedfrom<strong><tt-esc="old_ticket_name"/></strong>to<strong><tt-esc="new_ticket_name"/></strong></span>
                 </li>
             </ul>
         </div>

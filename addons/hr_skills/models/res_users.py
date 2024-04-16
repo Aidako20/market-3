@@ -1,25 +1,25 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import fields, models
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportfields,models
 
 
-class User(models.Model):
-    _inherit = ['res.users']
+classUser(models.Model):
+    _inherit=['res.users']
 
-    resume_line_ids = fields.One2many(related='employee_id.resume_line_ids', readonly=False)
-    employee_skill_ids = fields.One2many(related='employee_id.employee_skill_ids', readonly=False)
+    resume_line_ids=fields.One2many(related='employee_id.resume_line_ids',readonly=False)
+    employee_skill_ids=fields.One2many(related='employee_id.employee_skill_ids',readonly=False)
 
-    def __init__(self, pool, cr):
-        """ Override of __init__ to add access rights.
-            Access rights are disabled by default, but allowed
-            on some specific fields defined in self.SELF_{READ/WRITE}ABLE_FIELDS.
+    def__init__(self,pool,cr):
+        """Overrideof__init__toaddaccessrights.
+            Accessrightsaredisabledbydefault,butallowed
+            onsomespecificfieldsdefinedinself.SELF_{READ/WRITE}ABLE_FIELDS.
         """
-        hr_skills_fields = [
+        hr_skills_fields=[
             'resume_line_ids',
             'employee_skill_ids',
         ]
-        init_res = super(User, self).__init__(pool, cr)
-        # duplicate list to avoid modifying the original reference
-        pool[self._name].SELF_READABLE_FIELDS = pool[self._name].SELF_READABLE_FIELDS + hr_skills_fields
-        pool[self._name].SELF_WRITEABLE_FIELDS = pool[self._name].SELF_WRITEABLE_FIELDS + hr_skills_fields
-        return init_res
+        init_res=super(User,self).__init__(pool,cr)
+        #duplicatelisttoavoidmodifyingtheoriginalreference
+        pool[self._name].SELF_READABLE_FIELDS=pool[self._name].SELF_READABLE_FIELDS+hr_skills_fields
+        pool[self._name].SELF_WRITEABLE_FIELDS=pool[self._name].SELF_WRITEABLE_FIELDS+hr_skills_fields
+        returninit_res

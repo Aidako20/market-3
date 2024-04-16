@@ -1,51 +1,51 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models
+fromflectraimportapi,models
 
 
-class Board(models.AbstractModel):
-    _name = 'board.board'
-    _description = "Board"
-    _auto = False
-
-    @api.model
-    def create(self, vals):
-        return self
+classBoard(models.AbstractModel):
+    _name='board.board'
+    _description="Board"
+    _auto=False
 
     @api.model
-    def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
+    defcreate(self,vals):
+        returnself
+
+    @api.model
+    deffields_view_get(self,view_id=None,view_type='form',toolbar=False,submenu=False):
         """
-        Overrides orm field_view_get.
-        @return: Dictionary of Fields, arch and toolbar.
+        Overridesormfield_view_get.
+        @return:DictionaryofFields,archandtoolbar.
         """
 
-        res = super(Board, self).fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
+        res=super(Board,self).fields_view_get(view_id=view_id,view_type=view_type,toolbar=toolbar,submenu=submenu)
 
-        custom_view = self.env['ir.ui.view.custom'].search([('user_id', '=', self.env.uid), ('ref_id', '=', view_id)], limit=1)
-        if custom_view:
-            res.update({'custom_view_id': custom_view.id,
-                        'arch': custom_view.arch})
+        custom_view=self.env['ir.ui.view.custom'].search([('user_id','=',self.env.uid),('ref_id','=',view_id)],limit=1)
+        ifcustom_view:
+            res.update({'custom_view_id':custom_view.id,
+                        'arch':custom_view.arch})
         res.update({
-            'arch': self._arch_preprocessing(res['arch']),
-            'toolbar': {'print': [], 'action': [], 'relate': []}
+            'arch':self._arch_preprocessing(res['arch']),
+            'toolbar':{'print':[],'action':[],'relate':[]}
         })
-        return res
+        returnres
 
     @api.model
-    def _arch_preprocessing(self, arch):
-        from lxml import etree
+    def_arch_preprocessing(self,arch):
+        fromlxmlimportetree
 
-        def remove_unauthorized_children(node):
-            for child in node.iterchildren():
-                if child.tag == 'action' and child.get('invisible'):
+        defremove_unauthorized_children(node):
+            forchildinnode.iterchildren():
+                ifchild.tag=='action'andchild.get('invisible'):
                     node.remove(child)
                 else:
                     remove_unauthorized_children(child)
-            return node
+            returnnode
 
-        archnode = etree.fromstring(arch)
-        # add the js_class 'board' on the fly to force the webclient to
-        # instantiate a BoardView instead of FormView
-        archnode.set('js_class', 'board')
-        return etree.tostring(remove_unauthorized_children(archnode), pretty_print=True, encoding='unicode')
+        archnode=etree.fromstring(arch)
+        #addthejs_class'board'ontheflytoforcethewebclientto
+        #instantiateaBoardViewinsteadofFormView
+        archnode.set('js_class','board')
+        returnetree.tostring(remove_unauthorized_children(archnode),pretty_print=True,encoding='unicode')

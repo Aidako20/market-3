@@ -1,27 +1,27 @@
-flectra.define('web.kanban_examples_registry', function (require) {
-"use strict";
+flectra.define('web.kanban_examples_registry',function(require){
+"usestrict";
 
 /**
- * This file instantiates and exports a registry. The purpose of this registry
- * is to store static data displayed in a dialog to help the end user to
- * configure its columns in the grouped Kanban view.
+ *Thisfileinstantiatesandexportsaregistry.Thepurposeofthisregistry
+ *istostorestaticdatadisplayedinadialogtohelptheenduserto
+ *configureitscolumnsinthegroupedKanbanview.
  *
- * To activate a link on the ColumnQuickCreate widget on open such a dialog, the
- * attribute 'examples' on the root arch node must be set to a valid key in this
- * registry.
+ *ToactivatealinkontheColumnQuickCreatewidgetonopensuchadialog,the
+ *attribute'examples'ontherootarchnodemustbesettoavalidkeyinthis
+ *registry.
  *
- * Each value in this registry must be an array of Objects containing the
- * following keys:
- *   - name (string)
- *   - columns (Array[string])
- *   - description (string, optional) BE CAREFUL [*]
+ *EachvalueinthisregistrymustbeanarrayofObjectscontainingthe
+ *followingkeys:
+ *  -name(string)
+ *  -columns(Array[string])
+ *  -description(string,optional)BECAREFUL[*]
  *
- * [*] The description is added with a t-raw so the translated texts must be
- *     properly escaped.
+ *[*]Thedescriptionisaddedwithat-rawsothetranslatedtextsmustbe
+ *    properlyescaped.
  */
 
-var Registry = require('web.Registry');
+varRegistry=require('web.Registry');
 
-return new Registry();
+returnnewRegistry();
 
 });

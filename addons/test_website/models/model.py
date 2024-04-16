@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class TestModel(models.Model):
-    """ Add website option in server actions. """
+classTestModel(models.Model):
+    """Addwebsiteoptioninserveractions."""
 
-    _name = 'test.model'
-    _inherit = ['website.seo.metadata', 'website.published.mixin']
-    _description = 'Website Model Test'
+    _name='test.model'
+    _inherit=['website.seo.metadata','website.published.mixin']
+    _description='WebsiteModelTest'
 
-    name = fields.Char(required=1)
+    name=fields.Char(required=1)

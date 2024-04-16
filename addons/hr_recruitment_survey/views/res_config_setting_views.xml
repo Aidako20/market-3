@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="res_config_settings_view_form" model="ir.ui.view">
-        <field name="name">res.config.settings.view.form.inherit.hr.recruitment.survey</field>
-        <field name="model">res.config.settings</field>
-        <field name="inherit_id" ref="hr_recruitment.res_config_settings_view_form"/>
-        <field name="arch" type="xml">
-            <div id="interview_forms" position="replace">
-                <div class="content-group">
-                    <div class="mt8">
-                        <button name="%(survey.action_survey_form)d" icon="fa-arrow-right" type="action" string="Interview Forms" class="btn-link"/>
+    <recordid="res_config_settings_view_form"model="ir.ui.view">
+        <fieldname="name">res.config.settings.view.form.inherit.hr.recruitment.survey</field>
+        <fieldname="model">res.config.settings</field>
+        <fieldname="inherit_id"ref="hr_recruitment.res_config_settings_view_form"/>
+        <fieldname="arch"type="xml">
+            <divid="interview_forms"position="replace">
+                <divclass="content-group">
+                    <divclass="mt8">
+                        <buttonname="%(survey.action_survey_form)d"icon="fa-arrow-right"type="action"string="InterviewForms"class="btn-link"/>
                     </div>
                 </div>
         	</div>
         </field>
     </record>
-</flectra> 
+</flectra>

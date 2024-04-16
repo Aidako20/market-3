@@ -1,29 +1,29 @@
-flectra.define('wysiwyg.widgets', function (require) {
-'use strict';
+flectra.define('wysiwyg.widgets',function(require){
+'usestrict';
 
-var Dialog = require('wysiwyg.widgets.Dialog');
-var AltDialog = require('wysiwyg.widgets.AltDialog');
-var MediaDialog = require('wysiwyg.widgets.MediaDialog');
-var LinkDialog = require('wysiwyg.widgets.LinkDialog');
-var ImageCropWidget = require('wysiwyg.widgets.ImageCropWidget');
-const {ColorpickerDialog} = require('web.Colorpicker');
+varDialog=require('wysiwyg.widgets.Dialog');
+varAltDialog=require('wysiwyg.widgets.AltDialog');
+varMediaDialog=require('wysiwyg.widgets.MediaDialog');
+varLinkDialog=require('wysiwyg.widgets.LinkDialog');
+varImageCropWidget=require('wysiwyg.widgets.ImageCropWidget');
+const{ColorpickerDialog}=require('web.Colorpicker');
 
-var media = require('wysiwyg.widgets.media');
+varmedia=require('wysiwyg.widgets.media');
 
-return {
-    Dialog: Dialog,
-    AltDialog: AltDialog,
-    MediaDialog: MediaDialog,
-    LinkDialog: LinkDialog,
-    ImageCropWidget: ImageCropWidget,
-    ColorpickerDialog: ColorpickerDialog,
+return{
+    Dialog:Dialog,
+    AltDialog:AltDialog,
+    MediaDialog:MediaDialog,
+    LinkDialog:LinkDialog,
+    ImageCropWidget:ImageCropWidget,
+    ColorpickerDialog:ColorpickerDialog,
 
-    MediaWidget: media.MediaWidget,
-    SearchableMediaWidget: media.SearchableMediaWidget,
-    FileWidget: media.FileWidget,
-    ImageWidget: media.ImageWidget,
-    DocumentWidget: media.DocumentWidget,
-    IconWidget: media.IconWidget,
-    VideoWidget: media.VideoWidget,
+    MediaWidget:media.MediaWidget,
+    SearchableMediaWidget:media.SearchableMediaWidget,
+    FileWidget:media.FileWidget,
+    ImageWidget:media.ImageWidget,
+    DocumentWidget:media.DocumentWidget,
+    IconWidget:media.IconWidget,
+    VideoWidget:media.VideoWidget,
 };
 });

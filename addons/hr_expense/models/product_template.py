@@ -1,35 +1,35 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
-from flectra.tools.sql import column_exists, create_column
+fromflectraimportapi,fields,models
+fromflectra.tools.sqlimportcolumn_exists,create_column
 
 
-class ProductTemplate(models.Model):
-    _inherit = "product.template"
+classProductTemplate(models.Model):
+    _inherit="product.template"
 
-    can_be_expensed = fields.Boolean(string="Can be Expensed", compute='_compute_can_be_expensed',
-        store=True, readonly=False, help="Specify whether the product can be selected in an expense.")
+    can_be_expensed=fields.Boolean(string="CanbeExpensed",compute='_compute_can_be_expensed',
+        store=True,readonly=False,help="Specifywhethertheproductcanbeselectedinanexpense.")
 
-    def _auto_init(self):
-        if not column_exists(self.env.cr, "product_template", "can_be_expensed"):
-            create_column(self.env.cr, "product_template", "can_be_expensed", "boolean")
+    def_auto_init(self):
+        ifnotcolumn_exists(self.env.cr,"product_template","can_be_expensed"):
+            create_column(self.env.cr,"product_template","can_be_expensed","boolean")
             self.env.cr.execute(
                 """
-                UPDATE product_template
-                SET can_be_expensed = false
-                WHERE type NOT IN ('consu', 'service')
+                UPDATEproduct_template
+                SETcan_be_expensed=false
+                WHEREtypeNOTIN('consu','service')
                 """
             )
-        return super()._auto_init()
+        returnsuper()._auto_init()
 
     @api.model
-    def default_get(self, fields):
-        result = super(ProductTemplate, self).default_get(fields)
-        if self.env.context.get('default_can_be_expensed'):
-            result['supplier_taxes_id'] = False
-        return result
+    defdefault_get(self,fields):
+        result=super(ProductTemplate,self).default_get(fields)
+        ifself.env.context.get('default_can_be_expensed'):
+            result['supplier_taxes_id']=False
+        returnresult
 
     @api.depends('type')
-    def _compute_can_be_expensed(self):
-        self.filtered(lambda p: p.type not in ['consu', 'service']).update({'can_be_expensed': False})
+    def_compute_can_be_expensed(self):
+        self.filtered(lambdap:p.typenotin['consu','service']).update({'can_be_expensed':False})

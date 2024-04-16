@@ -1,27 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<!-- Options
-    * reminder_light: no text displayed
-    * reminder_small: text displayed as small
-    * light_theme: bell is white/gold if set; otherwse bell is gray / white
+<!--Options
+    *reminder_light:notextdisplayed
+    *reminder_small:textdisplayedassmall
+    *light_theme:belliswhite/goldifset;otherwsebellisgray/white
  -->
-<template id="track_widget_reminder">
-    <t t-set="_btn_style" t-value="'btn-link' if reminder_light else (track.is_reminder_on and 'btn-primary') or 'btn-outline-primary'"/>
-    <t t-set="_btn_size" t-value="'btn-sm' if reminder_small else ''"/>
-    <div t-att-class="'o_wetrack_js_reminder btn %s %s' % (_btn_style, _btn_size)">
-        <t t-if="track.is_reminder_on" t-set="title">Favorite On</t>
-        <t t-else="track.is_reminder_on" t-set="title">Set Favorite</t>
-        <i t-att-class="'fa fa-bell%s inactive_color_%s' % ('' if track.is_reminder_on else '-o', 'dark' if reminder_light and not light_theme else 'light')"
+<templateid="track_widget_reminder">
+    <tt-set="_btn_style"t-value="'btn-link'ifreminder_lightelse(track.is_reminder_onand'btn-primary')or'btn-outline-primary'"/>
+    <tt-set="_btn_size"t-value="'btn-sm'ifreminder_smallelse''"/>
+    <divt-att-class="'o_wetrack_js_reminderbtn%s%s'%(_btn_style,_btn_size)">
+        <tt-if="track.is_reminder_on"t-set="title">FavoriteOn</t>
+        <tt-else="track.is_reminder_on"t-set="title">SetFavorite</t>
+        <it-att-class="'fafa-bell%sinactive_color_%s'%(''iftrack.is_reminder_onelse'-o','dark'ifreminder_lightandnotlight_themeelse'light')"
            t-att-data-track-id="track.id"
            t-att-title="title"
            t-att-data-is-reminder-light="reminder_light"
            t-att-data-reminder-on="bool(track.is_reminder_on)"></i>
-        <span t-if="not reminder_light" class="o_wetrack_js_reminder_text">
-            <t t-if="not track.is_reminder_on">
-                Set Favorite
-            </t><t t-else="">
-                Favorite On
+        <spant-if="notreminder_light"class="o_wetrack_js_reminder_text">
+            <tt-if="nottrack.is_reminder_on">
+                SetFavorite
+            </t><tt-else="">
+                FavoriteOn
             </t>
         </span>
     </div>

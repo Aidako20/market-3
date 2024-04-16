@@ -1,30 +1,30 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.es = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.es=factory()));
+}(this,function(){'usestrict';
 
-    var es = {
-        code: "es",
-        week: {
-            dow: 1,
-            doy: 4 // The week that contains Jan 4th is the first week of the year.
+    vares={
+        code:"es",
+        week:{
+            dow:1,
+            doy:4//TheweekthatcontainsJan4thisthefirstweekoftheyear.
         },
-        buttonText: {
-            prev: "Ant",
-            next: "Sig",
-            today: "Hoy",
-            month: "Mes",
-            week: "Semana",
-            day: "Día",
-            list: "Agenda"
+        buttonText:{
+            prev:"Ant",
+            next:"Sig",
+            today:"Hoy",
+            month:"Mes",
+            week:"Semana",
+            day:"Día",
+            list:"Agenda"
         },
-        weekLabel: "Sm",
-        allDayHtml: "Todo<br/>el día",
-        eventLimitText: "más",
-        noEventsMessage: "No hay eventos para mostrar"
+        weekLabel:"Sm",
+        allDayHtml:"Todo<br/>eldía",
+        eventLimitText:"más",
+        noEventsMessage:"Nohayeventosparamostrar"
     };
 
-    return es;
+    returnes;
 
 }));

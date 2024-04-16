@@ -1,62 +1,62 @@
-flectra.define('mail.ActivityRecord', function (require) {
-"use strict";
+flectra.define('mail.ActivityRecord',function(require){
+"usestrict";
 
-var KanbanRecord = require('web.KanbanRecord');
+varKanbanRecord=require('web.KanbanRecord');
 
-var ActivityRecord = KanbanRecord.extend({
+varActivityRecord=KanbanRecord.extend({
     /**
-     * @override
+     *@override
      */
-    init: function (parent, state) {
+    init:function(parent,state){
         this._super.apply(this,arguments);
 
-        this.fieldsInfo = state.fieldsInfo.activity;
+        this.fieldsInfo=state.fieldsInfo.activity;
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _render: function () {
-        this.defs = [];
-        this._replaceElement(this.qweb.render('activity-box', this.qweb_context));
-        this.$el.on('click', this._onGlobalClick.bind(this));
+    _render:function(){
+        this.defs=[];
+        this._replaceElement(this.qweb.render('activity-box',this.qweb_context));
+        this.$el.on('click',this._onGlobalClick.bind(this));
         this.$el.addClass('o_activity_record');
         this._processFields();
         this._setupColor();
-        return Promise.all(this.defs);
+        returnPromise.all(this.defs);
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _setFieldDisplay: function ($el, fieldName) {
-        this._super.apply(this, arguments);
+    _setFieldDisplay:function($el,fieldName){
+        this._super.apply(this,arguments);
 
-        // attribute muted
-        if (this.fieldsInfo[fieldName].muted) {
+        //attributemuted
+        if(this.fieldsInfo[fieldName].muted){
             $el.addClass('text-muted');
         }
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _setState: function () {
-        this._super.apply(this, arguments);
+    _setState:function(){
+        this._super.apply(this,arguments);
 
-        // activity has a different qweb context
-        this.qweb_context = {
-            activity_image: this._getImageURL.bind(this),
-            record: this.record,
-            user_context: this.getSession().user_context,
-            widget: this,
+        //activityhasadifferentqwebcontext
+        this.qweb_context={
+            activity_image:this._getImageURL.bind(this),
+            record:this.record,
+            user_context:this.getSession().user_context,
+            widget:this,
         };
     },
 });
-return ActivityRecord;
+returnActivityRecord;
 });

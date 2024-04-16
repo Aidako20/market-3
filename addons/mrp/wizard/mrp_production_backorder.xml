@@ -1,44 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
         
-        <!-- MO Backorder -->
-        <record id="view_mrp_production_backorder_form" model="ir.ui.view">
-            <field name="name">Create Backorder</field>
-            <field name="model">mrp.production.backorder</field>
-            <field name="arch" type="xml">
-                <form string="Create a Backorder">
+        <!--MOBackorder-->
+        <recordid="view_mrp_production_backorder_form"model="ir.ui.view">
+            <fieldname="name">CreateBackorder</field>
+            <fieldname="model">mrp.production.backorder</field>
+            <fieldname="arch"type="xml">
+                <formstring="CreateaBackorder">
                     <group>
                         <p>
-                            Create a backorder if you expect to process the remaining products later. Do not create a backorder if you will not process the remaining products.
+                            Createabackorderifyouexpecttoprocesstheremainingproductslater.Donotcreateabackorderifyouwillnotprocesstheremainingproducts.
                         </p>
                     </group>
-                    <field name="show_backorder_lines" invisible="1"/>
-                    <field name="mrp_production_backorder_line_ids" nolabel="1" attrs="{'invisible': [('show_backorder_lines', '=', False)]}">
-                        <tree create="0" delete="0" editable="top">
-                            <field name="mrp_production_id" force_save="1"/>
-                            <field name="to_backorder" widget="boolean_toggle"/>
+                    <fieldname="show_backorder_lines"invisible="1"/>
+                    <fieldname="mrp_production_backorder_line_ids"nolabel="1"attrs="{'invisible':[('show_backorder_lines','=',False)]}">
+                        <treecreate="0"delete="0"editable="top">
+                            <fieldname="mrp_production_id"force_save="1"/>
+                            <fieldname="to_backorder"widget="boolean_toggle"/>
                         </tree>
                     </field>
                     <footer>
-                        <button name="action_backorder" string="Create backorder"
-                            colspan="1" type="object" class="btn-primary" attrs="{'invisible': [('show_backorder_lines', '!=', False)]}"/>
-                        <button name="action_backorder" string="Validate"
-                            colspan="1" type="object" class="btn-primary" attrs="{'invisible': [('show_backorder_lines', '=', False)]}"/>
-                        <button name="action_close_mo" type="object" string="No Backorder" attrs="{'invisible': [('show_backorder_lines', '!=', False)]}"/>
-                        <button string="Discard" class="btn-secondary" special="cancel" />
+                        <buttonname="action_backorder"string="Createbackorder"
+                            colspan="1"type="object"class="btn-primary"attrs="{'invisible':[('show_backorder_lines','!=',False)]}"/>
+                        <buttonname="action_backorder"string="Validate"
+                            colspan="1"type="object"class="btn-primary"attrs="{'invisible':[('show_backorder_lines','=',False)]}"/>
+                        <buttonname="action_close_mo"type="object"string="NoBackorder"attrs="{'invisible':[('show_backorder_lines','!=',False)]}"/>
+                        <buttonstring="Discard"class="btn-secondary"special="cancel"/>
                     </footer>
                 </form>
             </field>
         </record>
 
-        <record id="action_mrp_production_backorder" model="ir.actions.act_window">
-            <field name="name">You produced less than initial demand</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">mrp.production.backorder</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
+        <recordid="action_mrp_production_backorder"model="ir.actions.act_window">
+            <fieldname="name">Youproducedlessthaninitialdemand</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">mrp.production.backorder</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="target">new</field>
         </record>
        
     </data>
-</flectra>    
+</flectra>   

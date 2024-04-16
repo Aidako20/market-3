@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 
 <templates>
-    <t t-name="account.BillsHiddenUploadForm">
-        <div class="d-none o_vendor_bill_upload">
-            <t t-call="HiddenInputFile">
-                <t t-set="multi_upload" t-value="true"/>
-                <t t-set="fileupload_id" t-value="widget.fileUploadID"/>
-                <t t-set="fileupload_action" t-translation="off">/web/binary/upload_attachment</t>
-                <input type="hidden" name="model" value=""/>
-                <input type="hidden" name="id" value="0"/>
+    <tt-name="account.BillsHiddenUploadForm">
+        <divclass="d-noneo_vendor_bill_upload">
+            <tt-call="HiddenInputFile">
+                <tt-set="multi_upload"t-value="true"/>
+                <tt-set="fileupload_id"t-value="widget.fileUploadID"/>
+                <tt-set="fileupload_action"t-translation="off">/web/binary/upload_attachment</t>
+                <inputtype="hidden"name="model"value=""/>
+                <inputtype="hidden"name="id"value="0"/>
             </t>
         </div>
     </t>
 
-    <t t-extend="ListView.buttons" t-name="BillsListView.buttons">
-        <t t-jquery="button.o_list_button_add" t-operation="after">
-            <button type="button" class="btn btn-secondary o_button_upload_bill">
+    <tt-extend="ListView.buttons"t-name="BillsListView.buttons">
+        <tt-jquery="button.o_list_button_add"t-operation="after">
+            <buttontype="button"class="btnbtn-secondaryo_button_upload_bill">
                 Upload
             </button>
         </t>

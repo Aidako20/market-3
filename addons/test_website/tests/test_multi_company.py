@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.tests.common import HttpCase, tagged
+fromflectra.tests.commonimportHttpCase,tagged
 
 
-@tagged('post_install', '-at_install')
-class TestMultiCompany(HttpCase):
+@tagged('post_install','-at_install')
+classTestMultiCompany(HttpCase):
 
-    def test_company_in_context(self):
-        """ Test website company is set in context """
-        website = self.env.ref('website.default_website')
-        company = self.env['res.company'].create({'name': "Adaa"})
-        website.company_id = company
-        response = self.url_open('/multi_company_website')
-        self.assertEqual(response.json()[0], company.id)
+    deftest_company_in_context(self):
+        """Testwebsitecompanyissetincontext"""
+        website=self.env.ref('website.default_website')
+        company=self.env['res.company'].create({'name':"Adaa"})
+        website.company_id=company
+        response=self.url_open('/multi_company_website')
+        self.assertEqual(response.json()[0],company.id)

@@ -1,63 +1,63 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-import random
-from dateutil.relativedelta import relativedelta
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+importrandom
+fromdateutil.relativedeltaimportrelativedelta
 
-from flectra import api, fields, models, _
+fromflectraimportapi,fields,models,_
 
-from uuid import uuid4
+fromuuidimportuuid4
 
-class Coupon(models.Model):
-    _name = 'coupon.coupon'
-    _description = "Coupon"
-    _rec_name = 'code'
+classCoupon(models.Model):
+    _name='coupon.coupon'
+    _description="Coupon"
+    _rec_name='code'
 
     @api.model
-    def _generate_code(self):
-        """Generate a 20 char long pseudo-random string of digits for barcode
+    def_generate_code(self):
+        """Generatea20charlongpseudo-randomstringofdigitsforbarcode
         generation.
 
-        A decimal serialisation is longer than a hexadecimal one *but* it
-        generates a more compact barcode (Code128C rather than Code128A).
+        Adecimalserialisationislongerthanahexadecimalone*but*it
+        generatesamorecompactbarcode(Code128CratherthanCode128A).
 
-        Generate 8 bytes (64 bits) barcodes as 16 bytes barcodes are not
-        compatible with all scanners.
+        Generate8bytes(64bits)barcodesas16bytesbarcodesarenot
+        compatiblewithallscanners.
          """
-        return str(uuid4())[:22]
+        returnstr(uuid4())[:22]
 
-    code = fields.Char(default=_generate_code, required=True, readonly=True)
-    expiration_date = fields.Date('Expiration Date', compute='_compute_expiration_date')
-    state = fields.Selection([
-        ('reserved', 'Pending'),
-        ('new', 'Valid'),
-        ('sent', 'Sent'),
-        ('used', 'Used'),
-        ('expired', 'Expired'),
-        ('cancel', 'Cancelled')
-    ], required=True, default='new')
-    partner_id = fields.Many2one('res.partner', "For Customer")
-    program_id = fields.Many2one('coupon.program', "Program")
-    discount_line_product_id = fields.Many2one('product.product', related='program_id.discount_line_product_id', readonly=False,
-        help='Product used in the sales order to apply the discount.')
+    code=fields.Char(default=_generate_code,required=True,readonly=True)
+    expiration_date=fields.Date('ExpirationDate',compute='_compute_expiration_date')
+    state=fields.Selection([
+        ('reserved','Pending'),
+        ('new','Valid'),
+        ('sent','Sent'),
+        ('used','Used'),
+        ('expired','Expired'),
+        ('cancel','Cancelled')
+    ],required=True,default='new')
+    partner_id=fields.Many2one('res.partner',"ForCustomer")
+    program_id=fields.Many2one('coupon.program',"Program")
+    discount_line_product_id=fields.Many2one('product.product',related='program_id.discount_line_product_id',readonly=False,
+        help='Productusedinthesalesordertoapplythediscount.')
 
-    _sql_constraints = [
-        ('unique_coupon_code', 'unique(code)', 'The coupon code must be unique!'),
+    _sql_constraints=[
+        ('unique_coupon_code','unique(code)','Thecouponcodemustbeunique!'),
     ]
 
-    @api.depends('create_date', 'program_id.validity_duration')
-    def _compute_expiration_date(self):
-        self.expiration_date = 0
-        for coupon in self.filtered(lambda x: x.program_id.validity_duration > 0):
-            coupon.expiration_date = (coupon.create_date + relativedelta(days=coupon.program_id.validity_duration)).date()
+    @api.depends('create_date','program_id.validity_duration')
+    def_compute_expiration_date(self):
+        self.expiration_date=0
+        forcouponinself.filtered(lambdax:x.program_id.validity_duration>0):
+            coupon.expiration_date=(coupon.create_date+relativedelta(days=coupon.program_id.validity_duration)).date()
 
-    def action_coupon_sent(self):
-        """ Open a window to compose an email, with the edi invoice template
-            message loaded by default
+    defaction_coupon_sent(self):
+        """Openawindowtocomposeanemail,withtheediinvoicetemplate
+            messageloadedbydefault
         """
         self.ensure_one()
-        template = self.env.ref('coupon.mail_template_sale_coupon', False)
-        compose_form = self.env.ref('mail.email_compose_message_wizard_form', False)
-        ctx = dict(
+        template=self.env.ref('coupon.mail_template_sale_coupon',False)
+        compose_form=self.env.ref('mail.email_compose_message_wizard_form',False)
+        ctx=dict(
             default_model='coupon.coupon',
             default_res_id=self.id,
             default_use_template=bool(template),
@@ -67,27 +67,27 @@ class Coupon(models.Model):
             mark_coupon_as_sent=True,
             force_email=True,
         )
-        return {
-            'name': _('Compose Email'),
-            'type': 'ir.actions.act_window',
-            'view_mode': 'form',
-            'res_model': 'mail.compose.message',
-            'views': [(compose_form.id, 'form')],
-            'view_id': compose_form.id,
-            'target': 'new',
-            'context': ctx,
+        return{
+            'name':_('ComposeEmail'),
+            'type':'ir.actions.act_window',
+            'view_mode':'form',
+            'res_model':'mail.compose.message',
+            'views':[(compose_form.id,'form')],
+            'view_id':compose_form.id,
+            'target':'new',
+            'context':ctx,
         }
 
-    def action_coupon_cancel(self):
-        self.state = 'cancel'
+    defaction_coupon_cancel(self):
+        self.state='cancel'
 
-    def cron_expire_coupon(self):
+    defcron_expire_coupon(self):
         self._cr.execute("""
-            SELECT C.id FROM COUPON_COUPON as C
-            INNER JOIN COUPON_PROGRAM as P ON C.program_id = P.id
-            WHERE C.STATE in ('reserved', 'new', 'sent')
-                AND P.validity_duration > 0
-                AND C.create_date + interval '1 day' * P.validity_duration < now()""")
+            SELECTC.idFROMCOUPON_COUPONasC
+            INNERJOINCOUPON_PROGRAMasPONC.program_id=P.id
+            WHEREC.STATEin('reserved','new','sent')
+                ANDP.validity_duration>0
+                ANDC.create_date+interval'1day'*P.validity_duration<now()""")
 
-        expired_ids = [res[0] for res in self._cr.fetchall()]
-        self.browse(expired_ids).write({'state': 'expired'})
+        expired_ids=[res[0]forresinself._cr.fetchall()]
+        self.browse(expired_ids).write({'state':'expired'})

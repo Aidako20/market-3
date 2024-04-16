@@ -1,27 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="sale_report_view_graph_slides" model="ir.ui.view">
-         <field name="name">sale.report.view.graph.slides</field>
-         <field name="model">sale.report</field>
-         <field name="arch" type="xml">
-             <graph string="eLearning Sales Analysis" type="line" sample="1" disable_linking="1">
-                 <field name="date" type="row" interval="day"/>
-                 <field name="price_subtotal" type="measure"/>
+    <recordid="sale_report_view_graph_slides"model="ir.ui.view">
+         <fieldname="name">sale.report.view.graph.slides</field>
+         <fieldname="model">sale.report</field>
+         <fieldname="arch"type="xml">
+             <graphstring="eLearningSalesAnalysis"type="line"sample="1"disable_linking="1">
+                 <fieldname="date"type="row"interval="day"/>
+                 <fieldname="price_subtotal"type="measure"/>
              </graph>
          </field>
     </record>
 
-	<record id="sale_report_action_slides" model="ir.actions.act_window">
-        <field name="name">eLearning Revenues</field>
-        <field name="res_model">sale.report</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="view_mode">graph,pivot</field>
-        <field name="domain">[("product_id.channel_ids", "!=", False)]</field>
-        <field name="context">{'group_by': ['date', 'product_id']}</field>
-        <field name="view_id" ref="sale_report_view_graph_slides"/>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                No data yet!
+	<recordid="sale_report_action_slides"model="ir.actions.act_window">
+        <fieldname="name">eLearningRevenues</field>
+        <fieldname="res_model">sale.report</field>
+        <fieldname="type">ir.actions.act_window</field>
+        <fieldname="view_mode">graph,pivot</field>
+        <fieldname="domain">[("product_id.channel_ids","!=",False)]</field>
+        <fieldname="context">{'group_by':['date','product_id']}</field>
+        <fieldname="view_id"ref="sale_report_view_graph_slides"/>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_smiling_face">
+                Nodatayet!
             </p>
         </field>
     </record>

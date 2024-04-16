@@ -1,55 +1,55 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
 
-        <record id="view_move_form_inherit" model="ir.ui.view">
-            <field name="name">account.move.form.inherit</field>
-            <field name="model">account.move</field>
-            <field name="inherit_id" ref="account_edi.view_move_form_inherit" />
-            <field name="arch" type="xml">
-                <xpath expr="//button[@name='%(account_edi.action_open_edi_documents)d']" position="after">
-                    <button name="action_retry_edi_documents_error" type="object" class="oe_link oe_inline" string="Retry" />
+        <recordid="view_move_form_inherit"model="ir.ui.view">
+            <fieldname="name">account.move.form.inherit</field>
+            <fieldname="model">account.move</field>
+            <fieldname="inherit_id"ref="account_edi.view_move_form_inherit"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//button[@name='%(account_edi.action_open_edi_documents)d']"position="after">
+                    <buttonname="action_retry_edi_documents_error"type="object"class="oe_linkoe_inline"string="Retry"/>
                 </xpath>
-                <xpath expr="//button[@name='button_cancel_posted_moves']" position="after">
-                    <field name="edi_show_abandon_cancel_button" invisible="1"/>
-                    <button name="button_abandon_cancel_posted_posted_moves"
-                            string="Call off EDI Cancellation"
+                <xpathexpr="//button[@name='button_cancel_posted_moves']"position="after">
+                    <fieldname="edi_show_abandon_cancel_button"invisible="1"/>
+                    <buttonname="button_abandon_cancel_posted_posted_moves"
+                            string="CalloffEDICancellation"
                             type="object"
                             groups="account.group_account_invoice"
-                            attrs="{'invisible' : [('edi_show_abandon_cancel_button', '=', False)]}"/>
+                            attrs="{'invisible':[('edi_show_abandon_cancel_button','=',False)]}"/>
                 </xpath>
-                <!-- Nasty xpath to replace the error count warning banner. In master, it will be merged. -->
-                <xpath expr="//div[hasclass('alert-warning')]" position="replace">
-                    <field name="edi_blocking_level" invisible="1" />
-                    <field name="edi_error_count" invisible="1" />
-                    <div class="alert alert-danger" role="alert" style="margin-bottom:0px;"
-                        attrs="{'invisible': ['|', ('edi_error_count', '=', 0), ('edi_blocking_level', '!=', 'error')]}">
-                        <div class="o_row">
-                            <field name="edi_error_message" />
-                            <button name="%(account_edi.action_open_edi_documents)d" string="⇒ See errors" type="action" class="oe_link" attrs="{'invisible': [('edi_error_count', '=', 1)]}" /> 
-                            <button name="action_retry_edi_documents_error" type="object" class="oe_link oe_inline" string="Retry" />
+                <!--Nastyxpathtoreplacetheerrorcountwarningbanner.Inmaster,itwillbemerged.-->
+                <xpathexpr="//div[hasclass('alert-warning')]"position="replace">
+                    <fieldname="edi_blocking_level"invisible="1"/>
+                    <fieldname="edi_error_count"invisible="1"/>
+                    <divclass="alertalert-danger"role="alert"style="margin-bottom:0px;"
+                        attrs="{'invisible':['|',('edi_error_count','=',0),('edi_blocking_level','!=','error')]}">
+                        <divclass="o_row">
+                            <fieldname="edi_error_message"/>
+                            <buttonname="%(account_edi.action_open_edi_documents)d"string="⇒Seeerrors"type="action"class="oe_link"attrs="{'invisible':[('edi_error_count','=',1)]}"/>
+                            <buttonname="action_retry_edi_documents_error"type="object"class="oe_linkoe_inline"string="Retry"/>
                         </div>
                     </div>
-                    <div class="alert alert-warning" role="alert" style="margin-bottom:0px;"
-                        attrs="{'invisible': ['|', ('edi_error_count', '=', 0), ('edi_blocking_level', '!=', 'warning')]}">
-                        <div class="o_row">
-                            <field name="edi_error_message" />
-                            <button name="%(account_edi.action_open_edi_documents)d" string="⇒ See errors" type="action" class="oe_link" attrs="{'invisible': [('edi_error_count', '=', 1)]}" /> 
+                    <divclass="alertalert-warning"role="alert"style="margin-bottom:0px;"
+                        attrs="{'invisible':['|',('edi_error_count','=',0),('edi_blocking_level','!=','warning')]}">
+                        <divclass="o_row">
+                            <fieldname="edi_error_message"/>
+                            <buttonname="%(account_edi.action_open_edi_documents)d"string="⇒Seeerrors"type="action"class="oe_link"attrs="{'invisible':[('edi_error_count','=',1)]}"/>
                         </div>
                     </div>
-                    <div class="alert alert-info" role="alert" style="margin-bottom:0px;"
-                        attrs="{'invisible': ['|', ('edi_error_count', '=', 0), ('edi_blocking_level', '!=', 'info')]}">
-                        <div class="o_row">
-                            <field name="edi_error_message" />
-                            <button name="%(account_edi.action_open_edi_documents)d" string="⇒ See errors" type="action" class="oe_link" attrs="{'invisible': [('edi_error_count', '=', 1)]}" /> 
+                    <divclass="alertalert-info"role="alert"style="margin-bottom:0px;"
+                        attrs="{'invisible':['|',('edi_error_count','=',0),('edi_blocking_level','!=','info')]}">
+                        <divclass="o_row">
+                            <fieldname="edi_error_message"/>
+                            <buttonname="%(account_edi.action_open_edi_documents)d"string="⇒Seeerrors"type="action"class="oe_link"attrs="{'invisible':[('edi_error_count','=',1)]}"/>
                         </div>
                     </div>
                 </xpath>
-                <xpath expr="//field[@name='edi_document_ids']/tree" position="inside">
-                    <field name="blocking_level" invisible="1"/>
+                <xpathexpr="//field[@name='edi_document_ids']/tree"position="inside">
+                    <fieldname="blocking_level"invisible="1"/>
                 </xpath>
-                <xpath expr="//button[@name='action_export_xml']" position="attributes">
-                    <attribute name="attrs">{'invisible': ['|', ('error', '=', False), ('blocking_level', '=', 'info')]}</attribute>
+                <xpathexpr="//button[@name='action_export_xml']"position="attributes">
+                    <attributename="attrs">{'invisible':['|',('error','=',False),('blocking_level','=','info')]}</attribute>
                 </xpath>
 
             </field>

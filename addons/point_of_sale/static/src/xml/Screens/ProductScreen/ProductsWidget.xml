@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="ProductsWidget" owl="1">
-      <div class="products-widget">
-            <ProductsWidgetControlPanel breadcrumbs="breadcrumbs" subcategories="subcategories" hasNoCategories="hasNoCategories" />
-            <ProductList products="productsToDisplay" searchWord="searchWord" />
+    <tt-name="ProductsWidget"owl="1">
+      <divclass="products-widget">
+            <ProductsWidgetControlPanelbreadcrumbs="breadcrumbs"subcategories="subcategories"hasNoCategories="hasNoCategories"/>
+            <ProductListproducts="productsToDisplay"searchWord="searchWord"/>
         </div>
     </t>
 

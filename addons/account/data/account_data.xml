@@ -1,154 +1,154 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
+    <datanoupdate="1">
 
-        <record forcecreate="True" id="decimal_payment" model="decimal.precision">
-            <field name="name">Payment Terms</field>
-            <field name="digits">6</field>
+        <recordforcecreate="True"id="decimal_payment"model="decimal.precision">
+            <fieldname="name">PaymentTerms</field>
+            <fieldname="digits">6</field>
         </record>
 
-        <!-- Open Settings from Purchase Journal to configure mail servers -->
-        <record id="action_open_settings" model="ir.actions.act_window">
-            <field name="name">Settings</field>
-            <field name="res_model">res.config.settings</field>
-            <field name="view_mode">form</field>
-            <field name="target">inline</field>
-            <field name="context" eval="{'module': 'general_settings', 'bin_size': False}"/>
+        <!--OpenSettingsfromPurchaseJournaltoconfiguremailservers-->
+        <recordid="action_open_settings"model="ir.actions.act_window">
+            <fieldname="name">Settings</field>
+            <fieldname="res_model">res.config.settings</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="target">inline</field>
+            <fieldname="context"eval="{'module':'general_settings','bin_size':False}"/>
         </record>
 
-        <!-- TAGS FOR CASH FLOW STATEMENT DIRECT METHOD -->
+        <!--TAGSFORCASHFLOWSTATEMENTDIRECTMETHOD-->
 
-        <record id="account_tag_operating" model="account.account.tag">
-            <field name="name">Operating Activities</field>
-            <field name="applicability">accounts</field>
+        <recordid="account_tag_operating"model="account.account.tag">
+            <fieldname="name">OperatingActivities</field>
+            <fieldname="applicability">accounts</field>
         </record>
-        <record id="account_tag_financing" model="account.account.tag">
-            <field name="name">Financing Activities</field>
-            <field name="applicability">accounts</field>
+        <recordid="account_tag_financing"model="account.account.tag">
+            <fieldname="name">FinancingActivities</field>
+            <fieldname="applicability">accounts</field>
         </record>
-        <record id="account_tag_investing" model="account.account.tag">
-            <field name="name">Investing &amp; Extraordinary Activities</field>
-            <field name="applicability">accounts</field>
-        </record>
-
-        <!--
-        Payment terms
-        -->
-        <record id="account_payment_term_immediate" model="account.payment.term">
-            <field name="name">Immediate Payment</field>
-            <field name="note">Payment terms: Immediate Payment</field>
-        </record>
-
-        <record id="account_payment_term_15days" model="account.payment.term">
-            <field name="name">15 Days</field>
-            <field name="note">Payment terms: 15 Days</field>
-            <field name="line_ids" eval="[(5, 0), (0, 0, {'value': 'balance', 'value_amount': 0.0, 'sequence': 500, 'days': 15, 'option': 'day_after_invoice_date'})]"/>
-        </record>
-
-        <record id="account_payment_term_21days" model="account.payment.term">
-            <field name="name">21 Days</field>
-            <field name="note">Payment terms: 21 Days</field>
-            <field name="line_ids" eval="[(5, 0), (0, 0, {'value': 'balance', 'value_amount': 0.0, 'sequence': 500, 'days': 21, 'option': 'day_after_invoice_date'})]"/>
-        </record>
-
-        <record id="account_payment_term_30days" model="account.payment.term">
-            <field name="name">30 Days</field>
-            <field name="note">Payment terms: 30 Days</field>
-            <field name="line_ids" eval="[(5, 0), (0, 0, {'value': 'balance', 'value_amount': 0.0, 'sequence': 500, 'days': 30, 'option': 'day_after_invoice_date'})]"/>
-        </record>
-
-        <record id="account_payment_term_45days" model="account.payment.term">
-            <field name="name">45 Days</field>
-            <field name="note">Payment terms: 45 Days</field>
-            <field name="line_ids" eval="[(5, 0), (0, 0, {'value': 'balance', 'value_amount': 0.0, 'sequence': 500, 'days': 45, 'option': 'day_after_invoice_date'})]"/>
-        </record>
-
-        <record id="account_payment_term_2months" model="account.payment.term">
-            <field name="name">2 Months</field>
-            <field name="note">Payment terms: 2 Months</field>
-            <field name="line_ids" eval="[(5, 0), (0, 0, {'value': 'balance', 'value_amount': 0.0, 'sequence': 500, 'days': 60, 'option': 'day_after_invoice_date'})]"/>
-        </record>
-
-        <record id="account_payment_term_end_following_month" model="account.payment.term">
-            <field name="name">End of Following Month</field>
-            <field name="note">Payment terms: End of Following Month</field>
-            <field name="line_ids" eval="[(5, 0), (0, 0, {'value': 'balance', 'value_amount': 0.0, 'sequence': 500, 'days': 31, 'option': 'day_following_month'})]"/>
-        </record>
-
-        <record id="account_payment_term_advance_60days" model="account.payment.term">
-            <field name="name">30% Now, Balance 60 Days</field>
-            <field name="note">Payment terms: 30% Now, Balance 60 Days</field>
-            <field name="line_ids" eval="[(5, 0), (0, 0, {'value': 'percent', 'value_amount': 30.0, 'sequence': 400, 'days': 0, 'option': 'day_after_invoice_date'}),
-                    (0, 0, {'value': 'balance', 'value_amount': 0.0, 'sequence': 500, 'days': 60, 'option': 'day_after_invoice_date'})]"/>
+        <recordid="account_tag_investing"model="account.account.tag">
+            <fieldname="name">Investing&amp;ExtraordinaryActivities</field>
+            <fieldname="applicability">accounts</field>
         </record>
 
         <!--
-        Account Statement Sequences
+        Paymentterms
         -->
-        <record id="sequence_reconcile_seq" model="ir.sequence">
-            <field name="name">Account reconcile sequence</field>
-            <field name="code">account.reconcile</field>
-            <field name="prefix">A</field>
-            <field eval="1" name="number_next"/>
-            <field eval="1" name="number_increment"/>
-            <field eval="False" name="company_id"/>
+        <recordid="account_payment_term_immediate"model="account.payment.term">
+            <fieldname="name">ImmediatePayment</field>
+            <fieldname="note">Paymentterms:ImmediatePayment</field>
         </record>
 
-        <!-- Account-related subtypes for messaging / Chatter -->
-        <record id="mt_invoice_validated" model="mail.message.subtype">
-            <field name="name">Validated</field>
-            <field name="res_model">account.move</field>
-            <field name="default" eval="False"/>
-            <field name="description">Invoice validated</field>
-        </record>
-        <record id="mt_invoice_paid" model="mail.message.subtype">
-            <field name="name">Paid</field>
-            <field name="res_model">account.move</field>
-            <field name="default" eval="False"/>
-            <field name="description">Invoice paid</field>
-        </record>
-        <record id="mt_invoice_created" model="mail.message.subtype">
-            <field name="name">Invoice Created</field>
-            <field name="res_model">account.move</field>
-            <field name="default" eval="False"/>
-            <field name="hidden" eval="True"/>
-            <field name="description">Invoice Created</field>
+        <recordid="account_payment_term_15days"model="account.payment.term">
+            <fieldname="name">15Days</field>
+            <fieldname="note">Paymentterms:15Days</field>
+            <fieldname="line_ids"eval="[(5,0),(0,0,{'value':'balance','value_amount':0.0,'sequence':500,'days':15,'option':'day_after_invoice_date'})]"/>
         </record>
 
-        <!-- Payment methods -->
-        <record id="account_payment_method_manual_in" model="account.payment.method">
-            <field name="name">Manual</field>
-            <field name="code">manual</field>
-            <field name="payment_type">inbound</field>
-        </record>
-        <record id="account_payment_method_manual_out" model="account.payment.method">
-            <field name="name">Manual</field>
-            <field name="code">manual</field>
-            <field name="payment_type">outbound</field>
+        <recordid="account_payment_term_21days"model="account.payment.term">
+            <fieldname="name">21Days</field>
+            <fieldname="note">Paymentterms:21Days</field>
+            <fieldname="line_ids"eval="[(5,0),(0,0,{'value':'balance','value_amount':0.0,'sequence':500,'days':21,'option':'day_after_invoice_date'})]"/>
         </record>
 
-        <!-- Account Tax Group -->
-        <record id="tax_group_taxes" model="account.tax.group">
-            <field name="name">Taxes</field>
-            <field name="sequence">0</field>
+        <recordid="account_payment_term_30days"model="account.payment.term">
+            <fieldname="name">30Days</field>
+            <fieldname="note">Paymentterms:30Days</field>
+            <fieldname="line_ids"eval="[(5,0),(0,0,{'value':'balance','value_amount':0.0,'sequence':500,'days':30,'option':'day_after_invoice_date'})]"/>
         </record>
 
-        <!-- Partner Trust Property -->
-        <record forcecreate="True" id="default_followup_trust" model="ir.property">
-            <field name="name">Followup Trust Property</field>
-            <field name="fields_id" search="[('model', '=', 'res.partner'), ('name', '=', 'trust')]"/>
-            <field name="value">normal</field>
-            <field name="type">selection</field>
+        <recordid="account_payment_term_45days"model="account.payment.term">
+            <fieldname="name">45Days</field>
+            <fieldname="note">Paymentterms:45Days</field>
+            <fieldname="line_ids"eval="[(5,0),(0,0,{'value':'balance','value_amount':0.0,'sequence':500,'days':45,'option':'day_after_invoice_date'})]"/>
         </record>
 
-        <!-- Share Button in action menu -->
-        <record id="model_account_move_action_share" model="ir.actions.server">
-            <field name="name">Share</field>
-            <field name="model_id" ref="account.model_account_move"/>
-            <field name="binding_model_id" ref="account.model_account_move"/>
-            <field name="binding_view_types">form</field>
-            <field name="state">code</field>
-            <field name="code">action = records.action_share()</field>
+        <recordid="account_payment_term_2months"model="account.payment.term">
+            <fieldname="name">2Months</field>
+            <fieldname="note">Paymentterms:2Months</field>
+            <fieldname="line_ids"eval="[(5,0),(0,0,{'value':'balance','value_amount':0.0,'sequence':500,'days':60,'option':'day_after_invoice_date'})]"/>
+        </record>
+
+        <recordid="account_payment_term_end_following_month"model="account.payment.term">
+            <fieldname="name">EndofFollowingMonth</field>
+            <fieldname="note">Paymentterms:EndofFollowingMonth</field>
+            <fieldname="line_ids"eval="[(5,0),(0,0,{'value':'balance','value_amount':0.0,'sequence':500,'days':31,'option':'day_following_month'})]"/>
+        </record>
+
+        <recordid="account_payment_term_advance_60days"model="account.payment.term">
+            <fieldname="name">30%Now,Balance60Days</field>
+            <fieldname="note">Paymentterms:30%Now,Balance60Days</field>
+            <fieldname="line_ids"eval="[(5,0),(0,0,{'value':'percent','value_amount':30.0,'sequence':400,'days':0,'option':'day_after_invoice_date'}),
+                    (0,0,{'value':'balance','value_amount':0.0,'sequence':500,'days':60,'option':'day_after_invoice_date'})]"/>
+        </record>
+
+        <!--
+        AccountStatementSequences
+        -->
+        <recordid="sequence_reconcile_seq"model="ir.sequence">
+            <fieldname="name">Accountreconcilesequence</field>
+            <fieldname="code">account.reconcile</field>
+            <fieldname="prefix">A</field>
+            <fieldeval="1"name="number_next"/>
+            <fieldeval="1"name="number_increment"/>
+            <fieldeval="False"name="company_id"/>
+        </record>
+
+        <!--Account-relatedsubtypesformessaging/Chatter-->
+        <recordid="mt_invoice_validated"model="mail.message.subtype">
+            <fieldname="name">Validated</field>
+            <fieldname="res_model">account.move</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="description">Invoicevalidated</field>
+        </record>
+        <recordid="mt_invoice_paid"model="mail.message.subtype">
+            <fieldname="name">Paid</field>
+            <fieldname="res_model">account.move</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="description">Invoicepaid</field>
+        </record>
+        <recordid="mt_invoice_created"model="mail.message.subtype">
+            <fieldname="name">InvoiceCreated</field>
+            <fieldname="res_model">account.move</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="hidden"eval="True"/>
+            <fieldname="description">InvoiceCreated</field>
+        </record>
+
+        <!--Paymentmethods-->
+        <recordid="account_payment_method_manual_in"model="account.payment.method">
+            <fieldname="name">Manual</field>
+            <fieldname="code">manual</field>
+            <fieldname="payment_type">inbound</field>
+        </record>
+        <recordid="account_payment_method_manual_out"model="account.payment.method">
+            <fieldname="name">Manual</field>
+            <fieldname="code">manual</field>
+            <fieldname="payment_type">outbound</field>
+        </record>
+
+        <!--AccountTaxGroup-->
+        <recordid="tax_group_taxes"model="account.tax.group">
+            <fieldname="name">Taxes</field>
+            <fieldname="sequence">0</field>
+        </record>
+
+        <!--PartnerTrustProperty-->
+        <recordforcecreate="True"id="default_followup_trust"model="ir.property">
+            <fieldname="name">FollowupTrustProperty</field>
+            <fieldname="fields_id"search="[('model','=','res.partner'),('name','=','trust')]"/>
+            <fieldname="value">normal</field>
+            <fieldname="type">selection</field>
+        </record>
+
+        <!--ShareButtoninactionmenu-->
+        <recordid="model_account_move_action_share"model="ir.actions.server">
+            <fieldname="name">Share</field>
+            <fieldname="model_id"ref="account.model_account_move"/>
+            <fieldname="binding_model_id"ref="account.model_account_move"/>
+            <fieldname="binding_view_types">form</field>
+            <fieldname="state">code</field>
+            <fieldname="code">action=records.action_share()</field>
         </record>
 
     </data>

@@ -1,51 +1,51 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import models, fields, api, _
+fromflectraimportmodels,fields,api,_
 
 
-class Warehouse(models.Model):
-    _inherit = "stock.warehouse"
+classWarehouse(models.Model):
+    _inherit="stock.warehouse"
 
-    pos_type_id = fields.Many2one('stock.picking.type', string="Point of Sale Operation Type")
+    pos_type_id=fields.Many2one('stock.picking.type',string="PointofSaleOperationType")
 
-    def _get_sequence_values(self):
-        sequence_values = super(Warehouse, self)._get_sequence_values()
+    def_get_sequence_values(self):
+        sequence_values=super(Warehouse,self)._get_sequence_values()
         sequence_values.update({
-            'pos_type_id': {
-                'name': self.name + ' ' + _('Picking POS'),
-                'prefix': self.code + '/POS/',
-                'padding': 5,
-                'company_id': self.company_id.id,
+            'pos_type_id':{
+                'name':self.name+''+_('PickingPOS'),
+                'prefix':self.code+'/POS/',
+                'padding':5,
+                'company_id':self.company_id.id,
             }
         })
-        return sequence_values
+        returnsequence_values
 
-    def _get_picking_type_update_values(self):
-        picking_type_update_values = super(Warehouse, self)._get_picking_type_update_values()
+    def_get_picking_type_update_values(self):
+        picking_type_update_values=super(Warehouse,self)._get_picking_type_update_values()
         picking_type_update_values.update({
-            'pos_type_id': {'default_location_src_id': self.lot_stock_id.id}
+            'pos_type_id':{'default_location_src_id':self.lot_stock_id.id}
         })
-        return picking_type_update_values
+        returnpicking_type_update_values
 
-    def _get_picking_type_create_values(self, max_sequence):
-        picking_type_create_values, max_sequence = super(Warehouse, self)._get_picking_type_create_values(max_sequence)
+    def_get_picking_type_create_values(self,max_sequence):
+        picking_type_create_values,max_sequence=super(Warehouse,self)._get_picking_type_create_values(max_sequence)
         picking_type_create_values.update({
-            'pos_type_id': {
-                'name': _('PoS Orders'),
-                'code': 'outgoing',
-                'default_location_src_id': self.lot_stock_id.id,
-                'default_location_dest_id': self.env.ref('stock.stock_location_customers').id,
-                'sequence': max_sequence + 1,
-                'sequence_code': 'POS',
-                'company_id': self.company_id.id,
-                'show_operations': False,
+            'pos_type_id':{
+                'name':_('PoSOrders'),
+                'code':'outgoing',
+                'default_location_src_id':self.lot_stock_id.id,
+                'default_location_dest_id':self.env.ref('stock.stock_location_customers').id,
+                'sequence':max_sequence+1,
+                'sequence_code':'POS',
+                'company_id':self.company_id.id,
+                'show_operations':False,
             }
         })
-        return picking_type_create_values, max_sequence + 2
+        returnpicking_type_create_values,max_sequence+2
 
     @api.model
-    def _create_missing_pos_picking_types(self):
-        warehouses = self.env['stock.warehouse'].search([('pos_type_id', '=', False)])
-        for warehouse in warehouses:
-            new_vals = warehouse._create_or_update_sequences_and_picking_types()
+    def_create_missing_pos_picking_types(self):
+        warehouses=self.env['stock.warehouse'].search([('pos_type_id','=',False)])
+        forwarehouseinwarehouses:
+            new_vals=warehouse._create_or_update_sequences_and_picking_types()
             warehouse.write(new_vals)

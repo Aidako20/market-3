@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResCompany(models.Model):
-    _inherit = "res.company"
+classResCompany(models.Model):
+    _inherit="res.company"
 
-    ldaps = fields.One2many('res.company.ldap', 'company', string='LDAP Parameters',
-                               copy=True, groups="base.group_system")
+    ldaps=fields.One2many('res.company.ldap','company',string='LDAPParameters',
+                               copy=True,groups="base.group_system")

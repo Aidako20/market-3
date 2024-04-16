@@ -1,20 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <record id="view_pos_details_wizard" model="ir.ui.view">
-            <field name="name">pos.details.wizard.form</field>
-            <field name="model">pos.details.wizard</field>
-            <field name="arch" type="xml">
-                <form string="Sales Details">
+        <recordid="view_pos_details_wizard"model="ir.ui.view">
+            <fieldname="name">pos.details.wizard.form</field>
+            <fieldname="model">pos.details.wizard</field>
+            <fieldname="arch"type="xml">
+                <formstring="SalesDetails">
                     <group>
-                        <field name="start_date"/>
-                        <field name="end_date"/>
+                        <fieldname="start_date"/>
+                        <fieldname="end_date"/>
                     </group>
                     <group>
-                        <field name="pos_config_ids" mode="tree" colspan="4" nolabel="1" />
+                        <fieldname="pos_config_ids"mode="tree"colspan="4"nolabel="1"/>
                     </group>
                     <footer>
-                        <button name="generate_report" string="Print" type="object" class="btn-primary"/>
-                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                        <buttonname="generate_report"string="Print"type="object"class="btn-primary"/>
+                        <buttonstring="Cancel"class="btn-secondary"special="cancel"/>
                     </footer>
                 </form>
             </field>

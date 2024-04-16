@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class SaleOrder(models.Model):
-    _inherit = 'sale.order'
+classSaleOrder(models.Model):
+    _inherit='sale.order'
 
-    opportunity_id = fields.Many2one(
-        'crm.lead', string='Opportunity', check_company=True,
-        domain="[('type', '=', 'opportunity'), '|', ('company_id', '=', False), ('company_id', '=', company_id)]")
+    opportunity_id=fields.Many2one(
+        'crm.lead',string='Opportunity',check_company=True,
+        domain="[('type','=','opportunity'),'|',('company_id','=',False),('company_id','=',company_id)]")
 
-    def action_confirm(self):
-        return super(SaleOrder, self.with_context({k:v for k,v in self._context.items() if k != 'default_tag_ids'})).action_confirm()
+    defaction_confirm(self):
+        returnsuper(SaleOrder,self.with_context({k:vfork,vinself._context.items()ifk!='default_tag_ids'})).action_confirm()

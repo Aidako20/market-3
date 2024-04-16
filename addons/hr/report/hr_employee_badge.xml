@@ -1,41 +1,41 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="hr_employee_print_badge" model="ir.actions.report">
-        <field name="name">Print Badge</field>
-        <field name="model">hr.employee</field>
-        <field name="report_type">qweb-pdf</field>
-        <field name="report_name">hr.print_employee_badge</field>
-        <field name="report_file">hr.print_employee_badge</field>
-        <field name="print_report_name">'Print Badge - %s' % (object.name).replace('/', '')</field>
-        <field name="binding_model_id" ref="model_hr_employee"/>
-        <field name="binding_type">report</field>
+    <recordid="hr_employee_print_badge"model="ir.actions.report">
+        <fieldname="name">PrintBadge</field>
+        <fieldname="model">hr.employee</field>
+        <fieldname="report_type">qweb-pdf</field>
+        <fieldname="report_name">hr.print_employee_badge</field>
+        <fieldname="report_file">hr.print_employee_badge</field>
+        <fieldname="print_report_name">'PrintBadge-%s'%(object.name).replace('/','')</field>
+        <fieldname="binding_model_id"ref="model_hr_employee"/>
+        <fieldname="binding_type">report</field>
     </record>
 
-    <template id="print_employee_badge">
-        <t t-call="web.basic_layout">
-            <div class="page">
-                <t t-foreach="docs" t-as="employee">
-                    <div class="col-md-6">
-                        <table style="width:243pt; height:153pt; border: 1pt solid black; border-collapse:separate; border-radius:8pt; margin:5pt">
-                            <td style="width:33%;" valign="center">
-                                <table style="width:77pt; height:150pt">
-                                    <tr style="height:30%">
-                                        <td align="center" valign="center">
-                                            <img t-if="employee.company_id.logo" t-att-src="image_data_uri(employee.company_id.logo)" style="max-height:45pt;max-width:90%" alt="Company Logo"/>
+    <templateid="print_employee_badge">
+        <tt-call="web.basic_layout">
+            <divclass="page">
+                <tt-foreach="docs"t-as="employee">
+                    <divclass="col-md-6">
+                        <tablestyle="width:243pt;height:153pt;border:1ptsolidblack;border-collapse:separate;border-radius:8pt;margin:5pt">
+                            <tdstyle="width:33%;"valign="center">
+                                <tablestyle="width:77pt;height:150pt">
+                                    <trstyle="height:30%">
+                                        <tdalign="center"valign="center">
+                                            <imgt-if="employee.company_id.logo"t-att-src="image_data_uri(employee.company_id.logo)"style="max-height:45pt;max-width:90%"alt="CompanyLogo"/>
                                         </td>
                                     </tr>
-                                    <tr style="height:70%;">
-                                        <td align="center" valign="center">
-                                            <img t-if="employee.image_1920" t-att-src="image_data_uri(employee.image_1920)" style="max-height:85pt;max-width:90%" alt="Employee Image"/>
+                                    <trstyle="height:70%;">
+                                        <tdalign="center"valign="center">
+                                            <imgt-if="employee.image_1920"t-att-src="image_data_uri(employee.image_1920)"style="max-height:85pt;max-width:90%"alt="EmployeeImage"/>
                                         </td>
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width:67%" valign="center">
-                                <table style="width:155pt; height:85pt">
-                                    <tr><th><div style="font-size:15pt; margin-bottom:0pt;margin-top:0pt;" align="center"><t t-esc="employee.name"/></div></th></tr>
-                                    <tr><td><div align="center" style="font-size:10pt;margin-bottom:5pt;"><t t-esc="employee.job_id.name"/></div></td></tr>
-                                    <tr><td><img alt="barcode" t-if="employee.barcode" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', employee.barcode, 600, 120)" style="max-height:50pt;max-width:100%;" align="center"/></td></tr>
+                            <tdstyle="width:67%"valign="center">
+                                <tablestyle="width:155pt;height:85pt">
+                                    <tr><th><divstyle="font-size:15pt;margin-bottom:0pt;margin-top:0pt;"align="center"><tt-esc="employee.name"/></div></th></tr>
+                                    <tr><td><divalign="center"style="font-size:10pt;margin-bottom:5pt;"><tt-esc="employee.job_id.name"/></div></td></tr>
+                                    <tr><td><imgalt="barcode"t-if="employee.barcode"t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('Code128',employee.barcode,600,120)"style="max-height:50pt;max-width:100%;"align="center"/></td></tr>
                                 </table>
                             </td>
                         </table>

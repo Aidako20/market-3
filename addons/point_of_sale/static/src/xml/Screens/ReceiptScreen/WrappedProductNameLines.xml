@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="WrappedProductNameLines" owl="1">
+    <tt-name="WrappedProductNameLines"owl="1">
         <span>
-            <t t-foreach="props.line.product_name_wrapped.slice(1)" t-as="wrapped_line"><t t-esc="wrapped_line"/></t>
+            <tt-foreach="props.line.product_name_wrapped.slice(1)"t-as="wrapped_line"><tt-esc="wrapped_line"/></t>
         </span>
     </t>
 

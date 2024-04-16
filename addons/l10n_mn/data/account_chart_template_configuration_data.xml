@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<flectra noupdate="1">
+<?xmlversion="1.0"encoding="utf-8"?>
+<flectranoupdate="1">
 
-    <function model="account.chart.template" name="try_loading">
-        <value eval="[ref('l10n_mn.mn_chart_1')]"/>
+    <functionmodel="account.chart.template"name="try_loading">
+        <valueeval="[ref('l10n_mn.mn_chart_1')]"/>
     </function>
 
 </flectra>

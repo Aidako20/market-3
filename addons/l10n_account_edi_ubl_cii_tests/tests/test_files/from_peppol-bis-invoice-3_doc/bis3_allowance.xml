@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Invoice xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+<?xmlversion="1.0"encoding="UTF-8"?>
+<Invoicexmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
     xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
     xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">
     <cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0</cbc:CustomizationID>
@@ -8,7 +8,7 @@
     <cbc:IssueDate>2017-11-13</cbc:IssueDate>
     <cbc:DueDate>2017-12-01</cbc:DueDate>
     <cbc:InvoiceTypeCode>380</cbc:InvoiceTypeCode>
-    <cbc:Note>Please note we have a new phone number: 22 22 22 22</cbc:Note>
+    <cbc:Note>Pleasenotewehaveanewphonenumber:22222222</cbc:Note>
     <cbc:TaxPointDate>2017-12-01</cbc:TaxPointDate>
     <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
     <cbc:TaxCurrencyCode>SEK</cbc:TaxCurrencyCode>
@@ -19,15 +19,15 @@
         <cbc:EndDate>2017-12-31</cbc:EndDate>
     </cac:InvoicePeriod>
     <cac:ContractDocumentReference>
-        <cbc:ID>framework no 1</cbc:ID>
+        <cbc:ID>frameworkno1</cbc:ID>
     </cac:ContractDocumentReference>
     <cac:AdditionalDocumentReference>
-        <cbc:ID schemeID="ABT">DR35141</cbc:ID>
+        <cbc:IDschemeID="ABT">DR35141</cbc:ID>
         <cbc:DocumentTypeCode>130</cbc:DocumentTypeCode>
     </cac:AdditionalDocumentReference>
     <cac:AdditionalDocumentReference>
         <cbc:ID>ts12345</cbc:ID>
-        <cbc:DocumentDescription>Technical specification</cbc:DocumentDescription>
+        <cbc:DocumentDescription>Technicalspecification</cbc:DocumentDescription>
         <cac:Attachment>
             <cac:ExternalReference>
                 <cbc:URI>www.techspec.no</cbc:URI>
@@ -36,18 +36,18 @@
     </cac:AdditionalDocumentReference>
     <cac:AccountingSupplierParty>
         <cac:Party>
-            <cbc:EndpointID schemeID="0088">7300010000001</cbc:EndpointID>
+            <cbc:EndpointIDschemeID="0088">7300010000001</cbc:EndpointID>
             <cac:PartyIdentification>
                 <cbc:ID>99887766</cbc:ID>
             </cac:PartyIdentification>
             <cac:PartyName>
-                <cbc:Name>SupplierTradingName Ltd.</cbc:Name>
+                <cbc:Name>SupplierTradingNameLtd.</cbc:Name>
             </cac:PartyName>
             <cac:PostalAddress>
-                <cbc:StreetName>Main street 1</cbc:StreetName>
-                <cbc:AdditionalStreetName>Postbox 123</cbc:AdditionalStreetName>
+                <cbc:StreetName>Mainstreet1</cbc:StreetName>
+                <cbc:AdditionalStreetName>Postbox123</cbc:AdditionalStreetName>
                 <cbc:CityName>London</cbc:CityName>
-                <cbc:PostalZone>GB 123 EW</cbc:PostalZone>
+                <cbc:PostalZone>GB123EW</cbc:PostalZone>
                 <cac:Country>
                     <cbc:IdentificationCode>GB</cbc:IdentificationCode>
                 </cac:Country>
@@ -60,9 +60,9 @@
             </cac:PartyTaxScheme>
           
             <cac:PartyLegalEntity>
-                <cbc:RegistrationName>SupplierOfficialName Ltd</cbc:RegistrationName>
+                <cbc:RegistrationName>SupplierOfficialNameLtd</cbc:RegistrationName>
                 <cbc:CompanyID>GB983294</cbc:CompanyID>
-                <cbc:CompanyLegalForm>AdditionalLegalInformation</cbc:CompanyLegalForm>   
+                <cbc:CompanyLegalForm>AdditionalLegalInformation</cbc:CompanyLegalForm>  
             </cac:PartyLegalEntity>
 
         </cac:Party>
@@ -70,18 +70,18 @@
 
     <cac:AccountingCustomerParty>
         <cac:Party>
-            <cbc:EndpointID schemeID="0002">4598375937</cbc:EndpointID>
+            <cbc:EndpointIDschemeID="0002">4598375937</cbc:EndpointID>
             <cac:PartyIdentification>
-                <cbc:ID schemeID="0002">4598375937</cbc:ID>
+                <cbc:IDschemeID="0002">4598375937</cbc:ID>
             </cac:PartyIdentification>
             <cac:PartyName>
-                <cbc:Name>BuyerTradingName AS</cbc:Name>
+                <cbc:Name>BuyerTradingNameAS</cbc:Name>
             </cac:PartyName>
             <cac:PostalAddress>
-                <cbc:StreetName>Hovedgatan 32</cbc:StreetName>
-                <cbc:AdditionalStreetName>Po box 878</cbc:AdditionalStreetName>
+                <cbc:StreetName>Hovedgatan32</cbc:StreetName>
+                <cbc:AdditionalStreetName>Pobox878</cbc:AdditionalStreetName>
                 <cbc:CityName>Stockholm</cbc:CityName>
-                <cbc:PostalZone>456 34</cbc:PostalZone>
+                <cbc:PostalZone>45634</cbc:PostalZone>
                 <cbc:CountrySubentity>Södermalm</cbc:CountrySubentity>
   
                 <cac:Country>
@@ -95,11 +95,11 @@
                 </cac:TaxScheme>
             </cac:PartyTaxScheme>
             <cac:PartyLegalEntity>
-                <cbc:RegistrationName>Buyer Official Name</cbc:RegistrationName>
-                <cbc:CompanyID schemeID="0183">39937423947</cbc:CompanyID>
+                <cbc:RegistrationName>BuyerOfficialName</cbc:RegistrationName>
+                <cbc:CompanyIDschemeID="0183">39937423947</cbc:CompanyID>
             </cac:PartyLegalEntity>
             <cac:Contact>
-                <cbc:Name>Lisa Johnson</cbc:Name>
+                <cbc:Name>LisaJohnson</cbc:Name>
                 <cbc:Telephone>23434234</cbc:Telephone>
                 <cbc:ElectronicMail>lj@buyer.se</cbc:ElectronicMail>
             </cac:Contact>
@@ -108,15 +108,15 @@
     <cac:Delivery>
         <cbc:ActualDeliveryDate>2017-11-01</cbc:ActualDeliveryDate>
         <cac:DeliveryLocation>
-            <cbc:ID schemeID="0088">7300010000001</cbc:ID>
+            <cbc:IDschemeID="0088">7300010000001</cbc:ID>
             <cac:Address>
-                <cbc:StreetName>Delivery street 2</cbc:StreetName>
-                <cbc:AdditionalStreetName>Building 56</cbc:AdditionalStreetName>
+                <cbc:StreetName>Deliverystreet2</cbc:StreetName>
+                <cbc:AdditionalStreetName>Building56</cbc:AdditionalStreetName>
                 <cbc:CityName>Stockholm</cbc:CityName>
                 <cbc:PostalZone>21234</cbc:PostalZone>
                 <cbc:CountrySubentity>Södermalm</cbc:CountrySubentity>
                 <cac:AddressLine>
-                    <cbc:Line>Gate 15</cbc:Line>
+                    <cbc:Line>Gate15</cbc:Line>
                 </cac:AddressLine>
                 <cac:Country>
                     <cbc:IdentificationCode>SE</cbc:IdentificationCode>
@@ -125,12 +125,12 @@
         </cac:DeliveryLocation>
         <cac:DeliveryParty>
             <cac:PartyName>
-                <cbc:Name>Delivery party Name</cbc:Name>
+                <cbc:Name>DeliverypartyName</cbc:Name>
             </cac:PartyName>
         </cac:DeliveryParty>
     </cac:Delivery>
     <cac:PaymentMeans>
-        <cbc:PaymentMeansCode name="Credit transfer">30</cbc:PaymentMeansCode>
+        <cbc:PaymentMeansCodename="Credittransfer">30</cbc:PaymentMeansCode>
         <cbc:PaymentID>Snippet1</cbc:PaymentID>
         <cac:PayeeFinancialAccount>
             <cbc:ID>IBAN32423940</cbc:ID>
@@ -141,7 +141,7 @@
         </cac:PayeeFinancialAccount>
     </cac:PaymentMeans>
     <cac:PaymentTerms>
-        <cbc:Note>Payment within 10 days, 2% discount</cbc:Note>
+        <cbc:Note>Paymentwithin10days,2%discount</cbc:Note>
     </cac:PaymentTerms>
 
     <cac:AllowanceCharge>
@@ -149,8 +149,8 @@
         <cbc:AllowanceChargeReasonCode>CG</cbc:AllowanceChargeReasonCode>
         <cbc:AllowanceChargeReason>Cleaning</cbc:AllowanceChargeReason>
         <cbc:MultiplierFactorNumeric>20</cbc:MultiplierFactorNumeric>
-        <cbc:Amount currencyID="EUR">200</cbc:Amount>
-        <cbc:BaseAmount currencyID="EUR">1000</cbc:BaseAmount>
+        <cbc:AmountcurrencyID="EUR">200</cbc:Amount>
+        <cbc:BaseAmountcurrencyID="EUR">1000</cbc:BaseAmount>
         <cac:TaxCategory>
             <cbc:ID>S</cbc:ID>
             <cbc:Percent>25</cbc:Percent>
@@ -164,7 +164,7 @@
         <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
         <cbc:AllowanceChargeReasonCode>95</cbc:AllowanceChargeReasonCode>
         <cbc:AllowanceChargeReason>Discount</cbc:AllowanceChargeReason>
-        <cbc:Amount currencyID="EUR">200</cbc:Amount>
+        <cbc:AmountcurrencyID="EUR">200</cbc:Amount>
         <cac:TaxCategory>
             <cbc:ID>S</cbc:ID>
             <cbc:Percent>25</cbc:Percent>
@@ -175,10 +175,10 @@
     </cac:AllowanceCharge>
 
     <cac:TaxTotal>
-        <cbc:TaxAmount currencyID="EUR">1225.00</cbc:TaxAmount>
+        <cbc:TaxAmountcurrencyID="EUR">1225.00</cbc:TaxAmount>
         <cac:TaxSubtotal>
-            <cbc:TaxableAmount currencyID="EUR">4900.0</cbc:TaxableAmount>
-            <cbc:TaxAmount currencyID="EUR">1225</cbc:TaxAmount>
+            <cbc:TaxableAmountcurrencyID="EUR">4900.0</cbc:TaxableAmount>
+            <cbc:TaxAmountcurrencyID="EUR">1225</cbc:TaxAmount>
             <cac:TaxCategory>
                 <cbc:ID>S</cbc:ID>
                 <cbc:Percent>25</cbc:Percent>
@@ -188,12 +188,12 @@
             </cac:TaxCategory>
         </cac:TaxSubtotal>
         <cac:TaxSubtotal>
-            <cbc:TaxableAmount currencyID="EUR">1000.0</cbc:TaxableAmount>
-            <cbc:TaxAmount currencyID="EUR">0</cbc:TaxAmount>
+            <cbc:TaxableAmountcurrencyID="EUR">1000.0</cbc:TaxableAmount>
+            <cbc:TaxAmountcurrencyID="EUR">0</cbc:TaxAmount>
             <cac:TaxCategory>
                 <cbc:ID>E</cbc:ID>
                 <cbc:Percent>0</cbc:Percent>
-                <cbc:TaxExemptionReason>Reason for tax exempt</cbc:TaxExemptionReason>
+                <cbc:TaxExemptionReason>Reasonfortaxexempt</cbc:TaxExemptionReason>
                 <cac:TaxScheme>
                     <cbc:ID>VAT</cbc:ID>
                 </cac:TaxScheme>
@@ -201,42 +201,42 @@
         </cac:TaxSubtotal>
     </cac:TaxTotal>
     <cac:TaxTotal>
-        <cbc:TaxAmount currencyID ="SEK">9324.00</cbc:TaxAmount>
+        <cbc:TaxAmountcurrencyID="SEK">9324.00</cbc:TaxAmount>
     </cac:TaxTotal>
     
     <cac:LegalMonetaryTotal>
-        <cbc:LineExtensionAmount currencyID="EUR">5900</cbc:LineExtensionAmount>
-        <cbc:TaxExclusiveAmount currencyID="EUR">5900</cbc:TaxExclusiveAmount>
-        <cbc:TaxInclusiveAmount currencyID="EUR">7125</cbc:TaxInclusiveAmount>
-        <cbc:AllowanceTotalAmount currencyID="EUR">200</cbc:AllowanceTotalAmount>
-        <cbc:ChargeTotalAmount currencyID="EUR">200</cbc:ChargeTotalAmount>
-        <cbc:PrepaidAmount currencyID="EUR">1000</cbc:PrepaidAmount>
-        <cbc:PayableAmount currencyID="EUR">6125.00</cbc:PayableAmount>
+        <cbc:LineExtensionAmountcurrencyID="EUR">5900</cbc:LineExtensionAmount>
+        <cbc:TaxExclusiveAmountcurrencyID="EUR">5900</cbc:TaxExclusiveAmount>
+        <cbc:TaxInclusiveAmountcurrencyID="EUR">7125</cbc:TaxInclusiveAmount>
+        <cbc:AllowanceTotalAmountcurrencyID="EUR">200</cbc:AllowanceTotalAmount>
+        <cbc:ChargeTotalAmountcurrencyID="EUR">200</cbc:ChargeTotalAmount>
+        <cbc:PrepaidAmountcurrencyID="EUR">1000</cbc:PrepaidAmount>
+        <cbc:PayableAmountcurrencyID="EUR">6125.00</cbc:PayableAmount>
     </cac:LegalMonetaryTotal>
 
     <cac:InvoiceLine>
     <cbc:ID>1</cbc:ID>
-        <cbc:Note>Testing note on line level</cbc:Note>
-        <cbc:InvoicedQuantity unitCode="C62">10</cbc:InvoicedQuantity>
-        <cbc:LineExtensionAmount currencyID="EUR">4000.00</cbc:LineExtensionAmount>
+        <cbc:Note>Testingnoteonlinelevel</cbc:Note>
+        <cbc:InvoicedQuantityunitCode="C62">10</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmountcurrencyID="EUR">4000.00</cbc:LineExtensionAmount>
         <cbc:AccountingCost>Konteringsstreng</cbc:AccountingCost>
         <cac:AllowanceCharge>
             <cbc:ChargeIndicator>true</cbc:ChargeIndicator>
             <cbc:AllowanceChargeReasonCode>CG</cbc:AllowanceChargeReasonCode>
             <cbc:AllowanceChargeReason>Cleaning</cbc:AllowanceChargeReason>
             <cbc:MultiplierFactorNumeric>1</cbc:MultiplierFactorNumeric>
-            <cbc:Amount currencyID="EUR">1</cbc:Amount>
-            <cbc:BaseAmount currencyID="EUR">100</cbc:BaseAmount>
+            <cbc:AmountcurrencyID="EUR">1</cbc:Amount>
+            <cbc:BaseAmountcurrencyID="EUR">100</cbc:BaseAmount>
         </cac:AllowanceCharge>
         <cac:AllowanceCharge>
             <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
             <cbc:AllowanceChargeReasonCode>95</cbc:AllowanceChargeReasonCode>
             <cbc:AllowanceChargeReason>Discount</cbc:AllowanceChargeReason>
-            <cbc:Amount currencyID="EUR">101</cbc:Amount>
+            <cbc:AmountcurrencyID="EUR">101</cbc:Amount>
         </cac:AllowanceCharge>
         <cac:Item>
-            <cbc:Description>Description of item A</cbc:Description>
-            <cbc:Name>item name</cbc:Name>
+            <cbc:Description>DescriptionofitemA</cbc:Description>
+            <cbc:Name>itemname</cbc:Name>
         
             <cac:SellersItemIdentification>
                 <cbc:ID>97iugug876</cbc:ID>
@@ -245,7 +245,7 @@
                 <cbc:IdentificationCode>NO</cbc:IdentificationCode>
             </cac:OriginCountry>
             <cac:CommodityClassification>
-                <cbc:ItemClassificationCode listID="SRV">09348023</cbc:ItemClassificationCode>
+                <cbc:ItemClassificationCodelistID="SRV">09348023</cbc:ItemClassificationCode>
             </cac:CommodityClassification>
             <cac:ClassifiedTaxCategory>
                 <cbc:ID>S</cbc:ID>
@@ -258,22 +258,22 @@
         </cac:Item>
 
         <cac:Price>
-            <cbc:PriceAmount currencyID="EUR">410</cbc:PriceAmount>
-            <cbc:BaseQuantity unitCode="C62">1</cbc:BaseQuantity>
+            <cbc:PriceAmountcurrencyID="EUR">410</cbc:PriceAmount>
+            <cbc:BaseQuantityunitCode="C62">1</cbc:BaseQuantity>
             <cac:AllowanceCharge>
                 <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
-                <cbc:Amount currencyID="EUR">40</cbc:Amount>
-                <cbc:BaseAmount currencyID="EUR">450</cbc:BaseAmount>
+                <cbc:AmountcurrencyID="EUR">40</cbc:Amount>
+                <cbc:BaseAmountcurrencyID="EUR">450</cbc:BaseAmount>
             </cac:AllowanceCharge>
         </cac:Price>
 
     </cac:InvoiceLine>
     <cac:InvoiceLine>
         <cbc:ID>2</cbc:ID>
-        <cbc:Note>Testing note on line level</cbc:Note>
+        <cbc:Note>Testingnoteonlinelevel</cbc:Note>
 
-        <cbc:InvoicedQuantity unitCode="C62">10</cbc:InvoicedQuantity>
-        <cbc:LineExtensionAmount currencyID="EUR">1000.00</cbc:LineExtensionAmount>
+        <cbc:InvoicedQuantityunitCode="C62">10</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmountcurrencyID="EUR">1000.00</cbc:LineExtensionAmount>
 
         <cbc:AccountingCost>Konteringsstreng</cbc:AccountingCost>
         <cac:InvoicePeriod>
@@ -285,13 +285,13 @@
         </cac:OrderLineReference>
 
         <cac:Item>
-            <cbc:Description>Description of item B</cbc:Description>
-            <cbc:Name>item name</cbc:Name>
+            <cbc:Description>DescriptionofitemB</cbc:Description>
+            <cbc:Name>itemname</cbc:Name>
             <cac:SellersItemIdentification>
                 <cbc:ID>97iugug876</cbc:ID>
             </cac:SellersItemIdentification>
             <cac:CommodityClassification>
-                <cbc:ItemClassificationCode listID="SRV">86776</cbc:ItemClassificationCode>
+                <cbc:ItemClassificationCodelistID="SRV">86776</cbc:ItemClassificationCode>
             </cac:CommodityClassification>
             <cac:ClassifiedTaxCategory>
                 <cbc:ID>E</cbc:ID>
@@ -306,15 +306,15 @@
             </cac:AdditionalItemProperty>
         </cac:Item>
         <cac:Price>
-            <cbc:PriceAmount currencyID="EUR">200</cbc:PriceAmount>
-            <cbc:BaseQuantity unitCode="C62">2</cbc:BaseQuantity>
+            <cbc:PriceAmountcurrencyID="EUR">200</cbc:PriceAmount>
+            <cbc:BaseQuantityunitCode="C62">2</cbc:BaseQuantity>
         </cac:Price>
     </cac:InvoiceLine>
     <cac:InvoiceLine>
         <cbc:ID>3</cbc:ID>
-        <cbc:Note>Testing note on line level</cbc:Note>
-        <cbc:InvoicedQuantity unitCode="C62">10</cbc:InvoicedQuantity>
-        <cbc:LineExtensionAmount currencyID="EUR">900.00</cbc:LineExtensionAmount>
+        <cbc:Note>Testingnoteonlinelevel</cbc:Note>
+        <cbc:InvoicedQuantityunitCode="C62">10</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmountcurrencyID="EUR">900.00</cbc:LineExtensionAmount>
         <cbc:AccountingCost>Konteringsstreng</cbc:AccountingCost>
         <cac:InvoicePeriod>
             <cbc:StartDate>2017-12-01</cbc:StartDate>
@@ -329,25 +329,25 @@
             <cbc:AllowanceChargeReasonCode>CG</cbc:AllowanceChargeReasonCode>
             <cbc:AllowanceChargeReason>Charge</cbc:AllowanceChargeReason>
             <cbc:MultiplierFactorNumeric>1</cbc:MultiplierFactorNumeric>
-            <cbc:Amount currencyID="EUR">1</cbc:Amount>
-            <cbc:BaseAmount currencyID="EUR">100</cbc:BaseAmount>
+            <cbc:AmountcurrencyID="EUR">1</cbc:Amount>
+            <cbc:BaseAmountcurrencyID="EUR">100</cbc:BaseAmount>
         </cac:AllowanceCharge>
         <cac:AllowanceCharge>
             <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
             <cbc:AllowanceChargeReasonCode>95</cbc:AllowanceChargeReasonCode>
             <cbc:AllowanceChargeReason>Discount</cbc:AllowanceChargeReason>
-            <cbc:Amount currencyID="EUR">101</cbc:Amount>
+            <cbc:AmountcurrencyID="EUR">101</cbc:Amount>
         </cac:AllowanceCharge>
  
         <cac:Item>
-            <cbc:Description>Description of item C</cbc:Description>
-            <cbc:Name>item name</cbc:Name>
+            <cbc:Description>DescriptionofitemC</cbc:Description>
+            <cbc:Name>itemname</cbc:Name>
             <cac:SellersItemIdentification>
                 <cbc:ID>97iugug876</cbc:ID>
             </cac:SellersItemIdentification>
 
             <cac:CommodityClassification>
-                <cbc:ItemClassificationCode listID="SRV">86776</cbc:ItemClassificationCode>
+                <cbc:ItemClassificationCodelistID="SRV">86776</cbc:ItemClassificationCode>
             </cac:CommodityClassification>
             <cac:ClassifiedTaxCategory>
                 <cbc:ID>S</cbc:ID>
@@ -363,8 +363,8 @@
         </cac:Item>
 
         <cac:Price>
-            <cbc:PriceAmount currencyID="EUR">100</cbc:PriceAmount>
+            <cbc:PriceAmountcurrencyID="EUR">100</cbc:PriceAmount>
         </cac:Price>
 
-    </cac:InvoiceLine>    
+    </cac:InvoiceLine>   
 </Invoice>

@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-    <record id="product_matrix.matrix_product_template_shirt" model="product.template">
-        <field name="product_add_mode">matrix</field>
+    <recordid="product_matrix.matrix_product_template_shirt"model="product.template">
+        <fieldname="product_add_mode">matrix</field>
     </record>
 </flectra>

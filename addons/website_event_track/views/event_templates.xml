@@ -1,71 +1,71 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<!-- Add a shortcut to wishlist / talks after registration -->
-<template id="registration_complete" inherit_id="website_event.registration_complete">
-    <xpath expr="//div[hasclass('row')][last()]" position="after">
-        <div t-if="event.website_track" class="row mt-5 mb256">
-            <div class="col-12">
-                <h3>Book your seats to the best talks</h3>
-                <p>Get prepared and
-                    <a t-att-href="'/event/%s/track' % (slug(event))">register to your favorites talks now.</a>
+<!--Addashortcuttowishlist/talksafterregistration-->
+<templateid="registration_complete"inherit_id="website_event.registration_complete">
+    <xpathexpr="//div[hasclass('row')][last()]"position="after">
+        <divt-if="event.website_track"class="rowmt-5mb256">
+            <divclass="col-12">
+                <h3>Bookyourseatstothebesttalks</h3>
+                <p>Getpreparedand
+                    <at-att-href="'/event/%s/track'%(slug(event))">registertoyourfavoritestalksnow.</a>
                 </p>
             </div>
         </div>
     </xpath>
 </template>
 
-<template id="layout" inherit_id="website_event.layout">
-    <xpath expr='//t[@t-call="website.layout"]' position="inside">
-        <t t-set="pageName" t-value="'event'"/>
-        <t t-set="head">
-            <t t-raw="head"/>
-            <t t-call="website_event_track.pwa_manifest"/>
+<templateid="layout"inherit_id="website_event.layout">
+    <xpathexpr='//t[@t-call="website.layout"]'position="inside">
+        <tt-set="pageName"t-value="'event'"/>
+        <tt-set="head">
+            <tt-raw="head"/>
+            <tt-call="website_event_track.pwa_manifest"/>
         </t>
     </xpath>
 </template>
 
-<template id="index" inherit_id="website_event.index">
-    <xpath expr='//t[@t-call="website.layout"]' position="inside">
-        <t t-set="pageName" t-value="'event'"/>
-        <t t-set="head">
-            <t t-raw="head"/>
-            <t t-call="website_event_track.pwa_manifest"/>
+<templateid="index"inherit_id="website_event.index">
+    <xpathexpr='//t[@t-call="website.layout"]'position="inside">
+        <tt-set="pageName"t-value="'event'"/>
+        <tt-set="head">
+            <tt-raw="head"/>
+            <tt-call="website_event_track.pwa_manifest"/>
         </t>
     </xpath>
 </template>
 
-<template id="pwa_manifest">
-    <link rel="manifest" href="/event/manifest.webmanifest" crossorigin="use-credentials"/>
-    <link rel="apple-touch-icon" t-att-href="website.image_url(website, 'app_icon', size='192x192')"/>
-    <meta name="theme-color" content="#009EFB"/>
+<templateid="pwa_manifest">
+    <linkrel="manifest"href="/event/manifest.webmanifest"crossorigin="use-credentials"/>
+    <linkrel="apple-touch-icon"t-att-href="website.image_url(website,'app_icon',size='192x192')"/>
+    <metaname="theme-color"content="#009EFB"/>
 </template>
 
-<template id="pwa_offline" inherit_id="website_event.index" primary="True">
-    <xpath expr='//div[@id="wrap"]' position="replace">
-        <div id="wrap" class="o_wevent_index">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 card-body">
-                        <div class="h2 mb-3">You're offline!</div>
-                        <div class="alert alert-info text-center">
-                            <span class="fa-stack fa-4x">
-                                <i class="fa fa-wifi fa-stack-1x"></i>
-                                <i class="fa fa-ban fa-stack-2x text-muted"></i>
+<templateid="pwa_offline"inherit_id="website_event.index"primary="True">
+    <xpathexpr='//div[@id="wrap"]'position="replace">
+        <divid="wrap"class="o_wevent_index">
+            <divclass="container">
+                <divclass="row">
+                    <divclass="col-12card-body">
+                        <divclass="h2mb-3">You'reoffline!</div>
+                        <divclass="alertalert-infotext-center">
+                            <spanclass="fa-stackfa-4x">
+                                <iclass="fafa-wififa-stack-1x"></i>
+                                <iclass="fafa-banfa-stack-2xtext-muted"></i>
                             </span>
-                            <p>This page hasn't been saved for offline reading yet.<br/>Please check your network connection.</p>
+                            <p>Thispagehasn'tbeensavedforofflinereadingyet.<br/>Pleasecheckyournetworkconnection.</p>
                             <p>
-                                <a t-att-href="url_for('/event')" class="btn btn-primary btn-block">Home page</a>
-                                <button onclick="history.back();" class="btn btn-secondary btn-block">Previous page</button>
+                                <at-att-href="url_for('/event')"class="btnbtn-primarybtn-block">Homepage</a>
+                                <buttononclick="history.back();"class="btnbtn-secondarybtn-block">Previouspage</button>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <script type="text/javascript">
-            window.addEventListener('online', function(e) {
-                console.log('Go back online');
+        <scripttype="text/javascript">
+            window.addEventListener('online',function(e){
+                console.log('Gobackonline');
                 location.reload();
             });
         </script>

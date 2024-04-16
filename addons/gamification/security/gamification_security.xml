@@ -1,14 +1,14 @@
-<flectra noupdate="1">
+<flectranoupdate="1">
 
-        <record id="goal_user_visibility" model="ir.rule">
-            <field name="name">User can only see his/her goals or goal from the same challenge in board visibility</field>
-            <field name="model_id" ref="model_gamification_goal"/>
-            <field name="groups" eval="[(4, ref('base.group_user')), (4, ref('base.group_portal'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_unlink" eval="False"/>
-            <field name="domain_force">[
+        <recordid="goal_user_visibility"model="ir.rule">
+            <fieldname="name">Usercanonlyseehis/hergoalsorgoalfromthesamechallengeinboardvisibility</field>
+            <fieldname="model_id"ref="model_gamification_goal"/>
+            <fieldname="groups"eval="[(4,ref('base.group_user')),(4,ref('base.group_portal'))]"/>
+            <fieldname="perm_read"eval="True"/>
+            <fieldname="perm_write"eval="True"/>
+            <fieldname="perm_create"eval="False"/>
+            <fieldname="perm_unlink"eval="False"/>
+            <fieldname="domain_force">[
                 '|',
                     ('user_id','=',user.id),
                     '&amp;',
@@ -16,21 +16,21 @@
                         ('challenge_id.visibility_mode','=','ranking')]</field>
         </record>
 
-        <record id="goal_gamification_manager_visibility" model="ir.rule">
-            <field name="name">Manager can see any goal</field>
-            <field name="model_id" ref="model_gamification_goal"/>
-            <field name="groups" eval="[(4, ref('base.group_erp_manager'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_unlink" eval="False"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
+        <recordid="goal_gamification_manager_visibility"model="ir.rule">
+            <fieldname="name">Managercanseeanygoal</field>
+            <fieldname="model_id"ref="model_gamification_goal"/>
+            <fieldname="groups"eval="[(4,ref('base.group_erp_manager'))]"/>
+            <fieldname="perm_read"eval="True"/>
+            <fieldname="perm_write"eval="True"/>
+            <fieldname="perm_create"eval="False"/>
+            <fieldname="perm_unlink"eval="False"/>
+            <fieldname="domain_force">[(1,'=',1)]</field>
         </record>
 
-        <record id="goal_global_multicompany" model="ir.rule">
-            <field name="name">Multicompany rule on challenges</field>
-            <field name="model_id" ref="model_gamification_goal"/>
-            <field name="domain_force">[('user_id.company_id', 'in', company_ids)]</field>
+        <recordid="goal_global_multicompany"model="ir.rule">
+            <fieldname="name">Multicompanyruleonchallenges</field>
+            <fieldname="model_id"ref="model_gamification_goal"/>
+            <fieldname="domain_force">[('user_id.company_id','in',company_ids)]</field>
         </record>
 
 </flectra>

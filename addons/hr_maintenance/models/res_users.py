@@ -1,30 +1,30 @@
-from flectra import api, models, fields
+fromflectraimportapi,models,fields
 
 
-class Users(models.Model):
-    _inherit = 'res.users'
+classUsers(models.Model):
+    _inherit='res.users'
 
-    equipment_ids = fields.One2many('maintenance.equipment', 'owner_user_id', string="Managed Equipments")
-    equipment_count = fields.Integer(related='employee_id.equipment_count', string="Assigned Equipments")
+    equipment_ids=fields.One2many('maintenance.equipment','owner_user_id',string="ManagedEquipments")
+    equipment_count=fields.Integer(related='employee_id.equipment_count',string="AssignedEquipments")
 
-    def __init__(self, pool, cr):
-        """ Override of __init__ to add access rights.
-            Access rights are disabled by default, but allowed
-            on some specific fields defined in self.SELF_{READ/WRITE}ABLE_FIELDS.
+    def__init__(self,pool,cr):
+        """Overrideof__init__toaddaccessrights.
+            Accessrightsaredisabledbydefault,butallowed
+            onsomespecificfieldsdefinedinself.SELF_{READ/WRITE}ABLE_FIELDS.
         """
-        init_res = super(Users, self).__init__(pool, cr)
-        # duplicate list to avoid modifying the original reference
-        pool[self._name].SELF_READABLE_FIELDS = pool[self._name].SELF_READABLE_FIELDS + ['equipment_count']
-        return init_res
+        init_res=super(Users,self).__init__(pool,cr)
+        #duplicatelisttoavoidmodifyingtheoriginalreference
+        pool[self._name].SELF_READABLE_FIELDS=pool[self._name].SELF_READABLE_FIELDS+['equipment_count']
+        returninit_res
 
 
-class Employee(models.Model):
-    _inherit = 'hr.employee'
+classEmployee(models.Model):
+    _inherit='hr.employee'
 
-    equipment_ids = fields.One2many('maintenance.equipment', 'employee_id')
-    equipment_count = fields.Integer('Equipments', compute='_compute_equipment_count')
+    equipment_ids=fields.One2many('maintenance.equipment','employee_id')
+    equipment_count=fields.Integer('Equipments',compute='_compute_equipment_count')
 
     @api.depends('equipment_ids')
-    def _compute_equipment_count(self):
-        for employee in self:
-            employee.equipment_count = len(employee.equipment_ids)
+    def_compute_equipment_count(self):
+        foremployeeinself:
+            employee.equipment_count=len(employee.equipment_ids)

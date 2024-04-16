@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResPartner(models.Model):
-    _inherit = 'res.partner'
+classResPartner(models.Model):
+    _inherit='res.partner'
 
-    team_id = fields.Many2one(
-        'crm.team', 'Sales Team',
-        help='If set, this Sales Team will be used for sales and assignments related to this partner')
+    team_id=fields.Many2one(
+        'crm.team','SalesTeam',
+        help='Ifset,thisSalesTeamwillbeusedforsalesandassignmentsrelatedtothispartner')

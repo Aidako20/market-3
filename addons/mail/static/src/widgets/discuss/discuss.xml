@@ -1,26 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
     <!--
-        @param {mail/static/src/widgets/discuss/discuss.js} widget
+        @param{mail/static/src/widgets/discuss/discuss.js}widget
     -->
-    <t t-name="mail.widgets.Discuss">
-        <div class="o_widget_Discuss"/>
+    <tt-name="mail.widgets.Discuss">
+        <divclass="o_widget_Discuss"/>
     </t>
 
-    <!-- @param {boolean} isMobile -->
-    <t t-name="mail.widgets.Discuss.DiscussControlButtons">
+    <!--@param{boolean}isMobile-->
+    <tt-name="mail.widgets.Discuss.DiscussControlButtons">
         <div>
-            <button class="o_widget_Discuss_controlPanelButtonInvite o_invite o_hidden btn btn-primary" type="button" title="Invite people">Invite</button>
-            <button class="o_widget_Discuss_controlPanelButtonMarkAllRead o_hidden btn btn-secondary" type="button" title="Mark all as read">Mark all read</button>
-            <button class="o_widget_Discuss_controlPanelButtonUnstarAll o_unstar_all o_hidden btn btn-secondary" type="button" title="Unstar all messages">Unstar all</button>
-            <button class="o_widget_Discuss_controlPanelButtonMobileNewMessage o_mobile_new_message o_hidden btn btn-secondary" type="button" title="New Message">New Message</button>
-            <button class="o_widget_Discuss_controlPanelButtonMobileNewChannel o_mobile_new_channel o_hidden btn btn-secondary" title="New Channel" type="button">New Channel</button>
-            <button class="o_widget_Discuss_controlPanelButtonSelectAll btn btn-secondary o_hidden" title="Select all messages">Select All</button>
-            <button class="o_widget_Discuss_controlPanelButtonUnselectAll btn btn-secondary o_hidden" title="Unselect all messages">Unselect All</button>
-            <button class="o_widget_Discuss_controlPanelButtonModeration btn btn-secondary o_hidden o-accept" title="Accept selected messages">Accept</button>
-            <button class="o_widget_Discuss_controlPanelButtonModeration btn btn-secondary o_hidden o-reject" title="Reject selected messages">Reject</button>
-            <button class="o_widget_Discuss_controlPanelButtonModeration btn btn-secondary o_hidden o-discard" title="Discard selected messages">Discard</button>
+            <buttonclass="o_widget_Discuss_controlPanelButtonInviteo_inviteo_hiddenbtnbtn-primary"type="button"title="Invitepeople">Invite</button>
+            <buttonclass="o_widget_Discuss_controlPanelButtonMarkAllReado_hiddenbtnbtn-secondary"type="button"title="Markallasread">Markallread</button>
+            <buttonclass="o_widget_Discuss_controlPanelButtonUnstarAllo_unstar_allo_hiddenbtnbtn-secondary"type="button"title="Unstarallmessages">Unstarall</button>
+            <buttonclass="o_widget_Discuss_controlPanelButtonMobileNewMessageo_mobile_new_messageo_hiddenbtnbtn-secondary"type="button"title="NewMessage">NewMessage</button>
+            <buttonclass="o_widget_Discuss_controlPanelButtonMobileNewChannelo_mobile_new_channelo_hiddenbtnbtn-secondary"title="NewChannel"type="button">NewChannel</button>
+            <buttonclass="o_widget_Discuss_controlPanelButtonSelectAllbtnbtn-secondaryo_hidden"title="Selectallmessages">SelectAll</button>
+            <buttonclass="o_widget_Discuss_controlPanelButtonUnselectAllbtnbtn-secondaryo_hidden"title="Unselectallmessages">UnselectAll</button>
+            <buttonclass="o_widget_Discuss_controlPanelButtonModerationbtnbtn-secondaryo_hiddeno-accept"title="Acceptselectedmessages">Accept</button>
+            <buttonclass="o_widget_Discuss_controlPanelButtonModerationbtnbtn-secondaryo_hiddeno-reject"title="Rejectselectedmessages">Reject</button>
+            <buttonclass="o_widget_Discuss_controlPanelButtonModerationbtnbtn-secondaryo_hiddeno-discard"title="Discardselectedmessages">Discard</button>
         </div>
     </t>
 

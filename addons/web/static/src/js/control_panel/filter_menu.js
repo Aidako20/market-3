@@ -1,79 +1,79 @@
-flectra.define('web.FilterMenu', function (require) {
-    "use strict";
+flectra.define('web.FilterMenu',function(require){
+    "usestrict";
 
-    const CustomFilterItem = require('web.CustomFilterItem');
-    const DropdownMenu = require('web.DropdownMenu');
-    const { FACET_ICONS } = require("web.searchUtils");
-    const { useModel } = require('web/static/src/js/model.js');
+    constCustomFilterItem=require('web.CustomFilterItem');
+    constDropdownMenu=require('web.DropdownMenu');
+    const{FACET_ICONS}=require("web.searchUtils");
+    const{useModel}=require('web/static/src/js/model.js');
 
     /**
-     * 'Filters' menu
+     *'Filters'menu
      *
-     * Simple rendering of the filters of type `filter` given by the control panel
-     * model. It uses most of the behaviours implemented by the dropdown menu Component,
-     * with the addition of a filter generator (@see CustomFilterItem).
-     * @see DropdownMenu for additional details.
-     * @extends DropdownMenu
+     *Simplerenderingofthefiltersoftype`filter`givenbythecontrolpanel
+     *model.ItusesmostofthebehavioursimplementedbythedropdownmenuComponent,
+     *withtheadditionofafiltergenerator(@seeCustomFilterItem).
+     *@seeDropdownMenuforadditionaldetails.
+     *@extendsDropdownMenu
      */
-    class FilterMenu extends DropdownMenu {
+    classFilterMenuextendsDropdownMenu{
 
-        constructor() {
+        constructor(){
             super(...arguments);
 
-            this.model = useModel('searchModel');
+            this.model=useModel('searchModel');
         }
 
         //---------------------------------------------------------------------
-        // Getters
+        //Getters
         //---------------------------------------------------------------------
 
         /**
-         * @override
+         *@override
          */
-        get icon() {
-            return FACET_ICONS.filter;
+        geticon(){
+            returnFACET_ICONS.filter;
         }
 
         /**
-         * @override
+         *@override
          */
-        get items() {
-            return this.model.get('filters', f => f.type === 'filter');
+        getitems(){
+            returnthis.model.get('filters',f=>f.type==='filter');
         }
 
         /**
-         * @override
+         *@override
          */
-        get title() {
-            return this.env._t("Filters");
+        gettitle(){
+            returnthis.env._t("Filters");
         }
 
         //---------------------------------------------------------------------
-        // Handlers
+        //Handlers
         //---------------------------------------------------------------------
 
         /**
-         * @private
-         * @param {OwlEvent} ev
+         *@private
+         *@param{OwlEvent}ev
          */
-        _onItemSelected(ev) {
+        _onItemSelected(ev){
             ev.stopPropagation();
-            const { item, option } = ev.detail;
-            if (option) {
-                this.model.dispatch('toggleFilterWithOptions', item.id, option.id);
-            } else {
-                this.model.dispatch('toggleFilter', item.id);
+            const{item,option}=ev.detail;
+            if(option){
+                this.model.dispatch('toggleFilterWithOptions',item.id,option.id);
+            }else{
+                this.model.dispatch('toggleFilter',item.id);
             }
         }
     }
 
-    FilterMenu.components = Object.assign({}, DropdownMenu.components, {
+    FilterMenu.components=Object.assign({},DropdownMenu.components,{
         CustomFilterItem,
     });
-    FilterMenu.props = Object.assign({}, DropdownMenu.props, {
-        fields: Object,
+    FilterMenu.props=Object.assign({},DropdownMenu.props,{
+        fields:Object,
     });
-    FilterMenu.template = 'web.FilterMenu';
+    FilterMenu.template='web.FilterMenu';
 
-    return FilterMenu;
+    returnFilterMenu;
 });

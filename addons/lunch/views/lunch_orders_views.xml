@@ -1,101 +1,101 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="lunch_order_view_search" model="ir.ui.view">
-        <field name="name">lunch.order.search</field>
-        <field name="model">lunch.order</field>
-        <field name="arch" type="xml">
-            <search string="Search">
-                <field name="name" string="Product" filter_domain="['|', ('name', 'ilike', self), ('note', 'ilike', self)]"/>
-                <field name="user_id"/>
-                <filter name='is_mine' string="My Orders" domain="[('user_id', '=', uid)]"/>
+    <recordid="lunch_order_view_search"model="ir.ui.view">
+        <fieldname="name">lunch.order.search</field>
+        <fieldname="model">lunch.order</field>
+        <fieldname="arch"type="xml">
+            <searchstring="Search">
+                <fieldname="name"string="Product"filter_domain="['|',('name','ilike',self),('note','ilike',self)]"/>
+                <fieldname="user_id"/>
+                <filtername='is_mine'string="MyOrders"domain="[('user_id','=',uid)]"/>
                 <separator/>
-                <filter name="not_confirmed" string="Not Received" domain="[('state', '!=', ('confirmed'))]"/>
-                <filter name="confirmed" string="Received" domain="[('state', '=', 'confirmed')]"/>
-                <filter name="cancelled" string="Cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <filtername="not_confirmed"string="NotReceived"domain="[('state','!=',('confirmed'))]"/>
+                <filtername="confirmed"string="Received"domain="[('state','=','confirmed')]"/>
+                <filtername="cancelled"string="Cancelled"domain="[('state','=','cancelled')]"/>
                 <separator/>
-                <filter name="date_filter" string="Today" domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]" />
+                <filtername="date_filter"string="Today"domain="[('date','=',context_today().strftime('%Y-%m-%d'))]"/>
                 <separator/>
-                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
-                <group expand="0" string="Group By">
-                    <filter name="group_by_user" string="User" context="{'group_by': 'user_id'}"/>
-                    <filter name="group_by_supplier" string="Vendor" context="{'group_by': 'supplier_id'}"/>
-                    <filter name="group_by_date" string="Order Date" context="{'group_by': 'date:day'}" help="Vendor Orders by Date"/>
+                <filterstring="Archived"name="inactive"domain="[('active','=',False)]"/>
+                <groupexpand="0"string="GroupBy">
+                    <filtername="group_by_user"string="User"context="{'group_by':'user_id'}"/>
+                    <filtername="group_by_supplier"string="Vendor"context="{'group_by':'supplier_id'}"/>
+                    <filtername="group_by_date"string="OrderDate"context="{'group_by':'date:day'}"help="VendorOrdersbyDate"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <record id="lunch_order_view_tree" model="ir.ui.view">
-        <field name="name">lunch.order.tree</field>
-        <field name="model">lunch.order</field>
-        <field name="arch" type="xml">
-            <tree string="Order lines Tree" create="false" edit="false" decoration-muted="state == 'cancelled'" class="o_lunch_list">
+    <recordid="lunch_order_view_tree"model="ir.ui.view">
+        <fieldname="name">lunch.order.tree</field>
+        <fieldname="model">lunch.order</field>
+        <fieldname="arch"type="xml">
+            <treestring="OrderlinesTree"create="false"edit="false"decoration-muted="state=='cancelled'"class="o_lunch_list">
                 <header>
-                    <button name="action_confirm" type="object" string="Receive"/>
+                    <buttonname="action_confirm"type="object"string="Receive"/>
                 </header>
-                <field name='date'/>
-                <field name='supplier_id' invisible='1'/>
-                <field name='product_id'/>
-                <field name="display_toppings" class="o_text_overflow"/>
-                <field name='note' class="o_text_overflow"/>
-                <field name='user_id'/>
-                <field name="currency_id" invisible="1"/>
-                <field name='price' sum="Total" string="Price" widget="monetary"/>
-                <field name='state'/>
-                <field name="company_id" groups="base.group_multi_company"/>
-                <button name="action_confirm" string="Confirm" type="object" icon="fa-check" attrs="{'invisible': [('state', '!=', 'ordered')]}" groups="lunch.group_lunch_manager"/>
-                <button name="action_cancel" string="Cancel" type="object" icon="fa-times" attrs="{'invisible': [('state', 'in', ['cancelled', 'confirmed'])]}" groups="lunch.group_lunch_manager"/>
+                <fieldname='date'/>
+                <fieldname='supplier_id'invisible='1'/>
+                <fieldname='product_id'/>
+                <fieldname="display_toppings"class="o_text_overflow"/>
+                <fieldname='note'class="o_text_overflow"/>
+                <fieldname='user_id'/>
+                <fieldname="currency_id"invisible="1"/>
+                <fieldname='price'sum="Total"string="Price"widget="monetary"/>
+                <fieldname='state'/>
+                <fieldname="company_id"groups="base.group_multi_company"/>
+                <buttonname="action_confirm"string="Confirm"type="object"icon="fa-check"attrs="{'invisible':[('state','!=','ordered')]}"groups="lunch.group_lunch_manager"/>
+                <buttonname="action_cancel"string="Cancel"type="object"icon="fa-times"attrs="{'invisible':[('state','in',['cancelled','confirmed'])]}"groups="lunch.group_lunch_manager"/>
             </tree>
         </field>
     </record>
 
-    <record id='lunch_order_view_kanban' model='ir.ui.view'>
-        <field name="name">lunch.order.kanban</field>
-        <field name="model">lunch.order</field>
-        <field name="arch" type="xml">
-            <kanban create="false" edit="false">
-                <field name="product_id"/>
-                <field name="note"/>
-                <field name="state"/>
-                <field name="user_id"/>
-                <field name="date"/>
-                <field name="price"/>
+    <recordid='lunch_order_view_kanban'model='ir.ui.view'>
+        <fieldname="name">lunch.order.kanban</field>
+        <fieldname="model">lunch.order</field>
+        <fieldname="arch"type="xml">
+            <kanbancreate="false"edit="false">
+                <fieldname="product_id"/>
+                <fieldname="note"/>
+                <fieldname="state"/>
+                <fieldname="user_id"/>
+                <fieldname="date"/>
+                <fieldname="price"/>
                 <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_global_click">
-                            <div class="o_kanban_record_top">
-                                <div class="o_kanban_record_headings">
-                                    <strong class="o_kanban_record_title"><field name="product_id"/></strong>
+                    <tt-name="kanban-box">
+                        <divclass="oe_kanban_global_click">
+                            <divclass="o_kanban_record_top">
+                                <divclass="o_kanban_record_headings">
+                                    <strongclass="o_kanban_record_title"><fieldname="product_id"/></strong>
                                 </div>
-                                <field name="state" widget="label_selection" options="{'classes': {'new': 'default', 'confirmed': 'success', 'cancelled':'danger'}}"/>
+                                <fieldname="state"widget="label_selection"options="{'classes':{'new':'default','confirmed':'success','cancelled':'danger'}}"/>
                             </div>
                             <div>
-                                <field name="note"/>
+                                <fieldname="note"/>
                             </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <i class="fa fa-money" role="img" aria-label="Money" title="Money"/> <field name="price"/>
+                            <divclass="row">
+                                <divclass="col-6">
+                                    <iclass="fafa-money"role="img"aria-label="Money"title="Money"/><fieldname="price"/>
                                 </div>
-                                <div class="col-6 text-right">
-                                    <i class="fa fa-clock-o" role="img" aria-label="Date" title="Date"/> <field name="date"/>
+                                <divclass="col-6text-right">
+                                    <iclass="fafa-clock-o"role="img"aria-label="Date"title="Date"/><fieldname="date"/>
                                 </div>
                             </div>
-                            <div class="row mt4">
-                                <div class="col-6">
-                                    <a class="btn btn-sm btn-success" role="button" name="action_order" string="Order" type="object" attrs="{'invisible': ['|',('state','=','confirmed'),('state','=','ordered')]}" groups="lunch.group_lunch_manager">
-                                        <i class="fa fa-phone" role="img" aria-label="Order button" title="Order button"/>
+                            <divclass="rowmt4">
+                                <divclass="col-6">
+                                    <aclass="btnbtn-smbtn-success"role="button"name="action_order"string="Order"type="object"attrs="{'invisible':['|',('state','=','confirmed'),('state','=','ordered')]}"groups="lunch.group_lunch_manager">
+                                        <iclass="fafa-phone"role="img"aria-label="Orderbutton"title="Orderbutton"/>
                                     </a>
-                                    <a class="btn btn-sm btn-info" role="button" name="action_confirm" string="Receive" type="object" attrs="{'invisible': [('state','!=','ordered')]}" groups="lunch.group_lunch_manager">
-                                        <i class="fa fa-check" role="img" aria-label="Receive button" title="Receive button"/>
+                                    <aclass="btnbtn-smbtn-info"role="button"name="action_confirm"string="Receive"type="object"attrs="{'invisible':[('state','!=','ordered')]}"groups="lunch.group_lunch_manager">
+                                        <iclass="fafa-check"role="img"aria-label="Receivebutton"title="Receivebutton"/>
                                     </a>
-                                    <a class="btn btn-sm btn-danger" role="button" name="action_cancel" string="Cancel" type="object" attrs="{'invisible': [('state','=','cancelled')]}" groups="lunch.group_lunch_manager">
-                                        <i class="fa fa-times" role="img" aria-label="Cancel button" title="Cancel button"/>
+                                    <aclass="btnbtn-smbtn-danger"role="button"name="action_cancel"string="Cancel"type="object"attrs="{'invisible':[('state','=','cancelled')]}"groups="lunch.group_lunch_manager">
+                                        <iclass="fafa-times"role="img"aria-label="Cancelbutton"title="Cancelbutton"/>
                                     </a>
                                 </div>
-                                <div class="col-6">
-                                    <span class="float-right">
-                                        <field name="user_id" widget="many2one_avatar_user"/>
+                                <divclass="col-6">
+                                    <spanclass="float-right">
+                                        <fieldname="user_id"widget="many2one_avatar_user"/>
                                     </span>
                                 </div>
                             </div>
@@ -106,143 +106,143 @@
         </field>
     </record>
 
-    <record id="lunch_order_view_pivot" model="ir.ui.view">
-        <field name="name">lunch.order.pivot</field>
-        <field name="model">lunch.order</field>
-        <field name="arch" type="xml">
-            <pivot sample="1">
-                <field name="date" type="col"/>
-                <field name="supplier_id" type="row"/>
+    <recordid="lunch_order_view_pivot"model="ir.ui.view">
+        <fieldname="name">lunch.order.pivot</field>
+        <fieldname="model">lunch.order</field>
+        <fieldname="arch"type="xml">
+            <pivotsample="1">
+                <fieldname="date"type="col"/>
+                <fieldname="supplier_id"type="row"/>
             </pivot>
         </field>
     </record>
 
-    <record id="lunch_order_view_graph" model="ir.ui.view">
-        <field name="name">lunch.order.graph</field>
-        <field name="model">lunch.order</field>
-        <field name="arch" type="xml">
-            <graph sample="1">
-                <field name="product_id" type="col"/>
+    <recordid="lunch_order_view_graph"model="ir.ui.view">
+        <fieldname="name">lunch.order.graph</field>
+        <fieldname="model">lunch.order</field>
+        <fieldname="arch"type="xml">
+            <graphsample="1">
+                <fieldname="product_id"type="col"/>
             </graph>
         </field>
     </record>
 
-    <record id="lunch_order_action" model="ir.actions.act_window">
-        <field name="name">My Orders</field>
-        <field name="res_model">lunch.order</field>
-        <field name="view_mode">tree,kanban,pivot</field>
-        <field name="search_view_id" ref="lunch_order_view_search"/>
-        <field name="context">{"search_default_is_mine":1, "search_default_group_by_date": 1}</field>
-        <field name="help" type="html">
-        <p class="o_view_nocontent_empty_folder">
-            No previous order found
+    <recordid="lunch_order_action"model="ir.actions.act_window">
+        <fieldname="name">MyOrders</field>
+        <fieldname="res_model">lunch.order</field>
+        <fieldname="view_mode">tree,kanban,pivot</field>
+        <fieldname="search_view_id"ref="lunch_order_view_search"/>
+        <fieldname="context">{"search_default_is_mine":1,"search_default_group_by_date":1}</field>
+        <fieldname="help"type="html">
+        <pclass="o_view_nocontent_empty_folder">
+            Nopreviousorderfound
         </p><p>
-            There is no previous order recorded. Click on "My Lunch" and then create a new lunch order.
+            Thereisnopreviousorderrecorded.Clickon"MyLunch"andthencreateanewlunchorder.
         </p>
         </field>
     </record>
 
-    <record id="lunch_order_action_by_supplier" model="ir.actions.act_window">
-        <field name="name">Today's Orders</field>
-        <field name="res_model">lunch.order</field>
-        <field name="view_mode">tree,kanban</field>
-        <field name="search_view_id" ref="lunch_order_view_search"/>
-        <field name="context">{"search_default_group_by_supplier":1, "search_default_date_filter":1}</field>
-        <field name="help" type="html">
-          <p class="o_view_nocontent_empty_folder">
-            Nothing to order today
+    <recordid="lunch_order_action_by_supplier"model="ir.actions.act_window">
+        <fieldname="name">Today'sOrders</field>
+        <fieldname="res_model">lunch.order</field>
+        <fieldname="view_mode">tree,kanban</field>
+        <fieldname="search_view_id"ref="lunch_order_view_search"/>
+        <fieldname="context">{"search_default_group_by_supplier":1,"search_default_date_filter":1}</field>
+        <fieldname="help"type="html">
+          <pclass="o_view_nocontent_empty_folder">
+            Nothingtoordertoday
           </p><p>
-            Here you can see today's orders grouped by vendors.
+            Hereyoucanseetoday'sordersgroupedbyvendors.
           </p>
         </field>
     </record>
 
-    <record id="lunch_order_action_control_suppliers" model="ir.actions.act_window">
-        <field name="name">Control Vendors</field>
-        <field name="res_model">lunch.order</field>
-        <field name="view_mode">tree,kanban,pivot</field>
-        <field name="search_view_id" ref="lunch_order_view_search"/>
-        <field name="context">{"search_default_group_by_supplier":1}</field>
-        <field name="help" type="html">
-          <p class="o_view_nocontent_empty_folder">
-            No lunch order yet
+    <recordid="lunch_order_action_control_suppliers"model="ir.actions.act_window">
+        <fieldname="name">ControlVendors</field>
+        <fieldname="res_model">lunch.order</field>
+        <fieldname="view_mode">tree,kanban,pivot</field>
+        <fieldname="search_view_id"ref="lunch_order_view_search"/>
+        <fieldname="context">{"search_default_group_by_supplier":1}</field>
+        <fieldname="help"type="html">
+          <pclass="o_view_nocontent_empty_folder">
+            Nolunchorderyet
           </p><p>
-            Summary of all lunch orders, grouped by vendor and by date.
+            Summaryofalllunchorders,groupedbyvendorandbydate.
           </p><p>
-            Click on the <span class="fa fa-phone text-success" role="img" aria-label="Order button" title="Order button"/> to announce that the order is ordered.<br/>
-            Click on the <span class="fa fa-check text-success" role="img" aria-label="Receive button" title="Receive button"/> to announce that the order is received.<br/>
-            Click on the <span class="fa fa-times-circle text-danger" role="img" aria-label="Cancel button" title="Cancel button"/> red X to announce that the order isn't available.
+            Clickonthe<spanclass="fafa-phonetext-success"role="img"aria-label="Orderbutton"title="Orderbutton"/>toannouncethattheorderisordered.<br/>
+            Clickonthe<spanclass="fafa-checktext-success"role="img"aria-label="Receivebutton"title="Receivebutton"/>toannouncethattheorderisreceived.<br/>
+            Clickonthe<spanclass="fafa-times-circletext-danger"role="img"aria-label="Cancelbutton"title="Cancelbutton"/>redXtoannouncethattheorderisn'tavailable.
           </p>
         </field>
     </record>
 
-    <record id="lunch_order_view_form" model="ir.ui.view">
-        <field name="name">lunch.order.view.form</field>
-        <field name="model">lunch.order</field>
-        <field name="arch" type="xml">
+    <recordid="lunch_order_view_form"model="ir.ui.view">
+        <fieldname="name">lunch.order.view.form</field>
+        <fieldname="model">lunch.order</field>
+        <fieldname="arch"type="xml">
             <form>
-                <field name="currency_id" invisible="1"/>
-                <field name="quantity" invisible="1"/>
-                <field name="product_id" invisible="1"/>
-                <field name="category_id" invisible="1"/>
-                <field name="available_toppings_1" invisible="1"/>
-                <field name="available_toppings_2" invisible="1"/>
-                <field name="available_toppings_3" invisible="1"/>
-                <div class="d-flex">
-                    <div class="flex-grow-0 pr-5">
-                        <field name="image_1920" widget="image" class="o_lunch_image" options="{'image_preview': 'image_128'}"/>
+                <fieldname="currency_id"invisible="1"/>
+                <fieldname="quantity"invisible="1"/>
+                <fieldname="product_id"invisible="1"/>
+                <fieldname="category_id"invisible="1"/>
+                <fieldname="available_toppings_1"invisible="1"/>
+                <fieldname="available_toppings_2"invisible="1"/>
+                <fieldname="available_toppings_3"invisible="1"/>
+                <divclass="d-flex">
+                    <divclass="flex-grow-0pr-5">
+                        <fieldname="image_1920"widget="image"class="o_lunch_image"options="{'image_preview':'image_128'}"/>
                     </div>
-                    <div class="flex-grow-1 pr-5">
-                        <h2><field name="name"/></h2>
-                        <h3 class="pt-3"><field name="price" widget="monetary"/></h3>
+                    <divclass="flex-grow-1pr-5">
+                        <h2><fieldname="name"/></h2>
+                        <h3class="pt-3"><fieldname="price"widget="monetary"/></h3>
                     </div>
                 </div>
-                <div class="o_lunch_wizard">
-                    <div class="row">
-                        <div class="col-2">
-                            <field name="topping_label_1" nolabel="1" attrs="{'invisible': [('available_toppings_1', '=', False)]}" class="font-weight-bold"/>
+                <divclass="o_lunch_wizard">
+                    <divclass="row">
+                        <divclass="col-2">
+                            <fieldname="topping_label_1"nolabel="1"attrs="{'invisible':[('available_toppings_1','=',False)]}"class="font-weight-bold"/>
                         </div>
-                        <div class="col-10">
-                            <field name="topping_ids_1" attrs="{'invisible': [('available_toppings_1', '=', False)]}" widget="many2many_checkboxes" nolabel="1"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2">
-                            <field name="topping_label_2" nolabel="1" attrs="{'invisible': [('available_toppings_2', '=', False)]}" class="font-weight-bold"/>
-                        </div>
-                        <div class="col-10">
-                            <field name="topping_ids_2" attrs="{'invisible': [('available_toppings_2', '=', False)]}" widget="many2many_checkboxes" nolabel="1"/>
+                        <divclass="col-10">
+                            <fieldname="topping_ids_1"attrs="{'invisible':[('available_toppings_1','=',False)]}"widget="many2many_checkboxes"nolabel="1"/>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-2">
-                            <field name="topping_label_3" nolabel="1" attrs="{'invisible': [('available_toppings_3', '=', False)]}" class="font-weight-bold"/>
+                    <divclass="row">
+                        <divclass="col-2">
+                            <fieldname="topping_label_2"nolabel="1"attrs="{'invisible':[('available_toppings_2','=',False)]}"class="font-weight-bold"/>
                         </div>
-                        <div class="col-10">
-                            <field name="topping_ids_3" attrs="{'invisible': [('available_toppings_3', '=', False)]}" widget="many2many_checkboxes" nolabel="1"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2">
-                            <label for="product_description" class="font-weight-bold"/>
-                        </div>
-                        <div class="col-10">
-                            <field name="product_description" nolabel="1"/>
+                        <divclass="col-10">
+                            <fieldname="topping_ids_2"attrs="{'invisible':[('available_toppings_2','=',False)]}"widget="many2many_checkboxes"nolabel="1"/>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-2">
-                            <label for="note" class="font-weight-bold" />
+                    <divclass="row">
+                        <divclass="col-2">
+                            <fieldname="topping_label_3"nolabel="1"attrs="{'invisible':[('available_toppings_3','=',False)]}"class="font-weight-bold"/>
                         </div>
-                        <div class="col-10">
-                            <field name="note" nolabel="1" placeholder="Information, allergens, ..." />
+                        <divclass="col-10">
+                            <fieldname="topping_ids_3"attrs="{'invisible':[('available_toppings_3','=',False)]}"widget="many2many_checkboxes"nolabel="1"/>
+                        </div>
+                    </div>
+                    <divclass="row">
+                        <divclass="col-2">
+                            <labelfor="product_description"class="font-weight-bold"/>
+                        </div>
+                        <divclass="col-10">
+                            <fieldname="product_description"nolabel="1"/>
+                        </div>
+                    </div>
+                    <divclass="row">
+                        <divclass="col-2">
+                            <labelfor="note"class="font-weight-bold"/>
+                        </div>
+                        <divclass="col-10">
+                            <fieldname="note"nolabel="1"placeholder="Information,allergens,..."/>
                         </div>
                     </div>
                 </div>
                 <footer>
-                    <button string="Save" special="save" class="oe_highlight" invisible="not context.get('active_id', False)"/>
-                    <button string="Add To Cart" name="add_to_cart" type="object" class="oe_highlight" invisible="context.get('active_id', False)"/>
-                    <button string="Discard" special="cancel"/>
+                    <buttonstring="Save"special="save"class="oe_highlight"invisible="notcontext.get('active_id',False)"/>
+                    <buttonstring="AddToCart"name="add_to_cart"type="object"class="oe_highlight"invisible="context.get('active_id',False)"/>
+                    <buttonstring="Discard"special="cancel"/>
                 </footer>
             </form>
         </field>

@@ -1,91 +1,91 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record id="mail_template_sale_cart_recovery" model="mail.template">
-            <field name="name">Sales Order: Cart Recovery Email</field>
-            <field name="model_id" ref="sale.model_sale_order"/>
-            <field name="subject">You left items in your cart!</field>
-            <field name="email_from">${(object.user_id.email_formatted or user.email_formatted or '') | safe}</field>
-            <field name="partner_to">${object.partner_id.id}</field>
-            <field name="body_html" type="xml">
-<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;"><tr><td align="center">
-<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">
+    <datanoupdate="1">
+        <recordid="mail_template_sale_cart_recovery"model="mail.template">
+            <fieldname="name">SalesOrder:CartRecoveryEmail</field>
+            <fieldname="model_id"ref="sale.model_sale_order"/>
+            <fieldname="subject">Youleftitemsinyourcart!</field>
+            <fieldname="email_from">${(object.user_id.email_formattedoruser.email_formattedor'')|safe}</field>
+            <fieldname="partner_to">${object.partner_id.id}</field>
+            <fieldname="body_html"type="xml">
+<tableborder="0"cellpadding="0"cellspacing="0"style="padding-top:16px;background-color:#F1F1F1;font-family:Verdana,Arial,sans-serif;color:#454748;width:100%;border-collapse:separate;"><tr><tdalign="center">
+<tableborder="0"cellpadding="0"cellspacing="0"width="590"style="padding:16px;background-color:white;color:#454748;border-collapse:separate;">
 <tbody>
-    <!-- HEADER -->
+    <!--HEADER-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
-                <tr><td valign="middle">
-                    % set company = object.company_id or object.user_id.company_id or user.company_id
-                    <span style="font-size: 10px;">Your Cart</span><br/>
-                    <span style="font-size: 20px; font-weight: bold;">
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;padding:0px8px0px8px;border-collapse:separate;">
+                <tr><tdvalign="middle">
+                    %setcompany=object.company_idorobject.user_id.company_idoruser.company_id
+                    <spanstyle="font-size:10px;">YourCart</span><br/>
+                    <spanstyle="font-size:20px;font-weight:bold;">
                         ${object.name}
                     </span>
-                </td><td valign="middle" align="right">
-                    <img src="/logo.png?company=${company.id}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="${company.name}"/>
+                </td><tdvalign="middle"align="right">
+                    <imgsrc="/logo.png?company=${company.id}"style="padding:0px;margin:0px;height:auto;width:80px;"alt="${company.name}"/>
                 </td></tr>
-                <tr><td colspan="2" style="text-align:center;">
-                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin:16px 0px 16px 0px;"/>
+                <tr><tdcolspan="2"style="text-align:center;">
+                  <hrwidth="100%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:16px0px16px0px;"/>
                 </td></tr>
             </table>
         </td>
     </tr>
-    <!-- CONTENT -->
+    <!--CONTENT-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
-                <tr><td valign="top" style="font-size: 13px;">
-                    <h1 style="color:#A9A9A9;">THERE'S SOMETHING IN YOUR CART.</h1>
-                    Would you like to complete your purchase?<br/><br/>
-                    % if object.order_line:
-                        % for line in object.website_order_line:
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;padding:0px8px0px8px;border-collapse:separate;">
+                <tr><tdvalign="top"style="font-size:13px;">
+                    <h1style="color:#A9A9A9;">THERE'SSOMETHINGINYOURCART.</h1>
+                    Wouldyouliketocompleteyourpurchase?<br/><br/>
+                    %ifobject.order_line:
+                        %forlineinobject.website_order_line:
                             <hr/>
-                            <table width="100%">
+                            <tablewidth="100%">
                                 <tr>
-                                    <td style="padding: 10px; width:150px;">
-                                        <img src="/web/image/product.product/${line.product_id.id}/image_128" style="width: 100px; height: 100px; object-fit: contain;" alt="Product image"></img>
+                                    <tdstyle="padding:10px;width:150px;">
+                                        <imgsrc="/web/image/product.product/${line.product_id.id}/image_128"style="width:100px;height:100px;object-fit:contain;"alt="Productimage"></img>
                                     </td>
                                     <td>
                                         <strong>${line.product_id.display_name}</strong><br/>${line.name}
                                     </td>
-                                    <td width="100px" align="right">
-                                        ${(line.product_uom_qty) | int} ${(line.product_uom.name)}
+                                    <tdwidth="100px"align="right">
+                                        ${(line.product_uom_qty)|int}${(line.product_uom.name)}
                                     </td>
                                 </tr>
                             </table>
-                        % endfor
+                        %endfor
                         <hr/>
-                    % endif
-                    <div style="text-align: center; margin: 16px 0px 16px 0px; font-size: 14px;">
-                        <a href="${object.get_base_url()}/shop/cart?access_token=${object.access_token}"
+                    %endif
+                    <divstyle="text-align:center;margin:16px0px16px0px;font-size:14px;">
+                        <ahref="${object.get_base_url()}/shop/cart?access_token=${object.access_token}"
                             target="_blank"
-                            style="background-color: #009EFB; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
-                            Resume order
+                            style="background-color:#009EFB;padding:8px16px8px16px;text-decoration:none;color:#fff;border-radius:5px;font-size:13px;">
+                            Resumeorder
                         </a>
                     </div>
-                    <div style="text-align: center;"><strong>Thank you for shopping with ${company.name}!</strong></div>
+                    <divstyle="text-align:center;"><strong>Thankyouforshoppingwith${company.name}!</strong></div>
                 </td></tr>
-                <tr><td style="text-align:center;">
-                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                <tr><tdstyle="text-align:center;">
+                  <hrwidth="100%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:16px0px16px0px;"/>
                 </td></tr>
             </table>
         </td>
     </tr>
-    <!-- FOOTER -->
+    <!--FOOTER-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
-                <tr><td valign="middle" align="left">
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;font-size:11px;padding:0px8px0px8px;border-collapse:separate;">
+                <tr><tdvalign="middle"align="left">
                     ${company.name}
                 </td></tr>
-                <tr><td valign="middle" align="left" style="opacity: 0.7;">
+                <tr><tdvalign="middle"align="left"style="opacity:0.7;">
                     ${company.phone}
-                    % if company.email
-                        | <a href="'mailto:%s' % ${company.email}" style="text-decoration:none; color: #454748;">${company.email}</a>
-                    % endif
-                    % if company.website
-                        | <a href="'%s' % ${company.website}" style="text-decoration:none; color: #454748;">${company.website}</a>
-                    % endif
+                    %ifcompany.email
+                        |<ahref="'mailto:%s'%${company.email}"style="text-decoration:none;color:#454748;">${company.email}</a>
+                    %endif
+                    %ifcompany.website
+                        |<ahref="'%s'%${company.website}"style="text-decoration:none;color:#454748;">${company.website}</a>
+                    %endif
                 </td></tr>
             </table>
         </td>
@@ -93,18 +93,18 @@
 </tbody>
 </table>
 </td></tr>
-<!-- POWERED BY -->
-<tr><td align="center" style="min-width: 590px;">
-    <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;">
-      <tr><td style="text-align: center; font-size: 13px;">
-        Powered by <a target="_blank" href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=website" style="color: #009EFB;">Flectra</a>
+<!--POWEREDBY-->
+<tr><tdalign="center"style="min-width:590px;">
+    <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:#F1F1F1;color:#454748;padding:8px;border-collapse:separate;">
+      <tr><tdstyle="text-align:center;font-size:13px;">
+        Poweredby<atarget="_blank"href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=website"style="color:#009EFB;">Flectra</a>
       </td></tr>
     </table>
 </td></tr>
 </table>
             </field>
-            <field name="lang">${object.partner_id.lang}</field>
-            <field name="auto_delete" eval="False"/>
+            <fieldname="lang">${object.partner_id.lang}</field>
+            <fieldname="auto_delete"eval="False"/>
         </record>
     </data>
 </flectra>

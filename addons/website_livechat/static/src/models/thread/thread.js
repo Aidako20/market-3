@@ -1,44 +1,44 @@
-flectra.define('website_livechat/static/src/models/thread/thread.js', function (require) {
-'use strict';
+flectra.define('website_livechat/static/src/models/thread/thread.js',function(require){
+'usestrict';
 
-const {
+const{
     registerClassPatchModel,
     registerFieldPatchModel,
-} = require('mail/static/src/model/model_core.js');
-const { many2one } = require('mail/static/src/model/model_field.js');
+}=require('mail/static/src/model/model_core.js');
+const{many2one}=require('mail/static/src/model/model_field.js');
 
-registerClassPatchModel('mail.thread', 'website_livechat/static/src/models/thread/thread.js', {
+registerClassPatchModel('mail.thread','website_livechat/static/src/models/thread/thread.js',{
 
     //----------------------------------------------------------------------
-    // Public
+    //Public
     //----------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    convertData(data) {
-        const data2 = this._super(data);
-        if ('visitor' in data) {
-            if (data.visitor) {
-                data2.visitor = [[
+    convertData(data){
+        constdata2=this._super(data);
+        if('visitor'indata){
+            if(data.visitor){
+                data2.visitor=[[
                     'insert',
                     this.env.models['website_livechat.visitor'].convertData(data.visitor)
                 ]];
-            } else {
-                data2.visitor = [['unlink']];
+            }else{
+                data2.visitor=[['unlink']];
             }
         }
-        return data2;
+        returndata2;
     },
 
 });
 
-registerFieldPatchModel('mail.thread', 'website_livechat/static/src/models/thread/thread.js', {
+registerFieldPatchModel('mail.thread','website_livechat/static/src/models/thread/thread.js',{
     /**
-     * Visitor connected to the livechat.
+     *Visitorconnectedtothelivechat.
      */
-    visitor: many2one('website_livechat.visitor', {
-        inverse: 'threads',
+    visitor:many2one('website_livechat.visitor',{
+        inverse:'threads',
     }),
 });
 

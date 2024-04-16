@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
 
-<t t-extend="quiz.validation">
-    <t t-jquery="button.o_quiz_js_quiz_reset" t-operation="after">
-        <a t-if="widget.nextSuggestion"
-            t-attf-class="btn border o_quiz_js_quiz_next_track #{widget.track.completed ? 'btn-secondary' : 'btn-light'}"
+<tt-extend="quiz.validation">
+    <tt-jquery="button.o_quiz_js_quiz_reset"t-operation="after">
+        <at-if="widget.nextSuggestion"
+            t-attf-class="btnbordero_quiz_js_quiz_next_track#{widget.track.completed?'btn-secondary':'btn-light'}"
             t-att-href="widget.nextSuggestion.suggestion.website_url">
-            Next Track
+            NextTrack
         </a>
     </t>
 </t>

@@ -1,154 +1,154 @@
-flectra.define('website_mail_channel.s_channel', function (require) {
-'use strict';
+flectra.define('website_mail_channel.s_channel',function(require){
+'usestrict';
 
-var publicWidget = require('web.public.widget');
+varpublicWidget=require('web.public.widget');
 
-publicWidget.registry.Channel = publicWidget.Widget.extend({
-    selector: '.s_channel',
-    disabledInEditableMode: false,
-    read_events: {
-        'click .js_follow_btn, .js_unfollow_btn': '_onFollowUnFollowBtnClick',
-        'click .js_follow_btn': '_onFollowBtnClick',
+publicWidget.registry.Channel=publicWidget.Widget.extend({
+    selector:'.s_channel',
+    disabledInEditableMode:false,
+    read_events:{
+        'click.js_follow_btn,.js_unfollow_btn':'_onFollowUnFollowBtnClick',
+        'click.js_follow_btn':'_onFollowBtnClick',
     },
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var self = this;
-        this.is_user = false;
-        var unsubscribePage = window.location.search.slice(1).split('&').indexOf("unsubscribe") >= 0;
+    start:function(){
+        varself=this;
+        this.is_user=false;
+        varunsubscribePage=window.location.search.slice(1).split('&').indexOf("unsubscribe")>=0;
 
-        var always = function (data) {
-            self.is_user = data.is_user;
-            self.email = data.email;
-            self.$target.find('.js_mg_link').attr('href', '/groups/' + self.$target.data('id'));
-            if (unsubscribePage && self.is_user) {
+        varalways=function(data){
+            self.is_user=data.is_user;
+            self.email=data.email;
+            self.$target.find('.js_mg_link').attr('href','/groups/'+self.$target.data('id'));
+            if(unsubscribePage&&self.is_user){
                 self.$target.find(".js_mg_follow_form").remove();
             }
-            self._toggleSubscription(data.is_member ? 'on' : 'off', data.email);
+            self._toggleSubscription(data.is_member?'on':'off',data.email);
             self.$target.removeClass('d-none');
         };
 
         this._rpc({
-            route: '/groups/is_member',
-            params: {
-                model: this.$target.data('object'),
-                channel_id: this.$target.data('id'),
-                get_alias_info: true,
+            route:'/groups/is_member',
+            params:{
+                model:this.$target.data('object'),
+                channel_id:this.$target.data('id'),
+                get_alias_info:true,
             },
         }).then(always).guardedCatch(always);
 
-        // not if editable mode to allow designer to edit alert field
-        if (!this.editableMode) {
-            this.$('> .alert').addClass('d-none');
-            this.$('> .input-group-append.d-none').removeClass('d-none');
+        //notifeditablemodetoallowdesignertoeditalertfield
+        if(!this.editableMode){
+            this.$('>.alert').addClass('d-none');
+            this.$('>.input-group-append.d-none').removeClass('d-none');
         }
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
+    destroy:function(){
         this.el.classList.add('d-none');
         this._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _getAliasInfo: function () {
-        var self = this;
-        if (! this.$target.data('id')) {
-            return Promise.resolve();
+    _getAliasInfo:function(){
+        varself=this;
+        if(!this.$target.data('id')){
+            returnPromise.resolve();
         }
-        return this._rpc({route: '/groups/' + this.$target.data('id') + '/get_alias_info'}).then(function (data) {
-            if (data.alias_name) {
-                self.$target.find('.js_mg_email').attr('href', 'mailto:' + data.alias_name);
+        returnthis._rpc({route:'/groups/'+this.$target.data('id')+'/get_alias_info'}).then(function(data){
+            if(data.alias_name){
+                self.$target.find('.js_mg_email').attr('href','mailto:'+data.alias_name);
                 self.$target.find('.js_mg_email').removeClass('d-none');
-            } else {
+            }else{
                 self.$target.find('.js_mg_email').addClass('d-none');
             }
         });
     },
     /**
-     * @private
+     *@private
      */
-    _toggleSubscription: function (follow, email) {
-        // .js_mg_follow_form contains subscribe form
-        // .js_mg_details contains send/archives/unsubscribe links
-        // .js_mg_confirmation contains message warning has been sent
-        var aliasDone = this._getAliasInfo();
-        if (follow === "on") {
-            // user is connected and can unsubscribe
+    _toggleSubscription:function(follow,email){
+        //.js_mg_follow_formcontainssubscribeform
+        //.js_mg_detailscontainssend/archives/unsubscribelinks
+        //.js_mg_confirmationcontainsmessagewarninghasbeensent
+        varaliasDone=this._getAliasInfo();
+        if(follow==="on"){
+            //userisconnectedandcanunsubscribe
             this.$target.find(".js_mg_follow_form").addClass('d-none');
             this.$target.find(".js_mg_details").removeClass('d-none');
             this.$target.find(".js_mg_confirmation").addClass('d-none');
-        } else if (follow === "off") {
-            // user is connected and can subscribe
+        }elseif(follow==="off"){
+            //userisconnectedandcansubscribe
             this.$target.find(".js_mg_follow_form").removeClass('d-none');
             this.$target.find(".js_mg_details").addClass('d-none');
             this.$target.find(".js_mg_confirmation").addClass('d-none');
-        } else if (follow === "email") {
-            // a confirmation email has been sent
+        }elseif(follow==="email"){
+            //aconfirmationemailhasbeensent
             this.$target.find(".js_mg_follow_form").addClass('d-none');
             this.$target.find(".js_mg_details").addClass('d-none');
             this.$target.find(".js_mg_confirmation").removeClass('d-none');
-        } else {
-            console.error("Unknown subscription action", follow);
+        }else{
+            console.error("Unknownsubscriptionaction",follow);
         }
         this.$target.find('input.js_follow_email')
-            .val(email ? email : "")
-            .attr("disabled", follow === "on" || (email.length && this.is_user) ? "disabled" : false);
-        this.$target.attr("data-follow", follow);
-        return Promise.resolve(aliasDone);
+            .val(email?email:"")
+            .attr("disabled",follow==="on"||(email.length&&this.is_user)?"disabled":false);
+        this.$target.attr("data-follow",follow);
+        returnPromise.resolve(aliasDone);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onFollowBtnClick: function (ev) {
-        if ($(ev.currentTarget).closest('.js_mg_follow_form').length) {
+    _onFollowBtnClick:function(ev){
+        if($(ev.currentTarget).closest('.js_mg_follow_form').length){
             this.$('.js_follow_email').val($(ev.currentTarget).closest('.js_mg_follow_form').find('.js_follow_email').val());
         }
     },
     /**
-     * @private
+     *@private
      */
-    _onFollowUnFollowBtnClick: function (ev) {
+    _onFollowUnFollowBtnClick:function(ev){
         ev.preventDefault();
-        var self = this;
-        var $email = this.$target.find(".js_follow_email");
+        varself=this;
+        var$email=this.$target.find(".js_follow_email");
 
-        if ($email.length && !$email.val().match(/.+@.+/)) {
-            this.$target.addClass('o_has_error').find('.form-control, .custom-select').addClass('is-invalid');
-            return false;
+        if($email.length&&!$email.val().match(/.+@.+/)){
+            this.$target.addClass('o_has_error').find('.form-control,.custom-select').addClass('is-invalid');
+            returnfalse;
         }
-        this.$target.removeClass('o_has_error').find('.form-control, .custom-select').removeClass('is-invalid');
+        this.$target.removeClass('o_has_error').find('.form-control,.custom-select').removeClass('is-invalid');
 
-        var subscriptionAction = this.$target.attr("data-follow") || "off";
-        if (window.location.search.slice(1).split('&').indexOf("unsubscribe") >= 0) {
-            // force unsubscribe mode via URI /groups?unsubscribe
-            subscriptionAction = 'on';
+        varsubscriptionAction=this.$target.attr("data-follow")||"off";
+        if(window.location.search.slice(1).split('&').indexOf("unsubscribe")>=0){
+            //forceunsubscribemodeviaURI/groups?unsubscribe
+            subscriptionAction='on';
         }
         this._rpc({
-            route: '/groups/subscription',
-            params: {
-                'channel_id': +this.$target.data('id'),
-                'object': this.$target.data('object'),
-                'subscription': subscriptionAction,
-                'email': $email.length ? $email.val() : false,
+            route:'/groups/subscription',
+            params:{
+                'channel_id':+this.$target.data('id'),
+                'object':this.$target.data('object'),
+                'subscription':subscriptionAction,
+                'email':$email.length?$email.val():false,
             },
-        }).then(function (follow) {
-            self._toggleSubscription(follow, self.email);
+        }).then(function(follow){
+            self._toggleSubscription(follow,self.email);
         });
     },
 });

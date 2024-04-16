@@ -1,29 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 
 <templates>
-    <t t-name="hr.expense.DocumentsHiddenUploadForm">
-        <div class="d-none o_expense_documents_upload">
-            <t t-call="HiddenInputFile">
-                <t t-set="multi_upload" t-value="true"/>
-                <t t-set="fileupload_id" t-value="widget.fileUploadID"/>
-                <t t-set="fileupload_action" t-translation="off">/web/binary/upload_attachment</t>
-                <input type="hidden" name="model" t-att-value="'hr.expense'"/>
-                <input type="hidden" name="id" t-att-value="0"/>
+    <tt-name="hr.expense.DocumentsHiddenUploadForm">
+        <divclass="d-noneo_expense_documents_upload">
+            <tt-call="HiddenInputFile">
+                <tt-set="multi_upload"t-value="true"/>
+                <tt-set="fileupload_id"t-value="widget.fileUploadID"/>
+                <tt-set="fileupload_action"t-translation="off">/web/binary/upload_attachment</t>
+                <inputtype="hidden"name="model"t-att-value="'hr.expense'"/>
+                <inputtype="hidden"name="id"t-att-value="0"/>
             </t>
         </div>
     </t>
 
-    <t t-extend="ListView.buttons" t-name="ExpensesListView.buttons">
-        <t t-jquery="button.o_list_button_add" t-operation="after">
-            <button type="button" class="btn btn-primary o_button_upload_expense">
+    <tt-extend="ListView.buttons"t-name="ExpensesListView.buttons">
+        <tt-jquery="button.o_list_button_add"t-operation="after">
+            <buttontype="button"class="btnbtn-primaryo_button_upload_expense">
                 Upload
             </button>
         </t>
     </t>
 
-    <t t-extend="KanbanView.buttons" t-name="ExpensesKanbanView.buttons">
-        <t t-jquery="button" t-operation="after">
-            <button type="button" class="btn btn-primary o_button_upload_expense">
+    <tt-extend="KanbanView.buttons"t-name="ExpensesKanbanView.buttons">
+        <tt-jquery="button"t-operation="after">
+            <buttontype="button"class="btnbtn-primaryo_button_upload_expense">
                 Upload
             </button>
         </t>

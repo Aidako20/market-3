@@ -1,32 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
         
-        <!--  Make Invoice -->
+        <!-- MakeInvoice-->
         
-        <record id="view_make_invoice" model="ir.ui.view">
-            <field name="name">Make Invoice</field>
-            <field name="model">repair.order.make_invoice</field>
-            <field name="arch" type="xml">
-            <form string="Create invoices">
-                <group string="Do you really want to create the invoice(s)?">
-                    <field name="group"/>
+        <recordid="view_make_invoice"model="ir.ui.view">
+            <fieldname="name">MakeInvoice</field>
+            <fieldname="model">repair.order.make_invoice</field>
+            <fieldname="arch"type="xml">
+            <formstring="Createinvoices">
+                <groupstring="Doyoureallywanttocreatetheinvoice(s)?">
+                    <fieldname="group"/>
                 </group>
                 <footer>
-                    <button name="make_invoices" string="Create Invoice" type="object" class="btn-primary"/>
-                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                    <buttonname="make_invoices"string="CreateInvoice"type="object"class="btn-primary"/>
+                    <buttonstring="Cancel"class="btn-secondary"special="cancel"/>
                 </footer>
             </form>
             </field>
         </record>
 
-        <record id="act_repair_invoice" model="ir.actions.act_window">
-            <field name="name">Create invoices</field>
-            <field name="res_model">repair.order.make_invoice</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
-            <field name="binding_model_id" ref="model_repair_order"/>
-            <field name="binding_view_types">list</field>
+        <recordid="act_repair_invoice"model="ir.actions.act_window">
+            <fieldname="name">Createinvoices</field>
+            <fieldname="res_model">repair.order.make_invoice</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="target">new</field>
+            <fieldname="binding_model_id"ref="model_repair_order"/>
+            <fieldname="binding_view_types">list</field>
         </record>
 
     </data>

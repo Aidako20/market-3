@@ -1,26 +1,26 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class AccountMoveLine(models.Model):
-    _inherit = "account.move.line"
+classAccountMoveLine(models.Model):
+    _inherit="account.move.line"
 
-    expense_id = fields.Many2one('hr.expense', string='Expense', copy=False, help="Expense where the move line come from")
+    expense_id=fields.Many2one('hr.expense',string='Expense',copy=False,help="Expensewherethemovelinecomefrom")
 
-    def reconcile(self):
-        # OVERRIDE
-        not_paid_expenses = self.expense_id.filtered(lambda expense: expense.state != 'done')
-        not_paid_expense_sheets = not_paid_expenses.sheet_id
-        res = super().reconcile()
-        paid_expenses = not_paid_expenses.filtered(lambda expense: expense.currency_id.is_zero(expense.amount_residual))
-        paid_expenses.write({'state': 'done'})
-        not_paid_expense_sheets.filtered(lambda sheet: all(expense.state == 'done' for expense in sheet.expense_line_ids)).set_to_paid()
-        return res
+    defreconcile(self):
+        #OVERRIDE
+        not_paid_expenses=self.expense_id.filtered(lambdaexpense:expense.state!='done')
+        not_paid_expense_sheets=not_paid_expenses.sheet_id
+        res=super().reconcile()
+        paid_expenses=not_paid_expenses.filtered(lambdaexpense:expense.currency_id.is_zero(expense.amount_residual))
+        paid_expenses.write({'state':'done'})
+        not_paid_expense_sheets.filtered(lambdasheet:all(expense.state=='done'forexpenseinsheet.expense_line_ids)).set_to_paid()
+        returnres
 
-    def _get_attachment_domains(self):
-        attachment_domains = super(AccountMoveLine, self)._get_attachment_domains()
-        if self.expense_id:
-            attachment_domains.append([('res_model', '=', 'hr.expense'), ('res_id', '=', self.expense_id.id)])
-        return attachment_domains
+    def_get_attachment_domains(self):
+        attachment_domains=super(AccountMoveLine,self)._get_attachment_domains()
+        ifself.expense_id:
+            attachment_domains.append([('res_model','=','hr.expense'),('res_id','=',self.expense_id.id)])
+        returnattachment_domains

@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <!-- MailMany2OneAvatar: do not display the display_name in kanban views -->
-    <t t-name="mail.KanbanMany2OneAvatarUser" t-extend="web.Many2OneAvatar">
-        <t t-jquery="img" t-operation="attributes">
-            <attribute name="t-att-title">value</attribute>
+    <!--MailMany2OneAvatar:donotdisplaythedisplay_nameinkanbanviews-->
+    <tt-name="mail.KanbanMany2OneAvatarUser"t-extend="web.Many2OneAvatar">
+        <tt-jquery="img"t-operation="attributes">
+            <attributename="t-att-title">value</attribute>
         </t>
-        <t t-jquery="span" t-operation="replace"/>
+        <tt-jquery="span"t-operation="replace"/>
     </t>
 
 </templates>

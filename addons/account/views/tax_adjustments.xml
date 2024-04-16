@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <record id="tax_adjustments_form" model="ir.actions.act_window">
-            <field name="name">Tax Adjustments</field>
-            <field name="res_model">tax.adjustments.wizard</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
+        <recordid="tax_adjustments_form"model="ir.actions.act_window">
+            <fieldname="name">TaxAdjustments</field>
+            <fieldname="res_model">tax.adjustments.wizard</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="target">new</field>
         </record>
 </flectra>

@@ -1,259 +1,259 @@
-flectra.define('auth_totp_portal.button', function (require) {
-'use strict';
+flectra.define('auth_totp_portal.button',function(require){
+'usestrict';
 
-const {_t} = require('web.core');
-const publicWidget = require('web.public.widget');
-const Dialog = require('web.Dialog');
-const {handleCheckIdentity} = require('portal.portal');
+const{_t}=require('web.core');
+constpublicWidget=require('web.public.widget');
+constDialog=require('web.Dialog');
+const{handleCheckIdentity}=require('portal.portal');
 
 /**
- * Replaces specific <field> elements by normal HTML, strip out the rest entirely
+ *Replacesspecific<field>elementsbynormalHTML,stripouttherestentirely
  */
-function fromField(f, record) {
-    switch (f.getAttribute('name')) {
-    case 'qrcode':
-        const qrcode = document.createElement('img');
-        qrcode.setAttribute('class', 'img img-fluid offset-1');
-        qrcode.setAttribute('src', 'data:image/png;base64,' + record['qrcode']);
-        return qrcode;
-    case 'url':
-        const url = document.createElement('a');
-        url.setAttribute('href', record['url']);
-        url.textContent = f.getAttribute('text') || record['url'];
-        return url;
-    case 'code':
-        const code = document.createElement('input');
-        code.setAttribute('name', 'code');
-        code.setAttribute('class', 'form-control col-10 col-md-6');
-        code.setAttribute('placeholder', '6-digit code');
-        code.required = true;
-        code.maxLength = 6;
-        code.minLength = 6;
-        return code;
-    default: // just display the field's data
-        return document.createTextNode(record[f.getAttribute('name')] || '');
+functionfromField(f,record){
+    switch(f.getAttribute('name')){
+    case'qrcode':
+        constqrcode=document.createElement('img');
+        qrcode.setAttribute('class','imgimg-fluidoffset-1');
+        qrcode.setAttribute('src','data:image/png;base64,'+record['qrcode']);
+        returnqrcode;
+    case'url':
+        consturl=document.createElement('a');
+        url.setAttribute('href',record['url']);
+        url.textContent=f.getAttribute('text')||record['url'];
+        returnurl;
+    case'code':
+        constcode=document.createElement('input');
+        code.setAttribute('name','code');
+        code.setAttribute('class','form-controlcol-10col-md-6');
+        code.setAttribute('placeholder','6-digitcode');
+        code.required=true;
+        code.maxLength=6;
+        code.minLength=6;
+        returncode;
+    default://justdisplaythefield'sdata
+        returndocument.createTextNode(record[f.getAttribute('name')]||'');
     }
 }
 
 /**
- * Apparently chrome literally absolutely can't handle parsing XML and using
- * those nodes in an HTML document (even when parsing as application/xhtml+xml),
- * this results in broken rendering and a number of things not working (e.g.
- * classes) without any specific warning in the console or anything, things are
- * just broken with no indication of why.
+ *Apparentlychromeliterallyabsolutelycan'thandleparsingXMLandusing
+ *thosenodesinanHTMLdocument(evenwhenparsingasapplication/xhtml+xml),
+ *thisresultsinbrokenrenderingandanumberofthingsnotworking(e.g.
+ *classes)withoutanyspecificwarningintheconsoleoranything,thingsare
+ *justbrokenwithnoindicationofwhy.
  *
- * So... rebuild the entire f'ing body using document.createElement to ensure
- * we have HTML elements.
+ *So...rebuildtheentiref'ingbodyusingdocument.createElementtoensure
+ *wehaveHTMLelements.
  *
- * This is a recursive implementation so it's not super efficient but the views
- * to fixup *should* be relatively simple.
+ *Thisisarecursiveimplementationsoit'snotsuperefficientbuttheviews
+ *tofixup*should*berelativelysimple.
  */
-function fixupViewBody(oldNode, record) {
-    let qrcode = null, code = null, node = null;
+functionfixupViewBody(oldNode,record){
+    letqrcode=null,code=null,node=null;
 
-    switch (oldNode.nodeType) {
-        case 1: // element
-            if (oldNode.tagName === 'field') {
-                node = fromField(oldNode, record);
-                switch (oldNode.getAttribute('name')) {
-                case 'qrcode':
-                    qrcode = node;
+    switch(oldNode.nodeType){
+        case1://element
+            if(oldNode.tagName==='field'){
+                node=fromField(oldNode,record);
+                switch(oldNode.getAttribute('name')){
+                case'qrcode':
+                    qrcode=node;
                     break;
-                case 'code':
-                    code = node;
+                case'code':
+                    code=node;
                     break
                 }
-                break; // no need to recurse here
+                break;//noneedtorecursehere
             }
-            node = document.createElement(oldNode.tagName);
-            for(let i=0; i<oldNode.attributes.length; ++i) {
-                const attr = oldNode.attributes[i];
-                node.setAttribute(attr.name, attr.value);
+            node=document.createElement(oldNode.tagName);
+            for(leti=0;i<oldNode.attributes.length;++i){
+                constattr=oldNode.attributes[i];
+                node.setAttribute(attr.name,attr.value);
             }
-            for(let j=0; j<oldNode.childNodes.length; ++j) {
-                const [ch, qr, co] = fixupViewBody(oldNode.childNodes[j], record);
-                if (ch) { node.appendChild(ch); }
-                if (qr) { qrcode = qr; }
-                if (co) { code = co; }
+            for(letj=0;j<oldNode.childNodes.length;++j){
+                const[ch,qr,co]=fixupViewBody(oldNode.childNodes[j],record);
+                if(ch){node.appendChild(ch);}
+                if(qr){qrcode=qr;}
+                if(co){code=co;}
             }
             break;
-        case 3: case 4: // text, cdata
-            node = document.createTextNode(oldNode.data);
+        case3:case4://text,cdata
+            node=document.createTextNode(oldNode.data);
             break;
         default:
-            // don't care about PI & al
+            //don'tcareaboutPI&al
     }
 
-    return [node, qrcode, code]
+    return[node,qrcode,code]
 }
 
 /**
- * Converts a backend <button> element and a bunch of metadata into a structure
- * which can kinda be of use to Dialog.
+ *Convertsabackend<button>elementandabunchofmetadataintoastructure
+ *whichcankindabeofusetoDialog.
  */
-class Button {
-    constructor(parent, model, record_id, input_node, button_node) {
-        this._parent = parent;
-        this.model = model;
-        this.record_id = record_id;
-        this.input = input_node;
-        this.text = button_node.getAttribute('string');
-        this.classes = button_node.getAttribute('class') || null;
-        this.action = button_node.getAttribute('name');
-        if (button_node.getAttribute('special') === 'cancel') {
-            this.close = true;
-            this.click = null;
-        } else {
-            this.close = false;
-            // because Dialog doesnt' call() click on the descriptor object
-            this.click = this._click.bind(this);
+classButton{
+    constructor(parent,model,record_id,input_node,button_node){
+        this._parent=parent;
+        this.model=model;
+        this.record_id=record_id;
+        this.input=input_node;
+        this.text=button_node.getAttribute('string');
+        this.classes=button_node.getAttribute('class')||null;
+        this.action=button_node.getAttribute('name');
+        if(button_node.getAttribute('special')==='cancel'){
+            this.close=true;
+            this.click=null;
+        }else{
+            this.close=false;
+            //becauseDialogdoesnt'call()clickonthedescriptorobject
+            this.click=this._click.bind(this);
         }
     }
-    async _click() {
-        if (!this.input.reportValidity()) {
+    async_click(){
+        if(!this.input.reportValidity()){
             this.input.classList.add('is-invalid');
             return;
         }
 
-        try {
-            await this.callAction(this.record_id, {code: this.input.value});
-        } catch (e) {
+        try{
+            awaitthis.callAction(this.record_id,{code:this.input.value});
+        }catch(e){
             this.input.classList.add('is-invalid');
-            // show custom validity error message
+            //showcustomvalidityerrormessage
             this.input.setCustomValidity(e.message);
             this.input.reportValidity();
             return;
         }
         this.input.classList.remove('is-invalid');
-        // reloads page, avoid window.location.reload() because it re-posts forms
-        window.location = window.location;
+        //reloadspage,avoidwindow.location.reload()becauseitre-postsforms
+        window.location=window.location;
     }
-    async callAction(id, update) {
-        try {
-            await this._parent._rpc({model: this.model, method: 'write', args: [id, update]});
-            await handleCheckIdentity(
+    asynccallAction(id,update){
+        try{
+            awaitthis._parent._rpc({model:this.model,method:'write',args:[id,update]});
+            awaithandleCheckIdentity(
                 this._parent.proxy('_rpc'),
-                this._parent._rpc({model: this.model, method: this.action, args: [id]})
+                this._parent._rpc({model:this.model,method:this.action,args:[id]})
             );
-        } catch(e) {
-            // avoid error toast (crashmanager)
+        }catch(e){
+            //avoiderrortoast(crashmanager)
             e.event.preventDefault();
-            // try to unwrap mess of an error object to a usable error message
-            throw new Error(
-                !e.message ? e.toString()
-              : !e.message.data ? e.message.message
-              : e.message.data.message || _t("Operation failed for unknown reason.")
+            //trytounwrapmessofanerrorobjecttoausableerrormessage
+            thrownewError(
+                !e.message?e.toString()
+              :!e.message.data?e.message.message
+              :e.message.data.message||_t("Operationfailedforunknownreason.")
             );
         }
     }
 }
 
-publicWidget.registry.TOTPButton = publicWidget.Widget.extend({
-    selector: '#auth_totp_portal_enable',
-    events: {
-        click: '_onClick',
+publicWidget.registry.TOTPButton=publicWidget.Widget.extend({
+    selector:'#auth_totp_portal_enable',
+    events:{
+        click:'_onClick',
     },
 
-    async _onClick(e) {
+    async_onClick(e){
         e.preventDefault();
 
-        const w = await handleCheckIdentity(this.proxy('_rpc'), this._rpc({
-            model: 'res.users',
-            method: 'totp_enable_wizard',
-            args: [this.getSession().user_id]
+        constw=awaithandleCheckIdentity(this.proxy('_rpc'),this._rpc({
+            model:'res.users',
+            method:'totp_enable_wizard',
+            args:[this.getSession().user_id]
         }));
 
-        if (!w) {
-            // TOTP probably already enabled, just reload page
-            window.location = window.location;
+        if(!w){
+            //TOTPprobablyalreadyenabled,justreloadpage
+            window.location=window.location;
             return;
         }
 
-        const {res_model: model, res_id: wizard_id} = w;
+        const{res_model:model,res_id:wizard_id}=w;
 
-        const record = await this._rpc({
-            model, method: 'read', args: [wizard_id, []]
-        }).then(ar => ar[0]);
+        constrecord=awaitthis._rpc({
+            model,method:'read',args:[wizard_id,[]]
+        }).then(ar=>ar[0]);
 
-        const doc = new DOMParser().parseFromString(
+        constdoc=newDOMParser().parseFromString(
             document.getElementById('totp_wizard_view').textContent,
             'application/xhtml+xml'
         );
 
-        const xmlBody = doc.querySelector('sheet *');
-        const [body, , codeInput] = fixupViewBody(xmlBody, record);
-        // remove custom validity error message any time the field changes
-        // otherwise it sticks and browsers suppress submit
-        codeInput.addEventListener('input', () => codeInput.setCustomValidity(''));
+        constxmlBody=doc.querySelector('sheet*');
+        const[body,,codeInput]=fixupViewBody(xmlBody,record);
+        //removecustomvalidityerrormessageanytimethefieldchanges
+        //otherwiseitsticksandbrowserssuppresssubmit
+        codeInput.addEventListener('input',()=>codeInput.setCustomValidity(''));
 
-        const buttons = [];
-        for(const button of doc.querySelectorAll('footer button')) {
-            buttons.push(new Button(this, model, record.id, codeInput, button));
+        constbuttons=[];
+        for(constbuttonofdoc.querySelectorAll('footerbutton')){
+            buttons.push(newButton(this,model,record.id,codeInput,button));
         }
 
-        // wrap in a root host of .modal-body otherwise it breaks our neat flex layout
-        const $content = document.createElement('form');
+        //wrapinaroothostof.modal-bodyotherwiseitbreaksourneatflexlayout
+        const$content=document.createElement('form');
         $content.appendChild(body);
-        // implicit submission by pressing [return] from within input
-        $content.addEventListener('submit', (e) => {
+        //implicitsubmissionbypressing[return]fromwithininput
+        $content.addEventListener('submit',(e)=>{
             e.preventDefault();
-            // sadness: footer not available as normal element
+            //sadness:footernotavailableasnormalelement
             dialog.$footer.find('.btn-primary').click();
         });
-        var dialog = new Dialog(this, {$content, buttons}).open();
+        vardialog=newDialog(this,{$content,buttons}).open();
     }
 });
-publicWidget.registry.DisableTOTPButton = publicWidget.Widget.extend({
-    selector: '#auth_totp_portal_disable',
-    events: {
-        click: '_onClick'
+publicWidget.registry.DisableTOTPButton=publicWidget.Widget.extend({
+    selector:'#auth_totp_portal_disable',
+    events:{
+        click:'_onClick'
     },
 
-    async _onClick(e) {
+    async_onClick(e){
         e.preventDefault();
-        await handleCheckIdentity(
+        awaithandleCheckIdentity(
             this.proxy('_rpc'),
-            this._rpc({model: 'res.users', method: 'totp_disable', args: [this.getSession().user_id]})
+            this._rpc({model:'res.users',method:'totp_disable',args:[this.getSession().user_id]})
         )
-        window.location = window.location;
+        window.location=window.location;
     }
 });
-publicWidget.registry.RevokeTrustedDeviceButton = publicWidget.Widget.extend({
-    selector: '.fa.fa-trash.text-danger',
-    events: {
-        click: '_onClick'
+publicWidget.registry.RevokeTrustedDeviceButton=publicWidget.Widget.extend({
+    selector:'.fa.fa-trash.text-danger',
+    events:{
+        click:'_onClick'
     },
 
-    async _onClick(e){
+    async_onClick(e){
         e.preventDefault();
-        await handleCheckIdentity(
+        awaithandleCheckIdentity(
             this.proxy('_rpc'),
             this._rpc({
-                model: 'res.users.apikeys',
-                method: 'remove',
-                args: [parseInt(this.target.id)]
+                model:'res.users.apikeys',
+                method:'remove',
+                args:[parseInt(this.target.id)]
             })
         );
-        window.location = window.location;
+        window.location=window.location;
     }
 });
-publicWidget.registry.RevokeAllTrustedDevicesButton = publicWidget.Widget.extend({
-    selector: '#auth_totp_portal_revoke_all_devices',
-    events: {
-        click: '_onClick'
+publicWidget.registry.RevokeAllTrustedDevicesButton=publicWidget.Widget.extend({
+    selector:'#auth_totp_portal_revoke_all_devices',
+    events:{
+        click:'_onClick'
     },
 
-    async _onClick(e){
+    async_onClick(e){
         e.preventDefault();
-        await handleCheckIdentity(
+        awaithandleCheckIdentity(
             this.proxy('_rpc'),
             this._rpc({
-                model: 'res.users',
-                method: 'revoke_all_devices',
-                args: [this.getSession().user_id]
+                model:'res.users',
+                method:'revoke_all_devices',
+                args:[this.getSession().user_id]
             })
         );
-        window.location = window.location;
+        window.location=window.location;
     }
 });
 });

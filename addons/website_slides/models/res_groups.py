@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models
+fromflectraimportapi,models
 
 
-class UserGroup(models.Model):
-    _inherit = 'res.groups'
+classUserGroup(models.Model):
+    _inherit='res.groups'
 
-    def write(self, vals):
-        """ Automatically subscribe new users to linked slide channels """
-        write_res = super(UserGroup, self).write(vals)
-        if vals.get('users'):
-            # TDE FIXME: maybe directly check users and subscribe them
-            self.env['slide.channel'].sudo().search([('enroll_group_ids', 'in', self._ids)])._add_groups_members()
-        return write_res
+    defwrite(self,vals):
+        """Automaticallysubscribenewuserstolinkedslidechannels"""
+        write_res=super(UserGroup,self).write(vals)
+        ifvals.get('users'):
+            #TDEFIXME:maybedirectlycheckusersandsubscribethem
+            self.env['slide.channel'].sudo().search([('enroll_group_ids','in',self._ids)])._add_groups_members()
+        returnwrite_res

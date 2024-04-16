@@ -1,109 +1,109 @@
-flectra.define('mail/static/src/components/moderation_discard_dialog/moderation_discard_dialog.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/moderation_discard_dialog/moderation_discard_dialog.js',function(require){
+'usestrict';
 
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
 
-const components = {
-    Dialog: require('web.OwlDialog'),
+constcomponents={
+    Dialog:require('web.OwlDialog'),
 };
 
-const { Component } = owl;
-const { useRef } = owl.hooks;
+const{Component}=owl;
+const{useRef}=owl.hooks;
 
-class ModerationDiscardDialog extends Component {
+classModerationDiscardDialogextendsComponent{
 
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
         useShouldUpdateBasedOnProps({
-            compareDepth: {
-                messageLocalIds: 1,
+            compareDepth:{
+                messageLocalIds:1,
             },
         });
-        useStore(props => {
-            const messages = props.messageLocalIds.map(localId =>
+        useStore(props=>{
+            constmessages=props.messageLocalIds.map(localId=>
                 this.env.models['mail.message'].get(localId)
             );
-            return {
-                messages: messages.map(message => message ? message.__state : undefined),
+            return{
+                messages:messages.map(message=>message?message.__state:undefined),
             };
-        }, {
-            compareDepth: {
-                messages: 1,
+        },{
+            compareDepth:{
+                messages:1,
             },
         });
-        // to manually trigger the dialog close event
-        this._dialogRef = useRef('dialog');
+        //tomanuallytriggerthedialogcloseevent
+        this._dialogRef=useRef('dialog');
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    getBody() {
-        if (this.messages.length === 1) {
-            return this.env._t("You are going to discard 1 message.");
+    getBody(){
+        if(this.messages.length===1){
+            returnthis.env._t("Youaregoingtodiscard1message.");
         }
-        return _.str.sprintf(
-            this.env._t("You are going to discard %s messages."),
+        return_.str.sprintf(
+            this.env._t("Youaregoingtodiscard%smessages."),
             this.messages.length
         );
     }
 
     /**
-     * @returns {mail.message[]}
+     *@returns{mail.message[]}
      */
-    get messages() {
-        return this.props.messageLocalIds.map(localId =>
+    getmessages(){
+        returnthis.props.messageLocalIds.map(localId=>
             this.env.models['mail.message'].get(localId)
         );
     }
 
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    getTitle() {
-        return this.env._t("Confirmation");
+    getTitle(){
+        returnthis.env._t("Confirmation");
     }
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onClickCancel() {
+    _onClickCancel(){
         this._dialogRef.comp._close();
     }
 
     /**
-     * @private
+     *@private
      */
-    _onClickDiscard() {
+    _onClickDiscard(){
         this._dialogRef.comp._close();
-        this.env.models['mail.message'].moderate(this.messages, 'discard');
+        this.env.models['mail.message'].moderate(this.messages,'discard');
     }
 
 }
 
-Object.assign(ModerationDiscardDialog, {
+Object.assign(ModerationDiscardDialog,{
     components,
-    props: {
-        messageLocalIds: {
-            type: Array,
-            element: String,
+    props:{
+        messageLocalIds:{
+            type:Array,
+            element:String,
         },
     },
-    template: 'mail.ModerationDiscardDialog',
+    template:'mail.ModerationDiscardDialog',
 });
 
-return ModerationDiscardDialog;
+returnModerationDiscardDialog;
 
 });

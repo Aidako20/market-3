@@ -1,1143 +1,1143 @@
-flectra.define('website.contentMenu', function (require) {
-'use strict';
+flectra.define('website.contentMenu',function(require){
+'usestrict';
 
-var Class = require('web.Class');
-var core = require('web.core');
-var Dialog = require('web.Dialog');
-var time = require('web.time');
-var weWidgets = require('wysiwyg.widgets');
-var websiteNavbarData = require('website.navbar');
-var websiteRootData = require('website.root');
-var Widget = require('web.Widget');
+varClass=require('web.Class');
+varcore=require('web.core');
+varDialog=require('web.Dialog');
+vartime=require('web.time');
+varweWidgets=require('wysiwyg.widgets');
+varwebsiteNavbarData=require('website.navbar');
+varwebsiteRootData=require('website.root');
+varWidget=require('web.Widget');
 
-var _t = core._t;
-var qweb = core.qweb;
+var_t=core._t;
+varqweb=core.qweb;
 
-var PagePropertiesDialog = weWidgets.Dialog.extend({
-    template: 'website.pagesMenu.page_info',
-    xmlDependencies: weWidgets.Dialog.prototype.xmlDependencies.concat(
+varPagePropertiesDialog=weWidgets.Dialog.extend({
+    template:'website.pagesMenu.page_info',
+    xmlDependencies:weWidgets.Dialog.prototype.xmlDependencies.concat(
         ['/website/static/src/xml/website.pageProperties.xml']
     ),
-    events: _.extend({}, weWidgets.Dialog.prototype.events, {
-        'keyup input#page_name': '_onNameChanged',
-        'keyup input#page_url': '_onUrlChanged',
-        'change input#create_redirect': '_onCreateRedirectChanged',
-        'click input#visibility_password': '_onPasswordClicked',
-        'change input#visibility_password': '_onPasswordChanged',
-        'change select#visibility': '_onVisibilityChanged',
-        'error.datetimepicker': '_onDateTimePickerError',
+    events:_.extend({},weWidgets.Dialog.prototype.events,{
+        'keyupinput#page_name':'_onNameChanged',
+        'keyupinput#page_url':'_onUrlChanged',
+        'changeinput#create_redirect':'_onCreateRedirectChanged',
+        'clickinput#visibility_password':'_onPasswordClicked',
+        'changeinput#visibility_password':'_onPasswordChanged',
+        'changeselect#visibility':'_onVisibilityChanged',
+        'error.datetimepicker':'_onDateTimePickerError',
     }),
 
     /**
-     * @constructor
-     * @override
+     *@constructor
+     *@override
      */
-    init: function (parent, page_id, options) {
-        var self = this;
-        var serverUrl = window.location.origin + '/';
-        var length_url = serverUrl.length;
-        var serverUrlTrunc = serverUrl;
-        if (length_url > 30) {
-            serverUrlTrunc = serverUrl.slice(0,14) + '..' + serverUrl.slice(-14);
+    init:function(parent,page_id,options){
+        varself=this;
+        varserverUrl=window.location.origin+'/';
+        varlength_url=serverUrl.length;
+        varserverUrlTrunc=serverUrl;
+        if(length_url>30){
+            serverUrlTrunc=serverUrl.slice(0,14)+'..'+serverUrl.slice(-14);
         }
-        this.serverUrl = serverUrl;
-        this.serverUrlTrunc = serverUrlTrunc;
-        this.current_page_url = window.location.pathname;
-        this.page_id = page_id;
+        this.serverUrl=serverUrl;
+        this.serverUrlTrunc=serverUrlTrunc;
+        this.current_page_url=window.location.pathname;
+        this.page_id=page_id;
 
-        var buttons = [
-            {text: _t("Save"), classes: 'btn-primary', click: this.save},
-            {text: _t("Discard"), classes: 'mr-auto', close: true},
+        varbuttons=[
+            {text:_t("Save"),classes:'btn-primary',click:this.save},
+            {text:_t("Discard"),classes:'mr-auto',close:true},
         ];
-        if (options.fromPageManagement) {
+        if(options.fromPageManagement){
             buttons.push({
-                text: _t("Go To Page"),
-                icon: 'fa-globe',
-                classes: 'btn-link',
-                click: function (e) {
-                    window.location.href = '/' + self.page.url;
+                text:_t("GoToPage"),
+                icon:'fa-globe',
+                classes:'btn-link',
+                click:function(e){
+                    window.location.href='/'+self.page.url;
                 },
             });
         }
         buttons.push({
-            text: _t("Duplicate Page"),
-            icon: 'fa-clone',
-            classes: 'btn-link',
-            click: function (e) {
-                // modal('hide') will break the rpc, so hide manually
+            text:_t("DuplicatePage"),
+            icon:'fa-clone',
+            classes:'btn-link',
+            click:function(e){
+                //modal('hide')willbreaktherpc,sohidemanually
                 this.$el.closest('.modal').addClass('d-none');
-                _clonePage.call(this, self.page_id);
+                _clonePage.call(this,self.page_id);
             },
         });
         buttons.push({
-            text: _t("Delete Page"),
-            icon: 'fa-trash',
-            classes: 'btn-link',
-            click: function (e) {
-                _deletePage.call(this, self.page_id, options.fromPageManagement);
+            text:_t("DeletePage"),
+            icon:'fa-trash',
+            classes:'btn-link',
+            click:function(e){
+                _deletePage.call(this,self.page_id,options.fromPageManagement);
             },
         });
-        this._super(parent, _.extend({}, {
-            title: _t("Page Properties"),
-            size: 'medium',
-            buttons: buttons,
-        }, options || {}));
+        this._super(parent,_.extend({},{
+            title:_t("PageProperties"),
+            size:'medium',
+            buttons:buttons,
+        },options||{}));
     },
     /**
-     * @override
+     *@override
      */
-    willStart: function () {
-        var defs = [this._super.apply(this, arguments)];
-        var self = this;
+    willStart:function(){
+        vardefs=[this._super.apply(this,arguments)];
+        varself=this;
 
         defs.push(this._rpc({
-            model: 'website.page',
-            method: 'get_page_properties',
-            args: [this.page_id],
-        }).then(function (page) {
-            page.url = _.str.startsWith(page.url, '/') ? page.url.substring(1) : page.url;
-            page.hasSingleGroup = page.group_id !== undefined;
-            self.page = page;
+            model:'website.page',
+            method:'get_page_properties',
+            args:[this.page_id],
+        }).then(function(page){
+            page.url=_.str.startsWith(page.url,'/')?page.url.substring(1):page.url;
+            page.hasSingleGroup=page.group_id!==undefined;
+            self.page=page;
         }));
 
-        return Promise.all(defs);
+        returnPromise.all(defs);
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var self = this;
+    start:function(){
+        varself=this;
 
-        var defs = [this._super.apply(this, arguments)];
+        vardefs=[this._super.apply(this,arguments)];
 
         this.$('.ask_for_redirect').addClass('d-none');
         this.$('.redirect_type').addClass('d-none');
         this.$('.warn_about_call').addClass('d-none');
-        if (this.page.visibility !== 'password') {
+        if(this.page.visibility!=='password'){
             this.$('.show_visibility_password').addClass('d-none');
         }
-        if (this.page.visibility !== 'restricted_group') {
+        if(this.page.visibility!=='restricted_group'){
             this.$('.show_group_id').addClass('d-none');
         }
         this.autocompleteWithGroups(this.$('#group_id'));
 
         defs.push(this._getPageDependencies(this.page_id)
-        .then(function (dependencies) {
-            var dep_text = [];
-            _.each(dependencies, function (value, index) {
-                if (value.length > 0) {
-                    dep_text.push(value.length + ' ' + index.toLowerCase());
+        .then(function(dependencies){
+            vardep_text=[];
+            _.each(dependencies,function(value,index){
+                if(value.length>0){
+                    dep_text.push(value.length+''+index.toLowerCase());
                 }
             });
-            dep_text = dep_text.join(', ');
-            self.$('#dependencies_redirect').html(qweb.render('website.show_page_dependencies', { dependencies: dependencies, dep_text: dep_text }));
-            self.$('a.o_dependencies_redirect_link').on('click', () => {
+            dep_text=dep_text.join(',');
+            self.$('#dependencies_redirect').html(qweb.render('website.show_page_dependencies',{dependencies:dependencies,dep_text:dep_text}));
+            self.$('a.o_dependencies_redirect_link').on('click',()=>{
                 self.$('.o_dependencies_redirect_list_popover').popover({
-                    html: true,
-                    title: _t('Dependencies'),
-                    boundary: 'viewport',
-                    placement: 'right',
-                    trigger: 'focus',
-                    content: () => {
-                        return qweb.render('website.get_tooltip_dependencies', {
-                            dependencies: dependencies,
+                    html:true,
+                    title:_t('Dependencies'),
+                    boundary:'viewport',
+                    placement:'right',
+                    trigger:'focus',
+                    content:()=>{
+                        returnqweb.render('website.get_tooltip_dependencies',{
+                            dependencies:dependencies,
                         });
                     },
-                    template: qweb.render('website.page_dependencies_popover'),
+                    template:qweb.render('website.page_dependencies_popover'),
                 }).popover('toggle');
             });
         }));
 
         defs.push(this._getSupportedMimetype()
-        .then(function (mimetypes) {
-            self.supportedMimetype = mimetypes;
+        .then(function(mimetypes){
+            self.supportedMimetype=mimetypes;
         }));
 
         defs.push(this._getPageKeyDependencies(this.page_id)
-        .then(function (dependencies) {
-            var dep_text = [];
-            _.each(dependencies, function (value, index) {
-                if (value.length > 0) {
-                    dep_text.push(value.length + ' ' + index.toLowerCase());
+        .then(function(dependencies){
+            vardep_text=[];
+            _.each(dependencies,function(value,index){
+                if(value.length>0){
+                    dep_text.push(value.length+''+index.toLowerCase());
                 }
             });
-            dep_text = dep_text.join(', ');
-            self.$('.warn_about_call').html(qweb.render('website.show_page_key_dependencies', {dependencies: dependencies, dep_text: dep_text}));
-            self.$('.warn_about_call [data-toggle="popover"]').popover({
-               container: 'body',
+            dep_text=dep_text.join(',');
+            self.$('.warn_about_call').html(qweb.render('website.show_page_key_dependencies',{dependencies:dependencies,dep_text:dep_text}));
+            self.$('.warn_about_call[data-toggle="popover"]').popover({
+               container:'body',
             });
         }));
 
-        defs.push(this._rpc({model: 'res.users',
-                             method: 'has_group',
-                             args: ['website.group_multi_website']})
-                  .then(function (has_group) {
-                      if (!has_group) {
+        defs.push(this._rpc({model:'res.users',
+                             method:'has_group',
+                             args:['website.group_multi_website']})
+                  .then(function(has_group){
+                      if(!has_group){
                           self.$('#website_restriction').addClass('hidden');
                       }
                   }));
 
-        var datepickersOptions = {
-            minDate: moment({ y: 1000 }),
-            maxDate: moment().add(200, 'y'),
-            calendarWeeks: true,
-            icons : {
-                time: 'fa fa-clock-o',
-                date: 'fa fa-calendar',
-                next: 'fa fa-chevron-right',
-                previous: 'fa fa-chevron-left',
-                up: 'fa fa-chevron-up',
-                down: 'fa fa-chevron-down',
+        vardatepickersOptions={
+            minDate:moment({y:1000}),
+            maxDate:moment().add(200,'y'),
+            calendarWeeks:true,
+            icons:{
+                time:'fafa-clock-o',
+                date:'fafa-calendar',
+                next:'fafa-chevron-right',
+                previous:'fafa-chevron-left',
+                up:'fafa-chevron-up',
+                down:'fafa-chevron-down',
             },
-            locale : moment.locale(),
-            format : time.getLangDatetimeFormat(),
-            widgetPositioning : {
-                horizontal: 'auto',
-                vertical: 'top',
+            locale:moment.locale(),
+            format:time.getLangDatetimeFormat(),
+            widgetPositioning:{
+                horizontal:'auto',
+                vertical:'top',
             },
-             widgetParent: 'body',
+             widgetParent:'body',
         };
-        if (this.page.date_publish) {
-            datepickersOptions.defaultDate = time.str_to_datetime(this.page.date_publish);
+        if(this.page.date_publish){
+            datepickersOptions.defaultDate=time.str_to_datetime(this.page.date_publish);
         }
         this.$('#date_publish_container').datetimepicker(datepickersOptions);
-        return Promise.all(defs);
+        returnPromise.all(defs);
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
+    destroy:function(){
         $('.popover').popover('hide');
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    save: function (data) {
-        var self = this;
-        var context;
-        this.trigger_up('context_get', {
-            callback: function (ctx) {
-                context = ctx;
+    save:function(data){
+        varself=this;
+        varcontext;
+        this.trigger_up('context_get',{
+            callback:function(ctx){
+                context=ctx;
             },
         });
-        var url = this.$('#page_url').val();
+        varurl=this.$('#page_url').val();
 
-        var $datePublish = this.$("#date_publish");
-        $datePublish.closest(".form-group").removeClass('o_has_error').find('.form-control, .custom-select').removeClass('is-invalid');
-        var datePublish = $datePublish.val();
-        if (datePublish !== "") {
-            datePublish = this._parse_date(datePublish);
-            if (!datePublish) {
-                $datePublish.closest(".form-group").addClass('o_has_error').find('.form-control, .custom-select').addClass('is-invalid');
+        var$datePublish=this.$("#date_publish");
+        $datePublish.closest(".form-group").removeClass('o_has_error').find('.form-control,.custom-select').removeClass('is-invalid');
+        vardatePublish=$datePublish.val();
+        if(datePublish!==""){
+            datePublish=this._parse_date(datePublish);
+            if(!datePublish){
+                $datePublish.closest(".form-group").addClass('o_has_error').find('.form-control,.custom-select').addClass('is-invalid');
                 return;
             }
         }
-        var params = {
-            id: this.page.id,
-            name: this.$('#page_name').val(),
-            // Replace duplicate following '/' by only one '/'
-            url: url.replace(/\/{2,}/g, '/'),
-            is_menu: this.$('#is_menu').prop('checked'),
-            is_homepage: this.$('#is_homepage').prop('checked'),
-            website_published: this.$('#is_published').prop('checked'),
-            create_redirect: this.$('#create_redirect').prop('checked'),
-            redirect_type: this.$('#redirect_type').val(),
-            website_indexed: this.$('#is_indexed').prop('checked'),
-            visibility: this.$('#visibility').val(),
-            date_publish: datePublish,
+        varparams={
+            id:this.page.id,
+            name:this.$('#page_name').val(),
+            //Replaceduplicatefollowing'/'byonlyone'/'
+            url:url.replace(/\/{2,}/g,'/'),
+            is_menu:this.$('#is_menu').prop('checked'),
+            is_homepage:this.$('#is_homepage').prop('checked'),
+            website_published:this.$('#is_published').prop('checked'),
+            create_redirect:this.$('#create_redirect').prop('checked'),
+            redirect_type:this.$('#redirect_type').val(),
+            website_indexed:this.$('#is_indexed').prop('checked'),
+            visibility:this.$('#visibility').val(),
+            date_publish:datePublish,
         };
-        if (this.page.hasSingleGroup && this.$('#visibility').val() === 'restricted_group') {
-            params['group_id'] = this.$('#group_id').data('group-id');
+        if(this.page.hasSingleGroup&&this.$('#visibility').val()==='restricted_group'){
+            params['group_id']=this.$('#group_id').data('group-id');
         }
-        if (this.$('#visibility').val() === 'password') {
-            var field_pwd = $('#visibility_password');
-            if (!field_pwd.get(0).reportValidity()) {
+        if(this.$('#visibility').val()==='password'){
+            varfield_pwd=$('#visibility_password');
+            if(!field_pwd.get(0).reportValidity()){
                 return;
             }
-            if (field_pwd.data('dirty')) {
-                params['visibility_pwd'] = field_pwd.val();
+            if(field_pwd.data('dirty')){
+                params['visibility_pwd']=field_pwd.val();
             }
         }
 
         this._rpc({
-            model: 'website.page',
-            method: 'save_page_info',
-            args: [[context.website_id], params],
-        }).then(function (url) {
-            // If from page manager: reload url, if from page itself: go to
-            // (possibly) new url
-            var mo;
-            self.trigger_up('main_object_request', {
-                callback: function (value) {
-                    mo = value;
+            model:'website.page',
+            method:'save_page_info',
+            args:[[context.website_id],params],
+        }).then(function(url){
+            //Iffrompagemanager:reloadurl,iffrompageitself:goto
+            //(possibly)newurl
+            varmo;
+            self.trigger_up('main_object_request',{
+                callback:function(value){
+                    mo=value;
                 },
             });
-            if (mo.model === 'website.page') {
-                window.location.href = url.toLowerCase();
-            } else {
+            if(mo.model==='website.page'){
+                window.location.href=url.toLowerCase();
+            }else{
                 window.location.reload(true);
             }
         });
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Retrieves the page URL dependencies for the given object id.
+     *RetrievesthepageURLdependenciesforthegivenobjectid.
      *
-     * @private
-     * @param {integer} moID
-     * @returns {Promise<Array>}
+     *@private
+     *@param{integer}moID
+     *@returns{Promise<Array>}
      */
-    _getPageDependencies: function (moID) {
-        return this._rpc({
-            model: 'website',
-            method: 'page_search_dependencies',
-            args: [moID],
+    _getPageDependencies:function(moID){
+        returnthis._rpc({
+            model:'website',
+            method:'page_search_dependencies',
+            args:[moID],
         });
     },
     /**
-     * Retrieves the page's key dependencies for the given object id.
+     *Retrievesthepage'skeydependenciesforthegivenobjectid.
      *
-     * @private
-     * @param {integer} moID
-     * @returns {Promise<Array>}
+     *@private
+     *@param{integer}moID
+     *@returns{Promise<Array>}
      */
-    _getPageKeyDependencies: function (moID) {
-        return this._rpc({
-            model: 'website',
-            method: 'page_search_key_dependencies',
-            args: [moID],
+    _getPageKeyDependencies:function(moID){
+        returnthis._rpc({
+            model:'website',
+            method:'page_search_key_dependencies',
+            args:[moID],
         });
     },
     /**
-     * Retrieves supported mimtype
+     *Retrievessupportedmimtype
      *
-     * @private
-     * @returns {Promise<Array>}
+     *@private
+     *@returns{Promise<Array>}
      */
-    _getSupportedMimetype: function () {
-        return this._rpc({
-            model: 'website',
-            method: 'guess_mimetype',
+    _getSupportedMimetype:function(){
+        returnthis._rpc({
+            model:'website',
+            method:'guess_mimetype',
         });
     },
     /**
-     * Returns information about the page main object.
+     *Returnsinformationaboutthepagemainobject.
      *
-     * @private
-     * @returns {Object} model and id
+     *@private
+     *@returns{Object}modelandid
      */
-    _getMainObject: function () {
-        var repr = $('html').data('main-object');
-        var m = repr.match(/(.+)\((\d+),(.*)\)/);
-        return {
-            model: m[1],
-            id: m[2] | 0,
+    _getMainObject:function(){
+        varrepr=$('html').data('main-object');
+        varm=repr.match(/(.+)\((\d+),(.*)\)/);
+        return{
+            model:m[1],
+            id:m[2]|0,
         };
     },
     /**
-     * Converts a string representing the browser datetime
-     * (exemple: Albanian: '2018-Qer-22 15.12.35.')
-     * to a string representing UTC in Flectra's datetime string format
-     * (exemple: '2018-04-22 13:12:35').
+     *Convertsastringrepresentingthebrowserdatetime
+     *(exemple:Albanian:'2018-Qer-2215.12.35.')
+     *toastringrepresentingUTCinFlectra'sdatetimestringformat
+     *(exemple:'2018-04-2213:12:35').
      *
-     * The time zone of the datetime string is assumed to be the one of the
-     * browser and it will be converted to UTC (standard for Flectra).
+     *Thetimezoneofthedatetimestringisassumedtobetheoneofthe
+     *browseranditwillbeconvertedtoUTC(standardforFlectra).
      *
-     * @private
-     * @param {String} value A string representing a datetime.
-     * @returns {String|false} A string representing an UTC datetime if the given value is valid, false otherwise.
+     *@private
+     *@param{String}valueAstringrepresentingadatetime.
+     *@returns{String|false}AstringrepresentinganUTCdatetimeifthegivenvalueisvalid,falseotherwise.
      */
-    _parse_date: function (value) {
-        var datetime = moment(value, time.getLangDatetimeFormat(), true);
-        if (datetime.isValid()) {
-            return time.datetime_to_str(datetime.toDate());
+    _parse_date:function(value){
+        vardatetime=moment(value,time.getLangDatetimeFormat(),true);
+        if(datetime.isValid()){
+            returntime.datetime_to_str(datetime.toDate());
         }
-        else {
-            return false;
+        else{
+            returnfalse;
         }
     },
     /**
-     * Allows the given input to propose existing groups.
+     *Allowsthegiveninputtoproposeexistinggroups.
      *
-     * @param {jQuery} $input
+     *@param{jQuery}$input
      */
-    autocompleteWithGroups: function ($input) {
+    autocompleteWithGroups:function($input){
         $input.autocomplete({
-            source: (request, response) => {
-                return this._rpc({
-                    model: 'res.groups',
-                    method: 'search_read',
-                    args: [[['name', 'ilike', request.term]], ['display_name']],
-                    kwargs: {
-                        limit: 15,
+            source:(request,response)=>{
+                returnthis._rpc({
+                    model:'res.groups',
+                    method:'search_read',
+                    args:[[['name','ilike',request.term]],['display_name']],
+                    kwargs:{
+                        limit:15,
                     },
-                }).then(founds => {
-                    founds = founds.map(g => ({'id': g['id'], 'label': g['display_name']}));
+                }).then(founds=>{
+                    founds=founds.map(g=>({'id':g['id'],'label':g['display_name']}));
                     response(founds);
                 });
             },
-            change: (ev, ui) => {
-                var $target = $(ev.target);
-                if (!ui.item) {
+            change:(ev,ui)=>{
+                var$target=$(ev.target);
+                if(!ui.item){
                     $target.val("");
                     $target.removeData('group-id');
-                } else {
-                    $target.data('group-id', ui.item.id);
+                }else{
+                    $target.data('group-id',ui.item.id);
                 }
             },
         });
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onUrlChanged: function () {
-        var url = this.$('input#page_url').val();
-        this.$('.ask_for_redirect').toggleClass('d-none', url === this.page.url);
+    _onUrlChanged:function(){
+        varurl=this.$('input#page_url').val();
+        this.$('.ask_for_redirect').toggleClass('d-none',url===this.page.url);
     },
     /**
-     * @private
+     *@private
      */
-    _onNameChanged: function () {
-        var name = this.$('input#page_name').val();
-        // If the file type is a supported mimetype, check if it is t-called.
-        // If so, warn user. Note: different from page_search_dependencies which
-        // check only for url and not key
-        var ext = '.' + this.page.name.split('.').pop();
-        if (ext in this.supportedMimetype && ext !== '.html') {
-            this.$('.warn_about_call').toggleClass('d-none', name === this.page.name);
+    _onNameChanged:function(){
+        varname=this.$('input#page_name').val();
+        //Ifthefiletypeisasupportedmimetype,checkifitist-called.
+        //Ifso,warnuser.Note:differentfrompage_search_dependencieswhich
+        //checkonlyforurlandnotkey
+        varext='.'+this.page.name.split('.').pop();
+        if(extinthis.supportedMimetype&&ext!=='.html'){
+            this.$('.warn_about_call').toggleClass('d-none',name===this.page.name);
         }
     },
     /**
-     * @private
+     *@private
      */
-    _onCreateRedirectChanged: function () {
-        var createRedirect = this.$('input#create_redirect').prop('checked');
-        this.$('.redirect_type').toggleClass('d-none', !createRedirect);
+    _onCreateRedirectChanged:function(){
+        varcreateRedirect=this.$('input#create_redirect').prop('checked');
+        this.$('.redirect_type').toggleClass('d-none',!createRedirect);
     },
     /**
-     * @private
+     *@private
      */
-    _onVisibilityChanged: function (ev) {
-        this.$('.show_visibility_password').toggleClass('d-none', ev.target.value !== 'password');
-        this.$('.show_group_id').toggleClass('d-none', ev.target.value !== 'restricted_group');
-        this.$('#visibility_password').attr('required', ev.target.value === 'password');
+    _onVisibilityChanged:function(ev){
+        this.$('.show_visibility_password').toggleClass('d-none',ev.target.value!=='password');
+        this.$('.show_group_id').toggleClass('d-none',ev.target.value!=='restricted_group');
+        this.$('#visibility_password').attr('required',ev.target.value==='password');
     },
     /**
-     * Library clears the wrong date format so just ignore error
+     *Libraryclearsthewrongdateformatsojustignoreerror
      *
-     * @private
+     *@private
      */
-    _onDateTimePickerError: function (ev) {
-        return false;
+    _onDateTimePickerError:function(ev){
+        returnfalse;
     },
     /**
-     * @private
+     *@private
      */
-    _onPasswordClicked: function (ev) {
-        ev.target.value = '';
+    _onPasswordClicked:function(ev){
+        ev.target.value='';
         this._onPasswordChanged();
     },
     /**
-     * @private
+     *@private
      */
-    _onPasswordChanged: function () {
-        this.$('#visibility_password').data('dirty', 1);
+    _onPasswordChanged:function(){
+        this.$('#visibility_password').data('dirty',1);
     },
 });
 
-var MenuEntryDialog = weWidgets.LinkDialog.extend({
-    xmlDependencies: weWidgets.LinkDialog.prototype.xmlDependencies.concat(
+varMenuEntryDialog=weWidgets.LinkDialog.extend({
+    xmlDependencies:weWidgets.LinkDialog.prototype.xmlDependencies.concat(
         ['/website/static/src/xml/website.contentMenu.xml']
     ),
 
     /**
-     * @constructor
+     *@constructor
      */
-    init: function (parent, options, editable, data) {
-        this._super(parent, _.extend({
-            title: _t("Add a menu item"),
-        }, options || {}), editable, _.extend({
-            needLabel: true,
-            text: data.name || '',
-            isNewWindow: data.new_window,
-        }, data || {}));
+    init:function(parent,options,editable,data){
+        this._super(parent,_.extend({
+            title:_t("Addamenuitem"),
+        },options||{}),editable,_.extend({
+            needLabel:true,
+            text:data.name||'',
+            isNewWindow:data.new_window,
+        },data||{}));
 
-        this.menuType = data.menuType;
+        this.menuType=data.menuType;
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        // Remove style related elements
+    start:function(){
+        //Removestylerelatedelements
         this.$('.o_link_dialog_preview').remove();
-        this.$('input[name="is_new_window"], .link-style').closest('.form-group').remove();
+        this.$('input[name="is_new_window"],.link-style').closest('.form-group').remove();
         this.$modal.find('.modal-lg').removeClass('modal-lg');
         this.$('form.col-lg-8').removeClass('col-lg-8').addClass('col-12');
 
-        // Adapt URL label
-        this.$('label[for="o_link_dialog_label_input"]').text(_t("Menu Label"));
+        //AdaptURLlabel
+        this.$('label[for="o_link_dialog_label_input"]').text(_t("MenuLabel"));
 
-        // Auto add '#' URL and hide the input if for mega menu
-        if (this.menuType === 'mega') {
-            var $url = this.$('input[name="url"]');
+        //Autoadd'#'URLandhidetheinputifformegamenu
+        if(this.menuType==='mega'){
+            var$url=this.$('input[name="url"]');
             $url.val('#').trigger('change');
             $url.closest('.form-group').addClass('d-none');
         }
 
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    save: function () {
-        var $e = this.$('#o_link_dialog_label_input');
-        if (!$e.val() || !$e[0].checkValidity()) {
-            $e.closest('.form-group').addClass('o_has_error').find('.form-control, .custom-select').addClass('is-invalid');
+    save:function(){
+        var$e=this.$('#o_link_dialog_label_input');
+        if(!$e.val()||!$e[0].checkValidity()){
+            $e.closest('.form-group').addClass('o_has_error').find('.form-control,.custom-select').addClass('is-invalid');
             $e.focus();
             return;
         }
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 });
 
-var SelectEditMenuDialog = weWidgets.Dialog.extend({
-    template: 'website.contentMenu.dialog.select',
-    xmlDependencies: weWidgets.Dialog.prototype.xmlDependencies.concat(
+varSelectEditMenuDialog=weWidgets.Dialog.extend({
+    template:'website.contentMenu.dialog.select',
+    xmlDependencies:weWidgets.Dialog.prototype.xmlDependencies.concat(
         ['/website/static/src/xml/website.contentMenu.xml']
     ),
 
     /**
-     * @constructor
-     * @override
+     *@constructor
+     *@override
      */
-    init: function (parent, options) {
-        var self = this;
-        self.roots = [{id: null, name: _t("Top Menu")}];
-        $('[data-content_menu_id]').each(function () {
-            // Remove name fallback in master
-            self.roots.push({id: $(this).data('content_menu_id'), name: $(this).attr('name') || $(this).data('menu_name')});
+    init:function(parent,options){
+        varself=this;
+        self.roots=[{id:null,name:_t("TopMenu")}];
+        $('[data-content_menu_id]').each(function(){
+            //Removenamefallbackinmaster
+            self.roots.push({id:$(this).data('content_menu_id'),name:$(this).attr('name')||$(this).data('menu_name')});
         });
-        this._super(parent, _.extend({}, {
-            title: _t("Select a Menu"),
-            save_text: _t("Continue")
-        }, options || {}));
+        this._super(parent,_.extend({},{
+            title:_t("SelectaMenu"),
+            save_text:_t("Continue")
+        },options||{}));
     },
     /**
-     * @override
+     *@override
      */
-    save: function () {
-        this.final_data = parseInt(this.$el.find('select').val() || null);
-        this._super.apply(this, arguments);
+    save:function(){
+        this.final_data=parseInt(this.$el.find('select').val()||null);
+        this._super.apply(this,arguments);
     },
 });
 
-var EditMenuDialog = weWidgets.Dialog.extend({
-    template: 'website.contentMenu.dialog.edit',
-    xmlDependencies: weWidgets.Dialog.prototype.xmlDependencies.concat(
+varEditMenuDialog=weWidgets.Dialog.extend({
+    template:'website.contentMenu.dialog.edit',
+    xmlDependencies:weWidgets.Dialog.prototype.xmlDependencies.concat(
         ['/website/static/src/xml/website.contentMenu.xml']
     ),
-    events: _.extend({}, weWidgets.Dialog.prototype.events, {
-        'click a.js_add_menu': '_onAddMenuButtonClick',
-        'click button.js_delete_menu': '_onDeleteMenuButtonClick',
-        'click button.js_edit_menu': '_onEditMenuButtonClick',
+    events:_.extend({},weWidgets.Dialog.prototype.events,{
+        'clicka.js_add_menu':'_onAddMenuButtonClick',
+        'clickbutton.js_delete_menu':'_onDeleteMenuButtonClick',
+        'clickbutton.js_edit_menu':'_onEditMenuButtonClick',
     }),
 
     /**
-     * @constructor
-     * @override
+     *@constructor
+     *@override
      */
-    init: function (parent, options, rootID) {
-        this._super(parent, _.extend({}, {
-            title: _t("Edit Menu"),
-            size: 'medium',
-        }, options || {}));
-        this.rootID = rootID;
+    init:function(parent,options,rootID){
+        this._super(parent,_.extend({},{
+            title:_t("EditMenu"),
+            size:'medium',
+        },options||{}));
+        this.rootID=rootID;
     },
     /**
-     * @override
+     *@override
      */
-    willStart: function () {
-        var defs = [this._super.apply(this, arguments)];
-        var context;
-        this.trigger_up('context_get', {
-            callback: function (ctx) {
-                context = ctx;
+    willStart:function(){
+        vardefs=[this._super.apply(this,arguments)];
+        varcontext;
+        this.trigger_up('context_get',{
+            callback:function(ctx){
+                context=ctx;
             },
         });
         defs.push(this._rpc({
-            model: 'website.menu',
-            method: 'get_tree',
-            args: [context.website_id, this.rootID],
-        }).then(menu => {
-            this.menu = menu;
-            this.rootMenuID = menu.fields['id'];
-            this.flat = this._flatenize(menu);
-            this.toDelete = [];
+            model:'website.menu',
+            method:'get_tree',
+            args:[context.website_id,this.rootID],
+        }).then(menu=>{
+            this.menu=menu;
+            this.rootMenuID=menu.fields['id'];
+            this.flat=this._flatenize(menu);
+            this.toDelete=[];
         }));
-        return Promise.all(defs);
+        returnPromise.all(defs);
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var r = this._super.apply(this, arguments);
+    start:function(){
+        varr=this._super.apply(this,arguments);
         this.$('.oe_menu_editor').nestedSortable({
-            listType: 'ul',
-            handle: 'div',
-            items: 'li',
-            maxLevels: 2,
-            toleranceElement: '> div',
-            forcePlaceholderSize: true,
-            opacity: 0.6,
-            placeholder: 'oe_menu_placeholder',
-            tolerance: 'pointer',
-            attribute: 'data-menu-id',
-            expression: '()(.+)', // nestedSortable takes the second match of an expression (*sigh*)
-            isAllowed: (placeholder, placeholderParent, currentItem) => {
-                return !placeholderParent
-                    || !currentItem[0].dataset.megaMenu && !placeholderParent[0].dataset.megaMenu;
+            listType:'ul',
+            handle:'div',
+            items:'li',
+            maxLevels:2,
+            toleranceElement:'>div',
+            forcePlaceholderSize:true,
+            opacity:0.6,
+            placeholder:'oe_menu_placeholder',
+            tolerance:'pointer',
+            attribute:'data-menu-id',
+            expression:'()(.+)',//nestedSortabletakesthesecondmatchofanexpression(*sigh*)
+            isAllowed:(placeholder,placeholderParent,currentItem)=>{
+                return!placeholderParent
+                    ||!currentItem[0].dataset.megaMenu&&!placeholderParent[0].dataset.megaMenu;
             },
         });
-        return r;
+        returnr;
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    save: function () {
-        var _super = this._super.bind(this);
-        var newMenus = this.$('.oe_menu_editor').nestedSortable('toArray', {startDepthCount: 0});
-        var levels = [];
-        var data = [];
-        var context;
-        this.trigger_up('context_get', {
-            callback: function (ctx) {
-                context = ctx;
+    save:function(){
+        var_super=this._super.bind(this);
+        varnewMenus=this.$('.oe_menu_editor').nestedSortable('toArray',{startDepthCount:0});
+        varlevels=[];
+        vardata=[];
+        varcontext;
+        this.trigger_up('context_get',{
+            callback:function(ctx){
+                context=ctx;
             },
         });
-        // Resequence, re-tree and remove useless data
-        newMenus.forEach(menu => {
-            if (menu.id) {
-                levels[menu.depth] = (levels[menu.depth] || 0) + 1;
-                var menuFields = this.flat[menu.id].fields;
-                menuFields['sequence'] = levels[menu.depth];
-                menuFields['parent_id'] = menu['parent_id'] || this.rootMenuID;
+        //Resequence,re-treeandremoveuselessdata
+        newMenus.forEach(menu=>{
+            if(menu.id){
+                levels[menu.depth]=(levels[menu.depth]||0)+1;
+                varmenuFields=this.flat[menu.id].fields;
+                menuFields['sequence']=levels[menu.depth];
+                menuFields['parent_id']=menu['parent_id']||this.rootMenuID;
                 data.push(menuFields);
             }
         });
-        return this._rpc({
-            model: 'website.menu',
-            method: 'save',
-            args: [
+        returnthis._rpc({
+            model:'website.menu',
+            method:'save',
+            args:[
                 context.website_id,
                 {
-                    'data': data,
-                    'to_delete': this.toDelete,
+                    'data':data,
+                    'to_delete':this.toDelete,
                 }
             ],
-        }).then(function () {
-            return _super();
+        }).then(function(){
+            return_super();
         });
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Returns a mapping id -> menu item containing all the menu items in the
-     * given menu hierarchy.
+     *Returnsamappingid->menuitemcontainingallthemenuitemsinthe
+     *givenmenuhierarchy.
      *
-     * @private
-     * @param {Object} node
-     * @param {Object} [_dict] internal use: the mapping being built
-     * @returns {Object}
+     *@private
+     *@param{Object}node
+     *@param{Object}[_dict]internaluse:themappingbeingbuilt
+     *@returns{Object}
      */
-    _flatenize: function (node, _dict) {
-        _dict = _dict || {};
-        _dict[node.fields['id']] = node;
-        node.children.forEach(child => {
-            this._flatenize(child, _dict);
+    _flatenize:function(node,_dict){
+        _dict=_dict||{};
+        _dict[node.fields['id']]=node;
+        node.children.forEach(child=>{
+            this._flatenize(child,_dict);
         });
-        return _dict;
+        return_dict;
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when the "add menu" button is clicked -> Opens the appropriate
-     * dialog to edit this new menu.
+     *Calledwhenthe"addmenu"buttonisclicked->Openstheappropriate
+     *dialogtoeditthisnewmenu.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onAddMenuButtonClick: function (ev) {
-        var menuType = ev.currentTarget.dataset.type;
-        var dialog = new MenuEntryDialog(this, {}, null, {
-            menuType: menuType,
+    _onAddMenuButtonClick:function(ev){
+        varmenuType=ev.currentTarget.dataset.type;
+        vardialog=newMenuEntryDialog(this,{},null,{
+            menuType:menuType,
         });
-        dialog.on('save', this, link => {
-            var newMenu = {
-                'fields': {
-                    'id': _.uniqueId('new-'),
-                    'name': _.unescape(link.text),
-                    'url': link.url,
-                    'new_window': link.isNewWindow,
-                    'is_mega_menu': menuType === 'mega',
-                    'sequence': 0,
-                    'parent_id': false,
+        dialog.on('save',this,link=>{
+            varnewMenu={
+                'fields':{
+                    'id':_.uniqueId('new-'),
+                    'name':_.unescape(link.text),
+                    'url':link.url,
+                    'new_window':link.isNewWindow,
+                    'is_mega_menu':menuType==='mega',
+                    'sequence':0,
+                    'parent_id':false,
                 },
-                'children': [],
-                'is_homepage': false,
+                'children':[],
+                'is_homepage':false,
             };
-            this.flat[newMenu.fields['id']] = newMenu;
+            this.flat[newMenu.fields['id']]=newMenu;
             this.$('.oe_menu_editor').append(
-                qweb.render('website.contentMenu.dialog.submenu', {submenu: newMenu})
+                qweb.render('website.contentMenu.dialog.submenu',{submenu:newMenu})
             );
         });
         dialog.open();
     },
     /**
-     * Called when the "delete menu" button is clicked -> Deletes this menu.
+     *Calledwhenthe"deletemenu"buttonisclicked->Deletesthismenu.
      *
-     * @private
+     *@private
      */
-    _onDeleteMenuButtonClick: function (ev) {
-        var $menu = $(ev.currentTarget).closest('[data-menu-id]');
-        var menuID = parseInt($menu.data('menu-id'));
-        if (menuID) {
+    _onDeleteMenuButtonClick:function(ev){
+        var$menu=$(ev.currentTarget).closest('[data-menu-id]');
+        varmenuID=parseInt($menu.data('menu-id'));
+        if(menuID){
             this.toDelete.push(menuID);
         }
         $menu.remove();
     },
     /**
-     * Called when the "edit menu" button is clicked -> Opens the appropriate
-     * dialog to edit this menu.
+     *Calledwhenthe"editmenu"buttonisclicked->Openstheappropriate
+     *dialogtoeditthismenu.
      *
-     * @private
+     *@private
      */
-    _onEditMenuButtonClick: function (ev) {
-        var $menu = $(ev.currentTarget).closest('[data-menu-id]');
-        var menuID = $menu.data('menu-id');
-        var menu = this.flat[menuID];
-        if (menu) {
-            var dialog = new MenuEntryDialog(this, {}, null, _.extend({
-                menuType: menu.fields['is_mega_menu'] ? 'mega' : undefined,
-            }, menu.fields));
-            dialog.on('save', this, link => {
-                _.extend(menu.fields, {
-                    'name': _.unescape(link.text),
-                    'url': link.url,
-                    'new_window': link.isNewWindow,
+    _onEditMenuButtonClick:function(ev){
+        var$menu=$(ev.currentTarget).closest('[data-menu-id]');
+        varmenuID=$menu.data('menu-id');
+        varmenu=this.flat[menuID];
+        if(menu){
+            vardialog=newMenuEntryDialog(this,{},null,_.extend({
+                menuType:menu.fields['is_mega_menu']?'mega':undefined,
+            },menu.fields));
+            dialog.on('save',this,link=>{
+                _.extend(menu.fields,{
+                    'name':_.unescape(link.text),
+                    'url':link.url,
+                    'new_window':link.isNewWindow,
                 });
                 $menu.find('.js_menu_label').first().text(menu.fields['name']);
             });
             dialog.open();
-        } else {
-            Dialog.alert(null, "Could not find menu entry");
+        }else{
+            Dialog.alert(null,"Couldnotfindmenuentry");
         }
     },
 });
 
-var PageOption = Class.extend({
+varPageOption=Class.extend({
     /**
-     * @constructor
-     * @param {string} name
-     *        the option's name = the field's name in website.page model
-     * @param {*} value
-     * @param {function} setValueCallback
-     *        a function which simulates an option's value change without
-     *        asking the server to change it
+     *@constructor
+     *@param{string}name
+     *       theoption'sname=thefield'snameinwebsite.pagemodel
+     *@param{*}value
+     *@param{function}setValueCallback
+     *       afunctionwhichsimulatesanoption'svaluechangewithout
+     *       askingtheservertochangeit
      */
-    init: function (name, value, setValueCallback) {
-        this.name = name;
-        this.value = value;
-        this.isDirty = false;
-        this.setValueCallback = setValueCallback;
+    init:function(name,value,setValueCallback){
+        this.name=name;
+        this.value=value;
+        this.isDirty=false;
+        this.setValueCallback=setValueCallback;
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Sets the new option's value thanks to the related callback.
+     *Setsthenewoption'svaluethankstotherelatedcallback.
      *
-     * @param {*} [value]
-     *        by default: consider the current value is a boolean and toggle it
+     *@param{*}[value]
+     *       bydefault:considerthecurrentvalueisabooleanandtoggleit
      */
-    setValue: function (value) {
-        if (value === undefined) {
-            value = !this.value;
+    setValue:function(value){
+        if(value===undefined){
+            value=!this.value;
         }
-        this.setValueCallback.call(this, value);
-        this.value = value;
-        this.isDirty = true;
+        this.setValueCallback.call(this,value);
+        this.value=value;
+        this.isDirty=true;
     },
 });
 
-var ContentMenu = websiteNavbarData.WebsiteNavbarActionWidget.extend({
-    xmlDependencies: ['/website/static/src/xml/website.xml'],
-    actions: _.extend({}, websiteNavbarData.WebsiteNavbarActionWidget.prototype.actions || {}, {
-        edit_menu: '_editMenu',
-        get_page_option: '_getPageOption',
-        on_save: '_onSave',
-        page_properties: '_pageProperties',
-        toggle_page_option: '_togglePageOption',
+varContentMenu=websiteNavbarData.WebsiteNavbarActionWidget.extend({
+    xmlDependencies:['/website/static/src/xml/website.xml'],
+    actions:_.extend({},websiteNavbarData.WebsiteNavbarActionWidget.prototype.actions||{},{
+        edit_menu:'_editMenu',
+        get_page_option:'_getPageOption',
+        on_save:'_onSave',
+        page_properties:'_pageProperties',
+        toggle_page_option:'_togglePageOption',
     }),
-    pageOptionsSetValueCallbacks: {
-        header_overlay: function (value) {
-            $('#wrapwrap').toggleClass('o_header_overlay', value);
+    pageOptionsSetValueCallbacks:{
+        header_overlay:function(value){
+            $('#wrapwrap').toggleClass('o_header_overlay',value);
         },
-        header_color: function (value) {
-            $('#wrapwrap > header').removeClass(this.value)
+        header_color:function(value){
+            $('#wrapwrap>header').removeClass(this.value)
                                    .addClass(value);
         },
-        header_visible: function (value) {
-            $('#wrapwrap > header').toggleClass('d-none o_snippet_invisible', !value);
+        header_visible:function(value){
+            $('#wrapwrap>header').toggleClass('d-noneo_snippet_invisible',!value);
         },
-        footer_visible: function (value) {
-            $('#wrapwrap > footer').toggleClass('d-none o_snippet_invisible', !value);
+        footer_visible:function(value){
+            $('#wrapwrap>footer').toggleClass('d-noneo_snippet_invisible',!value);
         },
     },
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var self = this;
-        this.pageOptions = {};
-        _.each($('.o_page_option_data'), function (el) {
-            var value = el.value;
-            if (value === "True") {
-                value = true;
-            } else if (value === "False") {
-                value = false;
+    start:function(){
+        varself=this;
+        this.pageOptions={};
+        _.each($('.o_page_option_data'),function(el){
+            varvalue=el.value;
+            if(value==="True"){
+                value=true;
+            }elseif(value==="False"){
+                value=false;
             }
-            self.pageOptions[el.name] = new PageOption(
+            self.pageOptions[el.name]=newPageOption(
                 el.name,
                 value,
                 self.pageOptionsSetValueCallbacks[el.name]
             );
         });
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Actions
+    //Actions
     //--------------------------------------------------------------------------
 
     /**
-     * Asks the user which menu to edit if multiple menus exist on the page.
-     * Then opens the menu edition dialog.
-     * Then executes the given callback once the edition is saved, to finally
-     * reload the page.
+     *Askstheuserwhichmenutoeditifmultiplemenusexistonthepage.
+     *Thenopensthemenueditiondialog.
+     *Thenexecutesthegivencallbackoncetheeditionissaved,tofinally
+     *reloadthepage.
      *
-     * @private
-     * @param {function} [beforeReloadCallback]
-     * @returns {Promise}
-     *          Unresolved if the menu is edited and saved as the page will be
-     *          reloaded.
-     *          Resolved otherwise.
+     *@private
+     *@param{function}[beforeReloadCallback]
+     *@returns{Promise}
+     *         Unresolvedifthemenuiseditedandsavedasthepagewillbe
+     *         reloaded.
+     *         Resolvedotherwise.
      */
-    _editMenu: function (beforeReloadCallback) {
-        var self = this;
-        return new Promise(function (resolve) {
-            function resolveWhenEditMenuDialogIsCancelled(rootID) {
-                return self._openEditMenuDialog(rootID, beforeReloadCallback).then(resolve);
+    _editMenu:function(beforeReloadCallback){
+        varself=this;
+        returnnewPromise(function(resolve){
+            functionresolveWhenEditMenuDialogIsCancelled(rootID){
+                returnself._openEditMenuDialog(rootID,beforeReloadCallback).then(resolve);
             }
-            if ($('[data-content_menu_id]').length) {
-                var select = new SelectEditMenuDialog(self);
-                select.on('save', self, resolveWhenEditMenuDialogIsCancelled);
-                select.on('cancel', self, resolve);
+            if($('[data-content_menu_id]').length){
+                varselect=newSelectEditMenuDialog(self);
+                select.on('save',self,resolveWhenEditMenuDialogIsCancelled);
+                select.on('cancel',self,resolve);
                 select.open();
-            } else {
+            }else{
                 resolveWhenEditMenuDialogIsCancelled(null);
             }
         });
     },
     /**
      *
-     * @param {*} rootID
-     * @param {function|undefied} beforeReloadCallback function that returns a promise
-     * @returns {Promise}
+     *@param{*}rootID
+     *@param{function|undefied}beforeReloadCallbackfunctionthatreturnsapromise
+     *@returns{Promise}
      */
-    _openEditMenuDialog: function (rootID, beforeReloadCallback) {
-        var self = this;
-        return new Promise(function (resolve) {
-            var dialog = new EditMenuDialog(self, {}, rootID);
-            dialog.on('save', self, function () {
-                // Before reloading the page after menu modification, does the
-                // given action to do.
-                if (beforeReloadCallback) {
-                    // Reload the page so that the menu modification are shown
-                    beforeReloadCallback().then(function () {
+    _openEditMenuDialog:function(rootID,beforeReloadCallback){
+        varself=this;
+        returnnewPromise(function(resolve){
+            vardialog=newEditMenuDialog(self,{},rootID);
+            dialog.on('save',self,function(){
+                //Beforereloadingthepageaftermenumodification,doesthe
+                //givenactiontodo.
+                if(beforeReloadCallback){
+                    //Reloadthepagesothatthemenumodificationareshown
+                    beforeReloadCallback().then(function(){
                         window.location.reload(true);
                     });
-                } else {
+                }else{
                     window.location.reload(true);
                 }
             });
-            dialog.on('cancel', self, resolve);
+            dialog.on('cancel',self,resolve);
             dialog.open();
         });
     },
 
     /**
-     * Retrieves the value of a page option.
+     *Retrievesthevalueofapageoption.
      *
-     * @private
-     * @param {string} name
-     * @returns {Promise<*>}
+     *@private
+     *@param{string}name
+     *@returns{Promise<*>}
      */
-    _getPageOption: function (name) {
-        var option = this.pageOptions[name];
-        if (!option) {
-            return Promise.reject();
+    _getPageOption:function(name){
+        varoption=this.pageOptions[name];
+        if(!option){
+            returnPromise.reject();
         }
-        return Promise.resolve(option.value);
+        returnPromise.resolve(option.value);
     },
     /**
-     * On save, simulated page options have to be server-saved.
+     *Onsave,simulatedpageoptionshavetobeserver-saved.
      *
-     * @private
-     * @returns {Promise}
+     *@private
+     *@returns{Promise}
      */
-    _onSave: function () {
-        var self = this;
-        var defs = _.map(this.pageOptions, function (option, optionName) {
-            if (option.isDirty) {
-                return self._togglePageOption({
-                    name: optionName,
-                    value: option.value,
-                }, true, true);
+    _onSave:function(){
+        varself=this;
+        vardefs=_.map(this.pageOptions,function(option,optionName){
+            if(option.isDirty){
+                returnself._togglePageOption({
+                    name:optionName,
+                    value:option.value,
+                },true,true);
             }
         });
-        return Promise.all(defs);
+        returnPromise.all(defs);
     },
     /**
-     * Opens the page properties dialog.
+     *Opensthepagepropertiesdialog.
      *
-     * @private
-     * @returns {Promise}
+     *@private
+     *@returns{Promise}
      */
-    _pageProperties: function () {
-        var mo;
-        this.trigger_up('main_object_request', {
-            callback: function (value) {
-                mo = value;
+    _pageProperties:function(){
+        varmo;
+        this.trigger_up('main_object_request',{
+            callback:function(value){
+                mo=value;
             },
         });
-        var dialog = new PagePropertiesDialog(this, mo.id, {}).open();
-        return dialog.opened();
+        vardialog=newPagePropertiesDialog(this,mo.id,{}).open();
+        returndialog.opened();
     },
     /**
-     * Toggles a page option.
+     *Togglesapageoption.
      *
-     * @private
-     * @param {Object} params
-     * @param {string} params.name
-     * @param {*} [params.value] (change value by default true -> false -> true)
-     * @param {boolean} [forceSave=false]
-     * @param {boolean} [noReload=false]
-     * @returns {Promise}
+     *@private
+     *@param{Object}params
+     *@param{string}params.name
+     *@param{*}[params.value](changevaluebydefaulttrue->false->true)
+     *@param{boolean}[forceSave=false]
+     *@param{boolean}[noReload=false]
+     *@returns{Promise}
      */
-    _togglePageOption: function (params, forceSave, noReload) {
-        // First check it is a website page
-        var mo;
-        this.trigger_up('main_object_request', {
-            callback: function (value) {
-                mo = value;
+    _togglePageOption:function(params,forceSave,noReload){
+        //Firstcheckitisawebsitepage
+        varmo;
+        this.trigger_up('main_object_request',{
+            callback:function(value){
+                mo=value;
             },
         });
-        if (mo.model !== 'website.page') {
-            return Promise.reject();
+        if(mo.model!=='website.page'){
+            returnPromise.reject();
         }
 
-        // Check if this is a valid option
-        var option = this.pageOptions[params.name];
-        if (!option) {
-            return Promise.reject();
+        //Checkifthisisavalidoption
+        varoption=this.pageOptions[params.name];
+        if(!option){
+            returnPromise.reject();
         }
 
-        // Toggle the value
+        //Togglethevalue
         option.setValue(params.value);
 
-        // If simulate is true, it means we want the option to be toggled but
-        // not saved on the server yet
-        if (!forceSave) {
-            return Promise.resolve();
+        //Ifsimulateistrue,itmeanswewanttheoptiontobetoggledbut
+        //notsavedontheserveryet
+        if(!forceSave){
+            returnPromise.resolve();
         }
 
-        // If not, write on the server page and reload the current location
-        var vals = {};
-        vals[params.name] = option.value;
-        var prom = this._rpc({
-            model: 'website.page',
-            method: 'write',
-            args: [[mo.id], vals],
+        //Ifnot,writeontheserverpageandreloadthecurrentlocation
+        varvals={};
+        vals[params.name]=option.value;
+        varprom=this._rpc({
+            model:'website.page',
+            method:'write',
+            args:[[mo.id],vals],
         });
-        if (noReload) {
-            return prom;
+        if(noReload){
+            returnprom;
         }
-        return prom.then(function () {
+        returnprom.then(function(){
             window.location.reload();
-            return new Promise(function () {});
+            returnnewPromise(function(){});
         });
     },
 });
 
-var PageManagement = Widget.extend({
-    xmlDependencies: ['/website/static/src/xml/website.xml'],
-    events: {
-        'click a.js_page_properties': '_onPagePropertiesButtonClick',
-        'click a.js_clone_page': '_onClonePageButtonClick',
-        'click a.js_delete_page': '_onDeletePageButtonClick',
+varPageManagement=Widget.extend({
+    xmlDependencies:['/website/static/src/xml/website.xml'],
+    events:{
+        'clicka.js_page_properties':'_onPagePropertiesButtonClick',
+        'clicka.js_clone_page':'_onClonePageButtonClick',
+        'clicka.js_delete_page':'_onDeletePageButtonClick',
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Retrieves the page dependencies for the given object id.
+     *Retrievesthepagedependenciesforthegivenobjectid.
      *
-     * @private
-     * @param {integer} moID
-     * @returns {Promise<Array>}
+     *@private
+     *@param{integer}moID
+     *@returns{Promise<Array>}
      */
-    _getPageDependencies: function (moID) {
-        return this._rpc({
-            model: 'website',
-            method: 'page_search_dependencies',
-            args: [moID],
+    _getPageDependencies:function(moID){
+        returnthis._rpc({
+            model:'website',
+            method:'page_search_dependencies',
+            args:[moID],
         });
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
-    _onPagePropertiesButtonClick: function (ev) {
-        var moID = $(ev.currentTarget).data('id');
-        var dialog = new PagePropertiesDialog(this,moID, {'fromPageManagement': true}).open();
-        return dialog;
+    _onPagePropertiesButtonClick:function(ev){
+        varmoID=$(ev.currentTarget).data('id');
+        vardialog=newPagePropertiesDialog(this,moID,{'fromPageManagement':true}).open();
+        returndialog;
     },
-    _onClonePageButtonClick: function (ev) {
-        var pageId = $(ev.currentTarget).data('id');
-        _clonePage.call(this, pageId);
+    _onClonePageButtonClick:function(ev){
+        varpageId=$(ev.currentTarget).data('id');
+        _clonePage.call(this,pageId);
     },
-    _onDeletePageButtonClick: function (ev) {
-        var pageId = $(ev.currentTarget).data('id');
-        _deletePage.call(this, pageId, true);
+    _onDeletePageButtonClick:function(ev){
+        varpageId=$(ev.currentTarget).data('id');
+        _deletePage.call(this,pageId,true);
     },
 });
 
 /**
- * Deletes the page after showing a dependencies warning for the given page id.
+ *Deletesthepageaftershowingadependencieswarningforthegivenpageid.
  *
- * @private
- * @param {integer} pageId - The ID of the page to be deleted
- * @param {Boolean} fromPageManagement
- *                  Is the function called by the page manager?
- *                  It will affect redirect after page deletion: reload or '/'
+ *@private
+ *@param{integer}pageId-TheIDofthepagetobedeleted
+ *@param{Boolean}fromPageManagement
+ *                 Isthefunctioncalledbythepagemanager?
+ *                 Itwillaffectredirectafterpagedeletion:reloador'/'
  */
-// TODO: This function should be integrated in a widget in the future
-function _deletePage(pageId, fromPageManagement) {
-    var self = this;
-    new Promise(function (resolve, reject) {
-        // Search the page dependencies
+//TODO:Thisfunctionshouldbeintegratedinawidgetinthefuture
+function_deletePage(pageId,fromPageManagement){
+    varself=this;
+    newPromise(function(resolve,reject){
+        //Searchthepagedependencies
         self._getPageDependencies(pageId)
-        .then(function (dependencies) {
-            // Inform the user about those dependencies and ask him confirmation
-            return new Promise(function (confirmResolve, confirmReject) {
-                Dialog.safeConfirm(self, "", {
-                    title: _t("Delete Page"),
-                    $content: $(qweb.render('website.delete_page', {dependencies: dependencies})),
-                    confirm_callback: confirmResolve,
-                    cancel_callback: resolve,
+        .then(function(dependencies){
+            //Informtheuseraboutthosedependenciesandaskhimconfirmation
+            returnnewPromise(function(confirmResolve,confirmReject){
+                Dialog.safeConfirm(self,"",{
+                    title:_t("DeletePage"),
+                    $content:$(qweb.render('website.delete_page',{dependencies:dependencies})),
+                    confirm_callback:confirmResolve,
+                    cancel_callback:resolve,
                 });
             });
-        }).then(function () {
-            // Delete the page if the user confirmed
-            return self._rpc({
-                model: 'website.page',
-                method: 'unlink',
-                args: [pageId],
+        }).then(function(){
+            //Deletethepageiftheuserconfirmed
+            returnself._rpc({
+                model:'website.page',
+                method:'unlink',
+                args:[pageId],
             });
-        }).then(function () {
-            if (fromPageManagement) {
+        }).then(function(){
+            if(fromPageManagement){
                 window.location.reload(true);
-            } else {
-                window.location.href = '/';
+            }else{
+                window.location.href='/';
             }
-        }, reject);
+        },reject);
     });
 }
 /**
- * Duplicate the page after showing the wizard to enter new page name.
+ *Duplicatethepageaftershowingthewizardtoenternewpagename.
  *
- * @private
- * @param {integer} pageId - The ID of the page to be duplicate
+ *@private
+ *@param{integer}pageId-TheIDofthepagetobeduplicate
  *
  */
-function _clonePage(pageId) {
-    var self = this;
-    new Promise(function (resolve, reject) {
-        Dialog.confirm(this, undefined, {
-            title: _t("Duplicate Page"),
-            $content: $(qweb.render('website.duplicate_page_action_dialog')),
-            confirm_callback: function () {
-                return self._rpc({
-                    model: 'website.page',
-                    method: 'clone_page',
-                    args: [
+function_clonePage(pageId){
+    varself=this;
+    newPromise(function(resolve,reject){
+        Dialog.confirm(this,undefined,{
+            title:_t("DuplicatePage"),
+            $content:$(qweb.render('website.duplicate_page_action_dialog')),
+            confirm_callback:function(){
+                returnself._rpc({
+                    model:'website.page',
+                    method:'clone_page',
+                    args:[
                         pageId,
                         this.$('#page_name').val(),
                     ],
-                }).then(function (path) {
-                    window.location.href = path;
+                }).then(function(path){
+                    window.location.href=path;
                 }).guardedCatch(reject);
             },
-            cancel_callback: reject,
-        }).on('closed', null, reject);
+            cancel_callback:reject,
+        }).on('closed',null,reject);
     });
 }
 
-websiteNavbarData.websiteNavbarRegistry.add(ContentMenu, '#content-menu');
-websiteRootData.websiteRootRegistry.add(PageManagement, '#list_website_pages');
+websiteNavbarData.websiteNavbarRegistry.add(ContentMenu,'#content-menu');
+websiteRootData.websiteRootRegistry.add(PageManagement,'#list_website_pages');
 
-return {
-    PagePropertiesDialog: PagePropertiesDialog,
-    ContentMenu: ContentMenu,
-    EditMenuDialog: EditMenuDialog,
-    MenuEntryDialog: MenuEntryDialog,
-    SelectEditMenuDialog: SelectEditMenuDialog,
+return{
+    PagePropertiesDialog:PagePropertiesDialog,
+    ContentMenu:ContentMenu,
+    EditMenuDialog:EditMenuDialog,
+    MenuEntryDialog:MenuEntryDialog,
+    SelectEditMenuDialog:SelectEditMenuDialog,
 };
 });

@@ -1,18 +1,18 @@
-flectra.define('pos_hr.PaymentScreen', function (require) {
-    'use strict';
+flectra.define('pos_hr.PaymentScreen',function(require){
+    'usestrict';
 
-    const PaymentScreen = require('point_of_sale.PaymentScreen');
-    const Registries = require('point_of_sale.Registries');
+    constPaymentScreen=require('point_of_sale.PaymentScreen');
+    constRegistries=require('point_of_sale.Registries');
 
-    const PosHrPaymentScreen = (PaymentScreen_) =>
-          class extends PaymentScreen_ {
-              async _finalizeValidation() {
-                  this.currentOrder.employee = this.env.pos.get_cashier();
-                  await super._finalizeValidation();
+    constPosHrPaymentScreen=(PaymentScreen_)=>
+          classextendsPaymentScreen_{
+              async_finalizeValidation(){
+                  this.currentOrder.employee=this.env.pos.get_cashier();
+                  awaitsuper._finalizeValidation();
               }
           };
 
-    Registries.Component.extend(PaymentScreen, PosHrPaymentScreen);
+    Registries.Component.extend(PaymentScreen,PosHrPaymentScreen);
 
-    return PaymentScreen;
+    returnPaymentScreen;
 });

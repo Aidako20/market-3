@@ -1,72 +1,72 @@
-flectra.define('web.AbstractRendererOwl', function () {
-    "use strict";
+flectra.define('web.AbstractRendererOwl',function(){
+    "usestrict";
 
-    // Renderers may display sample data when there is no real data to display. In
-    // this case the data is displayed with opacity and can't be clicked. Moreover,
-    // we also want to prevent the user from accessing DOM elements with TAB
-    // navigation. This is the list of elements we won't allow to focus.
-    const FOCUSABLE_ELEMENTS = [
-        // focusable by default
-        'a', 'button', 'input', 'select', 'textarea',
-        // manually set
+    //Renderersmaydisplaysampledatawhenthereisnorealdatatodisplay.In
+    //thiscasethedataisdisplayedwithopacityandcan'tbeclicked.Moreover,
+    //wealsowanttopreventtheuserfromaccessingDOMelementswithTAB
+    //navigation.Thisisthelistofelementswewon'tallowtofocus.
+    constFOCUSABLE_ELEMENTS=[
+        //focusablebydefault
+        'a','button','input','select','textarea',
+        //manuallyset
         '[tabindex="0"]'
-    ].map((sel) => `:scope ${sel}`).join(', ');
+    ].map((sel)=>`:scope${sel}`).join(',');
 
-    class AbstractRenderer extends owl.Component {
+    classAbstractRendererextendsowl.Component{
 
-        constructor() {
+        constructor(){
             super(...arguments);
-            // Defines the elements suppressed when in demo data. This must be a list
-            // of DOM selectors matching view elements that will:
-            // 1. receive the 'o_sample_data_disabled' class (greyd out & no user events)
-            // 2. have themselves and any of their focusable children removed from the
-            //    tab navigation
-            this.sampleDataTargets = [];
+            //Definestheelementssuppressedwhenindemodata.Thismustbealist
+            //ofDOMselectorsmatchingviewelementsthatwill:
+            //1.receivethe'o_sample_data_disabled'class(greydout&nouserevents)
+            //2.havethemselvesandanyoftheirfocusablechildrenremovedfromthe
+            //   tabnavigation
+            this.sampleDataTargets=[];
         }
 
-        mounted() {
+        mounted(){
             this._suppressFocusableElements();
         }
 
-        patched() {
+        patched(){
             this._suppressFocusableElements();
         }
 
         /**
-         * Suppresses 'tabindex' property on any focusable element located inside
-         * root elements defined in the `this.sampleDataTargets` object and assigns
-         * the 'o_sample_data_disabled' class to these root elements.
+         *Suppresses'tabindex'propertyonanyfocusableelementlocatedinside
+         *rootelementsdefinedinthe`this.sampleDataTargets`objectandassigns
+         *the'o_sample_data_disabled'classtotheserootelements.
          *
-         * @private
-         * @see sampleDataTargets
+         *@private
+         *@seesampleDataTargets
          */
-        _suppressFocusableElements() {
-            if (!this.props.isSample || this.props.isEmbedded) {
-                const disabledEls = this.el.querySelectorAll(`.o_sample_data_disabled`);
-                disabledEls.forEach(el => el.classList.remove('o_sample_data_disabled'));
+        _suppressFocusableElements(){
+            if(!this.props.isSample||this.props.isEmbedded){
+                constdisabledEls=this.el.querySelectorAll(`.o_sample_data_disabled`);
+                disabledEls.forEach(el=>el.classList.remove('o_sample_data_disabled'));
                 return;
             }
-            const rootEls = [];
-            for (const selector of this.sampleDataTargets) {
-                rootEls.push(...this.el.querySelectorAll(`:scope ${selector}`));
+            constrootEls=[];
+            for(constselectorofthis.sampleDataTargets){
+                rootEls.push(...this.el.querySelectorAll(`:scope${selector}`));
             }
-            const focusableEls = new Set(rootEls);
-            for (const rootEl of rootEls) {
+            constfocusableEls=newSet(rootEls);
+            for(constrootElofrootEls){
                 rootEl.classList.add('o_sample_data_disabled');
-                for (const focusableEl of rootEl.querySelectorAll(FOCUSABLE_ELEMENTS)) {
+                for(constfocusableElofrootEl.querySelectorAll(FOCUSABLE_ELEMENTS)){
                     focusableEls.add(focusableEl);
                 }
             }
-            for (const focusableEl of focusableEls) {
-                focusableEl.setAttribute('tabindex', -1);
-                if (focusableEl.classList.contains('dropdown-item')) {
-                    // Tells Bootstrap to ignore the dropdown item in keynav
+            for(constfocusableEloffocusableEls){
+                focusableEl.setAttribute('tabindex',-1);
+                if(focusableEl.classList.contains('dropdown-item')){
+                    //TellsBootstraptoignorethedropdowniteminkeynav
                     focusableEl.classList.add('disabled');
                 }
             }
         }
     }
 
-    return AbstractRenderer;
+    returnAbstractRenderer;
 
 });

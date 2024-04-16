@@ -1,19 +1,19 @@
-flectra.define('hr_attendance.widget', function (require) {
-    "use strict";
+flectra.define('hr_attendance.widget',function(require){
+    "usestrict";
 
-    var basic_fields = require('web.basic_fields');
-    var field_registry = require('web.field_registry');
+    varbasic_fields=require('web.basic_fields');
+    varfield_registry=require('web.field_registry');
 
-    var RelativeTime = basic_fields.FieldDateTime.extend({
-        _formatValue: function (val) {
-            if (!(val && val._isAMomentObject)) {
+    varRelativeTime=basic_fields.FieldDateTime.extend({
+        _formatValue:function(val){
+            if(!(val&&val._isAMomentObject)){
                 return;
             }
-            return val.fromNow(true);
+            returnval.fromNow(true);
         },
     });
 
-    field_registry.add('relative_time', RelativeTime);
+    field_registry.add('relative_time',RelativeTime);
 
-    return RelativeTime;
-}); 
+    returnRelativeTime;
+});

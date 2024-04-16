@@ -1,24 +1,24 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, _
-from flectra.exceptions import UserError
+fromflectraimportfields,models,_
+fromflectra.exceptionsimportUserError
 
 
-class HrDepartureWizard(models.TransientModel):
-    _inherit = 'hr.departure.wizard'
+classHrDepartureWizard(models.TransientModel):
+    _inherit='hr.departure.wizard'
 
-    set_date_end = fields.Boolean(string="Set Contract End Date", default=True)
+    set_date_end=fields.Boolean(string="SetContractEndDate",default=True)
 
-    def action_register_departure(self):
-        """If set_date_end is checked, set the departure date as the end date to current running contract,
-        and cancel all draft contracts"""
-        current_contract = self.employee_id.contract_id
-        if current_contract and current_contract.date_start > self.departure_date:
-            raise UserError(_("Departure date can't be earlier than the start date of current contract."))
+    defaction_register_departure(self):
+        """Ifset_date_endischecked,setthedeparturedateastheenddatetocurrentrunningcontract,
+        andcancelalldraftcontracts"""
+        current_contract=self.employee_id.contract_id
+        ifcurrent_contractandcurrent_contract.date_start>self.departure_date:
+            raiseUserError(_("Departuredatecan'tbeearlierthanthestartdateofcurrentcontract."))
 
-        super(HrDepartureWizard, self).action_register_departure()
-        if self.set_date_end:
-            self.employee_id.contract_ids.filtered(lambda c: c.state == 'draft').write({'state': 'cancel'})
-            if current_contract:
-                self.employee_id.contract_id.write({'date_end': self.departure_date})
+        super(HrDepartureWizard,self).action_register_departure()
+        ifself.set_date_end:
+            self.employee_id.contract_ids.filtered(lambdac:c.state=='draft').write({'state':'cancel'})
+            ifcurrent_contract:
+                self.employee_id.contract_id.write({'date_end':self.departure_date})

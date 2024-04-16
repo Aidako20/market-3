@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.addons.website_event.controllers.main import WebsiteEventController
+fromflectra.addons.website_event.controllers.mainimportWebsiteEventController
 
 
-class EventOnlineController(WebsiteEventController):
+classEventOnlineController(WebsiteEventController):
 
-    def _get_registration_confirm_values(self, event, attendees_sudo):
-        values = super(EventOnlineController, self)._get_registration_confirm_values(event, attendees_sudo)
-        values['hide_sponsors'] = True
-        return values
+    def_get_registration_confirm_values(self,event,attendees_sudo):
+        values=super(EventOnlineController,self)._get_registration_confirm_values(event,attendees_sudo)
+        values['hide_sponsors']=True
+        returnvalues

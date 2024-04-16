@@ -1,18 +1,18 @@
-flectra.define('web_tour.public.TourManager', function (require) {
-'use strict';
+flectra.define('web_tour.public.TourManager',function(require){
+'usestrict';
 
-var TourManager = require('web_tour.TourManager');
-var lazyloader = require('web.public.lazyloader');
+varTourManager=require('web_tour.TourManager');
+varlazyloader=require('web.public.lazyloader');
 
 TourManager.include({
     /**
-     * @override
+     *@override
      */
-    _waitBeforeTourStart: function () {
-        return this._super.apply(this, arguments).then(function () {
-            return lazyloader.allScriptsLoaded;
-        }).then(function () {
-            return new Promise(function (resolve) {
+    _waitBeforeTourStart:function(){
+        returnthis._super.apply(this,arguments).then(function(){
+            returnlazyloader.allScriptsLoaded;
+        }).then(function(){
+            returnnewPromise(function(resolve){
                 setTimeout(resolve);
             });
         });

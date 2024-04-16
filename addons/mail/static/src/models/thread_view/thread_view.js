@@ -1,346 +1,346 @@
-flectra.define('mail/static/src/models/thread_view/thread_view.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/thread_view/thread_view.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { RecordDeletedError } = require('mail/static/src/model/model_errors.js');
-const { attr, many2many, many2one, one2one } = require('mail/static/src/model/model_field.js');
-const { clear } = require('mail/static/src/model/model_field_command.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{RecordDeletedError}=require('mail/static/src/model/model_errors.js');
+const{attr,many2many,many2one,one2one}=require('mail/static/src/model/model_field.js');
+const{clear}=require('mail/static/src/model/model_field_command.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class ThreadView extends dependencies['mail.model'] {
+    classThreadViewextendsdependencies['mail.model']{
 
         /**
-         * @override
+         *@override
          */
-        _willDelete() {
+        _willDelete(){
             this.env.browser.clearTimeout(this._loaderTimeout);
-            return super._willDelete(...arguments);
+            returnsuper._willDelete(...arguments);
         }
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * This function register a hint for the component related to this
-         * record. Hints are information on changes around this viewer that
-         * make require adjustment on the component. For instance, if this
-         * ThreadView initiated a thread cache load and it now has become
-         * loaded, then it may need to auto-scroll to last message.
+         *Thisfunctionregisterahintforthecomponentrelatedtothis
+         *record.Hintsareinformationonchangesaroundthisviewerthat
+         *makerequireadjustmentonthecomponent.Forinstance,ifthis
+         *ThreadViewinitiatedathreadcacheloadanditnowhasbecome
+         *loaded,thenitmayneedtoauto-scrolltolastmessage.
          *
-         * @param {string} hintType name of the hint. Used to determine what's
-         *   the broad type of adjustement the component has to do.
-         * @param {any} [hintData] data of the hint. Used to fine-tune
-         *   adjustments on the component.
+         *@param{string}hintTypenameofthehint.Usedtodeterminewhat's
+         *  thebroadtypeofadjustementthecomponenthastodo.
+         *@param{any}[hintData]dataofthehint.Usedtofine-tune
+         *  adjustmentsonthecomponent.
          */
-        addComponentHint(hintType, hintData) {
-            const hint = { data: hintData, type: hintType };
+        addComponentHint(hintType,hintData){
+            consthint={data:hintData,type:hintType};
             this.update({
-                componentHintList: this.componentHintList.concat([hint]),
+                componentHintList:this.componentHintList.concat([hint]),
             });
         }
 
         /**
-         * @param {Object} hint
+         *@param{Object}hint
          */
-        markComponentHintProcessed(hint) {
+        markComponentHintProcessed(hint){
             this.update({
-                componentHintList: this.componentHintList.filter(h => h !== hint),
+                componentHintList:this.componentHintList.filter(h=>h!==hint),
             });
-            this.env.messagingBus.trigger('o-thread-view-hint-processed', {
+            this.env.messagingBus.trigger('o-thread-view-hint-processed',{
                 hint,
-                threadViewer: this.threadViewer,
+                threadViewer:this.threadViewer,
             });
         }
 
         /**
-         * @param {mail.message} message
+         *@param{mail.message}message
          */
-        handleVisibleMessage(message) {
-            if (!this.lastVisibleMessage || this.lastVisibleMessage.id < message.id) {
-                this.update({ lastVisibleMessage: [['link', message]] });
+        handleVisibleMessage(message){
+            if(!this.lastVisibleMessage||this.lastVisibleMessage.id<message.id){
+                this.update({lastVisibleMessage:[['link',message]]});
             }
         }
 
         //----------------------------------------------------------------------
-        // Private
+        //Private
         //----------------------------------------------------------------------
 
         /**
-         * @private
-         * @returns {mail.messaging}
+         *@private
+         *@returns{mail.messaging}
          */
-        _computeMessaging() {
-            return [['link', this.env.messaging]];
+        _computeMessaging(){
+            return[['link',this.env.messaging]];
         }
 
         /**
-         * @private
-         * @returns {string[]}
+         *@private
+         *@returns{string[]}
          */
-        _computeTextInputSendShortcuts() {
-            if (!this.thread) {
+        _computeTextInputSendShortcuts(){
+            if(!this.thread){
                 return;
             }
-            const isMailingList = this.thread.model === 'mail.channel' && this.thread.mass_mailing;
-            // Actually in mobile there is a send button, so we need there 'enter' to allow new line.
-            // Hence, we want to use a different shortcut 'ctrl/meta enter' to send for small screen
-            // size with a non-mailing channel.
-            // here send will be done on clicking the button or using the 'ctrl/meta enter' shortcut.
-            if (this.env.messaging.device.isMobile || isMailingList) {
-                return ['ctrl-enter', 'meta-enter'];
+            constisMailingList=this.thread.model==='mail.channel'&&this.thread.mass_mailing;
+            //Actuallyinmobilethereisasendbutton,soweneedthere'enter'toallownewline.
+            //Hence,wewanttouseadifferentshortcut'ctrl/metaenter'tosendforsmallscreen
+            //sizewithanon-mailingchannel.
+            //heresendwillbedoneonclickingthebuttonorusingthe'ctrl/metaenter'shortcut.
+            if(this.env.messaging.device.isMobile||isMailingList){
+                return['ctrl-enter','meta-enter'];
             }
-            return ['enter'];
+            return['enter'];
         }
 
         /**
-         * @private
-         * @returns {integer|undefined}
+         *@private
+         *@returns{integer|undefined}
          */
-        _computeThreadCacheInitialScrollHeight() {
-            if (!this.threadCache) {
-                return clear();
+        _computeThreadCacheInitialScrollHeight(){
+            if(!this.threadCache){
+                returnclear();
             }
-            const threadCacheInitialScrollHeight = this.threadCacheInitialScrollHeights[this.threadCache.localId];
-            if (threadCacheInitialScrollHeight !== undefined) {
-                return threadCacheInitialScrollHeight;
+            constthreadCacheInitialScrollHeight=this.threadCacheInitialScrollHeights[this.threadCache.localId];
+            if(threadCacheInitialScrollHeight!==undefined){
+                returnthreadCacheInitialScrollHeight;
             }
-            return clear();
+            returnclear();
         }
 
         /**
-         * @private
-         * @returns {integer|undefined}
+         *@private
+         *@returns{integer|undefined}
          */
-        _computeThreadCacheInitialScrollPosition() {
-            if (!this.threadCache) {
-                return clear();
+        _computeThreadCacheInitialScrollPosition(){
+            if(!this.threadCache){
+                returnclear();
             }
-            const threadCacheInitialScrollPosition = this.threadCacheInitialScrollPositions[this.threadCache.localId];
-            if (threadCacheInitialScrollPosition !== undefined) {
-                return threadCacheInitialScrollPosition;
+            constthreadCacheInitialScrollPosition=this.threadCacheInitialScrollPositions[this.threadCache.localId];
+            if(threadCacheInitialScrollPosition!==undefined){
+                returnthreadCacheInitialScrollPosition;
             }
-            return clear();
+            returnclear();
         }
 
         /**
-         * Not a real field, used to trigger `thread.markAsSeen` when one of
-         * the dependencies changes.
+         *Notarealfield,usedtotrigger`thread.markAsSeen`whenoneof
+         *thedependencieschanges.
          *
-         * @private
-         * @returns {boolean}
+         *@private
+         *@returns{boolean}
          */
-        _computeThreadShouldBeSetAsSeen() {
-            if (!this.thread) {
+        _computeThreadShouldBeSetAsSeen(){
+            if(!this.thread){
                 return;
             }
-            if (!this.thread.lastNonTransientMessage) {
+            if(!this.thread.lastNonTransientMessage){
                 return;
             }
-            if (!this.lastVisibleMessage) {
+            if(!this.lastVisibleMessage){
                 return;
             }
-            if (this.lastVisibleMessage !== this.lastMessage) {
+            if(this.lastVisibleMessage!==this.lastMessage){
                 return;
             }
-            if (!this.hasComposerFocus) {
-                // FIXME condition should not be on "composer is focused" but "threadView is active"
-                // See task-2277543
+            if(!this.hasComposerFocus){
+                //FIXMEconditionshouldnotbeon"composerisfocused"but"threadViewisactive"
+                //Seetask-2277543
                 return;
             }
-            this.thread.markAsSeen(this.thread.lastNonTransientMessage).catch(e => {
-                // prevent crash when executing compute during destroy
-                if (!(e instanceof RecordDeletedError)) {
-                    throw e;
+            this.thread.markAsSeen(this.thread.lastNonTransientMessage).catch(e=>{
+                //preventcrashwhenexecutingcomputeduringdestroy
+                if(!(einstanceofRecordDeletedError)){
+                    throwe;
                 }
             });
         }
 
         /**
-         * @private
+         *@private
          */
-        _onThreadCacheChanged() {
-            if (this.threadCache) {
-                // clear obsolete hints
-                this.update({ componentHintList: clear() });
+        _onThreadCacheChanged(){
+            if(this.threadCache){
+                //clearobsoletehints
+                this.update({componentHintList:clear()});
                 this.addComponentHint('change-of-thread-cache');
                 this.threadCache.update({
-                    isCacheRefreshRequested: true,
-                    isMarkAllAsReadRequested: true,
+                    isCacheRefreshRequested:true,
+                    isMarkAllAsReadRequested:true,
                 });
-                this.update({ lastVisibleMessage: [['unlink']] });
+                this.update({lastVisibleMessage:[['unlink']]});
             }
         }
 
         /**
-         * @private
+         *@private
          */
-        _onThreadCacheIsLoadingChanged() {
-            if (this.threadCache && this.threadCache.isLoading) {
-                if (!this.isLoading && !this.isPreparingLoading) {
-                    this.update({ isPreparingLoading: true });
-                    this.async(() =>
-                        new Promise(resolve => {
-                            this._loaderTimeout = this.env.browser.setTimeout(resolve, 400);
+        _onThreadCacheIsLoadingChanged(){
+            if(this.threadCache&&this.threadCache.isLoading){
+                if(!this.isLoading&&!this.isPreparingLoading){
+                    this.update({isPreparingLoading:true});
+                    this.async(()=>
+                        newPromise(resolve=>{
+                            this._loaderTimeout=this.env.browser.setTimeout(resolve,400);
                         }
-                    )).then(() => {
-                        const isLoading = this.threadCache
-                            ? this.threadCache.isLoading
-                            : false;
-                        this.update({ isLoading, isPreparingLoading: false });
+                    )).then(()=>{
+                        constisLoading=this.threadCache
+                            ?this.threadCache.isLoading
+                            :false;
+                        this.update({isLoading,isPreparingLoading:false});
                     });
                 }
                 return;
             }
             this.env.browser.clearTimeout(this._loaderTimeout);
-            if (this.thread) {
-                this.update({ isLoading: false, isPreparingLoading: false });
+            if(this.thread){
+                this.update({isLoading:false,isPreparingLoading:false});
             }
         }
     }
 
-    ThreadView.fields = {
-        checkedMessages: many2many('mail.message', {
-            related: 'threadCache.checkedMessages',
+    ThreadView.fields={
+        checkedMessages:many2many('mail.message',{
+            related:'threadCache.checkedMessages',
         }),
         /**
-         * List of component hints. Hints contain information that help
-         * components make UI/UX decisions based on their UI state.
-         * For instance, on receiving new messages and the last message
-         * is visible, it should auto-scroll to this new last message.
+         *Listofcomponenthints.Hintscontaininformationthathelp
+         *componentsmakeUI/UXdecisionsbasedontheirUIstate.
+         *Forinstance,onreceivingnewmessagesandthelastmessage
+         *isvisible,itshouldauto-scrolltothisnewlastmessage.
          *
-         * Format of a component hint:
+         *Formatofacomponenthint:
          *
-         *   {
-         *       type: {string} the name of the component hint. Useful
-         *                      for components to dispatch behaviour
-         *                      based on its type.
-         *       data: {Object} data related to the component hint.
-         *                      For instance, if hint suggests to scroll
-         *                      to a certain message, data may contain
-         *                      message id.
-         *   }
+         *  {
+         *      type:{string}thenameofthecomponenthint.Useful
+         *                     forcomponentstodispatchbehaviour
+         *                     basedonitstype.
+         *      data:{Object}datarelatedtothecomponenthint.
+         *                     Forinstance,ifhintsuggeststoscroll
+         *                     toacertainmessage,datamaycontain
+         *                     messageid.
+         *  }
          */
-        componentHintList: attr({
-            default: [],
+        componentHintList:attr({
+            default:[],
         }),
-        composer: many2one('mail.composer', {
-            related: 'thread.composer',
+        composer:many2one('mail.composer',{
+            related:'thread.composer',
         }),
         /**
-         * Serves as compute dependency.
+         *Servesascomputedependency.
          */
-        device: one2one('mail.device', {
-            related: 'messaging.device',
+        device:one2one('mail.device',{
+            related:'messaging.device',
         }),
         /**
-         * Serves as compute dependency.
+         *Servesascomputedependency.
          */
-        deviceIsMobile: attr({
-            related: 'device.isMobile',
+        deviceIsMobile:attr({
+            related:'device.isMobile',
         }),
-        hasComposerFocus: attr({
-            related: 'composer.hasFocus',
+        hasComposerFocus:attr({
+            related:'composer.hasFocus',
         }),
         /**
-         * States whether `this.threadCache` is currently loading messages.
+         *Stateswhether`this.threadCache`iscurrentlyloadingmessages.
          *
-         * This field is related to `this.threadCache.isLoading` but with a
-         * delay on its update to avoid flickering on the UI.
+         *Thisfieldisrelatedto`this.threadCache.isLoading`butwitha
+         *delayonitsupdatetoavoidflickeringontheUI.
          *
-         * It is computed through `_onThreadCacheIsLoadingChanged` and it should
-         * otherwise be considered read-only.
+         *Itiscomputedthrough`_onThreadCacheIsLoadingChanged`anditshould
+         *otherwisebeconsideredread-only.
          */
-        isLoading: attr({
-            default: false,
+        isLoading:attr({
+            default:false,
         }),
         /**
-         * States whether `this` is aware of `this.threadCache` currently
-         * loading messages, but `this` is not yet ready to display that loading
-         * on the UI.
+         *Stateswhether`this`isawareof`this.threadCache`currently
+         *loadingmessages,but`this`isnotyetreadytodisplaythatloading
+         *ontheUI.
          *
-         * This field is computed through `_onThreadCacheIsLoadingChanged` and
-         * it should otherwise be considered read-only.
+         *Thisfieldiscomputedthrough`_onThreadCacheIsLoadingChanged`and
+         *itshouldotherwisebeconsideredread-only.
          *
-         * @see `this.isLoading`
+         *@see`this.isLoading`
          */
-        isPreparingLoading: attr({
-            default: false,
+        isPreparingLoading:attr({
+            default:false,
         }),
         /**
-         * Determines whether `this` should automatically scroll on receiving
-         * a new message. Detection of new message is done through the component
-         * hint `message-received`.
+         *Determineswhether`this`shouldautomaticallyscrollonreceiving
+         *anewmessage.Detectionofnewmessageisdonethroughthecomponent
+         *hint`message-received`.
          */
-        hasAutoScrollOnMessageReceived: attr({
-            default: true,
+        hasAutoScrollOnMessageReceived:attr({
+            default:true,
         }),
         /**
-         * Last message in the context of the currently displayed thread cache.
+         *Lastmessageinthecontextofthecurrentlydisplayedthreadcache.
          */
-        lastMessage: many2one('mail.message', {
-            related: 'thread.lastMessage',
+        lastMessage:many2one('mail.message',{
+            related:'thread.lastMessage',
         }),
         /**
-         * Serves as compute dependency.
+         *Servesascomputedependency.
          */
-        lastNonTransientMessage: many2one('mail.message', {
-            related: 'thread.lastNonTransientMessage',
+        lastNonTransientMessage:many2one('mail.message',{
+            related:'thread.lastNonTransientMessage',
         }),
         /**
-         * Most recent message in this ThreadView that has been shown to the
-         * current partner in the currently displayed thread cache.
+         *MostrecentmessageinthisThreadViewthathasbeenshowntothe
+         *currentpartnerinthecurrentlydisplayedthreadcache.
          */
-        lastVisibleMessage: many2one('mail.message'),
-        messages: many2many('mail.message', {
-            related: 'threadCache.messages',
+        lastVisibleMessage:many2one('mail.message'),
+        messages:many2many('mail.message',{
+            related:'threadCache.messages',
         }),
         /**
-         * Serves as compute dependency.
+         *Servesascomputedependency.
          */
-        messaging: many2one('mail.messaging', {
-            compute: '_computeMessaging',
+        messaging:many2one('mail.messaging',{
+            compute:'_computeMessaging',
         }),
-        nonEmptyMessages: many2many('mail.message', {
-            related: 'threadCache.nonEmptyMessages',
+        nonEmptyMessages:many2many('mail.message',{
+            related:'threadCache.nonEmptyMessages',
         }),
         /**
-         * Not a real field, used to trigger `_onThreadCacheChanged` when one of
-         * the dependencies changes.
+         *Notarealfield,usedtotrigger`_onThreadCacheChanged`whenoneof
+         *thedependencieschanges.
          */
-        onThreadCacheChanged: attr({
-            compute: '_onThreadCacheChanged',
-            dependencies: [
+        onThreadCacheChanged:attr({
+            compute:'_onThreadCacheChanged',
+            dependencies:[
                 'threadCache'
             ],
         }),
         /**
-         * Not a real field, used to trigger `_onThreadCacheIsLoadingChanged`
-         * when one of the dependencies changes.
+         *Notarealfield,usedtotrigger`_onThreadCacheIsLoadingChanged`
+         *whenoneofthedependencieschanges.
          *
-         * @see `this.isLoading`
+         *@see`this.isLoading`
          */
-        onThreadCacheIsLoadingChanged: attr({
-            compute: '_onThreadCacheIsLoadingChanged',
-            dependencies: [
+        onThreadCacheIsLoadingChanged:attr({
+            compute:'_onThreadCacheIsLoadingChanged',
+            dependencies:[
                 'threadCache',
                 'threadCacheIsLoading',
             ],
         }),
         /**
-         * Determines the domain to apply when fetching messages for `this.thread`.
+         *Determinesthedomaintoapplywhenfetchingmessagesfor`this.thread`.
          */
-        stringifiedDomain: attr({
-            related: 'threadViewer.stringifiedDomain',
+        stringifiedDomain:attr({
+            related:'threadViewer.stringifiedDomain',
         }),
         /**
-         * Determines the keyboard shortcuts that are available to send a message
-         * from the composer of this thread viewer.
+         *Determinesthekeyboardshortcutsthatareavailabletosendamessage
+         *fromthecomposerofthisthreadviewer.
          */
-        textInputSendShortcuts: attr({
-            compute: '_computeTextInputSendShortcuts',
-            dependencies: [
+        textInputSendShortcuts:attr({
+            compute:'_computeTextInputSendShortcuts',
+            dependencies:[
                 'device',
                 'deviceIsMobile',
                 'thread',
@@ -349,72 +349,72 @@ function factory(dependencies) {
             ],
         }),
         /**
-         * Determines the `mail.thread` currently displayed by `this`.
+         *Determinesthe`mail.thread`currentlydisplayedby`this`.
          */
-        thread: many2one('mail.thread', {
-            inverse: 'threadViews',
-            related: 'threadViewer.thread',
+        thread:many2one('mail.thread',{
+            inverse:'threadViews',
+            related:'threadViewer.thread',
         }),
         /**
-         * States the `mail.thread_cache` currently displayed by `this`.
+         *Statesthe`mail.thread_cache`currentlydisplayedby`this`.
          */
-        threadCache: many2one('mail.thread_cache', {
-            inverse: 'threadViews',
-            related: 'threadViewer.threadCache',
+        threadCache:many2one('mail.thread_cache',{
+            inverse:'threadViews',
+            related:'threadViewer.threadCache',
         }),
-        threadCacheInitialScrollHeight: attr({
-            compute: '_computeThreadCacheInitialScrollHeight',
-            dependencies: [
+        threadCacheInitialScrollHeight:attr({
+            compute:'_computeThreadCacheInitialScrollHeight',
+            dependencies:[
                 'threadCache',
                 'threadCacheInitialScrollHeights',
             ],
         }),
-        threadCacheInitialScrollPosition: attr({
-            compute: '_computeThreadCacheInitialScrollPosition',
-            dependencies: [
+        threadCacheInitialScrollPosition:attr({
+            compute:'_computeThreadCacheInitialScrollPosition',
+            dependencies:[
                 'threadCache',
                 'threadCacheInitialScrollPositions',
             ],
         }),
         /**
-         * Serves as compute dependency.
+         *Servesascomputedependency.
          */
-        threadCacheIsLoading: attr({
-            related: 'threadCache.isLoading',
+        threadCacheIsLoading:attr({
+            related:'threadCache.isLoading',
         }),
         /**
-         * List of saved initial scroll heights of thread caches.
+         *Listofsavedinitialscrollheightsofthreadcaches.
          */
-        threadCacheInitialScrollHeights: attr({
-            default: {},
-            related: 'threadViewer.threadCacheInitialScrollHeights',
+        threadCacheInitialScrollHeights:attr({
+            default:{},
+            related:'threadViewer.threadCacheInitialScrollHeights',
         }),
         /**
-         * List of saved initial scroll positions of thread caches.
+         *Listofsavedinitialscrollpositionsofthreadcaches.
          */
-        threadCacheInitialScrollPositions: attr({
-            default: {},
-            related: 'threadViewer.threadCacheInitialScrollPositions',
+        threadCacheInitialScrollPositions:attr({
+            default:{},
+            related:'threadViewer.threadCacheInitialScrollPositions',
         }),
         /**
-         * Serves as compute dependency.
+         *Servesascomputedependency.
          */
-        threadMassMailing: attr({
-            related: 'thread.mass_mailing',
+        threadMassMailing:attr({
+            related:'thread.mass_mailing',
         }),
         /**
-         * Serves as compute dependency.
+         *Servesascomputedependency.
          */
-        threadModel: attr({
-            related: 'thread.model',
+        threadModel:attr({
+            related:'thread.model',
         }),
         /**
-         * Not a real field, used to trigger `thread.markAsSeen` when one of
-         * the dependencies changes.
+         *Notarealfield,usedtotrigger`thread.markAsSeen`whenoneof
+         *thedependencieschanges.
          */
-        threadShouldBeSetAsSeen: attr({
-            compute: '_computeThreadShouldBeSetAsSeen',
-            dependencies: [
+        threadShouldBeSetAsSeen:attr({
+            compute:'_computeThreadShouldBeSetAsSeen',
+            dependencies:[
                 'hasComposerFocus',
                 'lastMessage',
                 'lastNonTransientMessage',
@@ -423,21 +423,21 @@ function factory(dependencies) {
             ],
         }),
         /**
-         * Determines the `mail.thread_viewer` currently managing `this`.
+         *Determinesthe`mail.thread_viewer`currentlymanaging`this`.
          */
-        threadViewer: one2one('mail.thread_viewer', {
-            inverse: 'threadView',
+        threadViewer:one2one('mail.thread_viewer',{
+            inverse:'threadView',
         }),
-        uncheckedMessages: many2many('mail.message', {
-            related: 'threadCache.uncheckedMessages',
+        uncheckedMessages:many2many('mail.message',{
+            related:'threadCache.uncheckedMessages',
         }),
     };
 
-    ThreadView.modelName = 'mail.thread_view';
+    ThreadView.modelName='mail.thread_view';
 
-    return ThreadView;
+    returnThreadView;
 }
 
-registerNewModel('mail.thread_view', factory);
+registerNewModel('mail.thread_view',factory);
 
 });

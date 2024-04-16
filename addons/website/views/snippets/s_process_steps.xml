@@ -1,52 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template name="Steps" id="s_process_steps">
-    <section class="s_process_steps pt24 pb24">
-        <div class="container">
-            <div class="row no-gutters">
-                <div class="col-lg-3 s_process_step pt24 pb24">
-                    <div class="s_process_step_icon">
+<templatename="Steps"id="s_process_steps">
+    <sectionclass="s_process_stepspt24pb24">
+        <divclass="container">
+            <divclass="rowno-gutters">
+                <divclass="col-lg-3s_process_steppt24pb24">
+                    <divclass="s_process_step_icon">
                         <span>
-                            <i class="fa fa-shopping-basket fa-2x mx-auto rounded-circle bg-primary"/>
+                            <iclass="fafa-shopping-basketfa-2xmx-autorounded-circlebg-primary"/>
                         </span>
                     </div>
-                    <div class="s_process_step_content text-center">
-                        <h2>Add to cart</h2>
-                        <p>Let your customers follow <br/>and understand your process.</p>
+                    <divclass="s_process_step_contenttext-center">
+                        <h2>Addtocart</h2>
+                        <p>Letyourcustomersfollow<br/>andunderstandyourprocess.</p>
                     </div>
                 </div>
-                <div class="col-lg-3 s_process_step pt24 pb24">
-                    <div class="s_process_step_icon">
+                <divclass="col-lg-3s_process_steppt24pb24">
+                    <divclass="s_process_step_icon">
                         <span>
-                            <i class="fa fa-unlock-alt fa-2x mx-auto rounded-circle bg-o-color-5"/>
+                            <iclass="fafa-unlock-altfa-2xmx-autorounded-circlebg-o-color-5"/>
                         </span>
                     </div>
-                    <div class="s_process_step_content text-center">
-                        <h2>Sign in</h2>
-                        <p>Click on the icon to adapt it <br/>to your purpose.</p>
+                    <divclass="s_process_step_contenttext-center">
+                        <h2>Signin</h2>
+                        <p>Clickontheicontoadaptit<br/>toyourpurpose.</p>
                     </div>
                 </div>
-                <div class="col-lg-3 s_process_step pt24 pb24">
-                    <div class="s_process_step_icon">
+                <divclass="col-lg-3s_process_steppt24pb24">
+                    <divclass="s_process_step_icon">
                         <span>
-                            <i class="fa fa-paypal fa-2x mx-auto rounded-circle bg-secondary"/>
+                            <iclass="fafa-paypalfa-2xmx-autorounded-circlebg-secondary"/>
                         </span>
                     </div>
-                    <div class="s_process_step_content text-center">
+                    <divclass="s_process_step_contenttext-center">
                         <h2>Pay</h2>
-                        <p>Duplicate blocks <br/>to add more steps.</p>
+                        <p>Duplicateblocks<br/>toaddmoresteps.</p>
                     </div>
                 </div>
-                <div class="col-lg-3 s_process_step pt24 pb24">
-                    <div class="s_process_step_icon">
+                <divclass="col-lg-3s_process_steppt24pb24">
+                    <divclass="s_process_step_icon">
                         <span>
-                            <i class="fa fa-plane fa-2x mx-auto rounded-circle bg-o-color-3"/>
+                            <iclass="fafa-planefa-2xmx-autorounded-circlebg-o-color-3"/>
                         </span>
                     </div>
-                    <div class="s_process_step_content text-center">
-                        <h2>Get Delivered</h2>
-                        <p>Select and delete blocks <br/>to remove some steps.</p>
+                    <divclass="s_process_step_contenttext-center">
+                        <h2>GetDelivered</h2>
+                        <p>Selectanddeleteblocks<br/>toremovesomesteps.</p>
                     </div>
                 </div>
             </div>
@@ -54,9 +54,9 @@
     </section>
 </template>
 
-<template id="assets_snippet_s_process_steps_css_000" inherit_id="website.assets_frontend">
-    <xpath expr="//link[last()]" position="after">
-        <link rel="stylesheet" type="text/scss" href="/website/static/src/snippets/s_process_steps/000.scss"/>
+<templateid="assets_snippet_s_process_steps_css_000"inherit_id="website.assets_frontend">
+    <xpathexpr="//link[last()]"position="after">
+        <linkrel="stylesheet"type="text/scss"href="/website/static/src/snippets/s_process_steps/000.scss"/>
     </xpath>
 </template>
 

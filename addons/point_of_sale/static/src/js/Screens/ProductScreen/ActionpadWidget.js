@@ -1,25 +1,25 @@
-flectra.define('point_of_sale.ActionpadWidget', function(require) {
-    'use strict';
+flectra.define('point_of_sale.ActionpadWidget',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
 
     /**
-     * @props client
-     * @emits click-customer
-     * @emits click-pay
+     *@propsclient
+     *@emitsclick-customer
+     *@emitsclick-pay
      */
-    class ActionpadWidget extends PosComponent {
-        get isLongName() {
-            return this.client && this.client.name.length > 10;
+    classActionpadWidgetextendsPosComponent{
+        getisLongName(){
+            returnthis.client&&this.client.name.length>10;
         }
-        get client() {
-            return this.props.client;
+        getclient(){
+            returnthis.props.client;
         }
     }
-    ActionpadWidget.template = 'ActionpadWidget';
+    ActionpadWidget.template='ActionpadWidget';
 
     Registries.Component.add(ActionpadWidget);
 
-    return ActionpadWidget;
+    returnActionpadWidget;
 });

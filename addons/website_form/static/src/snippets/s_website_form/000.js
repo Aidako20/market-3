@@ -1,255 +1,255 @@
-flectra.define('website_form.s_website_form', function (require) {
-    'use strict';
+flectra.define('website_form.s_website_form',function(require){
+    'usestrict';
 
-    var core = require('web.core');
-    var time = require('web.time');
-    const {ReCaptcha} = require('google_recaptcha.ReCaptchaV3');
-    var ajax = require('web.ajax');
-    var publicWidget = require('web.public.widget');
-    const dom = require('web.dom');
-    const session = require('web.session');
+    varcore=require('web.core');
+    vartime=require('web.time');
+    const{ReCaptcha}=require('google_recaptcha.ReCaptchaV3');
+    varajax=require('web.ajax');
+    varpublicWidget=require('web.public.widget');
+    constdom=require('web.dom');
+    constsession=require('web.session');
 
-    var _t = core._t;
-    var qweb = core.qweb;
+    var_t=core._t;
+    varqweb=core.qweb;
 
-    publicWidget.registry.s_website_form = publicWidget.Widget.extend({
-        selector: '.s_website_form form, form.s_website_form', // !compatibility
-        xmlDependencies: ['/website_form/static/src/xml/website_form.xml'],
-        events: {
-            'click .s_website_form_send, .o_website_form_send': 'send', // !compatibility
+    publicWidget.registry.s_website_form=publicWidget.Widget.extend({
+        selector:'.s_website_formform,form.s_website_form',//!compatibility
+        xmlDependencies:['/website_form/static/src/xml/website_form.xml'],
+        events:{
+            'click.s_website_form_send,.o_website_form_send':'send',//!compatibility
         },
 
         /**
-         * @constructor
+         *@constructor
          */
-        init: function () {
+        init:function(){
             this._super(...arguments);
-            this._recaptcha = new ReCaptcha();
-            this.__started = new Promise(resolve => this.__startResolve = resolve);
+            this._recaptcha=newReCaptcha();
+            this.__started=newPromise(resolve=>this.__startResolve=resolve);
         },
-        willStart: function () {
-            const res = this._super(...arguments);
-            if (!this.$target[0].classList.contains('s_website_form_no_recaptcha')) {
-                this._recaptchaLoaded = true;
+        willStart:function(){
+            constres=this._super(...arguments);
+            if(!this.$target[0].classList.contains('s_website_form_no_recaptcha')){
+                this._recaptchaLoaded=true;
                 this._recaptcha.loadLibs();
             }
-            return res;
+            returnres;
         },
-        start: function () {
-            var self = this;
+        start:function(){
+            varself=this;
 
-            // Initialize datetimepickers
-            var datepickers_options = {
-                minDate: moment({ y: 1000 }),
-                maxDate: moment({y: 9999, M: 11, d: 31}),
-                calendarWeeks: true,
-                icons: {
-                    time: 'fa fa-clock-o',
-                    date: 'fa fa-calendar',
-                    next: 'fa fa-chevron-right',
-                    previous: 'fa fa-chevron-left',
-                    up: 'fa fa-chevron-up',
-                    down: 'fa fa-chevron-down',
+            //Initializedatetimepickers
+            vardatepickers_options={
+                minDate:moment({y:1000}),
+                maxDate:moment({y:9999,M:11,d:31}),
+                calendarWeeks:true,
+                icons:{
+                    time:'fafa-clock-o',
+                    date:'fafa-calendar',
+                    next:'fafa-chevron-right',
+                    previous:'fafa-chevron-left',
+                    up:'fafa-chevron-up',
+                    down:'fafa-chevron-down',
                     },
-                locale: moment.locale(),
-                format: time.getLangDatetimeFormat(),
+                locale:moment.locale(),
+                format:time.getLangDatetimeFormat(),
             };
-            this.$target.find('.s_website_form_datetime, .o_website_form_datetime').datetimepicker(datepickers_options); // !compatibility
+            this.$target.find('.s_website_form_datetime,.o_website_form_datetime').datetimepicker(datepickers_options);//!compatibility
 
-            // Adapt options to date-only pickers
-            datepickers_options.format = time.getLangDateFormat();
-            this.$target.find('.s_website_form_date, .o_website_form_date').datetimepicker(datepickers_options); // !compatibility
+            //Adaptoptionstodate-onlypickers
+            datepickers_options.format=time.getLangDateFormat();
+            this.$target.find('.s_website_form_date,.o_website_form_date').datetimepicker(datepickers_options);//!compatibility
 
-            // Display form values from tag having data-for attribute
-            // It's necessary to handle field values generated on server-side
-            // Because, using t-att- inside form make it non-editable
-            var $values = $('[data-for=' + this.$target.attr('id') + ']');
-            if ($values.length) {
-                const values = JSON.parse($values.data('values')
-                    // replaces `True` by `true` if they are after `,` or `:` or `[`
-                    .replace(/([,:\[]\s*)True/g, '$1true')
-                    // replaces `False` and `None` by `""` if they are after `,` or `:` or `[`
-                    .replace(/([,:\[]\s*)(False|None)/g, '$1""')
-                    // replaces the `'` by `"` if they are before `,` or `:` or `]` or `}`
-                    .replace(/'(\s*[,:\]}])/g, '"$1')
-                    // replaces the `'` by `"` if they are after `{` or `[` or `,` or `:`
-                    .replace(/([{\[:,]\s*)'/g, '$1"')
+            //Displayformvaluesfromtaghavingdata-forattribute
+            //It'snecessarytohandlefieldvaluesgeneratedonserver-side
+            //Because,usingt-att-insideformmakeitnon-editable
+            var$values=$('[data-for='+this.$target.attr('id')+']');
+            if($values.length){
+                constvalues=JSON.parse($values.data('values')
+                    //replaces`True`by`true`iftheyareafter`,`or`:`or`[`
+                    .replace(/([,:\[]\s*)True/g,'$1true')
+                    //replaces`False`and`None`by`""`iftheyareafter`,`or`:`or`[`
+                    .replace(/([,:\[]\s*)(False|None)/g,'$1""')
+                    //replacesthe`'`by`"`iftheyarebefore`,`or`:`or`]`or`}`
+                    .replace(/'(\s*[,:\]}])/g,'"$1')
+                    //replacesthe`'`by`"`iftheyareafter`{`or`[`or`,`or`:`
+                    .replace(/([{\[:,]\s*)'/g,'$1"')
                 );
-                var fields = _.pluck(this.$target.serializeArray(), 'name');
-                _.each(fields, function (field) {
-                    if (_.has(values, field)) {
-                        var $field = self.$target.find('input[name="' + field + '"], textarea[name="' + field + '"]');
-                        if (!$field.val()) {
+                varfields=_.pluck(this.$target.serializeArray(),'name');
+                _.each(fields,function(field){
+                    if(_.has(values,field)){
+                        var$field=self.$target.find('input[name="'+field+'"],textarea[name="'+field+'"]');
+                        if(!$field.val()){
                             $field.val(values[field]);
-                            $field.data('website_form_original_default_value', $field.val());
+                            $field.data('website_form_original_default_value',$field.val());
                         }
                     }
                 });
             }
 
-            return this._super(...arguments).then(() => this.__startResolve());
+            returnthis._super(...arguments).then(()=>this.__startResolve());
         },
 
-        destroy: function () {
-            this._super.apply(this, arguments);
+        destroy:function(){
+            this._super.apply(this,arguments);
             this.$target.find('button').off('click');
 
-            // Empty imputs
+            //Emptyimputs
             this.$target[0].reset();
 
-            // Remove saving of the error colors
-            this.$target.find('.o_has_error').removeClass('o_has_error').find('.form-control, .custom-select').removeClass('is-invalid');
+            //Removesavingoftheerrorcolors
+            this.$target.find('.o_has_error').removeClass('o_has_error').find('.form-control,.custom-select').removeClass('is-invalid');
 
-            // Remove the status message
-            this.$target.find('#s_website_form_result, #o_website_form_result').empty(); // !compatibility
+            //Removethestatusmessage
+            this.$target.find('#s_website_form_result,#o_website_form_result').empty();//!compatibility
 
-            // Remove the success message and display the form
+            //Removethesuccessmessageanddisplaytheform
             this.$target.removeClass('d-none');
             this.$target.parent().find('.s_website_form_end_message').addClass('d-none');
         },
 
-        send: async function (e) {
-            e.preventDefault(); // Prevent the default submit behavior
-             // Prevent users from crazy clicking
-            this.$target.find('.s_website_form_send, .o_website_form_send')
-                .addClass('disabled')    // !compatibility
-                .attr('disabled', 'disabled');
+        send:asyncfunction(e){
+            e.preventDefault();//Preventthedefaultsubmitbehavior
+             //Preventusersfromcrazyclicking
+            this.$target.find('.s_website_form_send,.o_website_form_send')
+                .addClass('disabled')   //!compatibility
+                .attr('disabled','disabled');
 
-            var self = this;
+            varself=this;
 
-            self.$target.find('#s_website_form_result, #o_website_form_result').empty(); // !compatibility
-            if (!self.check_error_fields({})) {
-                self.update_status('error', _t("Please fill in the form correctly."));
-                return false;
+            self.$target.find('#s_website_form_result,#o_website_form_result').empty();//!compatibility
+            if(!self.check_error_fields({})){
+                self.update_status('error',_t("Pleasefillintheformcorrectly."));
+                returnfalse;
             }
 
-            // Prepare form inputs
-            this.form_fields = this.$target.serializeArray();
-            $.each(this.$target.find('input[type=file]'), function (outer_index, input) {
-                $.each($(input).prop('files'), function (index, file) {
-                    // Index field name as ajax won't accept arrays of files
-                    // when aggregating multiple files into a single field value
+            //Prepareforminputs
+            this.form_fields=this.$target.serializeArray();
+            $.each(this.$target.find('input[type=file]'),function(outer_index,input){
+                $.each($(input).prop('files'),function(index,file){
+                    //Indexfieldnameasajaxwon'tacceptarraysoffiles
+                    //whenaggregatingmultiplefilesintoasinglefieldvalue
                     self.form_fields.push({
-                        name: input.name + '[' + outer_index + '][' + index + ']',
-                        value: file
+                        name:input.name+'['+outer_index+']['+index+']',
+                        value:file
                     });
                 });
             });
 
-            // Serialize form inputs into a single object
-            // Aggregate multiple values into arrays
-            var form_values = {};
-            _.each(this.form_fields, function (input) {
-                if (input.name in form_values) {
-                    // If a value already exists for this field,
-                    // we are facing a x2many field, so we store
-                    // the values in an array.
-                    if (Array.isArray(form_values[input.name])) {
+            //Serializeforminputsintoasingleobject
+            //Aggregatemultiplevaluesintoarrays
+            varform_values={};
+            _.each(this.form_fields,function(input){
+                if(input.nameinform_values){
+                    //Ifavaluealreadyexistsforthisfield,
+                    //wearefacingax2manyfield,sowestore
+                    //thevaluesinanarray.
+                    if(Array.isArray(form_values[input.name])){
                         form_values[input.name].push(input.value);
-                    } else {
-                        form_values[input.name] = [form_values[input.name], input.value];
+                    }else{
+                        form_values[input.name]=[form_values[input.name],input.value];
                     }
-                } else {
-                    if (input.value !== '') {
-                        form_values[input.name] = input.value;
+                }else{
+                    if(input.value!==''){
+                        form_values[input.name]=input.value;
                     }
                 }
             });
 
-            // force server date format usage for existing fields
+            //forceserverdateformatusageforexistingfields
             this.$target.find('.s_website_form_field:not(.s_website_form_custom)')
-            .find('.s_website_form_date, .s_website_form_datetime').each(function () {
-                const $input = $(this).find('input');
+            .find('.s_website_form_date,.s_website_form_datetime').each(function(){
+                const$input=$(this).find('input');
 
-                // Datetimepicker('viewDate') will return `new Date()` if the
-                // input is empty but we want to keep the empty value
-                if (!$input.val()) {
+                //Datetimepicker('viewDate')willreturn`newDate()`ifthe
+                //inputisemptybutwewanttokeeptheemptyvalue
+                if(!$input.val()){
                     return;
                 }
 
-                var date = $(this).datetimepicker('viewDate').clone().locale('en');
-                var format = 'YYYY-MM-DD';
-                if ($(this).hasClass('s_website_form_datetime')) {
-                    date = date.utc();
-                    format = 'YYYY-MM-DD HH:mm:ss';
+                vardate=$(this).datetimepicker('viewDate').clone().locale('en');
+                varformat='YYYY-MM-DD';
+                if($(this).hasClass('s_website_form_datetime')){
+                    date=date.utc();
+                    format='YYYY-MM-DDHH:mm:ss';
                 }
-                form_values[$input.attr('name')] = date.format(format);
+                form_values[$input.attr('name')]=date.format(format);
             });
 
-            if (this._recaptchaLoaded) {
-                const tokenObj = await this._recaptcha.getToken('website_form');
-                if (tokenObj.token) {
-                    form_values['recaptcha_token_response'] = tokenObj.token;
-                } else if (tokenObj.error) {
-                    self.update_status('error', tokenObj.error);
-                    return false;
+            if(this._recaptchaLoaded){
+                consttokenObj=awaitthis._recaptcha.getToken('website_form');
+                if(tokenObj.token){
+                    form_values['recaptcha_token_response']=tokenObj.token;
+                }elseif(tokenObj.error){
+                    self.update_status('error',tokenObj.error);
+                    returnfalse;
                 }
             }
 
-            // Post form and handle result
-            ajax.post(this.$target.attr('action') + (this.$target.data('force_action') || this.$target.data('model_name')), form_values)
-            .then(function (result_data) {
-                // Restore send button behavior
-                self.$target.find('.s_website_form_send, .o_website_form_send')
+            //Postformandhandleresult
+            ajax.post(this.$target.attr('action')+(this.$target.data('force_action')||this.$target.data('model_name')),form_values)
+            .then(function(result_data){
+                //Restoresendbuttonbehavior
+                self.$target.find('.s_website_form_send,.o_website_form_send')
                     .removeAttr('disabled')
-                    .removeClass('disabled'); // !compatibility
-                result_data = JSON.parse(result_data);
-                if (!result_data.id) {
-                    // Failure, the server didn't return the created record ID
-                    self.update_status('error', result_data.error ? result_data.error : false);
-                    if (result_data.error_fields) {
-                        // If the server return a list of bad fields, show these fields for users
+                    .removeClass('disabled');//!compatibility
+                result_data=JSON.parse(result_data);
+                if(!result_data.id){
+                    //Failure,theserverdidn'treturnthecreatedrecordID
+                    self.update_status('error',result_data.error?result_data.error:false);
+                    if(result_data.error_fields){
+                        //Iftheserverreturnalistofbadfields,showthesefieldsforusers
                         self.check_error_fields(result_data.error_fields);
                     }
-                } else {
-                    // Success, redirect or update status
-                    let successMode = self.$target[0].dataset.successMode;
-                    let successPage = self.$target[0].dataset.successPage;
-                    if (!successMode) {
-                        successPage = self.$target.attr('data-success_page'); // Compatibility
-                        successMode = successPage ? 'redirect' : 'nothing';
+                }else{
+                    //Success,redirectorupdatestatus
+                    letsuccessMode=self.$target[0].dataset.successMode;
+                    letsuccessPage=self.$target[0].dataset.successPage;
+                    if(!successMode){
+                        successPage=self.$target.attr('data-success_page');//Compatibility
+                        successMode=successPage?'redirect':'nothing';
                     }
-                    switch (successMode) {
-                        case 'redirect': {
-                            let hashIndex = successPage.indexOf("#");
-                            if (hashIndex > 0) {
-                                // URL containing an anchor detected: extract
-                                // the anchor from the URL if the URL is the
-                                // same as the current page URL so we can scroll
-                                // directly to the element (if found) later
-                                // instead of redirecting.
-                                // Note that both currentUrlPath and successPage
-                                // can exist with or without a trailing slash
-                                // before the hash (e.g. "domain.com#footer" or
-                                // "domain.com/#footer"). Therefore, if they are
-                                // not present, we add them to be able to
-                                // compare the two variables correctly.
-                                let currentUrlPath = window.location.pathname;
-                                if (!currentUrlPath.endsWith("/")) {
-                                    currentUrlPath = currentUrlPath + "/";
+                    switch(successMode){
+                        case'redirect':{
+                            lethashIndex=successPage.indexOf("#");
+                            if(hashIndex>0){
+                                //URLcontainingananchordetected:extract
+                                //theanchorfromtheURLiftheURListhe
+                                //sameasthecurrentpageURLsowecanscroll
+                                //directlytotheelement(iffound)later
+                                //insteadofredirecting.
+                                //NotethatbothcurrentUrlPathandsuccessPage
+                                //canexistwithorwithoutatrailingslash
+                                //beforethehash(e.g."domain.com#footer"or
+                                //"domain.com/#footer").Therefore,iftheyare
+                                //notpresent,weaddthemtobeableto
+                                //comparethetwovariablescorrectly.
+                                letcurrentUrlPath=window.location.pathname;
+                                if(!currentUrlPath.endsWith("/")){
+                                    currentUrlPath=currentUrlPath+"/";
                                 }
-                                if (!successPage.includes("/#")) {
-                                    successPage = successPage.replace("#", "/#");
+                                if(!successPage.includes("/#")){
+                                    successPage=successPage.replace("#","/#");
                                     hashIndex++;
                                 }
-                                if ([successPage, "/" + session.lang_url_code + successPage].some(link => link.startsWith(currentUrlPath + '#'))) {
-                                    successPage = successPage.substring(hashIndex);
+                                if([successPage,"/"+session.lang_url_code+successPage].some(link=>link.startsWith(currentUrlPath+'#'))){
+                                    successPage=successPage.substring(hashIndex);
                                 }
                             }
-                            if (successPage.charAt(0) === "#") {
-                                const successAnchorEl = document.getElementById(successPage.substring(1));
-                                if (successAnchorEl) {
-                                    dom.scrollTo(successAnchorEl, {
-                                        duration: 500,
-                                        extraOffset: 0,
+                            if(successPage.charAt(0)==="#"){
+                                constsuccessAnchorEl=document.getElementById(successPage.substring(1));
+                                if(successAnchorEl){
+                                    dom.scrollTo(successAnchorEl,{
+                                        duration:500,
+                                        extraOffset:0,
                                     });
                                 }
-                            } else {
-                                $(window.location).attr('href', successPage);
+                            }else{
+                                $(window.location).attr('href',successPage);
                             }
                             break;
                         }
-                        case 'message':
+                        case'message':
                             self.$target[0].classList.add('d-none');
                             self.$target[0].parentElement.querySelector('.s_website_form_end_message').classList.remove('d-none');
                             break;
@@ -258,123 +258,123 @@ flectra.define('website_form.s_website_form', function (require) {
                             break;
                     }
 
-                    // Reset the form
+                    //Resettheform
                     self.$target[0].reset();
                 }
             })
-            .guardedCatch(function () {
+            .guardedCatch(function(){
                 self.update_status('error');
             });
         },
 
-        check_error_fields: function (error_fields) {
-            var self = this;
-            var form_valid = true;
-            // Loop on all fields
-            this.$target.find('.form-field, .s_website_form_field').each(function (k, field) { // !compatibility
-                var $field = $(field);
-                var field_name = $field.find('.col-form-label').attr('for');
+        check_error_fields:function(error_fields){
+            varself=this;
+            varform_valid=true;
+            //Looponallfields
+            this.$target.find('.form-field,.s_website_form_field').each(function(k,field){//!compatibility
+                var$field=$(field);
+                varfield_name=$field.find('.col-form-label').attr('for');
 
-                // Validate inputs for this field
-                var inputs = $field.find('.s_website_form_input, .o_website_form_input').not('#editable_select'); // !compatibility
-                var invalid_inputs = inputs.toArray().filter(function (input, k, inputs) {
-                    // Special check for multiple required checkbox for same
-                    // field as it seems checkValidity forces every required
-                    // checkbox to be checked, instead of looking at other
-                    // checkboxes with the same name and only requiring one
-                    // of them to be checked.
-                    if (input.required && input.type === 'checkbox') {
-                        // Considering we are currently processing a single
-                        // field, we can assume that all checkboxes in the
-                        // inputs variable have the same name
-                        var checkboxes = _.filter(inputs, function (input) {
-                            return input.required && input.type === 'checkbox';
+                //Validateinputsforthisfield
+                varinputs=$field.find('.s_website_form_input,.o_website_form_input').not('#editable_select');//!compatibility
+                varinvalid_inputs=inputs.toArray().filter(function(input,k,inputs){
+                    //Specialcheckformultiplerequiredcheckboxforsame
+                    //fieldasitseemscheckValidityforceseveryrequired
+                    //checkboxtobechecked,insteadoflookingatother
+                    //checkboxeswiththesamenameandonlyrequiringone
+                    //ofthemtobechecked.
+                    if(input.required&&input.type==='checkbox'){
+                        //Consideringwearecurrentlyprocessingasingle
+                        //field,wecanassumethatallcheckboxesinthe
+                        //inputsvariablehavethesamename
+                        varcheckboxes=_.filter(inputs,function(input){
+                            returninput.required&&input.type==='checkbox';
                         });
-                        return !_.any(checkboxes, checkbox => checkbox.checked);
+                        return!_.any(checkboxes,checkbox=>checkbox.checked);
 
-                    // Special cases for dates and datetimes
-                    } else if ($(input).hasClass('s_website_form_date') || $(input).hasClass('o_website_form_date')) { // !compatibility
-                        if (!self.is_datetime_valid(input.value, 'date')) {
-                            return true;
+                    //Specialcasesfordatesanddatetimes
+                    }elseif($(input).hasClass('s_website_form_date')||$(input).hasClass('o_website_form_date')){//!compatibility
+                        if(!self.is_datetime_valid(input.value,'date')){
+                            returntrue;
                         }
-                    } else if ($(input).hasClass('s_website_form_datetime') || $(input).hasClass('o_website_form_datetime')) { // !compatibility
-                        if (!self.is_datetime_valid(input.value, 'datetime')) {
-                            return true;
+                    }elseif($(input).hasClass('s_website_form_datetime')||$(input).hasClass('o_website_form_datetime')){//!compatibility
+                        if(!self.is_datetime_valid(input.value,'datetime')){
+                            returntrue;
                         }
                     }
-                    return !input.checkValidity();
+                    return!input.checkValidity();
                 });
 
-                // Update field color if invalid or erroneous
-                $field.removeClass('o_has_error').find('.form-control, .custom-select').removeClass('is-invalid');
-                if (invalid_inputs.length || error_fields[field_name]) {
-                    $field.addClass('o_has_error').find('.form-control, .custom-select').addClass('is-invalid');
-                    if (_.isString(error_fields[field_name])) {
-                        $field.popover({content: error_fields[field_name], trigger: 'hover', container: 'body', placement: 'top'});
-                        // update error message and show it.
-                        $field.data("bs.popover").config.content = error_fields[field_name];
+                //Updatefieldcolorifinvalidorerroneous
+                $field.removeClass('o_has_error').find('.form-control,.custom-select').removeClass('is-invalid');
+                if(invalid_inputs.length||error_fields[field_name]){
+                    $field.addClass('o_has_error').find('.form-control,.custom-select').addClass('is-invalid');
+                    if(_.isString(error_fields[field_name])){
+                        $field.popover({content:error_fields[field_name],trigger:'hover',container:'body',placement:'top'});
+                        //updateerrormessageandshowit.
+                        $field.data("bs.popover").config.content=error_fields[field_name];
                         $field.popover('show');
                     }
-                    form_valid = false;
+                    form_valid=false;
                 }
             });
-            return form_valid;
+            returnform_valid;
         },
 
-        is_datetime_valid: function (value, type_of_date) {
-            if (value === "") {
-                return true;
-            } else {
-                try {
-                    this.parse_date(value, type_of_date);
-                    return true;
-                } catch (e) {
-                    return false;
+        is_datetime_valid:function(value,type_of_date){
+            if(value===""){
+                returntrue;
+            }else{
+                try{
+                    this.parse_date(value,type_of_date);
+                    returntrue;
+                }catch(e){
+                    returnfalse;
                 }
             }
         },
 
-        // This is a stripped down version of format.js parse_value function
-        parse_date: function (value, type_of_date, value_if_empty) {
-            var date_pattern = time.getLangDateFormat(),
-                time_pattern = time.getLangTimeFormat();
-            var date_pattern_wo_zero = date_pattern.replace('MM', 'M').replace('DD', 'D'),
-                time_pattern_wo_zero = time_pattern.replace('HH', 'H').replace('mm', 'm').replace('ss', 's');
-            switch (type_of_date) {
-                case 'datetime':
-                    var datetime = moment(value, [date_pattern + ' ' + time_pattern, date_pattern_wo_zero + ' ' + time_pattern_wo_zero], true);
-                    if (datetime.isValid()) {
-                        return time.datetime_to_str(datetime.toDate());
+        //Thisisastrippeddownversionofformat.jsparse_valuefunction
+        parse_date:function(value,type_of_date,value_if_empty){
+            vardate_pattern=time.getLangDateFormat(),
+                time_pattern=time.getLangTimeFormat();
+            vardate_pattern_wo_zero=date_pattern.replace('MM','M').replace('DD','D'),
+                time_pattern_wo_zero=time_pattern.replace('HH','H').replace('mm','m').replace('ss','s');
+            switch(type_of_date){
+                case'datetime':
+                    vardatetime=moment(value,[date_pattern+''+time_pattern,date_pattern_wo_zero+''+time_pattern_wo_zero],true);
+                    if(datetime.isValid()){
+                        returntime.datetime_to_str(datetime.toDate());
                     }
-                    throw new Error(_.str.sprintf(_t("'%s' is not a correct datetime"), value));
-                case 'date':
-                    var date = moment(value, [date_pattern, date_pattern_wo_zero], true);
-                    if (date.isValid()) {
-                        return time.date_to_str(date.toDate());
+                    thrownewError(_.str.sprintf(_t("'%s'isnotacorrectdatetime"),value));
+                case'date':
+                    vardate=moment(value,[date_pattern,date_pattern_wo_zero],true);
+                    if(date.isValid()){
+                        returntime.date_to_str(date.toDate());
                     }
-                    throw new Error(_.str.sprintf(_t("'%s' is not a correct date"), value));
+                    thrownewError(_.str.sprintf(_t("'%s'isnotacorrectdate"),value));
             }
-            return value;
+            returnvalue;
         },
 
-        update_status: function (status, message) {
-            if (status !== 'success') { // Restore send button behavior if result is an error
-                this.$target.find('.s_website_form_send, .o_website_form_send')
+        update_status:function(status,message){
+            if(status!=='success'){//Restoresendbuttonbehaviorifresultisanerror
+                this.$target.find('.s_website_form_send,.o_website_form_send')
                     .removeAttr('disabled')
-                    .removeClass('disabled'); // !compatibility
+                    .removeClass('disabled');//!compatibility
             }
-            var $result = this.$('#s_website_form_result, #o_website_form_result'); // !compatibility
+            var$result=this.$('#s_website_form_result,#o_website_form_result');//!compatibility
 
-            if (status === 'error' && !message) {
-                message = _t("An error has occured, the form has not been sent.");
+            if(status==='error'&&!message){
+                message=_t("Anerrorhasoccured,theformhasnotbeensent.");
             }
 
-            // Note: we still need to wait that the widget is properly started
-            // before any qweb rendering which depends on xmlDependencies
-            // because the event handlers are binded before the call to
-            // willStart for public widgets...
-            this.__started.then(() => $result.replaceWith(qweb.render(`website_form.status_${status}`, {
-                message: message,
+            //Note:westillneedtowaitthatthewidgetisproperlystarted
+            //beforeanyqwebrenderingwhichdependsonxmlDependencies
+            //becausetheeventhandlersarebindedbeforethecallto
+            //willStartforpublicwidgets...
+            this.__started.then(()=>$result.replaceWith(qweb.render(`website_form.status_${status}`,{
+                message:message,
             })));
         },
     });

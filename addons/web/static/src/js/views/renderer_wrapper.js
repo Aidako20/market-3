@@ -1,15 +1,15 @@
-flectra.define('web.RendererWrapper', function (require) {
-    "use strict";
+flectra.define('web.RendererWrapper',function(require){
+    "usestrict";
 
-    const { ComponentWrapper } = require('web.OwlCompatibility');
+    const{ComponentWrapper}=require('web.OwlCompatibility');
 
-    class RendererWrapper extends ComponentWrapper {
-        getLocalState() { }
-        setLocalState() { }
-        giveFocus() { }
-        resetLocalState() { } 
+    classRendererWrapperextendsComponentWrapper{
+        getLocalState(){}
+        setLocalState(){}
+        giveFocus(){}
+        resetLocalState(){}
     }
 
-    return RendererWrapper;
+    returnRendererWrapper;
 
 });

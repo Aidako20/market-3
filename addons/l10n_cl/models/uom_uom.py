@@ -1,9 +1,9 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, api, _
+fromflectraimportfields,models,api,_
 
 
-class UomUom(models.Model):
-    _inherit = 'uom.uom'
+classUomUom(models.Model):
+    _inherit='uom.uom'
 
-    l10n_cl_sii_code = fields.Char('SII Code')
+    l10n_cl_sii_code=fields.Char('SIICode')

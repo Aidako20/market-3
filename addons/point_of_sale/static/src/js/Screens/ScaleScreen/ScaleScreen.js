@@ -1,102 +1,102 @@
-flectra.define('point_of_sale.ScaleScreen', function(require) {
-    'use strict';
+flectra.define('point_of_sale.ScaleScreen',function(require){
+    'usestrict';
 
-    const { useState, useExternalListener } = owl.hooks;
-    const PosComponent = require('point_of_sale.PosComponent');
-    const { round_precision: round_pr } = require('web.utils');
-    const Registries = require('point_of_sale.Registries');
+    const{useState,useExternalListener}=owl.hooks;
+    constPosComponent=require('point_of_sale.PosComponent');
+    const{round_precision:round_pr}=require('web.utils');
+    constRegistries=require('point_of_sale.Registries');
 
-    class ScaleScreen extends PosComponent {
+    classScaleScreenextendsPosComponent{
         /**
-         * @param {Object} props
-         * @param {Object} props.product The product to weight.
+         *@param{Object}props
+         *@param{Object}props.productTheproducttoweight.
          */
-        constructor() {
+        constructor(){
             super(...arguments);
-            useExternalListener(document, 'keyup', this._onHotkeys);
-            this.state = useState({ weight: 0 });
+            useExternalListener(document,'keyup',this._onHotkeys);
+            this.state=useState({weight:0});
         }
-        mounted() {
-            // start the scale reading
+        mounted(){
+            //startthescalereading
             this._readScale();
         }
-        willUnmount() {
-            // stop the scale reading
+        willUnmount(){
+            //stopthescalereading
             this.env.pos.proxy_queue.clear();
         }
-        back() {
-            this.props.resolve({ confirmed: false, payload: null });
+        back(){
+            this.props.resolve({confirmed:false,payload:null});
             this.trigger('close-temp-screen');
         }
-        confirm() {
+        confirm(){
             this.props.resolve({
-                confirmed: true,
-                payload: { weight: this.state.weight },
+                confirmed:true,
+                payload:{weight:this.state.weight},
             });
             this.trigger('close-temp-screen');
         }
-        _onHotkeys(event) {
-            if (event.key === 'Escape') {
+        _onHotkeys(event){
+            if(event.key==='Escape'){
                 this.back();
-            } else if (event.key === 'Enter') {
+            }elseif(event.key==='Enter'){
                 this.confirm();
             }
         }
-        _readScale() {
-            this.env.pos.proxy_queue.schedule(this._setWeight.bind(this), {
-                duration: 500,
-                repeat: true,
+        _readScale(){
+            this.env.pos.proxy_queue.schedule(this._setWeight.bind(this),{
+                duration:500,
+                repeat:true,
             });
         }
-        async _setWeight() {
-            const reading = await this.env.pos.proxy.scale_read();
-            this.state.weight = reading.weight;
+        async_setWeight(){
+            constreading=awaitthis.env.pos.proxy.scale_read();
+            this.state.weight=reading.weight;
         }
-        get _activePricelist() {
-            const current_order = this.env.pos.get_order();
-            let current_pricelist = this.env.pos.default_pricelist;
-            if (current_order) {
-                current_pricelist = current_order.pricelist;
+        get_activePricelist(){
+            constcurrent_order=this.env.pos.get_order();
+            letcurrent_pricelist=this.env.pos.default_pricelist;
+            if(current_order){
+                current_pricelist=current_order.pricelist;
             }
-            return current_pricelist;
+            returncurrent_pricelist;
         }
-        get productWeightString() {
-            const defaultstr = (this.state.weight || 0).toFixed(3) + ' Kg';
-            if (!this.props.product || !this.env.pos) {
-                return defaultstr;
+        getproductWeightString(){
+            constdefaultstr=(this.state.weight||0).toFixed(3)+'Kg';
+            if(!this.props.product||!this.env.pos){
+                returndefaultstr;
             }
-            const unit_id = this.props.product.uom_id;
-            if (!unit_id) {
-                return defaultstr;
+            constunit_id=this.props.product.uom_id;
+            if(!unit_id){
+                returndefaultstr;
             }
-            const unit = this.env.pos.units_by_id[unit_id[0]];
-            const weight = round_pr(this.state.weight || 0, unit.rounding);
-            let weightstr = weight.toFixed(Math.ceil(Math.log(1.0 / unit.rounding) / Math.log(10)));
-            weightstr += ' ' + unit.name;
-            return weightstr;
+            constunit=this.env.pos.units_by_id[unit_id[0]];
+            constweight=round_pr(this.state.weight||0,unit.rounding);
+            letweightstr=weight.toFixed(Math.ceil(Math.log(1.0/unit.rounding)/Math.log(10)));
+            weightstr+=''+unit.name;
+            returnweightstr;
         }
-        get computedPriceString() {
-            return this.env.pos.format_currency(this.productPrice * this.state.weight);
+        getcomputedPriceString(){
+            returnthis.env.pos.format_currency(this.productPrice*this.state.weight);
         }
-        get productPrice() {
-            const product = this.props.product;
-            return (product ? product.get_price(this._activePricelist, this.state.weight) : 0) || 0;
+        getproductPrice(){
+            constproduct=this.props.product;
+            return(product?product.get_price(this._activePricelist,this.state.weight):0)||0;
         }
-        get productName() {
-            return (
-                (this.props.product ? this.props.product.display_name : undefined) ||
-                'Unnamed Product'
+        getproductName(){
+            return(
+                (this.props.product?this.props.product.display_name:undefined)||
+                'UnnamedProduct'
             );
         }
-        get productUom() {
-            return this.props.product
-                ? this.env.pos.units_by_id[this.props.product.uom_id[0]].name
-                : '';
+        getproductUom(){
+            returnthis.props.product
+                ?this.env.pos.units_by_id[this.props.product.uom_id[0]].name
+                :'';
         }
     }
-    ScaleScreen.template = 'ScaleScreen';
+    ScaleScreen.template='ScaleScreen';
 
     Registries.Component.add(ScaleScreen);
 
-    return ScaleScreen;
+    returnScaleScreen;
 });

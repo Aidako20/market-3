@@ -1,43 +1,43 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, api
+fromflectraimportfields,models,api
 
 
-class ProductTemplate(models.Model):
-    _inherit = 'product.template'
-    _check_company_auto = True
+classProductTemplate(models.Model):
+    _inherit='product.template'
+    _check_company_auto=True
 
-    optional_product_ids = fields.Many2many(
-        'product.template', 'product_optional_rel', 'src_id', 'dest_id',
-        string='Optional Products', help="Optional Products are suggested "
-        "whenever the customer hits *Add to Cart* (cross-sell strategy, "
-        "e.g. for computers: warranty, software, etc.).", check_company=True)
+    optional_product_ids=fields.Many2many(
+        'product.template','product_optional_rel','src_id','dest_id',
+        string='OptionalProducts',help="OptionalProductsaresuggested"
+        "wheneverthecustomerhits*AddtoCart*(cross-sellstrategy,"
+        "e.g.forcomputers:warranty,software,etc.).",check_company=True)
 
-    @api.depends('attribute_line_ids.value_ids.is_custom', 'attribute_line_ids.attribute_id.create_variant')
-    def _compute_has_configurable_attributes(self):
-        """ A product is considered configurable if:
-        - It has dynamic attributes
-        - It has any attribute line with at least 2 attribute values configured
-        - It has at least one custom attribute value """
-        for product in self:
-            product.has_configurable_attributes = any(attribute.create_variant == 'dynamic' for attribute in product.mapped('attribute_line_ids.attribute_id')) \
-                or any(len(attribute_line_id.value_ids) >= 2 for attribute_line_id in product.attribute_line_ids) \
-                or any(attribute_value.is_custom for attribute_value in product.mapped('attribute_line_ids.value_ids'))
+    @api.depends('attribute_line_ids.value_ids.is_custom','attribute_line_ids.attribute_id.create_variant')
+    def_compute_has_configurable_attributes(self):
+        """Aproductisconsideredconfigurableif:
+        -Ithasdynamicattributes
+        -Ithasanyattributelinewithatleast2attributevaluesconfigured
+        -Ithasatleastonecustomattributevalue"""
+        forproductinself:
+            product.has_configurable_attributes=any(attribute.create_variant=='dynamic'forattributeinproduct.mapped('attribute_line_ids.attribute_id'))\
+                orany(len(attribute_line_id.value_ids)>=2forattribute_line_idinproduct.attribute_line_ids)\
+                orany(attribute_value.is_customforattribute_valueinproduct.mapped('attribute_line_ids.value_ids'))
 
-    def get_single_product_variant(self):
-        """ Method used by the product configurator to check if the product is configurable or not.
+    defget_single_product_variant(self):
+        """Methodusedbytheproductconfiguratortocheckiftheproductisconfigurableornot.
 
-        We need to open the product configurator if the product:
-        - is configurable (see has_configurable_attributes)
-        - has optional products """
+        Weneedtoopentheproductconfiguratoriftheproduct:
+        -isconfigurable(seehas_configurable_attributes)
+        -hasoptionalproducts"""
         self.ensure_one()
-        res = super(ProductTemplate, self).get_single_product_variant()
-        if res.get('product_id', False):
-            has_optional_products = False
-            for optional_product in self.product_variant_id.optional_product_ids:
-                if optional_product.has_dynamic_attributes() or optional_product._get_possible_variants(self.product_variant_id.product_template_attribute_value_ids):
-                    has_optional_products = True
+        res=super(ProductTemplate,self).get_single_product_variant()
+        ifres.get('product_id',False):
+            has_optional_products=False
+            foroptional_productinself.product_variant_id.optional_product_ids:
+                ifoptional_product.has_dynamic_attributes()oroptional_product._get_possible_variants(self.product_variant_id.product_template_attribute_value_ids):
+                    has_optional_products=True
                     break
-            res.update({'has_optional_products': has_optional_products})
-        return res
+            res.update({'has_optional_products':has_optional_products})
+        returnres

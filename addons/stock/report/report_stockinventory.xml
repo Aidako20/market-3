@@ -1,48 +1,48 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <template id="report_inventory">
-            <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
-                    <t t-call="web.external_layout">
-                        <div class="page">
+        <templateid="report_inventory">
+            <tt-call="web.html_container">
+                <tt-foreach="docs"t-as="o">
+                    <tt-call="web.external_layout">
+                        <divclass="page">
                             <br/>
-                            <h2 t-field="o.name"/>
+                            <h2t-field="o.name"/>
 
-                            <div class="row mt32 mb32" id="informations">
-                                <div t-if="o.date" class="col-auto mw-100 mb-2">
+                            <divclass="rowmt32mb32"id="informations">
+                                <divt-if="o.date"class="col-automw-100mb-2">
                                     <strong>Date:</strong>
-                                    <p class="m-0" t-field="o.date"/>
+                                    <pclass="m-0"t-field="o.date"/>
                                 </div>
                             </div>
 
-                            <t t-set="locations" t-value="o.line_ids.mapped('location_id')"/>
-                            <table class="table table-sm">
+                            <tt-set="locations"t-value="o.line_ids.mapped('location_id')"/>
+                            <tableclass="tabletable-sm">
                                 <thead>
                                     <tr>
-                                        <th groups="stock.group_stock_multi_locations"><strong>Location</strong></th>
+                                        <thgroups="stock.group_stock_multi_locations"><strong>Location</strong></th>
                                         <th><strong>Product</strong></th>
-                                        <th groups="stock.group_production_lot"><strong>Lot/Serial Number</strong></th>
-                                        <th groups="stock.group_tracking_lot"><strong>Package</strong></th>
-                                        <th class="text-right"><strong>On Hand Quantity</strong></th>
-                                        <th class="text-right"><strong>Counted Quantity</strong></th>
+                                        <thgroups="stock.group_production_lot"><strong>Lot/SerialNumber</strong></th>
+                                        <thgroups="stock.group_tracking_lot"><strong>Package</strong></th>
+                                        <thclass="text-right"><strong>OnHandQuantity</strong></th>
+                                        <thclass="text-right"><strong>CountedQuantity</strong></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <t t-foreach="locations" t-as="location">
-                                        <tr groups="stock.group_stock_multi_locations">
-                                            <td colspan="2"><strong t-esc="location.display_name"/></td>
-                                            <td groups="stock.group_production_lot"></td>
-                                            <td groups="stock.group_tracking_lot"></td>
+                                    <tt-foreach="locations"t-as="location">
+                                        <trgroups="stock.group_stock_multi_locations">
+                                            <tdcolspan="2"><strongt-esc="location.display_name"/></td>
+                                            <tdgroups="stock.group_production_lot"></td>
+                                            <tdgroups="stock.group_tracking_lot"></td>
                                             <td></td>
                                         </tr>
-                                        <tr t-foreach="o.line_ids.filtered(lambda line: line.location_id.id == location.id)" t-as="line">
-                                            <td groups="stock.group_stock_multi_locations"></td>
-                                            <td><span t-field="line.product_id"/></td>
-                                            <td groups="stock.group_production_lot"><span t-field="line.prod_lot_id"/></td>
-                                            <td groups="stock.group_tracking_lot"><span t-field="line.package_id"/></td>
-                                            <td class="text-right"><span t-field="line.theoretical_qty"/> <span t-field="line.product_uom_id" groups="uom.group_uom"/></td>
-                                            <td class="text-right"><span t-field="line.product_qty"/> <span t-field="line.product_uom_id" groups="uom.group_uom"/></td>
+                                        <trt-foreach="o.line_ids.filtered(lambdaline:line.location_id.id==location.id)"t-as="line">
+                                            <tdgroups="stock.group_stock_multi_locations"></td>
+                                            <td><spant-field="line.product_id"/></td>
+                                            <tdgroups="stock.group_production_lot"><spant-field="line.prod_lot_id"/></td>
+                                            <tdgroups="stock.group_tracking_lot"><spant-field="line.package_id"/></td>
+                                            <tdclass="text-right"><spant-field="line.theoretical_qty"/><spant-field="line.product_uom_id"groups="uom.group_uom"/></td>
+                                            <tdclass="text-right"><spant-field="line.product_qty"/><spant-field="line.product_uom_id"groups="uom.group_uom"/></td>
                                         </tr>
                                     </t>
                                 </tbody>

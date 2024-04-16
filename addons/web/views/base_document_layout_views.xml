@@ -1,52 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="view_base_document_layout" model="ir.ui.view">
-            <field name="name">Document Layout</field>
-            <field name="model">base.document.layout</field>
-            <field name="arch" type="xml">
-                <form class="o_document_layout">
+        <recordid="view_base_document_layout"model="ir.ui.view">
+            <fieldname="name">DocumentLayout</field>
+            <fieldname="model">base.document.layout</field>
+            <fieldname="arch"type="xml">
+                <formclass="o_document_layout">
                     <group>
-                        <group class="o_document_layout_company">
-                            <field name="company_id" invisible="1"/>
-                            <field name="external_report_layout_id" invisible="1" />
-                            <field name="logo_primary_color" invisible="1" />
-                            <field name="logo_secondary_color" invisible="1" />
-                            <field name="report_layout_id" widget="radio" string="Layout"/>
-                            <field name="logo" widget="image"/>
-                            <label for="primary_color" string="Colors" />
-                            <div class="o_document_layout_colors">
-                                <field name="primary_color" widget="color"/>
-                                <field name="secondary_color" widget="color"/>
-                                <field name="custom_colors" class="d-none" />
-                                <button class="btn btn-link" title="Reset to logo colors" attrs="{'invisible': [('custom_colors', '=', False)]}">
-                                    <label for="custom_colors" class="fa fa-refresh" string="" />
+                        <groupclass="o_document_layout_company">
+                            <fieldname="company_id"invisible="1"/>
+                            <fieldname="external_report_layout_id"invisible="1"/>
+                            <fieldname="logo_primary_color"invisible="1"/>
+                            <fieldname="logo_secondary_color"invisible="1"/>
+                            <fieldname="report_layout_id"widget="radio"string="Layout"/>
+                            <fieldname="logo"widget="image"/>
+                            <labelfor="primary_color"string="Colors"/>
+                            <divclass="o_document_layout_colors">
+                                <fieldname="primary_color"widget="color"/>
+                                <fieldname="secondary_color"widget="color"/>
+                                <fieldname="custom_colors"class="d-none"/>
+                                <buttonclass="btnbtn-link"title="Resettologocolors"attrs="{'invisible':[('custom_colors','=',False)]}">
+                                    <labelfor="custom_colors"class="fafa-refresh"string=""/>
                                 </button>
                             </div>
-                            <field name="font" widget="font"/>
-                            <field name="report_header" widget="char" placeholder="e.g. Global Business Solutions" />
-                            <field name="report_footer" string="Footer" placeholder="e.g. Opening hours, bank accounts (one per line)" />
-                            <field name="paperformat_id" required="1" />
+                            <fieldname="font"widget="font"/>
+                            <fieldname="report_header"widget="char"placeholder="e.g.GlobalBusinessSolutions"/>
+                            <fieldname="report_footer"string="Footer"placeholder="e.g.Openinghours,bankaccounts(oneperline)"/>
+                            <fieldname="paperformat_id"required="1"/>
                         </group>
                         <div>
-                            <field name="preview" widget="iframe_wrapper" />
+                            <fieldname="preview"widget="iframe_wrapper"/>
                         </div>
                     </group>
                     <footer>
-                        <button string="Save" class="btn-primary" type="object" name="document_layout_save"/>
-                        <button special="cancel" string="Cancel" />
+                        <buttonstring="Save"class="btn-primary"type="object"name="document_layout_save"/>
+                        <buttonspecial="cancel"string="Cancel"/>
                     </footer>
                 </form>
             </field>
         </record>
 
-        <record id="action_base_document_layout_configurator" model="ir.actions.act_window">
-            <field name="type">ir.actions.act_window</field>
-            <field name="name">Configure your document layout</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
-            <field name="res_model">base.document.layout</field>
-            <field name="view_id" ref="web.view_base_document_layout"/>
+        <recordid="action_base_document_layout_configurator"model="ir.actions.act_window">
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="name">Configureyourdocumentlayout</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="target">new</field>
+            <fieldname="res_model">base.document.layout</field>
+            <fieldname="view_id"ref="web.view_base_document_layout"/>
         </record>
 
     </data>

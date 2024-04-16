@@ -1,360 +1,360 @@
-flectra.define('sale.VariantMixin', function (require) {
-'use strict';
+flectra.define('sale.VariantMixin',function(require){
+'usestrict';
 
-var concurrency = require('web.concurrency');
-var core = require('web.core');
-var utils = require('web.utils');
-var ajax = require('web.ajax');
-var _t = core._t;
+varconcurrency=require('web.concurrency');
+varcore=require('web.core');
+varutils=require('web.utils');
+varajax=require('web.ajax');
+var_t=core._t;
 
-var VariantMixin = {
-    events: {
-        'change .css_attribute_color input': '_onChangeColorAttribute',
-        'change .main_product:not(.in_cart) input.js_quantity': 'onChangeAddQuantity',
-        'change [data-attribute_exclusions]': 'onChangeVariant'
+varVariantMixin={
+    events:{
+        'change.css_attribute_colorinput':'_onChangeColorAttribute',
+        'change.main_product:not(.in_cart)input.js_quantity':'onChangeAddQuantity',
+        'change[data-attribute_exclusions]':'onChangeVariant'
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * When a variant is changed, this will check:
-     * - If the selected combination is available or not
-     * - The extra price if applicable
-     * - The display name of the product ("Customizable desk (White, Steel)")
-     * - The new total price
-     * - The need of adding a "custom value" input
-     *   If the custom value is the only available value
-     *   (defined by its data 'is_single_and_custom'),
-     *   the custom value will have it's own input & label
+     *Whenavariantischanged,thiswillcheck:
+     *-Iftheselectedcombinationisavailableornot
+     *-Theextrapriceifapplicable
+     *-Thedisplaynameoftheproduct("Customizabledesk(White,Steel)")
+     *-Thenewtotalprice
+     *-Theneedofaddinga"customvalue"input
+     *  Ifthecustomvalueistheonlyavailablevalue
+     *  (definedbyitsdata'is_single_and_custom'),
+     *  thecustomvaluewillhaveit'sowninput&label
      *
-     * 'change' events triggered by the user entered custom values are ignored since they
-     * are not relevant
+     *'change'eventstriggeredbytheuserenteredcustomvaluesareignoredsincethey
+     *arenotrelevant
      *
-     * @param {MouseEvent} ev
+     *@param{MouseEvent}ev
      */
-    onChangeVariant: function (ev) {
-        var $parent = $(ev.target).closest('.js_product');
-        if (!$parent.data('uniqueId')) {
-            $parent.data('uniqueId', _.uniqueId());
+    onChangeVariant:function(ev){
+        var$parent=$(ev.target).closest('.js_product');
+        if(!$parent.data('uniqueId')){
+            $parent.data('uniqueId',_.uniqueId());
         }
         this._throttledGetCombinationInfo($parent.data('uniqueId'))(ev);
     },
     /**
-     * @see onChangeVariant
+     *@seeonChangeVariant
      *
-     * @private
-     * @param {Event} ev
-     * @returns {Deferred}
+     *@private
+     *@param{Event}ev
+     *@returns{Deferred}
      */
-    _getCombinationInfo: function (ev) {
-        var self = this;
+    _getCombinationInfo:function(ev){
+        varself=this;
 
-        if ($(ev.target).hasClass('variant_custom_value')) {
-            return Promise.resolve();
+        if($(ev.target).hasClass('variant_custom_value')){
+            returnPromise.resolve();
         }
 
-        var $parent = $(ev.target).closest('.js_product');
-        var qty = $parent.find('input[name="add_qty"]').val();
-        var combination = this.getSelectedVariantValues($parent);
-        var parentCombination = $parent.find('ul[data-attribute_exclusions]').data('attribute_exclusions').parent_combination;
-        var productTemplateId = parseInt($parent.find('.product_template_id').val());
+        var$parent=$(ev.target).closest('.js_product');
+        varqty=$parent.find('input[name="add_qty"]').val();
+        varcombination=this.getSelectedVariantValues($parent);
+        varparentCombination=$parent.find('ul[data-attribute_exclusions]').data('attribute_exclusions').parent_combination;
+        varproductTemplateId=parseInt($parent.find('.product_template_id').val());
 
-        self._checkExclusions($parent, combination);
+        self._checkExclusions($parent,combination);
 
-        return ajax.jsonRpc(this._getUri('/sale/get_combination_info'), 'call', {
-            'product_template_id': productTemplateId,
-            'product_id': this._getProductId($parent),
-            'combination': combination,
-            'add_qty': parseInt(qty),
-            'pricelist_id': this.pricelistId || false,
-            'parent_combination': parentCombination,
-        }).then(function (combinationData) {
-            self._onChangeCombination(ev, $parent, combinationData);
+        returnajax.jsonRpc(this._getUri('/sale/get_combination_info'),'call',{
+            'product_template_id':productTemplateId,
+            'product_id':this._getProductId($parent),
+            'combination':combination,
+            'add_qty':parseInt(qty),
+            'pricelist_id':this.pricelistId||false,
+            'parent_combination':parentCombination,
+        }).then(function(combinationData){
+            self._onChangeCombination(ev,$parent,combinationData);
         });
     },
 
     /**
-     * Will add the "custom value" input for this attribute value if
-     * the attribute value is configured as "custom" (see product_attribute_value.is_custom)
+     *Willaddthe"customvalue"inputforthisattributevalueif
+     *theattributevalueisconfiguredas"custom"(seeproduct_attribute_value.is_custom)
      *
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    handleCustomValues: function ($target) {
-        var $variantContainer;
-        var $customInput = false;
-        if ($target.is('input[type=radio]') && $target.is(':checked')) {
-            $variantContainer = $target.closest('ul').closest('li');
-            $customInput = $target;
-        } else if ($target.is('select')) {
-            $variantContainer = $target.closest('li');
-            $customInput = $target
-                .find('option[value="' + $target.val() + '"]');
+    handleCustomValues:function($target){
+        var$variantContainer;
+        var$customInput=false;
+        if($target.is('input[type=radio]')&&$target.is(':checked')){
+            $variantContainer=$target.closest('ul').closest('li');
+            $customInput=$target;
+        }elseif($target.is('select')){
+            $variantContainer=$target.closest('li');
+            $customInput=$target
+                .find('option[value="'+$target.val()+'"]');
         }
 
-        if ($variantContainer) {
-            if ($customInput && $customInput.data('is_custom') === 'True') {
-                var attributeValueId = $customInput.data('value_id');
-                var attributeValueName = $customInput.data('value_name');
+        if($variantContainer){
+            if($customInput&&$customInput.data('is_custom')==='True'){
+                varattributeValueId=$customInput.data('value_id');
+                varattributeValueName=$customInput.data('value_name');
 
-                if ($variantContainer.find('.variant_custom_value').length === 0
-                        || $variantContainer
+                if($variantContainer.find('.variant_custom_value').length===0
+                        ||$variantContainer
                               .find('.variant_custom_value')
-                              .data('custom_product_template_attribute_value_id') !== parseInt(attributeValueId)) {
+                              .data('custom_product_template_attribute_value_id')!==parseInt(attributeValueId)){
                     $variantContainer.find('.variant_custom_value').remove();
 
-                    var $input = $('<input>', {
-                        type: 'text',
-                        'data-custom_product_template_attribute_value_id': attributeValueId,
-                        'data-attribute_value_name': attributeValueName,
-                        class: 'variant_custom_value form-control'
+                    var$input=$('<input>',{
+                        type:'text',
+                        'data-custom_product_template_attribute_value_id':attributeValueId,
+                        'data-attribute_value_name':attributeValueName,
+                        class:'variant_custom_valueform-control'
                     });
 
-                    var isRadioInput = $target.is('input[type=radio]') &&
-                        $target.closest('label.css_attribute_color').length === 0;
+                    varisRadioInput=$target.is('input[type=radio]')&&
+                        $target.closest('label.css_attribute_color').length===0;
 
-                    if (isRadioInput && $customInput.data('is_single_and_custom') !== 'True') {
+                    if(isRadioInput&&$customInput.data('is_single_and_custom')!=='True'){
                         $input.addClass('custom_value_radio');
                         $target.closest('div').after($input);
-                    } else {
-                        $input.attr('placeholder', attributeValueName);
+                    }else{
+                        $input.attr('placeholder',attributeValueName);
                         $input.addClass('custom_value_own_line');
                         $variantContainer.append($input);
                     }
                 }
-            } else {
+            }else{
                 $variantContainer.find('.variant_custom_value').remove();
             }
         }
     },
 
     /**
-     * Hack to add and remove from cart with json
+     *Hacktoaddandremovefromcartwithjson
      *
-     * @param {MouseEvent} ev
+     *@param{MouseEvent}ev
      */
-    onClickAddCartJSON: function (ev) {
+    onClickAddCartJSON:function(ev){
         ev.preventDefault();
-        var $link = $(ev.currentTarget);
-        var $input = $link.closest('.input-group').find("input");
-        var min = parseFloat($input.data("min") || 0);
-        var max = parseFloat($input.data("max") || Infinity);
-        var previousQty = parseFloat($input.val() || 0, 10);
-        var quantity = ($link.has(".fa-minus").length ? -1 : 1) + previousQty;
-        var newQty = quantity > min ? (quantity < max ? quantity : max) : min;
+        var$link=$(ev.currentTarget);
+        var$input=$link.closest('.input-group').find("input");
+        varmin=parseFloat($input.data("min")||0);
+        varmax=parseFloat($input.data("max")||Infinity);
+        varpreviousQty=parseFloat($input.val()||0,10);
+        varquantity=($link.has(".fa-minus").length?-1:1)+previousQty;
+        varnewQty=quantity>min?(quantity<max?quantity:max):min;
 
-        if (newQty !== previousQty) {
+        if(newQty!==previousQty){
             $input.val(newQty).trigger('change');
         }
-        return false;
+        returnfalse;
     },
 
     /**
-     * When the quantity is changed, we need to query the new price of the product.
-     * Based on the price list, the price might change when quantity exceeds X
+     *Whenthequantityischanged,weneedtoquerythenewpriceoftheproduct.
+     *Basedonthepricelist,thepricemightchangewhenquantityexceedsX
      *
-     * @param {MouseEvent} ev
+     *@param{MouseEvent}ev
      */
-    onChangeAddQuantity: function (ev) {
-        var $parent;
+    onChangeAddQuantity:function(ev){
+        var$parent;
 
-        if ($(ev.currentTarget).closest('.oe_optional_products_modal').length > 0){
-            $parent = $(ev.currentTarget).closest('.oe_optional_products_modal');
-        } else if ($(ev.currentTarget).closest('form').length > 0){
-            $parent = $(ev.currentTarget).closest('form');
-        }  else {
-            $parent = $(ev.currentTarget).closest('.o_product_configurator');
+        if($(ev.currentTarget).closest('.oe_optional_products_modal').length>0){
+            $parent=$(ev.currentTarget).closest('.oe_optional_products_modal');
+        }elseif($(ev.currentTarget).closest('form').length>0){
+            $parent=$(ev.currentTarget).closest('form');
+        } else{
+            $parent=$(ev.currentTarget).closest('.o_product_configurator');
         }
 
         this.triggerVariantChange($parent);
     },
 
     /**
-     * Triggers the price computation and other variant specific changes
+     *Triggersthepricecomputationandothervariantspecificchanges
      *
-     * @param {$.Element} $container
+     *@param{$.Element}$container
      */
-    triggerVariantChange: function ($container) {
-        var self = this;
+    triggerVariantChange:function($container){
+        varself=this;
         $container.find('ul[data-attribute_exclusions]').trigger('change');
-        $container.find('input.js_variant_change:checked, select.js_variant_change').each(function () {
+        $container.find('input.js_variant_change:checked,select.js_variant_change').each(function(){
             self.handleCustomValues($(this));
         });
     },
 
     /**
-     * Will look for user custom attribute values
-     * in the provided container
+     *Willlookforusercustomattributevalues
+     *intheprovidedcontainer
      *
-     * @param {$.Element} $container
-     * @returns {Array} array of custom values with the following format
-     *   {integer} custom_product_template_attribute_value_id
-     *   {string} attribute_value_name
-     *   {string} custom_value
+     *@param{$.Element}$container
+     *@returns{Array}arrayofcustomvalueswiththefollowingformat
+     *  {integer}custom_product_template_attribute_value_id
+     *  {string}attribute_value_name
+     *  {string}custom_value
      */
-    getCustomVariantValues: function ($container) {
-        var variantCustomValues = [];
-        $container.find('.variant_custom_value').each(function (){
-            var $variantCustomValueInput = $(this);
-            if ($variantCustomValueInput.length !== 0){
+    getCustomVariantValues:function($container){
+        varvariantCustomValues=[];
+        $container.find('.variant_custom_value').each(function(){
+            var$variantCustomValueInput=$(this);
+            if($variantCustomValueInput.length!==0){
                 variantCustomValues.push({
-                    'custom_product_template_attribute_value_id': $variantCustomValueInput.data('custom_product_template_attribute_value_id'),
-                    'attribute_value_name': $variantCustomValueInput.data('attribute_value_name'),
-                    'custom_value': $variantCustomValueInput.val(),
+                    'custom_product_template_attribute_value_id':$variantCustomValueInput.data('custom_product_template_attribute_value_id'),
+                    'attribute_value_name':$variantCustomValueInput.data('attribute_value_name'),
+                    'custom_value':$variantCustomValueInput.val(),
                 });
             }
         });
 
-        return variantCustomValues;
+        returnvariantCustomValues;
     },
 
     /**
-     * Will look for attribute values that do not create product variant
-     * (see product_attribute.create_variant "dynamic")
+     *Willlookforattributevaluesthatdonotcreateproductvariant
+     *(seeproduct_attribute.create_variant"dynamic")
      *
-     * @param {$.Element} $container
-     * @returns {Array} array of attribute values with the following format
-     *   {integer} custom_product_template_attribute_value_id
-     *   {string} attribute_value_name
-     *   {integer} value
-     *   {string} attribute_name
-     *   {boolean} is_custom
+     *@param{$.Element}$container
+     *@returns{Array}arrayofattributevalueswiththefollowingformat
+     *  {integer}custom_product_template_attribute_value_id
+     *  {string}attribute_value_name
+     *  {integer}value
+     *  {string}attribute_name
+     *  {boolean}is_custom
      */
-    getNoVariantAttributeValues: function ($container) {
-        var noVariantAttributeValues = [];
-        var variantsValuesSelectors = [
+    getNoVariantAttributeValues:function($container){
+        varnoVariantAttributeValues=[];
+        varvariantsValuesSelectors=[
             'input.no_variant.js_variant_change:checked',
             'select.no_variant.js_variant_change'
         ];
 
-        $container.find(variantsValuesSelectors.join(',')).each(function (){
-            var $variantValueInput = $(this);
-            var singleNoCustom = $variantValueInput.data('is_single') && !$variantValueInput.data('is_custom');
+        $container.find(variantsValuesSelectors.join(',')).each(function(){
+            var$variantValueInput=$(this);
+            varsingleNoCustom=$variantValueInput.data('is_single')&&!$variantValueInput.data('is_custom');
 
-            if ($variantValueInput.is('select')){
-                $variantValueInput = $variantValueInput.find('option[value=' + $variantValueInput.val() + ']');
+            if($variantValueInput.is('select')){
+                $variantValueInput=$variantValueInput.find('option[value='+$variantValueInput.val()+']');
             }
 
-            if ($variantValueInput.length !== 0 && !singleNoCustom){
+            if($variantValueInput.length!==0&&!singleNoCustom){
                 noVariantAttributeValues.push({
-                    'custom_product_template_attribute_value_id': $variantValueInput.data('value_id'),
-                    'attribute_value_name': $variantValueInput.data('value_name'),
-                    'value': $variantValueInput.val(),
-                    'attribute_name': $variantValueInput.data('attribute_name'),
-                    'is_custom': $variantValueInput.data('is_custom')
+                    'custom_product_template_attribute_value_id':$variantValueInput.data('value_id'),
+                    'attribute_value_name':$variantValueInput.data('value_name'),
+                    'value':$variantValueInput.val(),
+                    'attribute_name':$variantValueInput.data('attribute_name'),
+                    'is_custom':$variantValueInput.data('is_custom')
                 });
             }
         });
 
-        return noVariantAttributeValues;
+        returnnoVariantAttributeValues;
     },
 
     /**
-     * Will return the list of selected product.template.attribute.value ids
-     * For the modal, the "main product"'s attribute values are stored in the
-     * "unchanged_value_ids" data
+     *Willreturnthelistofselectedproduct.template.attribute.valueids
+     *Forthemodal,the"mainproduct"'sattributevaluesarestoredinthe
+     *"unchanged_value_ids"data
      *
-     * @param {$.Element} $container the container to look into
+     *@param{$.Element}$containerthecontainertolookinto
      */
-    getSelectedVariantValues: function ($container) {
-        var values = [];
-        var unchangedValues = $container
+    getSelectedVariantValues:function($container){
+        varvalues=[];
+        varunchangedValues=$container
             .find('div.oe_unchanged_value_ids')
-            .data('unchanged_value_ids') || [];
+            .data('unchanged_value_ids')||[];
 
-        var variantsValuesSelectors = [
+        varvariantsValuesSelectors=[
             'input.js_variant_change:checked',
             'select.js_variant_change'
         ];
-        _.each($container.find(variantsValuesSelectors.join(', ')), function (el) {
+        _.each($container.find(variantsValuesSelectors.join(',')),function(el){
             values.push(+$(el).val());
         });
 
-        return values.concat(unchangedValues);
+        returnvalues.concat(unchangedValues);
     },
 
     /**
-     * Will return a promise:
+     *Willreturnapromise:
      *
-     * - If the product already exists, immediately resolves it with the product_id
-     * - If the product does not exist yet ("dynamic" variant creation), this method will
-     *   create the product first and then resolve the promise with the created product's id
+     *-Iftheproductalreadyexists,immediatelyresolvesitwiththeproduct_id
+     *-Iftheproductdoesnotexistyet("dynamic"variantcreation),thismethodwill
+     *  createtheproductfirstandthenresolvethepromisewiththecreatedproduct'sid
      *
-     * @param {$.Element} $container the container to look into
-     * @param {integer} productId the product id
-     * @param {integer} productTemplateId the corresponding product template id
-     * @param {boolean} useAjax wether the rpc call should be done using ajax.jsonRpc or using _rpc
-     * @returns {Promise} the promise that will be resolved with a {integer} productId
+     *@param{$.Element}$containerthecontainertolookinto
+     *@param{integer}productIdtheproductid
+     *@param{integer}productTemplateIdthecorrespondingproducttemplateid
+     *@param{boolean}useAjaxwethertherpccallshouldbedoneusingajax.jsonRpcorusing_rpc
+     *@returns{Promise}thepromisethatwillberesolvedwitha{integer}productId
      */
-    selectOrCreateProduct: function ($container, productId, productTemplateId, useAjax) {
-        var self = this;
-        productId = parseInt(productId);
-        productTemplateId = parseInt(productTemplateId);
-        var productReady = Promise.resolve();
-        if (productId) {
-            productReady = Promise.resolve(productId);
-        } else {
-            var params = {
-                product_template_id: productTemplateId,
+    selectOrCreateProduct:function($container,productId,productTemplateId,useAjax){
+        varself=this;
+        productId=parseInt(productId);
+        productTemplateId=parseInt(productTemplateId);
+        varproductReady=Promise.resolve();
+        if(productId){
+            productReady=Promise.resolve(productId);
+        }else{
+            varparams={
+                product_template_id:productTemplateId,
                 product_template_attribute_value_ids:
                     JSON.stringify(self.getSelectedVariantValues($container)),
             };
 
-            var route = '/sale/create_product_variant';
-            if (useAjax) {
-                productReady = ajax.jsonRpc(route, 'call', params);
-            } else {
-                productReady = this._rpc({route: route, params: params});
+            varroute='/sale/create_product_variant';
+            if(useAjax){
+                productReady=ajax.jsonRpc(route,'call',params);
+            }else{
+                productReady=this._rpc({route:route,params:params});
             }
         }
 
-        return productReady;
+        returnproductReady;
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Will disable attribute value's inputs based on combination exclusions
-     * and will disable the "add" button if the selected combination
-     * is not available
+     *Willdisableattributevalue'sinputsbasedoncombinationexclusions
+     *andwilldisablethe"add"buttoniftheselectedcombination
+     *isnotavailable
      *
-     * This will check both the exclusions within the product itself and
-     * the exclusions coming from the parent product (meaning that this product
-     * is an option of the parent product)
+     *Thiswillcheckboththeexclusionswithintheproductitselfand
+     *theexclusionscomingfromtheparentproduct(meaningthatthisproduct
+     *isanoptionoftheparentproduct)
      *
-     * It will also check that the selected combination does not exactly
-     * match a manually archived product
+     *Itwillalsocheckthattheselectedcombinationdoesnotexactly
+     *matchamanuallyarchivedproduct
      *
-     * @private
-     * @param {$.Element} $parent the parent container to apply exclusions
-     * @param {Array} combination the selected combination of product attribute values
+     *@private
+     *@param{$.Element}$parenttheparentcontainertoapplyexclusions
+     *@param{Array}combinationtheselectedcombinationofproductattributevalues
      */
-    _checkExclusions: function ($parent, combination) {
-        var self = this;
-        var combinationData = $parent
+    _checkExclusions:function($parent,combination){
+        varself=this;
+        varcombinationData=$parent
             .find('ul[data-attribute_exclusions]')
             .data('attribute_exclusions');
 
         $parent
-            .find('option, input, label')
+            .find('option,input,label')
             .removeClass('css_not_available')
-            .attr('title', function () { return $(this).data('value_name') || ''; })
-            .data('excluded-by', '');
+            .attr('title',function(){return$(this).data('value_name')||'';})
+            .data('excluded-by','');
 
-        // exclusion rules: array of ptav
-        // for each of them, contains array with the other ptav they exclude
-        if (combinationData.exclusions) {
-            // browse all the currently selected attributes
-            _.each(combination, function (current_ptav) {
-                if (combinationData.exclusions.hasOwnProperty(current_ptav)) {
-                    // for each exclusion of the current attribute:
-                    _.each(combinationData.exclusions[current_ptav], function (excluded_ptav) {
-                        // disable the excluded input (even when not already selected)
-                        // to give a visual feedback before click
+        //exclusionrules:arrayofptav
+        //foreachofthem,containsarraywiththeotherptavtheyexclude
+        if(combinationData.exclusions){
+            //browseallthecurrentlyselectedattributes
+            _.each(combination,function(current_ptav){
+                if(combinationData.exclusions.hasOwnProperty(current_ptav)){
+                    //foreachexclusionofthecurrentattribute:
+                    _.each(combinationData.exclusions[current_ptav],function(excluded_ptav){
+                        //disabletheexcludedinput(evenwhennotalreadyselected)
+                        //togiveavisualfeedbackbeforeclick
                         self._disableInput(
                             $parent,
                             excluded_ptav,
@@ -366,13 +366,13 @@ var VariantMixin = {
             });
         }
 
-        // parent exclusions (tell which attributes are excluded from parent)
-        _.each(combinationData.parent_exclusions, function (exclusions, excluded_by){
-            // check that the selected combination is in the parent exclusions
-            _.each(exclusions, function (ptav) {
+        //parentexclusions(tellwhichattributesareexcludedfromparent)
+        _.each(combinationData.parent_exclusions,function(exclusions,excluded_by){
+            //checkthattheselectedcombinationisintheparentexclusions
+            _.each(exclusions,function(ptav){
 
-                // disable the excluded input (even when not already selected)
-                // to give a visual feedback before click
+                //disabletheexcludedinput(evenwhennotalreadyselected)
+                //togiveavisualfeedbackbeforeclick
                 self._disableInput(
                     $parent,
                     ptav,
@@ -384,86 +384,86 @@ var VariantMixin = {
         });
     },
     /**
-     * Extracted to a method to be extendable by other modules
+     *Extractedtoamethodtobeextendablebyothermodules
      *
-     * @param {$.Element} $parent
+     *@param{$.Element}$parent
      */
-    _getProductId: function ($parent) {
-        return parseInt($parent.find('.product_id').val());
+    _getProductId:function($parent){
+        returnparseInt($parent.find('.product_id').val());
     },
     /**
-     * Will disable the input/option that refers to the passed attributeValueId.
-     * This is used for showing the user that some combinations are not available.
+     *Willdisabletheinput/optionthatreferstothepassedattributeValueId.
+     *Thisisusedforshowingtheuserthatsomecombinationsarenotavailable.
      *
-     * It will also display a message explaining why the input is not selectable.
-     * Based on the "excludedBy" and the "productName" params.
-     * e.g: Not available with Color: Black
+     *Itwillalsodisplayamessageexplainingwhytheinputisnotselectable.
+     *Basedonthe"excludedBy"andthe"productName"params.
+     *e.g:NotavailablewithColor:Black
      *
-     * @private
-     * @param {$.Element} $parent
-     * @param {integer} attributeValueId
-     * @param {integer} excludedBy The attribute value that excludes this input
-     * @param {Object} attributeNames A dict containing all the names of the attribute values
-     *   to show a human readable message explaining why the input is disabled.
-     * @param {string} [productName] The parent product. If provided, it will be appended before
-     *   the name of the attribute value that excludes this input
-     *   e.g: Not available with Customizable Desk (Color: Black)
+     *@private
+     *@param{$.Element}$parent
+     *@param{integer}attributeValueId
+     *@param{integer}excludedByTheattributevaluethatexcludesthisinput
+     *@param{Object}attributeNamesAdictcontainingallthenamesoftheattributevalues
+     *  toshowahumanreadablemessageexplainingwhytheinputisdisabled.
+     *@param{string}[productName]Theparentproduct.Ifprovided,itwillbeappendedbefore
+     *  thenameoftheattributevaluethatexcludesthisinput
+     *  e.g:NotavailablewithCustomizableDesk(Color:Black)
      */
-    _disableInput: function ($parent, attributeValueId, excludedBy, attributeNames, productName) {
-        var $input = $parent
-            .find('option[value=' + attributeValueId + '], input[value=' + attributeValueId + ']');
+    _disableInput:function($parent,attributeValueId,excludedBy,attributeNames,productName){
+        var$input=$parent
+            .find('option[value='+attributeValueId+'],input[value='+attributeValueId+']');
         $input.addClass('css_not_available');
         $input.closest('label').addClass('css_not_available');
 
-        if (excludedBy && attributeNames) {
-            var $target = $input.is('option') ? $input : $input.closest('label').add($input);
-            var excludedByData = [];
-            if ($target.data('excluded-by')) {
-                excludedByData = JSON.parse($target.data('excluded-by'));
+        if(excludedBy&&attributeNames){
+            var$target=$input.is('option')?$input:$input.closest('label').add($input);
+            varexcludedByData=[];
+            if($target.data('excluded-by')){
+                excludedByData=JSON.parse($target.data('excluded-by'));
             }
 
-            var excludedByName = attributeNames[excludedBy];
-            if (productName) {
-                excludedByName = productName + ' (' + excludedByName + ')';
+            varexcludedByName=attributeNames[excludedBy];
+            if(productName){
+                excludedByName=productName+'('+excludedByName+')';
             }
             excludedByData.push(excludedByName);
 
-            $target.attr('title', _.str.sprintf(_t('Not available with %s'), excludedByData.join(', ')));
-            $target.data('excluded-by', JSON.stringify(excludedByData));
+            $target.attr('title',_.str.sprintf(_t('Notavailablewith%s'),excludedByData.join(',')));
+            $target.data('excluded-by',JSON.stringify(excludedByData));
         }
     },
     /**
-     * @see onChangeVariant
+     *@seeonChangeVariant
      *
-     * @private
-     * @param {MouseEvent} ev
-     * @param {$.Element} $parent
-     * @param {Array} combination
+     *@private
+     *@param{MouseEvent}ev
+     *@param{$.Element}$parent
+     *@param{Array}combination
      */
-    _onChangeCombination: function (ev, $parent, combination) {
-        var self = this;
-        var $price = $parent.find(".oe_price:first .oe_currency_value");
-        var $default_price = $parent.find(".oe_default_price:first .oe_currency_value");
-        var $optional_price = $parent.find(".oe_optional:first .oe_currency_value");
+    _onChangeCombination:function(ev,$parent,combination){
+        varself=this;
+        var$price=$parent.find(".oe_price:first.oe_currency_value");
+        var$default_price=$parent.find(".oe_default_price:first.oe_currency_value");
+        var$optional_price=$parent.find(".oe_optional:first.oe_currency_value");
         $price.text(self._priceToStr(combination.price));
         $default_price.text(self._priceToStr(combination.list_price));
 
-        var isCombinationPossible = true;
-        if (!_.isUndefined(combination.is_combination_possible)) {
-            isCombinationPossible = combination.is_combination_possible;
+        varisCombinationPossible=true;
+        if(!_.isUndefined(combination.is_combination_possible)){
+            isCombinationPossible=combination.is_combination_possible;
         }
-        this._toggleDisable($parent, isCombinationPossible);
+        this._toggleDisable($parent,isCombinationPossible);
 
-        if (combination.has_discounted_price) {
+        if(combination.has_discounted_price){
             $default_price
                 .closest('.oe_website_sale')
                 .addClass("discount");
             $optional_price
                 .closest('.oe_optional')
                 .removeClass('d-none')
-                .css('text-decoration', 'line-through');
+                .css('text-decoration','line-through');
             $default_price.parent().removeClass('d-none');
-        } else {
+        }else{
             $default_price
                 .closest('.oe_website_sale')
                 .removeClass("discount");
@@ -471,22 +471,22 @@ var VariantMixin = {
             $default_price.parent().addClass('d-none');
         }
 
-        var rootComponentSelectors = [
+        varrootComponentSelectors=[
             'tr.js_product',
             '.oe_website_sale',
             '.o_product_configurator'
         ];
 
-        // update images only when changing product
-        // or when either ids are 'false', meaning dynamic products.
-        // Dynamic products don't have images BUT they may have invalid
-        // combinations that need to disable the image.
-        if (!combination.product_id ||
-            !this.last_product_id ||
-            combination.product_id !== this.last_product_id) {
-            this.last_product_id = combination.product_id;
+        //updateimagesonlywhenchangingproduct
+        //orwheneitheridsare'false',meaningdynamicproducts.
+        //Dynamicproductsdon'thaveimagesBUTtheymayhaveinvalid
+        //combinationsthatneedtodisabletheimage.
+        if(!combination.product_id||
+            !this.last_product_id||
+            combination.product_id!==this.last_product_id){
+            this.last_product_id=combination.product_id;
             self._updateProductImage(
-                $parent.closest(rootComponentSelectors.join(', ')),
+                $parent.closest(rootComponentSelectors.join(',')),
                 combination.display_image,
                 combination.product_id,
                 combination.product_template_id,
@@ -498,7 +498,7 @@ var VariantMixin = {
         $parent
             .find('.product_id')
             .first()
-            .val(combination.product_id || 0)
+            .val(combination.product_id||0)
             .trigger('change');
 
         $parent
@@ -516,105 +516,105 @@ var VariantMixin = {
     },
 
     /**
-     * returns the formatted price
+     *returnstheformattedprice
      *
-     * @private
-     * @param {float} price
+     *@private
+     *@param{float}price
      */
-    _priceToStr: function (price) {
-        var l10n = _t.database.parameters;
-        var precision = 2;
+    _priceToStr:function(price){
+        varl10n=_t.database.parameters;
+        varprecision=2;
 
-        if ($('.decimal_precision').length) {
-            precision = parseInt($('.decimal_precision').last().data('precision'));
+        if($('.decimal_precision').length){
+            precision=parseInt($('.decimal_precision').last().data('precision'));
         }
-        var formatted = _.str.sprintf('%.' + precision + 'f', price).split('.');
-        formatted[0] = utils.insert_thousand_seps(formatted[0]);
-        return formatted.join(l10n.decimal_point);
+        varformatted=_.str.sprintf('%.'+precision+'f',price).split('.');
+        formatted[0]=utils.insert_thousand_seps(formatted[0]);
+        returnformatted.join(l10n.decimal_point);
     },
     /**
-     * Returns a throttled `_getCombinationInfo` with a leading and a trailing
-     * call, which is memoized per `uniqueId`, and for which previous results
-     * are dropped.
+     *Returnsathrottled`_getCombinationInfo`withaleadingandatrailing
+     *call,whichismemoizedper`uniqueId`,andforwhichpreviousresults
+     *aredropped.
      *
-     * The uniqueId is needed because on the configurator modal there might be
-     * multiple elements triggering the rpc at the same time, and we need each
-     * individual product rpc to be executed, but only once per individual
-     * product.
+     *TheuniqueIdisneededbecauseontheconfiguratormodaltheremightbe
+     *multipleelementstriggeringtherpcatthesametime,andweneedeach
+     *individualproductrpctobeexecuted,butonlyonceperindividual
+     *product.
      *
-     * The leading execution is to keep good reactivity on the first call, for
-     * a better user experience. The trailing is because ultimately only the
-     * information about the last selected combination is useful. All
-     * intermediary rpc can be ignored and are therefore best not done at all.
+     *Theleadingexecutionistokeepgoodreactivityonthefirstcall,for
+     *abetteruserexperience.Thetrailingisbecauseultimatelyonlythe
+     *informationaboutthelastselectedcombinationisuseful.All
+     *intermediaryrpccanbeignoredandarethereforebestnotdoneatall.
      *
-     * The DropMisordered is to make sure slower rpc are ignored if the result
-     * of a newer rpc has already been received.
+     *TheDropMisorderedistomakesureslowerrpcareignorediftheresult
+     *ofanewerrpchasalreadybeenreceived.
      *
-     * @private
-     * @param {string} uniqueId
-     * @returns {function}
+     *@private
+     *@param{string}uniqueId
+     *@returns{function}
      */
-    _throttledGetCombinationInfo: _.memoize(function (uniqueId) {
-        var dropMisordered = new concurrency.DropMisordered();
-        var _getCombinationInfo = _.throttle(this._getCombinationInfo.bind(this), 500);
-        return function (ev, params) {
-            return dropMisordered.add(_getCombinationInfo(ev, params));
+    _throttledGetCombinationInfo:_.memoize(function(uniqueId){
+        vardropMisordered=newconcurrency.DropMisordered();
+        var_getCombinationInfo=_.throttle(this._getCombinationInfo.bind(this),500);
+        returnfunction(ev,params){
+            returndropMisordered.add(_getCombinationInfo(ev,params));
         };
     }),
     /**
-     * Toggles the disabled class depending on the $parent element
-     * and the possibility of the current combination.
+     *Togglesthedisabledclassdependingonthe$parentelement
+     *andthepossibilityofthecurrentcombination.
      *
-     * @private
-     * @param {$.Element} $parent
-     * @param {boolean} isCombinationPossible
+     *@private
+     *@param{$.Element}$parent
+     *@param{boolean}isCombinationPossible
      */
-    _toggleDisable: function ($parent, isCombinationPossible) {
-        $parent.toggleClass('css_not_available', !isCombinationPossible);
+    _toggleDisable:function($parent,isCombinationPossible){
+        $parent.toggleClass('css_not_available',!isCombinationPossible);
     },
     /**
-     * Updates the product image.
-     * This will use the productId if available or will fallback to the productTemplateId.
+     *Updatestheproductimage.
+     *ThiswillusetheproductIdifavailableorwillfallbacktotheproductTemplateId.
      *
-     * @private
-     * @param {$.Element} $productContainer
-     * @param {boolean} displayImage will hide the image if true. It will use the 'invisible' class
-     *   instead of d-none to prevent layout change
-     * @param {integer} product_id
-     * @param {integer} productTemplateId
+     *@private
+     *@param{$.Element}$productContainer
+     *@param{boolean}displayImagewillhidetheimageiftrue.Itwillusethe'invisible'class
+     *  insteadofd-nonetopreventlayoutchange
+     *@param{integer}product_id
+     *@param{integer}productTemplateId
      */
-    _updateProductImage: function ($productContainer, displayImage, productId, productTemplateId) {
-        var model = productId ? 'product.product' : 'product.template';
-        var modelId = productId || productTemplateId;
-        var imageUrl = '/web/image/{0}/{1}/' + (this._productImageField ? this._productImageField : 'image_1024');
-        var imageSrc = imageUrl
-            .replace("{0}", model)
-            .replace("{1}", modelId);
+    _updateProductImage:function($productContainer,displayImage,productId,productTemplateId){
+        varmodel=productId?'product.product':'product.template';
+        varmodelId=productId||productTemplateId;
+        varimageUrl='/web/image/{0}/{1}/'+(this._productImageField?this._productImageField:'image_1024');
+        varimageSrc=imageUrl
+            .replace("{0}",model)
+            .replace("{1}",modelId);
 
-        var imagesSelectors = [
-            'span[data-oe-model^="product."][data-oe-type="image"] img:first',
+        varimagesSelectors=[
+            'span[data-oe-model^="product."][data-oe-type="image"]img:first',
             'img.product_detail_img',
-            'span.variant_image img',
+            'span.variant_imageimg',
             'img.variant_image',
         ];
 
-        var $img = $productContainer.find(imagesSelectors.join(', '));
+        var$img=$productContainer.find(imagesSelectors.join(','));
 
-        if (displayImage) {
-            $img.removeClass('invisible').attr('src', imageSrc);
-        } else {
+        if(displayImage){
+            $img.removeClass('invisible').attr('src',imageSrc);
+        }else{
             $img.addClass('invisible');
         }
     },
 
     /**
-     * Highlight selected color
+     *Highlightselectedcolor
      *
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onChangeColorAttribute: function (ev) {
-        var $parent = $(ev.target).closest('.js_product');
+    _onChangeColorAttribute:function(ev){
+        var$parent=$(ev.target).closest('.js_product');
         $parent.find('.css_attribute_color')
             .removeClass("active")
             .filter(':has(input:checked)')
@@ -622,16 +622,16 @@ var VariantMixin = {
     },
 
     /**
-     * Extension point for website_sale
+     *Extensionpointforwebsite_sale
      *
-     * @private
-     * @param {string} uri The uri to adapt
+     *@private
+     *@param{string}uriTheuritoadapt
      */
-    _getUri: function (uri) {
-        return uri;
+    _getUri:function(uri){
+        returnuri;
     }
 };
 
-return VariantMixin;
+returnVariantMixin;
 
 });

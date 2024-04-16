@@ -1,407 +1,407 @@
-flectra.define('barcodes.FormView', function (require) {
-"use strict";
+flectra.define('barcodes.FormView',function(require){
+"usestrict";
 
-var BarcodeEvents = require('barcodes.BarcodeEvents'); // handle to trigger barcode on bus
-var concurrency = require('web.concurrency');
-var core = require('web.core');
-var Dialog = require('web.Dialog');
-var FormController = require('web.FormController');
-var FormRenderer = require('web.FormRenderer');
+varBarcodeEvents=require('barcodes.BarcodeEvents');//handletotriggerbarcodeonbus
+varconcurrency=require('web.concurrency');
+varcore=require('web.core');
+varDialog=require('web.Dialog');
+varFormController=require('web.FormController');
+varFormRenderer=require('web.FormRenderer');
 
-var _t = core._t;
+var_t=core._t;
 
 
 FormController.include({
-    custom_events: _.extend({}, FormController.prototype.custom_events, {
-        activeBarcode: '_barcodeActivated',
+    custom_events:_.extend({},FormController.prototype.custom_events,{
+        activeBarcode:'_barcodeActivated',
     }),
 
     /**
-     * add default barcode commands for from view
+     *adddefaultbarcodecommandsforfromview
      *
-     * @override
+     *@override
      */
-    init: function () {
-        this._super.apply(this, arguments);
-        this.activeBarcode = {
-            form_view: {
-                commands: {
-                    'O-CMD.EDIT': this._barcodeEdit.bind(this),
-                    'O-CMD.DISCARD': this._barcodeDiscard.bind(this),
-                    'O-CMD.SAVE': this._barcodeSave.bind(this),
-                    'O-CMD.PREV': this._barcodePagerPrevious.bind(this),
-                    'O-CMD.NEXT': this._barcodePagerNext.bind(this),
-                    'O-CMD.PAGER-FIRST': this._barcodePagerFirst.bind(this),
-                    'O-CMD.PAGER-LAST': this._barcodePagerLast.bind(this),
+    init:function(){
+        this._super.apply(this,arguments);
+        this.activeBarcode={
+            form_view:{
+                commands:{
+                    'O-CMD.EDIT':this._barcodeEdit.bind(this),
+                    'O-CMD.DISCARD':this._barcodeDiscard.bind(this),
+                    'O-CMD.SAVE':this._barcodeSave.bind(this),
+                    'O-CMD.PREV':this._barcodePagerPrevious.bind(this),
+                    'O-CMD.NEXT':this._barcodePagerNext.bind(this),
+                    'O-CMD.PAGER-FIRST':this._barcodePagerFirst.bind(this),
+                    'O-CMD.PAGER-LAST':this._barcodePagerLast.bind(this),
                 },
             },
         };
 
-        this.barcodeMutex = new concurrency.Mutex();
+        this.barcodeMutex=newconcurrency.Mutex();
         this._barcodeStartListening();
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
+    destroy:function(){
         this._barcodeStopListening();
         this._super();
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {string} barcode sent by the scanner (string generate from keypress series)
-     * @param {Object} activeBarcode: options sent by the field who use barcode features
-     * @returns {Promise}
+     *@private
+     *@param{string}barcodesentbythescanner(stringgeneratefromkeypressseries)
+     *@param{Object}activeBarcode:optionssentbythefieldwhousebarcodefeatures
+     *@returns{Promise}
      */
-    _barcodeAddX2MQuantity: function (barcode, activeBarcode) {
-        if (this.mode === 'readonly') {
-            this.do_warn(false, _t('Enable edit mode to modify this document'));
-            return Promise.reject();
+    _barcodeAddX2MQuantity:function(barcode,activeBarcode){
+        if(this.mode==='readonly'){
+            this.do_warn(false,_t('Enableeditmodetomodifythisdocument'));
+            returnPromise.reject();
         }
 
-        var record = this.model.get(this.handle);
-        var candidate = this._getBarCodeRecord(record, barcode, activeBarcode);
-        if (candidate) {
-            return this._barcodeSelectedCandidate(candidate, record, barcode, activeBarcode);
-        } else {
-            return this._barcodeWithoutCandidate(record, barcode, activeBarcode);
+        varrecord=this.model.get(this.handle);
+        varcandidate=this._getBarCodeRecord(record,barcode,activeBarcode);
+        if(candidate){
+            returnthis._barcodeSelectedCandidate(candidate,record,barcode,activeBarcode);
+        }else{
+            returnthis._barcodeWithoutCandidate(record,barcode,activeBarcode);
         }
     },
     /**
-     * @private
+     *@private
      */
-    _barcodeDiscard: function () {
-        return this.discardChanges();
+    _barcodeDiscard:function(){
+        returnthis.discardChanges();
     },
     /**
-     * @private
+     *@private
      */
-    _barcodeEdit: function () {
-        return this._setMode('edit');
+    _barcodeEdit:function(){
+        returnthis._setMode('edit');
     },
     /**
-     * @private
+     *@private
      */
-    _barcodePagerFirst: async function () {
-        return this._updatePage(() => 1);
+    _barcodePagerFirst:asyncfunction(){
+        returnthis._updatePage(()=>1);
     },
     /**
-     * @private
+     *@private
      */
-    _barcodePagerLast: async function () {
-        return this._updatePage((min, state) => state.count);
+    _barcodePagerLast:asyncfunction(){
+        returnthis._updatePage((min,state)=>state.count);
     },
     /**
-     * @private
+     *@private
      */
-    _barcodePagerNext: function () {
-        return this._updatePage((min, state) => {
-            min += 1;
-            if (min > state.count) {
-                min = 1;
+    _barcodePagerNext:function(){
+        returnthis._updatePage((min,state)=>{
+            min+=1;
+            if(min>state.count){
+                min=1;
             }
-            return min;
+            returnmin;
         });
     },
     /**
-     * @private
+     *@private
      */
-    _barcodePagerPrevious: function () {
-        return this._updatePage((min, state) => {
-            min -= 1;
-            if (min < 1) {
-                min = state.count;
+    _barcodePagerPrevious:function(){
+        returnthis._updatePage((min,state)=>{
+            min-=1;
+            if(min<1){
+                min=state.count;
             }
-            return min;
+            returnmin;
         });
     },
     /**
-     * Change the current minimum value of the pager using provided function.
-     * This function will be given the current minimum and state and must return
-     * the updated value.
+     *Changethecurrentminimumvalueofthepagerusingprovidedfunction.
+     *Thisfunctionwillbegiventhecurrentminimumandstateandmustreturn
+     *theupdatedvalue.
      *
-     * @private
-     * @param {Function(currentMin: Number, state: Object)} updater
+     *@private
+     *@param{Function(currentMin:Number,state:Object)}updater
      */
-    _updatePage: async function (updater) {
-        await this.mutex.exec(() => {});
-        const state = this.model.get(this.handle, { raw: true });
-        const pagingInfo = this._getPagingInfo(state);
-        if (!pagingInfo) {
-            return this.do_warn(false, _t('Pager unavailable'));
+    _updatePage:asyncfunction(updater){
+        awaitthis.mutex.exec(()=>{});
+        conststate=this.model.get(this.handle,{raw:true});
+        constpagingInfo=this._getPagingInfo(state);
+        if(!pagingInfo){
+            returnthis.do_warn(false,_t('Pagerunavailable'));
         }
-        const currentMinimum = updater(pagingInfo.currentMinimum, state);
-        const limit = pagingInfo.limit;
-        const reloadParams = state.groupedBy && state.groupedBy.length ? {
-                groupsLimit: limit,
-                groupsOffset: currentMinimum - 1,
-            } : {
+        constcurrentMinimum=updater(pagingInfo.currentMinimum,state);
+        constlimit=pagingInfo.limit;
+        constreloadParams=state.groupedBy&&state.groupedBy.length?{
+                groupsLimit:limit,
+                groupsOffset:currentMinimum-1,
+            }:{
                 limit,
-                offset: currentMinimum - 1,
+                offset:currentMinimum-1,
             };
-        await this.reload(reloadParams);
-        // reset the scroll position to the top on page changed only
-        if (state.limit === limit) {
-            this.trigger_up('scrollTo', { top: 0 });
+        awaitthis.reload(reloadParams);
+        //resetthescrollpositiontothetoponpagechangedonly
+        if(state.limit===limit){
+            this.trigger_up('scrollTo',{top:0});
         }
     },
     /**
-     * Returns true iff the given barcode matches the given record (candidate).
+     *Returnstrueiffthegivenbarcodematchesthegivenrecord(candidate).
      *
-     * @private
-     * @param {Object} candidate: record in the x2m
-     * @param {string} barcode sent by the scanner (string generate from keypress series)
-     * @param {Object} activeBarcode: options sent by the field who use barcode features
-     * @returns {boolean}
+     *@private
+     *@param{Object}candidate:recordinthex2m
+     *@param{string}barcodesentbythescanner(stringgeneratefromkeypressseries)
+     *@param{Object}activeBarcode:optionssentbythefieldwhousebarcodefeatures
+     *@returns{boolean}
      */
-    _barcodeRecordFilter: function (candidate, barcode, activeBarcode) {
-        return candidate.data.product_barcode === barcode;
+    _barcodeRecordFilter:function(candidate,barcode,activeBarcode){
+        returncandidate.data.product_barcode===barcode;
     },
     /**
-     * @private
+     *@private
      */
-    _barcodeSave: function () {
-        return this.saveRecord();
+    _barcodeSave:function(){
+        returnthis.saveRecord();
     },
     /**
-     * @private
-     * @param {Object} candidate: record in the x2m
-     * @param {Object} current record
-     * @param {string} barcode sent by the scanner (string generate from keypress series)
-     * @param {Object} activeBarcode: options sent by the field who use barcode features
-     * @returns {Promise}
+     *@private
+     *@param{Object}candidate:recordinthex2m
+     *@param{Object}currentrecord
+     *@param{string}barcodesentbythescanner(stringgeneratefromkeypressseries)
+     *@param{Object}activeBarcode:optionssentbythefieldwhousebarcodefeatures
+     *@returns{Promise}
      */
-    _barcodeSelectedCandidate: function (candidate, record, barcode, activeBarcode, quantity) {
-        var changes = {};
-        var candidateChanges = {};
-        candidateChanges[activeBarcode.quantity] = quantity ? quantity : candidate.data[activeBarcode.quantity] + 1;
-        changes[activeBarcode.fieldName] = {
-            operation: 'UPDATE',
-            id: candidate.id,
-            data: candidateChanges,
+    _barcodeSelectedCandidate:function(candidate,record,barcode,activeBarcode,quantity){
+        varchanges={};
+        varcandidateChanges={};
+        candidateChanges[activeBarcode.quantity]=quantity?quantity:candidate.data[activeBarcode.quantity]+1;
+        changes[activeBarcode.fieldName]={
+            operation:'UPDATE',
+            id:candidate.id,
+            data:candidateChanges,
         };
-        return this.model.notifyChanges(this.handle, changes, {notifyChange: activeBarcode.notifyChange});
+        returnthis.model.notifyChanges(this.handle,changes,{notifyChange:activeBarcode.notifyChange});
     },
     /**
-     * @private
+     *@private
      */
-    _barcodeStartListening: function () {
-        core.bus.on('barcode_scanned', this, this._barcodeScanned);
-        core.bus.on('keypress', this, this._quantityListener);
+    _barcodeStartListening:function(){
+        core.bus.on('barcode_scanned',this,this._barcodeScanned);
+        core.bus.on('keypress',this,this._quantityListener);
     },
     /**
-     * @private
+     *@private
      */
-    _barcodeStopListening: function () {
-        core.bus.off('barcode_scanned', this, this._barcodeScanned);
-        core.bus.off('keypress', this, this._quantityListener);
+    _barcodeStopListening:function(){
+        core.bus.off('barcode_scanned',this,this._barcodeScanned);
+        core.bus.off('keypress',this,this._quantityListener);
     },
     /**
-     * @private
-     * @param {Object} current record
-     * @param {string} barcode sent by the scanner (string generate from keypress series)
-     * @param {Object} activeBarcode: options sent by the field who use barcode features
-     * @returns {Promise}
+     *@private
+     *@param{Object}currentrecord
+     *@param{string}barcodesentbythescanner(stringgeneratefromkeypressseries)
+     *@param{Object}activeBarcode:optionssentbythefieldwhousebarcodefeatures
+     *@returns{Promise}
      */
-    _barcodeWithoutCandidate: function (record, barcode, activeBarcode) {
-        var changes = {};
-        changes[activeBarcode.name] = barcode;
-        return this.model.notifyChanges(record.id, changes);
+    _barcodeWithoutCandidate:function(record,barcode,activeBarcode){
+        varchanges={};
+        changes[activeBarcode.name]=barcode;
+        returnthis.model.notifyChanges(record.id,changes);
     },
     /**
-     * @private
-     * @param {Object} current record
-     * @param {string} barcode sent by the scanner (string generate from keypress series)
-     * @param {Object} activeBarcode: options sent by the field who use barcode features
-     * @returns {Object|undefined}
+     *@private
+     *@param{Object}currentrecord
+     *@param{string}barcodesentbythescanner(stringgeneratefromkeypressseries)
+     *@param{Object}activeBarcode:optionssentbythefieldwhousebarcodefeatures
+     *@returns{Object|undefined}
      */
-    _getBarCodeRecord: function (record, barcode, activeBarcode) {
-        var self = this;
-        if (!activeBarcode.fieldName || !record.data[activeBarcode.fieldName]) {
+    _getBarCodeRecord:function(record,barcode,activeBarcode){
+        varself=this;
+        if(!activeBarcode.fieldName||!record.data[activeBarcode.fieldName]){
             return;
         }
-        return _.find(record.data[activeBarcode.fieldName].data, function (record) {
-            return self._barcodeRecordFilter(record, barcode, activeBarcode);
+        return_.find(record.data[activeBarcode.fieldName].data,function(record){
+            returnself._barcodeRecordFilter(record,barcode,activeBarcode);
         });
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * The barcode is activate when at least one widget trigger_up 'activeBarcode' event
-     * with the widget option
+     *Thebarcodeisactivatewhenatleastonewidgettrigger_up'activeBarcode'event
+     *withthewidgetoption
      *
-     * @param {FlectraEvent} event
-     * @param {string} event.data.name: the current field name
-     * @param {string} [event.data.fieldName] optional for x2many sub field
-     * @param {boolean} [event.data.notifyChange] optional for x2many sub field
-     *     do not trigger on change server side if a candidate has been found
-     * @param {string} [event.data.quantity] optional field to increase quantity
-     * @param {Object} [event.data.commands] optional added methods
-     *     can use comand with specific barcode (with ReservedBarcodePrefixes)
-     *     or change 'barcode' for all other received barcodes
-     *     (e.g.: 'O-CMD.MAIN-MENU': function ..., barcode: function () {...})
+     *@param{FlectraEvent}event
+     *@param{string}event.data.name:thecurrentfieldname
+     *@param{string}[event.data.fieldName]optionalforx2manysubfield
+     *@param{boolean}[event.data.notifyChange]optionalforx2manysubfield
+     *    donottriggeronchangeserversideifacandidatehasbeenfound
+     *@param{string}[event.data.quantity]optionalfieldtoincreasequantity
+     *@param{Object}[event.data.commands]optionaladdedmethods
+     *    canusecomandwithspecificbarcode(withReservedBarcodePrefixes)
+     *    orchange'barcode'forallotherreceivedbarcodes
+     *    (e.g.:'O-CMD.MAIN-MENU':function...,barcode:function(){...})
      */
-    _barcodeActivated: function (event) {
+    _barcodeActivated:function(event){
         event.stopPropagation();
-        var name = event.data.name;
-        this.activeBarcode[name] = {
-            name: name,
-            handle: this.handle,
-            target: event.target,
-            widget: event.target.attrs && event.target.attrs.widget,
-            setQuantityWithKeypress: !! event.data.setQuantityWithKeypress,
-            fieldName: event.data.fieldName,
-            notifyChange: (event.data.notifyChange !== undefined) ? event.data.notifyChange : true,
-            quantity: event.data.quantity,
-            commands: event.data.commands || {},
-            candidate: this.activeBarcode[name] && this.activeBarcode[name].handle === this.handle ?
-                this.activeBarcode[name].candidate : null,
+        varname=event.data.name;
+        this.activeBarcode[name]={
+            name:name,
+            handle:this.handle,
+            target:event.target,
+            widget:event.target.attrs&&event.target.attrs.widget,
+            setQuantityWithKeypress:!!event.data.setQuantityWithKeypress,
+            fieldName:event.data.fieldName,
+            notifyChange:(event.data.notifyChange!==undefined)?event.data.notifyChange:true,
+            quantity:event.data.quantity,
+            commands:event.data.commands||{},
+            candidate:this.activeBarcode[name]&&this.activeBarcode[name].handle===this.handle?
+                this.activeBarcode[name].candidate:null,
         };
 
-        // we want to disable autofocus when activating the barcode to avoid
-        // putting the scanned value in the focused field
-        this.disableAutofocus = true;
+        //wewanttodisableautofocuswhenactivatingthebarcodetoavoid
+        //puttingthescannedvalueinthefocusedfield
+        this.disableAutofocus=true;
     },
     /**
-     * @private
-     * @param {string|function} method defined by the commands options
-     * @param {string} barcode sent by the scanner (string generate from keypress series)
-     * @param {Object} activeBarcode: options sent by the field who use barcode features
-     * @returns {Promise}
+     *@private
+     *@param{string|function}methoddefinedbythecommandsoptions
+     *@param{string}barcodesentbythescanner(stringgeneratefromkeypressseries)
+     *@param{Object}activeBarcode:optionssentbythefieldwhousebarcodefeatures
+     *@returns{Promise}
      */
-    _barcodeActiveScanned: function (method, barcode, activeBarcode) {
-        var self = this;
-        var methodDef;
-        var def = new Promise(function (resolve, reject) {
-            if (typeof method === 'string') {
-                methodDef = self[method](barcode, activeBarcode);
-            } else {
-                methodDef = method.call(self, barcode, activeBarcode);
+    _barcodeActiveScanned:function(method,barcode,activeBarcode){
+        varself=this;
+        varmethodDef;
+        vardef=newPromise(function(resolve,reject){
+            if(typeofmethod==='string'){
+                methodDef=self[method](barcode,activeBarcode);
+            }else{
+                methodDef=method.call(self,barcode,activeBarcode);
             }
             methodDef
-                .then(function () {
-                    var record = self.model.get(self.handle);
-                    var candidate = self._getBarCodeRecord(record, barcode, activeBarcode);
-                    activeBarcode.candidate = candidate;
+                .then(function(){
+                    varrecord=self.model.get(self.handle);
+                    varcandidate=self._getBarCodeRecord(record,barcode,activeBarcode);
+                    activeBarcode.candidate=candidate;
                 })
-                .then(resolve, resolve);
+                .then(resolve,resolve);
         });
-        return def;
+        returndef;
     },
     /**
-     * Method called when a user scan a barcode, call each method in function of the
-     * widget options then update the renderer
+     *Methodcalledwhenauserscanabarcode,calleachmethodinfunctionofthe
+     *widgetoptionsthenupdatetherenderer
      *
-     * @private
-     * @param {string} barcode sent by the scanner (string generate from keypress series)
-     * @param {DOM Object} target
-     * @returns {Promise}
+     *@private
+     *@param{string}barcodesentbythescanner(stringgeneratefromkeypressseries)
+     *@param{DOMObject}target
+     *@returns{Promise}
      */
-    _barcodeScanned: function (barcode, target) {
-        var self = this;
-        return this.barcodeMutex.exec(function () {
-            var prefixed = _.any(BarcodeEvents.ReservedBarcodePrefixes,
-                    function (reserved) {return barcode.indexOf(reserved) === 0;});
-            var hasCommand = false;
-            var defs = [];
-            if (! $.contains(target, self.el)) {
+    _barcodeScanned:function(barcode,target){
+        varself=this;
+        returnthis.barcodeMutex.exec(function(){
+            varprefixed=_.any(BarcodeEvents.ReservedBarcodePrefixes,
+                    function(reserved){returnbarcode.indexOf(reserved)===0;});
+            varhasCommand=false;
+            vardefs=[];
+            if(!$.contains(target,self.el)){
                 return;
             }
-            for (var k in self.activeBarcode) {
-                var activeBarcode = self.activeBarcode[k];
-                // Handle the case where there are several barcode widgets on the same page. Since the
-                // event is global on the page, all barcode widgets will be triggered. However, we only
-                // want to keep the event on the target widget.
-                var methods = self.activeBarcode[k].commands;
-                var method = prefixed ? methods[barcode] : methods.barcode;
-                if (method) {
-                    if (prefixed) {
-                        hasCommand = true;
+            for(varkinself.activeBarcode){
+                varactiveBarcode=self.activeBarcode[k];
+                //Handlethecasewherethereareseveralbarcodewidgetsonthesamepage.Sincethe
+                //eventisglobalonthepage,allbarcodewidgetswillbetriggered.However,weonly
+                //wanttokeeptheeventonthetargetwidget.
+                varmethods=self.activeBarcode[k].commands;
+                varmethod=prefixed?methods[barcode]:methods.barcode;
+                if(method){
+                    if(prefixed){
+                        hasCommand=true;
                     }
-                    defs.push(self._barcodeActiveScanned(method, barcode, activeBarcode));
+                    defs.push(self._barcodeActiveScanned(method,barcode,activeBarcode));
                 }
             }
-            if (prefixed && !hasCommand) {
-                self.do_warn(_t('Undefined barcode command'), barcode);
+            if(prefixed&&!hasCommand){
+                self.do_warn(_t('Undefinedbarcodecommand'),barcode);
             }
-            return self.alive(Promise.all(defs)).then(function () {
-                if (!prefixed) {
-                    // remember the barcode scanned for the quantity listener
-                    self.current_barcode = barcode;
-                    // redraw the view if we scanned a real barcode (required if
-                    // we manually apply the change in JS, e.g. incrementing the
-                    // quantity)
-                    self.update({}, {reload: false});
+            returnself.alive(Promise.all(defs)).then(function(){
+                if(!prefixed){
+                    //rememberthebarcodescannedforthequantitylistener
+                    self.current_barcode=barcode;
+                    //redrawtheviewifwescannedarealbarcode(requiredif
+                    //wemanuallyapplythechangeinJS,e.g.incrementingthe
+                    //quantity)
+                    self.update({},{reload:false});
                 }
             });
         });
     },
     /**
-     * @private
-     * @param {KeyEvent} event
+     *@private
+     *@param{KeyEvent}event
      */
-    _quantityListener: function (event) {
-        var character = String.fromCharCode(event.which);
+    _quantityListener:function(event){
+        varcharacter=String.fromCharCode(event.which);
 
-        if (! $.contains(event.target, this.el)) {
+        if(!$.contains(event.target,this.el)){
             return;
         }
-        // only catch the event if we're not focused in
-        // another field and it's a number
-        if (!$(event.target).is('body, .modal') || !/[0-9]/.test(character)) {
-            return;
-        }
-
-        var barcodeInfos = _.filter(this.activeBarcode, 'setQuantityWithKeypress');
-        if (!barcodeInfos.length) {
+        //onlycatchtheeventifwe'renotfocusedin
+        //anotherfieldandit'sanumber
+        if(!$(event.target).is('body,.modal')||!/[0-9]/.test(character)){
             return;
         }
 
-        if (!_.compact(_.pluck(barcodeInfos, 'candidate')).length) {
-            return this.do_warn(false, _t('Scan a barcode to set the quantity'));
+        varbarcodeInfos=_.filter(this.activeBarcode,'setQuantityWithKeypress');
+        if(!barcodeInfos.length){
+            return;
         }
 
-        for (var k in this.activeBarcode) {
-            if (this.activeBarcode[k].candidate) {
-                this._quantityOpenDialog(character, this.activeBarcode[k]);
+        if(!_.compact(_.pluck(barcodeInfos,'candidate')).length){
+            returnthis.do_warn(false,_t('Scanabarcodetosetthequantity'));
+        }
+
+        for(varkinthis.activeBarcode){
+            if(this.activeBarcode[k].candidate){
+                this._quantityOpenDialog(character,this.activeBarcode[k]);
             }
         }
     },
     /**
-     * @private
-     * @param {string} character
-     * @param {Object} activeBarcode: options sent by the field who use barcode features
+     *@private
+     *@param{string}character
+     *@param{Object}activeBarcode:optionssentbythefieldwhousebarcodefeatures
      */
-    _quantityOpenDialog: function (character, activeBarcode) {
-        var self = this;
-        var $content = $('<div>').append($('<input>', {type: 'text', class: 'o_set_qty_input'}));
-        this.dialog = new Dialog(this, {
-            title: _t('Set quantity'),
-            buttons: [{text: _t('Select'), classes: 'btn-primary', close: true, click: function () {
-                var new_qty = this.$content.find('.o_set_qty_input').val();
-                var record = self.model.get(self.handle);
-                return self._barcodeSelectedCandidate(activeBarcode.candidate, record,
-                        self.current_barcode, activeBarcode, parseFloat(new_qty))
-                .then(function () {
-                    self.update({}, {reload: false});
+    _quantityOpenDialog:function(character,activeBarcode){
+        varself=this;
+        var$content=$('<div>').append($('<input>',{type:'text',class:'o_set_qty_input'}));
+        this.dialog=newDialog(this,{
+            title:_t('Setquantity'),
+            buttons:[{text:_t('Select'),classes:'btn-primary',close:true,click:function(){
+                varnew_qty=this.$content.find('.o_set_qty_input').val();
+                varrecord=self.model.get(self.handle);
+                returnself._barcodeSelectedCandidate(activeBarcode.candidate,record,
+                        self.current_barcode,activeBarcode,parseFloat(new_qty))
+                .then(function(){
+                    self.update({},{reload:false});
                 });
-            }}, {text: _t('Discard'), close: true}],
-            $content: $content,
+            }},{text:_t('Discard'),close:true}],
+            $content:$content,
         });
-        this.dialog.opened().then(function () {
-            // This line set the value of the key which triggered the _set_quantity in the input
-            var $input = self.dialog.$('.o_set_qty_input').focus().val(character);
-            var $selectBtn = self.dialog.$footer.find('.btn-primary');
-            $input.on('keypress', function (event){
-                if (event.which === 13) {
+        this.dialog.opened().then(function(){
+            //Thislinesetthevalueofthekeywhichtriggeredthe_set_quantityintheinput
+            var$input=self.dialog.$('.o_set_qty_input').focus().val(character);
+            var$selectBtn=self.dialog.$footer.find('.btn-primary');
+            $input.on('keypress',function(event){
+                if(event.which===13){
                     event.preventDefault();
                     $input.off();
                     $selectBtn.click();
@@ -416,78 +416,78 @@ FormController.include({
 FormRenderer.include({
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
     /**
-     * trigger_up 'activeBarcode' to Add barcode event handler
+     *trigger_up'activeBarcode'toAddbarcodeeventhandler
      *
-     * @private
-     * @param {jQueryElement} $button
-     * @param {Object} node
+     *@private
+     *@param{jQueryElement}$button
+     *@param{Object}node
      */
-    _barcodeButtonHandler: function ($button, node) {
-        var commands = {};
-        commands.barcode = function () {return Promise.resolve();};
-        commands['O-BTN.' + node.attrs.barcode_trigger] = function () {
-            if (!$button.hasClass('o_invisible_modifier')) {
+    _barcodeButtonHandler:function($button,node){
+        varcommands={};
+        commands.barcode=function(){returnPromise.resolve();};
+        commands['O-BTN.'+node.attrs.barcode_trigger]=function(){
+            if(!$button.hasClass('o_invisible_modifier')){
                 $button.click();
             }
-            return Promise.resolve();
+            returnPromise.resolve();
         };
-        var name = node.attrs.name;
-        if (node.attrs.string) {
-            name = name + '_' + node.attrs.string;
+        varname=node.attrs.name;
+        if(node.attrs.string){
+            name=name+'_'+node.attrs.string;
         }
 
-        this.trigger_up('activeBarcode', {
-            name: name,
-            commands: commands
+        this.trigger_up('activeBarcode',{
+            name:name,
+            commands:commands
         });
     },
     /**
-     * Add barcode event handler
+     *Addbarcodeeventhandler
      *
-     * @override
-     * @private
-     * @param {Object} node
-     * @returns {jQueryElement}
+     *@override
+     *@private
+     *@param{Object}node
+     *@returns{jQueryElement}
      */
-    _renderHeaderButton: function (node) {
-        var $button = this._super.apply(this, arguments);
-        if (node.attrs.barcode_trigger) {
-            this._barcodeButtonHandler($button, node);
+    _renderHeaderButton:function(node){
+        var$button=this._super.apply(this,arguments);
+        if(node.attrs.barcode_trigger){
+            this._barcodeButtonHandler($button,node);
         }
-        return $button;
+        return$button;
     },
     /**
-     * Add barcode event handler
+     *Addbarcodeeventhandler
      *
-     * @override
-     * @private
-     * @param {Object} node
-     * @returns {jQueryElement}
+     *@override
+     *@private
+     *@param{Object}node
+     *@returns{jQueryElement}
      */
-    _renderStatButton: function (node) {
-        var $button = this._super.apply(this, arguments);
-        if (node.attrs.barcode_trigger) {
-            this._barcodeButtonHandler($button, node);
+    _renderStatButton:function(node){
+        var$button=this._super.apply(this,arguments);
+        if(node.attrs.barcode_trigger){
+            this._barcodeButtonHandler($button,node);
         }
-        return $button;
+        return$button;
     },
     /**
-     * Add barcode event handler
+     *Addbarcodeeventhandler
      *
-     * @override
-     * @private
-     * @param {Object} node
-     * @returns {jQueryElement}
+     *@override
+     *@private
+     *@param{Object}node
+     *@returns{jQueryElement}
      */
-    _renderTagButton: function (node) {
-        var $button = this._super.apply(this, arguments);
-        if (node.attrs.barcode_trigger) {
-            this._barcodeButtonHandler($button, node);
+    _renderTagButton:function(node){
+        var$button=this._super.apply(this,arguments);
+        if(node.attrs.barcode_trigger){
+            this._barcodeButtonHandler($button,node);
         }
-        return $button;
+        return$button;
     }
 });
 

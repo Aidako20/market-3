@@ -1,4 +1,4 @@
-<p:FatturaElettronica xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:p="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2 http://www.fatturapa.gov.it/export/fatturazione/sdi/fatturapa/v1.2/Schema_del_file_xml_FatturaPA_versione_1.2.xsd" versione="FPR12">
+<p:FatturaElettronicaxmlns:ds="http://www.w3.org/2000/09/xmldsig#"xmlns:p="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2"xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"xsi:schemaLocation="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2http://www.fatturapa.gov.it/export/fatturazione/sdi/fatturapa/v1.2/Schema_del_file_xml_FatturaPA_versione_1.2.xsd"versione="FPR12">
     <FatturaElettronicaHeader>
         <DatiTrasmissione>
             <IdTrasmittente>
@@ -24,7 +24,7 @@
                 <RegimeFiscale>RF01</RegimeFiscale>
             </DatiAnagrafici>
             <Sede>
-                <Indirizzo>1234 Test Street </Indirizzo>
+                <Indirizzo>1234TestStreet</Indirizzo>
                 <CAP>12345</CAP>
                 <Comune>Prova</Comune>
                 <Nazione>IT</Nazione>
@@ -41,7 +41,7 @@
                 </Anagrafica>
             </DatiAnagrafici>
             <Sede>
-                <Indirizzo>Avenue Test rue </Indirizzo>
+                <Indirizzo>AvenueTestrue</Indirizzo>
                 <CAP>00000</CAP>
                 <Comune>Avignon</Comune>
                 <Nazione>FR</Nazione>
@@ -62,7 +62,7 @@
                 <DettaglioLinee>
                     <NumeroLinea>1</NumeroLinea>
                     <Descrizione>
-                        Product A
+                        ProductA
                     </Descrizione>
                     <Quantita>1.00</Quantita>
                     <PrezzoUnitario>800.400000</PrezzoUnitario>
@@ -72,7 +72,7 @@
                 <DettaglioLinee>
                     <NumeroLinea>2</NumeroLinea>
                     <Descrizione>
-                        Product B
+                        ProductB
                     </Descrizione>
                     <Quantita>1.00</Quantita>
                     <PrezzoUnitario>800.400000</PrezzoUnitario>

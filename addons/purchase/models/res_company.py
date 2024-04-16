@@ -1,28 +1,28 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
-class Company(models.Model):
-    _inherit = 'res.company'
+classCompany(models.Model):
+    _inherit='res.company'
 
-    po_lead = fields.Float(string='Purchase Lead Time', required=True,
-        help="Margin of error for vendor lead times. When the system "
-             "generates Purchase Orders for procuring products, "
-             "they will be scheduled that many days earlier "
-             "to cope with unexpected vendor delays.", default=0.0)
+    po_lead=fields.Float(string='PurchaseLeadTime',required=True,
+        help="Marginoferrorforvendorleadtimes.Whenthesystem"
+             "generatesPurchaseOrdersforprocuringproducts,"
+             "theywillbescheduledthatmanydaysearlier"
+             "tocopewithunexpectedvendordelays.",default=0.0)
 
-    po_lock = fields.Selection([
-        ('edit', 'Allow to edit purchase orders'),
-        ('lock', 'Confirmed purchase orders are not editable')
-        ], string="Purchase Order Modification", default="edit",
-        help='Purchase Order Modification used when you want to purchase order editable after confirm')
+    po_lock=fields.Selection([
+        ('edit','Allowtoeditpurchaseorders'),
+        ('lock','Confirmedpurchaseordersarenoteditable')
+        ],string="PurchaseOrderModification",default="edit",
+        help='PurchaseOrderModificationusedwhenyouwanttopurchaseordereditableafterconfirm')
 
-    po_double_validation = fields.Selection([
-        ('one_step', 'Confirm purchase orders in one step'),
-        ('two_step', 'Get 2 levels of approvals to confirm a purchase order')
-        ], string="Levels of Approvals", default='one_step',
-        help="Provide a double validation mechanism for purchases")
+    po_double_validation=fields.Selection([
+        ('one_step','Confirmpurchaseordersinonestep'),
+        ('two_step','Get2levelsofapprovalstoconfirmapurchaseorder')
+        ],string="LevelsofApprovals",default='one_step',
+        help="Provideadoublevalidationmechanismforpurchases")
 
-    po_double_validation_amount = fields.Monetary(string='Double validation amount', default=5000,
-        help="Minimum amount for which a double validation is required")
+    po_double_validation_amount=fields.Monetary(string='Doublevalidationamount',default=5000,
+        help="Minimumamountforwhichadoublevalidationisrequired")

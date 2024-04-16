@@ -1,37 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-<template id="report_journal">
-    <t t-call="web.html_container">
-        <t t-set="data_report_margin_top" t-value="12"/>
-        <t t-set="data_report_header_spacing" t-value="9"/>
-        <t t-set="data_report_dpi" t-value="110"/>
-        <t t-foreach="docs" t-as="o">
-            <t t-call="web.internal_layout">
-                <div class="page">
-                    <h2><t t-esc="o.name"/> Journal</h2>
+<templateid="report_journal">
+    <tt-call="web.html_container">
+        <tt-set="data_report_margin_top"t-value="12"/>
+        <tt-set="data_report_header_spacing"t-value="9"/>
+        <tt-set="data_report_dpi"t-value="110"/>
+        <tt-foreach="docs"t-as="o">
+            <tt-call="web.internal_layout">
+                <divclass="page">
+                    <h2><tt-esc="o.name"/>Journal</h2>
 
-                    <div class="row mt32">
-                        <div class="col-3">
+                    <divclass="rowmt32">
+                        <divclass="col-3">
                             <strong>Company:</strong>
-                            <p t-esc="(company_id or res_company).name"/>
+                            <pt-esc="(company_idorres_company).name"/>
                         </div>
-                        <div class="col-3">
+                        <divclass="col-3">
                             <strong>Journal:</strong>
-                            <p t-esc="o.name"/>
+                            <pt-esc="o.name"/>
                         </div>
-                        <div class="col-3">
-                            <strong>Entries Sorted By:</strong>
-                            <p t-if="data['form'].get('sort_selection') == 'move_name'">Journal Entry Number</p>
-                            <p t-if="data['form'].get('sort_selection') == 'date'">Date</p>
+                        <divclass="col-3">
+                            <strong>EntriesSortedBy:</strong>
+                            <pt-if="data['form'].get('sort_selection')=='move_name'">JournalEntryNumber</p>
+                            <pt-if="data['form'].get('sort_selection')=='date'">Date</p>
                         </div>
-                        <div class="col-3">
-                            <strong>Target Moves:</strong>
-                            <p t-if="data['form']['target_move'] == 'all'">All Entries</p>
-                            <p t-if="data['form']['target_move'] == 'posted'">All Posted Entries</p>
+                        <divclass="col-3">
+                            <strong>TargetMoves:</strong>
+                            <pt-if="data['form']['target_move']=='all'">AllEntries</p>
+                            <pt-if="data['form']['target_move']=='posted'">AllPostedEntries</p>
                         </div>
                     </div>
 
-                    <table class="table table-sm">
+                    <tableclass="tabletable-sm">
                         <thead>
                             <tr>
                                 <th>Move</th>
@@ -41,54 +41,54 @@
                                 <th>Label</th>
                                 <th>Debit</th>
                                 <th>Credit</th>
-                                <th t-if="data['form']['amount_currency']">Currency</th>
+                                <tht-if="data['form']['amount_currency']">Currency</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr t-foreach="lines[o.id]" t-as="aml">
-                                <td><span t-esc="aml.move_id.name != '/' and aml.move_id.name or ('*'+str(aml.move_id.id))"/></td>
-                                <td><span t-field="aml.date"/></td>
-                                <td><span t-field="aml.account_id.code"/></td>
-                                <td><span t-esc="aml.sudo().partner_id and aml.sudo().partner_id.name and aml.sudo().partner_id.name[:23] or ''"/></td>
-                                <td><span t-esc="aml.name and aml.name[:35]"/></td>
-                                <td><span t-esc="aml.debit" t-options="{'widget': 'monetary', 'display_currency': (company_id or res_company).currency_id}"/></td>
-                                <td><span t-esc="aml.credit" t-options="{'widget': 'monetary', 'display_currency': (company_id or res_company).currency_id}"/></td>
-                                <td t-if="data['form']['amount_currency'] and aml.amount_currency">
-                                    <span t-esc="aml.amount_currency" t-options="{'widget': 'monetary', 'display_currency': aml.currency_id}"/>
+                            <trt-foreach="lines[o.id]"t-as="aml">
+                                <td><spant-esc="aml.move_id.name!='/'andaml.move_id.nameor('*'+str(aml.move_id.id))"/></td>
+                                <td><spant-field="aml.date"/></td>
+                                <td><spant-field="aml.account_id.code"/></td>
+                                <td><spant-esc="aml.sudo().partner_idandaml.sudo().partner_id.nameandaml.sudo().partner_id.name[:23]or''"/></td>
+                                <td><spant-esc="aml.nameandaml.name[:35]"/></td>
+                                <td><spant-esc="aml.debit"t-options="{'widget':'monetary','display_currency':(company_idorres_company).currency_id}"/></td>
+                                <td><spant-esc="aml.credit"t-options="{'widget':'monetary','display_currency':(company_idorres_company).currency_id}"/></td>
+                                <tdt-if="data['form']['amount_currency']andaml.amount_currency">
+                                    <spant-esc="aml.amount_currency"t-options="{'widget':'monetary','display_currency':aml.currency_id}"/>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <div class="row justify-content-end">
-                        <div class="col-4">
-                            <table class="table table-sm">
+                    <divclass="rowjustify-content-end">
+                        <divclass="col-4">
+                            <tableclass="tabletable-sm">
                                 <tr>
                                     <td><strong>Total</strong></td>
-                                    <td><span t-esc="sum_debit(data, o)" t-options="{'widget': 'monetary', 'display_currency': (company_id or res_company).currency_id}"/></td>
-                                    <td><span t-esc="sum_credit(data, o)" t-options="{'widget': 'monetary', 'display_currency': (company_id or res_company).currency_id}"/></td>
+                                    <td><spant-esc="sum_debit(data,o)"t-options="{'widget':'monetary','display_currency':(company_idorres_company).currency_id}"/></td>
+                                    <td><spant-esc="sum_credit(data,o)"t-options="{'widget':'monetary','display_currency':(company_idorres_company).currency_id}"/></td>
                                 </tr>
                             </table>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-4">
-                            <table class="table table-sm">
+                    <divclass="row">
+                        <divclass="col-4">
+                            <tableclass="tabletable-sm">
                                 <thead>
-                                    <tr><th colspan="3">Tax Declaration</th></tr>
+                                    <tr><thcolspan="3">TaxDeclaration</th></tr>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Base Amount</th>
-                                        <th>Tax Amount</th>
+                                        <th>BaseAmount</th>
+                                        <th>TaxAmount</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <t t-set="taxes" t-value="get_taxes(data, o)"/>
-                                    <tr t-foreach="taxes" t-as="tax">
-                                        <td><span t-esc="tax.name"/></td>
-                                        <td><span t-esc="taxes[tax]['base_amount']" t-options="{'widget': 'monetary', 'display_currency': (company_id or res_company).currency_id}"/></td>
-                                        <td><span t-esc="taxes[tax]['tax_amount']" t-options="{'widget': 'monetary', 'display_currency': (company_id or res_company).currency_id}"/></td>
+                                    <tt-set="taxes"t-value="get_taxes(data,o)"/>
+                                    <trt-foreach="taxes"t-as="tax">
+                                        <td><spant-esc="tax.name"/></td>
+                                        <td><spant-esc="taxes[tax]['base_amount']"t-options="{'widget':'monetary','display_currency':(company_idorres_company).currency_id}"/></td>
+                                        <td><spant-esc="taxes[tax]['tax_amount']"t-options="{'widget':'monetary','display_currency':(company_idorres_company).currency_id}"/></td>
                                     </tr>
                                 </tbody>
                             </table>

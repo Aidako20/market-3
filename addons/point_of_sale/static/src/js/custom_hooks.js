@@ -1,84 +1,84 @@
-flectra.define('point_of_sale.custom_hooks', function (require) {
-    'use strict';
+flectra.define('point_of_sale.custom_hooks',function(require){
+    'usestrict';
 
-    const { Component } = owl;
-    const { onMounted, onPatched, onWillUnmount } = owl.hooks;
+    const{Component}=owl;
+    const{onMounted,onPatched,onWillUnmount}=owl.hooks;
 
     /**
-     * Introduce error handlers in the component.
+     *Introduceerrorhandlersinthecomponent.
      *
-     * IMPROVEMENT: This is a terrible hook. There could be a better way to handle
-     * the error when the order failed to sync.
+     *IMPROVEMENT:Thisisaterriblehook.Therecouldbeabetterwaytohandle
+     *theerrorwhentheorderfailedtosync.
      */
-    function useErrorHandlers() {
-        const component = Component.current;
+    functionuseErrorHandlers(){
+        constcomponent=Component.current;
 
-        component._handlePushOrderError = async function (error) {
-            // This error handler receives `error` equivalent to `error.message` of the rpc error.
-            if (error.message === 'Backend Invoice') {
-                await this.showPopup('ConfirmPopup', {
-                    title: this.env._t('Please print the invoice from the backend'),
+        component._handlePushOrderError=asyncfunction(error){
+            //Thiserrorhandlerreceives`error`equivalentto`error.message`oftherpcerror.
+            if(error.message==='BackendInvoice'){
+                awaitthis.showPopup('ConfirmPopup',{
+                    title:this.env._t('Pleaseprinttheinvoicefromthebackend'),
                     body:
                         this.env._t(
-                            'The order has been synchronized earlier. Please make the invoice from the backend for the order: '
-                        ) + error.data.order.name,
+                            'Theorderhasbeensynchronizedearlier.Pleasemaketheinvoicefromthebackendfortheorder:'
+                        )+error.data.order.name,
                 });
-            } else if (error.code < 0) {
-                // XmlHttpRequest Errors
-                const title = this.env._t('Unable to sync order');
-                const body = this.env._t(
-                    'Check the internet connection then try to sync again by clicking on the red wifi button (upper right of the screen).'
+            }elseif(error.code<0){
+                //XmlHttpRequestErrors
+                consttitle=this.env._t('Unabletosyncorder');
+                constbody=this.env._t(
+                    'Checktheinternetconnectionthentrytosyncagainbyclickingontheredwifibutton(upperrightofthescreen).'
                 );
-                await this.showPopup('OfflineErrorPopup', { title, body });
-            } else if (error.code === 200) {
-                // OpenERP Server Errors
-                await this.showPopup('ErrorTracebackPopup', {
-                    title: error.data.message || this.env._t('Server Error'),
+                awaitthis.showPopup('OfflineErrorPopup',{title,body});
+            }elseif(error.code===200){
+                //OpenERPServerErrors
+                awaitthis.showPopup('ErrorTracebackPopup',{
+                    title:error.data.message||this.env._t('ServerError'),
                     body:
-                        error.data.debug ||
-                        this.env._t('The server encountered an error while receiving your order.'),
+                        error.data.debug||
+                        this.env._t('Theserverencounteredanerrorwhilereceivingyourorder.'),
                 });
-            } else if (error.code === 700) {
-                // Sweden Fiscal module errors
-                await this.showPopup('ErrorPopup', {
-                    title: this.env._t('Fiscal data module error'),
+            }elseif(error.code===700){
+                //SwedenFiscalmoduleerrors
+                awaitthis.showPopup('ErrorPopup',{
+                    title:this.env._t('Fiscaldatamoduleerror'),
                     body:
-                        error.data.error.status ||
-                        this.env._t('The fiscal data module encountered an error while receiving your order.'),
+                        error.data.error.status||
+                        this.env._t('Thefiscaldatamoduleencounteredanerrorwhilereceivingyourorder.'),
                 });
-            } else if (error.code === 701) {
-                // Belgian Fiscal module errors
-                let bodyMessage = "";
+            }elseif(error.code===701){
+                //BelgianFiscalmoduleerrors
+                letbodyMessage="";
                 if(error.error.errorCode)
-                    bodyMessage = "'" + error.error.errorCode + "': " + error.error.errorMessage;
+                    bodyMessage="'"+error.error.errorCode+"':"+error.error.errorMessage;
                 else
-                    bodyMessage = "Fiscal data module is not on.";
-                await this.showPopup('ErrorPopup', {
-                    title: this.env._t('Fiscal data module error'),
-                    body: bodyMessage
+                    bodyMessage="Fiscaldatamoduleisnoton.";
+                awaitthis.showPopup('ErrorPopup',{
+                    title:this.env._t('Fiscaldatamoduleerror'),
+                    body:bodyMessage
                 });
-            } else {
-                // ???
-                await this.showPopup('ErrorPopup', {
-                    title: this.env._t('Unknown Error'),
-                    body: this.env._t(
-                        'The order could not be sent to the server due to an unknown error'
+            }else{
+                //???
+                awaitthis.showPopup('ErrorPopup',{
+                    title:this.env._t('UnknownError'),
+                    body:this.env._t(
+                        'Theordercouldnotbesenttotheserverduetoanunknownerror'
                     ),
                 });
             }
         };
     }
 
-    function useAutoFocusToLast() {
-        const current = Component.current;
-        let target = null;
-        function autofocus() {
-            const prevTarget = target;
-            const allInputs = current.el.querySelectorAll('input');
-            target = allInputs[allInputs.length - 1];
-            if (target && target !== prevTarget) {
+    functionuseAutoFocusToLast(){
+        constcurrent=Component.current;
+        lettarget=null;
+        functionautofocus(){
+            constprevTarget=target;
+            constallInputs=current.el.querySelectorAll('input');
+            target=allInputs[allInputs.length-1];
+            if(target&&target!==prevTarget){
                 target.focus();
-                target.selectionStart = target.selectionEnd = target.value.length;
+                target.selectionStart=target.selectionEnd=target.value.length;
             }
         }
         onMounted(autofocus);
@@ -86,91 +86,91 @@ flectra.define('point_of_sale.custom_hooks', function (require) {
     }
 
     /**
-     * Use this hook when you want to do something on previously selected and
-     * newly selected order when the order changes.
+     *Usethishookwhenyouwanttodosomethingonpreviouslyselectedand
+     *newlyselectedorderwhentheorderchanges.
      *
-     * Normally, a component is rendered then the current order is changed. When
-     * this happens, we want to rerender the component because the new information
-     * should be reflected in the screen. Additionally, we might want to remove listeners
-     * to the previous order and attach listeners to the new one. This hook is
-     * perfect for the described situation.
+     *Normally,acomponentisrenderedthenthecurrentorderischanged.When
+     *thishappens,wewanttorerenderthecomponentbecausethenewinformation
+     *shouldbereflectedinthescreen.Additionally,wemightwanttoremovelisteners
+     *tothepreviousorderandattachlistenerstothenewone.Thishookis
+     *perfectforthedescribedsituation.
      *
-     * Internally, this hook performs the following:
-     * 1. call newOrderCB on mounted
-     * 2. listen to order changes and perform the following sequence:
-     *    - call prevOrderCB(prevOrder)
-     *    - call newOrderCB(newOrder)
-     * 3. call prevOrderCB on willUnmount
+     *Internally,thishookperformsthefollowing:
+     *1.callnewOrderCBonmounted
+     *2.listentoorderchangesandperformthefollowingsequence:
+     *   -callprevOrderCB(prevOrder)
+     *   -callnewOrderCB(newOrder)
+     *3.callprevOrderCBonwillUnmount
      *
-     * @param {Function} prevOrderCB apply this callback on the previous order
-     * @param {Function} newOrderCB apply this callback on the new order
+     *@param{Function}prevOrderCBapplythiscallbackonthepreviousorder
+     *@param{Function}newOrderCBapplythiscallbackontheneworder
      */
-    function onChangeOrder(prevOrderCB, newOrderCB) {
-        const current = Component.current;
-        prevOrderCB = prevOrderCB ? prevOrderCB.bind(current) : () => {};
-        newOrderCB = newOrderCB ? newOrderCB.bind(current) : () => {};
-        onMounted(() => {
+    functiononChangeOrder(prevOrderCB,newOrderCB){
+        constcurrent=Component.current;
+        prevOrderCB=prevOrderCB?prevOrderCB.bind(current):()=>{};
+        newOrderCB=newOrderCB?newOrderCB.bind(current):()=>{};
+        onMounted(()=>{
             current.env.pos.on(
                 'change:selectedOrder',
-                async (pos, newOrder) => {
-                    await prevOrderCB(pos.previous('selectedOrder'));
-                    await newOrderCB(newOrder);
+                async(pos,newOrder)=>{
+                    awaitprevOrderCB(pos.previous('selectedOrder'));
+                    awaitnewOrderCB(newOrder);
                 },
                 current
             );
             newOrderCB(current.env.pos.get_order());
         });
-        onWillUnmount(() => {
-            current.env.pos.off('change:selectedOrder', null, current);
+        onWillUnmount(()=>{
+            current.env.pos.off('change:selectedOrder',null,current);
             prevOrderCB(current.env.pos.get_order());
         });
     }
 
-    function useBarcodeReader(callbackMap, exclusive = false) {
-        const current = Component.current;
-        const barcodeReader = current.env.pos.barcode_reader;
-        for (let [key, callback] of Object.entries(callbackMap)) {
-            callbackMap[key] = callback.bind(current);
+    functionuseBarcodeReader(callbackMap,exclusive=false){
+        constcurrent=Component.current;
+        constbarcodeReader=current.env.pos.barcode_reader;
+        for(let[key,callback]ofObject.entries(callbackMap)){
+            callbackMap[key]=callback.bind(current);
         }
-        onMounted(() => {
-            if (barcodeReader) {
-                for (let key in callbackMap) {
-                    if (exclusive) {
-                        barcodeReader.set_exclusive_callback(key, callbackMap[key]);
-                    } else {
-                        barcodeReader.set_action_callback(key, callbackMap[key]);
+        onMounted(()=>{
+            if(barcodeReader){
+                for(letkeyincallbackMap){
+                    if(exclusive){
+                        barcodeReader.set_exclusive_callback(key,callbackMap[key]);
+                    }else{
+                        barcodeReader.set_action_callback(key,callbackMap[key]);
                     }
                 }
             }
         });
-        onWillUnmount(() => {
-            if (barcodeReader) {
-                for (let key in callbackMap) {
-                    if (exclusive) {
-                        barcodeReader.remove_exclusive_callback(key, callbackMap[key]);
-                    } else {
-                        barcodeReader.remove_action_callback(key, callbackMap[key]);
+        onWillUnmount(()=>{
+            if(barcodeReader){
+                for(letkeyincallbackMap){
+                    if(exclusive){
+                        barcodeReader.remove_exclusive_callback(key,callbackMap[key]);
+                    }else{
+                        barcodeReader.remove_action_callback(key,callbackMap[key]);
                     }
                 }
             }
         });
     }
 
-    function useAsyncLockedMethod(method) {
-        const component = Component.current;
-        let called = false;
-        return async (...args) => {
-            if (called) {
+    functionuseAsyncLockedMethod(method){
+        constcomponent=Component.current;
+        letcalled=false;
+        returnasync(...args)=>{
+            if(called){
                 return;
             }
-            try {
-                called = true;
-                await method.call(component, ...args);
-            } finally {
-                called = false;
+            try{
+                called=true;
+                awaitmethod.call(component,...args);
+            }finally{
+                called=false;
             }
         };
     }
 
-    return { useErrorHandlers, useAutoFocusToLast, onChangeOrder, useBarcodeReader, useAsyncLockedMethod };
+    return{useErrorHandlers,useAutoFocusToLast,onChangeOrder,useBarcodeReader,useAsyncLockedMethod};
 });

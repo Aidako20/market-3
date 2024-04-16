@@ -1,47 +1,47 @@
-flectra.define('website_sale_delivery.tour', function (require) {
-'use strict';
+flectra.define('website_sale_delivery.tour',function(require){
+'usestrict';
 
-var tour = require("web_tour.tour");
+vartour=require("web_tour.tour");
 
-tour.register('check_free_delivery', {
-        test: true,
-        url: '/shop?search=office chair black',
+tour.register('check_free_delivery',{
+        test:true,
+        url:'/shop?search=officechairblack',
 },
     [
-        // Part 1: Check free delivery
+        //Part1:Checkfreedelivery
         {
-            content: "select office chair black",
-            trigger: '.oe_product_cart a:contains("Office Chair Black TEST")',
+            content:"selectofficechairblack",
+            trigger:'.oe_product_carta:contains("OfficeChairBlackTEST")',
         },
         {
-            content: "click on add to cart",
-            trigger: '#product_details #add_to_cart',
+            content:"clickonaddtocart",
+            trigger:'#product_details#add_to_cart',
         },
         {
-            content: "go to checkout",
-            extra_trigger: '#cart_products input.js_quantity:propValue(1)',
-            trigger: 'a[href*="/shop/checkout"]',
+            content:"gotocheckout",
+            extra_trigger:'#cart_productsinput.js_quantity:propValue(1)',
+            trigger:'a[href*="/shop/checkout"]',
         },
         {
-            content: "Check Free Delivery value to be zero",
-            extra_trigger: '#delivery_carrier label:containsExact("Delivery Now Free Over 10")',
-            trigger: "#delivery_carrier span:contains('0.0')"
+            content:"CheckFreeDeliveryvaluetobezero",
+            extra_trigger:'#delivery_carrierlabel:containsExact("DeliveryNowFreeOver10")',
+            trigger:"#delivery_carrierspan:contains('0.0')"
         },
-        // Part 2: check multiple delivery & price loaded asynchronously
+        //Part2:checkmultipledelivery&priceloadedasynchronously
         {
-            content: "Ensure price was loaded asynchronously",
-            extra_trigger: '#delivery_carrier input[name="delivery_type"]:checked',
-            trigger: '#delivery_method .o_delivery_carrier_select:contains("20.0"):contains("The Poste")',
-            run: function () {}, // it's a check
-        },
-        {
-            content: "Click on Pay Now",
-            trigger: 'button[id="o_payment_form_pay"]:visible:not(:disabled)',
+            content:"Ensurepricewasloadedasynchronously",
+            extra_trigger:'#delivery_carrierinput[name="delivery_type"]:checked',
+            trigger:'#delivery_method.o_delivery_carrier_select:contains("20.0"):contains("ThePoste")',
+            run:function(){},//it'sacheck
         },
         {
-            content: "Confirmation page should be shown",
-            trigger: '#oe_structure_website_sale_confirmation_1',
-            run: function () {}, // it's a check
+            content:"ClickonPayNow",
+            trigger:'button[id="o_payment_form_pay"]:visible:not(:disabled)',
+        },
+        {
+            content:"Confirmationpageshouldbeshown",
+            trigger:'#oe_structure_website_sale_confirmation_1',
+            run:function(){},//it'sacheck
         }
     ]);
 });

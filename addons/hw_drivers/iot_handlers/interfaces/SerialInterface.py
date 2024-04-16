@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from glob import glob
+fromglobimportglob
 
-from flectra.addons.hw_drivers.interface import Interface
+fromflectra.addons.hw_drivers.interfaceimportInterface
 
 
-class SerialInterface(Interface):
-    connection_type = 'serial'
+classSerialInterface(Interface):
+    connection_type='serial'
 
-    def get_devices(self):
-        serial_devices = {}
-        for identifier in glob('/dev/serial/by-path/*'):
-            serial_devices[identifier] = {
-                'identifier': identifier
+    defget_devices(self):
+        serial_devices={}
+        foridentifieringlob('/dev/serial/by-path/*'):
+            serial_devices[identifier]={
+                'identifier':identifier
             }
-        return serial_devices
+        returnserial_devices

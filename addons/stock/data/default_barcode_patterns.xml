@@ -1,40 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-         <record id="barcode_rule_weight_three_dec" model="barcode.rule">
-            <field name="name">Weight Barcodes 3 Decimals</field>
-            <field name="barcode_nomenclature_id" ref="barcodes.default_barcode_nomenclature"/>
-            <field name="sequence">36</field>
-            <field name="type">weight</field>
-            <field name="encoding">ean13</field>
-            <field name="pattern">21.....{NNDDD}</field>
+    <datanoupdate="1">
+         <recordid="barcode_rule_weight_three_dec"model="barcode.rule">
+            <fieldname="name">WeightBarcodes3Decimals</field>
+            <fieldname="barcode_nomenclature_id"ref="barcodes.default_barcode_nomenclature"/>
+            <fieldname="sequence">36</field>
+            <fieldname="type">weight</field>
+            <fieldname="encoding">ean13</field>
+            <fieldname="pattern">21.....{NNDDD}</field>
         </record>
         
-        <record id="barcode_rule_package" model="barcode.rule">
-            <field name="name">Package barcodes</field>
-            <field name="barcode_nomenclature_id" ref="barcodes.default_barcode_nomenclature"/>
-            <field name="sequence">70</field>
-            <field name="type">package</field>
-            <field name="encoding">any</field>
-            <field name="pattern">PACK</field>
+        <recordid="barcode_rule_package"model="barcode.rule">
+            <fieldname="name">Packagebarcodes</field>
+            <fieldname="barcode_nomenclature_id"ref="barcodes.default_barcode_nomenclature"/>
+            <fieldname="sequence">70</field>
+            <fieldname="type">package</field>
+            <fieldname="encoding">any</field>
+            <fieldname="pattern">PACK</field>
         </record>
 
-        <record id="barcode_rule_lot" model="barcode.rule">
-            <field name="name">Lot barcodes</field>
-            <field name="barcode_nomenclature_id" ref="barcodes.default_barcode_nomenclature"/>
-            <field name="sequence">80</field>
-            <field name="type">lot</field>
-            <field name="encoding">any</field>
-            <field name="pattern">10</field>
+        <recordid="barcode_rule_lot"model="barcode.rule">
+            <fieldname="name">Lotbarcodes</field>
+            <fieldname="barcode_nomenclature_id"ref="barcodes.default_barcode_nomenclature"/>
+            <fieldname="sequence">80</field>
+            <fieldname="type">lot</field>
+            <fieldname="encoding">any</field>
+            <fieldname="pattern">10</field>
         </record>
 
-        <record id="barcode_rule_location" model="barcode.rule">
-            <field name="name">Location barcodes</field>
-            <field name="barcode_nomenclature_id" ref="barcodes.default_barcode_nomenclature"/>
-            <field name="sequence">60</field>
-            <field name="type">location</field>
-            <field name="encoding">any</field>
-            <field name="pattern">414</field>
+        <recordid="barcode_rule_location"model="barcode.rule">
+            <fieldname="name">Locationbarcodes</field>
+            <fieldname="barcode_nomenclature_id"ref="barcodes.default_barcode_nomenclature"/>
+            <fieldname="sequence">60</field>
+            <fieldname="type">location</field>
+            <fieldname="encoding">any</field>
+            <fieldname="pattern">414</field>
         </record>
     </data>
 </flectra>

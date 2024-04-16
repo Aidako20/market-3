@@ -1,60 +1,60 @@
-flectra.define('pos_restaurant.tour.TipScreenTourMethods', function (require) {
-    'use strict';
+flectra.define('pos_restaurant.tour.TipScreenTourMethods',function(require){
+    'usestrict';
 
-    const { createTourMethods } = require('point_of_sale.tour.utils');
+    const{createTourMethods}=require('point_of_sale.tour.utils');
 
-    class Do {
-        clickPercentTip(percent) {
-            return [
+    classDo{
+        clickPercentTip(percent){
+            return[
                 {
-                    trigger: `.tip-screen .percentage:contains("${percent}")`,
+                    trigger:`.tip-screen.percentage:contains("${percent}")`,
                 },
             ];
         }
-        setCustomTip(amount) {
-            return [
+        setCustomTip(amount){
+            return[
                 {
-                    trigger: `.tip-screen .custom-amount-form input`,
-                    run: `text ${amount}`,
+                    trigger:`.tip-screen.custom-amount-forminput`,
+                    run:`text${amount}`,
                 },
             ];
         }
     }
 
-    class Check {
-        isShown() {
-            return [
+    classCheck{
+        isShown(){
+            return[
                 {
-                    trigger: '.pos .tip-screen',
-                    run: () => {},
+                    trigger:'.pos.tip-screen',
+                    run:()=>{},
                 },
             ];
         }
-        totalAmountIs(amount) {
-            return [
+        totalAmountIs(amount){
+            return[
                 {
-                    trigger: `.tip-screen .total-amount:contains("${amount}")`,
-                    run: () => {},
+                    trigger:`.tip-screen.total-amount:contains("${amount}")`,
+                    run:()=>{},
                 },
             ];
         }
-        percentAmountIs(percent, amount) {
-            return [
+        percentAmountIs(percent,amount){
+            return[
                 {
-                    trigger: `.tip-screen .percentage:contains("${percent}") ~ .amount:contains("${amount}")`,
-                    run: () => {},
+                    trigger:`.tip-screen.percentage:contains("${percent}")~.amount:contains("${amount}")`,
+                    run:()=>{},
                 },
             ];
         }
-        inputAmountIs(amount) {
-            return [
+        inputAmountIs(amount){
+            return[
                 {
-                    trigger: `.tip-screen .custom-amount-form input[data-amount="${amount}"]`,
-                    run: () => {},
+                    trigger:`.tip-screen.custom-amount-forminput[data-amount="${amount}"]`,
+                    run:()=>{},
                 }
             ]
         }
     }
 
-    return createTourMethods('TipScreen', Do, Check);
+    returncreateTourMethods('TipScreen',Do,Check);
 });

@@ -1,159 +1,159 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="adyen_account_view_form" model="ir.ui.view">
-        <field name="name">adyen.account.view.form</field>
-        <field name="model">adyen.account</field>
-        <field name="arch" type="xml">
-            <form string="Adyen Account" create="false" js_class="adyen_account_form">
+    <recordid="adyen_account_view_form"model="ir.ui.view">
+        <fieldname="name">adyen.account.view.form</field>
+        <fieldname="model">adyen.account</field>
+        <fieldname="arch"type="xml">
+            <formstring="AdyenAccount"create="false"js_class="adyen_account_form">
                 <header>
-                    <field name="kyc_status" widget="statusbar" statusbar_visible="awaiting_data,pending,passed"/>
+                    <fieldname="kyc_status"widget="statusbar"statusbar_visible="awaiting_data,pending,passed"/>
                 </header>
                 <sheet>
-                    <div class="oe_button_box" name="button_box">
-                        <button name="action_show_transactions" type="object"
-                            class="oe_stat_button" icon="fa-credit-card">
-                            <div class="o_stat_info">
-                                <field name="transactions_count" class="o_stat_value"/>
-                                <span class="o_stat_text"> Transactions</span>
+                    <divclass="oe_button_box"name="button_box">
+                        <buttonname="action_show_transactions"type="object"
+                            class="oe_stat_button"icon="fa-credit-card">
+                            <divclass="o_stat_info">
+                                <fieldname="transactions_count"class="o_stat_value"/>
+                                <spanclass="o_stat_text">Transactions</span>
                             </div>
                         </button>
                     </div>
 
                     <group>
-                        <field name="adyen_uuid" invisible="1"/>
+                        <fieldname="adyen_uuid"invisible="1"/>
 
                         <group>
-                            <field name="is_business" attrs="{'readonly': [('id', '!=', False)]}"/>
+                            <fieldname="is_business"attrs="{'readonly':[('id','!=',False)]}"/>
                         </group>
 
                         <group>
-                            <field name="company_id" readonly="1"/>
+                            <fieldname="company_id"readonly="1"/>
                         </group>
 
-                        <group string="Individual" attrs="{'invisible': [('is_business', '=', True)]}">
-                            <field name="first_name"
-                                attrs="{'required': [('is_business', '=', False)]}"/>
-                            <field name="last_name"
-                                attrs="{'required': [('is_business', '=', False)]}"/>
-                            <field name="date_of_birth"
-                                attrs="{'required': [('is_business', '=', False)]}"/>
-                            <field name="document_number"
-                                attrs="{'invisible': [('country_code', 'not in', ['AU', 'CA', 'GR', 'IT', 'US'])], 'required': [('is_business', '=', False), ('country_id', 'in', ['AU', 'CA', 'GR', 'IT', 'US'])]}"/>
-                            <field name="document_type"
-                                attrs="{'invisible': [('country_code', '!=', 'AU')], 'required': [('is_business', '=', False), ('country_id', '=', 'AU')]}"/>
-                            <field name="id_type" attrs="{'invisible': [('adyen_uuid', '=', False)]}"/>
-                            <field name="id_front" filename="id_front_filename" attrs="{'invisible': [('adyen_uuid', '=', False)]}"/>
-                            <field name="id_front_filename" invisible="1"/>
-                            <field name="id_back" filename="id_back_filename"
-                                attrs="{'invisible': [('id_type', 'not in', ['ID_CARD', 'DRIVING_LICENSE'])]}"/>
-                            <field name="id_back_filename" invisible="1"/> 
+                        <groupstring="Individual"attrs="{'invisible':[('is_business','=',True)]}">
+                            <fieldname="first_name"
+                                attrs="{'required':[('is_business','=',False)]}"/>
+                            <fieldname="last_name"
+                                attrs="{'required':[('is_business','=',False)]}"/>
+                            <fieldname="date_of_birth"
+                                attrs="{'required':[('is_business','=',False)]}"/>
+                            <fieldname="document_number"
+                                attrs="{'invisible':[('country_code','notin',['AU','CA','GR','IT','US'])],'required':[('is_business','=',False),('country_id','in',['AU','CA','GR','IT','US'])]}"/>
+                            <fieldname="document_type"
+                                attrs="{'invisible':[('country_code','!=','AU')],'required':[('is_business','=',False),('country_id','=','AU')]}"/>
+                            <fieldname="id_type"attrs="{'invisible':[('adyen_uuid','=',False)]}"/>
+                            <fieldname="id_front"filename="id_front_filename"attrs="{'invisible':[('adyen_uuid','=',False)]}"/>
+                            <fieldname="id_front_filename"invisible="1"/>
+                            <fieldname="id_back"filename="id_back_filename"
+                                attrs="{'invisible':[('id_type','notin',['ID_CARD','DRIVING_LICENSE'])]}"/>
+                            <fieldname="id_back_filename"invisible="1"/>
                         </group>
 
-                        <group string="Business" attrs="{'invisible': [('is_business', '=', False)]}">
-                            <field name="legal_business_name"
-                                attrs="{'required': [('is_business', '=', True)]}"/>
-                            <field name="doing_business_as"
-                                attrs="{'required': [('is_business', '=', True)]}"/>
-                            <field name="registration_number"
-                                attrs="{'required': [('is_business', '=', True)]}"/>
+                        <groupstring="Business"attrs="{'invisible':[('is_business','=',False)]}">
+                            <fieldname="legal_business_name"
+                                attrs="{'required':[('is_business','=',True)]}"/>
+                            <fieldname="doing_business_as"
+                                attrs="{'required':[('is_business','=',True)]}"/>
+                            <fieldname="registration_number"
+                                attrs="{'required':[('is_business','=',True)]}"/>
                         </group>
 
-                        <group string="Contact">
-                            <field name="email" widget="email"/>
-                            <field name="phone_number"/>
-                            <label for="street" string="Address"/>
-                            <div class="o_address_format">
-                                <field name="street" placeholder="Street" class="o_address_street"/>
-                                <field name="house_number_or_name" placeholder="House number or name" class="o_address_street"/>
-                                <field name="city" placeholder="City" class="o_address_city"/>
-                                <field name="state_id" class="o_address_state" placeholder="State" options="{'no_open': True, 'no_quick_create': True}"
-                                    attrs="{'required': [('country_code', 'in', ['AU', 'CA', 'IT', 'US'])]}"/>
-                                <field name="state_code" invisible="1"/>
-                                <field name="zip" placeholder="ZIP" class="o_address_zip"/>
-                                <field name="country_id" placeholder="Country" class="o_address_country" options="{'no_open': True, 'no_create': True}"/>
-                                <field name="country_code" invisible="1"/>
+                        <groupstring="Contact">
+                            <fieldname="email"widget="email"/>
+                            <fieldname="phone_number"/>
+                            <labelfor="street"string="Address"/>
+                            <divclass="o_address_format">
+                                <fieldname="street"placeholder="Street"class="o_address_street"/>
+                                <fieldname="house_number_or_name"placeholder="Housenumberorname"class="o_address_street"/>
+                                <fieldname="city"placeholder="City"class="o_address_city"/>
+                                <fieldname="state_id"class="o_address_state"placeholder="State"options="{'no_open':True,'no_quick_create':True}"
+                                    attrs="{'required':[('country_code','in',['AU','CA','IT','US'])]}"/>
+                                <fieldname="state_code"invisible="1"/>
+                                <fieldname="zip"placeholder="ZIP"class="o_address_zip"/>
+                                <fieldname="country_id"placeholder="Country"class="o_address_country"options="{'no_open':True,'no_create':True}"/>
+                                <fieldname="country_code"invisible="1"/>
                             </div>
                         </group>
                     </group>
-                    <notebook attrs="{'invisible': [('adyen_uuid', '=', False)]}">
-                        <page string="Shareholders" attrs="{'invisible': [('is_business', '=', False)], 'required': [('is_business', '=', True)]}">
-                            <field name="shareholder_ids">
+                    <notebookattrs="{'invisible':[('adyen_uuid','=',False)]}">
+                        <pagestring="Shareholders"attrs="{'invisible':[('is_business','=',False)],'required':[('is_business','=',True)]}">
+                            <fieldname="shareholder_ids">
                                 <tree>
-                                    <field name="first_name"/>
-                                    <field name="last_name"/>
-                                    <field name="kyc_status" widget="adyen_kyc_status_tag"/>
+                                    <fieldname="first_name"/>
+                                    <fieldname="last_name"/>
+                                    <fieldname="kyc_status"widget="adyen_kyc_status_tag"/>
                                 </tree>
                             </field>
                         </page>
-                        <page string="Bank Accounts">
-                            <field name="bank_account_ids">
+                        <pagestring="BankAccounts">
+                            <fieldname="bank_account_ids">
                                 <tree>
-                                    <field name="owner_name"/>
-                                    <field name="iban"/>
-                                    <field name="account_number"/>
-                                    <field name="kyc_status" widget="adyen_kyc_status_tag"/>
+                                    <fieldname="owner_name"/>
+                                    <fieldname="iban"/>
+                                    <fieldname="account_number"/>
+                                    <fieldname="kyc_status"widget="adyen_kyc_status_tag"/>
                                 </tree>
                             </field>
                         </page>
-                        <page string="Payouts">
-                            <field name="payout_ids">
+                        <pagestring="Payouts">
+                            <fieldname="payout_ids">
                                 <tree>
-                                    <field name="name"/>
-                                    <field name="payout_schedule"/>
+                                    <fieldname="name"/>
+                                    <fieldname="payout_schedule"/>
                                 </tree>
                             </field>
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="message_ids"/>
+                <divclass="oe_chatter">
+                    <fieldname="message_follower_ids"/>
+                    <fieldname="message_ids"/>
                 </div>
             </form>
         </field>
     </record>
 
-    <record id="adyen_shareholder_view_form" model="ir.ui.view">
-        <field name="name">adyen.shareholder.view.form</field>
-        <field name="model">adyen.shareholder</field>
-        <field name="arch" type="xml">
-            <form string="Adyen Shareholder">
+    <recordid="adyen_shareholder_view_form"model="ir.ui.view">
+        <fieldname="name">adyen.shareholder.view.form</field>
+        <fieldname="model">adyen.shareholder</field>
+        <fieldname="arch"type="xml">
+            <formstring="AdyenShareholder">
                 <header>
-                    <field name="kyc_status" widget="statusbar" statusbar_visible="awaiting_data,pending,passed"/>
+                    <fieldname="kyc_status"widget="statusbar"statusbar_visible="awaiting_data,pending,passed"/>
                 </header>
                 <sheet>
-                    <div class="alert alert-warning" role="alert"
-                        attrs="{'invisible': [('kyc_status_message', '=', False)]}">
-                        <field name="kyc_status_message"/>
+                    <divclass="alertalert-warning"role="alert"
+                        attrs="{'invisible':[('kyc_status_message','=',False)]}">
+                        <fieldname="kyc_status_message"/>
                     </div>
                     <group>
-                        <field name="shareholder_uuid" invisible="1"/>
+                        <fieldname="shareholder_uuid"invisible="1"/>
                         <group>
-                            <field name="first_name"/>
-                            <field name="last_name"/>
-                            <field name="date_of_birth"/>
+                            <fieldname="first_name"/>
+                            <fieldname="last_name"/>
+                            <fieldname="date_of_birth"/>
                         </group>
                         <group>
-                            <field name="document_number"
-                                attrs="{'invisible': [('country_code', 'not in', ['IT', 'US'])], 'required': [('country_code', 'in', ['IT', 'US'])]}"/>
-                            <field name="id_type" attrs="{'invisible': [('shareholder_uuid', '=', False)]}"/>
-                            <field name="id_front" filename="id_front_filename" attrs="{'invisible': [('shareholder_uuid', '=', False)]}"/>
-                            <field name="id_front_filename" invisible="1"/>
-                            <field name="id_back" filename="id_back_filename"
-                                attrs="{'required': [('id_type', 'in', ['ID_CARD', 'DRIVING_LICENSE'])], 'invisible': [('id_type', 'not in', ['ID_CARD', 'DRIVING_LICENSE'])]}"/>
-                            <field name="id_back_filename" invisible="1"/> 
+                            <fieldname="document_number"
+                                attrs="{'invisible':[('country_code','notin',['IT','US'])],'required':[('country_code','in',['IT','US'])]}"/>
+                            <fieldname="id_type"attrs="{'invisible':[('shareholder_uuid','=',False)]}"/>
+                            <fieldname="id_front"filename="id_front_filename"attrs="{'invisible':[('shareholder_uuid','=',False)]}"/>
+                            <fieldname="id_front_filename"invisible="1"/>
+                            <fieldname="id_back"filename="id_back_filename"
+                                attrs="{'required':[('id_type','in',['ID_CARD','DRIVING_LICENSE'])],'invisible':[('id_type','notin',['ID_CARD','DRIVING_LICENSE'])]}"/>
+                            <fieldname="id_back_filename"invisible="1"/>
                         </group>
                         <group>
-                            <label for="street" string="Address"/>
-                            <div class="o_address_format">
-                                <field name="street" placeholder="Street" class="o_address_street"/>
-                                <field name="house_number_or_name" placeholder="House number or name" class="o_address_street"/>
-                                <field name="city" placeholder="City" class="o_address_city"/>
-                                <field name="state_id" class="o_address_state" placeholder="State" options="{'no_open': True, 'no_quick_create': True}"
-                                    attrs="{'required': [('country_code', 'in', ['AU', 'CA', 'IT', 'US'])]}"/>
-                                <field name="zip" placeholder="ZIP" class="o_address_zip"/>
-                                <field name="country_id" placeholder="Country" class="o_address_country" options="{'no_open': True, 'no_create': True}"/>
-                                <field name="country_code" invisible="1"/>
+                            <labelfor="street"string="Address"/>
+                            <divclass="o_address_format">
+                                <fieldname="street"placeholder="Street"class="o_address_street"/>
+                                <fieldname="house_number_or_name"placeholder="Housenumberorname"class="o_address_street"/>
+                                <fieldname="city"placeholder="City"class="o_address_city"/>
+                                <fieldname="state_id"class="o_address_state"placeholder="State"options="{'no_open':True,'no_quick_create':True}"
+                                    attrs="{'required':[('country_code','in',['AU','CA','IT','US'])]}"/>
+                                <fieldname="zip"placeholder="ZIP"class="o_address_zip"/>
+                                <fieldname="country_id"placeholder="Country"class="o_address_country"options="{'no_open':True,'no_create':True}"/>
+                                <fieldname="country_code"invisible="1"/>
                             </div>
                         </group>
                     </group>
@@ -162,51 +162,51 @@
         </field>
     </record>
 
-    <record id="adyen_bank_account_view_form" model="ir.ui.view">
-        <field name="name">adyen.bank.account.view.form</field>
-        <field name="model">adyen.bank.account</field>
-        <field name="arch" type="xml">
-            <form string="Adyen Bank Account">
+    <recordid="adyen_bank_account_view_form"model="ir.ui.view">
+        <fieldname="name">adyen.bank.account.view.form</field>
+        <fieldname="model">adyen.bank.account</field>
+        <fieldname="arch"type="xml">
+            <formstring="AdyenBankAccount">
                 <header>
-                    <field name="kyc_status" widget="statusbar" statusbar_visible="awaiting_data,pending,passed"/>
+                    <fieldname="kyc_status"widget="statusbar"statusbar_visible="awaiting_data,pending,passed"/>
                 </header>
                 <sheet>
-                    <div class="alert alert-warning" role="alert"
-                        attrs="{'invisible': [('kyc_status_message', '=', False)]}">
-                        <field name="kyc_status_message"/>
+                    <divclass="alertalert-warning"role="alert"
+                        attrs="{'invisible':[('kyc_status_message','=',False)]}">
+                        <fieldname="kyc_status_message"/>
                     </div>
                     <group>
-                        <field name="bank_account_uuid" invisible="1"/>
+                        <fieldname="bank_account_uuid"invisible="1"/>
                         <group>
-                            <field name="country_id" options='{"no_open": True, "no_create": True}'/>
-                            <field name="country_code" invisible="1"/>
-                            <field name="currency_id"/>
-                            <field name="iban"
-                                attrs="{'invisible': [('country_code', 'not in', ['AT', 'BE', 'CH', 'CZ', 'DE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HR', 'IE', 'IT', 'LT', 'LU', 'NL', 'PL', 'PT'])],
-                                        'required': [('country_code', 'in', ['AT', 'BE', 'CH', 'CZ', 'DE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HR', 'IE', 'IT', 'LT', 'LU', 'NL', 'PL', 'PT'])]}"/>
-                            <field name="account_type"
-                                attrs="{'invisible': [('country_code', '!=', 'US')], 'required': [('country_code', '=', 'US')]}"/>
-                            <field name="account_number"
-                                attrs="{'invisible': [('country_code', 'not in', ['AU', 'CA', 'US'])], 'required': [('country_code', 'in', ['AU', 'CA', 'US'])]}"/>
-                            <field name="branch_code"
-                                attrs="{'invisible': [('country_code', 'not in', ['AU', 'CA', 'US'])], 'required': [('country_code', 'in', ['AU', 'CA', 'US'])]}"/>
-                            <field name="bank_code"
-                                attrs="{'invisible': [('country_code', '!=', 'CA')], 'required': [('country_code', '=', 'CA')]}"/>
-                            <field name="bank_statement" filename="bank_statement_filename" attrs="{'invisible': [('bank_account_uuid', '=', False)]}"/>
-                            <field name="bank_statement_filename" invisible="1"/>
+                            <fieldname="country_id"options='{"no_open":True,"no_create":True}'/>
+                            <fieldname="country_code"invisible="1"/>
+                            <fieldname="currency_id"/>
+                            <fieldname="iban"
+                                attrs="{'invisible':[('country_code','notin',['AT','BE','CH','CZ','DE','ES','FI','FR','GB','GR','HR','IE','IT','LT','LU','NL','PL','PT'])],
+                                        'required':[('country_code','in',['AT','BE','CH','CZ','DE','ES','FI','FR','GB','GR','HR','IE','IT','LT','LU','NL','PL','PT'])]}"/>
+                            <fieldname="account_type"
+                                attrs="{'invisible':[('country_code','!=','US')],'required':[('country_code','=','US')]}"/>
+                            <fieldname="account_number"
+                                attrs="{'invisible':[('country_code','notin',['AU','CA','US'])],'required':[('country_code','in',['AU','CA','US'])]}"/>
+                            <fieldname="branch_code"
+                                attrs="{'invisible':[('country_code','notin',['AU','CA','US'])],'required':[('country_code','in',['AU','CA','US'])]}"/>
+                            <fieldname="bank_code"
+                                attrs="{'invisible':[('country_code','!=','CA')],'required':[('country_code','=','CA')]}"/>
+                            <fieldname="bank_statement"filename="bank_statement_filename"attrs="{'invisible':[('bank_account_uuid','=',False)]}"/>
+                            <fieldname="bank_statement_filename"invisible="1"/>
                         </group>
                         <group>
-                            <field name="owner_name"/>
-                            <label for="owner_street" string="Owner Address" attrs="{'invisible': [('country_code', 'not in', ['CA', 'US'])]}"/>
-                            <div class="o_address_format" attrs="{'invisible': [('country_code', 'not in', ['CA', 'US'])]}">
-                                <field name="owner_street" placeholder="Street" class="o_address_street" attrs="{'required': [('country_code', 'in', ['CA', 'US'])]}"/>
-                                <field name="owner_house_number_or_name" placeholder="House number or name" class="o_address_street" attrs="{'required': [('country_code', 'in', ['CA', 'US'])]}"/>
-                                <field name="owner_city" placeholder="City" class="o_address_city" attrs="{'required': [('country_code', 'in', ['CA', 'US'])]}"/>
-                                <field name="owner_state_id" class="o_address_state" placeholder="State" options="{'no_open': True, 'no_quick_create': True}"
-                                    attrs="{'required': [('country_code', 'in', ['CA', 'US'])]}"/>
-                                <field name="owner_zip" placeholder="ZIP" class="o_address_zip" attrs="{'required': [('country_code', 'in', ['CA', 'US'])]}"/>
-                                <field name="owner_country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'
-                                    attrs="{'required': [('country_code', 'in', ['CA', 'US'])]}"/>
+                            <fieldname="owner_name"/>
+                            <labelfor="owner_street"string="OwnerAddress"attrs="{'invisible':[('country_code','notin',['CA','US'])]}"/>
+                            <divclass="o_address_format"attrs="{'invisible':[('country_code','notin',['CA','US'])]}">
+                                <fieldname="owner_street"placeholder="Street"class="o_address_street"attrs="{'required':[('country_code','in',['CA','US'])]}"/>
+                                <fieldname="owner_house_number_or_name"placeholder="Housenumberorname"class="o_address_street"attrs="{'required':[('country_code','in',['CA','US'])]}"/>
+                                <fieldname="owner_city"placeholder="City"class="o_address_city"attrs="{'required':[('country_code','in',['CA','US'])]}"/>
+                                <fieldname="owner_state_id"class="o_address_state"placeholder="State"options="{'no_open':True,'no_quick_create':True}"
+                                    attrs="{'required':[('country_code','in',['CA','US'])]}"/>
+                                <fieldname="owner_zip"placeholder="ZIP"class="o_address_zip"attrs="{'required':[('country_code','in',['CA','US'])]}"/>
+                                <fieldname="owner_country_id"placeholder="Country"class="o_address_country"options='{"no_open":True,"no_create":True}'
+                                    attrs="{'required':[('country_code','in',['CA','US'])]}"/>
                             </div>
                         </group>
                     </group>
@@ -215,29 +215,29 @@
         </field>
     </record>
 
-    <record id="adyen_payout_view_form" model="ir.ui.view">
-        <field name="name">adyen.payout.view.form</field>
-        <field name="model">adyen.payout</field>
-        <field name="arch" type="xml">
-            <form string="Adyen Payout">
+    <recordid="adyen_payout_view_form"model="ir.ui.view">
+        <fieldname="name">adyen.payout.view.form</field>
+        <fieldname="model">adyen.payout</field>
+        <fieldname="arch"type="xml">
+            <formstring="AdyenPayout">
                 <header>
-                    <button name="send_payout_request" string="Request a payout now" class="oe_highlight" type="object" attrs="{'invisible': [('code', '=', False)]}"/>
+                    <buttonname="send_payout_request"string="Requestapayoutnow"class="oe_highlight"type="object"attrs="{'invisible':[('code','=',False)]}"/>
                 </header>
                 <sheet>
                     <group>
-                        <field name="code" invisible="1"/>
-                        <field name="name"/>
-                        <field name="payout_schedule"/>
-                        <field name="adyen_bank_account_id"/>
+                        <fieldname="code"invisible="1"/>
+                        <fieldname="name"/>
+                        <fieldname="payout_schedule"/>
+                        <fieldname="adyen_bank_account_id"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="adyen_account_action_create" model="ir.actions.act_window">
-        <field name="name">Create an Adyen Account</field>
-        <field name="res_model">adyen.account</field>
-        <field name="view_mode">form</field>
+    <recordid="adyen_account_action_create"model="ir.actions.act_window">
+        <fieldname="name">CreateanAdyenAccount</field>
+        <fieldname="res_model">adyen.account</field>
+        <fieldname="view_mode">form</field>
     </record>
 </flectra>

@@ -1,62 +1,62 @@
-flectra.define('mail.debugManagerTests', function (require) {
-"use strict";
+flectra.define('mail.debugManagerTests',function(require){
+"usestrict";
 
-var testUtils = require('web.test_utils');
+vartestUtils=require('web.test_utils');
 
-var createDebugManager = testUtils.createDebugManager;
+varcreateDebugManager=testUtils.createDebugManager;
 
-QUnit.module('Mail DebugManager', {}, function () {
+QUnit.module('MailDebugManager',{},function(){
 
-    QUnit.test("Manage Messages", async function (assert) {
+    QUnit.test("ManageMessages",asyncfunction(assert){
         assert.expect(3);
 
-        var debugManager = await createDebugManager({
-            intercepts: {
-                do_action: function (event) {
-                    assert.deepEqual(event.data.action, {
-                      context: {
-                        default_res_model: "testModel",
-                        default_res_id: 5,
+        vardebugManager=awaitcreateDebugManager({
+            intercepts:{
+                do_action:function(event){
+                    assert.deepEqual(event.data.action,{
+                      context:{
+                        default_res_model:"testModel",
+                        default_res_id:5,
                       },
-                        res_model: 'mail.message',
-                        name: "Manage Messages",
-                        views: [[false, 'list'], [false, 'form']],
-                        type: 'ir.actions.act_window',
-                        domain: [['res_id', '=', 5], ['model', '=', 'testModel']],
+                        res_model:'mail.message',
+                        name:"ManageMessages",
+                        views:[[false,'list'],[false,'form']],
+                        type:'ir.actions.act_window',
+                        domain:[['res_id','=',5],['model','=','testModel']],
                     });
                 },
             },
         });
 
-        await debugManager.appendTo($('#qunit-fixture'));
+        awaitdebugManager.appendTo($('#qunit-fixture'));
 
-        // Simulate update debug manager from web client
-        var action = {
-            views: [{
-                displayName: "Form",
-                fieldsView: {
-                    view_id: 1,
+        //Simulateupdatedebugmanagerfromwebclient
+        varaction={
+            views:[{
+                displayName:"Form",
+                fieldsView:{
+                    view_id:1,
                 },
-                type: "form",
+                type:"form",
             }],
         };
-        var view = {
-            viewType: "form",
-            getSelectedIds: function () {
-                return [5];
+        varview={
+            viewType:"form",
+            getSelectedIds:function(){
+                return[5];
             },
-            modelName: 'testModel',
+            modelName:'testModel',
         };
-        await testUtils.nextTick();
-        await debugManager.update('action', action, view);
+        awaittestUtils.nextTick();
+        awaitdebugManager.update('action',action,view);
 
-        var $messageMenu = debugManager.$('a[data-action=getMailMessages]');
-        assert.strictEqual($messageMenu.length, 1, "should have Manage Message menu item");
-        assert.strictEqual($messageMenu.text().trim(), "Manage Messages",
-            "should have correct menu item text");
+        var$messageMenu=debugManager.$('a[data-action=getMailMessages]');
+        assert.strictEqual($messageMenu.length,1,"shouldhaveManageMessagemenuitem");
+        assert.strictEqual($messageMenu.text().trim(),"ManageMessages",
+            "shouldhavecorrectmenuitemtext");
 
-        await testUtils.dom.click(debugManager.$('> a')); // open dropdown
-        await testUtils.dom.click($messageMenu);
+        awaittestUtils.dom.click(debugManager.$('>a'));//opendropdown
+        awaittestUtils.dom.click($messageMenu);
 
         debugManager.destroy();
     });

@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record id="product_category_events" model="product.category">
-            <field name="parent_id" ref="product.product_category_1"/>
-            <field name="name">Events</field>
+    <datanoupdate="1">
+        <recordid="product_category_events"model="product.category">
+            <fieldname="parent_id"ref="product.product_category_1"/>
+            <fieldname="name">Events</field>
         </record>
 
-        <record id="product_product_event" model="product.product">
-            <field name="list_price">10.0</field>
-            <field name="event_ok" eval="True"/>
-            <field name="standard_price">30.0</field>
-            <field name="uom_id" ref="uom.product_uom_unit"/>
-            <field name="uom_po_id" ref="uom.product_uom_unit"/>
-            <field name="name">Event Registration</field>
-            <field name="description_sale" eval="False"/>
-            <field name="categ_id" ref="event_sale.product_category_events"/>
-            <field name="type">service</field>
+        <recordid="product_product_event"model="product.product">
+            <fieldname="list_price">10.0</field>
+            <fieldname="event_ok"eval="True"/>
+            <fieldname="standard_price">30.0</field>
+            <fieldname="uom_id"ref="uom.product_uom_unit"/>
+            <fieldname="uom_po_id"ref="uom.product_uom_unit"/>
+            <fieldname="name">EventRegistration</field>
+            <fieldname="description_sale"eval="False"/>
+            <fieldname="categ_id"ref="event_sale.product_category_events"/>
+            <fieldname="type">service</field>
         </record>
     </data>
 </flectra>

@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record model="ir.ui.view" id="account_invoice_send_inherit_account_wizard_form">
-            <!-- Deprecated, the field is now invisible. This view will be removed in future versions. -->
-            <field name="name">account.invoice.send.form.inherited.edi</field>
-            <field name="model">account.invoice.send</field>
-            <field name="inherit_id" ref="account.account_invoice_send_wizard_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//div[@name='mail_form']" position='before'>
-                    <div name="edi_format_option" invisible='1'>
+        <recordmodel="ir.ui.view"id="account_invoice_send_inherit_account_wizard_form">
+            <!--Deprecated,thefieldisnowinvisible.Thisviewwillberemovedinfutureversions.-->
+            <fieldname="name">account.invoice.send.form.inherited.edi</field>
+            <fieldname="model">account.invoice.send</field>
+            <fieldname="inherit_id"ref="account.account_invoice_send_wizard_form"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//div[@name='mail_form']"position='before'>
+                    <divname="edi_format_option"invisible='1'>
                         <group>
-                            <label for="edi_format_ids"/>
-                            <div class="oe_inline">
-                                <field name="edi_format_ids"
+                            <labelfor="edi_format_ids"/>
+                            <divclass="oe_inline">
+                                <fieldname="edi_format_ids"
                                         nolabel="1"
-                                        widget="many2many_tags" 
-                                        placeholder="You can set default electronic invoicing formats on the journal"/>
+                                        widget="many2many_tags"
+                                        placeholder="Youcansetdefaultelectronicinvoicingformatsonthejournal"/>
                             </div>
                         </group>
                     </div>

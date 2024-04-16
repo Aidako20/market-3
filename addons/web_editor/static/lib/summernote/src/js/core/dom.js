@@ -2,942 +2,942 @@ define([
   'summernote/core/func',
   'summernote/core/list',
   'summernote/core/agent'
-], function (func, list, agent) {
+],function(func,list,agent){
 
-  var NBSP_CHAR = String.fromCharCode(160);
-  var ZERO_WIDTH_NBSP_CHAR = '\ufeff';
+  varNBSP_CHAR=String.fromCharCode(160);
+  varZERO_WIDTH_NBSP_CHAR='\ufeff';
 
   /**
-   * @class core.dom
+   *@classcore.dom
    *
-   * Dom functions
+   *Domfunctions
    *
-   * @singleton
-   * @alternateClassName dom
+   *@singleton
+   *@alternateClassNamedom
    */
-  var dom = (function () {
+  vardom=(function(){
     /**
-     * @method isEditable
+     *@methodisEditable
      *
-     * returns whether node is `note-editable` or not.
+     *returnswhethernodeis`note-editable`ornot.
      *
-     * @param {Node} node
-     * @return {Boolean}
+     *@param{Node}node
+     *@return{Boolean}
      */
-    var isEditable = function (node) {
-      return node && $(node).hasClass('note-editable');
+    varisEditable=function(node){
+      returnnode&&$(node).hasClass('note-editable');
     };
 
     /**
-     * @method isControlSizing
+     *@methodisControlSizing
      *
-     * returns whether node is `note-control-sizing` or not.
+     *returnswhethernodeis`note-control-sizing`ornot.
      *
-     * @param {Node} node
-     * @return {Boolean}
+     *@param{Node}node
+     *@return{Boolean}
      */
-    var isControlSizing = function (node) {
-      return node && $(node).hasClass('note-control-sizing');
+    varisControlSizing=function(node){
+      returnnode&&$(node).hasClass('note-control-sizing');
     };
 
     /**
-     * @method  buildLayoutInfo
+     *@method buildLayoutInfo
      *
-     * build layoutInfo from $editor(.note-editor)
+     *buildlayoutInfofrom$editor(.note-editor)
      *
-     * @param {jQuery} $editor
-     * @return {Object}
-     * @return {Function} return.editor
-     * @return {Node} return.dropzone
-     * @return {Node} return.toolbar
-     * @return {Node} return.editable
-     * @return {Node} return.codable
-     * @return {Node} return.popover
-     * @return {Node} return.handle
-     * @return {Node} return.dialog
+     *@param{jQuery}$editor
+     *@return{Object}
+     *@return{Function}return.editor
+     *@return{Node}return.dropzone
+     *@return{Node}return.toolbar
+     *@return{Node}return.editable
+     *@return{Node}return.codable
+     *@return{Node}return.popover
+     *@return{Node}return.handle
+     *@return{Node}return.dialog
      */
-    var buildLayoutInfo = function ($editor) {
-      var makeFinder;
+    varbuildLayoutInfo=function($editor){
+      varmakeFinder;
 
-      // air mode
-      if ($editor.hasClass('note-air-editor')) {
-        // FLECTRA: editor on [data-note-id] attribute
-        // var id = list.last($editor.attr('id').split('-'));
-        var id = list.last($editor.attr('data-note-id').split('-'));
-        makeFinder = function (sIdPrefix) {
-          return function () { return $(sIdPrefix + id); };
+      //airmode
+      if($editor.hasClass('note-air-editor')){
+        //FLECTRA:editoron[data-note-id]attribute
+        //varid=list.last($editor.attr('id').split('-'));
+        varid=list.last($editor.attr('data-note-id').split('-'));
+        makeFinder=function(sIdPrefix){
+          returnfunction(){return$(sIdPrefix+id);};
         };
 
-        return {
-          editor: function () { return $editor; },
-          holder : function () { return $editor.data('holder'); },
-          editable: function () { return $editor; },
-          popover: makeFinder('#note-popover-'),
-          handle: makeFinder('#note-handle-'),
-          dialog: makeFinder('#note-dialog-')
+        return{
+          editor:function(){return$editor;},
+          holder:function(){return$editor.data('holder');},
+          editable:function(){return$editor;},
+          popover:makeFinder('#note-popover-'),
+          handle:makeFinder('#note-handle-'),
+          dialog:makeFinder('#note-dialog-')
         };
 
-        // frame mode
-      } else {
-        makeFinder = function (className, $base) {
-          $base = $base || $editor;
-          return function () { return $base.find(className); };
+        //framemode
+      }else{
+        makeFinder=function(className,$base){
+          $base=$base||$editor;
+          returnfunction(){return$base.find(className);};
         };
 
-        var options = $editor.data('options');
-        var $dialogHolder = (options && options.dialogsInBody) ? $(document.body) : null;
+        varoptions=$editor.data('options');
+        var$dialogHolder=(options&&options.dialogsInBody)?$(document.body):null;
 
-        return {
-          editor: function () { return $editor; },
-          holder : function () { return $editor.data('holder'); },
-          dropzone: makeFinder('.note-dropzone'),
-          toolbar: makeFinder('.note-toolbar'),
-          editable: makeFinder('.note-editable'),
-          codable: makeFinder('.note-codable'),
-          statusbar: makeFinder('.note-statusbar'),
-          popover: makeFinder('.note-popover'),
-          handle: makeFinder('.note-handle'),
-          dialog: makeFinder('.note-dialog', $dialogHolder)
+        return{
+          editor:function(){return$editor;},
+          holder:function(){return$editor.data('holder');},
+          dropzone:makeFinder('.note-dropzone'),
+          toolbar:makeFinder('.note-toolbar'),
+          editable:makeFinder('.note-editable'),
+          codable:makeFinder('.note-codable'),
+          statusbar:makeFinder('.note-statusbar'),
+          popover:makeFinder('.note-popover'),
+          handle:makeFinder('.note-handle'),
+          dialog:makeFinder('.note-dialog',$dialogHolder)
         };
       }
     };
 
     /**
-     * returns makeLayoutInfo from editor's descendant node.
+     *returnsmakeLayoutInfofromeditor'sdescendantnode.
      *
-     * @private
-     * @param {Node} descendant
-     * @return {Object}
+     *@private
+     *@param{Node}descendant
+     *@return{Object}
      */
-    var makeLayoutInfo = function (descendant) {
-      var $target = $(descendant).closest('.note-editor, .note-air-editor, .note-air-layout');
+    varmakeLayoutInfo=function(descendant){
+      var$target=$(descendant).closest('.note-editor,.note-air-editor,.note-air-layout');
 
-      if (!$target.length) {
-        return null;
+      if(!$target.length){
+        returnnull;
       }
 
-      var $editor;
-      if ($target.is('.note-editor, .note-air-editor')) {
-        $editor = $target;
-      } else {
-        // FLECTRA: editor on [data-note-id] attribute
-        // $editor = $('#note-editor-' + list.last($target.attr('id').split('-')));
-        $editor = $('[data-note-id="' + list.last($target.attr('id').split('-')) + '"]');
+      var$editor;
+      if($target.is('.note-editor,.note-air-editor')){
+        $editor=$target;
+      }else{
+        //FLECTRA:editoron[data-note-id]attribute
+        //$editor=$('#note-editor-'+list.last($target.attr('id').split('-')));
+        $editor=$('[data-note-id="'+list.last($target.attr('id').split('-'))+'"]');
       }
 
-      return buildLayoutInfo($editor);
+      returnbuildLayoutInfo($editor);
     };
 
     /**
-     * @method makePredByNodeName
+     *@methodmakePredByNodeName
      *
-     * returns predicate which judge whether nodeName is same
+     *returnspredicatewhichjudgewhethernodeNameissame
      *
-     * @param {String} nodeName
-     * @return {Function}
+     *@param{String}nodeName
+     *@return{Function}
      */
-    var makePredByNodeName = function (nodeName) {
-      nodeName = nodeName.toUpperCase();
-      return function (node) {
-        return node && node.nodeName.toUpperCase() === nodeName;
+    varmakePredByNodeName=function(nodeName){
+      nodeName=nodeName.toUpperCase();
+      returnfunction(node){
+        returnnode&&node.nodeName.toUpperCase()===nodeName;
       };
     };
 
     /**
-     * @method isText
+     *@methodisText
      *
      *
      *
-     * @param {Node} node
-     * @return {Boolean} true if node's type is text(3)
+     *@param{Node}node
+     *@return{Boolean}trueifnode'stypeistext(3)
      */
-    var isText = function (node) {
-      return node && node.nodeType === 3;
+    varisText=function(node){
+      returnnode&&node.nodeType===3;
     };
 
     /**
-     * ex) br, col, embed, hr, img, input, ...
-     * @see http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
+     *ex)br,col,embed,hr,img,input,...
+     *@seehttp://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
      */
-    var isVoid = function (node) {
-      return node && /^BR|^IMG|^HR|^IFRAME|^BUTTON/.test(node.nodeName.toUpperCase());
+    varisVoid=function(node){
+      returnnode&&/^BR|^IMG|^HR|^IFRAME|^BUTTON/.test(node.nodeName.toUpperCase());
     };
 
-    var isPara = function (node) {
-      if (isEditable(node)) {
-        return false;
+    varisPara=function(node){
+      if(isEditable(node)){
+        returnfalse;
       }
 
-      // Chrome(v31.0), FF(v25.0.1) use DIV for paragraph
-      return node && /^DIV|^P|^LI|^H[1-7]/.test(node.nodeName.toUpperCase());
+      //Chrome(v31.0),FF(v25.0.1)useDIVforparagraph
+      returnnode&&/^DIV|^P|^LI|^H[1-7]/.test(node.nodeName.toUpperCase());
     };
 
-    var isLi = makePredByNodeName('LI');
+    varisLi=makePredByNodeName('LI');
 
-    var isPurePara = function (node) {
-      return isPara(node) && !isLi(node);
+    varisPurePara=function(node){
+      returnisPara(node)&&!isLi(node);
     };
 
-    var isTable = makePredByNodeName('TABLE');
+    varisTable=makePredByNodeName('TABLE');
 
-    var isInline = function (node) {
-      return !isBodyContainer(node) &&
-             !isList(node) &&
-             !isHr(node) &&
-             !isPara(node) &&
-             !isTable(node) &&
+    varisInline=function(node){
+      return!isBodyContainer(node)&&
+             !isList(node)&&
+             !isHr(node)&&
+             !isPara(node)&&
+             !isTable(node)&&
              !isBlockquote(node);
     };
 
-    var isList = function (node) {
-      return node && /^UL|^OL/.test(node.nodeName.toUpperCase());
+    varisList=function(node){
+      returnnode&&/^UL|^OL/.test(node.nodeName.toUpperCase());
     };
 
-    var isHr = makePredByNodeName('HR');
+    varisHr=makePredByNodeName('HR');
 
-    var isCell = function (node) {
-      return node && /^TD|^TH/.test(node.nodeName.toUpperCase());
+    varisCell=function(node){
+      returnnode&&/^TD|^TH/.test(node.nodeName.toUpperCase());
     };
 
-    var isBlockquote = makePredByNodeName('BLOCKQUOTE');
+    varisBlockquote=makePredByNodeName('BLOCKQUOTE');
 
-    var isBodyContainer = function (node) {
-      return isCell(node) || isBlockquote(node) || isEditable(node);
+    varisBodyContainer=function(node){
+      returnisCell(node)||isBlockquote(node)||isEditable(node);
     };
 
-    var isAnchor = makePredByNodeName('A');
+    varisAnchor=makePredByNodeName('A');
 
-    var isParaInline = function (node) {
-      return isInline(node) && !!ancestor(node, isPara);
+    varisParaInline=function(node){
+      returnisInline(node)&&!!ancestor(node,isPara);
     };
 
-    var isBodyInline = function (node) {
-      return isInline(node) && !ancestor(node, isPara);
+    varisBodyInline=function(node){
+      returnisInline(node)&&!ancestor(node,isPara);
     };
 
-    var isBody = makePredByNodeName('BODY');
+    varisBody=makePredByNodeName('BODY');
 
     /**
-     * returns whether nodeB is closest sibling of nodeA
+     *returnswhethernodeBisclosestsiblingofnodeA
      *
-     * @param {Node} nodeA
-     * @param {Node} nodeB
-     * @return {Boolean}
+     *@param{Node}nodeA
+     *@param{Node}nodeB
+     *@return{Boolean}
      */
-    var isClosestSibling = function (nodeA, nodeB) {
-      return nodeA.nextSibling === nodeB ||
-             nodeA.previousSibling === nodeB;
+    varisClosestSibling=function(nodeA,nodeB){
+      returnnodeA.nextSibling===nodeB||
+             nodeA.previousSibling===nodeB;
     };
 
     /**
-     * returns array of closest siblings with node
+     *returnsarrayofclosestsiblingswithnode
      *
-     * @param {Node} node
-     * @param {function} [pred] - predicate function
-     * @return {Node[]}
+     *@param{Node}node
+     *@param{function}[pred]-predicatefunction
+     *@return{Node[]}
      */
-    var withClosestSiblings = function (node, pred) {
-      pred = pred || func.ok;
+    varwithClosestSiblings=function(node,pred){
+      pred=pred||func.ok;
 
-      var siblings = [];
-      if (node.previousSibling && pred(node.previousSibling)) {
+      varsiblings=[];
+      if(node.previousSibling&&pred(node.previousSibling)){
         siblings.push(node.previousSibling);
       }
       siblings.push(node);
-      if (node.nextSibling && pred(node.nextSibling)) {
+      if(node.nextSibling&&pred(node.nextSibling)){
         siblings.push(node.nextSibling);
       }
-      return siblings;
+      returnsiblings;
     };
 
     /**
-     * blank HTML for cursor position
-     * - [workaround] old IE only works with &nbsp;
-     * - [workaround] IE11 and other browser works with bogus br
+     *blankHTMLforcursorposition
+     *-[workaround]oldIEonlyworkswith&nbsp;
+     *-[workaround]IE11andotherbrowserworkswithbogusbr
      */
-    var blankHTML = agent.isMSIE && agent.browserVersion < 11 ? '&nbsp;' : '<br>';
+    varblankHTML=agent.isMSIE&&agent.browserVersion<11?'&nbsp;':'<br>';
 
     /**
-     * @method nodeLength
+     *@methodnodeLength
      *
-     * returns #text's text size or element's childNodes size
+     *returns#text'stextsizeorelement'schildNodessize
      *
-     * @param {Node} node
+     *@param{Node}node
      */
-    var nodeLength = function (node) {
-      if (isText(node)) {
-        return node.nodeValue.length;
+    varnodeLength=function(node){
+      if(isText(node)){
+        returnnode.nodeValue.length;
       }
 
-      return node.childNodes.length;
+      returnnode.childNodes.length;
     };
 
     /**
-     * returns whether node is empty or not.
+     *returnswhethernodeisemptyornot.
      *
-     * @param {Node} node
-     * @return {Boolean}
+     *@param{Node}node
+     *@return{Boolean}
      */
-    var isEmpty = function (node) {
-      var len = nodeLength(node);
+    varisEmpty=function(node){
+      varlen=nodeLength(node);
 
-      if (len === 0) {
-        return true;
-      } else if (!isText(node) && len === 1 && node.innerHTML === blankHTML) {
-        // ex) <p><br></p>, <span><br></span>
-        return true;
-      } else if (list.all(node.childNodes, isText) && node.innerHTML === '') {
-        // ex) <p></p>, <span></span>
-        return true;
+      if(len===0){
+        returntrue;
+      }elseif(!isText(node)&&len===1&&node.innerHTML===blankHTML){
+        //ex)<p><br></p>,<span><br></span>
+        returntrue;
+      }elseif(list.all(node.childNodes,isText)&&node.innerHTML===''){
+        //ex)<p></p>,<span></span>
+        returntrue;
       }
 
-      return false;
+      returnfalse;
     };
 
     /**
-     * padding blankHTML if node is empty (for cursor position)
+     *paddingblankHTMLifnodeisempty(forcursorposition)
      */
-    var paddingBlankHTML = function (node) {
-      if (!isVoid(node) && !nodeLength(node)) {
-        node.innerHTML = blankHTML;
+    varpaddingBlankHTML=function(node){
+      if(!isVoid(node)&&!nodeLength(node)){
+        node.innerHTML=blankHTML;
       }
     };
 
     /**
-     * find nearest ancestor predicate hit
+     *findnearestancestorpredicatehit
      *
-     * @param {Node} node
-     * @param {Function} pred - predicate function
+     *@param{Node}node
+     *@param{Function}pred-predicatefunction
      */
-    var ancestor = function (node, pred) {
-      while (node) {
-        if (pred(node)) { return node; }
-        if (isEditable(node)) { break; }
+    varancestor=function(node,pred){
+      while(node){
+        if(pred(node)){returnnode;}
+        if(isEditable(node)){break;}
 
-        node = node.parentNode;
+        node=node.parentNode;
       }
-      return null;
+      returnnull;
     };
 
     /**
-     * find nearest ancestor only single child blood line and predicate hit
+     *findnearestancestoronlysinglechildbloodlineandpredicatehit
      *
-     * @param {Node} node
-     * @param {Function} pred - predicate function
+     *@param{Node}node
+     *@param{Function}pred-predicatefunction
      */
-    var singleChildAncestor = function (node, pred) {
-      node = node.parentNode;
+    varsingleChildAncestor=function(node,pred){
+      node=node.parentNode;
 
-      while (node) {
-        if (nodeLength(node) !== 1) { break; }
-        if (pred(node)) { return node; }
-        if (isEditable(node)) { break; }
+      while(node){
+        if(nodeLength(node)!==1){break;}
+        if(pred(node)){returnnode;}
+        if(isEditable(node)){break;}
 
-        node = node.parentNode;
+        node=node.parentNode;
       }
-      return null;
+      returnnull;
     };
 
     /**
-     * returns new array of ancestor nodes (until predicate hit).
+     *returnsnewarrayofancestornodes(untilpredicatehit).
      *
-     * @param {Node} node
-     * @param {Function} [optional] pred - predicate function
+     *@param{Node}node
+     *@param{Function}[optional]pred-predicatefunction
      */
-    var listAncestor = function (node, pred) {
-      pred = pred || func.fail;
+    varlistAncestor=function(node,pred){
+      pred=pred||func.fail;
 
-      var ancestors = [];
-      ancestor(node, function (el) {
-        if (!isEditable(el)) {
+      varancestors=[];
+      ancestor(node,function(el){
+        if(!isEditable(el)){
           ancestors.push(el);
         }
 
-        return pred(el);
+        returnpred(el);
       });
-      return ancestors;
+      returnancestors;
     };
 
     /**
-     * find farthest ancestor predicate hit
+     *findfarthestancestorpredicatehit
      */
-    var lastAncestor = function (node, pred) {
-      var ancestors = listAncestor(node);
-      return list.last(ancestors.filter(pred));
+    varlastAncestor=function(node,pred){
+      varancestors=listAncestor(node);
+      returnlist.last(ancestors.filter(pred));
     };
 
     /**
-     * returns common ancestor node between two nodes.
+     *returnscommonancestornodebetweentwonodes.
      *
-     * @param {Node} nodeA
-     * @param {Node} nodeB
+     *@param{Node}nodeA
+     *@param{Node}nodeB
      */
-    var commonAncestor = function (nodeA, nodeB) {
-      var ancestors = listAncestor(nodeA);
-      for (var n = nodeB; n; n = n.parentNode) {
-        if ($.inArray(n, ancestors) > -1) { return n; }
+    varcommonAncestor=function(nodeA,nodeB){
+      varancestors=listAncestor(nodeA);
+      for(varn=nodeB;n;n=n.parentNode){
+        if($.inArray(n,ancestors)>-1){returnn;}
       }
-      return null; // difference document area
+      returnnull;//differencedocumentarea
     };
 
     /**
-     * listing all previous siblings (until predicate hit).
+     *listingallprevioussiblings(untilpredicatehit).
      *
-     * @param {Node} node
-     * @param {Function} [optional] pred - predicate function
+     *@param{Node}node
+     *@param{Function}[optional]pred-predicatefunction
      */
-    var listPrev = function (node, pred) {
-      pred = pred || func.fail;
+    varlistPrev=function(node,pred){
+      pred=pred||func.fail;
 
-      var nodes = [];
-      while (node) {
-        if (pred(node)) { break; }
+      varnodes=[];
+      while(node){
+        if(pred(node)){break;}
         nodes.push(node);
-        node = node.previousSibling;
+        node=node.previousSibling;
       }
-      return nodes;
+      returnnodes;
     };
 
     /**
-     * listing next siblings (until predicate hit).
+     *listingnextsiblings(untilpredicatehit).
      *
-     * @param {Node} node
-     * @param {Function} [pred] - predicate function
+     *@param{Node}node
+     *@param{Function}[pred]-predicatefunction
      */
-    var listNext = function (node, pred) {
-      pred = pred || func.fail;
+    varlistNext=function(node,pred){
+      pred=pred||func.fail;
 
-      var nodes = [];
-      while (node) {
-        if (pred(node)) { break; }
+      varnodes=[];
+      while(node){
+        if(pred(node)){break;}
         nodes.push(node);
-        node = node.nextSibling;
+        node=node.nextSibling;
       }
-      return nodes;
+      returnnodes;
     };
 
     /**
-     * listing descendant nodes
+     *listingdescendantnodes
      *
-     * @param {Node} node
-     * @param {Function} [pred] - predicate function
+     *@param{Node}node
+     *@param{Function}[pred]-predicatefunction
      */
-    var listDescendant = function (node, pred) {
-      var descendents = [];
-      pred = pred || func.ok;
+    varlistDescendant=function(node,pred){
+      vardescendents=[];
+      pred=pred||func.ok;
 
-      // start DFS(depth first search) with node
-      (function fnWalk(current) {
-        if (node !== current && pred(current)) {
+      //startDFS(depthfirstsearch)withnode
+      (functionfnWalk(current){
+        if(node!==current&&pred(current)){
           descendents.push(current);
         }
-        for (var idx = 0, len = current.childNodes.length; idx < len; idx++) {
+        for(varidx=0,len=current.childNodes.length;idx<len;idx++){
           fnWalk(current.childNodes[idx]);
         }
       })(node);
 
-      return descendents;
+      returndescendents;
     };
 
     /**
-     * wrap node with new tag.
+     *wrapnodewithnewtag.
      *
-     * @param {Node} node
-     * @param {Node} tagName of wrapper
-     * @return {Node} - wrapper
+     *@param{Node}node
+     *@param{Node}tagNameofwrapper
+     *@return{Node}-wrapper
      */
-    var wrap = function (node, wrapperName) {
-      var parent = node.parentNode;
-      var wrapper = $('<' + wrapperName + '>')[0];
+    varwrap=function(node,wrapperName){
+      varparent=node.parentNode;
+      varwrapper=$('<'+wrapperName+'>')[0];
 
-      parent.insertBefore(wrapper, node);
+      parent.insertBefore(wrapper,node);
       wrapper.appendChild(node);
 
-      return wrapper;
+      returnwrapper;
     };
 
     /**
-     * insert node after preceding
+     *insertnodeafterpreceding
      *
-     * @param {Node} node
-     * @param {Node} preceding - predicate function
+     *@param{Node}node
+     *@param{Node}preceding-predicatefunction
      */
-    var insertAfter = function (node, preceding) {
-      var next = preceding.nextSibling, parent = preceding.parentNode;
-      if (next) {
-        parent.insertBefore(node, next);
-      } else {
+    varinsertAfter=function(node,preceding){
+      varnext=preceding.nextSibling,parent=preceding.parentNode;
+      if(next){
+        parent.insertBefore(node,next);
+      }else{
         parent.appendChild(node);
       }
-      return node;
+      returnnode;
     };
 
     /**
-     * append elements.
+     *appendelements.
      *
-     * @param {Node} node
-     * @param {Collection} aChild
+     *@param{Node}node
+     *@param{Collection}aChild
      */
-    var appendChildNodes = function (node, aChild) {
-      $.each(aChild, function (idx, child) {
+    varappendChildNodes=function(node,aChild){
+      $.each(aChild,function(idx,child){
         node.appendChild(child);
       });
-      return node;
+      returnnode;
     };
 
     /**
-     * returns whether boundaryPoint is left edge or not.
+     *returnswhetherboundaryPointisleftedgeornot.
      *
-     * @param {BoundaryPoint} point
-     * @return {Boolean}
+     *@param{BoundaryPoint}point
+     *@return{Boolean}
      */
-    var isLeftEdgePoint = function (point) {
-      return point.offset === 0;
+    varisLeftEdgePoint=function(point){
+      returnpoint.offset===0;
     };
 
     /**
-     * returns whether boundaryPoint is right edge or not.
+     *returnswhetherboundaryPointisrightedgeornot.
      *
-     * @param {BoundaryPoint} point
-     * @return {Boolean}
+     *@param{BoundaryPoint}point
+     *@return{Boolean}
      */
-    var isRightEdgePoint = function (point) {
-      return point.offset === nodeLength(point.node);
+    varisRightEdgePoint=function(point){
+      returnpoint.offset===nodeLength(point.node);
     };
 
     /**
-     * returns whether boundaryPoint is edge or not.
+     *returnswhetherboundaryPointisedgeornot.
      *
-     * @param {BoundaryPoint} point
-     * @return {Boolean}
+     *@param{BoundaryPoint}point
+     *@return{Boolean}
      */
-    var isEdgePoint = function (point) {
-      return isLeftEdgePoint(point) || isRightEdgePoint(point);
+    varisEdgePoint=function(point){
+      returnisLeftEdgePoint(point)||isRightEdgePoint(point);
     };
 
     /**
-     * returns wheter node is left edge of ancestor or not.
+     *returnswheternodeisleftedgeofancestorornot.
      *
-     * @param {Node} node
-     * @param {Node} ancestor
-     * @return {Boolean}
+     *@param{Node}node
+     *@param{Node}ancestor
+     *@return{Boolean}
      */
-    var isLeftEdgeOf = function (node, ancestor) {
-      while (node && node !== ancestor) {
-        if (position(node) !== 0) {
-          return false;
+    varisLeftEdgeOf=function(node,ancestor){
+      while(node&&node!==ancestor){
+        if(position(node)!==0){
+          returnfalse;
         }
-        node = node.parentNode;
+        node=node.parentNode;
       }
 
-      return true;
+      returntrue;
     };
 
     /**
-     * returns whether node is right edge of ancestor or not.
+     *returnswhethernodeisrightedgeofancestorornot.
      *
-     * @param {Node} node
-     * @param {Node} ancestor
-     * @return {Boolean}
+     *@param{Node}node
+     *@param{Node}ancestor
+     *@return{Boolean}
      */
-    var isRightEdgeOf = function (node, ancestor) {
-      while (node && node !== ancestor) {
-        if (position(node) !== nodeLength(node.parentNode) - 1) {
-          return false;
+    varisRightEdgeOf=function(node,ancestor){
+      while(node&&node!==ancestor){
+        if(position(node)!==nodeLength(node.parentNode)-1){
+          returnfalse;
         }
-        node = node.parentNode;
+        node=node.parentNode;
       }
 
-      return true;
+      returntrue;
     };
 
     /**
-     * returns whether point is left edge of ancestor or not.
-     * @param {BoundaryPoint} point
-     * @param {Node} ancestor
-     * @return {Boolean}
+     *returnswhetherpointisleftedgeofancestorornot.
+     *@param{BoundaryPoint}point
+     *@param{Node}ancestor
+     *@return{Boolean}
      */
-    var isLeftEdgePointOf = function (point, ancestor) {
-      return isLeftEdgePoint(point) && isLeftEdgeOf(point.node, ancestor);
+    varisLeftEdgePointOf=function(point,ancestor){
+      returnisLeftEdgePoint(point)&&isLeftEdgeOf(point.node,ancestor);
     };
 
     /**
-     * returns whether point is right edge of ancestor or not.
-     * @param {BoundaryPoint} point
-     * @param {Node} ancestor
-     * @return {Boolean}
+     *returnswhetherpointisrightedgeofancestorornot.
+     *@param{BoundaryPoint}point
+     *@param{Node}ancestor
+     *@return{Boolean}
      */
-    var isRightEdgePointOf = function (point, ancestor) {
-      return isRightEdgePoint(point) && isRightEdgeOf(point.node, ancestor);
+    varisRightEdgePointOf=function(point,ancestor){
+      returnisRightEdgePoint(point)&&isRightEdgeOf(point.node,ancestor);
     };
 
     /**
-     * returns offset from parent.
+     *returnsoffsetfromparent.
      *
-     * @param {Node} node
+     *@param{Node}node
      */
-    var position = function (node) {
-      var offset = 0;
-      while ((node = node.previousSibling)) {
-        offset += 1;
+    varposition=function(node){
+      varoffset=0;
+      while((node=node.previousSibling)){
+        offset+=1;
       }
-      return offset;
+      returnoffset;
     };
 
-    var hasChildren = function (node) {
-      return !!(node && node.childNodes && node.childNodes.length);
+    varhasChildren=function(node){
+      return!!(node&&node.childNodes&&node.childNodes.length);
     };
 
     /**
-     * returns previous boundaryPoint
+     *returnspreviousboundaryPoint
      *
-     * @param {BoundaryPoint} point
-     * @param {Boolean} isSkipInnerOffset
-     * @return {BoundaryPoint}
+     *@param{BoundaryPoint}point
+     *@param{Boolean}isSkipInnerOffset
+     *@return{BoundaryPoint}
      */
-    var prevPoint = function (point, isSkipInnerOffset) {
-      var node, offset;
+    varprevPoint=function(point,isSkipInnerOffset){
+      varnode,offset;
 
-      if (point.offset === 0) {
-        if (isEditable(point.node)) {
-          return null;
+      if(point.offset===0){
+        if(isEditable(point.node)){
+          returnnull;
         }
 
-        node = point.node.parentNode;
-        offset = position(point.node);
-      } else if (hasChildren(point.node)) {
-        node = point.node.childNodes[point.offset - 1];
-        offset = nodeLength(node);
-      } else {
-        node = point.node;
-        offset = isSkipInnerOffset ? 0 : point.offset - 1;
+        node=point.node.parentNode;
+        offset=position(point.node);
+      }elseif(hasChildren(point.node)){
+        node=point.node.childNodes[point.offset-1];
+        offset=nodeLength(node);
+      }else{
+        node=point.node;
+        offset=isSkipInnerOffset?0:point.offset-1;
       }
 
-      return {
-        node: node,
-        offset: offset
+      return{
+        node:node,
+        offset:offset
       };
     };
 
     /**
-     * returns next boundaryPoint
+     *returnsnextboundaryPoint
      *
-     * @param {BoundaryPoint} point
-     * @param {Boolean} isSkipInnerOffset
-     * @return {BoundaryPoint}
+     *@param{BoundaryPoint}point
+     *@param{Boolean}isSkipInnerOffset
+     *@return{BoundaryPoint}
      */
-    var nextPoint = function (point, isSkipInnerOffset) {
-      var node, offset;
+    varnextPoint=function(point,isSkipInnerOffset){
+      varnode,offset;
 
-      if (nodeLength(point.node) === point.offset) {
-        if (isEditable(point.node)) {
-          return null;
+      if(nodeLength(point.node)===point.offset){
+        if(isEditable(point.node)){
+          returnnull;
         }
 
-        node = point.node.parentNode;
-        offset = position(point.node) + 1;
-      } else if (hasChildren(point.node)) {
-        node = point.node.childNodes[point.offset];
-        offset = 0;
-      } else {
-        node = point.node;
-        offset = isSkipInnerOffset ? nodeLength(point.node) : point.offset + 1;
+        node=point.node.parentNode;
+        offset=position(point.node)+1;
+      }elseif(hasChildren(point.node)){
+        node=point.node.childNodes[point.offset];
+        offset=0;
+      }else{
+        node=point.node;
+        offset=isSkipInnerOffset?nodeLength(point.node):point.offset+1;
       }
 
-      return {
-        node: node,
-        offset: offset
+      return{
+        node:node,
+        offset:offset
       };
     };
 
     /**
-     * returns whether pointA and pointB is same or not.
+     *returnswhetherpointAandpointBissameornot.
      *
-     * @param {BoundaryPoint} pointA
-     * @param {BoundaryPoint} pointB
-     * @return {Boolean}
+     *@param{BoundaryPoint}pointA
+     *@param{BoundaryPoint}pointB
+     *@return{Boolean}
      */
-    var isSamePoint = function (pointA, pointB) {
-      return pointA.node === pointB.node && pointA.offset === pointB.offset;
+    varisSamePoint=function(pointA,pointB){
+      returnpointA.node===pointB.node&&pointA.offset===pointB.offset;
     };
 
     /**
-     * returns whether point is visible (can set cursor) or not.
-     * 
-     * @param {BoundaryPoint} point
-     * @return {Boolean}
+     *returnswhetherpointisvisible(cansetcursor)ornot.
+     *
+     *@param{BoundaryPoint}point
+     *@return{Boolean}
      */
-    var isVisiblePoint = function (point) {
-      if (isText(point.node) || !hasChildren(point.node) || isEmpty(point.node)) {
-        return true;
+    varisVisiblePoint=function(point){
+      if(isText(point.node)||!hasChildren(point.node)||isEmpty(point.node)){
+        returntrue;
       }
 
-      var leftNode = point.node.childNodes[point.offset - 1];
-      var rightNode = point.node.childNodes[point.offset];
-      if ((!leftNode || isVoid(leftNode)) && (!rightNode || isVoid(rightNode))) {
-        return true;
+      varleftNode=point.node.childNodes[point.offset-1];
+      varrightNode=point.node.childNodes[point.offset];
+      if((!leftNode||isVoid(leftNode))&&(!rightNode||isVoid(rightNode))){
+        returntrue;
       }
 
-      return false;
+      returnfalse;
     };
 
     /**
-     * @method prevPointUtil
+     *@methodprevPointUtil
      *
-     * @param {BoundaryPoint} point
-     * @param {Function} pred
-     * @return {BoundaryPoint}
+     *@param{BoundaryPoint}point
+     *@param{Function}pred
+     *@return{BoundaryPoint}
      */
-    var prevPointUntil = function (point, pred) {
-      while (point) {
-        if (pred(point)) {
-          return point;
+    varprevPointUntil=function(point,pred){
+      while(point){
+        if(pred(point)){
+          returnpoint;
         }
 
-        point = prevPoint(point);
+        point=prevPoint(point);
       }
 
-      return null;
+      returnnull;
     };
 
     /**
-     * @method nextPointUntil
+     *@methodnextPointUntil
      *
-     * @param {BoundaryPoint} point
-     * @param {Function} pred
-     * @return {BoundaryPoint}
+     *@param{BoundaryPoint}point
+     *@param{Function}pred
+     *@return{BoundaryPoint}
      */
-    var nextPointUntil = function (point, pred) {
-      while (point) {
-        if (pred(point)) {
-          return point;
+    varnextPointUntil=function(point,pred){
+      while(point){
+        if(pred(point)){
+          returnpoint;
         }
 
-        point = nextPoint(point);
+        point=nextPoint(point);
       }
 
-      return null;
+      returnnull;
     };
 
     /**
-     * returns whether point has character or not.
+     *returnswhetherpointhascharacterornot.
      *
-     * @param {Point} point
-     * @return {Boolean}
+     *@param{Point}point
+     *@return{Boolean}
      */
-    var isCharPoint = function (point) {
-      if (!isText(point.node)) {
-        return false;
+    varisCharPoint=function(point){
+      if(!isText(point.node)){
+        returnfalse;
       }
 
-      var ch = point.node.nodeValue.charAt(point.offset - 1);
-      return ch && (ch !== ' ' && ch !== NBSP_CHAR);
+      varch=point.node.nodeValue.charAt(point.offset-1);
+      returnch&&(ch!==''&&ch!==NBSP_CHAR);
     };
 
     /**
-     * @method walkPoint
+     *@methodwalkPoint
      *
-     * @param {BoundaryPoint} startPoint
-     * @param {BoundaryPoint} endPoint
-     * @param {Function} handler
-     * @param {Boolean} isSkipInnerOffset
+     *@param{BoundaryPoint}startPoint
+     *@param{BoundaryPoint}endPoint
+     *@param{Function}handler
+     *@param{Boolean}isSkipInnerOffset
      */
-    var walkPoint = function (startPoint, endPoint, handler, isSkipInnerOffset) {
-      var point = startPoint;
+    varwalkPoint=function(startPoint,endPoint,handler,isSkipInnerOffset){
+      varpoint=startPoint;
 
-      while (point) {
+      while(point){
         handler(point);
 
-        if (isSamePoint(point, endPoint)) {
+        if(isSamePoint(point,endPoint)){
           break;
         }
 
-        var isSkipOffset = isSkipInnerOffset &&
-                           startPoint.node !== point.node &&
-                           endPoint.node !== point.node;
-        point = nextPoint(point, isSkipOffset);
+        varisSkipOffset=isSkipInnerOffset&&
+                           startPoint.node!==point.node&&
+                           endPoint.node!==point.node;
+        point=nextPoint(point,isSkipOffset);
       }
     };
 
     /**
-     * @method makeOffsetPath
+     *@methodmakeOffsetPath
      *
-     * return offsetPath(array of offset) from ancestor
+     *returnoffsetPath(arrayofoffset)fromancestor
      *
-     * @param {Node} ancestor - ancestor node
-     * @param {Node} node
+     *@param{Node}ancestor-ancestornode
+     *@param{Node}node
      */
-    var makeOffsetPath = function (ancestor, node) {
-      var ancestors = listAncestor(node, func.eq(ancestor));
-      return ancestors.map(position).reverse();
+    varmakeOffsetPath=function(ancestor,node){
+      varancestors=listAncestor(node,func.eq(ancestor));
+      returnancestors.map(position).reverse();
     };
 
     /**
-     * @method fromOffsetPath
+     *@methodfromOffsetPath
      *
-     * return element from offsetPath(array of offset)
+     *returnelementfromoffsetPath(arrayofoffset)
      *
-     * @param {Node} ancestor - ancestor node
-     * @param {array} offsets - offsetPath
+     *@param{Node}ancestor-ancestornode
+     *@param{array}offsets-offsetPath
      */
-    var fromOffsetPath = function (ancestor, offsets) {
-      var current = ancestor;
-      for (var i = 0, len = offsets.length; i < len; i++) {
-        if (current.childNodes.length <= offsets[i]) {
-          current = current.childNodes[current.childNodes.length - 1];
-        } else {
-          current = current.childNodes[offsets[i]];
+    varfromOffsetPath=function(ancestor,offsets){
+      varcurrent=ancestor;
+      for(vari=0,len=offsets.length;i<len;i++){
+        if(current.childNodes.length<=offsets[i]){
+          current=current.childNodes[current.childNodes.length-1];
+        }else{
+          current=current.childNodes[offsets[i]];
         }
       }
-      return current;
+      returncurrent;
     };
 
     /**
-     * @method splitNode
+     *@methodsplitNode
      *
-     * split element or #text
+     *splitelementor#text
      *
-     * @param {BoundaryPoint} point
-     * @param {Object} [options]
-     * @param {Boolean} [options.isSkipPaddingBlankHTML] - default: false
-     * @param {Boolean} [options.isNotSplitEdgePoint] - default: false
-     * @return {Node} right node of boundaryPoint
+     *@param{BoundaryPoint}point
+     *@param{Object}[options]
+     *@param{Boolean}[options.isSkipPaddingBlankHTML]-default:false
+     *@param{Boolean}[options.isNotSplitEdgePoint]-default:false
+     *@return{Node}rightnodeofboundaryPoint
      */
-    var splitNode = function (point, options) {
-      var isSkipPaddingBlankHTML = options && options.isSkipPaddingBlankHTML;
-      var isNotSplitEdgePoint = options && options.isNotSplitEdgePoint;
+    varsplitNode=function(point,options){
+      varisSkipPaddingBlankHTML=options&&options.isSkipPaddingBlankHTML;
+      varisNotSplitEdgePoint=options&&options.isNotSplitEdgePoint;
 
-      // edge case
-      if (isEdgePoint(point) && (isText(point.node) || isNotSplitEdgePoint)) {
-        if (isLeftEdgePoint(point)) {
-          return point.node;
-        } else if (isRightEdgePoint(point)) {
-          return point.node.nextSibling;
+      //edgecase
+      if(isEdgePoint(point)&&(isText(point.node)||isNotSplitEdgePoint)){
+        if(isLeftEdgePoint(point)){
+          returnpoint.node;
+        }elseif(isRightEdgePoint(point)){
+          returnpoint.node.nextSibling;
         }
       }
 
-      // split #text
-      if (isText(point.node)) {
-        return point.node.splitText(point.offset);
-      } else {
-        var childNode = point.node.childNodes[point.offset];
-        var clone = insertAfter(point.node.cloneNode(false), point.node);
-        appendChildNodes(clone, listNext(childNode));
+      //split#text
+      if(isText(point.node)){
+        returnpoint.node.splitText(point.offset);
+      }else{
+        varchildNode=point.node.childNodes[point.offset];
+        varclone=insertAfter(point.node.cloneNode(false),point.node);
+        appendChildNodes(clone,listNext(childNode));
 
-        if (!isSkipPaddingBlankHTML) {
+        if(!isSkipPaddingBlankHTML){
           paddingBlankHTML(point.node);
           paddingBlankHTML(clone);
         }
 
-        return clone;
+        returnclone;
       }
     };
 
     /**
-     * @method splitTree
+     *@methodsplitTree
      *
-     * split tree by point
+     *splittreebypoint
      *
-     * @param {Node} root - split root
-     * @param {BoundaryPoint} point
-     * @param {Object} [options]
-     * @param {Boolean} [options.isSkipPaddingBlankHTML] - default: false
-     * @param {Boolean} [options.isNotSplitEdgePoint] - default: false
-     * @return {Node} right node of boundaryPoint
+     *@param{Node}root-splitroot
+     *@param{BoundaryPoint}point
+     *@param{Object}[options]
+     *@param{Boolean}[options.isSkipPaddingBlankHTML]-default:false
+     *@param{Boolean}[options.isNotSplitEdgePoint]-default:false
+     *@return{Node}rightnodeofboundaryPoint
      */
-    var splitTree = function (root, point, options) {
-      // ex) [#text, <span>, <p>]
-      var ancestors = listAncestor(point.node, func.eq(root));
+    varsplitTree=function(root,point,options){
+      //ex)[#text,<span>,<p>]
+      varancestors=listAncestor(point.node,func.eq(root));
 
-      if (!ancestors.length) {
-        return null;
-      } else if (ancestors.length === 1) {
-        return splitNode(point, options);
+      if(!ancestors.length){
+        returnnull;
+      }elseif(ancestors.length===1){
+        returnsplitNode(point,options);
       }
 
-      return ancestors.reduce(function (node, parent) {
-        if (node === point.node) {
-          node = splitNode(point, options);
+      returnancestors.reduce(function(node,parent){
+        if(node===point.node){
+          node=splitNode(point,options);
         }
 
-        return splitNode({
-          node: parent,
-          offset: node ? dom.position(node) : nodeLength(parent)
-        }, options);
+        returnsplitNode({
+          node:parent,
+          offset:node?dom.position(node):nodeLength(parent)
+        },options);
       });
     };
 
     /**
-     * split point
+     *splitpoint
      *
-     * @param {Point} point
-     * @param {Boolean} isInline
-     * @return {Object}
+     *@param{Point}point
+     *@param{Boolean}isInline
+     *@return{Object}
      */
-    var splitPoint = function (point, isInline) {
-      // find splitRoot, container
-      //  - inline: splitRoot is a child of paragraph
-      //  - block: splitRoot is a child of bodyContainer
-      var pred = isInline ? isPara : isBodyContainer;
-      var ancestors = listAncestor(point.node, pred);
-      var topAncestor = list.last(ancestors) || point.node;
+    varsplitPoint=function(point,isInline){
+      //findsplitRoot,container
+      // -inline:splitRootisachildofparagraph
+      // -block:splitRootisachildofbodyContainer
+      varpred=isInline?isPara:isBodyContainer;
+      varancestors=listAncestor(point.node,pred);
+      vartopAncestor=list.last(ancestors)||point.node;
 
-      var splitRoot, container;
-      if (pred(topAncestor)) {
-        splitRoot = ancestors[ancestors.length - 2];
-        container = topAncestor;
-      } else {
-        splitRoot = topAncestor;
-        container = splitRoot.parentNode;
+      varsplitRoot,container;
+      if(pred(topAncestor)){
+        splitRoot=ancestors[ancestors.length-2];
+        container=topAncestor;
+      }else{
+        splitRoot=topAncestor;
+        container=splitRoot.parentNode;
       }
 
-      // if splitRoot is exists, split with splitTree
-      var pivot = splitRoot && splitTree(splitRoot, point, {
-        isSkipPaddingBlankHTML: isInline,
-        isNotSplitEdgePoint: isInline
+      //ifsplitRootisexists,splitwithsplitTree
+      varpivot=splitRoot&&splitTree(splitRoot,point,{
+        isSkipPaddingBlankHTML:isInline,
+        isNotSplitEdgePoint:isInline
       });
 
-      // if container is point.node, find pivot with point.offset
-      if (!pivot && container === point.node) {
-        pivot = point.node.childNodes[point.offset];
+      //ifcontainerispoint.node,findpivotwithpoint.offset
+      if(!pivot&&container===point.node){
+        pivot=point.node.childNodes[point.offset];
       }
 
-      return {
-        rightNode: pivot,
-        container: container
+      return{
+        rightNode:pivot,
+        container:container
       };
     };
 
-    var create = function (nodeName) {
-      return document.createElement(nodeName);
+    varcreate=function(nodeName){
+      returndocument.createElement(nodeName);
     };
 
-    var createText = function (text) {
-      return document.createTextNode(text);
+    varcreateText=function(text){
+      returndocument.createTextNode(text);
     };
 
     /**
-     * @method remove
+     *@methodremove
      *
-     * remove node, (isRemoveChild: remove child or not)
+     *removenode,(isRemoveChild:removechildornot)
      *
-     * @param {Node} node
-     * @param {Boolean} isRemoveChild
+     *@param{Node}node
+     *@param{Boolean}isRemoveChild
      */
-    var remove = function (node, isRemoveChild) {
-      if (!node || !node.parentNode) { return; }
-      if (node.removeNode) { return node.removeNode(isRemoveChild); }
+    varremove=function(node,isRemoveChild){
+      if(!node||!node.parentNode){return;}
+      if(node.removeNode){returnnode.removeNode(isRemoveChild);}
 
-      var parent = node.parentNode;
-      if (!isRemoveChild) {
-        var nodes = [];
-        var i, len;
-        for (i = 0, len = node.childNodes.length; i < len; i++) {
+      varparent=node.parentNode;
+      if(!isRemoveChild){
+        varnodes=[];
+        vari,len;
+        for(i=0,len=node.childNodes.length;i<len;i++){
           nodes.push(node.childNodes[i]);
         }
 
-        for (i = 0, len = nodes.length; i < len; i++) {
-          parent.insertBefore(nodes[i], node);
+        for(i=0,len=nodes.length;i<len;i++){
+          parent.insertBefore(nodes[i],node);
         }
       }
 
@@ -945,176 +945,176 @@ define([
     };
 
     /**
-     * @method removeWhile
+     *@methodremoveWhile
      *
-     * @param {Node} node
-     * @param {Function} pred
+     *@param{Node}node
+     *@param{Function}pred
      */
-    var removeWhile = function (node, pred) {
-      while (node) {
-        if (isEditable(node) || !pred(node)) {
+    varremoveWhile=function(node,pred){
+      while(node){
+        if(isEditable(node)||!pred(node)){
           break;
         }
 
-        var parent = node.parentNode;
+        varparent=node.parentNode;
         remove(node);
-        node = parent;
+        node=parent;
       }
     };
 
     /**
-     * @method replace
+     *@methodreplace
      *
-     * replace node with provided nodeName
+     *replacenodewithprovidednodeName
      *
-     * @param {Node} node
-     * @param {String} nodeName
-     * @return {Node} - new node
+     *@param{Node}node
+     *@param{String}nodeName
+     *@return{Node}-newnode
      */
-    var replace = function (node, nodeName) {
-      if (node.nodeName.toUpperCase() === nodeName.toUpperCase()) {
-        return node;
+    varreplace=function(node,nodeName){
+      if(node.nodeName.toUpperCase()===nodeName.toUpperCase()){
+        returnnode;
       }
 
-      var newNode = create(nodeName);
+      varnewNode=create(nodeName);
 
-      if (node.style.cssText) {
-        newNode.style.cssText = node.style.cssText;
+      if(node.style.cssText){
+        newNode.style.cssText=node.style.cssText;
       }
 
-      appendChildNodes(newNode, list.from(node.childNodes));
-      insertAfter(newNode, node);
+      appendChildNodes(newNode,list.from(node.childNodes));
+      insertAfter(newNode,node);
       remove(node);
 
-      return newNode;
+      returnnewNode;
     };
 
-    var isTextarea = makePredByNodeName('TEXTAREA');
+    varisTextarea=makePredByNodeName('TEXTAREA');
 
     /**
-     * @param {jQuery} $node
-     * @param {Boolean} [stripLinebreaks] - default: false
+     *@param{jQuery}$node
+     *@param{Boolean}[stripLinebreaks]-default:false
      */
-    var value = function ($node, stripLinebreaks) {
-      var val = isTextarea($node[0]) ? $node.val() : $node.html();
-      if (stripLinebreaks) {
-        return val.replace(/[\n\r]/g, '');
+    varvalue=function($node,stripLinebreaks){
+      varval=isTextarea($node[0])?$node.val():$node.html();
+      if(stripLinebreaks){
+        returnval.replace(/[\n\r]/g,'');
       }
-      return val;
+      returnval;
     };
 
     /**
-     * @method html
+     *@methodhtml
      *
-     * get the HTML contents of node
+     *gettheHTMLcontentsofnode
      *
-     * @param {jQuery} $node
-     * @param {Boolean} [isNewlineOnBlock]
+     *@param{jQuery}$node
+     *@param{Boolean}[isNewlineOnBlock]
      */
-    var html = function ($node, isNewlineOnBlock) {
-      var markup = value($node);
+    varhtml=function($node,isNewlineOnBlock){
+      varmarkup=value($node);
 
-      if (isNewlineOnBlock) {
-        var regexTag = /<(\/?)(\b(?!!)[^>\s]*)(.*?)(\s*\/?>)/g;
-        markup = markup.replace(regexTag, function (match, endSlash, name) {
-          name = name.toUpperCase();
-          var isEndOfInlineContainer = /^DIV|^TD|^TH|^P|^LI|^H[1-7]/.test(name) &&
+      if(isNewlineOnBlock){
+        varregexTag=/<(\/?)(\b(?!!)[^>\s]*)(.*?)(\s*\/?>)/g;
+        markup=markup.replace(regexTag,function(match,endSlash,name){
+          name=name.toUpperCase();
+          varisEndOfInlineContainer=/^DIV|^TD|^TH|^P|^LI|^H[1-7]/.test(name)&&
                                        !!endSlash;
-          var isBlockNode = /^BLOCKQUOTE|^TABLE|^TBODY|^TR|^HR|^UL|^OL/.test(name);
+          varisBlockNode=/^BLOCKQUOTE|^TABLE|^TBODY|^TR|^HR|^UL|^OL/.test(name);
 
-          return match + ((isEndOfInlineContainer || isBlockNode) ? '\n' : '');
+          returnmatch+((isEndOfInlineContainer||isBlockNode)?'\n':'');
         });
-        markup = $.trim(markup);
+        markup=$.trim(markup);
       }
 
-      return markup;
+      returnmarkup;
     };
 
-    return {
-      /** @property {String} NBSP_CHAR */
-      NBSP_CHAR: NBSP_CHAR,
-      /** @property {String} ZERO_WIDTH_NBSP_CHAR */
-      ZERO_WIDTH_NBSP_CHAR: ZERO_WIDTH_NBSP_CHAR,
-      /** @property {String} blank */
-      blank: blankHTML,
-      /** @property {String} emptyPara */
-      emptyPara: '<p>' + blankHTML + '</p>',
-      makePredByNodeName: makePredByNodeName,
-      isEditable: isEditable,
-      isControlSizing: isControlSizing,
-      buildLayoutInfo: buildLayoutInfo,
-      makeLayoutInfo: makeLayoutInfo,
-      isText: isText,
-      isVoid: isVoid,
-      isPara: isPara,
-      isPurePara: isPurePara,
-      isInline: isInline,
-      isBlock: func.not(isInline),
-      isBodyInline: isBodyInline,
-      isBody: isBody,
-      isParaInline: isParaInline,
-      isList: isList,
-      isTable: isTable,
-      isCell: isCell,
-      isBlockquote: isBlockquote,
-      isBodyContainer: isBodyContainer,
-      isAnchor: isAnchor,
-      isDiv: makePredByNodeName('DIV'),
-      isLi: isLi,
-      isBR: makePredByNodeName('BR'),
-      isSpan: makePredByNodeName('SPAN'),
-      isB: makePredByNodeName('B'),
-      isU: makePredByNodeName('U'),
-      isS: makePredByNodeName('S'),
-      isI: makePredByNodeName('I'),
-      isImg: makePredByNodeName('IMG'),
-      isTextarea: isTextarea,
-      isEmpty: isEmpty,
-      isEmptyAnchor: func.and(isAnchor, isEmpty),
-      isClosestSibling: isClosestSibling,
-      withClosestSiblings: withClosestSiblings,
-      nodeLength: nodeLength,
-      isLeftEdgePoint: isLeftEdgePoint,
-      isRightEdgePoint: isRightEdgePoint,
-      isEdgePoint: isEdgePoint,
-      isLeftEdgeOf: isLeftEdgeOf,
-      isRightEdgeOf: isRightEdgeOf,
-      isLeftEdgePointOf: isLeftEdgePointOf,
-      isRightEdgePointOf: isRightEdgePointOf,
-      prevPoint: prevPoint,
-      nextPoint: nextPoint,
-      isSamePoint: isSamePoint,
-      isVisiblePoint: isVisiblePoint,
-      prevPointUntil: prevPointUntil,
-      nextPointUntil: nextPointUntil,
-      isCharPoint: isCharPoint,
-      walkPoint: walkPoint,
-      ancestor: ancestor,
-      singleChildAncestor: singleChildAncestor,
-      listAncestor: listAncestor,
-      lastAncestor: lastAncestor,
-      listNext: listNext,
-      listPrev: listPrev,
-      listDescendant: listDescendant,
-      commonAncestor: commonAncestor,
-      wrap: wrap,
-      insertAfter: insertAfter,
-      appendChildNodes: appendChildNodes,
-      position: position,
-      hasChildren: hasChildren,
-      makeOffsetPath: makeOffsetPath,
-      fromOffsetPath: fromOffsetPath,
-      splitTree: splitTree,
-      splitPoint: splitPoint,
-      create: create,
-      createText: createText,
-      remove: remove,
-      removeWhile: removeWhile,
-      replace: replace,
-      html: html,
-      value: value
+    return{
+      /**@property{String}NBSP_CHAR*/
+      NBSP_CHAR:NBSP_CHAR,
+      /**@property{String}ZERO_WIDTH_NBSP_CHAR*/
+      ZERO_WIDTH_NBSP_CHAR:ZERO_WIDTH_NBSP_CHAR,
+      /**@property{String}blank*/
+      blank:blankHTML,
+      /**@property{String}emptyPara*/
+      emptyPara:'<p>'+blankHTML+'</p>',
+      makePredByNodeName:makePredByNodeName,
+      isEditable:isEditable,
+      isControlSizing:isControlSizing,
+      buildLayoutInfo:buildLayoutInfo,
+      makeLayoutInfo:makeLayoutInfo,
+      isText:isText,
+      isVoid:isVoid,
+      isPara:isPara,
+      isPurePara:isPurePara,
+      isInline:isInline,
+      isBlock:func.not(isInline),
+      isBodyInline:isBodyInline,
+      isBody:isBody,
+      isParaInline:isParaInline,
+      isList:isList,
+      isTable:isTable,
+      isCell:isCell,
+      isBlockquote:isBlockquote,
+      isBodyContainer:isBodyContainer,
+      isAnchor:isAnchor,
+      isDiv:makePredByNodeName('DIV'),
+      isLi:isLi,
+      isBR:makePredByNodeName('BR'),
+      isSpan:makePredByNodeName('SPAN'),
+      isB:makePredByNodeName('B'),
+      isU:makePredByNodeName('U'),
+      isS:makePredByNodeName('S'),
+      isI:makePredByNodeName('I'),
+      isImg:makePredByNodeName('IMG'),
+      isTextarea:isTextarea,
+      isEmpty:isEmpty,
+      isEmptyAnchor:func.and(isAnchor,isEmpty),
+      isClosestSibling:isClosestSibling,
+      withClosestSiblings:withClosestSiblings,
+      nodeLength:nodeLength,
+      isLeftEdgePoint:isLeftEdgePoint,
+      isRightEdgePoint:isRightEdgePoint,
+      isEdgePoint:isEdgePoint,
+      isLeftEdgeOf:isLeftEdgeOf,
+      isRightEdgeOf:isRightEdgeOf,
+      isLeftEdgePointOf:isLeftEdgePointOf,
+      isRightEdgePointOf:isRightEdgePointOf,
+      prevPoint:prevPoint,
+      nextPoint:nextPoint,
+      isSamePoint:isSamePoint,
+      isVisiblePoint:isVisiblePoint,
+      prevPointUntil:prevPointUntil,
+      nextPointUntil:nextPointUntil,
+      isCharPoint:isCharPoint,
+      walkPoint:walkPoint,
+      ancestor:ancestor,
+      singleChildAncestor:singleChildAncestor,
+      listAncestor:listAncestor,
+      lastAncestor:lastAncestor,
+      listNext:listNext,
+      listPrev:listPrev,
+      listDescendant:listDescendant,
+      commonAncestor:commonAncestor,
+      wrap:wrap,
+      insertAfter:insertAfter,
+      appendChildNodes:appendChildNodes,
+      position:position,
+      hasChildren:hasChildren,
+      makeOffsetPath:makeOffsetPath,
+      fromOffsetPath:fromOffsetPath,
+      splitTree:splitTree,
+      splitPoint:splitPoint,
+      create:create,
+      createText:createText,
+      remove:remove,
+      removeWhile:removeWhile,
+      replace:replace,
+      html:html,
+      value:value
     };
   })();
 
-  return dom;
+  returndom;
 });

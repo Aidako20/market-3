@@ -1,32 +1,32 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import json
-import requests
+importjson
+importrequests
 
-from flectra import models
+fromflectraimportmodels
 
-TIMEOUT = 10
+TIMEOUT=10
 
 
-class PosPayment(models.Model):
-    _inherit = 'pos.payment'
+classPosPayment(models.Model):
+    _inherit='pos.payment'
 
-    def _update_payment_line_for_tip(self, tip_amount):
-        """Capture the payment when a tip is set."""
-        res = super(PosPayment, self)._update_payment_line_for_tip(tip_amount)
-        if self.payment_method_id.use_payment_terminal == 'adyen':
+    def_update_payment_line_for_tip(self,tip_amount):
+        """Capturethepaymentwhenatipisset."""
+        res=super(PosPayment,self)._update_payment_line_for_tip(tip_amount)
+        ifself.payment_method_id.use_payment_terminal=='adyen':
             self._adyen_capture()
-        return res
+        returnres
 
-    def _adyen_capture(self):
-        data = {
-            'originalReference': self.transaction_id,
-            'modificationAmount': {
-                'value': int(self.amount * 10**self.currency_id.decimal_places),
-                'currency': self.currency_id.name,
+    def_adyen_capture(self):
+        data={
+            'originalReference':self.transaction_id,
+            'modificationAmount':{
+                'value':int(self.amount*10**self.currency_id.decimal_places),
+                'currency':self.currency_id.name,
             },
-            'merchantAccount': self.payment_method_id.adyen_merchant_account,
+            'merchantAccount':self.payment_method_id.adyen_merchant_account,
         }
 
-        return self.payment_method_id.proxy_adyen_request(data, 'capture')
+        returnself.payment_method_id.proxy_adyen_request(data,'capture')

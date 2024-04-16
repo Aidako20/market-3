@@ -1,162 +1,162 @@
-flectra.define('mail/static/src/components/composer_suggested_recipient/composer_suggested_recipient.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/composer_suggested_recipient/composer_suggested_recipient.js',function(require){
+'usestrict';
 
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
-const useUpdate = require('mail/static/src/component_hooks/use_update/use_update.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
+constuseUpdate=require('mail/static/src/component_hooks/use_update/use_update.js');
 
-const { FormViewDialog } = require('web.view_dialogs');
-const { ComponentAdapter } = require('web.OwlCompatibility');
-const session = require('web.session');
+const{FormViewDialog}=require('web.view_dialogs');
+const{ComponentAdapter}=require('web.OwlCompatibility');
+constsession=require('web.session');
 
-const { Component } = owl;
-const { useRef } = owl.hooks;
+const{Component}=owl;
+const{useRef}=owl.hooks;
 
-class FormViewDialogComponentAdapter extends ComponentAdapter {
+classFormViewDialogComponentAdapterextendsComponentAdapter{
 
-    renderWidget() {
-        // Ensure the dialog is properly reconstructed. Without this line, it is
-        // impossible to open the dialog again after having it closed a first
-        // time, because the DOM of the dialog has disappeared.
-        return this.willStart();
+    renderWidget(){
+        //Ensurethedialogisproperlyreconstructed.Withoutthisline,itis
+        //impossibletoopenthedialogagainafterhavingitclosedafirst
+        //time,becausetheDOMofthedialoghasdisappeared.
+        returnthis.willStart();
     }
 
 }
 
-const components = {
+constcomponents={
     FormViewDialogComponentAdapter,
 };
 
-class ComposerSuggestedRecipient extends Component {
+classComposerSuggestedRecipientextendsComponent{
 
-    constructor(...args) {
+    constructor(...args){
         super(...args);
-        this.id = _.uniqueId('o_ComposerSuggestedRecipient_');
+        this.id=_.uniqueId('o_ComposerSuggestedRecipient_');
         useShouldUpdateBasedOnProps();
-        useStore(props => {
-            const suggestedRecipientInfo = this.env.models['mail.suggested_recipient_info'].get(props.suggestedRecipientLocalId);
-            const partner = suggestedRecipientInfo && suggestedRecipientInfo.partner;
-            return {
-                partner: partner && partner.__state,
-                suggestedRecipientInfo: suggestedRecipientInfo && suggestedRecipientInfo.__state,
+        useStore(props=>{
+            constsuggestedRecipientInfo=this.env.models['mail.suggested_recipient_info'].get(props.suggestedRecipientLocalId);
+            constpartner=suggestedRecipientInfo&&suggestedRecipientInfo.partner;
+            return{
+                partner:partner&&partner.__state,
+                suggestedRecipientInfo:suggestedRecipientInfo&&suggestedRecipientInfo.__state,
             };
         });
-        useUpdate({ func: () => this._update() });
+        useUpdate({func:()=>this._update()});
         /**
-         * Form view dialog class. Useful to reference it in the template.
+         *Formviewdialogclass.Usefultoreferenceitinthetemplate.
          */
-        this.FormViewDialog = FormViewDialog;
+        this.FormViewDialog=FormViewDialog;
         /**
-         * Reference of the checkbox. Useful to know whether it was checked or
-         * not, to properly update the corresponding state in the record or to
-         * prompt the user with the partner creation dialog.
+         *Referenceofthecheckbox.Usefultoknowwhetheritwascheckedor
+         *not,toproperlyupdatethecorrespondingstateintherecordorto
+         *prompttheuserwiththepartnercreationdialog.
          */
-        this._checkboxRef = useRef('checkbox');
+        this._checkboxRef=useRef('checkbox');
         /**
-         * Reference of the partner creation dialog. Useful to open it, for
-         * compatibility with old code.
+         *Referenceofthepartnercreationdialog.Usefultoopenit,for
+         *compatibilitywitholdcode.
          */
-        this._dialogRef = useRef('dialog');
+        this._dialogRef=useRef('dialog');
         /**
-         * Whether the dialog is currently open. `_dialogRef` cannot be trusted
-         * to know if the dialog is open due to manually calling `open` and
-         * potential out of sync with component adapter.
+         *Whetherthedialogiscurrentlyopen.`_dialogRef`cannotbetrusted
+         *toknowifthedialogisopenduetomanuallycalling`open`and
+         *potentialoutofsyncwithcomponentadapter.
          */
-        this._isDialogOpen = false;
-        this._onDialogSaved = this._onDialogSaved.bind(this);
+        this._isDialogOpen=false;
+        this._onDialogSaved=this._onDialogSaved.bind(this);
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @returns {string|undefined}
+     *@returns{string|undefined}
      */
-    get ADD_AS_RECIPIENT_AND_FOLLOWER_REASON() {
-        if (!this.suggestedRecipientInfo) {
-            return undefined;
+    getADD_AS_RECIPIENT_AND_FOLLOWER_REASON(){
+        if(!this.suggestedRecipientInfo){
+            returnundefined;
         }
-        return this.env._t(_.str.sprintf(
-            "Add as recipient and follower (reason: %s)",
+        returnthis.env._t(_.str.sprintf(
+            "Addasrecipientandfollower(reason:%s)",
             this.suggestedRecipientInfo.reason
         ));
     }
 
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    get PLEASE_COMPLETE_CUSTOMER_S_INFORMATION() {
-        return this.env._t("Please complete customer's information");
+    getPLEASE_COMPLETE_CUSTOMER_S_INFORMATION(){
+        returnthis.env._t("Pleasecompletecustomer'sinformation");
     }
 
     /**
-     * @returns {mail.suggested_recipient_info}
+     *@returns{mail.suggested_recipient_info}
      */
-    get suggestedRecipientInfo() {
-        return this.env.models['mail.suggested_recipient_info'].get(this.props.suggestedRecipientInfoLocalId);
+    getsuggestedRecipientInfo(){
+        returnthis.env.models['mail.suggested_recipient_info'].get(this.props.suggestedRecipientInfoLocalId);
     }
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _update() {
-        if (this._checkboxRef.el && this.suggestedRecipientInfo) {
-            this._checkboxRef.el.checked = this.suggestedRecipientInfo.isSelected;
+    _update(){
+        if(this._checkboxRef.el&&this.suggestedRecipientInfo){
+            this._checkboxRef.el.checked=this.suggestedRecipientInfo.isSelected;
         }
     }
 
     //--------------------------------------------------------------------------
-    // Handler
+    //Handler
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onChangeCheckbox() {
-        const isChecked = this._checkboxRef.el.checked;
-        this.suggestedRecipientInfo.update({ isSelected: isChecked });
-        if (!this.suggestedRecipientInfo.partner) {
-            // Recipients must always be partners. On selecting a suggested
-            // recipient that does not have a partner, the partner creation form
-            // should be opened.
-            if (isChecked && this._dialogRef && !this._isDialogOpen) {
-                const widget = this._dialogRef.comp.widget;
-                this._isDialogOpen = true;
-                widget.on('closed', this, () => {
-                    this._isDialogOpen = false;
-                    this._checkboxRef.el.checked = !!this.suggestedRecipientInfo.partner;
+    _onChangeCheckbox(){
+        constisChecked=this._checkboxRef.el.checked;
+        this.suggestedRecipientInfo.update({isSelected:isChecked});
+        if(!this.suggestedRecipientInfo.partner){
+            //Recipientsmustalwaysbepartners.Onselectingasuggested
+            //recipientthatdoesnothaveapartner,thepartnercreationform
+            //shouldbeopened.
+            if(isChecked&&this._dialogRef&&!this._isDialogOpen){
+                constwidget=this._dialogRef.comp.widget;
+                this._isDialogOpen=true;
+                widget.on('closed',this,()=>{
+                    this._isDialogOpen=false;
+                    this._checkboxRef.el.checked=!!this.suggestedRecipientInfo.partner;
                 });
-                widget.context = Object.assign({}, widget.context, session.user_context)
+                widget.context=Object.assign({},widget.context,session.user_context)
                 widget.open();
             }
         }
     }
 
     /**
-     * @private
+     *@private
      */
-    _onDialogSaved() {
-        const thread = this.suggestedRecipientInfo && this.suggestedRecipientInfo.thread;
-        if (!thread) {
+    _onDialogSaved(){
+        constthread=this.suggestedRecipientInfo&&this.suggestedRecipientInfo.thread;
+        if(!thread){
             return;
         }
         thread.fetchAndUpdateSuggestedRecipients();
     }
 }
 
-Object.assign(ComposerSuggestedRecipient, {
+Object.assign(ComposerSuggestedRecipient,{
     components,
-    props: {
-        suggestedRecipientInfoLocalId: String,
+    props:{
+        suggestedRecipientInfoLocalId:String,
     },
-    template: 'mail.ComposerSuggestedRecipient',
+    template:'mail.ComposerSuggestedRecipient',
 });
 
-return ComposerSuggestedRecipient;
+returnComposerSuggestedRecipient;
 
 });

@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class SponsorType(models.Model):
-    _name = "event.sponsor.type"
-    _description = 'Event Sponsor Type'
-    _order = "sequence"
+classSponsorType(models.Model):
+    _name="event.sponsor.type"
+    _description='EventSponsorType'
+    _order="sequence"
 
-    name = fields.Char('Sponsor Type', required=True, translate=True)
-    sequence = fields.Integer('Sequence')
-    display_ribbon_style = fields.Selection([
-        ('no_ribbon', 'No Ribbon'),
-        ('Gold', 'Gold'),
-        ('Silver', 'Silver'),
-        ('Bronze', 'Bronze')], string='Ribbon Style')
+    name=fields.Char('SponsorType',required=True,translate=True)
+    sequence=fields.Integer('Sequence')
+    display_ribbon_style=fields.Selection([
+        ('no_ribbon','NoRibbon'),
+        ('Gold','Gold'),
+        ('Silver','Silver'),
+        ('Bronze','Bronze')],string='RibbonStyle')

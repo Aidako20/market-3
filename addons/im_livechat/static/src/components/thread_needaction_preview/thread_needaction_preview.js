@@ -1,26 +1,26 @@
-flectra.define('im_livechat/static/src/components/thread_needaction_preview/thread_needaction_preview.js', function (require) {
-'use strict';
+flectra.define('im_livechat/static/src/components/thread_needaction_preview/thread_needaction_preview.js',function(require){
+'usestrict';
 
-const components = {
-    ThreadNeedactionPreview: require('mail/static/src/components/thread_needaction_preview/thread_needaction_preview.js'),
+constcomponents={
+    ThreadNeedactionPreview:require('mail/static/src/components/thread_needaction_preview/thread_needaction_preview.js'),
 };
 
-const { patch } = require('web.utils');
+const{patch}=require('web.utils');
 
-patch(components.ThreadNeedactionPreview, 'thread_needaction_preview', {
+patch(components.ThreadNeedactionPreview,'thread_needaction_preview',{
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    image(...args) {
-        if (this.thread.channel_type === 'livechat') {
-            return '/mail/static/src/img/smiley/avatar.jpg';
+    image(...args){
+        if(this.thread.channel_type==='livechat'){
+            return'/mail/static/src/img/smiley/avatar.jpg';
         }
-        return this._super(...args);
+        returnthis._super(...args);
     }
 
 });

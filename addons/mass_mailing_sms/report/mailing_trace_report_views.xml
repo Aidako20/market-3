@@ -1,63 +1,63 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="mailing_trace_report_sms_view_pivot" model="ir.ui.view">
-        <field name="name">mailing.sms.trace.report.view.pivot</field>
-        <field name="model">mailing.trace.report</field>
-        <field name="inherit_id" ref="mass_mailing.mailing_trace_report_view_pivot"/>
-        <field name="priority" eval="50"/>
-        <field name="mode">primary</field>
-        <field name="type">pivot</field>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='replied']" position="attributes">
-                <attribute name="invisible">1</attribute>
+    <recordid="mailing_trace_report_sms_view_pivot"model="ir.ui.view">
+        <fieldname="name">mailing.sms.trace.report.view.pivot</field>
+        <fieldname="model">mailing.trace.report</field>
+        <fieldname="inherit_id"ref="mass_mailing.mailing_trace_report_view_pivot"/>
+        <fieldname="priority"eval="50"/>
+        <fieldname="mode">primary</field>
+        <fieldname="type">pivot</field>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='replied']"position="attributes">
+                <attributename="invisible">1</attribute>
             </xpath>
         </field>
     </record>
 
-    <record id="mailing_trace_report_sms_view_graph" model="ir.ui.view">
-        <field name="name">mailing.sms.trace.report.view.graph</field>
-        <field name="model">mailing.trace.report</field>
-        <field name="inherit_id" ref="mass_mailing.mailing_trace_report_view_graph"/>
-        <field name="priority" eval="50"/>
-        <field name="mode">primary</field>
-        <field name="type">graph</field>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='replied']" position="attributes">
-                <attribute name="invisible">1</attribute>
+    <recordid="mailing_trace_report_sms_view_graph"model="ir.ui.view">
+        <fieldname="name">mailing.sms.trace.report.view.graph</field>
+        <fieldname="model">mailing.trace.report</field>
+        <fieldname="inherit_id"ref="mass_mailing.mailing_trace_report_view_graph"/>
+        <fieldname="priority"eval="50"/>
+        <fieldname="mode">primary</field>
+        <fieldname="type">graph</field>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='replied']"position="attributes">
+                <attributename="invisible">1</attribute>
             </xpath>
         </field>
     </record>
 
-    <!-- Actions and Menuitems -->
-    <record id="mailing_trace_report_action_sms" model="ir.actions.act_window">
-        <field name="name">SMS Marketing Analysis</field>
-        <field name="res_model">mailing.trace.report</field>
-        <field name="view_mode">graph,pivot</field>
-        <field name="domain">[('mailing_type', '=', 'sms')]</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                SMS Marketing Statistics allows you to check different mailing related information like number of sent SMS or bounced SMS.
-                You can sort out your analysis by different groups to get accurate grained analysis.
+    <!--ActionsandMenuitems-->
+    <recordid="mailing_trace_report_action_sms"model="ir.actions.act_window">
+        <fieldname="name">SMSMarketingAnalysis</field>
+        <fieldname="res_model">mailing.trace.report</field>
+        <fieldname="view_mode">graph,pivot</field>
+        <fieldname="domain">[('mailing_type','=','sms')]</field>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_smiling_face">
+                SMSMarketingStatisticsallowsyoutocheckdifferentmailingrelatedinformationlikenumberofsentSMSorbouncedSMS.
+                Youcansortoutyouranalysisbydifferentgroupstogetaccurategrainedanalysis.
             </p>
         </field>
     </record>
 
-    <record id="mailing_trace_report_action_sms_view_graph" model="ir.actions.act_window.view">
-        <field name="sequence">0</field>
-        <field name="view_mode">graph</field>
-        <field name="act_window_id" ref="mailing_trace_report_action_sms"/>
-        <field name="view_id" ref="mailing_trace_report_sms_view_graph"/>
+    <recordid="mailing_trace_report_action_sms_view_graph"model="ir.actions.act_window.view">
+        <fieldname="sequence">0</field>
+        <fieldname="view_mode">graph</field>
+        <fieldname="act_window_id"ref="mailing_trace_report_action_sms"/>
+        <fieldname="view_id"ref="mailing_trace_report_sms_view_graph"/>
     </record>
 
-    <record id="mailing_trace_report_action_sms_view_pivot" model="ir.actions.act_window.view">
-        <field name="sequence">1</field>
-        <field name="view_mode">pivot</field>
-        <field name="act_window_id" ref="mailing_trace_report_action_sms"/>
-        <field name="view_id" ref="mailing_trace_report_sms_view_pivot"/>
+    <recordid="mailing_trace_report_action_sms_view_pivot"model="ir.actions.act_window.view">
+        <fieldname="sequence">1</field>
+        <fieldname="view_mode">pivot</field>
+        <fieldname="act_window_id"ref="mailing_trace_report_action_sms"/>
+        <fieldname="view_id"ref="mailing_trace_report_sms_view_pivot"/>
     </record>
 
-    <!-- SMS Marketing / Reporting -->
-    <record id="mass_mailing_sms_menu_reporting" model="ir.ui.menu">
-        <field name="action" ref="mailing_trace_report_action_sms"/>
+    <!--SMSMarketing/Reporting-->
+    <recordid="mass_mailing_sms_menu_reporting"model="ir.ui.menu">
+        <fieldname="action"ref="mailing_trace_report_action_sms"/>
     </record>
 </flectra>

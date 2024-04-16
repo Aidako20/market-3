@@ -1,38 +1,38 @@
-flectra.define('event.EventConfiguratorFormController', function (require) {
-"use strict";
+flectra.define('event.EventConfiguratorFormController',function(require){
+"usestrict";
 
-var FormController = require('web.FormController');
+varFormController=require('web.FormController');
 
 /**
- * This controller is overridden to allow configuring sale_order_lines through a popup
- * window when a product with 'event_ok' is selected.
+ *Thiscontrollerisoverriddentoallowconfiguringsale_order_linesthroughapopup
+ *windowwhenaproductwith'event_ok'isselected.
  *
- * This allows keeping an editable list view for sales order and remove the noise of
- * those 2 fields ('event_id' + 'event_ticket_id')
+ *Thisallowskeepinganeditablelistviewforsalesorderandremovethenoiseof
+ *those2fields('event_id'+'event_ticket_id')
  */
-var EventConfiguratorFormController = FormController.extend({
+varEventConfiguratorFormController=FormController.extend({
     /**
-     * We let the regular process take place to allow the validation of the required fields
-     * to happen.
+     *Welettheregularprocesstakeplacetoallowthevalidationoftherequiredfields
+     *tohappen.
      *
-     * Then we can manually close the window, providing event information to the caller.
+     *Thenwecanmanuallyclosethewindow,providingeventinformationtothecaller.
      *
-     * @override
+     *@override
      */
-    saveRecord: function () {
-        var self = this;
-        return this._super.apply(this, arguments).then(function () {
-            var state = self.renderer.state.data;
-            self.do_action({type: 'ir.actions.act_window_close', infos: {
-                eventConfiguration: {
-                    event_id: {id: state.event_id.data.id},
-                    event_ticket_id: {id: state.event_ticket_id.data.id}
+    saveRecord:function(){
+        varself=this;
+        returnthis._super.apply(this,arguments).then(function(){
+            varstate=self.renderer.state.data;
+            self.do_action({type:'ir.actions.act_window_close',infos:{
+                eventConfiguration:{
+                    event_id:{id:state.event_id.data.id},
+                    event_ticket_id:{id:state.event_ticket_id.data.id}
                 }
             }});
         });
     }
 });
 
-return EventConfiguratorFormController;
+returnEventConfiguratorFormController;
 
 });

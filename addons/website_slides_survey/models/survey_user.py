@@ -1,64 +1,64 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, api
-from flectra.osv import expression
+fromflectraimportfields,models,api
+fromflectra.osvimportexpression
 
 
-class SurveyUserInput(models.Model):
-    _inherit = 'survey.user_input'
+classSurveyUserInput(models.Model):
+    _inherit='survey.user_input'
 
-    slide_id = fields.Many2one('slide.slide', 'Related course slide',
-        help="The related course slide when there is no membership information")
-    slide_partner_id = fields.Many2one('slide.slide.partner', 'Subscriber information',
-        help="Slide membership information for the logged in user")
+    slide_id=fields.Many2one('slide.slide','Relatedcourseslide',
+        help="Therelatedcourseslidewhenthereisnomembershipinformation")
+    slide_partner_id=fields.Many2one('slide.slide.partner','Subscriberinformation',
+        help="Slidemembershipinformationfortheloggedinuser")
 
     @api.model_create_multi
-    def create(self, vals_list):
-        records = super(SurveyUserInput, self).create(vals_list)
+    defcreate(self,vals_list):
+        records=super(SurveyUserInput,self).create(vals_list)
         records._check_for_failed_attempt()
-        return records
+        returnrecords
 
-    def write(self, vals):
-        res = super(SurveyUserInput, self).write(vals)
-        if 'state' in vals:
+    defwrite(self,vals):
+        res=super(SurveyUserInput,self).write(vals)
+        if'state'invals:
             self._check_for_failed_attempt()
-        return res
+        returnres
 
-    def _check_for_failed_attempt(self):
-        """ If the user fails his last attempt at a course certification,
-        we remove him from the members of the course (and he has to enroll again).
-        He receives an email in the process notifying him of his failure and suggesting
-        he enrolls to the course again.
+    def_check_for_failed_attempt(self):
+        """Iftheuserfailshislastattemptatacoursecertification,
+        weremovehimfromthemembersofthecourse(andhehastoenrollagain).
+        Hereceivesanemailintheprocessnotifyinghimofhisfailureandsuggesting
+        heenrollstothecourseagain.
 
-        The purpose is to have a 'certification flow' where the user can re-purchase the
-        certification when they have failed it."""
+        Thepurposeistohavea'certificationflow'wheretheusercanre-purchasethe
+        certificationwhentheyhavefailedit."""
 
-        if self:
-            user_inputs = self.search([
-                ('id', 'in', self.ids),
-                ('state', '=', 'done'),
-                ('scoring_success', '=', False),
-                ('slide_partner_id', '!=', False)
+        ifself:
+            user_inputs=self.search([
+                ('id','in',self.ids),
+                ('state','=','done'),
+                ('scoring_success','=',False),
+                ('slide_partner_id','!=',False)
             ])
 
-            if user_inputs:
-                for user_input in user_inputs:
-                    removed_memberships_per_partner = {}
-                    if user_input.survey_id._has_attempts_left(user_input.partner_id, user_input.email, user_input.invite_token):
-                        # skip if user still has attempts left
+            ifuser_inputs:
+                foruser_inputinuser_inputs:
+                    removed_memberships_per_partner={}
+                    ifuser_input.survey_id._has_attempts_left(user_input.partner_id,user_input.email,user_input.invite_token):
+                        #skipifuserstillhasattemptsleft
                         continue
 
                     self.env.ref('website_slides_survey.mail_template_user_input_certification_failed').send_mail(
-                        user_input.id, notif_layout="mail.mail_notification_light"
+                        user_input.id,notif_layout="mail.mail_notification_light"
                     )
 
-                    removed_memberships = removed_memberships_per_partner.get(
+                    removed_memberships=removed_memberships_per_partner.get(
                         user_input.partner_id,
                         self.env['slide.channel']
                     )
-                    removed_memberships |= user_input.slide_partner_id.channel_id
-                    removed_memberships_per_partner[user_input.partner_id] = removed_memberships
+                    removed_memberships|=user_input.slide_partner_id.channel_id
+                    removed_memberships_per_partner[user_input.partner_id]=removed_memberships
 
-                for partner_id, removed_memberships in removed_memberships_per_partner.items():
+                forpartner_id,removed_membershipsinremoved_memberships_per_partner.items():
                     removed_memberships._remove_membership(partner_id.ids)

@@ -1,362 +1,362 @@
-flectra.define('mail/static/src/components/thread_textual_typing_status/thread_textual_typing_status_tests.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/thread_textual_typing_status/thread_textual_typing_status_tests.js',function(require){
+'usestrict';
 
-const components = {
-    ThreadTextualTypingStatus: require('mail/static/src/components/thread_textual_typing_status/thread_textual_typing_status.js'),
+constcomponents={
+    ThreadTextualTypingStatus:require('mail/static/src/components/thread_textual_typing_status/thread_textual_typing_status.js'),
 };
-const {
+const{
     afterEach,
     afterNextRender,
     beforeEach,
     createRootComponent,
     nextAnimationFrame,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+}=require('mail/static/src/utils/test_utils.js');
 
-QUnit.module('mail', {}, function () {
-QUnit.module('components', {}, function () {
-QUnit.module('thread_textual_typing_status', {}, function () {
-QUnit.module('thread_textual_typing_status_tests.js', {
-    beforeEach() {
+QUnit.module('mail',{},function(){
+QUnit.module('components',{},function(){
+QUnit.module('thread_textual_typing_status',{},function(){
+QUnit.module('thread_textual_typing_status_tests.js',{
+    beforeEach(){
         beforeEach(this);
 
-        this.createThreadTextualTypingStatusComponent = async thread => {
-            await createRootComponent(this, components.ThreadTextualTypingStatus, {
-                props: { threadLocalId: thread.localId },
-                target: this.widget.el,
+        this.createThreadTextualTypingStatusComponent=asyncthread=>{
+            awaitcreateRootComponent(this,components.ThreadTextualTypingStatus,{
+                props:{threadLocalId:thread.localId},
+                target:this.widget.el,
             });
         };
 
-        this.start = async params => {
-            const { env, widget } = await start(Object.assign({}, params, {
-                data: this.data,
+        this.start=asyncparams=>{
+            const{env,widget}=awaitstart(Object.assign({},params,{
+                data:this.data,
             }));
-            this.env = env;
-            this.widget = widget;
+            this.env=env;
+            this.widget=widget;
         };
     },
-    async afterEach() {
+    asyncafterEach(){
         afterEach(this);
     },
 });
 
-QUnit.test('receive other member typing status "is typing"', async function (assert) {
+QUnit.test('receiveothermembertypingstatus"istyping"',asyncfunction(assert){
     assert.expect(2);
 
-    this.data['res.partner'].records.push({ id: 17, name: 'Demo' });
+    this.data['res.partner'].records.push({id:17,name:'Demo'});
     this.data['mail.channel'].records.push({
-        id: 20,
-        members: [this.data.currentPartnerId, 17],
+        id:20,
+        members:[this.data.currentPartnerId,17],
     });
-    await this.start();
-    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
-        id: 20,
-        model: 'mail.channel',
+    awaitthis.start();
+    constthread=this.env.models['mail.thread'].findFromIdentifyingData({
+        id:20,
+        model:'mail.channel',
     });
-    await this.createThreadTextualTypingStatusComponent(thread);
+    awaitthis.createThreadTextualTypingStatusComponent(thread);
 
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
         "",
-        "Should display no one is currently typing"
+        "Shoulddisplaynooneiscurrentlytyping"
     );
 
-    // simulate receive typing notification from demo
-    await afterNextRender(() => {
-        const typingData = {
-            info: 'typing_status',
-            is_typing: true,
-            partner_id: 17,
-            partner_name: "Demo",
+    //simulatereceivetypingnotificationfromdemo
+    awaitafterNextRender(()=>{
+        consttypingData={
+            info:'typing_status',
+            is_typing:true,
+            partner_id:17,
+            partner_name:"Demo",
         };
-        const notification = [[false, 'mail.channel', 20], typingData];
-        this.widget.call('bus_service', 'trigger', 'notification', [notification]);
+        constnotification=[[false,'mail.channel',20],typingData];
+        this.widget.call('bus_service','trigger','notification',[notification]);
     });
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
-        "Demo is typing...",
-        "Should display that demo user is typing"
+        "Demoistyping...",
+        "Shoulddisplaythatdemouseristyping"
     );
 });
 
-QUnit.test('receive other member typing status "is typing" then "no longer is typing"', async function (assert) {
+QUnit.test('receiveothermembertypingstatus"istyping"then"nolongeristyping"',asyncfunction(assert){
     assert.expect(3);
 
-    this.data['res.partner'].records.push({ id: 17, name: 'Demo' });
+    this.data['res.partner'].records.push({id:17,name:'Demo'});
     this.data['mail.channel'].records.push({
-        id: 20,
-        members: [this.data.currentPartnerId, 17],
+        id:20,
+        members:[this.data.currentPartnerId,17],
     });
-    await this.start();
-    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
-        id: 20,
-        model: 'mail.channel',
+    awaitthis.start();
+    constthread=this.env.models['mail.thread'].findFromIdentifyingData({
+        id:20,
+        model:'mail.channel',
     });
-    await this.createThreadTextualTypingStatusComponent(thread);
+    awaitthis.createThreadTextualTypingStatusComponent(thread);
 
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
         "",
-        "Should display no one is currently typing"
+        "Shoulddisplaynooneiscurrentlytyping"
     );
 
-    // simulate receive typing notification from demo "is typing"
-    await afterNextRender(() => {
-        const typingData = {
-            info: 'typing_status',
-            is_typing: true,
-            partner_id: 17,
-            partner_name: "Demo",
+    //simulatereceivetypingnotificationfromdemo"istyping"
+    awaitafterNextRender(()=>{
+        consttypingData={
+            info:'typing_status',
+            is_typing:true,
+            partner_id:17,
+            partner_name:"Demo",
         };
-        const notification = [[false, 'mail.channel', 20], typingData];
-        this.widget.call('bus_service', 'trigger', 'notification', [notification]);
+        constnotification=[[false,'mail.channel',20],typingData];
+        this.widget.call('bus_service','trigger','notification',[notification]);
     });
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
-        "Demo is typing...",
-        "Should display that demo user is typing"
+        "Demoistyping...",
+        "Shoulddisplaythatdemouseristyping"
     );
 
-    // simulate receive typing notification from demo "is no longer typing"
-    await afterNextRender(() => {
-        const typingData = {
-            info: 'typing_status',
-            is_typing: false,
-            partner_id: 17,
-            partner_name: "Demo",
+    //simulatereceivetypingnotificationfromdemo"isnolongertyping"
+    awaitafterNextRender(()=>{
+        consttypingData={
+            info:'typing_status',
+            is_typing:false,
+            partner_id:17,
+            partner_name:"Demo",
         };
-        const notification = [[false, 'mail.channel', 20], typingData];
-        this.widget.call('bus_service', 'trigger', 'notification', [notification]);
+        constnotification=[[false,'mail.channel',20],typingData];
+        this.widget.call('bus_service','trigger','notification',[notification]);
     });
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
         "",
-        "Should no longer display that demo user is typing"
+        "Shouldnolongerdisplaythatdemouseristyping"
     );
 });
 
-QUnit.test('assume other member typing status becomes "no longer is typing" after 60 seconds without any updated typing status', async function (assert) {
+QUnit.test('assumeothermembertypingstatusbecomes"nolongeristyping"after60secondswithoutanyupdatedtypingstatus',asyncfunction(assert){
     assert.expect(3);
 
-    this.data['res.partner'].records.push({ id: 17, name: 'Demo' });
+    this.data['res.partner'].records.push({id:17,name:'Demo'});
     this.data['mail.channel'].records.push({
-        id: 20,
-        members: [this.data.currentPartnerId, 17],
+        id:20,
+        members:[this.data.currentPartnerId,17],
     });
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
-    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
-        id: 20,
-        model: 'mail.channel',
+    constthread=this.env.models['mail.thread'].findFromIdentifyingData({
+        id:20,
+        model:'mail.channel',
     });
-    await this.createThreadTextualTypingStatusComponent(thread);
+    awaitthis.createThreadTextualTypingStatusComponent(thread);
 
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
         "",
-        "Should display no one is currently typing"
+        "Shoulddisplaynooneiscurrentlytyping"
     );
 
-    // simulate receive typing notification from demo "is typing"
-    await afterNextRender(() => {
-        const typingData = {
-            info: 'typing_status',
-            is_typing: true,
-            partner_id: 17,
-            partner_name: "Demo",
+    //simulatereceivetypingnotificationfromdemo"istyping"
+    awaitafterNextRender(()=>{
+        consttypingData={
+            info:'typing_status',
+            is_typing:true,
+            partner_id:17,
+            partner_name:"Demo",
         };
-        const notification = [[false, 'mail.channel', 20], typingData];
-        this.widget.call('bus_service', 'trigger', 'notification', [notification]);
+        constnotification=[[false,'mail.channel',20],typingData];
+        this.widget.call('bus_service','trigger','notification',[notification]);
     });
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
-        "Demo is typing...",
-        "Should display that demo user is typing"
+        "Demoistyping...",
+        "Shoulddisplaythatdemouseristyping"
     );
 
-    await afterNextRender(() => this.env.testUtils.advanceTime(60 * 1000));
+    awaitafterNextRender(()=>this.env.testUtils.advanceTime(60*1000));
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
         "",
-        "Should no longer display that demo user is typing"
+        "Shouldnolongerdisplaythatdemouseristyping"
     );
 });
 
-QUnit.test ('other member typing status "is typing" refreshes 60 seconds timer of assuming no longer typing', async function (assert) {
+QUnit.test('othermembertypingstatus"istyping"refreshes60secondstimerofassumingnolongertyping',asyncfunction(assert){
     assert.expect(4);
 
-    this.data['res.partner'].records.push({ id: 17, name: 'Demo' });
+    this.data['res.partner'].records.push({id:17,name:'Demo'});
     this.data['mail.channel'].records.push({
-        id: 20,
-        members: [this.data.currentPartnerId, 17],
+        id:20,
+        members:[this.data.currentPartnerId,17],
     });
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
-    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
-        id: 20,
-        model: 'mail.channel',
+    constthread=this.env.models['mail.thread'].findFromIdentifyingData({
+        id:20,
+        model:'mail.channel',
     });
-    await this.createThreadTextualTypingStatusComponent(thread);
+    awaitthis.createThreadTextualTypingStatusComponent(thread);
 
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
         "",
-        "Should display no one is currently typing"
+        "Shoulddisplaynooneiscurrentlytyping"
     );
 
-    // simulate receive typing notification from demo "is typing"
-    await afterNextRender(() => {
-        const typingData = {
-            info: 'typing_status',
-            is_typing: true,
-            partner_id: 17,
-            partner_name: "Demo",
+    //simulatereceivetypingnotificationfromdemo"istyping"
+    awaitafterNextRender(()=>{
+        consttypingData={
+            info:'typing_status',
+            is_typing:true,
+            partner_id:17,
+            partner_name:"Demo",
         };
-        const notification = [[false, 'mail.channel', 20], typingData];
-        this.widget.call('bus_service', 'trigger', 'notification', [notification]);
+        constnotification=[[false,'mail.channel',20],typingData];
+        this.widget.call('bus_service','trigger','notification',[notification]);
     });
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
-        "Demo is typing...",
-        "Should display that demo user is typing"
+        "Demoistyping...",
+        "Shoulddisplaythatdemouseristyping"
     );
 
-    // simulate receive typing notification from demo "is typing" again after 50s.
-    await this.env.testUtils.advanceTime(50 * 1000);
-    const typingData = {
-        info: 'typing_status',
-        is_typing: true,
-        partner_id: 17,
-        partner_name: "Demo",
+    //simulatereceivetypingnotificationfromdemo"istyping"againafter50s.
+    awaitthis.env.testUtils.advanceTime(50*1000);
+    consttypingData={
+        info:'typing_status',
+        is_typing:true,
+        partner_id:17,
+        partner_name:"Demo",
     };
-    const notification = [[false, 'mail.channel', 20], typingData];
-    this.widget.call('bus_service', 'trigger', 'notification', [notification]);
-    await this.env.testUtils.advanceTime(50 * 1000);
-    await nextAnimationFrame();
+    constnotification=[[false,'mail.channel',20],typingData];
+    this.widget.call('bus_service','trigger','notification',[notification]);
+    awaitthis.env.testUtils.advanceTime(50*1000);
+    awaitnextAnimationFrame();
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
-        "Demo is typing...",
-        "Should still display that demo user is typing after 100 seconds (refreshed is typing status at 50s => (100 - 50) = 50s < 60s after assuming no-longer typing)"
+        "Demoistyping...",
+        "Shouldstilldisplaythatdemouseristypingafter100seconds(refreshedistypingstatusat50s=>(100-50)=50s<60safterassumingno-longertyping)"
     );
 
-    await afterNextRender(() => this.env.testUtils.advanceTime(11 * 1000));
+    awaitafterNextRender(()=>this.env.testUtils.advanceTime(11*1000));
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
         "",
-        "Should no longer display that demo user is typing after 111 seconds (refreshed is typing status at 50s => (111 - 50) = 61s > 60s after assuming no-longer typing)"
+        "Shouldnolongerdisplaythatdemouseristypingafter111seconds(refreshedistypingstatusat50s=>(111-50)=61s>60safterassumingno-longertyping)"
     );
 });
 
-QUnit.test('receive several other members typing status "is typing"', async function (assert) {
+QUnit.test('receiveseveralothermemberstypingstatus"istyping"',asyncfunction(assert){
     assert.expect(6);
 
     this.data['res.partner'].records.push(
-        { id: 10, name: 'Other10' },
-        { id: 11, name: 'Other11' },
-        { id: 12, name: 'Other12' }
+        {id:10,name:'Other10'},
+        {id:11,name:'Other11'},
+        {id:12,name:'Other12'}
     );
     this.data['mail.channel'].records.push({
-        id: 20,
-        members: [this.data.currentPartnerId, 10, 11, 12],
+        id:20,
+        members:[this.data.currentPartnerId,10,11,12],
     });
-    await this.start();
-    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
-        id: 20,
-        model: 'mail.channel',
+    awaitthis.start();
+    constthread=this.env.models['mail.thread'].findFromIdentifyingData({
+        id:20,
+        model:'mail.channel',
     });
-    await this.createThreadTextualTypingStatusComponent(thread);
+    awaitthis.createThreadTextualTypingStatusComponent(thread);
 
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
         "",
-        "Should display no one is currently typing"
+        "Shoulddisplaynooneiscurrentlytyping"
     );
 
-    // simulate receive typing notification from other10 (is typing)
-    await afterNextRender(() => {
-        const typingData = {
-            info: 'typing_status',
-            is_typing: true,
-            partner_id: 10,
-            partner_name: "Other10",
+    //simulatereceivetypingnotificationfromother10(istyping)
+    awaitafterNextRender(()=>{
+        consttypingData={
+            info:'typing_status',
+            is_typing:true,
+            partner_id:10,
+            partner_name:"Other10",
         };
-        const notification = [[false, 'mail.channel', 20], typingData];
-        this.widget.call('bus_service', 'trigger', 'notification', [notification]);
+        constnotification=[[false,'mail.channel',20],typingData];
+        this.widget.call('bus_service','trigger','notification',[notification]);
     });
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
-        "Other10 is typing...",
-        "Should display that 'Other10' member is typing"
+        "Other10istyping...",
+        "Shoulddisplaythat'Other10'memberistyping"
     );
 
-    // simulate receive typing notification from other11 (is typing)
-    await afterNextRender(() => {
-        const typingData = {
-            info: 'typing_status',
-            is_typing: true,
-            partner_id: 11,
-            partner_name: "Other11",
+    //simulatereceivetypingnotificationfromother11(istyping)
+    awaitafterNextRender(()=>{
+        consttypingData={
+            info:'typing_status',
+            is_typing:true,
+            partner_id:11,
+            partner_name:"Other11",
         };
-        const notification = [[false, 'mail.channel', 20], typingData];
-        this.widget.call('bus_service', 'trigger', 'notification', [notification]);
+        constnotification=[[false,'mail.channel',20],typingData];
+        this.widget.call('bus_service','trigger','notification',[notification]);
     });
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
-        "Other10 and Other11 are typing...",
-        "Should display that members 'Other10' and 'Other11' are typing (order: longer typer named first)"
+        "Other10andOther11aretyping...",
+        "Shoulddisplaythatmembers'Other10'and'Other11'aretyping(order:longertypernamedfirst)"
     );
 
-    // simulate receive typing notification from other12 (is typing)
-    await afterNextRender(() => {
-        const typingData = {
-            info: 'typing_status',
-            is_typing: true,
-            partner_id: 12,
-            partner_name: "Other12",
+    //simulatereceivetypingnotificationfromother12(istyping)
+    awaitafterNextRender(()=>{
+        consttypingData={
+            info:'typing_status',
+            is_typing:true,
+            partner_id:12,
+            partner_name:"Other12",
         };
-        const notification = [[false, 'mail.channel', 20], typingData];
-        this.widget.call('bus_service', 'trigger', 'notification', [notification]);
+        constnotification=[[false,'mail.channel',20],typingData];
+        this.widget.call('bus_service','trigger','notification',[notification]);
     });
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
-        "Other10, Other11 and more are typing...",
-        "Should display that members 'Other10', 'Other11' and more (at least 1 extra member) are typing (order: longer typer named first)"
+        "Other10,Other11andmorearetyping...",
+        "Shoulddisplaythatmembers'Other10','Other11'andmore(atleast1extramember)aretyping(order:longertypernamedfirst)"
     );
 
-    // simulate receive typing notification from other10 (no longer is typing)
-    await afterNextRender(() => {
-        const typingData = {
-            info: 'typing_status',
-            is_typing: false,
-            partner_id: 10,
-            partner_name: "Other10",
+    //simulatereceivetypingnotificationfromother10(nolongeristyping)
+    awaitafterNextRender(()=>{
+        consttypingData={
+            info:'typing_status',
+            is_typing:false,
+            partner_id:10,
+            partner_name:"Other10",
         };
-        const notification = [[false, 'mail.channel', 20], typingData];
-        this.widget.call('bus_service', 'trigger', 'notification', [notification]);
+        constnotification=[[false,'mail.channel',20],typingData];
+        this.widget.call('bus_service','trigger','notification',[notification]);
     });
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
-        "Other11 and Other12 are typing...",
-        "Should display that members 'Other11' and 'Other12' are typing ('Other10' stopped typing)"
+        "Other11andOther12aretyping...",
+        "Shoulddisplaythatmembers'Other11'and'Other12'aretyping('Other10'stoppedtyping)"
     );
 
-    // simulate receive typing notification from other10 (is typing again)
-    await afterNextRender(() => {
-        const typingData = {
-            info: 'typing_status',
-            is_typing: true,
-            partner_id: 10,
-            partner_name: "Other10",
+    //simulatereceivetypingnotificationfromother10(istypingagain)
+    awaitafterNextRender(()=>{
+        consttypingData={
+            info:'typing_status',
+            is_typing:true,
+            partner_id:10,
+            partner_name:"Other10",
         };
-        const notification = [[false, 'mail.channel', 20], typingData];
-        this.widget.call('bus_service', 'trigger', 'notification', [notification]);
+        constnotification=[[false,'mail.channel',20],typingData];
+        this.widget.call('bus_service','trigger','notification',[notification]);
     });
     assert.strictEqual(
         document.querySelector('.o_ThreadTextualTypingStatus').textContent,
-        "Other11, Other12 and more are typing...",
-        "Should display that members 'Other11' and 'Other12' and more (at least 1 extra member) are typing (order by longer typer, 'Other10' just recently restarted typing)"
+        "Other11,Other12andmorearetyping...",
+        "Shoulddisplaythatmembers'Other11'and'Other12'andmore(atleast1extramember)aretyping(orderbylongertyper,'Other10'justrecentlyrestartedtyping)"
     );
 });
 

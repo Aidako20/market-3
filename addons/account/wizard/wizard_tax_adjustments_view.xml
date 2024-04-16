@@ -1,37 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="tax_adjustments_wizard" model="ir.ui.view">
-        <field name="name">tax.adjustments.wizard.form</field>
-        <field name="model">tax.adjustments.wizard</field>
-        <field name="arch" type="xml">
+    <recordid="tax_adjustments_wizard"model="ir.ui.view">
+        <fieldname="name">tax.adjustments.wizard.form</field>
+        <fieldname="model">tax.adjustments.wizard</field>
+        <fieldname="arch"type="xml">
         <form>
             <h1>
-                <field name="reason" class="oe_inline" placeholder="Reason..."/>
+                <fieldname="reason"class="oe_inline"placeholder="Reason..."/>
             </h1>
             <group>
-                <field name="report_id" invisible="1"/>
-                <field name="tax_report_line_id" widget="selection"/>
+                <fieldname="report_id"invisible="1"/>
+                <fieldname="tax_report_line_id"widget="selection"/>
             </group>
             <group>
                 <group>
-                    <field name="amount"/>
+                    <fieldname="amount"/>
                 </group>
                 <group>
-                    <field name="adjustment_type"/>
+                    <fieldname="adjustment_type"/>
                 </group>
-                <group string="Accounts">
-                    <field name="debit_account_id"/>
-                    <field name="credit_account_id"/>
+                <groupstring="Accounts">
+                    <fieldname="debit_account_id"/>
+                    <fieldname="credit_account_id"/>
                 </group>
-                <group string="Options">
-                    <field name="journal_id"/>
-                    <field name="date"/>
+                <groupstring="Options">
+                    <fieldname="journal_id"/>
+                    <fieldname="date"/>
                 </group>
             </group>
             <footer>
-                <button name="create_move" string="Create and post move" type="object" default_focus="1" class="oe_highlight"/>
-                <button string="Cancel" class="btn btn-secondary" special="cancel" />
+                <buttonname="create_move"string="Createandpostmove"type="object"default_focus="1"class="oe_highlight"/>
+                <buttonstring="Cancel"class="btnbtn-secondary"special="cancel"/>
             </footer>
         </form>
         </field>

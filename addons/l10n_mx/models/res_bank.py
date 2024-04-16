@@ -1,21 +1,21 @@
-# coding: utf-8
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#coding:utf-8
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
-
-
-class Bank(models.Model):
-    _inherit = "res.bank"
-
-    l10n_mx_edi_code = fields.Char(
-        "ABM Code",
-        help="Three-digit number assigned by the ABM to identify banking "
-        "institutions (ABM is an acronym for Asociación de Bancos de México)")
+fromflectraimportfields,models
 
 
-class ResPartnerBank(models.Model):
-    _inherit = "res.partner.bank"
+classBank(models.Model):
+    _inherit="res.bank"
 
-    l10n_mx_edi_clabe = fields.Char(
-        "CLABE", help="Standardized banking cipher for Mexico. More info "
+    l10n_mx_edi_code=fields.Char(
+        "ABMCode",
+        help="Three-digitnumberassignedbytheABMtoidentifybanking"
+        "institutions(ABMisanacronymforAsociacióndeBancosdeMéxico)")
+
+
+classResPartnerBank(models.Model):
+    _inherit="res.partner.bank"
+
+    l10n_mx_edi_clabe=fields.Char(
+        "CLABE",help="StandardizedbankingcipherforMexico.Moreinfo"
         "wikipedia.org/wiki/CLABE")

@@ -1,67 +1,67 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
+fromdatetimeimportdatetime
+fromdateutil.relativedeltaimportrelativedelta
 
-from flectra.addons.hr_holidays.tests.common import TestHrHolidaysCommon
+fromflectra.addons.hr_holidays.tests.commonimportTestHrHolidaysCommon
 
 
-class TestChangeDepartment(TestHrHolidaysCommon):
-    def test_employee_change_department_request_change_department(self):
-        self.HolidaysEmployeeGroup = self.env['hr.leave'].with_user(self.user_employee_id)
+classTestChangeDepartment(TestHrHolidaysCommon):
+    deftest_employee_change_department_request_change_department(self):
+        self.HolidaysEmployeeGroup=self.env['hr.leave'].with_user(self.user_employee_id)
 
-        HolidayStatusManagerGroup = self.env['hr.leave.type'].with_user(self.user_hrmanager_id)
-        self.holidays_status_1 = HolidayStatusManagerGroup.create({
-            'name': 'NotLimitedHR',
-            'allocation_type': 'no',
-            'validity_start': False,
+        HolidayStatusManagerGroup=self.env['hr.leave.type'].with_user(self.user_hrmanager_id)
+        self.holidays_status_1=HolidayStatusManagerGroup.create({
+            'name':'NotLimitedHR',
+            'allocation_type':'no',
+            'validity_start':False,
         })
 
-        def create_holiday(name, start, end):
-            return self.HolidaysEmployeeGroup.create({
-                'name': name,
-                'employee_id': self.employee_emp_id,
-                'holiday_status_id': self.holidays_status_1.id,
-                'date_from': (datetime.today() + relativedelta(days=start)).strftime('%Y-%m-%d %H:%M'),
-                'date_to': datetime.today() + relativedelta(days=end),
-                'number_of_days': end-start,
+        defcreate_holiday(name,start,end):
+            returnself.HolidaysEmployeeGroup.create({
+                'name':name,
+                'employee_id':self.employee_emp_id,
+                'holiday_status_id':self.holidays_status_1.id,
+                'date_from':(datetime.today()+relativedelta(days=start)).strftime('%Y-%m-%d%H:%M'),
+                'date_to':datetime.today()+relativedelta(days=end),
+                'number_of_days':end-start,
             })
 
-        # Non approved leave request change department
-        self.employee_emp.department_id = self.rd_dept
-        hol1_employee_group = create_holiday("hol1", 1, 2)
-        self.employee_emp.department_id = self.hr_dept
-        self.assertEqual(hol1_employee_group.department_id, self.hr_dept, 'hr_holidays: non approved leave request should change department if employee change department')
+        #Nonapprovedleaverequestchangedepartment
+        self.employee_emp.department_id=self.rd_dept
+        hol1_employee_group=create_holiday("hol1",1,2)
+        self.employee_emp.department_id=self.hr_dept
+        self.assertEqual(hol1_employee_group.department_id,self.hr_dept,'hr_holidays:nonapprovedleaverequestshouldchangedepartmentifemployeechangedepartment')
 
-        # Approved passed leave request change department
-        self.employee_emp.department_id = self.hr_dept
-        hol2_employee_group = create_holiday("hol2", -4, -3)
-        hol2_user_group = hol2_employee_group.with_user(self.user_hruser_id)
+        #Approvedpassedleaverequestchangedepartment
+        self.employee_emp.department_id=self.hr_dept
+        hol2_employee_group=create_holiday("hol2",-4,-3)
+        hol2_user_group=hol2_employee_group.with_user(self.user_hruser_id)
         hol2_user_group.action_approve()
-        self.employee_emp.department_id = self.rd_dept
-        self.assertEqual(hol2_employee_group.department_id, self.hr_dept, 'hr_holidays: approved passed leave request should stay in previous department if employee change department')
+        self.employee_emp.department_id=self.rd_dept
+        self.assertEqual(hol2_employee_group.department_id,self.hr_dept,'hr_holidays:approvedpassedleaverequestshouldstayinpreviousdepartmentifemployeechangedepartment')
 
-        # Approved futur leave request change department
-        self.employee_emp.department_id = self.hr_dept
-        hol22_employee_group = create_holiday("hol22", 3, 4)
-        hol22_user_group = hol22_employee_group.with_user(self.user_hruser_id)
+        #Approvedfuturleaverequestchangedepartment
+        self.employee_emp.department_id=self.hr_dept
+        hol22_employee_group=create_holiday("hol22",3,4)
+        hol22_user_group=hol22_employee_group.with_user(self.user_hruser_id)
         hol22_user_group.action_approve()
-        self.employee_emp.department_id = self.rd_dept
-        self.assertEqual(hol22_employee_group.department_id, self.rd_dept, 'hr_holidays: approved futur leave request should change department if employee change department')
+        self.employee_emp.department_id=self.rd_dept
+        self.assertEqual(hol22_employee_group.department_id,self.rd_dept,'hr_holidays:approvedfuturleaverequestshouldchangedepartmentifemployeechangedepartment')
 
-        # Refused passed leave request change department
-        self.employee_emp.department_id = self.rd_dept
-        hol3_employee_group = create_holiday("hol3", -6, -5)
-        hol3_user_group = hol3_employee_group.with_user(self.user_hruser_id)
+        #Refusedpassedleaverequestchangedepartment
+        self.employee_emp.department_id=self.rd_dept
+        hol3_employee_group=create_holiday("hol3",-6,-5)
+        hol3_user_group=hol3_employee_group.with_user(self.user_hruser_id)
         hol3_user_group.action_refuse()
-        self.employee_emp.department_id = self.hr_dept # Change department
-        self.assertEqual(hol3_employee_group.department_id, self.rd_dept, 'hr_holidays: refused passed leave request should stay in previous department if employee change department')
+        self.employee_emp.department_id=self.hr_dept#Changedepartment
+        self.assertEqual(hol3_employee_group.department_id,self.rd_dept,'hr_holidays:refusedpassedleaverequestshouldstayinpreviousdepartmentifemployeechangedepartment')
 
-        # Refused futur leave request change department
-        self.employee_emp.department_id = self.rd_dept
-        hol32_employee_group = create_holiday("hol32", 5, 6)
-        hol32_user_group = hol32_employee_group.with_user(self.user_hruser_id)
+        #Refusedfuturleaverequestchangedepartment
+        self.employee_emp.department_id=self.rd_dept
+        hol32_employee_group=create_holiday("hol32",5,6)
+        hol32_user_group=hol32_employee_group.with_user(self.user_hruser_id)
         hol32_user_group.action_refuse()
-        self.employee_emp.department_id = self.hr_dept # Change department
-        self.assertEqual(hol32_employee_group.department_id, self.hr_dept, 'hr_holidays: refused futur leave request should change department if employee change department')
+        self.employee_emp.department_id=self.hr_dept#Changedepartment
+        self.assertEqual(hol32_employee_group.department_id,self.hr_dept,'hr_holidays:refusedfuturleaverequestshouldchangedepartmentifemployeechangedepartment')

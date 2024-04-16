@@ -1,87 +1,87 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="hr_employee_view_search" model="ir.ui.view">
-        <field name="name">hr.employee.skill.search</field>
-        <field name="model">hr.employee</field>
-        <field name="inherit_id" ref="hr.view_employee_filter"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='job_id']" position="after">
-                <field name="employee_skill_ids"/>
-                <field name="resume_line_ids" string="Resumé" filter_domain="['|', ('resume_line_ids.name', 'ilike', self), ('resume_line_ids.description', 'ilike', self)]"/>
+    <recordid="hr_employee_view_search"model="ir.ui.view">
+        <fieldname="name">hr.employee.skill.search</field>
+        <fieldname="model">hr.employee</field>
+        <fieldname="inherit_id"ref="hr.view_employee_filter"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='job_id']"position="after">
+                <fieldname="employee_skill_ids"/>
+                <fieldname="resume_line_ids"string="Resumé"filter_domain="['|',('resume_line_ids.name','ilike',self),('resume_line_ids.description','ilike',self)]"/>
             </xpath>
         </field>
     </record>
 
-    <record id="hr_employee_public_view_search" model="ir.ui.view">
-        <field name="name">hr.employee.public.skill.search</field>
-        <field name="model">hr.employee.public</field>
-        <field name="inherit_id" ref="hr.hr_employee_public_view_search"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='company_id']" position="after">
-                <field name="employee_skill_ids"/>
-                <field name="resume_line_ids" string="Resumé" filter_domain="['|', ('resume_line_ids.name', 'ilike', self), ('resume_line_ids.description', 'ilike', self)]"/>
+    <recordid="hr_employee_public_view_search"model="ir.ui.view">
+        <fieldname="name">hr.employee.public.skill.search</field>
+        <fieldname="model">hr.employee.public</field>
+        <fieldname="inherit_id"ref="hr.hr_employee_public_view_search"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='company_id']"position="after">
+                <fieldname="employee_skill_ids"/>
+                <fieldname="resume_line_ids"string="Resumé"filter_domain="['|',('resume_line_ids.name','ilike',self),('resume_line_ids.description','ilike',self)]"/>
             </xpath>
         </field>
     </record>
 
-    <record id="resume_line_view_form" model="ir.ui.view">
-        <field name="name">hr.resume.line.form</field>
-        <field name="model">hr.resume.line</field>
-        <field name="arch" type="xml">
-            <form string="Resumé">
-                <div class="oe_title">
-                    <label for="name" class="oe_edit_only"/>
+    <recordid="resume_line_view_form"model="ir.ui.view">
+        <fieldname="name">hr.resume.line.form</field>
+        <fieldname="model">hr.resume.line</field>
+        <fieldname="arch"type="xml">
+            <formstring="Resumé">
+                <divclass="oe_title">
+                    <labelfor="name"class="oe_edit_only"/>
                     <h1>
-                        <field name="name" placeholder="Title" required="True"/>
+                        <fieldname="name"placeholder="Title"required="True"/>
                     </h1>
                 </div>
                 <group>
                     <group>
-                        <field name="line_type_id"/>
-                        <field name="display_type" required="1"/>
+                        <fieldname="line_type_id"/>
+                        <fieldname="display_type"required="1"/>
                     </group>
                     <group>
-                        <field name="date_start" required="True"/>
-                        <field name="date_end"/>
+                        <fieldname="date_start"required="True"/>
+                        <fieldname="date_end"/>
                     </group>
                 </group>
-                <field name="description" placeholder="Description"/>
+                <fieldname="description"placeholder="Description"/>
             </form>
         </field>
     </record>
 
-    <record id="hr_employee_view_form" model="ir.ui.view">
-        <field name="name">hr.employee.view.form.inherit.resume</field>
-        <field name="model">hr.employee</field>
-        <field name="inherit_id" ref="hr.view_employee_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//page[@name='public']" position="before">
-                <page name="public" string="Resumé">
-                    <div class="row">
-                        <div class="o_hr_skills_group o_group_resume col-lg-7 d-flex">
-                            <!-- This field uses a custom tree view rendered by the 'hr_resume' widget.
-                                Adding fields in the tree arch below makes them accessible to the widget
+    <recordid="hr_employee_view_form"model="ir.ui.view">
+        <fieldname="name">hr.employee.view.form.inherit.resume</field>
+        <fieldname="model">hr.employee</field>
+        <fieldname="inherit_id"ref="hr.view_employee_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//page[@name='public']"position="before">
+                <pagename="public"string="Resumé">
+                    <divclass="row">
+                        <divclass="o_hr_skills_groupo_group_resumecol-lg-7d-flex">
+                            <!--Thisfieldusesacustomtreeviewrenderedbythe'hr_resume'widget.
+                                Addingfieldsinthetreearchbelowmakesthemaccessibletothewidget
                             -->
-                            <field mode="tree" nolabel="1" name="resume_line_ids" widget="hr_resume">
+                            <fieldmode="tree"nolabel="1"name="resume_line_ids"widget="hr_resume">
                                 <tree>
-                                    <field name="line_type_id"/>
-                                    <field name="name"/>
-                                    <field name="description"/>
-                                    <field name="date_start"/>
-                                    <field name="date_end"/>
-                                    <field name="display_type" invisible="1"/>
+                                    <fieldname="line_type_id"/>
+                                    <fieldname="name"/>
+                                    <fieldname="description"/>
+                                    <fieldname="date_start"/>
+                                    <fieldname="date_end"/>
+                                    <fieldname="display_type"invisible="1"/>
                                 </tree>
                             </field>
                         </div>
-                        <div class="o_hr_skills_group o_group_skills col-lg-5 d-flex flex-column">
-                            <separator string="Skills"/>
-                            <field mode="tree" nolabel="1" name="employee_skill_ids"  widget="hr_skills">
+                        <divclass="o_hr_skills_groupo_group_skillscol-lg-5d-flexflex-column">
+                            <separatorstring="Skills"/>
+                            <fieldmode="tree"nolabel="1"name="employee_skill_ids" widget="hr_skills">
                                 <tree>
-                                    <field name="skill_type_id" invisible="1"/>
-                                    <field name="skill_id"/>
-                                    <field name="skill_level_id"/>
-                                    <field name="level_progress" widget="progressbar"/>
+                                    <fieldname="skill_type_id"invisible="1"/>
+                                    <fieldname="skill_id"/>
+                                    <fieldname="skill_level_id"/>
+                                    <fieldname="level_progress"widget="progressbar"/>
                                 </tree>
                             </field>
                         </div>
@@ -92,37 +92,37 @@
     </record>
 
 
-    <record id="hr_employee_public_view_form_inherit" model="ir.ui.view">
-        <field name="name">hr.employee.public.view.form.inherit.resume</field>
-        <field name="model">hr.employee.public</field>
-        <field name="inherit_id" ref="hr.hr_employee_public_view_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//page[@name='public']" position="before">
-                <page name="public" string="Resumé">
-                    <div class="row">
-                        <div class="o_hr_skills_group o_group_resume col-lg-7 d-flex">
-                            <!-- This field uses a custom tree view rendered by the 'hr_resume' widget.
-                                Adding fields in the tree arch below makes them accessible to the widget
+    <recordid="hr_employee_public_view_form_inherit"model="ir.ui.view">
+        <fieldname="name">hr.employee.public.view.form.inherit.resume</field>
+        <fieldname="model">hr.employee.public</field>
+        <fieldname="inherit_id"ref="hr.hr_employee_public_view_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//page[@name='public']"position="before">
+                <pagename="public"string="Resumé">
+                    <divclass="row">
+                        <divclass="o_hr_skills_groupo_group_resumecol-lg-7d-flex">
+                            <!--Thisfieldusesacustomtreeviewrenderedbythe'hr_resume'widget.
+                                Addingfieldsinthetreearchbelowmakesthemaccessibletothewidget
                             -->
-                            <field mode="tree" nolabel="1" name="resume_line_ids" widget="hr_resume">
+                            <fieldmode="tree"nolabel="1"name="resume_line_ids"widget="hr_resume">
                                 <tree>
-                                    <field name="line_type_id"/>
-                                    <field name="name"/>
-                                    <field name="description"/>
-                                    <field name="date_start"/>
-                                    <field name="date_end"/>
-                                    <field name="display_type" invisible="1"/>
+                                    <fieldname="line_type_id"/>
+                                    <fieldname="name"/>
+                                    <fieldname="description"/>
+                                    <fieldname="date_start"/>
+                                    <fieldname="date_end"/>
+                                    <fieldname="display_type"invisible="1"/>
                                 </tree>
                             </field>
                         </div>
-                        <div class="o_hr_skills_group o_group_skills col-lg-5 d-flex flex-column">
-                            <separator string="Skills"/>
-                            <field mode="tree" nolabel="1" name="employee_skill_ids"  widget="hr_skills">
+                        <divclass="o_hr_skills_groupo_group_skillscol-lg-5d-flexflex-column">
+                            <separatorstring="Skills"/>
+                            <fieldmode="tree"nolabel="1"name="employee_skill_ids" widget="hr_skills">
                                 <tree>
-                                    <field name="skill_type_id" invisible="1"/>
-                                    <field name="skill_id"/>
-                                    <field name="skill_level_id"/>
-                                    <field name="level_progress" widget="progressbar"/>
+                                    <fieldname="skill_type_id"invisible="1"/>
+                                    <fieldname="skill_id"/>
+                                    <fieldname="skill_level_id"/>
+                                    <fieldname="level_progress"widget="progressbar"/>
                                 </tree>
                             </field>
                         </div>
@@ -132,37 +132,37 @@
         </field>
     </record>
 
-    <record id="res_users_view_form" model="ir.ui.view">
-        <field name="name">hr.user.preferences.form.inherit.hr.skills</field>
-        <field name="model">res.users</field>
-        <field name="inherit_id" ref="hr.res_users_view_form_profile" />
-        <field name="arch" type="xml">
-            <xpath expr="//page[@name='public']" position="before">
-                <page name="public" string="Resumé">
-                    <div class="row">
-                        <div class="o_hr_skills_group o_group_resume col-lg-7 d-flex">
-                            <!-- This field uses a custom tree view rendered by the 'hr_resume' widget.
-                                Adding fields in the tree arch below makes them accessible to the widget
+    <recordid="res_users_view_form"model="ir.ui.view">
+        <fieldname="name">hr.user.preferences.form.inherit.hr.skills</field>
+        <fieldname="model">res.users</field>
+        <fieldname="inherit_id"ref="hr.res_users_view_form_profile"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//page[@name='public']"position="before">
+                <pagename="public"string="Resumé">
+                    <divclass="row">
+                        <divclass="o_hr_skills_groupo_group_resumecol-lg-7d-flex">
+                            <!--Thisfieldusesacustomtreeviewrenderedbythe'hr_resume'widget.
+                                Addingfieldsinthetreearchbelowmakesthemaccessibletothewidget
                             -->
-                            <field mode="tree" nolabel="1" name="resume_line_ids" widget="hr_resume" attrs="{'readonly': [('can_edit', '=', False)]}">
+                            <fieldmode="tree"nolabel="1"name="resume_line_ids"widget="hr_resume"attrs="{'readonly':[('can_edit','=',False)]}">
                                 <tree>
-                                    <field name="line_type_id"/>
-                                    <field name="name"/>
-                                    <field name="description"/>
-                                    <field name="date_start"/>
-                                    <field name="date_end"/>
-                                    <field name="display_type" invisible="1"/>
+                                    <fieldname="line_type_id"/>
+                                    <fieldname="name"/>
+                                    <fieldname="description"/>
+                                    <fieldname="date_start"/>
+                                    <fieldname="date_end"/>
+                                    <fieldname="display_type"invisible="1"/>
                                 </tree>
                             </field>
                         </div>
-                        <div class="o_hr_skills_group o_group_skills col-lg-5 d-flex flex-column">
-                            <separator string="Skills"/>
-                            <field mode="tree" nolabel="1" name="employee_skill_ids"  widget="hr_skills" attrs="{'readonly': [('can_edit', '=', False)]}">
+                        <divclass="o_hr_skills_groupo_group_skillscol-lg-5d-flexflex-column">
+                            <separatorstring="Skills"/>
+                            <fieldmode="tree"nolabel="1"name="employee_skill_ids" widget="hr_skills"attrs="{'readonly':[('can_edit','=',False)]}">
                                 <tree>
-                                    <field name="skill_type_id" invisible="1"/>
-                                    <field name="skill_id"/>
-                                    <field name="skill_level_id"/>
-                                    <field name="level_progress" widget="progressbar"/>
+                                    <fieldname="skill_type_id"invisible="1"/>
+                                    <fieldname="skill_id"/>
+                                    <fieldname="skill_level_id"/>
+                                    <fieldname="level_progress"widget="progressbar"/>
                                 </tree>
                             </field>
                         </div>
@@ -172,21 +172,21 @@
         </field>
     </record>
 
-    <record id="hr_resume_line_type_tree_view" model="ir.ui.view">
-        <field name="name">hr.resume.line.type.tree.view</field>
-        <field name="model">hr.resume.line.type</field>
-        <field name="arch" type="xml">
-            <tree name="Resumé Line Types" editable="bottom">
-                <field name="sequence" widget="handle"/>
-                <field name="name"/>
+    <recordid="hr_resume_line_type_tree_view"model="ir.ui.view">
+        <fieldname="name">hr.resume.line.type.tree.view</field>
+        <fieldname="model">hr.resume.line.type</field>
+        <fieldname="arch"type="xml">
+            <treename="ResuméLineTypes"editable="bottom">
+                <fieldname="sequence"widget="handle"/>
+                <fieldname="name"/>
             </tree>
         </field>
     </record>
 
-    <record id="hr_resume_type_action" model="ir.actions.act_window">
-        <field name="name">Resumé Line Types</field>
-        <field name="res_model">hr.resume.line.type</field>
-        <field name="view_mode">tree,form</field>
+    <recordid="hr_resume_type_action"model="ir.actions.act_window">
+        <fieldname="name">ResuméLineTypes</field>
+        <fieldname="res_model">hr.resume.line.type</field>
+        <fieldname="view_mode">tree,form</field>
     </record>
 
     <menuitem
@@ -204,61 +204,61 @@
         sequence="3"
         groups="base.group_no_one"/>
 
-    <!-- Skills -->
+    <!--Skills-->
 
-    <record id="employee_skill_level_view_tree" model="ir.ui.view">
-        <field name="name">hr.skill.level.tree</field>
-        <field name="model">hr.skill.level</field>
-        <field name="arch" type="xml">
-            <tree string="Skill Levels">
-                <field name="name"/>
-                <field name="level_progress" widget="progressbar"/>
+    <recordid="employee_skill_level_view_tree"model="ir.ui.view">
+        <fieldname="name">hr.skill.level.tree</field>
+        <fieldname="model">hr.skill.level</field>
+        <fieldname="arch"type="xml">
+            <treestring="SkillLevels">
+                <fieldname="name"/>
+                <fieldname="level_progress"widget="progressbar"/>
             </tree>
         </field>
     </record>
 
-    <record id="employee_skill_view_tree" model="ir.ui.view">
-        <field name="name">hr.skill.tree</field>
-        <field name="model">hr.skill</field>
-        <field name="arch" type="xml">
-            <tree string="Skill Levels">
-                <field name="name"/>
+    <recordid="employee_skill_view_tree"model="ir.ui.view">
+        <fieldname="name">hr.skill.tree</field>
+        <fieldname="model">hr.skill</field>
+        <fieldname="arch"type="xml">
+            <treestring="SkillLevels">
+                <fieldname="name"/>
             </tree>
         </field>
     </record>
 
-    <record id="employee_skill_level_view_form" model="ir.ui.view">
-        <field name="name">hr.skill.level.form</field>
-        <field name="model">hr.skill.level</field>
-        <field name="arch" type="xml">
-            <form string="Skill Level">
+    <recordid="employee_skill_level_view_form"model="ir.ui.view">
+        <fieldname="name">hr.skill.level.form</field>
+        <fieldname="model">hr.skill.level</field>
+        <fieldname="arch"type="xml">
+            <formstring="SkillLevel">
                 <sheet>
                     <group>
-                        <field name="name"/>
-                        <field name="level_progress" string="Progress (%)"/>
+                        <fieldname="name"/>
+                        <fieldname="level_progress"string="Progress(%)"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="employee_skill_view_form" model="ir.ui.view">
-        <field name="name">hr.employees.skill.form</field>
-        <field name="model">hr.employee.skill</field>
-        <field name="arch" type="xml">
-            <form string="Skills">
+    <recordid="employee_skill_view_form"model="ir.ui.view">
+        <fieldname="name">hr.employees.skill.form</field>
+        <fieldname="model">hr.employee.skill</field>
+        <fieldname="arch"type="xml">
+            <formstring="Skills">
                 <sheet>
                     <group>
                         <group>
-                            <field name="skill_type_id"/>
+                            <fieldname="skill_type_id"/>
                             <field
                                 name="skill_id"
-                                domain="[('skill_type_id', '=', skill_type_id)]"
+                                domain="[('skill_type_id','=',skill_type_id)]"
                                 options="{'no_create_edit':True}"/>
                         </group>
                         <group>
-                            <field name="skill_level_id" domain="[('skill_type_id', '=', skill_type_id)]"/>
-                            <field name="level_progress" widget="progressbar"/>
+                            <fieldname="skill_level_id"domain="[('skill_type_id','=',skill_type_id)]"/>
+                            <fieldname="level_progress"widget="progressbar"/>
                         </group>
                     </group>
                 </sheet>
@@ -266,61 +266,61 @@
         </field>
     </record>
 
-    <record id="hr_skill_view_form" model="ir.ui.view">
-        <field name="name">hr.skill.form</field>
-        <field name="model">hr.skill</field>
-        <field name="arch" type="xml">
-            <form string="Skills">
+    <recordid="hr_skill_view_form"model="ir.ui.view">
+        <fieldname="name">hr.skill.form</field>
+        <fieldname="model">hr.skill</field>
+        <fieldname="arch"type="xml">
+            <formstring="Skills">
                 <sheet>
-                    <field name="name"/>
+                    <fieldname="name"/>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="hr_skill_type_view_tree" model="ir.ui.view">
-        <field name="name">hr.skill.type.tree</field>
-        <field name="model">hr.skill.type</field>
-        <field name="arch" type="xml">
-            <tree string="Skill Types">
-                <field name="name"/>
-                <field name="skill_ids" widget="many2many_tags"/>
+    <recordid="hr_skill_type_view_tree"model="ir.ui.view">
+        <fieldname="name">hr.skill.type.tree</field>
+        <fieldname="model">hr.skill.type</field>
+        <fieldname="arch"type="xml">
+            <treestring="SkillTypes">
+                <fieldname="name"/>
+                <fieldname="skill_ids"widget="many2many_tags"/>
             </tree>
         </field>
     </record>
 
-    <record id="hr_employee_skill_type_view_form" model="ir.ui.view">
-        <field name="name">hr.skill.type.form</field>
-        <field name="model">hr.skill.type</field>
-        <field name="arch" type="xml">
-            <form string="Skill Type">
-                <field name="id" invisible="1"/>
+    <recordid="hr_employee_skill_type_view_form"model="ir.ui.view">
+        <fieldname="name">hr.skill.type.form</field>
+        <fieldname="model">hr.skill.type</field>
+        <fieldname="arch"type="xml">
+            <formstring="SkillType">
+                <fieldname="id"invisible="1"/>
                 <sheet>
-                    <div class="oe_title">
-                        <label for="name" class="oe_edit_only"/>
+                    <divclass="oe_title">
+                        <labelfor="name"class="oe_edit_only"/>
                         <h1>
-                            <field name="name" placeholder="Skill Type" required="True"/>
+                            <fieldname="name"placeholder="SkillType"required="True"/>
                         </h1>
                     </div>
-                    <group string="Skills">
-                        <field name="skill_ids" nolabel="1" context="{'default_skill_type_id': id}">
-                            <tree editable="bottom">
-                                <field name="name"/>
+                    <groupstring="Skills">
+                        <fieldname="skill_ids"nolabel="1"context="{'default_skill_type_id':id}">
+                            <treeeditable="bottom">
+                                <fieldname="name"/>
                             </tree>
                         </field>
                     </group>
-                    <group string="Levels">
-                        <field name="skill_level_ids" nolabel="1" context="{'default_skill_type_id': id}"/>
+                    <groupstring="Levels">
+                        <fieldname="skill_level_ids"nolabel="1"context="{'default_skill_type_id':id}"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="hr_skill_type_action" model="ir.actions.act_window">
-        <field name="name">Skill Types</field>
-        <field name="res_model">hr.skill.type</field>
-        <field name="view_mode">tree,form</field>
+    <recordid="hr_skill_type_action"model="ir.actions.act_window">
+        <fieldname="name">SkillTypes</field>
+        <fieldname="res_model">hr.skill.type</field>
+        <fieldname="view_mode">tree,form</field>
     </record>
 
     <menuitem

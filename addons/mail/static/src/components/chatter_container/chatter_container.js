@@ -1,139 +1,139 @@
-flectra.define('mail/static/src/components/chatter_container/chatter_container.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/chatter_container/chatter_container.js',function(require){
+'usestrict';
 
-const components = {
-    Chatter: require('mail/static/src/components/chatter/chatter.js'),
+constcomponents={
+    Chatter:require('mail/static/src/components/chatter/chatter.js'),
 };
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
-const useUpdate = require('mail/static/src/component_hooks/use_update/use_update.js');
-const { clear } = require('mail/static/src/model/model_field_command.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
+constuseUpdate=require('mail/static/src/component_hooks/use_update/use_update.js');
+const{clear}=require('mail/static/src/model/model_field_command.js');
 
-const { Component } = owl;
+const{Component}=owl;
 
 /**
- * This component abstracts chatter component to its parent, so that it can be
- * mounted and receive chatter data even when a chatter component cannot be
- * created. Indeed, in order to create a chatter component, we must create
- * a chatter record, the latter requiring messaging to be initialized. The view
- * may attempt to create a chatter before messaging has been initialized, so
- * this component delays the mounting of chatter until it becomes initialized.
+ *Thiscomponentabstractschattercomponenttoitsparent,sothatitcanbe
+ *mountedandreceivechatterdataevenwhenachattercomponentcannotbe
+ *created.Indeed,inordertocreateachattercomponent,wemustcreate
+ *achatterrecord,thelatterrequiringmessagingtobeinitialized.Theview
+ *mayattempttocreateachatterbeforemessaginghasbeeninitialized,so
+ *thiscomponentdelaysthemountingofchatteruntilitbecomesinitialized.
  */
-class ChatterContainer extends Component {
+classChatterContainerextendsComponent{
 
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
-        this.chatter = undefined;
-        this._wasMessagingInitialized = false;
+        this.chatter=undefined;
+        this._wasMessagingInitialized=false;
         useShouldUpdateBasedOnProps();
-        useStore(props => {
-            const isMessagingInitialized = this.env.isMessagingInitialized();
-            // Delay creation of chatter record until messaging is initialized.
-            // Ideally should observe models directly to detect change instead
-            // of using `useStore`.
-            if (!this._wasMessagingInitialized && isMessagingInitialized) {
-                this._wasMessagingInitialized = true;
+        useStore(props=>{
+            constisMessagingInitialized=this.env.isMessagingInitialized();
+            //Delaycreationofchatterrecorduntilmessagingisinitialized.
+            //Ideallyshouldobservemodelsdirectlytodetectchangeinstead
+            //ofusing`useStore`.
+            if(!this._wasMessagingInitialized&&isMessagingInitialized){
+                this._wasMessagingInitialized=true;
                 this._insertFromProps(props);
             }
-            return { chatter: this.chatter };
+            return{chatter:this.chatter};
         });
-        useUpdate({ func: () => this._update() });
+        useUpdate({func:()=>this._update()});
     }
 
     /**
-     * @override
+     *@override
      */
-    willUpdateProps(nextProps) {
-        if (this.env.isMessagingInitialized()) {
+    willUpdateProps(nextProps){
+        if(this.env.isMessagingInitialized()){
             this._insertFromProps(nextProps);
         }
-        return super.willUpdateProps(...arguments);
+        returnsuper.willUpdateProps(...arguments);
     }
 
     /**
-     * @override
+     *@override
      */
-    destroy() {
+    destroy(){
         super.destroy();
-        if (this.chatter) {
+        if(this.chatter){
             this.chatter.delete();
         }
     }
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _insertFromProps(props) {
-        const values = Object.assign({}, props);
-        if (values.threadId === undefined) {
-            values.threadId = clear();
+    _insertFromProps(props){
+        constvalues=Object.assign({},props);
+        if(values.threadId===undefined){
+            values.threadId=clear();
         }
-        if (!this.chatter) {
-            this.chatter = this.env.models['mail.chatter'].create(values);
-        } else {
+        if(!this.chatter){
+            this.chatter=this.env.models['mail.chatter'].create(values);
+        }else{
             this.chatter.update(values);
         }
     }
 
     /**
-     * @private
+     *@private
      */
-    _update() {
-        if (this.chatter) {
+    _update(){
+        if(this.chatter){
             this.chatter.refresh();
         }
     }
 
 }
 
-Object.assign(ChatterContainer, {
+Object.assign(ChatterContainer,{
     components,
-    props: {
-        hasActivities: {
-            type: Boolean,
-            optional: true,
+    props:{
+        hasActivities:{
+            type:Boolean,
+            optional:true,
         },
-        hasExternalBorder: {
-            type: Boolean,
-            optional: true,
+        hasExternalBorder:{
+            type:Boolean,
+            optional:true,
         },
-        hasFollowers: {
-            type: Boolean,
-            optional: true,
+        hasFollowers:{
+            type:Boolean,
+            optional:true,
         },
-        hasMessageList: {
-            type: Boolean,
-            optional: true,
+        hasMessageList:{
+            type:Boolean,
+            optional:true,
         },
-        hasMessageListScrollAdjust: {
-            type: Boolean,
-            optional: true,
+        hasMessageListScrollAdjust:{
+            type:Boolean,
+            optional:true,
         },
-        hasTopbarCloseButton: {
-            type: Boolean,
-            optional: true,
+        hasTopbarCloseButton:{
+            type:Boolean,
+            optional:true,
         },
-        isAttachmentBoxVisibleInitially: {
-            type: Boolean,
-            optional: true,
+        isAttachmentBoxVisibleInitially:{
+            type:Boolean,
+            optional:true,
         },
-        threadId: {
-            type: Number,
-            optional: true,
+        threadId:{
+            type:Number,
+            optional:true,
         },
-        threadModel: String,
+        threadModel:String,
     },
-    template: 'mail.ChatterContainer',
+    template:'mail.ChatterContainer',
 });
 
 
-return ChatterContainer;
+returnChatterContainer;
 
 });

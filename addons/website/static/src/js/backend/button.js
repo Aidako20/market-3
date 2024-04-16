@@ -1,116 +1,116 @@
-flectra.define('website.backend.button', function (require) {
-'use strict';
+flectra.define('website.backend.button',function(require){
+'usestrict';
 
-var AbstractField = require('web.AbstractField');
-var core = require('web.core');
-var field_registry = require('web.field_registry');
+varAbstractField=require('web.AbstractField');
+varcore=require('web.core');
+varfield_registry=require('web.field_registry');
 
-var _t = core._t;
+var_t=core._t;
 
-var WebsitePublishButton = AbstractField.extend({
-    className: 'o_stat_info',
-    supportedFieldTypes: ['boolean'],
+varWebsitePublishButton=AbstractField.extend({
+    className:'o_stat_info',
+    supportedFieldTypes:['boolean'],
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * A boolean field is always set since false is a valid value.
+     *Abooleanfieldisalwayssetsincefalseisavalidvalue.
      *
-     * @override
+     *@override
      */
-    isSet: function () {
-        return true;
+    isSet:function(){
+        returntrue;
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * This widget is supposed to be used inside a stat button and, as such, is
-     * rendered the same way in edit and readonly mode.
+     *Thiswidgetissupposedtobeusedinsideastatbuttonand,assuch,is
+     *renderedthesamewayineditandreadonlymode.
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _render: function () {
+    _render:function(){
         this.$el.empty();
-        var text = this.value ? _t("Published") : _t("Unpublished");
-        var hover = this.value ? _t("Unpublish") : _t("Publish");
-        var valColor = this.value ? 'text-success' : 'text-danger';
-        var hoverColor = this.value ? 'text-danger' : 'text-success';
-        var $val = $('<span>').addClass('o_stat_text o_not_hover ' + valColor).text(text);
-        var $hover = $('<span>').addClass('o_stat_text o_hover ' + hoverColor).text(hover);
+        vartext=this.value?_t("Published"):_t("Unpublished");
+        varhover=this.value?_t("Unpublish"):_t("Publish");
+        varvalColor=this.value?'text-success':'text-danger';
+        varhoverColor=this.value?'text-danger':'text-success';
+        var$val=$('<span>').addClass('o_stat_texto_not_hover'+valColor).text(text);
+        var$hover=$('<span>').addClass('o_stat_texto_hover'+hoverColor).text(hover);
         this.$el.append($val).append($hover);
     },
 });
 
-var WidgetWebsiteButtonIcon = AbstractField.extend({
-    template: 'WidgetWebsiteButtonIcon',
-    events: {
-        'click': '_onClick',
+varWidgetWebsiteButtonIcon=AbstractField.extend({
+    template:'WidgetWebsiteButtonIcon',
+    events:{
+        'click':'_onClick',
     },
 
     /**
-    * @override
+    *@override
     */
-    start: function () {
-        this.$icon = this.$('.o_button_icon');
-        return this._super.apply(this, arguments);
+    start:function(){
+        this.$icon=this.$('.o_button_icon');
+        returnthis._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    isSet: function () {
-        return true;
+    isSet:function(){
+        returntrue;
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _render: function () {
-        this._super.apply(this, arguments);
+    _render:function(){
+        this._super.apply(this,arguments);
 
-        var published = this.value;
-        var info = published ? _t("Published") : _t("Unpublished");
-        this.$el.attr('aria-label', info)
-                .prop('title', info);
-        this.$icon.toggleClass('text-danger', !published)
-                .toggleClass('text-success', published);
+        varpublished=this.value;
+        varinfo=published?_t("Published"):_t("Unpublished");
+        this.$el.attr('aria-label',info)
+                .prop('title',info);
+        this.$icon.toggleClass('text-danger',!published)
+                .toggleClass('text-success',published);
     },
 
     //--------------------------------------------------------------------------
-    // Handler
+    //Handler
     //--------------------------------------------------------------------------
 
     /**
-     * Redirects to the website page of the record.
+     *Redirectstothewebsitepageoftherecord.
      *
-     * @private
+     *@private
      */
-    _onClick: function () {
-        this.trigger_up('button_clicked', {
-            attrs: {
-                type: 'object',
-                name: 'open_website_url',
+    _onClick:function(){
+        this.trigger_up('button_clicked',{
+            attrs:{
+                type:'object',
+                name:'open_website_url',
             },
-            record: this.record,
+            record:this.record,
         });
     },
 });
 
 field_registry
-    .add('website_redirect_button', WidgetWebsiteButtonIcon)
-    .add('website_publish_button', WebsitePublishButton);
+    .add('website_redirect_button',WidgetWebsiteButtonIcon)
+    .add('website_publish_button',WebsitePublishButton);
 });

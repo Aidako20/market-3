@@ -1,32 +1,32 @@
-flectra.define('board.ActionManager', function (require) {
-"use strict";
+flectra.define('board.ActionManager',function(require){
+"usestrict";
 
 /**
- * The purpose of this file is to patch the ActionManager to properly generate
- * the flags for the 'ir.actions.act_window' of model 'board.board'.
+ *ThepurposeofthisfileistopatchtheActionManagertoproperlygenerate
+ *theflagsforthe'ir.actions.act_window'ofmodel'board.board'.
  */
 
-var ActionManager = require('web.ActionManager');
+varActionManager=require('web.ActionManager');
 
 ActionManager.include({
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _executeWindowAction: function (action) {
-        if (action.res_model === 'board.board' && action.view_mode === 'form') {
-            action.target = 'inline';
-            _.extend(action.flags, {
-                hasActionMenus: false,
-                hasSearchView: false,
-                headless: true,
+    _executeWindowAction:function(action){
+        if(action.res_model==='board.board'&&action.view_mode==='form'){
+            action.target='inline';
+            _.extend(action.flags,{
+                hasActionMenus:false,
+                hasSearchView:false,
+                headless:true,
             });
         }
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 });
 

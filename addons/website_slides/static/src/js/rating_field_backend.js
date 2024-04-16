@@ -1,42 +1,42 @@
-flectra.define('website_slides.ratingField', function (require) {
-"use strict";
+flectra.define('website_slides.ratingField',function(require){
+"usestrict";
 
-var basicFields = require('web.basic_fields');
-var fieldRegistry = require('web.field_registry');
+varbasicFields=require('web.basic_fields');
+varfieldRegistry=require('web.field_registry');
 
-var core = require('web.core');
+varcore=require('web.core');
 
-var QWeb = core.qweb;
+varQWeb=core.qweb;
 
-var FieldFloatRating = basicFields.FieldFloat.extend({
-    xmlDependencies: !basicFields.FieldFloat.prototype.xmlDependencies ?
-        ['/portal_rating/static/src/xml/portal_tools.xml'] : basicFields.FieldFloat.prototype.xmlDependencies.concat(
+varFieldFloatRating=basicFields.FieldFloat.extend({
+    xmlDependencies:!basicFields.FieldFloat.prototype.xmlDependencies?
+        ['/portal_rating/static/src/xml/portal_tools.xml']:basicFields.FieldFloat.prototype.xmlDependencies.concat(
             ['/portal_rating/static/src/xml/portal_tools.xml']
         ),
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _render: function () {
-        var self = this;
+    _render:function(){
+        varself=this;
 
-        return Promise.resolve(this._super()).then(function () {
-            self.$el.html(QWeb.render('portal_rating.rating_stars_static', {
-                'val': self.value / 2,
-                'inline_mode': true
+        returnPromise.resolve(this._super()).then(function(){
+            self.$el.html(QWeb.render('portal_rating.rating_stars_static',{
+                'val':self.value/2,
+                'inline_mode':true
             }));
         });
     },
 });
 
-fieldRegistry.add('field_float_rating', FieldFloatRating);
+fieldRegistry.add('field_float_rating',FieldFloatRating);
 
-return {
-    FieldFloatRating: FieldFloatRating,
+return{
+    FieldFloatRating:FieldFloatRating,
 };
 
 });

@@ -1,25 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra><data>
-    <record id="gamification_badge_form_view_simplified" model="ir.ui.view">
-        <field name="name">gamification.badge.form.view.simplified</field>
-        <field name="model">gamification.badge</field>
-        <field name="priority">100</field>
-        <field name="arch" type="xml">
-            <form string="Badge">
+    <recordid="gamification_badge_form_view_simplified"model="ir.ui.view">
+        <fieldname="name">gamification.badge.form.view.simplified</field>
+        <fieldname="model">gamification.badge</field>
+        <fieldname="priority">100</field>
+        <fieldname="arch"type="xml">
+            <formstring="Badge">
                 <sheet>
-                    <div class="oe_button_box" name="button_box"/>
-                    <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_128'}"/>
-                    <div class="oe_title">
-                        <label for="name" class="oe_edit_only"/>
+                    <divclass="oe_button_box"name="button_box"/>
+                    <fieldname="image_1920"widget="image"class="oe_avatar"options="{'preview_image':'image_128'}"/>
+                    <divclass="oe_title">
+                        <labelfor="name"class="oe_edit_only"/>
                         <h1>
-                            <field name="name" placeholder="Badge Name"/>
+                            <fieldname="name"placeholder="BadgeName"/>
                         </h1>
                     </div>
                     <group>
-                        <field name="description" nolabel="1" placeholder="Badge Description"/>
+                        <fieldname="description"nolabel="1"placeholder="BadgeDescription"/>
                     </group>
-                    <group string="Rewards for challenges">
-                        <field name="level"/>
+                    <groupstring="Rewardsforchallenges">
+                        <fieldname="level"/>
                     </group>
                 </sheet>
             </form>

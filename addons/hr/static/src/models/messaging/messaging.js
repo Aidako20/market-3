@@ -1,35 +1,35 @@
-flectra.define('hr/static/src/models/messaging/messaging.js', function (require) {
-'use strict';
+flectra.define('hr/static/src/models/messaging/messaging.js',function(require){
+'usestrict';
 
-const {
+const{
     registerInstancePatchModel,
-} = require('mail/static/src/model/model_core.js');
+}=require('mail/static/src/model/model_core.js');
 
-registerInstancePatchModel('mail.messaging', 'hr/static/src/models/messaging/messaging.js', {
+registerInstancePatchModel('mail.messaging','hr/static/src/models/messaging/messaging.js',{
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @param {integer} [param0.employeeId]
+     *@override
+     *@param{integer}[param0.employeeId]
      */
-    async getChat({ employeeId }) {
-        if (employeeId) {
-            const employee = this.env.models['hr.employee'].insert({ id: employeeId });
-            return employee.getChat();
+    asyncgetChat({employeeId}){
+        if(employeeId){
+            constemployee=this.env.models['hr.employee'].insert({id:employeeId});
+            returnemployee.getChat();
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    async openProfile({ id, model }) {
-        if (model === 'hr.employee' || model === 'hr.employee.public') {
-            const employee = this.env.models['hr.employee'].insert({ id });
-            return employee.openProfile(model);
+    asyncopenProfile({id,model}){
+        if(model==='hr.employee'||model==='hr.employee.public'){
+            constemployee=this.env.models['hr.employee'].insert({id});
+            returnemployee.openProfile(model);
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 });
 

@@ -1,74 +1,74 @@
 <templates>
-    <div t-name="sale_stock.qtyAtDate">
-        <div t-att-class="!widget.data.display_qty_widget ? 'invisible' : ''">
-            <a tabindex="0" t-attf-class="fa fa-area-chart {{ widget.data.forecasted_issue ? 'text-danger' : 'text-primary' }}"/>
+    <divt-name="sale_stock.qtyAtDate">
+        <divt-att-class="!widget.data.display_qty_widget?'invisible':''">
+            <atabindex="0"t-attf-class="fafa-area-chart{{widget.data.forecasted_issue?'text-danger':'text-primary'}}"/>
         </div>
     </div>
 
-    <div t-name="sale_stock.QtyDetailPopOver">
-        <table class="table table-borderless table-sm">
+    <divt-name="sale_stock.QtyDetailPopOver">
+        <tableclass="tabletable-borderlesstable-sm">
             <tbody>
-                <t t-if="!data.is_mto and ['draft', 'sent'].includes(data.state)">
+                <tt-if="!data.is_mtoand['draft','sent'].includes(data.state)">
                     <tr>
-                        <td><strong>Forecasted Stock</strong><br /><small>On <span t-esc="data.delivery_date"/></small></td>
-                        <td><b t-esc='data.virtual_available_at_date'/>
-                        <t t-esc='data.product_uom.data.display_name'/></td>
+                        <td><strong>ForecastedStock</strong><br/><small>On<spant-esc="data.delivery_date"/></small></td>
+                        <td><bt-esc='data.virtual_available_at_date'/>
+                        <tt-esc='data.product_uom.data.display_name'/></td>
                     </tr>
                     <tr>
-                        <td><strong>Available</strong><br /><small>All planned operations included</small></td>
-                        <td><b t-esc='data.free_qty_today' t-att-class="!data.will_be_fulfilled ? 'text-danger': ''"/>
-                        <t t-esc='data.product_uom.data.display_name'/></td>
-                    </tr>
-                </t>
-                <t t-elif="data.is_mto and ['draft', 'sent'].includes(data.state)">
-                    <tr>
-                        <td><strong>Expected Delivery</strong></td>
-                        <td class="oe-right"><span t-esc="data.delivery_date"/></td>
-                    </tr>
-                    <tr>
-                        <p>This product is replenished on demand.</p>
+                        <td><strong>Available</strong><br/><small>Allplannedoperationsincluded</small></td>
+                        <td><bt-esc='data.free_qty_today't-att-class="!data.will_be_fulfilled?'text-danger':''"/>
+                        <tt-esc='data.product_uom.data.display_name'/></td>
                     </tr>
                 </t>
-                <t t-elif="data.state == 'sale'">
+                <tt-elif="data.is_mtoand['draft','sent'].includes(data.state)">
+                    <tr>
+                        <td><strong>ExpectedDelivery</strong></td>
+                        <tdclass="oe-right"><spant-esc="data.delivery_date"/></td>
+                    </tr>
+                    <tr>
+                        <p>Thisproductisreplenishedondemand.</p>
+                    </tr>
+                </t>
+                <tt-elif="data.state=='sale'">
                     <tr>
                         <td>
                             <strong>Reserved</strong><br/>
                         </td>
-                        <td style="min-width: 50px; text-align: right;">
-                            <b t-esc='data.qty_available_today'/> <t t-esc='data.product_uom.data.display_name'/>
+                        <tdstyle="min-width:50px;text-align:right;">
+                            <bt-esc='data.qty_available_today'/><tt-esc='data.product_uom.data.display_name'/>
                         </td>
                     </tr>
-                    <tr t-if="data.qty_available_today &lt; data.qty_to_deliver">
+                    <trt-if="data.qty_available_today&lt;data.qty_to_deliver">
                         <td>
-                            <span t-if="data.will_be_fulfilled and data.forecast_expected_date_str">
-                                Remaining demand available at <b t-esc="data.forecast_expected_date_str" t-att-class="data.scheduled_date &lt; data.forecast_expected_date ? 'text-danger' : ''"/>
+                            <spant-if="data.will_be_fulfilledanddata.forecast_expected_date_str">
+                                Remainingdemandavailableat<bt-esc="data.forecast_expected_date_str"t-att-class="data.scheduled_date&lt;data.forecast_expected_date?'text-danger':''"/>
                             </span>
-                            <span t-elif="!data.will_be_fulfilled and data.forecast_expected_date_str" class="text-danger">
-                                No enough future availaibility
+                            <spant-elif="!data.will_be_fulfilledanddata.forecast_expected_date_str"class="text-danger">
+                                Noenoughfutureavailaibility
                             </span>
-                            <span t-elif="!data.will_be_fulfilled" class="text-danger">
-                                No future availaibility
+                            <spant-elif="!data.will_be_fulfilled"class="text-danger">
+                                Nofutureavailaibility
                             </span>
-                            <span t-else="">
-                                Available in stock
+                            <spant-else="">
+                                Availableinstock
                             </span>
                         </td>
                     </tr>
                 </t>
             </tbody>
         </table>
-        <button t-if="!data.is_mto" class="text-left btn btn-link action_open_forecast"
+        <buttont-if="!data.is_mto"class="text-leftbtnbtn-linkaction_open_forecast"
             type="button">
-            <i class="fa fa-fw o_button_icon fa-arrow-right"></i>
-            View Forecast
+            <iclass="fafa-fwo_button_iconfa-arrow-right"></i>
+            ViewForecast
         </button>
     </div>
 
-    <div t-name="sale_stock.DelayAlertWidget">
-        <p>The delivery
-            <t t-foreach="late_elements" t-as="late_element">
-                <a t-esc="late_element.name" href="#" t-att-element-id="late_element.id" t-att-element-model="model"/>,
-            </t> will be late.
+    <divt-name="sale_stock.DelayAlertWidget">
+        <p>Thedelivery
+            <tt-foreach="late_elements"t-as="late_element">
+                <at-esc="late_element.name"href="#"t-att-element-id="late_element.id"t-att-element-model="model"/>,
+            </t>willbelate.
         </p>
     </div>
 </templates>

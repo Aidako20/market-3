@@ -1,27 +1,27 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class Channel(models.Model):
-    _inherit = 'mail.channel'
+classChannel(models.Model):
+    _inherit='mail.channel'
 
-    subscription_department_ids = fields.Many2many(
-        'hr.department', string='HR Departments',
-        help='Automatically subscribe members of those departments to the channel.')
+    subscription_department_ids=fields.Many2many(
+        'hr.department',string='HRDepartments',
+        help='Automaticallysubscribemembersofthosedepartmentstothechannel.')
 
-    def _subscribe_users(self):
-        """ Auto-subscribe members of a department to a channel """
-        super(Channel, self)._subscribe_users()
-        for mail_channel in self:
-            if mail_channel.subscription_department_ids:
+    def_subscribe_users(self):
+        """Auto-subscribemembersofadepartmenttoachannel"""
+        super(Channel,self)._subscribe_users()
+        formail_channelinself:
+            ifmail_channel.subscription_department_ids:
                 mail_channel.write(
                     {'channel_partner_ids':
-                        [(4, partner_id) for partner_id in mail_channel.mapped('subscription_department_ids.member_ids.user_id.partner_id').ids]})
+                        [(4,partner_id)forpartner_idinmail_channel.mapped('subscription_department_ids.member_ids.user_id.partner_id').ids]})
 
-    def write(self, vals):
-        res = super(Channel, self).write(vals)
-        if vals.get('subscription_department_ids'):
+    defwrite(self,vals):
+        res=super(Channel,self).write(vals)
+        ifvals.get('subscription_department_ids'):
             self._subscribe_users()
-        return res
+        returnres

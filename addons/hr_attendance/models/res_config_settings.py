@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+classResConfigSettings(models.TransientModel):
+    _inherit='res.config.settings'
 
-    group_attendance_use_pin = fields.Boolean(string='Employee PIN',
+    group_attendance_use_pin=fields.Boolean(string='EmployeePIN',
         implied_group="hr_attendance.group_hr_attendance_use_pin")

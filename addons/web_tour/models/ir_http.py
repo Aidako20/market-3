@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
-from flectra.http import request
+fromflectraimportmodels
+fromflectra.httpimportrequest
 
 
-class Http(models.AbstractModel):
-    _inherit = 'ir.http'
+classHttp(models.AbstractModel):
+    _inherit='ir.http'
 
-    def session_info(self):
-        result = super(Http, self).session_info()
-        if result['is_admin']:
-            result['web_tours'] = request.env['web_tour.tour'].get_consumed_tours()
-        return result
+    defsession_info(self):
+        result=super(Http,self).session_info()
+        ifresult['is_admin']:
+            result['web_tours']=request.env['web_tour.tour'].get_consumed_tours()
+        returnresult

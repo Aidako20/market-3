@@ -1,25 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template id="event_track_content"
-    name="Track: Main Description: add quiz"
+<templateid="event_track_content"
+    name="Track:MainDescription:addquiz"
     inherit_id="website_event_track.event_track_content">
-    <xpath expr="//div[hasclass('o_wesession_track_main_description')]" position="after">
-        <div id="we_track_quiz_container" t-if="track.quiz_id"
-             t-att-class="'o_quiz_js_quiz_container o_quiz_main border-top bg-white px-2 pt-4 pb-4 col-12 %s' % ('' if track.is_quiz_completed else 'd-none')"
+    <xpathexpr="//div[hasclass('o_wesession_track_main_description')]"position="after">
+        <divid="we_track_quiz_container"t-if="track.quiz_id"
+             t-att-class="'o_quiz_js_quiz_containero_quiz_mainborder-topbg-whitepx-2pt-4pb-4col-12%s'%(''iftrack.is_quiz_completedelse'd-none')"
              t-att-data-object-id="track.id">
-            <h3 class="col-12">Quiz</h3>
-            <t t-call="website_event_track_quiz.quiz_content">
-                <t t-set="track" t-value="track"/>
-                <t t-set="quiz_completed" t-value="track.is_quiz_completed"/>
-                <t t-set="quiz_points" t-value="track.quiz_points"/>
+            <h3class="col-12">Quiz</h3>
+            <tt-call="website_event_track_quiz.quiz_content">
+                <tt-set="track"t-value="track"/>
+                <tt-set="quiz_completed"t-value="track.is_quiz_completed"/>
+                <tt-set="quiz_points"t-value="track.quiz_points"/>
             </t>
         </div>
     </xpath>
-    <xpath expr="//div[hasclass('o_we_track_reminder_button')]" position="before">
-        <div class="o_we_track_quiz_button mr-2 my-1" t-if="track.quiz_id and not track.is_quiz_completed and not track.is_track_upcoming">
-            <a class="btn btn-primary" href="#we_track_quiz_container" onclick="$('.o_quiz_js_quiz_container').removeClass('d-none'); ">
-                Take the Quiz
+    <xpathexpr="//div[hasclass('o_we_track_reminder_button')]"position="before">
+        <divclass="o_we_track_quiz_buttonmr-2my-1"t-if="track.quiz_idandnottrack.is_quiz_completedandnottrack.is_track_upcoming">
+            <aclass="btnbtn-primary"href="#we_track_quiz_container"onclick="$('.o_quiz_js_quiz_container').removeClass('d-none');">
+                TaketheQuiz
             </a>
         </div>
     </xpath>

@@ -1,63 +1,63 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, tools, _
-from flectra.exceptions import ValidationError
+fromflectraimportapi,fields,models,tools,_
+fromflectra.exceptionsimportValidationError
 
-from flectra.addons.website.tools import get_video_embed_code
+fromflectra.addons.website.toolsimportget_video_embed_code
 
 
-class ProductImage(models.Model):
-    _name = 'product.image'
-    _description = "Product Image"
-    _inherit = ['image.mixin']
-    _order = 'sequence, id'
+classProductImage(models.Model):
+    _name='product.image'
+    _description="ProductImage"
+    _inherit=['image.mixin']
+    _order='sequence,id'
 
-    name = fields.Char("Name", required=True)
-    sequence = fields.Integer(default=10, index=True)
+    name=fields.Char("Name",required=True)
+    sequence=fields.Integer(default=10,index=True)
 
-    image_1920 = fields.Image(required=True)
+    image_1920=fields.Image(required=True)
 
-    product_tmpl_id = fields.Many2one('product.template', "Product Template", index=True, ondelete='cascade')
-    product_variant_id = fields.Many2one('product.product', "Product Variant", index=True, ondelete='cascade')
-    video_url = fields.Char('Video URL',
-                            help='URL of a video for showcasing your product.')
-    embed_code = fields.Char(compute="_compute_embed_code")
+    product_tmpl_id=fields.Many2one('product.template',"ProductTemplate",index=True,ondelete='cascade')
+    product_variant_id=fields.Many2one('product.product',"ProductVariant",index=True,ondelete='cascade')
+    video_url=fields.Char('VideoURL',
+                            help='URLofavideoforshowcasingyourproduct.')
+    embed_code=fields.Char(compute="_compute_embed_code")
 
-    can_image_1024_be_zoomed = fields.Boolean("Can Image 1024 be zoomed", compute='_compute_can_image_1024_be_zoomed', store=True)
+    can_image_1024_be_zoomed=fields.Boolean("CanImage1024bezoomed",compute='_compute_can_image_1024_be_zoomed',store=True)
 
-    @api.depends('image_1920', 'image_1024')
-    def _compute_can_image_1024_be_zoomed(self):
-        for image in self:
-            image.can_image_1024_be_zoomed = image.image_1920 and tools.is_image_size_above(image.image_1920, image.image_1024)
+    @api.depends('image_1920','image_1024')
+    def_compute_can_image_1024_be_zoomed(self):
+        forimageinself:
+            image.can_image_1024_be_zoomed=image.image_1920andtools.is_image_size_above(image.image_1920,image.image_1024)
 
     @api.depends('video_url')
-    def _compute_embed_code(self):
-        for image in self:
-            image.embed_code = get_video_embed_code(image.video_url)
+    def_compute_embed_code(self):
+        forimageinself:
+            image.embed_code=get_video_embed_code(image.video_url)
 
     @api.constrains('video_url')
-    def _check_valid_video_url(self):
-        for image in self:
-            if image.video_url and not image.embed_code:
-                raise ValidationError(_("Provided video URL for '%s' is not valid. Please enter a valid video URL.", image.name))
+    def_check_valid_video_url(self):
+        forimageinself:
+            ifimage.video_urlandnotimage.embed_code:
+                raiseValidationError(_("ProvidedvideoURLfor'%s'isnotvalid.PleaseenteravalidvideoURL.",image.name))
 
     @api.model_create_multi
-    def create(self, vals_list):
+    defcreate(self,vals_list):
         """
-            We don't want the default_product_tmpl_id from the context
-            to be applied if we have a product_variant_id set to avoid
-            having the variant images to show also as template images.
-            But we want it if we don't have a product_variant_id set.
+            Wedon'twantthedefault_product_tmpl_idfromthecontext
+            tobeappliedifwehaveaproduct_variant_idsettoavoid
+            havingthevariantimagestoshowalsoastemplateimages.
+            Butwewantitifwedon'thaveaproduct_variant_idset.
         """
-        context_without_template = self.with_context({k: v for k, v in self.env.context.items() if k != 'default_product_tmpl_id'})
-        normal_vals = []
-        variant_vals_list = []
+        context_without_template=self.with_context({k:vfork,vinself.env.context.items()ifk!='default_product_tmpl_id'})
+        normal_vals=[]
+        variant_vals_list=[]
 
-        for vals in vals_list:
-            if vals.get('product_variant_id') and 'default_product_tmpl_id' in self.env.context:
+        forvalsinvals_list:
+            ifvals.get('product_variant_id')and'default_product_tmpl_id'inself.env.context:
                 variant_vals_list.append(vals)
             else:
                 normal_vals.append(vals)
 
-        return super().create(normal_vals) + super(ProductImage, context_without_template).create(variant_vals_list)
+        returnsuper().create(normal_vals)+super(ProductImage,context_without_template).create(variant_vals_list)

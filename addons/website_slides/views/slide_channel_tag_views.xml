@@ -1,82 +1,82 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra><data>
-    <!-- SLIDE.CHANNEL.TAG -->
-    <record id="slide_channel_tag_view_search" model="ir.ui.view">
-        <field name="name">slide.channel.tag.view.search</field>
-        <field name="model">slide.channel.tag</field>
-        <field name="arch" type="xml">
-            <search string="Course Tags">
-                <field name="name"/>
-                <field name="group_id"/>
+    <!--SLIDE.CHANNEL.TAG-->
+    <recordid="slide_channel_tag_view_search"model="ir.ui.view">
+        <fieldname="name">slide.channel.tag.view.search</field>
+        <fieldname="model">slide.channel.tag</field>
+        <fieldname="arch"type="xml">
+            <searchstring="CourseTags">
+                <fieldname="name"/>
+                <fieldname="group_id"/>
             </search>
         </field>
     </record>
 
-    <record id="slide_channel_tag_view_form" model="ir.ui.view">
-        <field name="name">slide.channel.tag.view.form</field>
-        <field name="model">slide.channel.tag</field>
-        <field name="arch" type="xml">
-            <form string="Course Tag">
+    <recordid="slide_channel_tag_view_form"model="ir.ui.view">
+        <fieldname="name">slide.channel.tag.view.form</field>
+        <fieldname="model">slide.channel.tag</field>
+        <fieldname="arch"type="xml">
+            <formstring="CourseTag">
                 <sheet>
                     <group>
-                        <field name="name"/>
-                        <field name="group_id"/>
+                        <fieldname="name"/>
+                        <fieldname="group_id"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="slide_channel_tag_view_tree" model="ir.ui.view">
-        <field name="name">slide.channel.tag.view.tree</field>
-        <field name="model">slide.channel.tag</field>
-        <field name="arch" type="xml">
-            <tree string="Course Tags" editable="top">
-                <field name="sequence" widget="handle"/>
-                <field name="group_sequence" invisible="1"/>
-                <field name="name"/>
-                <field name="group_id"/>
+    <recordid="slide_channel_tag_view_tree"model="ir.ui.view">
+        <fieldname="name">slide.channel.tag.view.tree</field>
+        <fieldname="model">slide.channel.tag</field>
+        <fieldname="arch"type="xml">
+            <treestring="CourseTags"editable="top">
+                <fieldname="sequence"widget="handle"/>
+                <fieldname="group_sequence"invisible="1"/>
+                <fieldname="name"/>
+                <fieldname="group_id"/>
             </tree>
         </field>
     </record>
     
-    <record id="slide_channel_tag_action" model="ir.actions.act_window">
-        <field name="name">Course Tags</field>
-        <field name="res_model">slide.channel.tag</field>
-        <field name="view_mode">tree,form</field>
+    <recordid="slide_channel_tag_action"model="ir.actions.act_window">
+        <fieldname="name">CourseTags</field>
+        <fieldname="res_model">slide.channel.tag</field>
+        <fieldname="view_mode">tree,form</field>
     </record>
 
-    <!-- SLIDE.CHANNEL.TAG.GROUP -->
-    <record id="slide_channel_tag_group_view_search" model="ir.ui.view">
-        <field name="name">slide.channel.tag.group.view.search</field>
-        <field name="model">slide.channel.tag.group</field>
-        <field name="arch" type="xml">
-            <search string="Course Tag Groups">
-                <field name="name"/>
+    <!--SLIDE.CHANNEL.TAG.GROUP-->
+    <recordid="slide_channel_tag_group_view_search"model="ir.ui.view">
+        <fieldname="name">slide.channel.tag.group.view.search</field>
+        <fieldname="model">slide.channel.tag.group</field>
+        <fieldname="arch"type="xml">
+            <searchstring="CourseTagGroups">
+                <fieldname="name"/>
             </search>
         </field>
     </record>
 
-    <record id="slide_channel_tag_group_view_form" model="ir.ui.view">
-        <field name="name">slide.channel.tag.group.view.form</field>
-        <field name="model">slide.channel.tag.group</field>
-        <field name="arch" type="xml">
-            <form string="Course Tag Group">
+    <recordid="slide_channel_tag_group_view_form"model="ir.ui.view">
+        <fieldname="name">slide.channel.tag.group.view.form</field>
+        <fieldname="model">slide.channel.tag.group</field>
+        <fieldname="arch"type="xml">
+            <formstring="CourseTagGroup">
                 <sheet>
                     <group>
-                        <div class="oe_title">
-                            <label for="name" class="oe_edit_only" string="Group Name"/>
-                            <h1><field name="name" default_focus="1" placeholder="Group Name"/></h1>
-                            <label for="is_published" string="Menu Entry"/>
-                            <field name="is_published"/><br/>
-                            <field name="tag_ids">
-                                <tree editable="bottom">
-                                    <field name="sequence" widget="handle"/>
-                                    <field name="group_sequence" invisible="1"/>
-                                    <field name="name" string="Tag Name"/>
-                                    <field name="color" string="Color" widget="color_picker"/>
+                        <divclass="oe_title">
+                            <labelfor="name"class="oe_edit_only"string="GroupName"/>
+                            <h1><fieldname="name"default_focus="1"placeholder="GroupName"/></h1>
+                            <labelfor="is_published"string="MenuEntry"/>
+                            <fieldname="is_published"/><br/>
+                            <fieldname="tag_ids">
+                                <treeeditable="bottom">
+                                    <fieldname="sequence"widget="handle"/>
+                                    <fieldname="group_sequence"invisible="1"/>
+                                    <fieldname="name"string="TagName"/>
+                                    <fieldname="color"string="Color"widget="color_picker"/>
                                     <control>
-                                        <create string="Add a tag"/>
+                                        <createstring="Addatag"/>
                                     </control>
                                 </tree>
                             </field>
@@ -87,22 +87,22 @@
         </field>
     </record>
 
-    <record id="slide_channel_tag_group_view_tree" model="ir.ui.view">
-        <field name="name">slide.channel.tag.group.view.tree</field>
-        <field name="model">slide.channel.tag.group</field>
-        <field name="arch" type="xml">
-            <tree string="Course Tag Groups">
-                <field name="sequence" widget="handle"/>
-                <field name="name"/>
-                <field name="is_published" string="Menu Entry"/>
+    <recordid="slide_channel_tag_group_view_tree"model="ir.ui.view">
+        <fieldname="name">slide.channel.tag.group.view.tree</field>
+        <fieldname="model">slide.channel.tag.group</field>
+        <fieldname="arch"type="xml">
+            <treestring="CourseTagGroups">
+                <fieldname="sequence"widget="handle"/>
+                <fieldname="name"/>
+                <fieldname="is_published"string="MenuEntry"/>
             </tree>
         </field>
     </record>
 
-    <record id="slide_channel_tag_group_action" model="ir.actions.act_window">
-        <field name="name">Course Groups</field>
-        <field name="res_model">slide.channel.tag.group</field>
-        <field name="view_mode">tree,form</field>
+    <recordid="slide_channel_tag_group_action"model="ir.actions.act_window">
+        <fieldname="name">CourseGroups</field>
+        <fieldname="res_model">slide.channel.tag.group</field>
+        <fieldname="view_mode">tree,form</field>
     </record>
 
     </data>

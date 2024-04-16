@@ -1,37 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <templates>
 
-<t t-name="web.ProgressCard">
-    <t t-if="widget.viewType === 'kanban'">
-        <div class="o_kanban_progress_card o_kanban_record o_kanban_attachment">
-            <div class="o_kanban_image">
-                <div class="o_kanban_image_wrapper">
-                    <div class="o_image o_image_thumbnail" t-att-data-mimetype="widget.type"/>
+<tt-name="web.ProgressCard">
+    <tt-if="widget.viewType==='kanban'">
+        <divclass="o_kanban_progress_cardo_kanban_recordo_kanban_attachment">
+            <divclass="o_kanban_image">
+                <divclass="o_kanban_image_wrapper">
+                    <divclass="o_imageo_image_thumbnail"t-att-data-mimetype="widget.type"/>
                 </div>
             </div>
-            <div class="o_kanban_details">
-                <div class="o_kanban_details_wrapper">
-                    <div t-att-title="widget.title" t-att-aria-label="widget.title" class="o_kanban_record_title">
-                        <span t-esc="widget.title"/>
+            <divclass="o_kanban_details">
+                <divclass="o_kanban_details_wrapper">
+                    <divt-att-title="widget.title"t-att-aria-label="widget.title"class="o_kanban_record_title">
+                        <spant-esc="widget.title"/>
                     </div>
-                    <div class="o_kanban_record_body"/>
-                    <div class="o_kanban_record_bottom">
-                        <div class="oe_kanban_bottom_left">
-                            <div class="o_file_upload_progress_text_left">Processing...</div>
+                    <divclass="o_kanban_record_body"/>
+                    <divclass="o_kanban_record_bottom">
+                        <divclass="oe_kanban_bottom_left">
+                            <divclass="o_file_upload_progress_text_left">Processing...</div>
                         </div>
-                        <div class="oe_kanban_bottom_right">
-                            <span class="o_file_upload_progress_text_right"/>
+                        <divclass="oe_kanban_bottom_right">
+                            <spanclass="o_file_upload_progress_text_right"/>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </t>
-    <t t-if="widget.viewType === 'list'">
-        <div class="o_data_row o_list_progress_card">
-            <span class="o_file_upload_upload_title" t-esc="widget.title"/>
-            <span class="o_file_upload_progress_text_left">Processing...</span>
-            <span class="o_file_upload_progress_text_right"/>
+    <tt-if="widget.viewType==='list'">
+        <divclass="o_data_rowo_list_progress_card">
+            <spanclass="o_file_upload_upload_title"t-esc="widget.title"/>
+            <spanclass="o_file_upload_progress_text_left">Processing...</span>
+            <spanclass="o_file_upload_progress_text_right"/>
         </div>
     </t>
 </t>

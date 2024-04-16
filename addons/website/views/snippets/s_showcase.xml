@@ -1,75 +1,75 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<!-- Template -->
-<template name="Showcase" id="s_showcase">
-    <section class="s_showcase pt48 pb48" data-vcss="002">
-        <div class="container">
-            <div class="row no-gutters s_col_no_resize s_col_no_bgcolor s_nb_column_fixed">
-                <div class="col-lg text-lg-right">
-                    <div class="row">
-                        <div class="col-lg-12 pt24 pb24" data-name="Block">
-                            <div class="s_showcase_title d-flex flex-lg-row-reverse mb-2">
-                                <i class="s_showcase_icon fa fa-2x fa-desktop text-secondary mr-3 mr-lg-0 ml-lg-3"/>
-                                <h3>First feature</h3>
+<!--Template-->
+<templatename="Showcase"id="s_showcase">
+    <sectionclass="s_showcasept48pb48"data-vcss="002">
+        <divclass="container">
+            <divclass="rowno-gutterss_col_no_resizes_col_no_bgcolors_nb_column_fixed">
+                <divclass="col-lgtext-lg-right">
+                    <divclass="row">
+                        <divclass="col-lg-12pt24pb24"data-name="Block">
+                            <divclass="s_showcase_titled-flexflex-lg-row-reversemb-2">
+                                <iclass="s_showcase_iconfafa-2xfa-desktoptext-secondarymr-3mr-lg-0ml-lg-3"/>
+                                <h3>Firstfeature</h3>
                             </div>
-                            <p>A short description of this great feature.</p>
+                            <p>Ashortdescriptionofthisgreatfeature.</p>
                         </div>
-                        <div class="col-lg-12 pt24 pb24" data-name="Block">
-                            <div class="s_showcase_title d-flex flex-lg-row-reverse mb-2">
-                                <i class="s_showcase_icon fa fa-2x fa-paint-brush text-secondary mr-3 mr-lg-0 ml-lg-3"/>
-                                <h3>Second feature</h3>
+                        <divclass="col-lg-12pt24pb24"data-name="Block">
+                            <divclass="s_showcase_titled-flexflex-lg-row-reversemb-2">
+                                <iclass="s_showcase_iconfafa-2xfa-paint-brushtext-secondarymr-3mr-lg-0ml-lg-3"/>
+                                <h3>Secondfeature</h3>
                             </div>
-                            <p>A short description of this great feature.</p>
+                            <p>Ashortdescriptionofthisgreatfeature.</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-1">
-                    <div class="w-50 h-100 border-right"/>
+                <divclass="col-1">
+                    <divclass="w-50h-100border-right"/>
                 </div>
-                <div class="col-lg">
-                    <div class="row">
-                        <div class="col-lg-12 pt24 pb24" data-name="Block">
-                            <div class="s_showcase_title d-flex mb-2">
-                                <i class="s_showcase_icon fa fa-2x fa-heart text-secondary mr-3"/>
-                                <h3>Another feature</h3>
+                <divclass="col-lg">
+                    <divclass="row">
+                        <divclass="col-lg-12pt24pb24"data-name="Block">
+                            <divclass="s_showcase_titled-flexmb-2">
+                                <iclass="s_showcase_iconfafa-2xfa-hearttext-secondarymr-3"/>
+                                <h3>Anotherfeature</h3>
                             </div>
-                            <p>A short description of this great feature.</p>
+                            <p>Ashortdescriptionofthisgreatfeature.</p>
                         </div>
-                        <div class="col-lg-12 pt24 pb24" data-name="Block">
-                            <div class="s_showcase_title d-flex mb-2">
-                                <i class="s_showcase_icon fa fa-2x fa-gift text-secondary mr-3"/>
-                                <h3>Last Feature</h3>
+                        <divclass="col-lg-12pt24pb24"data-name="Block">
+                            <divclass="s_showcase_titled-flexmb-2">
+                                <iclass="s_showcase_iconfafa-2xfa-gifttext-secondarymr-3"/>
+                                <h3>LastFeature</h3>
                             </div>
-                            <p>A short description of this great feature.</p>
+                            <p>Ashortdescriptionofthisgreatfeature.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="container text-lg-center">
+        <divclass="containertext-lg-center">
             <p><br/></p>
-            <a href="#" class="btn btn-primary mb-2">Discover all the features</a>
+            <ahref="#"class="btnbtn-primarymb-2">Discoverallthefeatures</a>
         </div>
     </section>
 </template>
 
-<!-- Options -->
-<template id="s_showcase_options" inherit_id="website.snippet_options">
-    <xpath expr="//div[@data-js='Box']" position="before">
-        <div data-js="Showcase" data-selector=".s_showcase .row > div:has(> .s_showcase_title)"/>
+<!--Options-->
+<templateid="s_showcase_options"inherit_id="website.snippet_options">
+    <xpathexpr="//div[@data-js='Box']"position="before">
+        <divdata-js="Showcase"data-selector=".s_showcase.row>div:has(>.s_showcase_title)"/>
     </xpath>
 </template>
 
-<!-- Assets -->
-<template id="assets_snippet_s_showcase_css_000" inherit_id="website.assets_frontend" active="False">
-    <xpath expr="//link[last()]" position="after">
-        <link rel="stylesheet" type="text/scss" href="/website/static/src/snippets/s_showcase/000.scss"/>
+<!--Assets-->
+<templateid="assets_snippet_s_showcase_css_000"inherit_id="website.assets_frontend"active="False">
+    <xpathexpr="//link[last()]"position="after">
+        <linkrel="stylesheet"type="text/scss"href="/website/static/src/snippets/s_showcase/000.scss"/>
     </xpath>
 </template>
-<template id="assets_snippet_s_showcase_css_001" inherit_id="website.assets_frontend" active="False">
-    <xpath expr="//link[last()]" position="after">
-        <link rel="stylesheet" type="text/scss" href="/website/static/src/snippets/s_showcase/001.scss"/>
+<templateid="assets_snippet_s_showcase_css_001"inherit_id="website.assets_frontend"active="False">
+    <xpathexpr="//link[last()]"position="after">
+        <linkrel="stylesheet"type="text/scss"href="/website/static/src/snippets/s_showcase/001.scss"/>
     </xpath>
 </template>
 

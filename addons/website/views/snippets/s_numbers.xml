@@ -1,33 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template name="Numbers" id="s_numbers">
-    <section class="s_numbers o_cc o_cc2 pt24 pb24">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 text-center pt24 pb24">
-                    <span class="s_number display-4">12</span>
-                    <h6>Useful options</h6>
+<templatename="Numbers"id="s_numbers">
+    <sectionclass="s_numberso_cco_cc2pt24pb24">
+        <divclass="container">
+            <divclass="row">
+                <divclass="col-lg-3text-centerpt24pb24">
+                    <spanclass="s_numberdisplay-4">12</span>
+                    <h6>Usefuloptions</h6>
                 </div>
-                <div class="col-lg-3 text-center pt24 pb24">
-                    <span class="s_number display-4">45</span>
-                    <h6>Beautiful snippets</h6>
+                <divclass="col-lg-3text-centerpt24pb24">
+                    <spanclass="s_numberdisplay-4">45</span>
+                    <h6>Beautifulsnippets</h6>
                 </div>
-                <div class="col-lg-3 text-center pt24 pb24">
-                    <span class="s_number display-4">8</span>
-                    <h6>Amazing pages</h6>
+                <divclass="col-lg-3text-centerpt24pb24">
+                    <spanclass="s_numberdisplay-4">8</span>
+                    <h6>Amazingpages</h6>
                 </div>
-                <div class="col-lg-3 text-center pt24 pb24">
-                    <span class="s_number display-4">37</span>
-                    <h6>Outstanding images</h6>
+                <divclass="col-lg-3text-centerpt24pb24">
+                    <spanclass="s_numberdisplay-4">37</span>
+                    <h6>Outstandingimages</h6>
                 </div>
             </div>
         </div>
     </section>
 </template>
 
-<!-- No associated CSS but there is some in theme overrides -->
-<template id="assets_snippet_s_numbers_css_000" inherit_id="website.assets_frontend">
+<!--NoassociatedCSSbutthereissomeinthemeoverrides-->
+<templateid="assets_snippet_s_numbers_css_000"inherit_id="website.assets_frontend">
 </template>
 
 </flectra>

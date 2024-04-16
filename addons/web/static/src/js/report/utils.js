@@ -1,26 +1,26 @@
-flectra.define('report.utils', function (require) {
-'use strict';
+flectra.define('report.utils',function(require){
+'usestrict';
 
-function get_protocol_from_url (url) {
-    var a = document.createElement('a');
-    a.href = url;
-    return a.protocol;
+functionget_protocol_from_url(url){
+    vara=document.createElement('a');
+    a.href=url;
+    returna.protocol;
 }
 
-function get_host_from_url (url) {
-    var a = document.createElement('a');
-    a.href = url;
-    return a.host;
+functionget_host_from_url(url){
+    vara=document.createElement('a');
+    a.href=url;
+    returna.host;
 }
 
-function build_origin (protocol, host) {
-    return protocol + '//' + host;
+functionbuild_origin(protocol,host){
+    returnprotocol+'//'+host;
 }
 
-return {
-    'get_protocol_from_url': get_protocol_from_url,
-    'get_host_from_url': get_host_from_url,
-    'build_origin': build_origin,
+return{
+    'get_protocol_from_url':get_protocol_from_url,
+    'get_host_from_url':get_host_from_url,
+    'build_origin':build_origin,
 };
 
 });

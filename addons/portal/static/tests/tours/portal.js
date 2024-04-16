@@ -1,20 +1,20 @@
-flectra.define('portal.tour', function (require) {
-'use strict';
+flectra.define('portal.tour',function(require){
+'usestrict';
 
-var tour = require("web_tour.tour");
+vartour=require("web_tour.tour");
 
-tour.register('portal_load_homepage', {
-    test: true,
-    url: '/my',
+tour.register('portal_load_homepage',{
+    test:true,
+    url:'/my',
 },
     [
         {
-            content: "Check portal is loaded",
-            trigger: 'a[href*="/my/account"]:contains("Edit"):first',
+            content:"Checkportalisloaded",
+            trigger:'a[href*="/my/account"]:contains("Edit"):first',
         },
         {
-            content: "Load my account details",
-            trigger: 'input[value="Joel Willis"]'
+            content:"Loadmyaccountdetails",
+            trigger:'input[value="JoelWillis"]'
         }
     ]
 );

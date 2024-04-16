@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-<template id="report_userlabel">
-    <t t-call="web.basic_layout">
-        <div class="page">
-            <t t-foreach="docs" t-as="user">
-                <div class="col-6 mb92">
-                    <table class="table table-bordered">
+<templateid="report_userlabel">
+    <tt-call="web.basic_layout">
+        <divclass="page">
+            <tt-foreach="docs"t-as="user">
+                <divclass="col-6mb92">
+                    <tableclass="tabletable-bordered">
                         <thead>
                             <tr>
-                                <th class="col-4 danger"/>
-                                <th class="active"/>
+                                <thclass="col-4danger"/>
+                                <thclass="active"/>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><img t-if="user.barcode" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN13', user.barcode, 300, 50)" style="width:100%;height:35%;" alt="Barcode"/></td>
-                                <td><strong t-field="user.name"/></td>
+                                <td><imgt-if="user.barcode"t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('EAN13',user.barcode,300,50)"style="width:100%;height:35%;"alt="Barcode"/></td>
+                                <td><strongt-field="user.name"/></td>
                             </tr>
                         </tbody>
                     </table>

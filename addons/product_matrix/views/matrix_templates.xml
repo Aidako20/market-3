@@ -1,29 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <template id="matrix">
-          <t t-foreach="order.get_report_matrixes()" t-as="grid">
-              <table class="o_view_grid o_product_variant_grid table table-sm table-striped table-bordered">
+    <templateid="matrix">
+          <tt-foreach="order.get_report_matrixes()"t-as="grid">
+              <tableclass="o_view_grido_product_variant_gridtabletable-smtable-stripedtable-bordered">
                   <thead>
                       <tr>
-                          <th t-foreach="grid['header']" t-as="column_header" class="o_grid_title_header text-center">
-                              <span t-esc="column_header['name']"/>
-                              <t t-call="product_matrix.extra_price">
-                                  <t t-set="price" t-value="column_header.get('price', False)"/>
+                          <tht-foreach="grid['header']"t-as="column_header"class="o_grid_title_headertext-center">
+                              <spant-esc="column_header['name']"/>
+                              <tt-call="product_matrix.extra_price">
+                                  <tt-set="price"t-value="column_header.get('price',False)"/>
                               </t>
                           </th>
                       </tr>
                   </thead>
                   <tbody>
-                      <tr t-foreach="grid['matrix']" t-as="row">
-                          <t t-foreach="row" t-as="cell">
-                              <td t-if="cell.get('name', False)" class="text-left">
-                                  <strong t-esc="cell['name']"/>
-                                  <t t-call="product_matrix.extra_price">
-                                      <t t-set="price" t-value="cell.get('price', False)"/>
+                      <trt-foreach="grid['matrix']"t-as="row">
+                          <tt-foreach="row"t-as="cell">
+                              <tdt-if="cell.get('name',False)"class="text-left">
+                                  <strongt-esc="cell['name']"/>
+                                  <tt-call="product_matrix.extra_price">
+                                      <tt-set="price"t-value="cell.get('price',False)"/>
                                   </t>
                               </td>
-                              <td t-else="" class="text-right">
-                                  <span t-esc="cell.get('qty', 0)" class="o_grid_cell_container"/>
+                              <tdt-else=""class="text-right">
+                                  <spant-esc="cell.get('qty',0)"class="o_grid_cell_container"/>
                               </td>
                           </t>
                       </tr>
@@ -32,19 +32,19 @@
           </t>
     </template>
 
-    <template id="extra_price">
-      <span t-if="price" class="badge badge-pill badge-secondary">
+    <templateid="extra_price">
+      <spant-if="price"class="badgebadge-pillbadge-secondary">
               <!--
-                  price_extra is displayed as catalog price instead of
-                  price after pricelist because it is impossible to
-                  compute. Indeed, the pricelist rule might depend on the
-                  selected variant, so the price_extra will be different
-                  depending on the selected combination. The price of an
-                  attribute is therefore variable and it's not very
-                  accurate to display it.
+                  price_extraisdisplayedascatalogpriceinsteadof
+                  priceafterpricelistbecauseitisimpossibleto
+                  compute.Indeed,thepricelistrulemightdependonthe
+                  selectedvariant,sotheprice_extrawillbedifferent
+                  dependingontheselectedcombination.Thepriceofan
+                  attributeisthereforevariableandit'snotvery
+                  accuratetodisplayit.
                   -->
-              <span class="variant_price_extra" style="white-space: nowrap;">
-                  <t t-raw="price"/>
+              <spanclass="variant_price_extra"style="white-space:nowrap;">
+                  <tt-raw="price"/>
               </span>
           </span>
     </template>

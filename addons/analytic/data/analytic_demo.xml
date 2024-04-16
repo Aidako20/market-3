@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
+    <datanoupdate="1">
 
-        <record id="tag_contract" model="account.analytic.tag">
-            <field name="name">Contracts</field>
+        <recordid="tag_contract"model="account.analytic.tag">
+            <fieldname="name">Contracts</field>
         </record>
 
     </data>

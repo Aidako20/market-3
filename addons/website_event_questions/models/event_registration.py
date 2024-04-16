@@ -1,30 +1,30 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class EventRegistration(models.Model):
-    """ Store answers on attendees. """
-    _inherit = 'event.registration'
+classEventRegistration(models.Model):
+    """Storeanswersonattendees."""
+    _inherit='event.registration'
 
-    registration_answer_ids = fields.One2many('event.registration.answer', 'registration_id', string='Attendee Answers')
+    registration_answer_ids=fields.One2many('event.registration.answer','registration_id',string='AttendeeAnswers')
 
-class EventRegistrationAnswer(models.Model):
-    """ Represents the user input answer for a single event.question """
-    _name = 'event.registration.answer'
-    _description = 'Event Registration Answer'
+classEventRegistrationAnswer(models.Model):
+    """Representstheuserinputanswerforasingleevent.question"""
+    _name='event.registration.answer'
+    _description='EventRegistrationAnswer'
 
-    question_id = fields.Many2one(
-        'event.question', ondelete='restrict', required=True,
-        domain="[('event_id', '=', event_id)]")
-    registration_id = fields.Many2one('event.registration', required=True, ondelete='cascade')
-    partner_id = fields.Many2one('res.partner', related='registration_id.partner_id')
-    event_id = fields.Many2one('event.event', related='registration_id.event_id')
-    question_type = fields.Selection(related='question_id.question_type')
-    value_answer_id = fields.Many2one('event.question.answer', string="Suggested answer")
-    value_text_box = fields.Text('Text answer')
+    question_id=fields.Many2one(
+        'event.question',ondelete='restrict',required=True,
+        domain="[('event_id','=',event_id)]")
+    registration_id=fields.Many2one('event.registration',required=True,ondelete='cascade')
+    partner_id=fields.Many2one('res.partner',related='registration_id.partner_id')
+    event_id=fields.Many2one('event.event',related='registration_id.event_id')
+    question_type=fields.Selection(related='question_id.question_type')
+    value_answer_id=fields.Many2one('event.question.answer',string="Suggestedanswer")
+    value_text_box=fields.Text('Textanswer')
 
-    _sql_constraints = [
-        ('value_check', "CHECK(value_answer_id IS NOT NULL OR COALESCE(value_text_box, '') <> '')", "There must be a suggested value or a text value.")
+    _sql_constraints=[
+        ('value_check',"CHECK(value_answer_idISNOTNULLORCOALESCE(value_text_box,'')<>'')","Theremustbeasuggestedvalueoratextvalue.")
     ]

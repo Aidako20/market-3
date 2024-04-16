@@ -1,9 +1,9 @@
-flectra.define('web.public.Notification', function (require) {
-'use strict';
+flectra.define('web.public.Notification',function(require){
+'usestrict';
 
-var Notification = require('web.Notification');
+varNotification=require('web.Notification');
 
 Notification.include({
-    xmlDependencies: ['/web/static/src/xml/notification.xml'],
+    xmlDependencies:['/web/static/src/xml/notification.xml'],
 });
 });

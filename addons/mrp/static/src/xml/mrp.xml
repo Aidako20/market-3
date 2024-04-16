@@ -1,49 +1,49 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <templates>
-    <t t-name="mrp.button">
-        <div class="o_list_buttons o_mrp_bom_report_buttons">
-            <button type="button" class="btn btn-primary o_mrp_bom_print">Print</button>
-            <t t-if="is_variant_applied">
-                <button type="button" class="btn btn-primary o_mrp_bom_print_all_variants">Print All Variants</button>
+    <tt-name="mrp.button">
+        <divclass="o_list_buttonso_mrp_bom_report_buttons">
+            <buttontype="button"class="btnbtn-primaryo_mrp_bom_print">Print</button>
+            <tt-if="is_variant_applied">
+                <buttontype="button"class="btnbtn-primaryo_mrp_bom_print_all_variants">PrintAllVariants</button>
             </t>
-            <button type="button" class="btn btn-primary o_mrp_bom_print_unfolded">Print Unfolded</button>
+            <buttontype="button"class="btnbtn-primaryo_mrp_bom_print_unfolded">PrintUnfolded</button>
         </div>
     </t>
 
-    <form class="form-inline" t-name="mrp.report_bom_search">
-        <div class="form-group col-lg-4">
+    <formclass="form-inline"t-name="mrp.report_bom_search">
+        <divclass="form-groupcol-lg-4">
             <label>Quantity:</label>
-            <div class="row">
-                <div class="col-lg-6">
-                    <input type="number" step="any" t-att-value="bom_qty" min="1" class="o_input o_mrp_bom_report_qty"/>
+            <divclass="row">
+                <divclass="col-lg-6">
+                    <inputtype="number"step="any"t-att-value="bom_qty"min="1"class="o_inputo_mrp_bom_report_qty"/>
                 </div>
-                <div class="col-lg-6">
-                    <t t-if="is_uom_applied" t-esc="bom_uom_name"/>
+                <divclass="col-lg-6">
+                    <tt-if="is_uom_applied"t-esc="bom_uom_name"/>
                 </div>
             </div>
         </div>
-        <div t-if="is_variant_applied" class="form-group col-lg-4">
+        <divt-if="is_variant_applied"class="form-groupcol-lg-4">
             <label>Variant:</label>
-            <select class="o_input o_mrp_bom_report_variants">
-                <option t-foreach="variants" t-as="variant" t-att-value="variant">
-                    <t t-esc="variants[variant]"/>
+            <selectclass="o_inputo_mrp_bom_report_variants">
+                <optiont-foreach="variants"t-as="variant"t-att-value="variant">
+                    <tt-esc="variants[variant]"/>
                 </option>
             </select>
         </div>
-        <div t-attf-class="form-group #{is_variant_applied ? 'col-lg-4' : 'col-lg-8'}">
+        <divt-attf-class="form-group#{is_variant_applied?'col-lg-4':'col-lg-8'}">
             <label>Report:</label>
-            <select class="o_input o_mrp_bom_report_type">
-                <option t-att-data-type="'all'">BoM Structure &amp; Cost</option>
-                <option t-att-data-type="'bom_structure'">BoM Structure</option>
+            <selectclass="o_inputo_mrp_bom_report_type">
+                <optiont-att-data-type="'all'">BoMStructure&amp;Cost</option>
+                <optiont-att-data-type="'bom_structure'">BoMStructure</option>
             </select>
         </div>
     </form>
 
-    <div t-name="mrp.workorderPopover">
-        <t t-foreach="infos" t-as="info">
-            <i t-attf-class="fa fa-arrow-right mr-2 #{ info.color }"></i><t t-esc="info.msg"/><br/>
+    <divt-name="mrp.workorderPopover">
+        <tt-foreach="infos"t-as="info">
+            <it-attf-class="fafa-arrow-rightmr-2#{info.color}"></i><tt-esc="info.msg"/><br/>
         </t>
-        <button t-if="replan" class="btn btn-primary action_replan_button">Replan</button>
+        <buttont-if="replan"class="btnbtn-primaryaction_replan_button">Replan</button>
     </div>
 
 </templates>

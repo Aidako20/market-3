@@ -1,22 +1,22 @@
-flectra.define('web.tools', function (require) {
-"use strict";
+flectra.define('web.tools',function(require){
+"usestrict";
 
 /**
- * Wrapper for deprecated functions that display a warning message.
+ *Wrapperfordeprecatedfunctionsthatdisplayawarningmessage.
  *
- * @param {Function} fn the deprecated function
- * @param {string} [message=''] optional message to display
- * @returns {Function}
+ *@param{Function}fnthedeprecatedfunction
+ *@param{string}[message='']optionalmessagetodisplay
+ *@returns{Function}
  */
-function deprecated(fn, message) {
-    return function () {
-        console.warn(message || (fn.name + ' is deprecated.'));
-        return fn.apply(this, arguments);
+functiondeprecated(fn,message){
+    returnfunction(){
+        console.warn(message||(fn.name+'isdeprecated.'));
+        returnfn.apply(this,arguments);
     };
 }
 
-return {
-    deprecated: deprecated,
+return{
+    deprecated:deprecated,
 };
 
 });

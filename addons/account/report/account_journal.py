@@ -1,121 +1,121 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-import time
-from flectra import api, models, _
-from flectra.exceptions import UserError
+importtime
+fromflectraimportapi,models,_
+fromflectra.exceptionsimportUserError
 
 
-class ReportJournal(models.AbstractModel):
-    _name = 'report.account.report_journal'
-    _description = 'Account Journal Report'
+classReportJournal(models.AbstractModel):
+    _name='report.account.report_journal'
+    _description='AccountJournalReport'
 
-    def lines(self, target_move, journal_ids, sort_selection, data):
-        if isinstance(journal_ids, int):
-            journal_ids = [journal_ids]
+    deflines(self,target_move,journal_ids,sort_selection,data):
+        ifisinstance(journal_ids,int):
+            journal_ids=[journal_ids]
 
-        move_state = ['draft', 'posted']
-        if target_move == 'posted':
-            move_state = ['posted']
+        move_state=['draft','posted']
+        iftarget_move=='posted':
+            move_state=['posted']
 
-        query_get_clause = self._get_query_get_clause(data)
-        params = [tuple(move_state), tuple(journal_ids)] + query_get_clause[2]
-        query = 'SELECT "account_move_line".id FROM ' + query_get_clause[0] + ', account_move am, account_account acc WHERE "account_move_line".account_id = acc.id AND "account_move_line".move_id=am.id AND am.state IN %s AND "account_move_line".journal_id IN %s AND ' + query_get_clause[1] + ' ORDER BY '
-        if sort_selection == 'date':
-            query += '"account_move_line".date'
+        query_get_clause=self._get_query_get_clause(data)
+        params=[tuple(move_state),tuple(journal_ids)]+query_get_clause[2]
+        query='SELECT"account_move_line".idFROM'+query_get_clause[0]+',account_moveam,account_accountaccWHERE"account_move_line".account_id=acc.idAND"account_move_line".move_id=am.idANDam.stateIN%sAND"account_move_line".journal_idIN%sAND'+query_get_clause[1]+'ORDERBY'
+        ifsort_selection=='date':
+            query+='"account_move_line".date'
         else:
-            query += 'am.name'
-        query += ', "account_move_line".move_id, acc.code'
-        self.env.cr.execute(query, tuple(params))
-        ids = (x[0] for x in self.env.cr.fetchall())
-        return self.env['account.move.line'].browse(ids)
+            query+='am.name'
+        query+=',"account_move_line".move_id,acc.code'
+        self.env.cr.execute(query,tuple(params))
+        ids=(x[0]forxinself.env.cr.fetchall())
+        returnself.env['account.move.line'].browse(ids)
 
-    def _sum_debit(self, data, journal_id):
-        move_state = ['draft', 'posted']
-        if data['form'].get('target_move', 'all') == 'posted':
-            move_state = ['posted']
+    def_sum_debit(self,data,journal_id):
+        move_state=['draft','posted']
+        ifdata['form'].get('target_move','all')=='posted':
+            move_state=['posted']
 
-        query_get_clause = self._get_query_get_clause(data)
-        params = [tuple(move_state), tuple(journal_id.ids)] + query_get_clause[2]
-        self.env.cr.execute('SELECT SUM(debit) FROM ' + query_get_clause[0] + ', account_move am '
-                        'WHERE "account_move_line".move_id=am.id AND am.state IN %s AND "account_move_line".journal_id IN %s AND ' + query_get_clause[1] + ' ',
+        query_get_clause=self._get_query_get_clause(data)
+        params=[tuple(move_state),tuple(journal_id.ids)]+query_get_clause[2]
+        self.env.cr.execute('SELECTSUM(debit)FROM'+query_get_clause[0]+',account_moveam'
+                        'WHERE"account_move_line".move_id=am.idANDam.stateIN%sAND"account_move_line".journal_idIN%sAND'+query_get_clause[1]+'',
                         tuple(params))
-        return self.env.cr.fetchone()[0] or 0.0
+        returnself.env.cr.fetchone()[0]or0.0
 
-    def _sum_credit(self, data, journal_id):
-        move_state = ['draft', 'posted']
-        if data['form'].get('target_move', 'all') == 'posted':
-            move_state = ['posted']
+    def_sum_credit(self,data,journal_id):
+        move_state=['draft','posted']
+        ifdata['form'].get('target_move','all')=='posted':
+            move_state=['posted']
 
-        query_get_clause = self._get_query_get_clause(data)
-        params = [tuple(move_state), tuple(journal_id.ids)] + query_get_clause[2]
-        self.env.cr.execute('SELECT SUM(credit) FROM ' + query_get_clause[0] + ', account_move am '
-                        'WHERE "account_move_line".move_id=am.id AND am.state IN %s AND "account_move_line".journal_id IN %s AND ' + query_get_clause[1] + ' ',
+        query_get_clause=self._get_query_get_clause(data)
+        params=[tuple(move_state),tuple(journal_id.ids)]+query_get_clause[2]
+        self.env.cr.execute('SELECTSUM(credit)FROM'+query_get_clause[0]+',account_moveam'
+                        'WHERE"account_move_line".move_id=am.idANDam.stateIN%sAND"account_move_line".journal_idIN%sAND'+query_get_clause[1]+'',
                         tuple(params))
-        return self.env.cr.fetchone()[0] or 0.0
+        returnself.env.cr.fetchone()[0]or0.0
 
-    def _get_taxes(self, data, journal_id):
-        move_state = ['draft', 'posted']
-        if data['form'].get('target_move', 'all') == 'posted':
-            move_state = ['posted']
+    def_get_taxes(self,data,journal_id):
+        move_state=['draft','posted']
+        ifdata['form'].get('target_move','all')=='posted':
+            move_state=['posted']
 
-        query_get_clause = self._get_query_get_clause(data)
-        params = [tuple(move_state), tuple(journal_id.ids)] + query_get_clause[2]
-        query = """
-            SELECT rel.account_tax_id, SUM("account_move_line".balance) AS base_amount
-            FROM account_move_line_account_tax_rel rel, """ + query_get_clause[0] + """ 
-            LEFT JOIN account_move am ON "account_move_line".move_id = am.id
-            WHERE "account_move_line".id = rel.account_move_line_id
-                AND am.state IN %s
-                AND "account_move_line".journal_id IN %s
-                AND """ + query_get_clause[1] + """
-           GROUP BY rel.account_tax_id"""
-        self.env.cr.execute(query, tuple(params))
-        ids = []
-        base_amounts = {}
-        for row in self.env.cr.fetchall():
+        query_get_clause=self._get_query_get_clause(data)
+        params=[tuple(move_state),tuple(journal_id.ids)]+query_get_clause[2]
+        query="""
+            SELECTrel.account_tax_id,SUM("account_move_line".balance)ASbase_amount
+            FROMaccount_move_line_account_tax_relrel,"""+query_get_clause[0]+"""
+            LEFTJOINaccount_moveamON"account_move_line".move_id=am.id
+            WHERE"account_move_line".id=rel.account_move_line_id
+                ANDam.stateIN%s
+                AND"account_move_line".journal_idIN%s
+                AND"""+query_get_clause[1]+"""
+           GROUPBYrel.account_tax_id"""
+        self.env.cr.execute(query,tuple(params))
+        ids=[]
+        base_amounts={}
+        forrowinself.env.cr.fetchall():
             ids.append(row[0])
-            base_amounts[row[0]] = row[1]
+            base_amounts[row[0]]=row[1]
 
 
-        res = {}
-        for tax in self.env['account.tax'].browse(ids):
-            self.env.cr.execute('SELECT sum(debit - credit) FROM ' + query_get_clause[0] + ', account_move am '
-                'WHERE "account_move_line".move_id=am.id AND am.state IN %s AND "account_move_line".journal_id IN %s AND ' + query_get_clause[1] + ' AND tax_line_id = %s',
-                tuple(params + [tax.id]))
-            res[tax] = {
-                'base_amount': base_amounts[tax.id],
-                'tax_amount': self.env.cr.fetchone()[0] or 0.0,
+        res={}
+        fortaxinself.env['account.tax'].browse(ids):
+            self.env.cr.execute('SELECTsum(debit-credit)FROM'+query_get_clause[0]+',account_moveam'
+                'WHERE"account_move_line".move_id=am.idANDam.stateIN%sAND"account_move_line".journal_idIN%sAND'+query_get_clause[1]+'ANDtax_line_id=%s',
+                tuple(params+[tax.id]))
+            res[tax]={
+                'base_amount':base_amounts[tax.id],
+                'tax_amount':self.env.cr.fetchone()[0]or0.0,
             }
-            if journal_id.type == 'sale':
-                #sales operation are credits
-                res[tax]['base_amount'] = res[tax]['base_amount'] * -1
-                res[tax]['tax_amount'] = res[tax]['tax_amount'] * -1
-        return res
+            ifjournal_id.type=='sale':
+                #salesoperationarecredits
+                res[tax]['base_amount']=res[tax]['base_amount']*-1
+                res[tax]['tax_amount']=res[tax]['tax_amount']*-1
+        returnres
 
-    def _get_query_get_clause(self, data):
-        return self.env['account.move.line'].with_context(data['form'].get('used_context', {}))._query_get()
+    def_get_query_get_clause(self,data):
+        returnself.env['account.move.line'].with_context(data['form'].get('used_context',{}))._query_get()
 
     @api.model
-    def _get_report_values(self, docids, data=None):
-        if not data.get('form'):
-            raise UserError(_("Form content is missing, this report cannot be printed."))
+    def_get_report_values(self,docids,data=None):
+        ifnotdata.get('form'):
+            raiseUserError(_("Formcontentismissing,thisreportcannotbeprinted."))
 
-        target_move = data['form'].get('target_move', 'all')
-        sort_selection = data['form'].get('sort_selection', 'date')
+        target_move=data['form'].get('target_move','all')
+        sort_selection=data['form'].get('sort_selection','date')
 
-        res = {}
-        for journal in data['form']['journal_ids']:
-            res[journal] = self.with_context(data['form'].get('used_context', {})).lines(target_move, journal, sort_selection, data)
-        return {
-            'doc_ids': data['form']['journal_ids'],
-            'doc_model': self.env['account.journal'],
-            'data': data,
-            'docs': self.env['account.journal'].browse(data['form']['journal_ids']),
-            'time': time,
-            'lines': res,
-            'sum_credit': self._sum_credit,
-            'sum_debit': self._sum_debit,
-            'get_taxes': self._get_taxes,
-            'company_id': self.env['res.company'].browse(
+        res={}
+        forjournalindata['form']['journal_ids']:
+            res[journal]=self.with_context(data['form'].get('used_context',{})).lines(target_move,journal,sort_selection,data)
+        return{
+            'doc_ids':data['form']['journal_ids'],
+            'doc_model':self.env['account.journal'],
+            'data':data,
+            'docs':self.env['account.journal'].browse(data['form']['journal_ids']),
+            'time':time,
+            'lines':res,
+            'sum_credit':self._sum_credit,
+            'sum_debit':self._sum_debit,
+            'get_taxes':self._get_taxes,
+            'company_id':self.env['res.company'].browse(
                 data['form']['company_id'][0]),
         }

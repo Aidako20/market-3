@@ -1,77 +1,77 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 
-<templates id="template" xml:space="preserve">
-    <t t-name="hr_holidays.dashboard_calendar_header">
-        <div class="o_timeoff_container d-flex">
-            <div t-foreach="timeoffs" t-as="timeoff" t-attf-class="o_timeoff_card flex-grow-1 d-flex flex-column {{ timeoff_last ? 'o_timeoff_card_last' : '' }}">
-                <t t-set="need_allocation" t-value="timeoff[2] !== 'no'"/>
-                <t t-set="cl" t-value="'text-muted'"/>
+<templatesid="template"xml:space="preserve">
+    <tt-name="hr_holidays.dashboard_calendar_header">
+        <divclass="o_timeoff_containerd-flex">
+            <divt-foreach="timeoffs"t-as="timeoff"t-attf-class="o_timeoff_cardflex-grow-1d-flexflex-column{{timeoff_last?'o_timeoff_card_last':''}}">
+                <tt-set="need_allocation"t-value="timeoff[2]!=='no'"/>
+                <tt-set="cl"t-value="'text-muted'"/>
 
-                <t t-if="need_allocation &amp;&amp; timeoff[1]['virtual_remaining_leaves'] &gt; 0">
-                    <t t-set="cl" t-value="'o_timeoff_green'"/>
+                <tt-if="need_allocation&amp;&amp;timeoff[1]['virtual_remaining_leaves']&gt;0">
+                    <tt-set="cl"t-value="'o_timeoff_green'"/>
                 </t>
 
-                <div class="mt-2">
-                    <t t-if="need_allocation">
-                        <span t-esc="timeoff[1]['virtual_remaining_leaves']" class="o_timeoff_big o_timeoff_purple"/> / <span t-esc="timeoff[1]['max_leaves']"/> <t t-if="timeoff[1]['request_unit'] == 'hour'">Hours</t><t t-else="">Days</t>
+                <divclass="mt-2">
+                    <tt-if="need_allocation">
+                        <spant-esc="timeoff[1]['virtual_remaining_leaves']"class="o_timeoff_bigo_timeoff_purple"/>/<spant-esc="timeoff[1]['max_leaves']"/><tt-if="timeoff[1]['request_unit']=='hour'">Hours</t><tt-else="">Days</t>
                     </t>
-                    <t t-else="">
-                        <span t-esc="timeoff[1]['virtual_leaves_taken']" class="o_timeoff_big o_timeoff_purple"/> <t t-if="timeoff[1]['request_unit'] == 'hour'">Hours</t><t t-else="">Days</t>
+                    <tt-else="">
+                        <spant-esc="timeoff[1]['virtual_leaves_taken']"class="o_timeoff_bigo_timeoff_purple"/><tt-if="timeoff[1]['request_unit']=='hour'">Hours</t><tt-else="">Days</t>
                     </t>
                 </div>
 
-                <b><span t-esc="timeoff[0]" class="o_timeoff_name"/></b>
+                <b><spant-esc="timeoff[0]"class="o_timeoff_name"/></b>
 
-                <span class="mb-4" t-if="need_allocation">
-                    <span t-attf-class="mr-1 font-weight-bold {{ cl }}" t-esc="timeoff[1]['virtual_leaves_taken']"/><span>taken</span>
-                    <t t-if="timeoff[3]"> (Expire on <span t-esc="moment(timeoff[3]).format('L')"/>)</t>
+                <spanclass="mb-4"t-if="need_allocation">
+                    <spant-attf-class="mr-1font-weight-bold{{cl}}"t-esc="timeoff[1]['virtual_leaves_taken']"/><span>taken</span>
+                    <tt-if="timeoff[3]">(Expireon<spant-esc="moment(timeoff[3]).format('L')"/>)</t>
                 </span>
             </div>
         </div>
     </t>
 
-    <t t-name="hr_holidays.dashboard.calendar.button">
-        <button class="btn btn-primary btn-time-off" type="button">
-            <t t-esc="time_off"/>
+    <tt-name="hr_holidays.dashboard.calendar.button">
+        <buttonclass="btnbtn-primarybtn-time-off"type="button">
+            <tt-esc="time_off"/>
         </button>
-        <button class="btn btn-secondary btn-allocation" type="button">
-            <t t-esc="request"/>
+        <buttonclass="btnbtn-secondarybtn-allocation"type="button">
+            <tt-esc="request"/>
         </button>
     </t>
 
-    <t t-name="hr_holidays.calendar.popover.placeholder">
-        <div t-attf-class="o_cw_popover popover card shadow #{typeof color === 'number' ? _.str.sprintf('o_calendar_color_%s', color) : ''}" role="tooltip">
-            <div class="arrow"/>
-            <div class="card-header d-flex justify-content-between py-2 pr-2">
-                <h4 class="popover-header border-0 p-0 pt-1"/>
-                <div class="ml-4">
-                    <i t-if="calendarIcon" t-attf-class="fa {{calendarIcon}}"></i>
-                    <span class="o_cw_popover_close ml-1"><i class="fa fa-close small"/></span>
+    <tt-name="hr_holidays.calendar.popover.placeholder">
+        <divt-attf-class="o_cw_popoverpopovercardshadow#{typeofcolor==='number'?_.str.sprintf('o_calendar_color_%s',color):''}"role="tooltip">
+            <divclass="arrow"/>
+            <divclass="card-headerd-flexjustify-content-betweenpy-2pr-2">
+                <h4class="popover-headerborder-0p-0pt-1"/>
+                <divclass="ml-4">
+                    <it-if="calendarIcon"t-attf-class="fa{{calendarIcon}}"></i>
+                    <spanclass="o_cw_popover_closeml-1"><iclass="fafa-closesmall"/></span>
                 </div>
             </div>
-            <div class="o_cw_body">
+            <divclass="o_cw_body">
             </div>
         </div>
     </t>
 
-    <t t-name="hr_holidays.calendar.popover">
-        <div class="o_cw_body">
-            <ul class="list-group list-group-flush">
-                <li t-if="!widget.hideDate and widget.eventDate.date" class="list-group-item">
-                    <b class="text-capitalize" t-esc="widget.eventDate.date"/> <small t-if="widget.eventDate.duration"><b t-esc="_.str.sprintf('(%s)', widget.eventDate.duration)"/></small>
+    <tt-name="hr_holidays.calendar.popover">
+        <divclass="o_cw_body">
+            <ulclass="list-grouplist-group-flush">
+                <lit-if="!widget.hideDateandwidget.eventDate.date"class="list-group-item">
+                    <bclass="text-capitalize"t-esc="widget.eventDate.date"/><smallt-if="widget.eventDate.duration"><bt-esc="_.str.sprintf('(%s)',widget.eventDate.duration)"/></small>
                 </li>
-                <li t-if="!widget.hideTime and widget.eventTime.time" class="list-group-item">
-                    <b t-esc="widget.eventTime.time"/> <small t-if="widget.eventTime.duration"><b t-esc="_.str.sprintf('(%s)', widget.eventTime.duration)"/></small>
-                </li>
-            </ul>
-            <ul class="list-group list-group-flush o_cw_popover_fields_secondary" t-if="widget.display_name">
-                <li class="list-group-item">
-                    <span class="o_field_char o_field_widget" t-esc="widget.display_name" />
+                <lit-if="!widget.hideTimeandwidget.eventTime.time"class="list-group-item">
+                    <bt-esc="widget.eventTime.time"/><smallt-if="widget.eventTime.duration"><bt-esc="_.str.sprintf('(%s)',widget.eventTime.duration)"/></small>
                 </li>
             </ul>
-            <div class="card-footer border-top" t-if="widget.canEdit or widget.canDelete">
-                <a t-if="widget.canEdit" href="#" class="btn btn-primary o_cw_popover_edit">Edit</a>
-                <a t-if="widget.canDelete" href="#" class="btn btn-secondary o_cw_popover_delete ml-2">Delete</a>
+            <ulclass="list-grouplist-group-flusho_cw_popover_fields_secondary"t-if="widget.display_name">
+                <liclass="list-group-item">
+                    <spanclass="o_field_charo_field_widget"t-esc="widget.display_name"/>
+                </li>
+            </ul>
+            <divclass="card-footerborder-top"t-if="widget.canEditorwidget.canDelete">
+                <at-if="widget.canEdit"href="#"class="btnbtn-primaryo_cw_popover_edit">Edit</a>
+                <at-if="widget.canDelete"href="#"class="btnbtn-secondaryo_cw_popover_deleteml-2">Delete</a>
             </div>
         </div>
     </t>

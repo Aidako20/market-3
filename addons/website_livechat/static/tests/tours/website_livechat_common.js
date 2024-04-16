@@ -1,41 +1,41 @@
-flectra.define('website_livechat.tour_common', function(require) {
-'use strict';
+flectra.define('website_livechat.tour_common',function(require){
+'usestrict';
 
-var session = require('web.session');
-var LivechatButton = require('im_livechat.legacy.im_livechat.im_livechat').LivechatButton;
+varsession=require('web.session');
+varLivechatButton=require('im_livechat.legacy.im_livechat.im_livechat').LivechatButton;
 
 /**
- * Alter this method for test purposes.
+ *Alterthismethodfortestpurposes.
  *
- * Fake the notification after sending message
- * As bus is not available, it's necessary to add the message in the chatter + in livechat.messages
+ *Fakethenotificationaftersendingmessage
+ *Asbusisnotavailable,it'snecessarytoaddthemessageinthechatter+inlivechat.messages
  *
- * Add a class to the chatter window after sendFeedback is done
- * to force the test to wait until feedback is really done
- * (to check afterwards if the livechat session is set to inactive)
+ *AddaclasstothechatterwindowaftersendFeedbackisdone
+ *toforcethetesttowaituntilfeedbackisreallydone
+ *(tocheckafterwardsifthelivechatsessionissettoinactive)
  *
- * Note : this asset is loaded for tests only (rpc call done only during tests)
+ *Note:thisassetisloadedfortestsonly(rpccalldoneonlyduringtests)
  */
 LivechatButton.include({
-    _sendMessage: function (message) {
-        var self = this;
-        return this._super.apply(this, arguments).then(function () {
-            if (message.isFeedback) {
+    _sendMessage:function(message){
+        varself=this;
+        returnthis._super.apply(this,arguments).then(function(){
+            if(message.isFeedback){
                 $('div.o_thread_window_header').addClass('feedback_sent');
             }
-            else {
-                session.rpc('/bus/test_mode_activated', {}).then(function (in_test_mode) {
-                    if (in_test_mode) {
-                        var notification = [
+            else{
+                session.rpc('/bus/test_mode_activated',{}).then(function(in_test_mode){
+                    if(in_test_mode){
+                        varnotification=[
                             self._livechat.getUUID(),
                             {
-                                'id': -1,
-                                'author_id': [0, 'Website Visitor Test'],
-                                'email_from': 'Website Visitor Test',
-                                'body': '<p>' + message.content + '</p>',
-                                'is_discussion': true,
-                                'subtype_id': [1, "Discussions"],
-                                'date': moment().format('YYYY-MM-DD HH:mm:ss'),
+                                'id':-1,
+                                'author_id':[0,'WebsiteVisitorTest'],
+                                'email_from':'WebsiteVisitorTest',
+                                'body':'<p>'+message.content+'</p>',
+                                'is_discussion':true,
+                                'subtype_id':[1,"Discussions"],
+                                'date':moment().format('YYYY-MM-DDHH:mm:ss'),
                             }
                         ]
                         self._handleNotification(notification);
@@ -47,119 +47,119 @@ LivechatButton.include({
 });
 
 /*******************************
-*         Common Steps
+*        CommonSteps
 *******************************/
 
-var startStep = [{
-    content: "click on livechat widget",
-    trigger: "div.o_livechat_button"
-}, {
-    content: "Say hello!",
-    trigger: "input.o_composer_text_field",
-    run: "text Hello Sir!"
-}, {
-    content: "Send the message",
-    trigger: "input.o_composer_text_field",
-    run: function() {
-        $('input.o_composer_text_field').trigger($.Event('keydown', {which: $.ui.keyCode.ENTER}));
+varstartStep=[{
+    content:"clickonlivechatwidget",
+    trigger:"div.o_livechat_button"
+},{
+    content:"Sayhello!",
+    trigger:"input.o_composer_text_field",
+    run:"textHelloSir!"
+},{
+    content:"Sendthemessage",
+    trigger:"input.o_composer_text_field",
+    run:function(){
+        $('input.o_composer_text_field').trigger($.Event('keydown',{which:$.ui.keyCode.ENTER}));
     }
-}, {
-    content: "Verify your message has been typed",
-    trigger: "div.o_thread_message_content>p:contains('Hello Sir!')"
-}, {
-    content: "Verify there is no duplicates",
-    trigger: "body",
-    run: function () {
-        if ($("div.o_thread_message_content p:contains('Hello Sir!')").length === 1) {
+},{
+    content:"Verifyyourmessagehasbeentyped",
+    trigger:"div.o_thread_message_content>p:contains('HelloSir!')"
+},{
+    content:"Verifythereisnoduplicates",
+    trigger:"body",
+    run:function(){
+        if($("div.o_thread_message_contentp:contains('HelloSir!')").length===1){
             $('body').addClass('no_duplicated_message');
         }
     }
-}, {
-    content: "Is your message correctly sent ?",
-    trigger: 'body.no_duplicated_message'
+},{
+    content:"Isyourmessagecorrectlysent?",
+    trigger:'body.no_duplicated_message'
 }];
 
-var endDiscussionStep = [{
-    content: "Close the chatter",
-    trigger: "a.o_thread_window_close",
-    run: function() {
+varendDiscussionStep=[{
+    content:"Closethechatter",
+    trigger:"a.o_thread_window_close",
+    run:function(){
         $('a.o_thread_window_close').click();
     }
 }];
 
-var feedbackStep = [{
-    content: "Type a feedback",
-    trigger: "div.o_livechat_rating_reason > textarea",
-    run: "text ;-) This was really helpful. Thanks ;-)!"
-}, {
-    content: "Send the feedback",
-    trigger: "button[type='button'].o_rating_submit_button",
-}, {
-    content: "Check if feedback has been sent",
-    trigger: "div.o_thread_window_header.feedback_sent",
-}, {
-    content: "Thanks for your feedback",
-    trigger: "div.o_livechat_rating_box:has(div:contains('Thank you for your feedback'))",
+varfeedbackStep=[{
+    content:"Typeafeedback",
+    trigger:"div.o_livechat_rating_reason>textarea",
+    run:"text;-)Thiswasreallyhelpful.Thanks;-)!"
+},{
+    content:"Sendthefeedback",
+    trigger:"button[type='button'].o_rating_submit_button",
+},{
+    content:"Checkiffeedbackhasbeensent",
+    trigger:"div.o_thread_window_header.feedback_sent",
+},{
+    content:"Thanksforyourfeedback",
+    trigger:"div.o_livechat_rating_box:has(div:contains('Thankyouforyourfeedback'))",
 }];
 
-var transcriptStep = [{
-    content: "Type your email",
-    trigger: "input[id='o_email']",
-    run: "text deboul@onner.com"
-}, {
-    content: "Send the conversation to your email address",
-    trigger: "button.o_email_chat_button",
-}, {
-    content: "Type your email",
-    trigger: "div.o_livechat_email:has(strong:contains('Conversation Sent'))",
+vartranscriptStep=[{
+    content:"Typeyouremail",
+    trigger:"input[id='o_email']",
+    run:"textdeboul@onner.com"
+},{
+    content:"Sendtheconversationtoyouremailaddress",
+    trigger:"button.o_email_chat_button",
+},{
+    content:"Typeyouremail",
+    trigger:"div.o_livechat_email:has(strong:contains('ConversationSent'))",
 }];
 
-var closeStep = [{
-    content: "Close the conversation with the x button",
-    trigger: "a.o_thread_window_close",
-},  {
-    content: "Check that the chat window is closed",
-    trigger: 'body',
-    run: function () {
-        if ($('div.o_livechat_button').length === 1 && !$('div.o_livechat_button').is(':visible')) {
+varcloseStep=[{
+    content:"Closetheconversationwiththexbutton",
+    trigger:"a.o_thread_window_close",
+}, {
+    content:"Checkthatthechatwindowisclosed",
+    trigger:'body',
+    run:function(){
+        if($('div.o_livechat_button').length===1&&!$('div.o_livechat_button').is(':visible')){
             $('body').addClass('tour_success');
         }
     }
-}, {
-    content: "Is the Test succeded ?",
-    trigger: 'body.tour_success'
+},{
+    content:"IstheTestsucceded?",
+    trigger:'body.tour_success'
 }];
 
-var goodRatingStep = [{
-    content: "Send Good Rating",
-    trigger: "div.o_livechat_rating_choices > img[data-value=5]",
-}, {
-    content: "Check if feedback has been sent",
-    trigger: "div.o_thread_window_header.feedback_sent",
-}, {
-    content: "Thanks for your feedback",
-    trigger: "div.o_livechat_rating_box:has(div:contains('Thank you for your feedback'))"
+vargoodRatingStep=[{
+    content:"SendGoodRating",
+    trigger:"div.o_livechat_rating_choices>img[data-value=5]",
+},{
+    content:"Checkiffeedbackhasbeensent",
+    trigger:"div.o_thread_window_header.feedback_sent",
+},{
+    content:"Thanksforyourfeedback",
+    trigger:"div.o_livechat_rating_box:has(div:contains('Thankyouforyourfeedback'))"
 }];
 
-var okRatingStep = [{
-    content: "Send ok Rating",
-    trigger: "div.o_livechat_rating_choices > img[data-value=3]",
+varokRatingStep=[{
+    content:"SendokRating",
+    trigger:"div.o_livechat_rating_choices>img[data-value=3]",
 }];
 
-var sadRatingStep = [{
-    content: "Send bad Rating",
-    trigger: "div.o_livechat_rating_choices > img[data-value=1]",
+varsadRatingStep=[{
+    content:"SendbadRating",
+    trigger:"div.o_livechat_rating_choices>img[data-value=1]",
 }];
 
-return {
-    'startStep': startStep,
-    'endDiscussionStep': endDiscussionStep,
-    'transcriptStep': transcriptStep,
-    'feedbackStep': feedbackStep,
-    'closeStep': closeStep,
-    'goodRatingStep': goodRatingStep,
-    'okRatingStep': okRatingStep,
-    'sadRatingStep': sadRatingStep,
+return{
+    'startStep':startStep,
+    'endDiscussionStep':endDiscussionStep,
+    'transcriptStep':transcriptStep,
+    'feedbackStep':feedbackStep,
+    'closeStep':closeStep,
+    'goodRatingStep':goodRatingStep,
+    'okRatingStep':okRatingStep,
+    'sadRatingStep':sadRatingStep,
 };
 
 });

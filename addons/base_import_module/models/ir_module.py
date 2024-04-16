@@ -1,234 +1,234 @@
-# -*- coding: utf-8 -*-
-import ast
-import base64
-import logging
-import lxml
-import os
-import sys
-import tempfile
-import zipfile
-from collections import defaultdict
-from os.path import join as opj
+#-*-coding:utf-8-*-
+importast
+importbase64
+importlogging
+importlxml
+importos
+importsys
+importtempfile
+importzipfile
+fromcollectionsimportdefaultdict
+fromos.pathimportjoinasopj
 
-from flectra import api, fields, models, _
-from flectra.exceptions import UserError
-from flectra.modules.module import MANIFEST_NAMES
-from flectra.tools import convert_csv_import, convert_sql_import, convert_xml_import, exception_to_unicode
-from flectra.tools import file_open, file_open_temporary_directory
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportUserError
+fromflectra.modules.moduleimportMANIFEST_NAMES
+fromflectra.toolsimportconvert_csv_import,convert_sql_import,convert_xml_import,exception_to_unicode
+fromflectra.toolsimportfile_open,file_open_temporary_directory
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
-MAX_FILE_SIZE = 100 * 1024 * 1024  # in megabytes
+MAX_FILE_SIZE=100*1024*1024 #inmegabytes
 
 
-class IrModule(models.Model):
-    _inherit = "ir.module.module"
+classIrModule(models.Model):
+    _inherit="ir.module.module"
 
-    imported = fields.Boolean(string="Imported Module")
+    imported=fields.Boolean(string="ImportedModule")
 
-    def _get_modules_to_load_domain(self):
-        # imported modules are not expected to be loaded as regular modules
-        return super()._get_modules_to_load_domain() + [('imported', '=', False)]
+    def_get_modules_to_load_domain(self):
+        #importedmodulesarenotexpectedtobeloadedasregularmodules
+        returnsuper()._get_modules_to_load_domain()+[('imported','=',False)]
 
     @api.depends('name')
-    def _get_latest_version(self):
-        imported_modules = self.filtered(lambda m: m.imported and m.latest_version)
-        for module in imported_modules:
-            module.installed_version = module.latest_version
-        super(IrModule, self - imported_modules)._get_latest_version()
+    def_get_latest_version(self):
+        imported_modules=self.filtered(lambdam:m.importedandm.latest_version)
+        formoduleinimported_modules:
+            module.installed_version=module.latest_version
+        super(IrModule,self-imported_modules)._get_latest_version()
 
-    def _import_module(self, module, path, force=False):
-        known_mods = self.search([])
-        known_mods_names = {m.name: m for m in known_mods}
-        installed_mods = [m.name for m in known_mods if m.state == 'installed']
+    def_import_module(self,module,path,force=False):
+        known_mods=self.search([])
+        known_mods_names={m.name:mforminknown_mods}
+        installed_mods=[m.nameforminknown_modsifm.state=='installed']
 
-        terp = {}
-        manifest_path = next((opj(path, name) for name in MANIFEST_NAMES if os.path.exists(opj(path, name))), None)
-        if manifest_path:
-            with file_open(manifest_path, 'rb', env=self.env) as f:
+        terp={}
+        manifest_path=next((opj(path,name)fornameinMANIFEST_NAMESifos.path.exists(opj(path,name))),None)
+        ifmanifest_path:
+            withfile_open(manifest_path,'rb',env=self.env)asf:
                 terp.update(ast.literal_eval(f.read().decode()))
-        if not terp:
-            return False
-        if not terp.get('icon'):
-            icon_path = 'static/description/icon.png'
-            module_icon = module if os.path.exists(opj(path, icon_path)) else 'base'
-            terp['icon'] = opj('/', module_icon, icon_path)
-        values = self.get_values_from_terp(terp)
-        if 'version' in terp:
-            values['latest_version'] = terp['version']
+        ifnotterp:
+            returnFalse
+        ifnotterp.get('icon'):
+            icon_path='static/description/icon.png'
+            module_icon=moduleifos.path.exists(opj(path,icon_path))else'base'
+            terp['icon']=opj('/',module_icon,icon_path)
+        values=self.get_values_from_terp(terp)
+        if'version'interp:
+            values['latest_version']=terp['version']
 
-        unmet_dependencies = set(terp.get('depends', [])).difference(installed_mods)
+        unmet_dependencies=set(terp.get('depends',[])).difference(installed_mods)
 
-        if unmet_dependencies:
-            if (unmet_dependencies == set(['web_studio']) and
+        ifunmet_dependencies:
+            if(unmet_dependencies==set(['web_studio'])and
                     _is_studio_custom(path)):
-                err = _("Studio customizations require Studio")
+                err=_("StudiocustomizationsrequireStudio")
             else:
-                err = _("Unmet module dependencies: \n\n - %s") % '\n - '.join(
-                    known_mods.filtered(lambda mod: mod.name in unmet_dependencies).mapped('shortdesc')
+                err=_("Unmetmoduledependencies:\n\n-%s")%'\n-'.join(
+                    known_mods.filtered(lambdamod:mod.nameinunmet_dependencies).mapped('shortdesc')
                 )
-            raise UserError(err)
-        elif 'web_studio' not in installed_mods and _is_studio_custom(path):
-            raise UserError(_("Studio customizations require the Flectra Studio app."))
+            raiseUserError(err)
+        elif'web_studio'notininstalled_modsand_is_studio_custom(path):
+            raiseUserError(_("StudiocustomizationsrequiretheFlectraStudioapp."))
 
-        mod = known_mods_names.get(module)
-        if mod:
-            mod.write(dict(state='installed', **values))
-            mode = 'update' if not force else 'init'
+        mod=known_mods_names.get(module)
+        ifmod:
+            mod.write(dict(state='installed',**values))
+            mode='update'ifnotforceelse'init'
         else:
-            assert terp.get('installable', True), "Module not installable"
-            self.create(dict(name=module, state='installed', imported=True, **values))
-            mode = 'init'
+            assertterp.get('installable',True),"Modulenotinstallable"
+            self.create(dict(name=module,state='installed',imported=True,**values))
+            mode='init'
 
-        for kind in ['data', 'init_xml', 'update_xml']:
-            for filename in terp.get(kind, []):
-                ext = os.path.splitext(filename)[1].lower()
-                if ext not in ('.xml', '.csv', '.sql'):
-                    _logger.info("module %s: skip unsupported file %s", module, filename)
+        forkindin['data','init_xml','update_xml']:
+            forfilenameinterp.get(kind,[]):
+                ext=os.path.splitext(filename)[1].lower()
+                ifextnotin('.xml','.csv','.sql'):
+                    _logger.info("module%s:skipunsupportedfile%s",module,filename)
                     continue
-                _logger.info("module %s: loading %s", module, filename)
-                noupdate = False
-                if ext == '.csv' and kind in ('init', 'init_xml'):
-                    noupdate = True
-                pathname = opj(path, filename)
-                idref = {}
-                with file_open(pathname, 'rb', env=self.env) as fp:
-                    if ext == '.csv':
-                        convert_csv_import(self.env.cr, module, pathname, fp.read(), idref, mode, noupdate)
-                    elif ext == '.sql':
-                        convert_sql_import(self.env.cr, fp)
-                    elif ext == '.xml':
-                        convert_xml_import(self.env.cr, module, fp, idref, mode, noupdate)
+                _logger.info("module%s:loading%s",module,filename)
+                noupdate=False
+                ifext=='.csv'andkindin('init','init_xml'):
+                    noupdate=True
+                pathname=opj(path,filename)
+                idref={}
+                withfile_open(pathname,'rb',env=self.env)asfp:
+                    ifext=='.csv':
+                        convert_csv_import(self.env.cr,module,pathname,fp.read(),idref,mode,noupdate)
+                    elifext=='.sql':
+                        convert_sql_import(self.env.cr,fp)
+                    elifext=='.xml':
+                        convert_xml_import(self.env.cr,module,fp,idref,mode,noupdate)
 
-        path_static = opj(path, 'static')
-        IrAttachment = self.env['ir.attachment']
-        if os.path.isdir(path_static):
-            for root, dirs, files in os.walk(path_static):
-                for static_file in files:
-                    full_path = opj(root, static_file)
-                    with file_open(full_path, 'rb', env=self.env) as fp:
-                        data = base64.b64encode(fp.read())
-                    url_path = '/{}{}'.format(module, full_path.split(path)[1].replace(os.path.sep, '/'))
-                    if not isinstance(url_path, str):
-                        url_path = url_path.decode(sys.getfilesystemencoding())
-                    filename = os.path.split(url_path)[1]
-                    values = dict(
+        path_static=opj(path,'static')
+        IrAttachment=self.env['ir.attachment']
+        ifos.path.isdir(path_static):
+            forroot,dirs,filesinos.walk(path_static):
+                forstatic_fileinfiles:
+                    full_path=opj(root,static_file)
+                    withfile_open(full_path,'rb',env=self.env)asfp:
+                        data=base64.b64encode(fp.read())
+                    url_path='/{}{}'.format(module,full_path.split(path)[1].replace(os.path.sep,'/'))
+                    ifnotisinstance(url_path,str):
+                        url_path=url_path.decode(sys.getfilesystemencoding())
+                    filename=os.path.split(url_path)[1]
+                    values=dict(
                         name=filename,
                         url=url_path,
                         res_model='ir.ui.view',
                         type='binary',
                         datas=data,
                     )
-                    attachment = IrAttachment.search([('url', '=', url_path), ('type', '=', 'binary'), ('res_model', '=', 'ir.ui.view')])
-                    if attachment:
+                    attachment=IrAttachment.search([('url','=',url_path),('type','=','binary'),('res_model','=','ir.ui.view')])
+                    ifattachment:
                         attachment.write(values)
                     else:
                         IrAttachment.create(values)
 
-        return True
+        returnTrue
 
     @api.model
-    def import_zipfile(self, module_file, force=False):
-        if not module_file:
-            raise Exception(_("No file sent."))
-        if not zipfile.is_zipfile(module_file):
-            raise UserError(_('Only zip files are supported.'))
+    defimport_zipfile(self,module_file,force=False):
+        ifnotmodule_file:
+            raiseException(_("Nofilesent."))
+        ifnotzipfile.is_zipfile(module_file):
+            raiseUserError(_('Onlyzipfilesaresupported.'))
 
-        success = []
-        errors = dict()
-        module_names = []
-        with zipfile.ZipFile(module_file, "r") as z:
-            for zf in z.filelist:
-                if zf.file_size > MAX_FILE_SIZE:
-                    raise UserError(_("File '%s' exceed maximum allowed file size", zf.filename))
+        success=[]
+        errors=dict()
+        module_names=[]
+        withzipfile.ZipFile(module_file,"r")asz:
+            forzfinz.filelist:
+                ifzf.file_size>MAX_FILE_SIZE:
+                    raiseUserError(_("File'%s'exceedmaximumallowedfilesize",zf.filename))
 
-            with file_open_temporary_directory(self.env) as module_dir:
-                manifest_files = [
+            withfile_open_temporary_directory(self.env)asmodule_dir:
+                manifest_files=[
                     file
-                    for file in z.filelist
-                    if file.filename.count('/') == 1
-                    and file.filename.split('/')[1] in MANIFEST_NAMES
+                    forfileinz.filelist
+                    iffile.filename.count('/')==1
+                    andfile.filename.split('/')[1]inMANIFEST_NAMES
                 ]
-                module_data_files = defaultdict(list)
-                for manifest in manifest_files:
-                    manifest_path = z.extract(manifest, module_dir)
-                    mod_name = manifest.filename.split('/')[0]
+                module_data_files=defaultdict(list)
+                formanifestinmanifest_files:
+                    manifest_path=z.extract(manifest,module_dir)
+                    mod_name=manifest.filename.split('/')[0]
                     try:
-                        with file_open(manifest_path, 'rb', env=self.env) as f:
-                            terp = ast.literal_eval(f.read().decode())
-                    except Exception:
+                        withfile_open(manifest_path,'rb',env=self.env)asf:
+                            terp=ast.literal_eval(f.read().decode())
+                    exceptException:
                         continue
-                    for filename in terp.get('data', []) + terp.get('init_xml', []) + terp.get('update_xml', []):
-                        if os.path.splitext(filename)[1].lower() not in ('.xml', '.csv', '.sql'):
+                    forfilenameinterp.get('data',[])+terp.get('init_xml',[])+terp.get('update_xml',[]):
+                        ifos.path.splitext(filename)[1].lower()notin('.xml','.csv','.sql'):
                             continue
-                        module_data_files[mod_name].append('%s/%s' % (mod_name, filename))
-                for file in z.filelist:
-                    filename = file.filename
-                    mod_name = filename.split('/')[0]
-                    is_data_file = filename in module_data_files[mod_name]
-                    is_static = filename.startswith('%s/static' % mod_name)
-                    if is_data_file or is_static:
-                        z.extract(file, module_dir)
+                        module_data_files[mod_name].append('%s/%s'%(mod_name,filename))
+                forfileinz.filelist:
+                    filename=file.filename
+                    mod_name=filename.split('/')[0]
+                    is_data_file=filenameinmodule_data_files[mod_name]
+                    is_static=filename.startswith('%s/static'%mod_name)
+                    ifis_data_fileoris_static:
+                        z.extract(file,module_dir)
 
-                dirs = [d for d in os.listdir(module_dir) if os.path.isdir(opj(module_dir, d))]
-                for mod_name in dirs:
+                dirs=[dfordinos.listdir(module_dir)ifos.path.isdir(opj(module_dir,d))]
+                formod_nameindirs:
                     module_names.append(mod_name)
                     try:
-                        # assert mod_name.startswith('theme_')
-                        path = opj(module_dir, mod_name)
-                        if self._import_module(mod_name, path, force=force):
+                        #assertmod_name.startswith('theme_')
+                        path=opj(module_dir,mod_name)
+                        ifself._import_module(mod_name,path,force=force):
                             success.append(mod_name)
-                    except Exception as e:
-                        _logger.exception('Error while importing module')
-                        errors[mod_name] = exception_to_unicode(e)
-        r = ["Successfully imported module '%s'" % mod for mod in success]
-        for mod, error in errors.items():
-            r.append("Error while importing module '%s'.\n\n %s \n Make sure those modules are installed and try again." % (mod, error))
-        return '\n'.join(r), module_names
+                    exceptExceptionase:
+                        _logger.exception('Errorwhileimportingmodule')
+                        errors[mod_name]=exception_to_unicode(e)
+        r=["Successfullyimportedmodule'%s'"%modformodinsuccess]
+        formod,errorinerrors.items():
+            r.append("Errorwhileimportingmodule'%s'.\n\n%s\nMakesurethosemodulesareinstalledandtryagain."%(mod,error))
+        return'\n'.join(r),module_names
 
-    def module_uninstall(self):
-        # Delete an ir_module_module record completely if it was an imported
-        # one. The rationale behind this is that an imported module *cannot* be
-        # reinstalled anyway, as it requires the data files. Any attempt to
-        # install it again will simply fail without trace.
-        # /!\ modules_to_delete must be calculated before calling super().module_uninstall(),
-        # because when uninstalling `base_import_module` the `imported` column will no longer be
-        # in the database but we'll still have an old registry that runs this code.
-        modules_to_delete = self.filtered('imported')
-        res = super().module_uninstall()
-        if modules_to_delete:
-            _logger.info("deleting imported modules upon uninstallation: %s",
-                         ", ".join(modules_to_delete.mapped('name')))
+    defmodule_uninstall(self):
+        #Deleteanir_module_modulerecordcompletelyifitwasanimported
+        #one.Therationalebehindthisisthatanimportedmodule*cannot*be
+        #reinstalledanyway,asitrequiresthedatafiles.Anyattemptto
+        #installitagainwillsimplyfailwithouttrace.
+        #/!\modules_to_deletemustbecalculatedbeforecallingsuper().module_uninstall(),
+        #becausewhenuninstalling`base_import_module`the`imported`columnwillnolongerbe
+        #inthedatabasebutwe'llstillhaveanoldregistrythatrunsthiscode.
+        modules_to_delete=self.filtered('imported')
+        res=super().module_uninstall()
+        ifmodules_to_delete:
+            _logger.info("deletingimportedmodulesuponuninstallation:%s",
+                         ",".join(modules_to_delete.mapped('name')))
             modules_to_delete.unlink()
-        return res
+        returnres
 
 
-def _is_studio_custom(path):
+def_is_studio_custom(path):
     """
-    Checks the to-be-imported records to see if there are any references to
-    studio, which would mean that the module was created using studio
+    Checkstheto-be-importedrecordstoseeifthereareanyreferencesto
+    studio,whichwouldmeanthatthemodulewascreatedusingstudio
 
-    Returns True if any of the records contains a context with the key
-    studio in it, False if none of the records do
+    ReturnsTrueifanyoftherecordscontainsacontextwiththekey
+    studioinit,Falseifnoneoftherecordsdo
     """
-    filepaths = []
-    for level in os.walk(path):
-        filepaths += [os.path.join(level[0], fn) for fn in level[2]]
-    filepaths = [fp for fp in filepaths if fp.lower().endswith('.xml')]
+    filepaths=[]
+    forlevelinos.walk(path):
+        filepaths+=[os.path.join(level[0],fn)forfninlevel[2]]
+    filepaths=[fpforfpinfilepathsiffp.lower().endswith('.xml')]
 
-    for fp in filepaths:
-        root = lxml.etree.parse(fp).getroot()
+    forfpinfilepaths:
+        root=lxml.etree.parse(fp).getroot()
 
-        for record in root:
-            # there might not be a context if it's a non-studio module
+        forrecordinroot:
+            #theremightnotbeacontextifit'sanon-studiomodule
             try:
-                # ast.literal_eval is like eval(), but safer
-                # context is a string representing a python dict
-                ctx = ast.literal_eval(record.get('context'))
-                # there are no cases in which studio is false
-                # so just checking for its existence is enough
-                if ctx and ctx.get('studio'):
-                    return True
-            except Exception:
+                #ast.literal_evalislikeeval(),butsafer
+                #contextisastringrepresentingapythondict
+                ctx=ast.literal_eval(record.get('context'))
+                #therearenocasesinwhichstudioisfalse
+                #sojustcheckingforitsexistenceisenough
+                ifctxandctx.get('studio'):
+                    returnTrue
+            exceptException:
                 continue
-    return False
+    returnFalse

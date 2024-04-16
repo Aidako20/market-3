@@ -1,87 +1,87 @@
-flectra.define('web.custom_file_input_tests', function (require) {
-    "use strict";
+flectra.define('web.custom_file_input_tests',function(require){
+    "usestrict";
 
-    const CustomFileInput = require('web.CustomFileInput');
-    const testUtils = require('web.test_utils');
+    constCustomFileInput=require('web.CustomFileInput');
+    consttestUtils=require('web.test_utils');
 
-    const { createComponent } = testUtils;
+    const{createComponent}=testUtils;
 
-    QUnit.module('Components', {}, function () {
+    QUnit.module('Components',{},function(){
 
-        // This module cannot be tested as thoroughly as we want it to be:
-        // browsers do not let scripts programmatically assign values to inputs
-        // of type file
+        //Thismodulecannotbetestedasthoroughlyaswewantittobe:
+        //browsersdonotletscriptsprogrammaticallyassignvaluestoinputs
+        //oftypefile
         QUnit.module('CustomFileInput');
 
-        QUnit.test("Upload a file: default props", async function (assert) {
+        QUnit.test("Uploadafile:defaultprops",asyncfunction(assert){
             assert.expect(6);
 
-            const customFileInput = await createComponent(CustomFileInput, {
-                env: {
-                    services: {
-                        async httpRequest(route, params) {
-                            assert.deepEqual(params, {
-                                csrf_token: flectra.csrf_token,
-                                ufile: [],
+            constcustomFileInput=awaitcreateComponent(CustomFileInput,{
+                env:{
+                    services:{
+                        asynchttpRequest(route,params){
+                            assert.deepEqual(params,{
+                                csrf_token:flectra.csrf_token,
+                                ufile:[],
                             });
                             assert.step(route);
-                            return '[]';
+                            return'[]';
                         },
                     },
                 },
             });
-            const input = customFileInput.el.querySelector('input');
+            constinput=customFileInput.el.querySelector('input');
 
-            assert.strictEqual(customFileInput.el.innerText.trim().toUpperCase(), "CHOOSE FILE",
-                "File input total text should match its given inner element's text");
-            assert.strictEqual(input.accept, '*',
-                "Input should accept all files by default");
+            assert.strictEqual(customFileInput.el.innerText.trim().toUpperCase(),"CHOOSEFILE",
+                "Fileinputtotaltextshouldmatchitsgiveninnerelement'stext");
+            assert.strictEqual(input.accept,'*',
+                "Inputshouldacceptallfilesbydefault");
 
-            await testUtils.dom.triggerEvent(input, 'change');
+            awaittestUtils.dom.triggerEvent(input,'change');
 
-            assert.notOk(input.multiple, "'multiple' attribute should not be set");
+            assert.notOk(input.multiple,"'multiple'attributeshouldnotbeset");
             assert.verifySteps(['/web/binary/upload']);
 
             customFileInput.destroy();
         });
 
-        QUnit.test("Upload a file: custom attachment", async function (assert) {
+        QUnit.test("Uploadafile:customattachment",asyncfunction(assert){
             assert.expect(6);
 
-            const customFileInput = await createComponent(CustomFileInput, {
-                env: {
-                    services: {
-                        async httpRequest(route, params) {
-                            assert.deepEqual(params, {
-                                id: 5,
-                                model: 'res.model',
-                                csrf_token: flectra.csrf_token,
-                                ufile: [],
+            constcustomFileInput=awaitcreateComponent(CustomFileInput,{
+                env:{
+                    services:{
+                        asynchttpRequest(route,params){
+                            assert.deepEqual(params,{
+                                id:5,
+                                model:'res.model',
+                                csrf_token:flectra.csrf_token,
+                                ufile:[],
                             });
                             assert.step(route);
-                            return '[]';
+                            return'[]';
                         },
                     },
                 },
-                props: {
-                    accepted_file_extensions: '.png',
-                    action: '/web/binary/upload_attachment',
-                    id: 5,
-                    model: 'res.model',
-                    multi_upload: true,
+                props:{
+                    accepted_file_extensions:'.png',
+                    action:'/web/binary/upload_attachment',
+                    id:5,
+                    model:'res.model',
+                    multi_upload:true,
                 },
-                intercepts: {
-                    'uploaded': ev => assert.strictEqual(ev.detail.files.length, 0,
-                        "'files' property should be an empty array"),
+                intercepts:{
+                    'uploaded':ev=>assert.strictEqual(ev.detail.files.length,0,
+                        "'files'propertyshouldbeanemptyarray"),
                 },
             });
-            const input = customFileInput.el.querySelector('input');
+            constinput=customFileInput.el.querySelector('input');
 
-            assert.strictEqual(input.accept, '.png', "Input should now only accept pngs");
+            assert.strictEqual(input.accept,'.png',"Inputshouldnowonlyacceptpngs");
 
-            await testUtils.dom.triggerEvent(input, 'change');
+            awaittestUtils.dom.triggerEvent(input,'change');
 
-            assert.ok(input.multiple, "'multiple' attribute should be set");
+            assert.ok(input.multiple,"'multiple'attributeshouldbeset");
             assert.verifySteps(['/web/binary/upload_attachment']);
 
             customFileInput.destroy();

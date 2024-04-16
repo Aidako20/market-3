@@ -1,29 +1,29 @@
-from .common import PurchaseTestCommon
+from.commonimportPurchaseTestCommon
 
 
-class TestPurchaseOrderProcess(PurchaseTestCommon):
+classTestPurchaseOrderProcess(PurchaseTestCommon):
 
-    def test_00_cancel_purchase_order_flow(self):
-        """ Test cancel purchase order with group user."""
+    deftest_00_cancel_purchase_order_flow(self):
+        """Testcancelpurchaseorderwithgroupuser."""
 
-        # In order to test the cancel flow,start it from canceling confirmed purchase order.
-        purchase_order = self.env['purchase.order'].create({
-            'partner_id': self.env['res.partner'].create({'name': 'My Partner'}).id,
-            'state': 'draft',
+        #Inordertotestthecancelflow,startitfromcancelingconfirmedpurchaseorder.
+        purchase_order=self.env['purchase.order'].create({
+            'partner_id':self.env['res.partner'].create({'name':'MyPartner'}).id,
+            'state':'draft',
         })
-        po_edit_with_user = purchase_order.with_user(self.res_users_purchase_user)
+        po_edit_with_user=purchase_order.with_user(self.res_users_purchase_user)
 
-        # Confirm the purchase order.
+        #Confirmthepurchaseorder.
         po_edit_with_user.button_confirm()
 
-        # Check the "Approved" status  after confirmed RFQ.
-        self.assertEqual(po_edit_with_user.state, 'purchase', 'Purchase: PO state should be "Purchase')
+        #Checkthe"Approved"status afterconfirmedRFQ.
+        self.assertEqual(po_edit_with_user.state,'purchase','Purchase:POstateshouldbe"Purchase')
 
-        # First cancel receptions related to this order if order shipped.
+        #Firstcancelreceptionsrelatedtothisorderifordershipped.
         po_edit_with_user.picking_ids.action_cancel()
 
-        # Able to cancel purchase order.
+        #Abletocancelpurchaseorder.
         po_edit_with_user.button_cancel()
 
-        # Check that order is cancelled.
-        self.assertEqual(po_edit_with_user.state, 'cancel', 'Purchase: PO state should be "Cancel')
+        #Checkthatorderiscancelled.
+        self.assertEqual(po_edit_with_user.state,'cancel','Purchase:POstateshouldbe"Cancel')

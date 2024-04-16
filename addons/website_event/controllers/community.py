@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import http
-from flectra.http import request
+fromflectraimporthttp
+fromflectra.httpimportrequest
 
 
-class EventCommunityController(http.Controller):
+classEventCommunityController(http.Controller):
 
-    @http.route('/event/<model("event.event"):event>/community', type="http", auth="public", website=True, sitemap=False)
-    def community(self, event, lang=None, **kwargs):
-        """ This skeleton route will be overriden in website_event_track_quiz, website_event_meet and website_event_meet_quiz. """
-        return request.render('website.page_404')
+    @http.route('/event/<model("event.event"):event>/community',type="http",auth="public",website=True,sitemap=False)
+    defcommunity(self,event,lang=None,**kwargs):
+        """Thisskeletonroutewillbeoverrideninwebsite_event_track_quiz,website_event_meetandwebsite_event_meet_quiz."""
+        returnrequest.render('website.page_404')

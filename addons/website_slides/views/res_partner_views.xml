@@ -1,27 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra><data>
 
-    <record id="res_partner_view_form" model="ir.ui.view">
-        <field name="name">res.partner.view.form.inherit.slides</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
-        <field name="groups_id" eval="[(4, ref('website_slides.group_website_slides_officer'))]"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[@name='button_box']" position="inside">
-                <button class="oe_stat_button" type="object"
-                    icon="fa-graduation-cap" name="action_view_courses"
-                    attrs="{'invisible': ['|', ('slide_channel_count', '=', 0), ('is_company', '=', True)]}">
-                    <div class="o_field_widget o_stat_info">
-                        <span class="o_stat_value"><field name="slide_channel_count"/></span>
-                        <span class="o_stat_text">Courses</span>
+    <recordid="res_partner_view_form"model="ir.ui.view">
+        <fieldname="name">res.partner.view.form.inherit.slides</field>
+        <fieldname="model">res.partner</field>
+        <fieldname="inherit_id"ref="base.view_partner_form"/>
+        <fieldname="groups_id"eval="[(4,ref('website_slides.group_website_slides_officer'))]"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//div[@name='button_box']"position="inside">
+                <buttonclass="oe_stat_button"type="object"
+                    icon="fa-graduation-cap"name="action_view_courses"
+                    attrs="{'invisible':['|',('slide_channel_count','=',0),('is_company','=',True)]}">
+                    <divclass="o_field_widgeto_stat_info">
+                        <spanclass="o_stat_value"><fieldname="slide_channel_count"/></span>
+                        <spanclass="o_stat_text">Courses</span>
                     </div>
                 </button>
-                <button class="oe_stat_button" type="object"
-                    icon="fa-graduation-cap" name="action_view_courses"
-                    attrs="{'invisible': ['|', ('slide_channel_company_count', '=', 0), ('is_company', '=', False)]}">
-                    <div class="o_field_widget o_stat_info">
-                        <span class="o_stat_value"><field name="slide_channel_company_count" /></span>
-                        <span class="o_stat_text">Courses</span>
+                <buttonclass="oe_stat_button"type="object"
+                    icon="fa-graduation-cap"name="action_view_courses"
+                    attrs="{'invisible':['|',('slide_channel_company_count','=',0),('is_company','=',False)]}">
+                    <divclass="o_field_widgeto_stat_info">
+                        <spanclass="o_stat_value"><fieldname="slide_channel_company_count"/></span>
+                        <spanclass="o_stat_text">Courses</span>
                     </div>
                 </button>
             </xpath>

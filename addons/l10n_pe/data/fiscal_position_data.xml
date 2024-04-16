@@ -1,25 +1,25 @@
 <flectra>
-    <record id="local_peru" model="account.fiscal.position.template">
-        <field name="name">LOCAL PERU</field>
-        <field name="chart_template_id" ref="pe_chart_template"/>
-        <field name="auto_apply">1</field>
-        <field name="country_id" ref="base.pe"/>
-        <field name="sequence">15</field>
+    <recordid="local_peru"model="account.fiscal.position.template">
+        <fieldname="name">LOCALPERU</field>
+        <fieldname="chart_template_id"ref="pe_chart_template"/>
+        <fieldname="auto_apply">1</field>
+        <fieldname="country_id"ref="base.pe"/>
+        <fieldname="sequence">15</field>
     </record>
-    <record id="exportation" model="account.fiscal.position.template">
-        <field name="name">EXTRANJERO - EXPORTACIÓN</field>
-        <field name="chart_template_id" ref="pe_chart_template"/>
-        <field name="auto_apply">1</field>
-        <field name="sequence">10</field>
+    <recordid="exportation"model="account.fiscal.position.template">
+        <fieldname="name">EXTRANJERO-EXPORTACIÓN</field>
+        <fieldname="chart_template_id"ref="pe_chart_template"/>
+        <fieldname="auto_apply">1</field>
+        <fieldname="sequence">10</field>
     </record>
-    <record id="exportation_sales_goods_1" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="exportation"/>
-        <field name="tax_src_id" ref="sale_tax_igv_18"/>
-        <field name="tax_dest_id" ref="sale_tax_exp"/>
+    <recordid="exportation_sales_goods_1"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="exportation"/>
+        <fieldname="tax_src_id"ref="sale_tax_igv_18"/>
+        <fieldname="tax_dest_id"ref="sale_tax_exp"/>
     </record>
-    <record id="exportation_sales_goods_2" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="exportation"/>
-        <field name="tax_src_id" ref="sale_tax_igv_18_included"/>
-        <field name="tax_dest_id" ref="sale_tax_exp"/>
+    <recordid="exportation_sales_goods_2"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="exportation"/>
+        <fieldname="tax_src_id"ref="sale_tax_igv_18_included"/>
+        <fieldname="tax_dest_id"ref="sale_tax_exp"/>
     </record>
 </flectra>

@@ -1,36 +1,36 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class MailingList(models.Model):
-    _inherit = 'mailing.list'
+classMailingList(models.Model):
+    _inherit='mailing.list'
 
-    def _compute_contact_nbr(self):
-        if self.env.context.get('mailing_sms') and self.ids:
+    def_compute_contact_nbr(self):
+        ifself.env.context.get('mailing_sms')andself.ids:
             self.env.cr.execute('''
-select list_id, count(*)
-from mailing_contact_list_rel r
-left join mailing_contact c on (r.contact_id=c.id)
-left join phone_blacklist bl on c.phone_sanitized = bl.number and bl.active
+selectlist_id,count(*)
+frommailing_contact_list_relr
+leftjoinmailing_contactcon(r.contact_id=c.id)
+leftjoinphone_blacklistblonc.phone_sanitized=bl.numberandbl.active
 where
-    list_id in %s
-    AND COALESCE(r.opt_out,FALSE) = FALSE
-    AND c.phone_sanitized IS NOT NULL
-    AND bl.id IS NULL
-group by list_id''', (tuple(self.ids), ))
-            data = dict(self.env.cr.fetchall())
-            for mailing_list in self:
-                mailing_list.contact_nbr = data.get(mailing_list.id, 0)
+    list_idin%s
+    ANDCOALESCE(r.opt_out,FALSE)=FALSE
+    ANDc.phone_sanitizedISNOTNULL
+    ANDbl.idISNULL
+groupbylist_id''',(tuple(self.ids),))
+            data=dict(self.env.cr.fetchall())
+            formailing_listinself:
+                mailing_list.contact_nbr=data.get(mailing_list.id,0)
             return
-        return super(MailingList, self)._compute_contact_nbr()
+        returnsuper(MailingList,self)._compute_contact_nbr()
 
-    def action_view_contacts(self):
-        if self.env.context.get('mailing_sms'):
-            action = self.env["ir.actions.actions"]._for_xml_id("mass_mailing_sms.mailing_contact_action_sms")
-            action['domain'] = [('list_ids', 'in', self.ids)]
-            context = dict(self.env.context, search_default_filter_valid_sms_recipient=1, default_list_ids=self.ids)
-            action['context'] = context
-            return action
-        return super(MailingList, self).action_view_contacts()
+    defaction_view_contacts(self):
+        ifself.env.context.get('mailing_sms'):
+            action=self.env["ir.actions.actions"]._for_xml_id("mass_mailing_sms.mailing_contact_action_sms")
+            action['domain']=[('list_ids','in',self.ids)]
+            context=dict(self.env.context,search_default_filter_valid_sms_recipient=1,default_list_ids=self.ids)
+            action['context']=context
+            returnaction
+        returnsuper(MailingList,self).action_view_contacts()

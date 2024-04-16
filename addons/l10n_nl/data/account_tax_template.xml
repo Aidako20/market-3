@@ -1,1724 +1,1724 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<!-- Binnen Nederland -->
-<!-- Verkoop BTW -->
-        <record id="btw_0" model="account.tax.template">
-            <field name="sequence">10</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Verkopen/omzet onbelast (nul-tarief)</field>
-            <field name="description">0% BTW</field>
-            <field eval="0" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="tax_group_id" ref="tax_group_0"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_1e')],
+<!--BinnenNederland-->
+<!--VerkoopBTW-->
+        <recordid="btw_0"model="account.tax.template">
+            <fieldname="sequence">10</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">Verkopen/omzetonbelast(nul-tarief)</field>
+            <fieldname="description">0%BTW</field>
+            <fieldeval="0"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="tax_group_id"ref="tax_group_0"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_1e')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_1e')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
                 }),
             ]"/>
-        </record>
-        <record id="btw_6" model="account.tax.template">
-            <field name="sequence">10</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Verkopen/omzet laag 6%</field>
-            <field name="description">6% BTW</field>
-            <field eval="6" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="tax_group_id" ref="tax_group_6"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_1b')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_1e')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_1b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_1b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_1b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
                 }),
             ]"/>
         </record>
-        <record id="btw_9" model="account.tax.template">
-            <field name="sequence">10</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Verkopen/omzet laag 9%</field>
-            <field name="description">9% BTW</field>
-            <field eval="9" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="tax_group_id" ref="tax_group_9"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_1b')],
+        <recordid="btw_6"model="account.tax.template">
+            <fieldname="sequence">10</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">Verkopen/omzetlaag6%</field>
+            <fieldname="description">6%BTW</field>
+            <fieldeval="6"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="tax_group_id"ref="tax_group_6"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_1b')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_1b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_1b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_1b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_1b')],
                 }),
             ]"/>
-        </record>
-        <record id="btw_21" model="account.tax.template">
-            <field name="sequence">5</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Verkopen/omzet hoog</field>
-            <field name="description">21% BTW</field>
-            <field eval="21" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="tax_group_id" ref="tax_group_21"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_1a')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_1b')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_1a')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_1a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_1a')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_1b')],
                 }),
             ]"/>
         </record>
-        <record id="btw_overig" model="account.tax.template">
-            <field name="sequence">15</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Verkopen/omzet overig</field>
-            <field name="description">variabel BTW</field>
-            <field eval="21" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="tax_group_id" ref="tax_group_21"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_1a')],
+        <recordid="btw_9"model="account.tax.template">
+            <fieldname="sequence">10</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">Verkopen/omzetlaag9%</field>
+            <fieldname="description">9%BTW</field>
+            <fieldeval="9"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="tax_group_id"ref="tax_group_9"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_1b')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_1a')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_1c')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_1c')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_1b')],
                 }),
             ]"/>
-        </record>
-<!-- Verkoop BTW Diensten -->
-        <record id="btw_0_d" model="account.tax.template">
-            <field name="sequence">10</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Verkopen/omzet onbelast (nul-tarief) diensten</field>
-            <field name="description">0% BTW diensten</field>
-            <field eval="0" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="tax_group_id" ref="tax_group_0"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_1e')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_1b')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_1e')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_1b')],
                 }),
             ]"/>
         </record>
-        <record id="btw_6_d" model="account.tax.template">
-            <field name="sequence">10</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Verkopen/omzet laag diensten 6%</field>
-            <field name="description">6% BTW diensten</field>
-            <field eval="6" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="tax_group_id" ref="tax_group_6"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_1b')],
+        <recordid="btw_21"model="account.tax.template">
+            <fieldname="sequence">5</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">Verkopen/omzethoog</field>
+            <fieldname="description">21%BTW</field>
+            <fieldeval="21"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="tax_group_id"ref="tax_group_21"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_1a')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_d'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_1b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_1b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_d'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_1b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_1a')],
                 }),
             ]"/>
-        </record>
-        <record id="btw_9_d" model="account.tax.template">
-            <field name="sequence">10</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Verkopen/omzet laag diensten 9%</field>
-            <field name="description">9% BTW diensten</field>
-            <field eval="9" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="tax_group_id" ref="tax_group_9"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_1b')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_1a')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_d'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_1b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_1b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_d'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_1b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_1a')],
                 }),
             ]"/>
         </record>
-        <record id="btw_21_d" model="account.tax.template">
-            <field name="sequence">6</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Verkopen/omzet hoog diensten</field>
-            <field name="description">21% BTW diensten</field>
-            <field eval="21" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="tax_group_id" ref="tax_group_21"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_1a')],
+        <recordid="btw_overig"model="account.tax.template">
+            <fieldname="sequence">15</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">Verkopen/omzetoverig</field>
+            <fieldname="description">variabelBTW</field>
+            <fieldeval="21"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="tax_group_id"ref="tax_group_21"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_1a')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h_d'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_1a')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_1a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h_d'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_1a')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_1a')],
                 }),
             ]"/>
-        </record>
-        <record id="btw_overig_d" model="account.tax.template">
-            <field name="sequence">15</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Verkopen/omzet overig diensten</field>
-            <field name="description">variabel BTW diensten</field>
-            <field eval="21" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="tax_group_id" ref="tax_group_21"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_1a')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_1c')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h_d'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_1a')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_1c')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h_d'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_1c')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_1c')],
                 }),
             ]"/>
         </record>
-<!--Inkoop BTW -->
-        <record id="btw_6_buy" model="account.tax.template">
-            <field name="sequence">10</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">BTW te vorderen laag (inkopen) 6%</field>
-            <field name="description">6% BTW</field>
-            <field eval="6" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_6"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+<!--VerkoopBTWDiensten-->
+        <recordid="btw_0_d"model="account.tax.template">
+            <fieldname="sequence">10</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">Verkopen/omzetonbelast(nul-tarief)diensten</field>
+            <fieldname="description">0%BTWdiensten</field>
+            <fieldeval="0"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="tax_group_id"ref="tax_group_0"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_1e')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
                 }),
             ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_1e')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
                 }),
             ]"/>
         </record>
-        <record id="btw_9_buy" model="account.tax.template">
-            <field name="sequence">10</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">BTW te vorderen laag (inkopen) 9%</field>
-            <field name="description">9% BTW</field>
-            <field eval="9" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_9"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+        <recordid="btw_6_d"model="account.tax.template">
+            <fieldname="sequence">10</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">Verkopen/omzetlaagdiensten6%</field>
+            <fieldname="description">6%BTWdiensten</field>
+            <fieldeval="6"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="tax_group_id"ref="tax_group_6"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_1b')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_d'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_1b')],
                 }),
             ]"/>
-        </record>
-
-        <record id="btw_6_buy_incl" model="account.tax.template">
-            <field name="sequence">10</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">BTW te vorderen laag (inkopen incl. BTW) 6%</field>
-            <field name="description">6% BTW Incl.</field>
-            <field eval="6" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="price_include">True</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_6"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_1b')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_d'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_1b')],
                 }),
             ]"/>
         </record>
-        <record id="btw_9_buy_incl" model="account.tax.template">
-            <field name="sequence">10</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">BTW te vorderen laag (inkopen incl. BTW) 9%</field>
-            <field name="description">9% BTW Incl.</field>
-            <field eval="9" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="price_include">True</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_9"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+        <recordid="btw_9_d"model="account.tax.template">
+            <fieldname="sequence">10</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">Verkopen/omzetlaagdiensten9%</field>
+            <fieldname="description">9%BTWdiensten</field>
+            <fieldeval="9"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="tax_group_id"ref="tax_group_9"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_1b')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_d'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_1b')],
                 }),
             ]"/>
-        </record>
-        <record id="btw_21_buy" model="account.tax.template">
-            <field name="sequence">5</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">BTW te vorderen hoog (inkopen)</field>
-            <field name="description">21% BTW</field>
-            <field eval="21" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_21"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_1b')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_d'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_1b')],
                 }),
             ]"/>
         </record>
-        <record id="btw_21_buy_incl" model="account.tax.template">
-            <field name="sequence">7</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">BTW te vorderen hoog (inkopen incl. BTW)</field>
-            <field name="description">21% BTW Incl.</field>
-            <field eval="21" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="price_include">True</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_21"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+        <recordid="btw_21_d"model="account.tax.template">
+            <fieldname="sequence">6</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">Verkopen/omzethoogdiensten</field>
+            <fieldname="description">21%BTWdiensten</field>
+            <fieldeval="21"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="tax_group_id"ref="tax_group_21"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_1a')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h_d'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_1a')],
                 }),
             ]"/>
-        </record>
-        <record id="btw_overig_buy" model="account.tax.template">
-            <field name="sequence">15</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">BTW te vorderen overig (inkopen)</field>
-            <field name="description">variabel BTW</field>
-            <field eval="21" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_21"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_1a')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h_d'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_1a')],
                 }),
             ]"/>
         </record>
-<!--Inkoop BTW diensten -->
-        <record id="btw_6_buy_d" model="account.tax.template">
-            <field name="sequence">10</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">BTW te vorderen laag (inkopen) diensten 6%</field>
-            <field name="description">6% BTW diensten</field>
-            <field eval="6" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_6"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+        <recordid="btw_overig_d"model="account.tax.template">
+            <fieldname="sequence">15</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">Verkopen/omzetoverigdiensten</field>
+            <fieldname="description">variabelBTWdiensten</field>
+            <fieldeval="21"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="tax_group_id"ref="tax_group_21"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_1a')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_d'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_d'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h_d'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_1a')],
                 }),
             ]"/>
-        </record>
-        <record id="btw_9_buy_d" model="account.tax.template">
-            <field name="sequence">10</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">BTW te vorderen laag (inkopen) diensten 9%</field>
-            <field name="description">9% BTW diensten</field>
-            <field eval="9" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_9"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_1c')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_d'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_d'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h_d'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_1c')],
                 }),
             ]"/>
         </record>
-        <record id="btw_21_buy_d" model="account.tax.template">
-            <field name="sequence">6</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">BTW te vorderen hoog (inkopen) diensten</field>
-            <field name="description">21% BTW diensten</field>
-            <field eval="21" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_21"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+<!--InkoopBTW-->
+        <recordid="btw_6_buy"model="account.tax.template">
+            <fieldname="sequence">10</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">BTWtevorderenlaag(inkopen)6%</field>
+            <fieldname="description">6%BTW</field>
+            <fieldeval="6"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_6"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h_d'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h_d'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
-        </record>
-        <record id="btw_overig_buy_d" model="account.tax.template">
-            <field name="sequence">15</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">BTW te vorderen overig (inkopen) diensten</field>
-            <field name="description">variabel BTW diensten</field>
-            <field eval="21" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_21"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h_d'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h_d'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
         </record>
-<!--BTW verlegd-->
-        <record id="btw_verk_0" model="account.tax.template">
-            <field name="sequence">15</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">BTW af te dragen verlegd (verkopen)</field>
-            <field name="description">0% BTW verlegd</field>
-            <field eval="0" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="tax_group_id" ref="tax_group_0"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_1e')],
+        <recordid="btw_9_buy"model="account.tax.template">
+            <fieldname="sequence">10</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">BTWtevorderenlaag(inkopen)9%</field>
+            <fieldname="description">9%BTW</field>
+            <fieldeval="9"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_9"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_1e')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
-        </record>
-        <record id="btw_ink_0" model="account.tax.template">
-            <field name="sequence">15</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">BTW af te dragen verlegd (inkopen)</field>
-            <field name="description">21% BTW verlegd</field>
-            <field eval="21" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_21"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_2a')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_v'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_2a')],
-                }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_v'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_2a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_v'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_2a')],
-                }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_v'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-        </record>
-<!-- Binnen de EU -->
-<!-- BTW inkoop -->
-        <record id="btw_I_6" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Inkopen import binnen EU laag 6%</field>
-            <field name="description">6% BTW import binnen EU</field>
-            <field eval="6" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_6_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-        </record>
-        <record id="btw_I_9" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Inkopen import binnen EU laag 9%</field>
-            <field name="description">9% BTW import binnen EU</field>
-            <field eval="9" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_9_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-        </record>
-        <record id="btw_I_21" model="account.tax.template">
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="sequence">20</field>
-            <field name="name">Inkopen import binnen EU hoog</field>
-            <field name="description">21% BTW import binnen EU</field>
-            <field eval="21" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_21_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-        </record>
-        <record id="btw_I_overig" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Inkopen import binnen EU overig</field>
-            <field name="description">0% BTW import binnen EU</field>
-            <field eval="0" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_0_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                }),
-            ]"/>
-        </record>
-<!-- BTW verkoop -->
-        <record id="btw_X0_producten" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Verkopen export binnen EU (producten)</field>
-            <field name="description">BTW export binnen EU (producten)</field>
-            <field eval="0" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="tax_group_id" ref="tax_group_0_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_3b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_3b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                }),
-            ]"/>
-        </record>
-        <record id="btw_X0_diensten" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Verkopen export binnen EU (diensten)</field>
-            <field name="description">BTW export binnen EU (diensten)</field>
-            <field eval="0" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="tax_group_id" ref="tax_group_0_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_3b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_3b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                }),
-            ]"/>
-        </record>
-        <record id="btw_X2" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Installatie/afstandsverkopen binnen EU</field>
-            <field name="description">Inst./afst.verkopen binnen EU</field>
-            <field eval="0" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="tax_group_id" ref="tax_group_0_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_3c')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_3c')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                }),
-            ]"/>
-        </record>
-<!-- BTW inkoop diensten -->
-        <record id="btw_I_6_d" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Inkopen import binnen EU laag diensten 6%</field>
-            <field name="description">6% BTW import binnen EU diensten</field>
-            <field eval="6" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_6_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_d_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_d_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_d_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_d_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-        </record>
-        <record id="btw_I_9_d" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Inkopen import binnen EU laag diensten 9%</field>
-            <field name="description">9% BTW import binnen EU diensten</field>
-            <field eval="9" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_9_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_d_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_d_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_d_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_d_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-        </record>
-        <record id="btw_I_21_d" model="account.tax.template">
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="sequence">20</field>
-            <field name="name">Inkopen import binnen EU hoog diensten</field>
-            <field name="description">21% BTW import binnen EU diensten</field>
-            <field eval="21" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_21_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h_d_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h_d_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h_d_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h_d_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
-                }),
-            ]"/>
-        </record>
-        <record id="btw_I_overig_d" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Inkopen import binnen EU overig diensten</field>
-            <field name="description">0% BTW import binnen EU diensten</field>
-            <field eval="0" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_0_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_4b')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
         </record>
 
-<!-- Buiten de EU -->
-<!-- BTW inkoop -->
-        <record id="btw_E1" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Inkopen import buiten EU laag 6%</field>
-            <field name="description">BTW import buiten EU laag inkopen</field>
-            <field eval="6" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_6_niet_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_4a')],
+        <recordid="btw_6_buy_incl"model="account.tax.template">
+            <fieldname="sequence">10</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">BTWtevorderenlaag(inkopenincl.BTW)6%</field>
+            <fieldname="description">6%BTWIncl.</field>
+            <fieldeval="6"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="price_include">True</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_6"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_non_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_4a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_non_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_4a')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_non_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_4a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_non_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
         </record>
-        <record id="btw_E1_9" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Inkopen import buiten EU laag 9%</field>
-            <field name="description">BTW import buiten EU laag inkopen</field>
-            <field eval="9" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_9_niet_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_4a')],
+        <recordid="btw_9_buy_incl"model="account.tax.template">
+            <fieldname="sequence">10</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">BTWtevorderenlaag(inkopenincl.BTW)9%</field>
+            <fieldname="description">9%BTWIncl.</field>
+            <fieldeval="9"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="price_include">True</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_9"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_non_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_4a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_non_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_4a')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_non_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_4a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_non_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
         </record>
-        <record id="btw_E2" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Inkopen import buiten EU hoog</field>
-            <field name="description">BTW import buiten EU hoog inkopen</field>
-            <field eval="21" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_21_niet_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_4a')],
+        <recordid="btw_21_buy"model="account.tax.template">
+            <fieldname="sequence">5</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">BTWtevorderenhoog(inkopen)</field>
+            <fieldname="description">21%BTW</field>
+            <fieldeval="21"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_21"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h_non_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_4a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h_non_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_4a')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h_non_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_4a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h_non_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
         </record>
-        <record id="btw_E_overig" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Inkopen import buiten EU overig</field>
-            <field name="description">BTW import buiten EU overig inkopen</field>
-            <field eval="21" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_21_niet_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_4a')],
+        <recordid="btw_21_buy_incl"model="account.tax.template">
+            <fieldname="sequence">7</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">BTWtevorderenhoog(inkopenincl.BTW)</field>
+            <fieldname="description">21%BTWIncl.</field>
+            <fieldeval="21"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="price_include">True</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_21"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h_non_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_4a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h_non_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_4a')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h_non_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_4a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h_non_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
         </record>
-<!-- BTW Verkoop -->
-        <record id="btw_X1" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Verkopen export buiten EU</field>
-            <field name="description">BTW export buiten EU</field>
-            <field eval="0" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="tax_group_id" ref="tax_group_0_niet_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_3a')],
+        <recordid="btw_overig_buy"model="account.tax.template">
+            <fieldname="sequence">15</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">BTWtevorderenoverig(inkopen)</field>
+            <fieldname="description">variabelBTW</field>
+            <fieldeval="21"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_21"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_3a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
-        </record>
-        <record id="btw_X3" model="account.tax.template">
-            <field name="sequence">21</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Installatie/afstandsverkopen buiten EU</field>
-            <field name="description">Inst./afst.verkopen buiten EU</field>
-            <field eval="0" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="tax_group_id" ref="tax_group_0_niet_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_3a')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_3a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
         </record>
-<!-- BTW inkoop diensten -->
-        <record id="btw_E1_d" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Inkopen import buiten EU laag diensten 6%</field>
-            <field name="description">BTW import buiten EU laag inkopen diensten</field>
-            <field eval="6" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_6_niet_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_4a')],
+<!--InkoopBTWdiensten-->
+        <recordid="btw_6_buy_d"model="account.tax.template">
+            <fieldname="sequence">10</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">BTWtevorderenlaag(inkopen)diensten6%</field>
+            <fieldname="description">6%BTWdiensten</field>
+            <fieldeval="6"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_6"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_d_non_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_4a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_d_non_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_d'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_4a')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_d_non_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_4a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_d_non_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_d'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
         </record>
-        <record id="btw_E1_d_9" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Inkopen import buiten EU laag diensten 9%</field>
-            <field name="description">BTW import buiten EU laag inkopen diensten</field>
-            <field eval="9" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_9_niet_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_4a')],
+        <recordid="btw_9_buy_d"model="account.tax.template">
+            <fieldname="sequence">10</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">BTWtevorderenlaag(inkopen)diensten9%</field>
+            <fieldname="description">9%BTWdiensten</field>
+            <fieldeval="9"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_9"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_d_non_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_4a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_d_non_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_d'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_4a')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_l_d_non_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_4a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_l_d_non_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_d'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
         </record>
-        <record id="btw_E2_d" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Inkopen import buiten EU hoog diensten</field>
-            <field name="description">BTW import buiten EU hoog inkopen diensten</field>
-            <field eval="21" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_21_niet_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_4a')],
+        <recordid="btw_21_buy_d"model="account.tax.template">
+            <fieldname="sequence">6</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">BTWtevorderenhoog(inkopen)diensten</field>
+            <fieldname="description">21%BTWdiensten</field>
+            <fieldeval="21"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_21"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h_d_non_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_4a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h_d_non_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h_d'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_4a')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h_d_non_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_4a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h_d_non_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h_d'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
         </record>
-        <record id="btw_E_overig_d" model="account.tax.template">
-            <field name="sequence">20</field>
-            <field name="chart_template_id" ref="l10nnl_chart_template"/>
-            <field name="name">Inkopen import buiten EU overig diensten</field>
-            <field name="description">BTW import buiten EU overig inkopen diensten</field>
-            <field eval="21" name="amount"/>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="tax_group_id" ref="tax_group_21_niet_eu"/>
-            <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('tax_report_rub_4a')],
+        <recordid="btw_overig_buy_d"model="account.tax.template">
+            <fieldname="sequence">15</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">BTWtevorderenoverig(inkopen)diensten</field>
+            <fieldname="description">variabelBTWdiensten</field>
+            <fieldeval="21"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_21"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h_d_non_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_4a')],
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h_d_non_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h_d'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'minus_report_line_ids': [ref('tax_report_rub_4a')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': -100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_payable_h_d_non_eu'),
-                    'plus_report_line_ids': [ref('tax_report_rub_btw_4a')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h_d'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('vat_refund_h_d_non_eu'),
-                    'minus_report_line_ids': [ref('tax_report_rub_btw_5b')],
+            ]"/>
+        </record>
+<!--BTWverlegd-->
+        <recordid="btw_verk_0"model="account.tax.template">
+            <fieldname="sequence">15</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">BTWaftedragenverlegd(verkopen)</field>
+            <fieldname="description">0%BTWverlegd</field>
+            <fieldeval="0"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="tax_group_id"ref="tax_group_0"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_1e')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_1e')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                }),
+            ]"/>
+        </record>
+        <recordid="btw_ink_0"model="account.tax.template">
+            <fieldname="sequence">15</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">BTWaftedragenverlegd(inkopen)</field>
+            <fieldname="description">21%BTWverlegd</field>
+            <fieldeval="21"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_21"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_2a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_v'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_2a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_v'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_2a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_v'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_2a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_v'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+        </record>
+<!--BinnendeEU-->
+<!--BTWinkoop-->
+        <recordid="btw_I_6"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">InkopenimportbinnenEUlaag6%</field>
+            <fieldname="description">6%BTWimportbinnenEU</field>
+            <fieldeval="6"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_6_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+        </record>
+        <recordid="btw_I_9"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">InkopenimportbinnenEUlaag9%</field>
+            <fieldname="description">9%BTWimportbinnenEU</field>
+            <fieldeval="9"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_9_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+        </record>
+        <recordid="btw_I_21"model="account.tax.template">
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="sequence">20</field>
+            <fieldname="name">InkopenimportbinnenEUhoog</field>
+            <fieldname="description">21%BTWimportbinnenEU</field>
+            <fieldeval="21"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_21_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+        </record>
+        <recordid="btw_I_overig"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">InkopenimportbinnenEUoverig</field>
+            <fieldname="description">0%BTWimportbinnenEU</field>
+            <fieldeval="0"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_0_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                }),
+            ]"/>
+        </record>
+<!--BTWverkoop-->
+        <recordid="btw_X0_producten"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">VerkopenexportbinnenEU(producten)</field>
+            <fieldname="description">BTWexportbinnenEU(producten)</field>
+            <fieldeval="0"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="tax_group_id"ref="tax_group_0_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_3b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_3b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                }),
+            ]"/>
+        </record>
+        <recordid="btw_X0_diensten"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">VerkopenexportbinnenEU(diensten)</field>
+            <fieldname="description">BTWexportbinnenEU(diensten)</field>
+            <fieldeval="0"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="tax_group_id"ref="tax_group_0_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_3b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_3b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                }),
+            ]"/>
+        </record>
+        <recordid="btw_X2"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">Installatie/afstandsverkopenbinnenEU</field>
+            <fieldname="description">Inst./afst.verkopenbinnenEU</field>
+            <fieldeval="0"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="tax_group_id"ref="tax_group_0_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_3c')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_3c')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                }),
+            ]"/>
+        </record>
+<!--BTWinkoopdiensten-->
+        <recordid="btw_I_6_d"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">InkopenimportbinnenEUlaagdiensten6%</field>
+            <fieldname="description">6%BTWimportbinnenEUdiensten</field>
+            <fieldeval="6"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_6_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_d_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_d_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_d_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_d_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+        </record>
+        <recordid="btw_I_9_d"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">InkopenimportbinnenEUlaagdiensten9%</field>
+            <fieldname="description">9%BTWimportbinnenEUdiensten</field>
+            <fieldeval="9"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_9_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_d_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_d_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_d_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_d_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+        </record>
+        <recordid="btw_I_21_d"model="account.tax.template">
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="sequence">20</field>
+            <fieldname="name">InkopenimportbinnenEUhoogdiensten</field>
+            <fieldname="description">21%BTWimportbinnenEUdiensten</field>
+            <fieldeval="21"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_21_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h_d_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h_d_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h_d_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h_d_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+        </record>
+        <recordid="btw_I_overig_d"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">InkopenimportbinnenEUoverigdiensten</field>
+            <fieldname="description">0%BTWimportbinnenEUdiensten</field>
+            <fieldeval="0"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_0_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_4b')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                }),
+            ]"/>
+        </record>
+
+<!--BuitendeEU-->
+<!--BTWinkoop-->
+        <recordid="btw_E1"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">InkopenimportbuitenEUlaag6%</field>
+            <fieldname="description">BTWimportbuitenEUlaaginkopen</field>
+            <fieldeval="6"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_6_niet_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_non_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_non_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_non_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_non_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+        </record>
+        <recordid="btw_E1_9"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">InkopenimportbuitenEUlaag9%</field>
+            <fieldname="description">BTWimportbuitenEUlaaginkopen</field>
+            <fieldeval="9"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_9_niet_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_non_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_non_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_non_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_non_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+        </record>
+        <recordid="btw_E2"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">InkopenimportbuitenEUhoog</field>
+            <fieldname="description">BTWimportbuitenEUhooginkopen</field>
+            <fieldeval="21"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_21_niet_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h_non_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h_non_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h_non_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h_non_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+        </record>
+        <recordid="btw_E_overig"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">InkopenimportbuitenEUoverig</field>
+            <fieldname="description">BTWimportbuitenEUoveriginkopen</field>
+            <fieldeval="21"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_21_niet_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h_non_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h_non_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h_non_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h_non_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+        </record>
+<!--BTWVerkoop-->
+        <recordid="btw_X1"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">VerkopenexportbuitenEU</field>
+            <fieldname="description">BTWexportbuitenEU</field>
+            <fieldeval="0"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="tax_group_id"ref="tax_group_0_niet_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_3a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_3a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                }),
+            ]"/>
+        </record>
+        <recordid="btw_X3"model="account.tax.template">
+            <fieldname="sequence">21</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">Installatie/afstandsverkopenbuitenEU</field>
+            <fieldname="description">Inst./afst.verkopenbuitenEU</field>
+            <fieldeval="0"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="tax_group_id"ref="tax_group_0_niet_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_3a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_3a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                }),
+            ]"/>
+        </record>
+<!--BTWinkoopdiensten-->
+        <recordid="btw_E1_d"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">InkopenimportbuitenEUlaagdiensten6%</field>
+            <fieldname="description">BTWimportbuitenEUlaaginkopendiensten</field>
+            <fieldeval="6"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_6_niet_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_d_non_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_d_non_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_d_non_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_d_non_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+        </record>
+        <recordid="btw_E1_d_9"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">InkopenimportbuitenEUlaagdiensten9%</field>
+            <fieldname="description">BTWimportbuitenEUlaaginkopendiensten</field>
+            <fieldeval="9"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_9_niet_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_d_non_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_d_non_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_l_d_non_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_l_d_non_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+        </record>
+        <recordid="btw_E2_d"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">InkopenimportbuitenEUhoogdiensten</field>
+            <fieldname="description">BTWimportbuitenEUhooginkopendiensten</field>
+            <fieldeval="21"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_21_niet_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h_d_non_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h_d_non_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h_d_non_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h_d_non_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+        </record>
+        <recordid="btw_E_overig_d"model="account.tax.template">
+            <fieldname="sequence">20</field>
+            <fieldname="chart_template_id"ref="l10nnl_chart_template"/>
+            <fieldname="name">InkopenimportbuitenEUoverigdiensten</field>
+            <fieldname="description">BTWimportbuitenEUoveriginkopendiensten</field>
+            <fieldeval="21"name="amount"/>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="tax_group_id"ref="tax_group_21_niet_eu"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('tax_report_rub_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h_d_non_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h_d_non_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_5b')],
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'minus_report_line_ids':[ref('tax_report_rub_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':-100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_payable_h_d_non_eu'),
+                    'plus_report_line_ids':[ref('tax_report_rub_btw_4a')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('vat_refund_h_d_non_eu'),
+                    'minus_report_line_ids':[ref('tax_report_rub_btw_5b')],
                 }),
             ]"/>
         </record>

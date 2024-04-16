@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 <data>
 
-    <record id="res_users_view_form" model="ir.ui.view">
-        <field name="name">res.users.view.form.inherit.gamification</field>
-        <field name="model">res.users</field>
-        <field name="inherit_id" ref="base.view_users_form"/>
-        <field name="arch" type="xml">
-            <group name="messaging" position="inside">
-                <field name="karma"/>
+    <recordid="res_users_view_form"model="ir.ui.view">
+        <fieldname="name">res.users.view.form.inherit.gamification</field>
+        <fieldname="model">res.users</field>
+        <fieldname="inherit_id"ref="base.view_users_form"/>
+        <fieldname="arch"type="xml">
+            <groupname="messaging"position="inside">
+                <fieldname="karma"/>
             </group>
         </field>
     </record>

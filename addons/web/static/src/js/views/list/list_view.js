@@ -1,137 +1,137 @@
-flectra.define('web.ListView', function (require) {
-"use strict";
+flectra.define('web.ListView',function(require){
+"usestrict";
 
 /**
- * The list view is one of the core and most basic view: it is used to look at
- * a list of records in a table.
+ *Thelistviewisoneofthecoreandmostbasicview:itisusedtolookat
+ *alistofrecordsinatable.
  *
- * Note that a list view is not instantiated to display a one2many field in a
- * form view. Only a ListRenderer is used in that case.
+ *Notethatalistviewisnotinstantiatedtodisplayaone2manyfieldina
+ *formview.OnlyaListRendererisusedinthatcase.
  */
 
-var BasicView = require('web.BasicView');
-var core = require('web.core');
-var ListModel = require('web.ListModel');
-var ListRenderer = require('web.ListRenderer');
-var ListController = require('web.ListController');
-var pyUtils = require('web.py_utils');
+varBasicView=require('web.BasicView');
+varcore=require('web.core');
+varListModel=require('web.ListModel');
+varListRenderer=require('web.ListRenderer');
+varListController=require('web.ListController');
+varpyUtils=require('web.py_utils');
 
-var _lt = core._lt;
+var_lt=core._lt;
 
-var ListView = BasicView.extend({
-    accesskey: "l",
-    display_name: _lt('List'),
-    icon: 'fa-list-ul',
-    config: _.extend({}, BasicView.prototype.config, {
-        Model: ListModel,
-        Renderer: ListRenderer,
-        Controller: ListController,
+varListView=BasicView.extend({
+    accesskey:"l",
+    display_name:_lt('List'),
+    icon:'fa-list-ul',
+    config:_.extend({},BasicView.prototype.config,{
+        Model:ListModel,
+        Renderer:ListRenderer,
+        Controller:ListController,
     }),
-    viewType: 'list',
+    viewType:'list',
     /**
-     * @override
+     *@override
      *
-     * @param {Object} viewInfo
-     * @param {Object} params
-     * @param {boolean} params.hasActionMenus
-     * @param {boolean} [params.hasSelectors=true]
+     *@param{Object}viewInfo
+     *@param{Object}params
+     *@param{boolean}params.hasActionMenus
+     *@param{boolean}[params.hasSelectors=true]
      */
-    init: function (viewInfo, params) {
-        var self = this;
-        this._super.apply(this, arguments);
-        var selectedRecords = []; // there is no selected records by default
+    init:function(viewInfo,params){
+        varself=this;
+        this._super.apply(this,arguments);
+        varselectedRecords=[];//thereisnoselectedrecordsbydefault
 
-        var pyevalContext = py.dict.fromJSON(_.pick(params.context, function(value, key, object) {return !_.isUndefined(value)}) || {});
-        var expandGroups = !!JSON.parse(pyUtils.py_eval(this.arch.attrs.expand || "0", {'context': pyevalContext}));
+        varpyevalContext=py.dict.fromJSON(_.pick(params.context,function(value,key,object){return!_.isUndefined(value)})||{});
+        varexpandGroups=!!JSON.parse(pyUtils.py_eval(this.arch.attrs.expand||"0",{'context':pyevalContext}));
 
-        this.groupbys = {};
-        this.headerButtons = [];
-        this.arch.children.forEach(function (child) {
-            if (child.tag === 'groupby') {
+        this.groupbys={};
+        this.headerButtons=[];
+        this.arch.children.forEach(function(child){
+            if(child.tag==='groupby'){
                 self._extractGroup(child);
             }
-            if (child.tag === 'header') {
+            if(child.tag==='header'){
                 self._extractHeaderButtons(child);
             }
         });
 
-        let editable = false;
-        if ((!this.arch.attrs.edit || !!JSON.parse(this.arch.attrs.edit)) && !params.readonly) {
-            editable = this.arch.attrs.editable;
+        leteditable=false;
+        if((!this.arch.attrs.edit||!!JSON.parse(this.arch.attrs.edit))&&!params.readonly){
+            editable=this.arch.attrs.editable;
         }
 
-        this.controllerParams.activeActions.export_xlsx = this.arch.attrs.export_xlsx ? !!JSON.parse(this.arch.attrs.export_xlsx): true;
-        this.controllerParams.editable = editable;
-        this.controllerParams.hasActionMenus = params.hasActionMenus;
-        this.controllerParams.headerButtons = this.headerButtons;
-        this.controllerParams.toolbarActions = viewInfo.toolbar;
-        this.controllerParams.mode = 'readonly';
-        this.controllerParams.selectedRecords = selectedRecords;
+        this.controllerParams.activeActions.export_xlsx=this.arch.attrs.export_xlsx?!!JSON.parse(this.arch.attrs.export_xlsx):true;
+        this.controllerParams.editable=editable;
+        this.controllerParams.hasActionMenus=params.hasActionMenus;
+        this.controllerParams.headerButtons=this.headerButtons;
+        this.controllerParams.toolbarActions=viewInfo.toolbar;
+        this.controllerParams.mode='readonly';
+        this.controllerParams.selectedRecords=selectedRecords;
 
-        this.rendererParams.arch = this.arch;
-        this.rendererParams.groupbys = this.groupbys;
-        this.rendererParams.hasSelectors =
-                'hasSelectors' in params ? params.hasSelectors : true;
-        this.rendererParams.editable = editable;
-        this.rendererParams.selectedRecords = selectedRecords;
-        this.rendererParams.addCreateLine = false;
-        this.rendererParams.addCreateLineInGroups = editable && this.controllerParams.activeActions.create;
-        this.rendererParams.isMultiEditable = this.arch.attrs.multi_edit && !!JSON.parse(this.arch.attrs.multi_edit);
+        this.rendererParams.arch=this.arch;
+        this.rendererParams.groupbys=this.groupbys;
+        this.rendererParams.hasSelectors=
+                'hasSelectors'inparams?params.hasSelectors:true;
+        this.rendererParams.editable=editable;
+        this.rendererParams.selectedRecords=selectedRecords;
+        this.rendererParams.addCreateLine=false;
+        this.rendererParams.addCreateLineInGroups=editable&&this.controllerParams.activeActions.create;
+        this.rendererParams.isMultiEditable=this.arch.attrs.multi_edit&&!!JSON.parse(this.arch.attrs.multi_edit);
 
-        this.modelParams.groupbys = this.groupbys;
+        this.modelParams.groupbys=this.groupbys;
 
-        this.loadParams.limit = this.loadParams.limit || 80;
-        this.loadParams.openGroupByDefault = expandGroups;
-        this.loadParams.type = 'list';
-        var groupsLimit = parseInt(this.arch.attrs.groups_limit, 10);
-        this.loadParams.groupsLimit = groupsLimit || (expandGroups ? 10 : 80);
+        this.loadParams.limit=this.loadParams.limit||80;
+        this.loadParams.openGroupByDefault=expandGroups;
+        this.loadParams.type='list';
+        vargroupsLimit=parseInt(this.arch.attrs.groups_limit,10);
+        this.loadParams.groupsLimit=groupsLimit||(expandGroups?10:80);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {Object} node
+     *@private
+     *@param{Object}node
      */
-    _extractGroup: function (node) {
-        var innerView = this.fields[node.attrs.name].views.groupby;
-        this.groupbys[node.attrs.name] = this._processFieldsView(innerView, 'groupby');
+    _extractGroup:function(node){
+        varinnerView=this.fields[node.attrs.name].views.groupby;
+        this.groupbys[node.attrs.name]=this._processFieldsView(innerView,'groupby');
     },
     /**
-     * Extracts action buttons definitions from the <header> node of the list
-     * view definition
+     *Extractsactionbuttonsdefinitionsfromthe<header>nodeofthelist
+     *viewdefinition
      *
-     * @private
-     * @param {Object} node
+     *@private
+     *@param{Object}node
      */
-    _extractHeaderButtons(node) {
-        node.children.forEach(child => {
-            if (child.tag === 'button' && !child.attrs.modifiers.invisible) {
+    _extractHeaderButtons(node){
+        node.children.forEach(child=>{
+            if(child.tag==='button'&&!child.attrs.modifiers.invisible){
                 this.headerButtons.push(child);
             }
         });
     },
     /**
-     * @override
+     *@override
      */
-    _extractParamsFromAction: function (action) {
-        var params = this._super.apply(this, arguments);
-        var inDialog = action.target === 'new';
-        var inline = action.target === 'inline';
-        params.hasActionMenus = !inDialog && !inline;
-        return params;
+    _extractParamsFromAction:function(action){
+        varparams=this._super.apply(this,arguments);
+        varinDialog=action.target==='new';
+        varinline=action.target==='inline';
+        params.hasActionMenus=!inDialog&&!inline;
+        returnparams;
     },
     /**
-     * @override
+     *@override
      */
-    _updateMVCParams: function () {
-        this._super.apply(this, arguments);
-        this.controllerParams.noLeaf = !!this.loadParams.context.group_by_no_leaf;
+    _updateMVCParams:function(){
+        this._super.apply(this,arguments);
+        this.controllerParams.noLeaf=!!this.loadParams.context.group_by_no_leaf;
     },
 });
 
-return ListView;
+returnListView;
 
 });

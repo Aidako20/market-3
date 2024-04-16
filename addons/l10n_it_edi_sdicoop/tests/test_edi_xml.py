@@ -1,348 +1,348 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import datetime
-import logging
-from lxml import etree
-from freezegun import freeze_time
+importdatetime
+importlogging
+fromlxmlimportetree
+fromfreezegunimportfreeze_time
 
-from flectra import tools
-from flectra.tests import tagged
-from flectra.addons.account_edi.tests.common import AccountEdiTestCommon
-from flectra.exceptions import UserError
+fromflectraimporttools
+fromflectra.testsimporttagged
+fromflectra.addons.account_edi.tests.commonimportAccountEdiTestCommon
+fromflectra.exceptionsimportUserError
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
-@tagged('post_install_l10n', 'post_install', '-at_install')
-class TestItEdi(AccountEdiTestCommon):
+@tagged('post_install_l10n','post_install','-at_install')
+classTestItEdi(AccountEdiTestCommon):
 
     @classmethod
-    def setUpClass(cls):
+    defsetUpClass(cls):
         super().setUpClass(chart_template_ref='l10n_it.l10n_it_chart_template_generic',
                            edi_format_ref='l10n_it_edi.edi_fatturaPA')
 
-        # Use the company_data_2 to test that the e-invoice is imported for the right company
-        cls.company = cls.company_data_2['company']
+        #Usethecompany_data_2totestthatthee-invoiceisimportedfortherightcompany
+        cls.company=cls.company_data_2['company']
 
-        cls.company.l10n_it_codice_fiscale = '01234560157'
-        cls.company.vat = 'IT01234560157'
-        cls.test_bank = cls.env['res.partner.bank'].with_company(cls.company).create({
-                'partner_id': cls.company.partner_id.id,
-                'acc_number': 'IT1212341234123412341234123',
-                'bank_name': 'BIG BANK',
-                'bank_bic': 'BIGGBANQ',
+        cls.company.l10n_it_codice_fiscale='01234560157'
+        cls.company.vat='IT01234560157'
+        cls.test_bank=cls.env['res.partner.bank'].with_company(cls.company).create({
+                'partner_id':cls.company.partner_id.id,
+                'acc_number':'IT1212341234123412341234123',
+                'bank_name':'BIGBANK',
+                'bank_bic':'BIGGBANQ',
         })
-        cls.company.l10n_it_tax_system = "RF01"
-        cls.company.street = "1234 Test Street"
-        cls.company.zip = "12345"
-        cls.company.city = "Prova"
-        cls.company.country_id = cls.env.ref('base.it')
+        cls.company.l10n_it_tax_system="RF01"
+        cls.company.street="1234TestStreet"
+        cls.company.zip="12345"
+        cls.company.city="Prova"
+        cls.company.country_id=cls.env.ref('base.it')
 
-        cls.price_included_tax = cls.env['account.tax'].create({
-            'name': '22% price included tax',
-            'amount': 22.0,
-            'amount_type': 'percent',
-            'price_include': True,
-            'include_base_amount': True,
-            'company_id': cls.company.id,
-        })
-
-        cls.tax_10 = cls.env['account.tax'].create({
-            'name': '10% tax',
-            'amount': 10.0,
-            'amount_type': 'percent',
-            'company_id': cls.company.id,
+        cls.price_included_tax=cls.env['account.tax'].create({
+            'name':'22%priceincludedtax',
+            'amount':22.0,
+            'amount_type':'percent',
+            'price_include':True,
+            'include_base_amount':True,
+            'company_id':cls.company.id,
         })
 
-        cls.tax_zero_percent_hundred_percent_repartition = cls.env['account.tax'].create({
-            'name': 'all of nothing',
-            'amount': 0,
-            'amount_type': 'percent',
-            'company_id': cls.company.id,
-            'invoice_repartition_line_ids': [
-                (0, 0, {'factor_percent': 100, 'repartition_type': 'base'}),
-                (0, 0, {'factor_percent': 100, 'repartition_type': 'tax'}),
+        cls.tax_10=cls.env['account.tax'].create({
+            'name':'10%tax',
+            'amount':10.0,
+            'amount_type':'percent',
+            'company_id':cls.company.id,
+        })
+
+        cls.tax_zero_percent_hundred_percent_repartition=cls.env['account.tax'].create({
+            'name':'allofnothing',
+            'amount':0,
+            'amount_type':'percent',
+            'company_id':cls.company.id,
+            'invoice_repartition_line_ids':[
+                (0,0,{'factor_percent':100,'repartition_type':'base'}),
+                (0,0,{'factor_percent':100,'repartition_type':'tax'}),
             ],
-            'refund_repartition_line_ids': [
-                (0, 0, {'factor_percent': 100, 'repartition_type': 'base'}),
-                (0, 0, {'factor_percent': 100, 'repartition_type': 'tax'}),
-            ],
-        })
-
-        cls.tax_zero_percent_zero_percent_repartition = cls.env['account.tax'].create({
-            'name': 'none of nothing',
-            'amount': 0,
-            'amount_type': 'percent',
-            'company_id': cls.company.id,
-            'invoice_repartition_line_ids': [
-                (0, 0, {'factor_percent': 100, 'repartition_type': 'base'}),
-                (0, 0, {'factor_percent': 0, 'repartition_type': 'tax'}),
-            ],
-            'refund_repartition_line_ids': [
-                (0, 0, {'factor_percent': 100, 'repartition_type': 'base'}),
-                (0, 0, {'factor_percent': 0, 'repartition_type': 'tax'}),
+            'refund_repartition_line_ids':[
+                (0,0,{'factor_percent':100,'repartition_type':'base'}),
+                (0,0,{'factor_percent':100,'repartition_type':'tax'}),
             ],
         })
 
-        cls.italian_partner_a = cls.env['res.partner'].create({
-            'name': 'Alessi',
-            'vat': 'IT00465840031',
-            'l10n_it_codice_fiscale': '93026890017',
-            'country_id': cls.env.ref('base.it').id,
-            'street': 'Via Privata Alessi 6',
-            'zip': '28887',
-            'city': 'Milan',
-            'company_id': cls.company.id,
-            'is_company': True,
+        cls.tax_zero_percent_zero_percent_repartition=cls.env['account.tax'].create({
+            'name':'noneofnothing',
+            'amount':0,
+            'amount_type':'percent',
+            'company_id':cls.company.id,
+            'invoice_repartition_line_ids':[
+                (0,0,{'factor_percent':100,'repartition_type':'base'}),
+                (0,0,{'factor_percent':0,'repartition_type':'tax'}),
+            ],
+            'refund_repartition_line_ids':[
+                (0,0,{'factor_percent':100,'repartition_type':'base'}),
+                (0,0,{'factor_percent':0,'repartition_type':'tax'}),
+            ],
         })
 
-        cls.italian_partner_b = cls.env['res.partner'].create({
-            'name': 'pa partner',
-            'vat': 'IT06655971007',
-            'l10n_it_codice_fiscale': '06655971007',
-            'l10n_it_pa_index': '123456',
-            'country_id': cls.env.ref('base.it').id,
-            'street': 'Via Test PA',
-            'zip': '32121',
-            'city': 'PA Town',
-            'is_company': True
+        cls.italian_partner_a=cls.env['res.partner'].create({
+            'name':'Alessi',
+            'vat':'IT00465840031',
+            'l10n_it_codice_fiscale':'93026890017',
+            'country_id':cls.env.ref('base.it').id,
+            'street':'ViaPrivataAlessi6',
+            'zip':'28887',
+            'city':'Milan',
+            'company_id':cls.company.id,
+            'is_company':True,
         })
 
-        cls.italian_partner_no_address_codice = cls.env['res.partner'].create({
-            'name': 'Alessi',
-            'l10n_it_codice_fiscale': '00465840031',
-            'is_company': True,
+        cls.italian_partner_b=cls.env['res.partner'].create({
+            'name':'papartner',
+            'vat':'IT06655971007',
+            'l10n_it_codice_fiscale':'06655971007',
+            'l10n_it_pa_index':'123456',
+            'country_id':cls.env.ref('base.it').id,
+            'street':'ViaTestPA',
+            'zip':'32121',
+            'city':'PATown',
+            'is_company':True
         })
 
-        cls.italian_partner_no_address_VAT = cls.env['res.partner'].create({
-            'name': 'Alessi',
-            'vat': 'IT00465840031',
-            'is_company': True,
+        cls.italian_partner_no_address_codice=cls.env['res.partner'].create({
+            'name':'Alessi',
+            'l10n_it_codice_fiscale':'00465840031',
+            'is_company':True,
         })
 
-        cls.american_partner = cls.env['res.partner'].create({
-            'name': 'Alessi',
-            'vat': '00465840031',
-            'country_id': cls.env.ref('base.us').id,
-            'is_company': True,
+        cls.italian_partner_no_address_VAT=cls.env['res.partner'].create({
+            'name':'Alessi',
+            'vat':'IT00465840031',
+            'is_company':True,
         })
 
-        cls.standard_line = {
-            'name': 'standard_line',
-            'quantity': 1,
-            'price_unit': 800.40,
-            'tax_ids': [(6, 0, [cls.company.account_sale_tax_id.id])]
+        cls.american_partner=cls.env['res.partner'].create({
+            'name':'Alessi',
+            'vat':'00465840031',
+            'country_id':cls.env.ref('base.us').id,
+            'is_company':True,
+        })
+
+        cls.standard_line={
+            'name':'standard_line',
+            'quantity':1,
+            'price_unit':800.40,
+            'tax_ids':[(6,0,[cls.company.account_sale_tax_id.id])]
         }
 
-        cls.standard_line_below_400 = {
-            'name': 'cheap_line',
-            'quantity': 1,
-            'price_unit': 100.00,
-            'tax_ids': [(6, 0, [cls.company.account_sale_tax_id.id])]
+        cls.standard_line_below_400={
+            'name':'cheap_line',
+            'quantity':1,
+            'price_unit':100.00,
+            'tax_ids':[(6,0,[cls.company.account_sale_tax_id.id])]
         }
 
-        cls.standard_line_400 = {
-            'name': '400_line',
-            'quantity': 1,
-            'price_unit': 327.87,
-            'tax_ids': [(6, 0, [cls.company.account_sale_tax_id.id])]
+        cls.standard_line_400={
+            'name':'400_line',
+            'quantity':1,
+            'price_unit':327.87,
+            'tax_ids':[(6,0,[cls.company.account_sale_tax_id.id])]
         }
 
-        cls.price_included_invoice = cls.env['account.move'].with_company(cls.company).create({
-            'move_type': 'out_invoice',
-            'invoice_date': datetime.date(2022, 3, 24),
-            'partner_id': cls.italian_partner_a.id,
-            'partner_bank_id': cls.test_bank.id,
-            'invoice_line_ids': [
-                (0, 0, {
+        cls.price_included_invoice=cls.env['account.move'].with_company(cls.company).create({
+            'move_type':'out_invoice',
+            'invoice_date':datetime.date(2022,3,24),
+            'partner_id':cls.italian_partner_a.id,
+            'partner_bank_id':cls.test_bank.id,
+            'invoice_line_ids':[
+                (0,0,{
                     **cls.standard_line,
-                    'name': 'something price included',
-                    'tax_ids': [(6, 0, [cls.price_included_tax.id])]
+                    'name':'somethingpriceincluded',
+                    'tax_ids':[(6,0,[cls.price_included_tax.id])]
                 }),
-                (0, 0, {
+                (0,0,{
                     **cls.standard_line,
-                    'name': 'something else price included',
-                    'tax_ids': [(6, 0, [cls.price_included_tax.id])]
+                    'name':'somethingelsepriceincluded',
+                    'tax_ids':[(6,0,[cls.price_included_tax.id])]
                 }),
-                (0, 0, {
+                (0,0,{
                     **cls.standard_line,
-                    'name': 'something not price included',
-                }),
-            ],
-        })
-
-        cls.partial_discount_invoice = cls.env['account.move'].with_company(cls.company).create({
-            'move_type': 'out_invoice',
-            'invoice_date': datetime.date(2022, 3, 24),
-            'partner_id': cls.italian_partner_a.id,
-            'partner_bank_id': cls.test_bank.id,
-            'invoice_line_ids': [
-                (0, 0, {
-                    **cls.standard_line,
-                    'name': 'no discount',
-                }),
-                (0, 0, {
-                    **cls.standard_line,
-                    'name': 'special discount',
-                    'discount': 50,
-                }),
-                (0, 0, {
-                    **cls.standard_line,
-                    'name': "an offer you can't refuse",
-                    'discount': 100,
+                    'name':'somethingnotpriceincluded',
                 }),
             ],
         })
 
-        cls.full_discount_invoice = cls.env['account.move'].with_company(cls.company).create({
-            'move_type': 'out_invoice',
-            'invoice_date': datetime.date(2022, 3, 24),
-            'partner_id': cls.italian_partner_a.id,
-            'partner_bank_id': cls.test_bank.id,
-            'invoice_line_ids': [
-                (0, 0, {
+        cls.partial_discount_invoice=cls.env['account.move'].with_company(cls.company).create({
+            'move_type':'out_invoice',
+            'invoice_date':datetime.date(2022,3,24),
+            'partner_id':cls.italian_partner_a.id,
+            'partner_bank_id':cls.test_bank.id,
+            'invoice_line_ids':[
+                (0,0,{
                     **cls.standard_line,
-                    'name': 'nothing shady just a gift for my friend',
-                    'discount': 100,
+                    'name':'nodiscount',
+                }),
+                (0,0,{
+                    **cls.standard_line,
+                    'name':'specialdiscount',
+                    'discount':50,
+                }),
+                (0,0,{
+                    **cls.standard_line,
+                    'name':"anofferyoucan'trefuse",
+                    'discount':100,
                 }),
             ],
         })
 
-        cls.non_latin_and_latin_invoice = cls.env['account.move'].with_company(cls.company).create({
-            'move_type': 'out_invoice',
-            'invoice_date': datetime.date(2022, 3, 24),
-            'partner_id': cls.italian_partner_a.id,
-            'partner_bank_id': cls.test_bank.id,
-            'invoice_line_ids': [
-                (0, 0, {
+        cls.full_discount_invoice=cls.env['account.move'].with_company(cls.company).create({
+            'move_type':'out_invoice',
+            'invoice_date':datetime.date(2022,3,24),
+            'partner_id':cls.italian_partner_a.id,
+            'partner_bank_id':cls.test_bank.id,
+            'invoice_line_ids':[
+                (0,0,{
                     **cls.standard_line,
-                    'name': 'ʢ◉ᴥ◉ʡ',
+                    'name':'nothingshadyjustagiftformyfriend',
+                    'discount':100,
+                }),
+            ],
+        })
+
+        cls.non_latin_and_latin_invoice=cls.env['account.move'].with_company(cls.company).create({
+            'move_type':'out_invoice',
+            'invoice_date':datetime.date(2022,3,24),
+            'partner_id':cls.italian_partner_a.id,
+            'partner_bank_id':cls.test_bank.id,
+            'invoice_line_ids':[
+                (0,0,{
+                    **cls.standard_line,
+                    'name':'ʢ◉ᴥ◉ʡ',
                     }),
-                (0, 0, {
+                (0,0,{
                     **cls.standard_line,
-                    'name': '–-',
+                    'name':'–-',
                     }),
-                (0, 0, {
+                (0,0,{
                     **cls.standard_line,
-                    'name': 'this should be the same as it was',
+                    'name':'thisshouldbethesameasitwas',
                     }),
                 ],
             })
 
-        cls.below_400_codice_simplified_invoice = cls.env['account.move'].with_company(cls.company).create({
-            'move_type': 'out_invoice',
-            'invoice_date': datetime.date(2022, 3, 24),
-            'partner_id': cls.italian_partner_no_address_codice.id,
-            'invoice_line_ids': [
-                (0, 0, {
+        cls.below_400_codice_simplified_invoice=cls.env['account.move'].with_company(cls.company).create({
+            'move_type':'out_invoice',
+            'invoice_date':datetime.date(2022,3,24),
+            'partner_id':cls.italian_partner_no_address_codice.id,
+            'invoice_line_ids':[
+                (0,0,{
                     **cls.standard_line_below_400,
                     }),
-                (0, 0, {
+                (0,0,{
                     **cls.standard_line_below_400,
-                    'name': 'cheap_line_2',
-                    'quantity': 2,
-                    'price_unit': 10.0,
+                    'name':'cheap_line_2',
+                    'quantity':2,
+                    'price_unit':10.0,
                     }),
                 ],
             })
 
-        cls.total_400_VAT_simplified_invoice = cls.env['account.move'].with_company(cls.company).create({
-            'move_type': 'out_invoice',
-            'invoice_date': datetime.date(2022, 3, 24),
-            'partner_id': cls.italian_partner_no_address_VAT.id,
-            'invoice_line_ids': [
-                (0, 0, {
+        cls.total_400_VAT_simplified_invoice=cls.env['account.move'].with_company(cls.company).create({
+            'move_type':'out_invoice',
+            'invoice_date':datetime.date(2022,3,24),
+            'partner_id':cls.italian_partner_no_address_VAT.id,
+            'invoice_line_ids':[
+                (0,0,{
                     **cls.standard_line_400,
                     }),
                 ],
             })
 
-        cls.more_400_simplified_invoice = cls.env['account.move'].with_company(cls.company).create({
-            'move_type': 'out_invoice',
-            'invoice_date': datetime.date(2022, 3, 24),
-            'partner_id': cls.italian_partner_no_address_codice.id,
-            'invoice_line_ids': [
-                (0, 0, {
+        cls.more_400_simplified_invoice=cls.env['account.move'].with_company(cls.company).create({
+            'move_type':'out_invoice',
+            'invoice_date':datetime.date(2022,3,24),
+            'partner_id':cls.italian_partner_no_address_codice.id,
+            'invoice_line_ids':[
+                (0,0,{
                     **cls.standard_line,
                     }),
                 ],
             })
 
-        cls.non_domestic_simplified_invoice = cls.env['account.move'].with_company(cls.company).create({
-            'move_type': 'out_invoice',
-            'invoice_date': datetime.date(2022, 3, 24),
-            'partner_id': cls.american_partner.id,
-            'invoice_line_ids': [
-                (0, 0, {
+        cls.non_domestic_simplified_invoice=cls.env['account.move'].with_company(cls.company).create({
+            'move_type':'out_invoice',
+            'invoice_date':datetime.date(2022,3,24),
+            'partner_id':cls.american_partner.id,
+            'invoice_line_ids':[
+                (0,0,{
                     **cls.standard_line_below_400,
                     }),
                 ],
             })
 
-        cls.pa_partner_invoice = cls.env['account.move'].with_company(cls.company).create({
-            'move_type': 'out_invoice',
-            'invoice_date': datetime.date(2022, 3, 24),
-            'partner_id': cls.italian_partner_b.id,
-            'partner_bank_id': cls.test_bank.id,
-            'invoice_line_ids': [
-                (0, 0, cls.standard_line),
+        cls.pa_partner_invoice=cls.env['account.move'].with_company(cls.company).create({
+            'move_type':'out_invoice',
+            'invoice_date':datetime.date(2022,3,24),
+            'partner_id':cls.italian_partner_b.id,
+            'partner_bank_id':cls.test_bank.id,
+            'invoice_line_ids':[
+                (0,0,cls.standard_line),
             ],
         })
 
-        # We create this because we are unable to post without a proxy user existing
-        cls.proxy_user = cls.env['account_edi_proxy_client.user'].create({
-            'id_client': 'l10n_it_edi_sdicoop_test',
-            'company_id': cls.company.id,
-            'edi_format_id': cls.edi_format.id,
-            'edi_identification': 'l10n_it_edi_sdicoop_test',
-            'private_key': 'l10n_it_edi_sdicoop_test',
+        #Wecreatethisbecauseweareunabletopostwithoutaproxyuserexisting
+        cls.proxy_user=cls.env['account_edi_proxy_client.user'].create({
+            'id_client':'l10n_it_edi_sdicoop_test',
+            'company_id':cls.company.id,
+            'edi_format_id':cls.edi_format.id,
+            'edi_identification':'l10n_it_edi_sdicoop_test',
+            'private_key':'l10n_it_edi_sdicoop_test',
         })
 
-        cls.zero_tax_invoice = cls.env['account.move'].with_company(cls.company).create({
-            'move_type': 'out_invoice',
-            'invoice_date': datetime.date(2022, 3, 24),
-            'partner_id': cls.italian_partner_a.id,
-            'invoice_line_ids': [
-                (0, 0, {
+        cls.zero_tax_invoice=cls.env['account.move'].with_company(cls.company).create({
+            'move_type':'out_invoice',
+            'invoice_date':datetime.date(2022,3,24),
+            'partner_id':cls.italian_partner_a.id,
+            'invoice_line_ids':[
+                (0,0,{
                     **cls.standard_line,
-                    'name': 'line with tax of 0% with repartition line of 100% ',
-                    'tax_ids': [(6, 0, [cls.tax_zero_percent_hundred_percent_repartition.id])],
+                    'name':'linewithtaxof0%withrepartitionlineof100%',
+                    'tax_ids':[(6,0,[cls.tax_zero_percent_hundred_percent_repartition.id])],
                 }),
-                (0, 0, {
+                (0,0,{
                     **cls.standard_line,
-                    'name': 'line with tax of 0% with repartition line of 0% ',
-                    'tax_ids': [(6, 0, [cls.tax_zero_percent_zero_percent_repartition.id])],
+                    'name':'linewithtaxof0%withrepartitionlineof0%',
+                    'tax_ids':[(6,0,[cls.tax_zero_percent_zero_percent_repartition.id])],
                 }),
             ],
         })
 
-        cls.negative_price_invoice = cls.env['account.move'].with_company(cls.company).create({
-            'move_type': 'out_invoice',
-            'invoice_date': datetime.date(2022, 3, 24),
-            'partner_id': cls.italian_partner_a.id,
-            'invoice_line_ids': [
-                (0, 0, {
+        cls.negative_price_invoice=cls.env['account.move'].with_company(cls.company).create({
+            'move_type':'out_invoice',
+            'invoice_date':datetime.date(2022,3,24),
+            'partner_id':cls.italian_partner_a.id,
+            'invoice_line_ids':[
+                (0,0,{
                     **cls.standard_line,
                     }),
-                (0, 0, {
+                (0,0,{
                     **cls.standard_line,
-                    'name': 'negative_line',
-                    'price_unit': -100.0,
+                    'name':'negative_line',
+                    'price_unit':-100.0,
                     }),
-                (0, 0, {
+                (0,0,{
                     **cls.standard_line,
-                    'name': 'negative_line_different_tax',
-                    'price_unit': -50.0,
-                    'tax_ids': [(6, 0, [cls.tax_10.id])]
+                    'name':'negative_line_different_tax',
+                    'price_unit':-50.0,
+                    'tax_ids':[(6,0,[cls.tax_10.id])]
                     }),
                 ],
             })
 
-        cls.negative_price_credit_note = cls.negative_price_invoice.with_company(cls.company)._reverse_moves([{
-            'invoice_date': datetime.date(2022, 3, 24),
+        cls.negative_price_credit_note=cls.negative_price_invoice.with_company(cls.company)._reverse_moves([{
+            'invoice_date':datetime.date(2022,3,24),
         }])
 
-        # post the invoices
+        #posttheinvoices
         cls.price_included_invoice._post()
         cls.partial_discount_invoice._post()
         cls.full_discount_invoice._post()
@@ -354,46 +354,46 @@ class TestItEdi(AccountEdiTestCommon):
         cls.negative_price_invoice._post()
         cls.negative_price_credit_note._post()
 
-        cls.edi_basis_xml = cls._get_test_file_content('IT00470550013_basis.xml')
-        cls.edi_simplified_basis_xml = cls._get_test_file_content('IT00470550013_simpl.xml')
+        cls.edi_basis_xml=cls._get_test_file_content('IT00470550013_basis.xml')
+        cls.edi_simplified_basis_xml=cls._get_test_file_content('IT00470550013_simpl.xml')
 
     @classmethod
-    def _get_test_file_content(cls, filename):
-        """ Get the content of a test file inside this module """
-        path = 'l10n_it_edi_sdicoop/tests/expected_xmls/' + filename
-        with tools.file_open(path, mode='rb') as test_file:
-            return test_file.read()
+    def_get_test_file_content(cls,filename):
+        """Getthecontentofatestfileinsidethismodule"""
+        path='l10n_it_edi_sdicoop/tests/expected_xmls/'+filename
+        withtools.file_open(path,mode='rb')astest_file:
+            returntest_file.read()
 
-    def test_price_included_taxes(self):
-        """ When the tax is price included, there should be a rounding value added to the xml, if the sum(subtotals) * tax_rate is not
-            equal to taxable base * tax rate (there is a constraint in the edi where taxable base * tax rate = tax amount, but also
-            taxable base = sum(subtotals) + rounding amount)
+    deftest_price_included_taxes(self):
+        """Whenthetaxispriceincluded,thereshouldbearoundingvalueaddedtothexml,ifthesum(subtotals)*tax_rateisnot
+            equaltotaxablebase*taxrate(thereisaconstraintintheediwheretaxablebase*taxrate=taxamount,butalso
+            taxablebase=sum(subtotals)+roundingamount)
         """
-        # In this case, the first two lines use a price_include tax the
-        # subtotals should be 800.40 / (100 + 22.0) * 100 = 656.065564..,
-        # where 22.0 is the tax rate.
+        #Inthiscase,thefirsttwolinesuseaprice_includetaxthe
+        #subtotalsshouldbe800.40/(100+22.0)*100=656.065564..,
+        #where22.0isthetaxrate.
         #
-        # Since the subtotals are rounded we actually have 656.07
-        lines = self.price_included_invoice.line_ids
-        price_included_lines = lines.filtered(lambda line: line.tax_ids == self.price_included_tax)
-        self.assertEqual([line.price_subtotal for line in price_included_lines], [656.07, 656.07])
-        # So the taxable a base the edi expects (for this tax) is actually 1312.14
-        price_included_tax_line = lines.filtered(lambda line: line.tax_line_id == self.price_included_tax)
-        self.assertEqual(price_included_tax_line.tax_base_amount, 1312.14)
+        #Sincethesubtotalsareroundedweactuallyhave656.07
+        lines=self.price_included_invoice.line_ids
+        price_included_lines=lines.filtered(lambdaline:line.tax_ids==self.price_included_tax)
+        self.assertEqual([line.price_subtotalforlineinprice_included_lines],[656.07,656.07])
+        #Sothetaxableabasetheediexpects(forthistax)isactually1312.14
+        price_included_tax_line=lines.filtered(lambdaline:line.tax_line_id==self.price_included_tax)
+        self.assertEqual(price_included_tax_line.tax_base_amount,1312.14)
 
-        # The tax amount of the price included tax should be:
-        #   per line: 800.40 - (800.40 / (100 + 22) * 100) = 144.33
-        #   tax amount: 144.33 * 2 = 288.66
-        self.assertEqual(price_included_tax_line.price_total, 288.66)
+        #Thetaxamountofthepriceincludedtaxshouldbe:
+        #  perline:800.40-(800.40/(100+22)*100)=144.33
+        #  taxamount:144.33*2=288.66
+        self.assertEqual(price_included_tax_line.price_total,288.66)
 
-        expected_etree = self.with_applied_xpath(
+        expected_etree=self.with_applied_xpath(
             etree.fromstring(self.edi_basis_xml),
             '''
-                <xpath expr="//FatturaElettronicaBody//DatiBeniServizi" position="replace">
+                <xpathexpr="//FatturaElettronicaBody//DatiBeniServizi"position="replace">
                     <DatiBeniServizi>
                         <DettaglioLinee>
                           <NumeroLinea>1</NumeroLinea>
-                          <Descrizione>something price included</Descrizione>
+                          <Descrizione>somethingpriceincluded</Descrizione>
                           <Quantita>1.00</Quantita>
                           <PrezzoUnitario>656.070000</PrezzoUnitario>
                           <PrezzoTotale>656.07</PrezzoTotale>
@@ -401,7 +401,7 @@ class TestItEdi(AccountEdiTestCommon):
                         </DettaglioLinee>
                         <DettaglioLinee>
                           <NumeroLinea>2</NumeroLinea>
-                          <Descrizione>something else price included</Descrizione>
+                          <Descrizione>somethingelsepriceincluded</Descrizione>
                           <Quantita>1.00</Quantita>
                           <PrezzoUnitario>656.070000</PrezzoUnitario>
                           <PrezzoTotale>656.07</PrezzoTotale>
@@ -409,7 +409,7 @@ class TestItEdi(AccountEdiTestCommon):
                         </DettaglioLinee>
                         <DettaglioLinee>
                           <NumeroLinea>3</NumeroLinea>
-                          <Descrizione>something not price included</Descrizione>
+                          <Descrizione>somethingnotpriceincluded</Descrizione>
                           <Quantita>1.00</Quantita>
                           <PrezzoUnitario>800.400000</PrezzoUnitario>
                           <PrezzoTotale>800.40</PrezzoTotale>
@@ -430,31 +430,31 @@ class TestItEdi(AccountEdiTestCommon):
                         </DatiRiepilogo>
                     </DatiBeniServizi>
                 </xpath>
-                <xpath expr="//DettaglioPagamento//ImportoPagamento" position="inside">
+                <xpathexpr="//DettaglioPagamento//ImportoPagamento"position="inside">
                     2577.29
                 </xpath>
-                <xpath expr="//DatiGeneraliDocumento//ImportoTotaleDocumento" position="inside">
+                <xpathexpr="//DatiGeneraliDocumento//ImportoTotaleDocumento"position="inside">
                     2577.29
                 </xpath>
             ''')
-        invoice_etree = etree.fromstring(self.price_included_invoice._export_as_xml())
-        # Remove the attachment and its details
-        invoice_etree = self.with_applied_xpath(invoice_etree, "<xpath expr='.//Allegati' position='replace'/>")
-        self.assertXmlTreeEqual(invoice_etree, expected_etree)
+        invoice_etree=etree.fromstring(self.price_included_invoice._export_as_xml())
+        #Removetheattachmentanditsdetails
+        invoice_etree=self.with_applied_xpath(invoice_etree,"<xpathexpr='.//Allegati'position='replace'/>")
+        self.assertXmlTreeEqual(invoice_etree,expected_etree)
 
-    def test_partially_discounted_invoice(self):
-        # The EDI can account for discounts, but a line with, for example, a 100% discount should still have
-        # a corresponding tax with a base amount of 0
+    deftest_partially_discounted_invoice(self):
+        #TheEDIcanaccountfordiscounts,butalinewith,forexample,a100%discountshouldstillhave
+        #acorrespondingtaxwithabaseamountof0
 
-        invoice_etree = etree.fromstring(self.partial_discount_invoice._export_as_xml())
-        expected_etree = self.with_applied_xpath(
+        invoice_etree=etree.fromstring(self.partial_discount_invoice._export_as_xml())
+        expected_etree=self.with_applied_xpath(
             etree.fromstring(self.edi_basis_xml),
             '''
-                <xpath expr="//FatturaElettronicaBody//DatiBeniServizi" position="replace">
+                <xpathexpr="//FatturaElettronicaBody//DatiBeniServizi"position="replace">
                     <DatiBeniServizi>
                       <DettaglioLinee>
                         <NumeroLinea>1</NumeroLinea>
-                        <Descrizione>no discount</Descrizione>
+                        <Descrizione>nodiscount</Descrizione>
                         <Quantita>1.00</Quantita>
                         <PrezzoUnitario>800.400000</PrezzoUnitario>
                         <PrezzoTotale>800.40</PrezzoTotale>
@@ -462,7 +462,7 @@ class TestItEdi(AccountEdiTestCommon):
                       </DettaglioLinee>
                       <DettaglioLinee>
                         <NumeroLinea>2</NumeroLinea>
-                        <Descrizione>special discount</Descrizione>
+                        <Descrizione>specialdiscount</Descrizione>
                         <Quantita>1.00</Quantita>
                         <PrezzoUnitario>800.400000</PrezzoUnitario>
                         <ScontoMaggiorazione>
@@ -474,7 +474,7 @@ class TestItEdi(AccountEdiTestCommon):
                       </DettaglioLinee>
                       <DettaglioLinee>
                         <NumeroLinea>3</NumeroLinea>
-                        <Descrizione>an offer you can't refuse</Descrizione>
+                        <Descrizione>anofferyoucan'trefuse</Descrizione>
                         <Quantita>1.00</Quantita>
                         <PrezzoUnitario>800.400000</PrezzoUnitario>
                         <ScontoMaggiorazione>
@@ -492,26 +492,26 @@ class TestItEdi(AccountEdiTestCommon):
                       </DatiRiepilogo>
                     </DatiBeniServizi>
                 </xpath>
-                <xpath expr="//DettaglioPagamento//ImportoPagamento" position="inside">
+                <xpathexpr="//DettaglioPagamento//ImportoPagamento"position="inside">
                     1464.73
                 </xpath>
-                <xpath expr="//DatiGeneraliDocumento//ImportoTotaleDocumento" position="inside">
+                <xpathexpr="//DatiGeneraliDocumento//ImportoTotaleDocumento"position="inside">
                     1464.73
                 </xpath>
             ''')
-        invoice_etree = self.with_applied_xpath(invoice_etree, "<xpath expr='.//Allegati' position='replace'/>")
-        self.assertXmlTreeEqual(invoice_etree, expected_etree)
+        invoice_etree=self.with_applied_xpath(invoice_etree,"<xpathexpr='.//Allegati'position='replace'/>")
+        self.assertXmlTreeEqual(invoice_etree,expected_etree)
 
-    def test_fully_discounted_inovice(self):
-        invoice_etree = etree.fromstring(self.full_discount_invoice._export_as_xml())
-        expected_etree = self.with_applied_xpath(
+    deftest_fully_discounted_inovice(self):
+        invoice_etree=etree.fromstring(self.full_discount_invoice._export_as_xml())
+        expected_etree=self.with_applied_xpath(
             etree.fromstring(self.edi_basis_xml),
             '''
-            <xpath expr="//FatturaElettronicaBody//DatiBeniServizi" position="replace">
+            <xpathexpr="//FatturaElettronicaBody//DatiBeniServizi"position="replace">
             <DatiBeniServizi>
               <DettaglioLinee>
                 <NumeroLinea>1</NumeroLinea>
-                <Descrizione>nothing shady just a gift for my friend</Descrizione>
+                <Descrizione>nothingshadyjustagiftformyfriend</Descrizione>
                 <Quantita>1.00</Quantita>
                 <PrezzoUnitario>800.400000</PrezzoUnitario>
                 <ScontoMaggiorazione>
@@ -529,22 +529,22 @@ class TestItEdi(AccountEdiTestCommon):
               </DatiRiepilogo>
             </DatiBeniServizi>
             </xpath>
-            <xpath expr="//DettaglioPagamento//ImportoPagamento" position="inside">
+            <xpathexpr="//DettaglioPagamento//ImportoPagamento"position="inside">
                 0.00
             </xpath>
-            <xpath expr="//DatiGeneraliDocumento//ImportoTotaleDocumento" position="inside">
+            <xpathexpr="//DatiGeneraliDocumento//ImportoTotaleDocumento"position="inside">
                 0.00
             </xpath>
             ''')
-        invoice_etree = self.with_applied_xpath(invoice_etree, "<xpath expr='.//Allegati' position='replace'/>")
-        self.assertXmlTreeEqual(invoice_etree, expected_etree)
+        invoice_etree=self.with_applied_xpath(invoice_etree,"<xpathexpr='.//Allegati'position='replace'/>")
+        self.assertXmlTreeEqual(invoice_etree,expected_etree)
 
-    def test_non_latin_and_latin_invoice(self):
-        invoice_etree = etree.fromstring(self.non_latin_and_latin_invoice._export_as_xml())
-        expected_etree = self.with_applied_xpath(
+    deftest_non_latin_and_latin_invoice(self):
+        invoice_etree=etree.fromstring(self.non_latin_and_latin_invoice._export_as_xml())
+        expected_etree=self.with_applied_xpath(
             etree.fromstring(self.edi_basis_xml),
             '''
-            <xpath expr="//FatturaElettronicaBody//DatiBeniServizi" position="replace">
+            <xpathexpr="//FatturaElettronicaBody//DatiBeniServizi"position="replace">
             <DatiBeniServizi>
               <DettaglioLinee>
                 <NumeroLinea>1</NumeroLinea>
@@ -564,7 +564,7 @@ class TestItEdi(AccountEdiTestCommon):
               </DettaglioLinee>
               <DettaglioLinee>
                 <NumeroLinea>3</NumeroLinea>
-                <Descrizione>this should be the same as it was</Descrizione>
+                <Descrizione>thisshouldbethesameasitwas</Descrizione>
                 <Quantita>1.00</Quantita>
                 <PrezzoUnitario>800.400000</PrezzoUnitario>
                 <PrezzoTotale>800.40</PrezzoTotale>
@@ -578,27 +578,27 @@ class TestItEdi(AccountEdiTestCommon):
               </DatiRiepilogo>
             </DatiBeniServizi>
             </xpath>
-            <xpath expr="//DettaglioPagamento//ImportoPagamento" position="inside">
+            <xpathexpr="//DettaglioPagamento//ImportoPagamento"position="inside">
               2929.47
             </xpath>
-            <xpath expr="//DatiGeneraliDocumento//ImportoTotaleDocumento" position="inside">
+            <xpathexpr="//DatiGeneraliDocumento//ImportoTotaleDocumento"position="inside">
               2929.47
             </xpath>
             ''')
-        invoice_etree = self.with_applied_xpath(invoice_etree, "<xpath expr='.//Allegati' position='replace'/>")
-        self.assertXmlTreeEqual(invoice_etree, expected_etree)
+        invoice_etree=self.with_applied_xpath(invoice_etree,"<xpathexpr='.//Allegati'position='replace'/>")
+        self.assertXmlTreeEqual(invoice_etree,expected_etree)
 
-    def test_below_400_codice_simplified_invoice(self):
-        invoice_etree = etree.fromstring(self.below_400_codice_simplified_invoice._export_as_xml())
-        expected_etree = self.with_applied_xpath(
+    deftest_below_400_codice_simplified_invoice(self):
+        invoice_etree=etree.fromstring(self.below_400_codice_simplified_invoice._export_as_xml())
+        expected_etree=self.with_applied_xpath(
             etree.fromstring(self.edi_simplified_basis_xml),
             '''
-            <xpath expr="//FatturaElettronicaHeader//CessionarioCommittente" position="inside">
+            <xpathexpr="//FatturaElettronicaHeader//CessionarioCommittente"position="inside">
             <IdentificativiFiscali>
                 <CodiceFiscale>00465840031</CodiceFiscale>
             </IdentificativiFiscali>
             </xpath>
-            <xpath expr="//FatturaElettronicaBody//DatiBeniServizi" position="replace">
+            <xpathexpr="//FatturaElettronicaBody//DatiBeniServizi"position="replace">
             <DatiBeniServizi>
               <Descrizione>cheap_line</Descrizione>
               <Importo>122.00</Importo>
@@ -615,15 +615,15 @@ class TestItEdi(AccountEdiTestCommon):
             </DatiBeniServizi>
             </xpath>
             ''')
-        invoice_etree = self.with_applied_xpath(invoice_etree, "<xpath expr='.//Allegati' position='replace'/>")
-        self.assertXmlTreeEqual(invoice_etree, expected_etree)
+        invoice_etree=self.with_applied_xpath(invoice_etree,"<xpathexpr='.//Allegati'position='replace'/>")
+        self.assertXmlTreeEqual(invoice_etree,expected_etree)
 
-    def test_total_400_VAT_simplified_invoice(self):
-        invoice_etree = etree.fromstring(self.total_400_VAT_simplified_invoice._export_as_xml())
-        expected_etree = self.with_applied_xpath(
+    deftest_total_400_VAT_simplified_invoice(self):
+        invoice_etree=etree.fromstring(self.total_400_VAT_simplified_invoice._export_as_xml())
+        expected_etree=self.with_applied_xpath(
             etree.fromstring(self.edi_simplified_basis_xml),
             '''
-            <xpath expr="//FatturaElettronicaHeader//CessionarioCommittente" position="inside">
+            <xpathexpr="//FatturaElettronicaHeader//CessionarioCommittente"position="inside">
             <IdentificativiFiscali>
                 <IdFiscaleIVA>
                     <IdPaese>IT</IdPaese>
@@ -631,7 +631,7 @@ class TestItEdi(AccountEdiTestCommon):
                 </IdFiscaleIVA>
             </IdentificativiFiscali>
             </xpath>
-            <xpath expr="//FatturaElettronicaBody//DatiBeniServizi" position="replace">
+            <xpathexpr="//FatturaElettronicaBody//DatiBeniServizi"position="replace">
             <DatiBeniServizi>
               <Descrizione>400_line</Descrizione>
               <Importo>400.00</Importo>
@@ -641,31 +641,31 @@ class TestItEdi(AccountEdiTestCommon):
             </DatiBeniServizi>
             </xpath>
             ''')
-        invoice_etree = self.with_applied_xpath(invoice_etree, "<xpath expr='.//Allegati' position='replace'/>")
-        self.assertXmlTreeEqual(invoice_etree, expected_etree)
+        invoice_etree=self.with_applied_xpath(invoice_etree,"<xpathexpr='.//Allegati'position='replace'/>")
+        self.assertXmlTreeEqual(invoice_etree,expected_etree)
 
-    def test_more_400_simplified_invoice(self):
-        with self.assertRaises(UserError):
+    deftest_more_400_simplified_invoice(self):
+        withself.assertRaises(UserError):
             self.more_400_simplified_invoice._post()
 
-    def test_non_domestic_simplified_invoice(self):
-        with self.assertRaises(UserError):
+    deftest_non_domestic_simplified_invoice(self):
+        withself.assertRaises(UserError):
             self.non_domestic_simplified_invoice._post()
 
-    def test_send_pa_partner(self):
-        res = self.edi_format._l10n_it_post_invoices_step_1(self.pa_partner_invoice)
-        self.assertEqual(res[self.pa_partner_invoice], {'attachment': self.pa_partner_invoice.l10n_it_edi_attachment_id, 'success': True})
+    deftest_send_pa_partner(self):
+        res=self.edi_format._l10n_it_post_invoices_step_1(self.pa_partner_invoice)
+        self.assertEqual(res[self.pa_partner_invoice],{'attachment':self.pa_partner_invoice.l10n_it_edi_attachment_id,'success':True})
 
-    def test_zero_percent_taxes(self):
-        invoice_etree = etree.fromstring(self.zero_tax_invoice._export_as_xml())
-        expected_etree = self.with_applied_xpath(
+    deftest_zero_percent_taxes(self):
+        invoice_etree=etree.fromstring(self.zero_tax_invoice._export_as_xml())
+        expected_etree=self.with_applied_xpath(
             etree.fromstring(self.edi_basis_xml),
             '''
-            <xpath expr="//FatturaElettronicaBody//DatiBeniServizi" position="replace">
+            <xpathexpr="//FatturaElettronicaBody//DatiBeniServizi"position="replace">
                 <DatiBeniServizi>
                   <DettaglioLinee>
                     <NumeroLinea>1</NumeroLinea>
-                    <Descrizione>line with tax of 0% with repartition line of 100%</Descrizione>
+                    <Descrizione>linewithtaxof0%withrepartitionlineof100%</Descrizione>
                     <Quantita>1.00</Quantita>
                     <PrezzoUnitario>800.400000</PrezzoUnitario>
                     <PrezzoTotale>800.40</PrezzoTotale>
@@ -673,7 +673,7 @@ class TestItEdi(AccountEdiTestCommon):
                   </DettaglioLinee>
                   <DettaglioLinee>
                     <NumeroLinea>2</NumeroLinea>
-                    <Descrizione>line with tax of 0% with repartition line of 0%</Descrizione>
+                    <Descrizione>linewithtaxof0%withrepartitionlineof0%</Descrizione>
                     <Quantita>1.00</Quantita>
                     <PrezzoUnitario>800.400000</PrezzoUnitario>
                     <PrezzoTotale>800.40</PrezzoTotale>
@@ -693,23 +693,23 @@ class TestItEdi(AccountEdiTestCommon):
                   </DatiRiepilogo>
                 </DatiBeniServizi>
             </xpath>
-            <xpath expr="//DettaglioPagamento//ImportoPagamento" position="inside">
+            <xpathexpr="//DettaglioPagamento//ImportoPagamento"position="inside">
                 1600.80
             </xpath>
-            <xpath expr="//DatiGeneraliDocumento//ImportoTotaleDocumento" position="inside">
+            <xpathexpr="//DatiGeneraliDocumento//ImportoTotaleDocumento"position="inside">
                 1600.80
             </xpath>
             '''
         )
-        invoice_etree = self.with_applied_xpath(invoice_etree, "<xpath expr='.//Allegati' position='replace'/>")
-        self.assertXmlTreeEqual(invoice_etree, expected_etree)
+        invoice_etree=self.with_applied_xpath(invoice_etree,"<xpathexpr='.//Allegati'position='replace'/>")
+        self.assertXmlTreeEqual(invoice_etree,expected_etree)
 
-    def test_negative_price_invoice(self):
-        invoice_etree = etree.fromstring(self.negative_price_invoice._export_as_xml())
-        expected_etree = self.with_applied_xpath(
+    deftest_negative_price_invoice(self):
+        invoice_etree=etree.fromstring(self.negative_price_invoice._export_as_xml())
+        expected_etree=self.with_applied_xpath(
             etree.fromstring(self.edi_basis_xml),
             '''
-                <xpath expr="//FatturaElettronicaBody//DatiBeniServizi" position="replace">
+                <xpathexpr="//FatturaElettronicaBody//DatiBeniServizi"position="replace">
                     <DatiBeniServizi>
                       <DettaglioLinee>
                         <NumeroLinea>1</NumeroLinea>
@@ -749,28 +749,28 @@ class TestItEdi(AccountEdiTestCommon):
                       </DatiRiepilogo>
                     </DatiBeniServizi>
                 </xpath>
-                <xpath expr="//DettaglioPagamento//ImportoPagamento" position="inside">
+                <xpathexpr="//DettaglioPagamento//ImportoPagamento"position="inside">
                     799.49
                 </xpath>
-                <xpath expr="//DatiGeneraliDocumento//ImportoTotaleDocumento" position="inside">
+                <xpathexpr="//DatiGeneraliDocumento//ImportoTotaleDocumento"position="inside">
                     799.49
                 </xpath>
             ''')
-        invoice_etree = self.with_applied_xpath(invoice_etree, "<xpath expr='.//Allegati' position='replace'/>")
-        self.assertXmlTreeEqual(invoice_etree, expected_etree)
+        invoice_etree=self.with_applied_xpath(invoice_etree,"<xpathexpr='.//Allegati'position='replace'/>")
+        self.assertXmlTreeEqual(invoice_etree,expected_etree)
 
-    def test_negative_price_credit_note(self):
-        invoice_etree = etree.fromstring(self.negative_price_credit_note._export_as_xml())
-        expected_etree = self.with_applied_xpath(
+    deftest_negative_price_credit_note(self):
+        invoice_etree=etree.fromstring(self.negative_price_credit_note._export_as_xml())
+        expected_etree=self.with_applied_xpath(
             etree.fromstring(self.edi_basis_xml),
             '''
-                <xpath expr="//DatiGeneraliDocumento/TipoDocumento" position="replace">
+                <xpathexpr="//DatiGeneraliDocumento/TipoDocumento"position="replace">
                     <TipoDocumento>TD04</TipoDocumento>
                 </xpath>
-                <xpath expr="//DatiGeneraliDocumento//ImportoTotaleDocumento" position="inside">
+                <xpathexpr="//DatiGeneraliDocumento//ImportoTotaleDocumento"position="inside">
                     799.49
                 </xpath>
-                <xpath expr="//DatiBeniServizi" position="replace">
+                <xpathexpr="//DatiBeniServizi"position="replace">
                     <DatiBeniServizi>
                       <DettaglioLinee>
                         <NumeroLinea>1</NumeroLinea>
@@ -810,7 +810,7 @@ class TestItEdi(AccountEdiTestCommon):
                       </DatiRiepilogo>
                     </DatiBeniServizi>
                 </xpath>
-                <xpath expr="//DatiPagamento" position="replace"/>
+                <xpathexpr="//DatiPagamento"position="replace"/>
             ''')
-        invoice_etree = self.with_applied_xpath(invoice_etree, "<xpath expr='.//Allegati' position='replace'/>")
-        self.assertXmlTreeEqual(invoice_etree, expected_etree)
+        invoice_etree=self.with_applied_xpath(invoice_etree,"<xpathexpr='.//Allegati'position='replace'/>")
+        self.assertXmlTreeEqual(invoice_etree,expected_etree)

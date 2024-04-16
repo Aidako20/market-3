@@ -1,17 +1,17 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra><data>
-    <record id="event_type_view_form" model="ir.ui.view">
-        <field name="name">event.type.view.form.inherit.meet</field>
-        <field name="model">event.type</field>
-        <field name="inherit_id" ref="website_event.event_type_view_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[@id='community-menu']" position='after'>
-                <div class="row mt16" attrs="{'invisible': [('website_menu', '=', False)]}">
-                    <label class="col-lg-4" for="meeting_room_allow_creation"/> <field name="meeting_room_allow_creation"/>
+    <recordid="event_type_view_form"model="ir.ui.view">
+        <fieldname="name">event.type.view.form.inherit.meet</field>
+        <fieldname="model">event.type</field>
+        <fieldname="inherit_id"ref="website_event.event_type_view_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//div[@id='community-menu']"position='after'>
+                <divclass="rowmt16"attrs="{'invisible':[('website_menu','=',False)]}">
+                    <labelclass="col-lg-4"for="meeting_room_allow_creation"/><fieldname="meeting_room_allow_creation"/>
                 </div>
             </xpath>
-            <xpath expr="//div[@id='community-menu']" position="attributes">
-                <attribute name="attrs">{'invisible': [('website_menu', '=', False)]}</attribute>
+            <xpathexpr="//div[@id='community-menu']"position="attributes">
+                <attributename="attrs">{'invisible':[('website_menu','=',False)]}</attribute>
             </xpath>
         </field>
     </record>

@@ -1,30 +1,30 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.hu = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.hu=factory()));
+}(this,function(){'usestrict';
 
-    var hu = {
-        code: "hu",
-        week: {
-            dow: 1,
-            doy: 4 // The week that contains Jan 4th is the first week of the year.
+    varhu={
+        code:"hu",
+        week:{
+            dow:1,
+            doy:4//TheweekthatcontainsJan4thisthefirstweekoftheyear.
         },
-        buttonText: {
-            prev: "vissza",
-            next: "előre",
-            today: "ma",
-            month: "Hónap",
-            week: "Hét",
-            day: "Nap",
-            list: "Napló"
+        buttonText:{
+            prev:"vissza",
+            next:"előre",
+            today:"ma",
+            month:"Hónap",
+            week:"Hét",
+            day:"Nap",
+            list:"Napló"
         },
-        weekLabel: "Hét",
-        allDayText: "Egész nap",
-        eventLimitText: "további",
-        noEventsMessage: "Nincs megjeleníthető esemény"
+        weekLabel:"Hét",
+        allDayText:"Egésznap",
+        eventLimitText:"további",
+        noEventsMessage:"Nincsmegjeleníthetőesemény"
     };
 
-    return hu;
+    returnhu;
 
 }));

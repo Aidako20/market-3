@@ -1,47 +1,47 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="view_project_task_type_delete_wizard" model="ir.ui.view">
-        <field name="name">project.task.type.delete.wizard.form</field>
-        <field name="model">project.task.type.delete.wizard</field>
-        <field name="arch" type="xml">
-            <form string="Delete Stage">
-                <field name="tasks_count" invisible="1" />
-                <field name="stages_active" invisible="1" />
-                <div attrs="{'invisible': [('tasks_count', '>', 0)]}">
-                    <p>Are you sure you want to delete those stages ?</p>
+    <recordid="view_project_task_type_delete_wizard"model="ir.ui.view">
+        <fieldname="name">project.task.type.delete.wizard.form</field>
+        <fieldname="model">project.task.type.delete.wizard</field>
+        <fieldname="arch"type="xml">
+            <formstring="DeleteStage">
+                <fieldname="tasks_count"invisible="1"/>
+                <fieldname="stages_active"invisible="1"/>
+                <divattrs="{'invisible':[('tasks_count','>',0)]}">
+                    <p>Areyousureyouwanttodeletethosestages?</p>
                 </div>
-                <div attrs="{'invisible': ['|', ('stages_active', '=', False), ('tasks_count', '=', 0)]}">
-                    <p>You cannot delete stages containing tasks. You can either archive them or first delete all of their tasks.</p>
+                <divattrs="{'invisible':['|',('stages_active','=',False),('tasks_count','=',0)]}">
+                    <p>Youcannotdeletestagescontainingtasks.Youcaneitherarchivethemorfirstdeletealloftheirtasks.</p>
                 </div>
-                <div attrs="{'invisible': ['|', ('stages_active', '=', True), ('tasks_count', '=', 0)]}">
-                    <p>You cannot delete stages containing tasks. You should first delete all of their tasks.</p>
+                <divattrs="{'invisible':['|',('stages_active','=',True),('tasks_count','=',0)]}">
+                    <p>Youcannotdeletestagescontainingtasks.Youshouldfirstdeletealloftheirtasks.</p>
                 </div>
                 <footer>
-                    <button string="Archive Stages" type="object" name="action_archive" class="btn btn-primary" attrs="{'invisible': ['|', ('stages_active', '=', False), ('tasks_count', '=', 0)]}" />
-                    <button string="Delete" type="object" name="action_unlink" class="btn btn-primary" attrs="{'invisible': [('tasks_count', '>', 0)]}" />
-                    <button string="Discard" special="cancel" />
+                    <buttonstring="ArchiveStages"type="object"name="action_archive"class="btnbtn-primary"attrs="{'invisible':['|',('stages_active','=',False),('tasks_count','=',0)]}"/>
+                    <buttonstring="Delete"type="object"name="action_unlink"class="btnbtn-primary"attrs="{'invisible':[('tasks_count','>',0)]}"/>
+                    <buttonstring="Discard"special="cancel"/>
                 </footer>
             </form>
         </field>
     </record>
 
-    <record id="view_project_task_type_delete_confirmation_wizard" model="ir.ui.view">
-        <field name="name">project.task.type.delete.wizard.form</field>
-        <field name="model">project.task.type.delete.wizard</field>
-        <field name="arch" type="xml">
-            <form string="Delete Stage">
+    <recordid="view_project_task_type_delete_confirmation_wizard"model="ir.ui.view">
+        <fieldname="name">project.task.type.delete.wizard.form</field>
+        <fieldname="model">project.task.type.delete.wizard</field>
+        <fieldname="arch"type="xml">
+            <formstring="DeleteStage">
                 <div>
-                    <p>This will archive the stages and all the tasks they contain from the following projects:</p>
-                    <field name="project_ids" readonly="1">
+                    <p>Thiswillarchivethestagesandallthetaskstheycontainfromthefollowingprojects:</p>
+                    <fieldname="project_ids"readonly="1">
                         <tree>
-                            <field name="name"/>
+                            <fieldname="name"/>
                         </tree>
                     </field>
-                    <p>Are you sure you want to continue?</p>
+                    <p>Areyousureyouwanttocontinue?</p>
                 </div>
                 <footer>
-                    <button string="Confirm" type="object" name="action_confirm" class="btn btn-primary"/>
-                    <button string="Discard" special="cancel" />
+                    <buttonstring="Confirm"type="object"name="action_confirm"class="btnbtn-primary"/>
+                    <buttonstring="Discard"special="cancel"/>
                 </footer>
             </form>
         </field>

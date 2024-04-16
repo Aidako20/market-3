@@ -1,32 +1,32 @@
-(function () {
-'use strict';
+(function(){
+'usestrict';
 
 /**
- * This file makes sure textarea elements with a specific editor class are
- * tweaked as soon as the DOM is ready so that they appear to be loading.
+ *Thisfilemakessuretextareaelementswithaspecificeditorclassare
+ *tweakedassoonastheDOMisreadysothattheyappeartobeloading.
  *
- * They must then be loaded using standard Flectra modules system. In particular,
- * @see web_editor.loader
+ *TheymustthenbeloadedusingstandardFlectramodulessystem.Inparticular,
+ *@seeweb_editor.loader
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Standard loop for better browser support
-    var textareaEls = document.querySelectorAll('textarea.o_wysiwyg_loader');
-    for (var i = 0; i < textareaEls.length; i++) {
-        var textarea = textareaEls[i];
-        var wrapper = document.createElement('div');
-        wrapper.classList.add('position-relative', 'o_wysiwyg_wrapper');
+document.addEventListener('DOMContentLoaded',()=>{
+    //Standardloopforbetterbrowsersupport
+    vartextareaEls=document.querySelectorAll('textarea.o_wysiwyg_loader');
+    for(vari=0;i<textareaEls.length;i++){
+        vartextarea=textareaEls[i];
+        varwrapper=document.createElement('div');
+        wrapper.classList.add('position-relative','o_wysiwyg_wrapper');
 
-        var loadingElement = document.createElement('div');
+        varloadingElement=document.createElement('div');
         loadingElement.classList.add('o_wysiwyg_loading');
-        var loadingIcon = document.createElement('i');
-        loadingIcon.classList.add('text-600', 'text-center',
-            'fa', 'fa-circle-o-notch', 'fa-spin', 'fa-2x');
+        varloadingIcon=document.createElement('i');
+        loadingIcon.classList.add('text-600','text-center',
+            'fa','fa-circle-o-notch','fa-spin','fa-2x');
         loadingElement.appendChild(loadingIcon);
         wrapper.appendChild(loadingElement);
 
-        textarea.parentNode.insertBefore(wrapper, textarea);
-        wrapper.insertBefore(textarea, loadingElement);
+        textarea.parentNode.insertBefore(wrapper,textarea);
+        wrapper.insertBefore(textarea,loadingElement);
     }
 });
 

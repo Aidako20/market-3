@@ -1,47 +1,47 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import fields, models, api, _
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportfields,models,api,_
 
 
-class AccountFiscalPosition(models.Model):
+classAccountFiscalPosition(models.Model):
 
-    _inherit = 'account.fiscal.position'
+    _inherit='account.fiscal.position'
 
-    l10n_ar_afip_responsibility_type_ids = fields.Many2many(
-        'l10n_ar.afip.responsibility.type', 'l10n_ar_afip_reponsibility_type_fiscal_pos_rel',
-        string='AFIP Responsibility Types', help='List of AFIP responsibilities where this fiscal position '
-        'should be auto-detected')
+    l10n_ar_afip_responsibility_type_ids=fields.Many2many(
+        'l10n_ar.afip.responsibility.type','l10n_ar_afip_reponsibility_type_fiscal_pos_rel',
+        string='AFIPResponsibilityTypes',help='ListofAFIPresponsibilitieswherethisfiscalposition'
+        'shouldbeauto-detected')
 
     @api.model
-    def get_fiscal_position(self, partner_id, delivery_id=None):
-        """ Take into account the partner afip responsibility in order to auto-detect the fiscal position """
-        company = self.env.company
-        if company.country_id.code == "AR":
-            PartnerObj = self.env['res.partner']
-            partner = PartnerObj.browse(partner_id)
+    defget_fiscal_position(self,partner_id,delivery_id=None):
+        """Takeintoaccountthepartnerafipresponsibilityinordertoauto-detectthefiscalposition"""
+        company=self.env.company
+        ifcompany.country_id.code=="AR":
+            PartnerObj=self.env['res.partner']
+            partner=PartnerObj.browse(partner_id)
 
-            # if no delivery use invoicing
-            if delivery_id:
-                delivery = PartnerObj.browse(delivery_id)
+            #ifnodeliveryuseinvoicing
+            ifdelivery_id:
+                delivery=PartnerObj.browse(delivery_id)
             else:
-                delivery = partner
+                delivery=partner
 
-            # partner manually set fiscal position always win
-            if delivery.property_account_position_id or partner.property_account_position_id:
-                return delivery.property_account_position_id or partner.property_account_position_id
-            domain = [
-                ('auto_apply', '=', True),
-                ('l10n_ar_afip_responsibility_type_ids', '=', self.env['res.partner'].browse(
+            #partnermanuallysetfiscalpositionalwayswin
+            ifdelivery.property_account_position_idorpartner.property_account_position_id:
+                returndelivery.property_account_position_idorpartner.property_account_position_id
+            domain=[
+                ('auto_apply','=',True),
+                ('l10n_ar_afip_responsibility_type_ids','=',self.env['res.partner'].browse(
                     partner_id).l10n_ar_afip_responsibility_type_id.id),
-                ('company_id', '=', company.id),
+                ('company_id','=',company.id),
             ]
-            return self.sudo().search(domain, limit=1)
-        return super().get_fiscal_position(partner_id, delivery_id=delivery_id)
+            returnself.sudo().search(domain,limit=1)
+        returnsuper().get_fiscal_position(partner_id,delivery_id=delivery_id)
 
-    @api.onchange('l10n_ar_afip_responsibility_type_ids', 'country_group_id', 'country_id', 'zip_from', 'zip_to')
-    def _onchange_afip_responsibility(self):
-        if self.company_id.country_id.code == "AR":
-            if self.l10n_ar_afip_responsibility_type_ids and any(['country_group_id', 'country_id', 'zip_from', 'zip_to']):
-                return {'warning': {
-                    'title': _("Warning"),
-                    'message': _('If use AFIP Responsibility then the country / zip codes will be not take into account'),
+    @api.onchange('l10n_ar_afip_responsibility_type_ids','country_group_id','country_id','zip_from','zip_to')
+    def_onchange_afip_responsibility(self):
+        ifself.company_id.country_id.code=="AR":
+            ifself.l10n_ar_afip_responsibility_type_idsandany(['country_group_id','country_id','zip_from','zip_to']):
+                return{'warning':{
+                    'title':_("Warning"),
+                    'message':_('IfuseAFIPResponsibilitythenthecountry/zipcodeswillbenottakeintoaccount'),
                 }}

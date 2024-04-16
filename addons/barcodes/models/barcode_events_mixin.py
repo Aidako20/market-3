@@ -1,25 +1,25 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import models, fields, api
+fromflectraimportmodels,fields,api
 
-class BarcodeEventsMixin(models.AbstractModel):
-    """ Mixin class for objects reacting when a barcode is scanned in their form views
-        which contains `<field name="_barcode_scanned" widget="barcode_handler"/>`.
-        Models using this mixin must implement the method on_barcode_scanned. It works
-        like an onchange and receives the scanned barcode in parameter.
+classBarcodeEventsMixin(models.AbstractModel):
+    """Mixinclassforobjectsreactingwhenabarcodeisscannedintheirformviews
+        whichcontains`<fieldname="_barcode_scanned"widget="barcode_handler"/>`.
+        Modelsusingthismixinmustimplementthemethodon_barcode_scanned.Itworks
+        likeanonchangeandreceivesthescannedbarcodeinparameter.
     """
 
-    _name = 'barcodes.barcode_events_mixin'
-    _description = 'Barcode Event Mixin'
+    _name='barcodes.barcode_events_mixin'
+    _description='BarcodeEventMixin'
 
-    _barcode_scanned = fields.Char("Barcode Scanned", help="Value of the last barcode scanned.", store=False)
+    _barcode_scanned=fields.Char("BarcodeScanned",help="Valueofthelastbarcodescanned.",store=False)
 
     @api.onchange('_barcode_scanned')
-    def _on_barcode_scanned(self):
-        barcode = self._barcode_scanned
-        if barcode:
-            self._barcode_scanned = ""
-            return self.on_barcode_scanned(barcode)
+    def_on_barcode_scanned(self):
+        barcode=self._barcode_scanned
+        ifbarcode:
+            self._barcode_scanned=""
+            returnself.on_barcode_scanned(barcode)
 
-    def on_barcode_scanned(self, barcode):
-        raise NotImplementedError("In order to use barcodes.barcode_events_mixin, method on_barcode_scanned must be implemented")
+    defon_barcode_scanned(self,barcode):
+        raiseNotImplementedError("Inordertousebarcodes.barcode_events_mixin,methodon_barcode_scannedmustbeimplemented")

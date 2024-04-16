@@ -1,29 +1,29 @@
-flectra.define('snailmail/static/tests/helpers/mock_models.js', function (require) {
-'use strict';
+flectra.define('snailmail/static/tests/helpers/mock_models.js',function(require){
+'usestrict';
 
-const MockModels = require('mail/static/tests/helpers/mock_models.js');
+constMockModels=require('mail/static/tests/helpers/mock_models.js');
 
-MockModels.patch('snailmail/static/tests/helpers/mock_models.js', T =>
-    class extends T {
+MockModels.patch('snailmail/static/tests/helpers/mock_models.js',T=>
+    classextendsT{
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * @override
+         *@override
          */
-        static generateData() {
-            const data = super.generateData(...arguments);
-            Object.assign(data, {
-                'snailmail.letter': {
-                    fields: {
-                        message_id: { string: 'Snailmail Status Message', type: 'many2one', relation: 'mail.message' },
+        staticgenerateData(){
+            constdata=super.generateData(...arguments);
+            Object.assign(data,{
+                'snailmail.letter':{
+                    fields:{
+                        message_id:{string:'SnailmailStatusMessage',type:'many2one',relation:'mail.message'},
                     },
-                    records: [],
+                    records:[],
                 },
             });
-            return data;
+            returndata;
         }
 
     }

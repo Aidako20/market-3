@@ -1,88 +1,88 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="DebugWidget" owl="1">
-        <Draggable limitArea="'.pos'">
-            <div class="debug-widget">
-                <header class="drag-handle">
-                    <h1>Debug Window</h1>
+    <tt-name="DebugWidget"owl="1">
+        <DraggablelimitArea="'.pos'">
+            <divclass="debug-widget">
+                <headerclass="drag-handle">
+                    <h1>DebugWindow</h1>
                 </header>
-                <div class="toggle" t-on-click="trigger('toggle-debug-widget')" title="Dismiss"
-                     role="img" aria-label="Dismiss"><i class="fa fa-times" /></div>
-                <div class="content">
-                    <p class="category">Electronic Scale</p>
+                <divclass="toggle"t-on-click="trigger('toggle-debug-widget')"title="Dismiss"
+                     role="img"aria-label="Dismiss"><iclass="fafa-times"/></div>
+                <divclass="content">
+                    <pclass="category">ElectronicScale</p>
                     <ul>
                         <li>
-                            <input t-model="state.weightInput" type="text" class="weight"></input>
+                            <inputt-model="state.weightInput"type="text"class="weight"></input>
                         </li>
-                        <li class="button set_weight" t-on-click="setWeight">Set Weight</li>
-                        <li class="button reset_weight" t-on-click="resetWeight">Reset</li>
+                        <liclass="buttonset_weight"t-on-click="setWeight">SetWeight</li>
+                        <liclass="buttonreset_weight"t-on-click="resetWeight">Reset</li>
                     </ul>
 
-                    <p class="category">Barcode Scanner</p>
+                    <pclass="category">BarcodeScanner</p>
                     <ul>
                         <li>
-                            <input t-model="state.barcodeInput" type="text" class="ean"></input>
+                            <inputt-model="state.barcodeInput"type="text"class="ean"></input>
                         </li>
-                        <li class="button barcode" t-on-click="barcodeScan">Scan</li>
-                        <li class="button custom_ean" t-on-click="barcodeScanEAN">Scan EAN-13</li>
+                        <liclass="buttonbarcode"t-on-click="barcodeScan">Scan</li>
+                        <liclass="buttoncustom_ean"t-on-click="barcodeScanEAN">ScanEAN-13</li>
                     </ul>
 
-                    <p class="category">Orders</p>
+                    <pclass="category">Orders</p>
 
                     <ul>
-                        <li class="button" t-on-click="deleteOrders">
-                            Delete Paid Orders
+                        <liclass="button"t-on-click="deleteOrders">
+                            DeletePaidOrders
                         </li>
-                        <li class="button" t-on-click="deleteUnpaidOrders">
-                            Delete Unpaid Orders
+                        <liclass="button"t-on-click="deleteUnpaidOrders">
+                            DeleteUnpaidOrders
                         </li>
-                        <li t-if="!state.isPaidOrdersReady" class="button"
+                        <lit-if="!state.isPaidOrdersReady"class="button"
                             t-on-click="preparePaidOrders">
-                            Export Paid Orders
+                            ExportPaidOrders
                         </li>
-                        <a t-else="" t-att-download="paidOrdersFilename" t-att-href="paidOrdersURL"
-                           t-on-click="state.isPaidOrdersReady = !state.isPaidOrdersReady">
-                            <li class="button">
-                                Download Paid Orders
+                        <at-else=""t-att-download="paidOrdersFilename"t-att-href="paidOrdersURL"
+                           t-on-click="state.isPaidOrdersReady=!state.isPaidOrdersReady">
+                            <liclass="button">
+                                DownloadPaidOrders
                             </li>
                         </a>
-                        <li t-if="!state.isUnpaidOrdersReady" class="button"
+                        <lit-if="!state.isUnpaidOrdersReady"class="button"
                             t-on-click="prepareUnpaidOrders">
-                            Export Unpaid Orders
+                            ExportUnpaidOrders
                         </li>
-                        <a t-else="" t-att-download="unpaidOrdersFilename"
+                        <at-else=""t-att-download="unpaidOrdersFilename"
                            t-att-href="unpaidOrdersURL"
-                           t-on-click="state.isUnpaidOrdersReady = !state.isUnpaidOrdersReady">
-                            <li class="button">
-                                Download Unpaid Orders
+                           t-on-click="state.isUnpaidOrdersReady=!state.isUnpaidOrdersReady">
+                            <liclass="button">
+                                DownloadUnpaidOrders
                             </li>
                         </a>
-                        <li class="button import_orders" style="position:relative">
-                            Import Orders
-                            <input t-on-change="importOrders" type="file"
-                                   style="opacity:0;position:absolute;top:0;left:0;right:0;bottom:0;margin:0;cursor:pointer" />
+                        <liclass="buttonimport_orders"style="position:relative">
+                            ImportOrders
+                            <inputt-on-change="importOrders"type="file"
+                                   style="opacity:0;position:absolute;top:0;left:0;right:0;bottom:0;margin:0;cursor:pointer"/>
                         </li>
                     </ul>
 
-                    <p class="category">Hardware Status</p>
+                    <pclass="category">HardwareStatus</p>
                     <ul>
-                        <li class="status weighing">Weighing</li>
-                        <li class="button display_refresh" t-on-click="refreshDisplay">
-                            Refresh Display
+                        <liclass="statusweighing">Weighing</li>
+                        <liclass="buttondisplay_refresh"t-on-click="refreshDisplay">
+                            RefreshDisplay
                         </li>
                     </ul>
-                    <p class="category">Hardware Events</p>
+                    <pclass="category">HardwareEvents</p>
                     <ul>
-                        <li class="event" t-ref="open_cashbox">Open Cashbox</li>
-                        <li class="event" t-ref="print_receipt">Print Receipt</li>
-                        <li class="event" t-ref="scale_read">Read Weighing Scale</li>
+                        <liclass="event"t-ref="open_cashbox">OpenCashbox</li>
+                        <liclass="event"t-ref="print_receipt">PrintReceipt</li>
+                        <liclass="event"t-ref="scale_read">ReadWeighingScale</li>
                     </ul>
-                    <p class="category">Others</p>
+                    <pclass="category">Others</p>
                     <ul>
-                        <li class="event">
-                            <span>Buffer: </span>
-                            <t t-esc="bufferRepr" />
+                        <liclass="event">
+                            <span>Buffer:</span>
+                            <tt-esc="bufferRepr"/>
                         </li>
                     </ul>
                 </div>

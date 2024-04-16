@@ -1,49 +1,49 @@
-flectra.define('web.core', function (require) {
-"use strict";
+flectra.define('web.core',function(require){
+"usestrict";
 
-var Bus = require('web.Bus');
-var config = require('web.config');
-var Class = require('web.Class');
-var QWeb = require('web.QWeb');
-var Registry = require('web.Registry');
-var translation = require('web.translation');
+varBus=require('web.Bus');
+varconfig=require('web.config');
+varClass=require('web.Class');
+varQWeb=require('web.QWeb');
+varRegistry=require('web.Registry');
+vartranslation=require('web.translation');
 
 /**
- * Whether the client is currently in "debug" mode
+ *Whethertheclientiscurrentlyin"debug"mode
  *
- * @type Boolean
+ *@typeBoolean
  */
-var bus = new Bus();
+varbus=newBus();
 
-_.each('click,dblclick,keydown,keypress,keyup'.split(','), function (evtype) {
-    $('html').on(evtype, function (ev) {
-        bus.trigger(evtype, ev);
+_.each('click,dblclick,keydown,keypress,keyup'.split(','),function(evtype){
+    $('html').on(evtype,function(ev){
+        bus.trigger(evtype,ev);
     });
 });
-_.each('resize,scroll'.split(','), function (evtype) {
-    $(window).on(evtype, function (ev) {
-        bus.trigger(evtype, ev);
+_.each('resize,scroll'.split(','),function(evtype){
+    $(window).on(evtype,function(ev){
+        bus.trigger(evtype,ev);
     });
 });
 
-return {
-    qweb: new QWeb(config.isDebug()),
+return{
+    qweb:newQWeb(config.isDebug()),
 
-    // core classes and functions
-    Class: Class,
-    bus: bus,
-    main_bus: new Bus(),
-    _t: translation._t,
-    _lt: translation._lt,
+    //coreclassesandfunctions
+    Class:Class,
+    bus:bus,
+    main_bus:newBus(),
+    _t:translation._t,
+    _lt:translation._lt,
 
-    // registries
-    action_registry: new Registry(),
-    crash_registry: new Registry(),
-    serviceRegistry: new Registry(),
+    //registries
+    action_registry:newRegistry(),
+    crash_registry:newRegistry(),
+    serviceRegistry:newRegistry(),
     /**
-     * @type {String}
+     *@type{String}
      */
-    csrf_token: flectra.csrf_token,
+    csrf_token:flectra.csrf_token,
 };
 
 });

@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="CashierName" t-inherit="point_of_sale.CashierName" t-inherit-mode="extension" owl="1">
-        <xpath expr="//div" position="attributes">
-            <attribute name="t-on-click">selectCashier</attribute>
+    <tt-name="CashierName"t-inherit="point_of_sale.CashierName"t-inherit-mode="extension"owl="1">
+        <xpathexpr="//div"position="attributes">
+            <attributename="t-on-click">selectCashier</attribute>
         </xpath>
     </t>
 

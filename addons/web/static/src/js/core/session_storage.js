@@ -1,56 +1,56 @@
-flectra.define('web.sessionStorage', function (require) {
-'use strict';
+flectra.define('web.sessionStorage',function(require){
+'usestrict';
 
-var RamStorage = require('web.RamStorage');
-var mixins = require('web.mixins');
+varRamStorage=require('web.RamStorage');
+varmixins=require('web.mixins');
 
-// use a fake sessionStorage in RAM if the native sessionStorage is unavailable
-// (e.g. private browsing in Safari)
-var storage;
-var sessionStorage = window.sessionStorage;
-try {
-    var uid = new Date();
-    sessionStorage.setItem(uid, uid);
+//useafakesessionStorageinRAMifthenativesessionStorageisunavailable
+//(e.g.privatebrowsinginSafari)
+varstorage;
+varsessionStorage=window.sessionStorage;
+try{
+    varuid=newDate();
+    sessionStorage.setItem(uid,uid);
     sessionStorage.removeItem(uid);
 
     /*
-     * We create an intermediate object in order to triggered the storage on
-     * this object. the sessionStorage. This simplifies testing and usage as 
-     * starages are commutable in services without change. Also, objects
-     * that use storage do not have to know that events go through window,
-     * it's not up to them to handle these cases.
+     *Wecreateanintermediateobjectinordertotriggeredthestorageon
+     *thisobject.thesessionStorage.Thissimplifiestestingandusageas
+     *staragesarecommutableinserviceswithoutchange.Also,objects
+     *thatusestoragedonothavetoknowthateventsgothroughwindow,
+     *it'snotuptothemtohandlethesecases.
      */
-    storage = (function () {
-        var storage = Object.create(_.extend({
-                getItem: sessionStorage.getItem.bind(sessionStorage),
-                setItem: sessionStorage.setItem.bind(sessionStorage),
-                removeItem: sessionStorage.removeItem.bind(sessionStorage),
-                clear: sessionStorage.clear.bind(sessionStorage),
+    storage=(function(){
+        varstorage=Object.create(_.extend({
+                getItem:sessionStorage.getItem.bind(sessionStorage),
+                setItem:sessionStorage.setItem.bind(sessionStorage),
+                removeItem:sessionStorage.removeItem.bind(sessionStorage),
+                clear:sessionStorage.clear.bind(sessionStorage),
             },
             mixins.EventDispatcherMixin
         ));
         storage.init();
-        $(window).on('storage', function (e) {
-            var key = e.originalEvent.key;
-            var newValue = e.originalEvent.newValue;
-            try {
+        $(window).on('storage',function(e){
+            varkey=e.originalEvent.key;
+            varnewValue=e.originalEvent.newValue;
+            try{
                 JSON.parse(newValue);
-                if (sessionStorage.getItem(key) === newValue) {
-                    storage.trigger('storage', {
-                        key: key,
-                        newValue: newValue,
+                if(sessionStorage.getItem(key)===newValue){
+                    storage.trigger('storage',{
+                        key:key,
+                        newValue:newValue,
                     });
                 }
-            } catch (error) {}
+            }catch(error){}
         });
-        return storage;
+        returnstorage;
     })();
 
-} catch (exception) {
-    console.warn('Fail to load sessionStorage');
-    storage = new RamStorage();
+}catch(exception){
+    console.warn('FailtoloadsessionStorage');
+    storage=newRamStorage();
 }
 
-return storage;
+returnstorage;
 
 });

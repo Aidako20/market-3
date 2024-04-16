@@ -3,58 +3,58 @@ define([
   'summernote/core/func',
   'summernote/core/dom',
   'summernote/core/range'
-], function (list, func, dom, range) {
+],function(list,func,dom,range){
 
   /**
-   * @class editing.Bullet
+   *@classediting.Bullet
    *
-   * @alternateClassName Bullet
+   *@alternateClassNameBullet
    */
-  var Bullet = function () {
+  varBullet=function(){
     /**
-     * @method insertOrderedList
+     *@methodinsertOrderedList
      *
-     * toggle ordered list
+     *toggleorderedlist
      *
-     * @type command
+     *@typecommand
      */
-    this.insertOrderedList = function () {
+    this.insertOrderedList=function(){
       this.toggleList('OL');
     };
 
     /**
-     * @method insertUnorderedList
+     *@methodinsertUnorderedList
      *
-     * toggle unordered list
+     *toggleunorderedlist
      *
-     * @type command
+     *@typecommand
      */
-    this.insertUnorderedList = function () {
+    this.insertUnorderedList=function(){
       this.toggleList('UL');
     };
 
     /**
-     * @method indent
+     *@methodindent
      *
-     * indent
+     *indent
      *
-     * @type command
+     *@typecommand
      */
-    this.indent = function () {
-      var self = this;
-      var rng = range.create().wrapBodyInlineWithPara();
+    this.indent=function(){
+      varself=this;
+      varrng=range.create().wrapBodyInlineWithPara();
 
-      var paras = rng.nodes(dom.isPara, { includeAncestor: true });
-      var clustereds = list.clusterBy(paras, func.peq2('parentNode'));
+      varparas=rng.nodes(dom.isPara,{includeAncestor:true});
+      varclustereds=list.clusterBy(paras,func.peq2('parentNode'));
 
-      $.each(clustereds, function (idx, paras) {
-        var head = list.head(paras);
-        if (dom.isLi(head)) {
-          self.wrapList(paras, head.parentNode.nodeName);
-        } else {
-          $.each(paras, function (idx, para) {
-            $(para).css('marginLeft', function (idx, val) {
-              return (parseInt(val, 10) || 0) + 25;
+      $.each(clustereds,function(idx,paras){
+        varhead=list.head(paras);
+        if(dom.isLi(head)){
+          self.wrapList(paras,head.parentNode.nodeName);
+        }else{
+          $.each(paras,function(idx,para){
+            $(para).css('marginLeft',function(idx,val){
+              return(parseInt(val,10)||0)+25;
             });
           });
         }
@@ -64,28 +64,28 @@ define([
     };
 
     /**
-     * @method outdent
+     *@methodoutdent
      *
-     * outdent
+     *outdent
      *
-     * @type command
+     *@typecommand
      */
-    this.outdent = function () {
-      var self = this;
-      var rng = range.create().wrapBodyInlineWithPara();
+    this.outdent=function(){
+      varself=this;
+      varrng=range.create().wrapBodyInlineWithPara();
 
-      var paras = rng.nodes(dom.isPara, { includeAncestor: true });
-      var clustereds = list.clusterBy(paras, func.peq2('parentNode'));
+      varparas=rng.nodes(dom.isPara,{includeAncestor:true});
+      varclustereds=list.clusterBy(paras,func.peq2('parentNode'));
 
-      $.each(clustereds, function (idx, paras) {
-        var head = list.head(paras);
-        if (dom.isLi(head)) {
+      $.each(clustereds,function(idx,paras){
+        varhead=list.head(paras);
+        if(dom.isLi(head)){
           self.releaseList([paras]);
-        } else {
-          $.each(paras, function (idx, para) {
-            $(para).css('marginLeft', function (idx, val) {
-              val = (parseInt(val, 10) || 0);
-              return val > 25 ? val - 25 : '';
+        }else{
+          $.each(paras,function(idx,para){
+            $(para).css('marginLeft',function(idx,val){
+              val=(parseInt(val,10)||0);
+              returnval>25?val-25:'';
             });
           });
         }
@@ -95,141 +95,141 @@ define([
     };
 
     /**
-     * @method toggleList
+     *@methodtoggleList
      *
-     * toggle list
+     *togglelist
      *
-     * @param {String} listName - OL or UL
+     *@param{String}listName-OLorUL
      */
-    this.toggleList = function (listName) {
-      var self = this;
-      var rng = range.create().wrapBodyInlineWithPara();
+    this.toggleList=function(listName){
+      varself=this;
+      varrng=range.create().wrapBodyInlineWithPara();
 
-      var paras = rng.nodes(dom.isPara, { includeAncestor: true });
-      var bookmark = rng.paraBookmark(paras);
-      var clustereds = list.clusterBy(paras, func.peq2('parentNode'));
+      varparas=rng.nodes(dom.isPara,{includeAncestor:true});
+      varbookmark=rng.paraBookmark(paras);
+      varclustereds=list.clusterBy(paras,func.peq2('parentNode'));
 
-      // paragraph to list
-      if (list.find(paras, dom.isPurePara)) {
-        var wrappedParas = [];
-        $.each(clustereds, function (idx, paras) {
-          wrappedParas = wrappedParas.concat(self.wrapList(paras, listName));
+      //paragraphtolist
+      if(list.find(paras,dom.isPurePara)){
+        varwrappedParas=[];
+        $.each(clustereds,function(idx,paras){
+          wrappedParas=wrappedParas.concat(self.wrapList(paras,listName));
         });
-        paras = wrappedParas;
-      // list to paragraph or change list style
-      } else {
-        var diffLists = rng.nodes(dom.isList, {
-          includeAncestor: true
-        }).filter(function (listNode) {
-          return !$.nodeName(listNode, listName);
+        paras=wrappedParas;
+      //listtoparagraphorchangeliststyle
+      }else{
+        vardiffLists=rng.nodes(dom.isList,{
+          includeAncestor:true
+        }).filter(function(listNode){
+          return!$.nodeName(listNode,listName);
         });
 
-        if (diffLists.length) {
-          $.each(diffLists, function (idx, listNode) {
-            dom.replace(listNode, listName);
+        if(diffLists.length){
+          $.each(diffLists,function(idx,listNode){
+            dom.replace(listNode,listName);
           });
-        } else {
-          paras = this.releaseList(clustereds, true);
+        }else{
+          paras=this.releaseList(clustereds,true);
         }
       }
 
-      range.createFromParaBookmark(bookmark, paras).select();
+      range.createFromParaBookmark(bookmark,paras).select();
     };
 
     /**
-     * @method wrapList
+     *@methodwrapList
      *
-     * @param {Node[]} paras
-     * @param {String} listName
-     * @return {Node[]}
+     *@param{Node[]}paras
+     *@param{String}listName
+     *@return{Node[]}
      */
-    this.wrapList = function (paras, listName) {
-      var head = list.head(paras);
-      var last = list.last(paras);
+    this.wrapList=function(paras,listName){
+      varhead=list.head(paras);
+      varlast=list.last(paras);
 
-      var prevList = dom.isList(head.previousSibling) && head.previousSibling;
-      var nextList = dom.isList(last.nextSibling) && last.nextSibling;
+      varprevList=dom.isList(head.previousSibling)&&head.previousSibling;
+      varnextList=dom.isList(last.nextSibling)&&last.nextSibling;
 
-      var listNode = prevList || dom.insertAfter(dom.create(listName || 'UL'), last);
+      varlistNode=prevList||dom.insertAfter(dom.create(listName||'UL'),last);
 
-      // P to LI
-      paras = paras.map(function (para) {
-        return dom.isPurePara(para) ? dom.replace(para, 'LI') : para;
+      //PtoLI
+      paras=paras.map(function(para){
+        returndom.isPurePara(para)?dom.replace(para,'LI'):para;
       });
 
-      // append to list(<ul>, <ol>)
-      dom.appendChildNodes(listNode, paras);
+      //appendtolist(<ul>,<ol>)
+      dom.appendChildNodes(listNode,paras);
 
-      if (nextList) {
-        dom.appendChildNodes(listNode, list.from(nextList.childNodes));
+      if(nextList){
+        dom.appendChildNodes(listNode,list.from(nextList.childNodes));
         dom.remove(nextList);
       }
 
-      return paras;
+      returnparas;
     };
 
     /**
-     * @method releaseList
+     *@methodreleaseList
      *
-     * @param {Array[]} clustereds
-     * @param {Boolean} isEscapseToBody
-     * @return {Node[]}
+     *@param{Array[]}clustereds
+     *@param{Boolean}isEscapseToBody
+     *@return{Node[]}
      */
-    this.releaseList = function (clustereds, isEscapseToBody) {
-      var releasedParas = [];
+    this.releaseList=function(clustereds,isEscapseToBody){
+      varreleasedParas=[];
 
-      $.each(clustereds, function (idx, paras) {
-        var head = list.head(paras);
-        var last = list.last(paras);
+      $.each(clustereds,function(idx,paras){
+        varhead=list.head(paras);
+        varlast=list.last(paras);
 
-        var headList = isEscapseToBody ? dom.lastAncestor(head, dom.isList) :
+        varheadList=isEscapseToBody?dom.lastAncestor(head,dom.isList):
                                          head.parentNode;
-        var lastList = headList.childNodes.length > 1 ? dom.splitTree(headList, {
-          node: last.parentNode,
-          offset: dom.position(last) + 1
-        }, {
-          isSkipPaddingBlankHTML: true
-        }) : null;
+        varlastList=headList.childNodes.length>1?dom.splitTree(headList,{
+          node:last.parentNode,
+          offset:dom.position(last)+1
+        },{
+          isSkipPaddingBlankHTML:true
+        }):null;
 
-        var middleList = dom.splitTree(headList, {
-          node: head.parentNode,
-          offset: dom.position(head)
-        }, {
-          isSkipPaddingBlankHTML: true
+        varmiddleList=dom.splitTree(headList,{
+          node:head.parentNode,
+          offset:dom.position(head)
+        },{
+          isSkipPaddingBlankHTML:true
         });
 
-        paras = isEscapseToBody ? dom.listDescendant(middleList, dom.isLi) :
+        paras=isEscapseToBody?dom.listDescendant(middleList,dom.isLi):
                                   list.from(middleList.childNodes).filter(dom.isLi);
 
-        // LI to P
-        if (isEscapseToBody || !dom.isList(headList.parentNode)) {
-          paras = paras.map(function (para) {
-            return dom.replace(para, 'P');
+        //LItoP
+        if(isEscapseToBody||!dom.isList(headList.parentNode)){
+          paras=paras.map(function(para){
+            returndom.replace(para,'P');
           });
         }
 
-        $.each(list.from(paras).reverse(), function (idx, para) {
-          dom.insertAfter(para, headList);
+        $.each(list.from(paras).reverse(),function(idx,para){
+          dom.insertAfter(para,headList);
         });
 
-        // remove empty lists
-        var rootLists = list.compact([headList, middleList, lastList]);
-        $.each(rootLists, function (idx, rootList) {
-          var listNodes = [rootList].concat(dom.listDescendant(rootList, dom.isList));
-          $.each(listNodes.reverse(), function (idx, listNode) {
-            if (!dom.nodeLength(listNode)) {
-              dom.remove(listNode, true);
+        //removeemptylists
+        varrootLists=list.compact([headList,middleList,lastList]);
+        $.each(rootLists,function(idx,rootList){
+          varlistNodes=[rootList].concat(dom.listDescendant(rootList,dom.isList));
+          $.each(listNodes.reverse(),function(idx,listNode){
+            if(!dom.nodeLength(listNode)){
+              dom.remove(listNode,true);
             }
           });
         });
 
-        releasedParas = releasedParas.concat(paras);
+        releasedParas=releasedParas.concat(paras);
       });
 
-      return releasedParas;
+      returnreleasedParas;
     };
   };
 
-  return Bullet;
+  returnBullet;
 });
 

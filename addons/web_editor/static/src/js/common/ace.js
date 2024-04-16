@@ -1,151 +1,151 @@
-flectra.define('web_editor.ace', function (require) {
-'use strict';
+flectra.define('web_editor.ace',function(require){
+'usestrict';
 
-var ajax = require('web.ajax');
-var config = require('web.config');
-var concurrency = require('web.concurrency');
-var core = require('web.core');
-var dom = require('web.dom');
-var Dialog = require('web.Dialog');
-var Widget = require('web.Widget');
-var localStorage = require('web.local_storage');
+varajax=require('web.ajax');
+varconfig=require('web.config');
+varconcurrency=require('web.concurrency');
+varcore=require('web.core');
+vardom=require('web.dom');
+varDialog=require('web.Dialog');
+varWidget=require('web.Widget');
+varlocalStorage=require('web.local_storage');
 
-var _t = core._t;
+var_t=core._t;
 
 /**
- * Formats a content-check result (@see checkXML, checkSCSS).
+ *Formatsacontent-checkresult(@seecheckXML,checkSCSS).
  *
- * @param {boolean} isValid
- * @param {integer} [errorLine] needed if isValid is false
- * @param {string} [errorMessage] needed if isValid is false
- * @returns {Object}
+ *@param{boolean}isValid
+ *@param{integer}[errorLine]neededifisValidisfalse
+ *@param{string}[errorMessage]neededifisValidisfalse
+ *@returns{Object}
  */
-function _getCheckReturn(isValid, errorLine, errorMessage) {
-    return {
-        isValid: isValid,
-        error: isValid ? null : {
-            line: errorLine,
-            message: errorMessage,
+function_getCheckReturn(isValid,errorLine,errorMessage){
+    return{
+        isValid:isValid,
+        error:isValid?null:{
+            line:errorLine,
+            message:errorMessage,
         },
     };
 }
 /**
- * Checks the syntax validity of some XML.
+ *ChecksthesyntaxvalidityofsomeXML.
  *
- * @param {string} xml
- * @returns {Object} @see _getCheckReturn
+ *@param{string}xml
+ *@returns{Object}@see_getCheckReturn
  */
-function checkXML(xml) {
-    if (typeof window.DOMParser != 'undefined') {
-        var xmlDoc = (new window.DOMParser()).parseFromString(xml, 'text/xml');
-        var error = xmlDoc.getElementsByTagName('parsererror');
-        if (error.length > 0) {
-            const errorEl = error[0];
-            const sourceTextEls = errorEl.querySelectorAll('sourcetext');
-            let codeEls = null;
-            if (sourceTextEls.length) {
-                codeEls = [...sourceTextEls].map(el => {
-                    const codeEl = document.createElement('code');
-                    codeEl.textContent = el.textContent;
-                    const brEl = document.createElement('br');
+functioncheckXML(xml){
+    if(typeofwindow.DOMParser!='undefined'){
+        varxmlDoc=(newwindow.DOMParser()).parseFromString(xml,'text/xml');
+        varerror=xmlDoc.getElementsByTagName('parsererror');
+        if(error.length>0){
+            consterrorEl=error[0];
+            constsourceTextEls=errorEl.querySelectorAll('sourcetext');
+            letcodeEls=null;
+            if(sourceTextEls.length){
+                codeEls=[...sourceTextEls].map(el=>{
+                    constcodeEl=document.createElement('code');
+                    codeEl.textContent=el.textContent;
+                    constbrEl=document.createElement('br');
                     brEl.classList.add('o_we_source_text_origin');
-                    el.parentElement.insertBefore(brEl, el);
-                    return codeEl;
+                    el.parentElement.insertBefore(brEl,el);
+                    returncodeEl;
                 });
-                for (const el of sourceTextEls) {
+                for(constelofsourceTextEls){
                     el.remove();
                 }
             }
-            for (const el of [...errorEl.querySelectorAll(':not(code):not(pre):not(br)')]) {
-                const pEl = document.createElement('p');
-                for (const cEl of [...el.childNodes]) {
+            for(constelof[...errorEl.querySelectorAll(':not(code):not(pre):not(br)')]){
+                constpEl=document.createElement('p');
+                for(constcElof[...el.childNodes]){
                     pEl.appendChild(cEl);
                 }
-                el.parentElement.insertBefore(pEl, el);
+                el.parentElement.insertBefore(pEl,el);
                 el.remove();
             }
-            errorEl.innerHTML = errorEl.innerHTML.replace(/\r?\n/g, '<br/>');
-            errorEl.querySelectorAll('.o_we_source_text_origin').forEach((el, i) => {
+            errorEl.innerHTML=errorEl.innerHTML.replace(/\r?\n/g,'<br/>');
+            errorEl.querySelectorAll('.o_we_source_text_origin').forEach((el,i)=>{
                 el.after(codeEls[i]);
             });
-            return _getCheckReturn(false, parseInt(error[0].innerHTML.match(/[Ll]ine[^\d]+(\d+)/)[1], 10), errorEl.innerHTML);
+            return_getCheckReturn(false,parseInt(error[0].innerHTML.match(/[Ll]ine[^\d]+(\d+)/)[1],10),errorEl.innerHTML);
         }
-    } else if (typeof window.ActiveXObject != 'undefined' && new window.ActiveXObject('Microsoft.XMLDOM')) {
-        var xmlDocIE = new window.ActiveXObject('Microsoft.XMLDOM');
-        xmlDocIE.async = 'false';
+    }elseif(typeofwindow.ActiveXObject!='undefined'&&newwindow.ActiveXObject('Microsoft.XMLDOM')){
+        varxmlDocIE=newwindow.ActiveXObject('Microsoft.XMLDOM');
+        xmlDocIE.async='false';
         xmlDocIE.loadXML(xml);
-        if (xmlDocIE.parseError.line > 0) {
-            return _getCheckReturn(false, xmlDocIE.parseError.line, xmlDocIE.parseError.reason);
+        if(xmlDocIE.parseError.line>0){
+            return_getCheckReturn(false,xmlDocIE.parseError.line,xmlDocIE.parseError.reason);
         }
     }
-    return _getCheckReturn(true);
+    return_getCheckReturn(true);
 }
 /**
- * Formats some XML so that it has proper indentation and structure.
+ *FormatssomeXMLsothatithasproperindentationandstructure.
  *
- * @param {string} xml
- * @returns {string} formatted xml
+ *@param{string}xml
+ *@returns{string}formattedxml
  */
-function formatXML(xml) {
-    // do nothing if an inline script is present to avoid breaking it
-    if (/<script(?: [^>]*)?>[^<][\s\S]*<\/script>/i.test(xml)) {
-        return xml;
+functionformatXML(xml){
+    //donothingifaninlinescriptispresenttoavoidbreakingit
+    if(/<script(?:[^>]*)?>[^<][\s\S]*<\/script>/i.test(xml)){
+        returnxml;
     }
-    return window.vkbeautify.xml(xml, 4);
+    returnwindow.vkbeautify.xml(xml,4);
 }
 /**
- * Checks the syntax validity of some SCSS.
+ *ChecksthesyntaxvalidityofsomeSCSS.
  *
- * @param {string} scss
- * @returns {Object} @see _getCheckReturn
+ *@param{string}scss
+ *@returns{Object}@see_getCheckReturn
  */
-var checkSCSS = (function () {
-    var mapping = {
-        '{': '}', '}': '{',
-        '(': ')', ')': '(',
-        '[': ']', ']': '[',
+varcheckSCSS=(function(){
+    varmapping={
+        '{':'}','}':'{',
+        '(':')',')':'(',
+        '[':']',']':'[',
     };
-    var openings = ['{', '(', '['];
-    var closings = ['}', ')', ']'];
+    varopenings=['{','(','['];
+    varclosings=['}',')',']'];
 
-    return function (scss) {
-        var stack = [];
-        var line = 1;
-        for (var i = 0 ; i < scss.length ; i++) {
-            if (_.contains(openings, scss[i])) {
+    returnfunction(scss){
+        varstack=[];
+        varline=1;
+        for(vari=0;i<scss.length;i++){
+            if(_.contains(openings,scss[i])){
                 stack.push(scss[i]);
-            } else if (_.contains(closings, scss[i])) {
-                if (stack.pop() !== mapping[scss[i]]) {
-                    return _getCheckReturn(false, line, _t("Unexpected ") + scss[i]);
+            }elseif(_.contains(closings,scss[i])){
+                if(stack.pop()!==mapping[scss[i]]){
+                    return_getCheckReturn(false,line,_t("Unexpected")+scss[i]);
                 }
-            } else if (scss[i] === '\n') {
+            }elseif(scss[i]==='\n'){
                 line++;
             }
         }
-        if (stack.length > 0) {
-            return _getCheckReturn(false, line, _t("Expected ") + mapping[stack.pop()]);
+        if(stack.length>0){
+            return_getCheckReturn(false,line,_t("Expected")+mapping[stack.pop()]);
         }
-        return _getCheckReturn(true);
+        return_getCheckReturn(true);
     };
 })();
 /**
- * Formats some SCSS so that it has proper indentation and structure.
+ *FormatssomeSCSSsothatithasproperindentationandstructure.
  *
- * @todo Right now, this does return the given SCSS content, untouched.
- * @param {string} scss
- * @returns {string} formatted scss
+ *@todoRightnow,thisdoesreturnthegivenSCSScontent,untouched.
+ *@param{string}scss
+ *@returns{string}formattedscss
  */
-function formatSCSS(scss) {
-    return scss;
+functionformatSCSS(scss){
+    returnscss;
 }
 
 /**
- * Allows to visualize resources (by default, XML views) and edit them.
+ *Allowstovisualizeresources(bydefault,XMLviews)andeditthem.
  */
-var ViewEditor = Widget.extend({
-    template: 'web_editor.ace_view_editor',
-    xmlDependencies: ['/web_editor/static/src/xml/ace.xml'],
-    jsLibs: [
+varViewEditor=Widget.extend({
+    template:'web_editor.ace_view_editor',
+    xmlDependencies:['/web_editor/static/src/xml/ace.xml'],
+    jsLibs:[
         '/web/static/lib/ace/ace.js',
         [
             '/web/static/lib/ace/javascript_highlight_rules.js',
@@ -155,882 +155,882 @@ var ViewEditor = Widget.extend({
             '/web/static/lib/ace/theme-monokai.js'
         ]
     ],
-    events: {
-        'click .o_ace_type_switcher_choice': '_onTypeChoice',
-        'change .o_res_list': '_onResChange',
-        'click .o_ace_filter': '_onFilterChange',
-        'click button[data-action=save]': '_onSaveClick',
-        'click button[data-action=reset]': '_onResetClick',
-        'click button[data-action=format]': '_onFormatClick',
-        'click button[data-action=close]': '_onCloseClick',
-        'click #ace-view-id > .alert-warning .close': '_onCloseWarningClick'
+    events:{
+        'click.o_ace_type_switcher_choice':'_onTypeChoice',
+        'change.o_res_list':'_onResChange',
+        'click.o_ace_filter':'_onFilterChange',
+        'clickbutton[data-action=save]':'_onSaveClick',
+        'clickbutton[data-action=reset]':'_onResetClick',
+        'clickbutton[data-action=format]':'_onFormatClick',
+        'clickbutton[data-action=close]':'_onCloseClick',
+        'click#ace-view-id>.alert-warning.close':'_onCloseWarningClick'
     },
 
     /**
-     * Initializes the parameters so that the ace editor knows which information
-     * it has to load.
+     *Initializestheparameterssothattheaceeditorknowswhichinformation
+     *ithastoload.
      *
-     * @constructor
-     * @param {Widget} parent
-     * @param {string|integer} viewKey
-     *        xml_id or id of the view whose linked resources have to be loaded.
-     * @param {Object} [options]
-     * @param {string|integer} [options.initialResID]
-     *        a specific view ID / SCSS URL to load on start (otherwise the main
-     *        view ID associated with the specified viewKey will be used)
-     * @param {string} [options.position=right]
-     * @param {boolean} [options.doNotLoadViews=false]
-     * @param {boolean} [options.doNotLoadSCSS=false]
-     * @param {boolean} [options.doNotLoadJS=false]
-     * @param {boolean} [options.includeBundles=false]
-     * @param {string} [options.filesFilter=custom]
-     * @param {string[]} [options.defaultBundlesRestriction]
+     *@constructor
+     *@param{Widget}parent
+     *@param{string|integer}viewKey
+     *       xml_idoridoftheviewwhoselinkedresourceshavetobeloaded.
+     *@param{Object}[options]
+     *@param{string|integer}[options.initialResID]
+     *       aspecificviewID/SCSSURLtoloadonstart(otherwisethemain
+     *       viewIDassociatedwiththespecifiedviewKeywillbeused)
+     *@param{string}[options.position=right]
+     *@param{boolean}[options.doNotLoadViews=false]
+     *@param{boolean}[options.doNotLoadSCSS=false]
+     *@param{boolean}[options.doNotLoadJS=false]
+     *@param{boolean}[options.includeBundles=false]
+     *@param{string}[options.filesFilter=custom]
+     *@param{string[]}[options.defaultBundlesRestriction]
      */
-    init: function (parent, viewKey, options) {
-        this._super.apply(this, arguments);
+    init:function(parent,viewKey,options){
+        this._super.apply(this,arguments);
 
-        this.context = options.context;
+        this.context=options.context;
 
-        this.viewKey = viewKey;
-        this.options = _.defaults({}, options, {
-            position: 'right',
-            doNotLoadViews: false,
-            doNotLoadSCSS: false,
-            doNotLoadJS: false,
-            includeBundles: false,
-            filesFilter: 'custom',
-            defaultBundlesRestriction: [],
+        this.viewKey=viewKey;
+        this.options=_.defaults({},options,{
+            position:'right',
+            doNotLoadViews:false,
+            doNotLoadSCSS:false,
+            doNotLoadJS:false,
+            includeBundles:false,
+            filesFilter:'custom',
+            defaultBundlesRestriction:[],
         });
 
-        this.resources = {xml: {}, scss: {}, js: {}};
-        this.editingSessions = {xml: {}, scss: {}, js: {}};
-        this.currentType = 'xml';
+        this.resources={xml:{},scss:{},js:{}};
+        this.editingSessions={xml:{},scss:{},js:{}};
+        this.currentType='xml';
 
-        // Alias
-        this.views = this.resources.xml;
-        this.scss = this.resources.scss;
-        this.js = this.resources.js;
+        //Alias
+        this.views=this.resources.xml;
+        this.scss=this.resources.scss;
+        this.js=this.resources.js;
     },
     /**
-     * Loads everything the ace library needs to work.
-     * It also loads the resources to visualize (@see _loadResources).
+     *Loadseverythingtheacelibraryneedstowork.
+     *Italsoloadstheresourcestovisualize(@see_loadResources).
      *
-     * @override
+     *@override
      */
-    willStart: function () {
-        return Promise.all([
-            this._super.apply(this, arguments),
+    willStart:function(){
+        returnPromise.all([
+            this._super.apply(this,arguments),
             this._loadResources()
         ]);
     },
     /**
-     * Initializes the library and initial view once the DOM is ready. It also
-     * initializes the resize feature of the ace editor.
+     *InitializesthelibraryandinitialviewoncetheDOMisready.Italso
+     *initializestheresizefeatureoftheaceeditor.
      *
-     * @override
+     *@override
      */
-    start: function () {
-        this.$viewEditor = this.$('#ace-view-editor');
+    start:function(){
+        this.$viewEditor=this.$('#ace-view-editor');
 
-        this.$typeSwitcherChoices = this.$('.o_ace_type_switcher_choice');
-        this.$typeSwitcherBtn = this.$('.o_ace_type_switcher > .dropdown-toggle');
+        this.$typeSwitcherChoices=this.$('.o_ace_type_switcher_choice');
+        this.$typeSwitcherBtn=this.$('.o_ace_type_switcher>.dropdown-toggle');
 
-        this.$lists = {
-            xml: this.$('#ace-view-list'),
-            scss: this.$('#ace-scss-list'),
-            js: this.$('#ace-js-list'),
+        this.$lists={
+            xml:this.$('#ace-view-list'),
+            scss:this.$('#ace-scss-list'),
+            js:this.$('#ace-js-list'),
         };
-        this.$includeBundlesArea = this.$('.oe_include_bundles');
-        this.$includeAllSCSSArea = this.$('.o_include_all_scss');
-        this.$viewID = this.$('#ace-view-id > span');
-        this.$warningMessage = this.$('#ace-view-id > .alert-warning');
+        this.$includeBundlesArea=this.$('.oe_include_bundles');
+        this.$includeAllSCSSArea=this.$('.o_include_all_scss');
+        this.$viewID=this.$('#ace-view-id>span');
+        this.$warningMessage=this.$('#ace-view-id>.alert-warning');
 
-        this.$formatButton = this.$('button[data-action=format]');
-        this.$resetButton = this.$('button[data-action=reset]');
+        this.$formatButton=this.$('button[data-action=format]');
+        this.$resetButton=this.$('button[data-action=reset]');
 
-        this.aceEditor = window.ace.edit(this.$viewEditor[0]);
+        this.aceEditor=window.ace.edit(this.$viewEditor[0]);
         this.aceEditor.setTheme('ace/theme/monokai');
-        this.$editor = this.$('.ace_editor');
+        this.$editor=this.$('.ace_editor');
 
-        var refX = 0;
-        var resizing = false;
-        var minWidth = 400;
-        var debounceStoreEditorWidth = _.debounce(storeEditorWidth, 500);
+        varrefX=0;
+        varresizing=false;
+        varminWidth=400;
+        vardebounceStoreEditorWidth=_.debounce(storeEditorWidth,500);
 
         this._updateViewSelectDOM();
 
-        var initResID;
-        var initType;
-        if (this.options.initialResID) {
-            initResID = this.options.initialResID;
-            if (_.isString(initResID) && initResID[0] === '/') {
-                if (_.str.endsWith(initResID, '.scss')) {
-                    initType = 'scss';
-                } else {
-                    initType = 'js';
+        varinitResID;
+        varinitType;
+        if(this.options.initialResID){
+            initResID=this.options.initialResID;
+            if(_.isString(initResID)&&initResID[0]==='/'){
+                if(_.str.endsWith(initResID,'.scss')){
+                    initType='scss';
+                }else{
+                    initType='js';
                 }
-            } else {
-                initType = 'xml';
+            }else{
+                initType='xml';
             }
-        } else {
-            if (!this.options.doNotLoadSCSS) {
-                initResID = this.sortedSCSS[0][1][0].url; // first bundle, scss files, first one
-                initType = 'scss';
+        }else{
+            if(!this.options.doNotLoadSCSS){
+                initResID=this.sortedSCSS[0][1][0].url;//firstbundle,scssfiles,firstone
+                initType='scss';
             }
-            if (!this.options.doNotLoadJS) {
-                initResID = this.sortedJS[0][1][0].url; // first bundle, js files, first one
-                initType = 'js';
+            if(!this.options.doNotLoadJS){
+                initResID=this.sortedJS[0][1][0].url;//firstbundle,jsfiles,firstone
+                initType='js';
             }
-            if (!this.options.doNotLoadViews) {
-                if (typeof this.viewKey === "number") {
-                    initResID = this.viewKey;
-                } else {
-                    var view = _.findWhere(this.views, {xml_id: this.viewKey});
-                    if (!view) {
-                        view = _.findWhere(this.views, {key: this.viewKey});
+            if(!this.options.doNotLoadViews){
+                if(typeofthis.viewKey==="number"){
+                    initResID=this.viewKey;
+                }else{
+                    varview=_.findWhere(this.views,{xml_id:this.viewKey});
+                    if(!view){
+                        view=_.findWhere(this.views,{key:this.viewKey});
                     }
-                    initResID = view.id;
+                    initResID=view.id;
                 }
-                initType = 'xml';
+                initType='xml';
             }
         }
-        if (initResID) {
-            this._displayResource(initResID, initType);
+        if(initResID){
+            this._displayResource(initResID,initType);
         }
 
-        if (!this.sortedViews.length || !this.sortedSCSS.length) {
-            _.defer((function () {
-                this._switchType(this.sortedViews.length ? 'xml' : 'scss');
+        if(!this.sortedViews.length||!this.sortedSCSS.length){
+            _.defer((function(){
+                this._switchType(this.sortedViews.length?'xml':'scss');
                 this.$typeSwitcherBtn.parent('.btn-group').addClass('d-none');
             }).bind(this));
         }
 
-        $(document).on('mouseup.ViewEditor', stopResizing.bind(this)).on('mousemove.ViewEditor', updateWidth.bind(this));
-        if (this.options.position === 'left') {
+        $(document).on('mouseup.ViewEditor',stopResizing.bind(this)).on('mousemove.ViewEditor',updateWidth.bind(this));
+        if(this.options.position==='left'){
             this.$('.ace_scroller').after($('<div>').addClass('ace_resize_bar'));
-            this.$('.ace_gutter').css({'cursor': 'default'});
-            this.$el.on('mousedown.ViewEditor', '.ace_resize_bar', startResizing.bind(this));
-        } else {
-            this.$el.on('mousedown.ViewEditor', '.ace_gutter', startResizing.bind(this));
+            this.$('.ace_gutter').css({'cursor':'default'});
+            this.$el.on('mousedown.ViewEditor','.ace_resize_bar',startResizing.bind(this));
+        }else{
+            this.$el.on('mousedown.ViewEditor','.ace_gutter',startResizing.bind(this));
         }
 
-        resizeEditor.call(this, readEditorWidth.call(this));
+        resizeEditor.call(this,readEditorWidth.call(this));
 
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
 
-        function resizeEditor(target) {
-            var width = Math.min(document.body.clientWidth, Math.max(parseInt(target, 10), minWidth));
+        functionresizeEditor(target){
+            varwidth=Math.min(document.body.clientWidth,Math.max(parseInt(target,10),minWidth));
             this.$editor.width(width);
             this.aceEditor.resize();
             this.$el.width(width);
 
-            if (this.$errorLine) {
+            if(this.$errorLine){
                 this.$errorLine.popover('update');
             }
         }
-        function storeEditorWidth() {
-            localStorage.setItem('ace_editor_width', this.$el.width());
+        functionstoreEditorWidth(){
+            localStorage.setItem('ace_editor_width',this.$el.width());
         }
-        function readEditorWidth() {
-            var width = localStorage.getItem('ace_editor_width');
-            return parseInt(width || 720, 10);
+        functionreadEditorWidth(){
+            varwidth=localStorage.getItem('ace_editor_width');
+            returnparseInt(width||720,10);
         }
-        function startResizing(e) {
-            refX = e.pageX;
-            resizing = true;
+        functionstartResizing(e){
+            refX=e.pageX;
+            resizing=true;
         }
-        function stopResizing() {
-            if (resizing) {
-                resizing = false;
+        functionstopResizing(){
+            if(resizing){
+                resizing=false;
 
-                if (this.errorSession) {
-                    // To trigger an update of the error display
-                    this.errorSession.setScrollTop(this.errorSession.getScrollTop() + 1);
+                if(this.errorSession){
+                    //Totriggeranupdateoftheerrordisplay
+                    this.errorSession.setScrollTop(this.errorSession.getScrollTop()+1);
                 }
             }
         }
-        function updateWidth(e) {
-            if (!resizing) return;
+        functionupdateWidth(e){
+            if(!resizing)return;
 
-            var offset = e.pageX - refX;
-            if (this.options.position === 'left') {
-                offset = - offset;
+            varoffset=e.pageX-refX;
+            if(this.options.position==='left'){
+                offset=-offset;
             }
-            var width = this.$el.width() - offset;
-            refX = e.pageX;
-            resizeEditor.call(this, width);
+            varwidth=this.$el.width()-offset;
+            refX=e.pageX;
+            resizeEditor.call(this,width);
             debounceStoreEditorWidth.call(this);
         }
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
-        this._super.apply(this, arguments);
+    destroy:function(){
+        this._super.apply(this,arguments);
         this.$el.off('.ViewEditor');
         $(document).off('.ViewEditor');
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Initializes a text editor for the specified resource.
+     *Initializesatexteditorforthespecifiedresource.
      *
-     * @private
-     * @param {integer|string} resID - the ID/URL of the view/scss/js file
-     * @param {string} [type] (default to the currently selected one)
-     * @returns {ace.EditSession}
+     *@private
+     *@param{integer|string}resID-theID/URLoftheview/scss/jsfile
+     *@param{string}[type](defaulttothecurrentlyselectedone)
+     *@returns{ace.EditSession}
      */
-    _buildEditingSession: function (resID, type) {
-        var self = this;
-        type = type || this.currentType;
-        var editingSession = new window.ace.EditSession(this.resources[type][resID].arch);
+    _buildEditingSession:function(resID,type){
+        varself=this;
+        type=type||this.currentType;
+        vareditingSession=newwindow.ace.EditSession(this.resources[type][resID].arch);
         editingSession.setUseWorker(false);
-        editingSession.setMode('ace/mode/' + (type || this.currentType));
-        editingSession.setUndoManager(new window.ace.UndoManager());
-        editingSession.on('change', function () {
-            _.defer(function () {
+        editingSession.setMode('ace/mode/'+(type||this.currentType));
+        editingSession.setUndoManager(newwindow.ace.UndoManager());
+        editingSession.on('change',function(){
+            _.defer(function(){
                 self._toggleDirtyInfo(resID);
                 self._showErrorLine();
             });
         });
-        return editingSession;
+        returneditingSession;
     },
     /**
-     * Forces the view/scss/js file identified by its ID/URL to be displayed in the
-     * editor. The method will update the resource select DOM element as well if
-     * necessary.
+     *Forcestheview/scss/jsfileidentifiedbyitsID/URLtobedisplayedinthe
+     *editor.ThemethodwillupdatetheresourceselectDOMelementaswellif
+     *necessary.
      *
-     * @private
-     * @param {integer|string} resID
-     * @param {string} [type] - the type of resource (either 'xml', 'scss' or 'js')
+     *@private
+     *@param{integer|string}resID
+     *@param{string}[type]-thetypeofresource(either'xml','scss'or'js')
      */
-    _displayResource: function (resID, type) {
-        if (type) {
+    _displayResource:function(resID,type){
+        if(type){
             this._switchType(type);
         }
 
-        if (!this.resources[this.currentType].hasOwnProperty(resID)) {
-            // This could happen if trying to switch to a file which is not
-            // visible with the default filters. In that case, we prefer the
-            // user to have to switch explicitely to the right filters again.
+        if(!this.resources[this.currentType].hasOwnProperty(resID)){
+            //Thiscouldhappeniftryingtoswitchtoafilewhichisnot
+            //visiblewiththedefaultfilters.Inthatcase,wepreferthe
+            //usertohavetoswitchexplicitelytotherightfiltersagain.
             return;
         }
 
-        var editingSession = this.editingSessions[this.currentType][resID];
-        if (!editingSession) {
-            editingSession = this.editingSessions[this.currentType][resID] = this._buildEditingSession(resID);
+        vareditingSession=this.editingSessions[this.currentType][resID];
+        if(!editingSession){
+            editingSession=this.editingSessions[this.currentType][resID]=this._buildEditingSession(resID);
         }
         this.aceEditor.setSession(editingSession);
 
-        if (this.currentType === 'xml') {
-            this.$viewID.text(_.str.sprintf(_t("Template ID: %s"), this.views[resID].key));
-        } else if (this.currentType === 'scss') {
-            this.$viewID.text(_.str.sprintf(_t("SCSS file: %s"), resID));
-        } else {
-            this.$viewID.text(_.str.sprintf(_t("JS file: %s"), resID));
+        if(this.currentType==='xml'){
+            this.$viewID.text(_.str.sprintf(_t("TemplateID:%s"),this.views[resID].key));
+        }elseif(this.currentType==='scss'){
+            this.$viewID.text(_.str.sprintf(_t("SCSSfile:%s"),resID));
+        }else{
+            this.$viewID.text(_.str.sprintf(_t("JSfile:%s"),resID));
         }
-        const isCustomized = this._isCustomResource(resID);
-        this.$lists[this.currentType].select2('val', resID);
+        constisCustomized=this._isCustomResource(resID);
+        this.$lists[this.currentType].select2('val',resID);
 
-        this.$resetButton.toggleClass('d-none', this.currentType === 'xml' || !isCustomized);
+        this.$resetButton.toggleClass('d-none',this.currentType==='xml'||!isCustomized);
 
         this.$warningMessage.toggleClass('d-none',
-            this.currentType !== 'xml' && (resID.indexOf('/user_custom_') >= 0) || isCustomized);
+            this.currentType!=='xml'&&(resID.indexOf('/user_custom_')>=0)||isCustomized);
 
         this.aceEditor.resize(true);
     },
     /**
-     * Formats the current resource being vizualized.
-     * (@see formatXML, formatSCSS)
+     *Formatsthecurrentresourcebeingvizualized.
+     *(@seeformatXML,formatSCSS)
      *
-     * @private
+     *@private
      */
-    _formatResource: function () {
-        var res = this.aceEditor.getValue();
-        var check = (this.currentType === 'xml' ? checkXML : checkSCSS)(res);
-        if (check.isValid) {
-            this.aceEditor.setValue((this.currentType === 'xml' ? formatXML : formatSCSS)(res));
-        } else {
-            this._showErrorLine(check.error.line, check.error.message, this._getSelectedResource());
+    _formatResource:function(){
+        varres=this.aceEditor.getValue();
+        varcheck=(this.currentType==='xml'?checkXML:checkSCSS)(res);
+        if(check.isValid){
+            this.aceEditor.setValue((this.currentType==='xml'?formatXML:formatSCSS)(res));
+        }else{
+            this._showErrorLine(check.error.line,check.error.message,this._getSelectedResource());
         }
     },
     /**
-     * Returns the currently selected resource data.
+     *Returnsthecurrentlyselectedresourcedata.
      *
-     * @private
-     * @returns {integer|string} view ID or scss file URL
+     *@private
+     *@returns{integer|string}viewIDorscssfileURL
      */
-    _getSelectedResource: function () {
-        var value = this.$lists[this.currentType].select2('val');
-        return parseInt(value, 10) || value;
+    _getSelectedResource:function(){
+        varvalue=this.$lists[this.currentType].select2('val');
+        returnparseInt(value,10)||value;
     },
     /**
-     * Checks resource is customized or not.
+     *Checksresourceiscustomizedornot.
      *
-     * @private
-     * @param {integer|string} resID
+     *@private
+     *@param{integer|string}resID
      */
-    _isCustomResource(resID) {
-        // TODO we should be able to detect if the XML template is customized
-        // to not show the warning in that case
-        let isCustomized = false;
-        if (this.currentType === 'scss') {
-            isCustomized = this.scss[resID].customized;
-        } else if (this.currentType === 'js') {
-            isCustomized = this.js[resID].customized;
+    _isCustomResource(resID){
+        //TODOweshouldbeabletodetectiftheXMLtemplateiscustomized
+        //tonotshowthewarninginthatcase
+        letisCustomized=false;
+        if(this.currentType==='scss'){
+            isCustomized=this.scss[resID].customized;
+        }elseif(this.currentType==='js'){
+            isCustomized=this.js[resID].customized;
         }
-        return isCustomized;
+        returnisCustomized;
     },
     /**
-     * Loads data the ace editor will vizualize and process it. Default behavior
-     * is loading the activate views, index them and build their hierarchy.
+     *Loadsdatatheaceeditorwillvizualizeandprocessit.Defaultbehavior
+     *isloadingtheactivateviews,indexthemandbuildtheirhierarchy.
      *
-     * @private
-     * @returns {Promise}
+     *@private
+     *@returns{Promise}
      */
-    _loadResources: function () {
-        // Reset resources
-        this.resources = {xml: {}, scss: {}, js: {}};
-        this.editingSessions = {xml: {}, scss: {}, js: {}};
-        this.views = this.resources.xml;
-        this.scss = this.resources.scss;
-        this.js = this.resources.js;
+    _loadResources:function(){
+        //Resetresources
+        this.resources={xml:{},scss:{},js:{}};
+        this.editingSessions={xml:{},scss:{},js:{}};
+        this.views=this.resources.xml;
+        this.scss=this.resources.scss;
+        this.js=this.resources.js;
 
-        // Load resources
-        return this._rpc({
-            route: '/web_editor/get_assets_editor_resources',
-            params: {
-                key: this.viewKey,
-                get_views: !this.options.doNotLoadViews,
-                get_scss: !this.options.doNotLoadSCSS,
-                get_js: !this.options.doNotLoadJS,
-                bundles: this.options.includeBundles,
-                bundles_restriction: this.options.filesFilter === 'all' ? [] : this.options.defaultBundlesRestriction,
-                only_user_custom_files: this.options.filesFilter === 'custom',
+        //Loadresources
+        returnthis._rpc({
+            route:'/web_editor/get_assets_editor_resources',
+            params:{
+                key:this.viewKey,
+                get_views:!this.options.doNotLoadViews,
+                get_scss:!this.options.doNotLoadSCSS,
+                get_js:!this.options.doNotLoadJS,
+                bundles:this.options.includeBundles,
+                bundles_restriction:this.options.filesFilter==='all'?[]:this.options.defaultBundlesRestriction,
+                only_user_custom_files:this.options.filesFilter==='custom',
             },
-        }).then((function (resources) {
-            _processViews.call(this, resources.views || []);
-            _processJSorSCSS.call(this, resources.scss || [], 'scss');
-            _processJSorSCSS.call(this, resources.js || [], 'js');
+        }).then((function(resources){
+            _processViews.call(this,resources.views||[]);
+            _processJSorSCSS.call(this,resources.scss||[],'scss');
+            _processJSorSCSS.call(this,resources.js||[],'js');
         }).bind(this));
 
-        function _processViews(views) {
-            // Only keep the active views and index them by ID.
-            _.extend(this.views, _.indexBy(_.filter(views, function (view) {
-                return view.active;
-            }), 'id'));
+        function_processViews(views){
+            //OnlykeeptheactiveviewsandindexthembyID.
+            _.extend(this.views,_.indexBy(_.filter(views,function(view){
+                returnview.active;
+            }),'id'));
 
-            // Initialize a 0 level for each view and assign them an array containing their children.
-            var self = this;
-            var roots = [];
-            _.each(this.views, function (view) {
-                view.level = 0;
-                view.children = [];
+            //Initializea0levelforeachviewandassignthemanarraycontainingtheirchildren.
+            varself=this;
+            varroots=[];
+            _.each(this.views,function(view){
+                view.level=0;
+                view.children=[];
             });
-            _.each(this.views, function (view) {
-                var parentId = view.inherit_id[0];
-                var parent = parentId && self.views[parentId];
-                if (parent) {
+            _.each(this.views,function(view){
+                varparentId=view.inherit_id[0];
+                varparent=parentId&&self.views[parentId];
+                if(parent){
                     parent.children.push(view);
-                } else {
+                }else{
                     roots.push(view);
                 }
             });
 
-            // Assign the correct level based on children key and save a sorted array where
-            // each view is followed by their children.
-            this.sortedViews = [];
-            function visit(view, level) {
-                view.level = level;
+            //Assignthecorrectlevelbasedonchildrenkeyandsaveasortedarraywhere
+            //eachviewisfollowedbytheirchildren.
+            this.sortedViews=[];
+            functionvisit(view,level){
+                view.level=level;
                 self.sortedViews.push(view);
-                _.each(view.children, function (child) {
-                    visit(child, level + 1);
+                _.each(view.children,function(child){
+                    visit(child,level+1);
                 });
             }
-            _.each(roots, function (root) {
-                visit(root, 0);
+            _.each(roots,function(root){
+                visit(root,0);
             });
         }
 
-        function _processJSorSCSS(data, type) {
-            // The received scss or js data is already sorted by bundle and DOM order
-            if (type === 'scss') {
-                this.sortedSCSS = data;
-            } else {
-                this.sortedJS = data;
+        function_processJSorSCSS(data,type){
+            //ThereceivedscssorjsdataisalreadysortedbybundleandDOMorder
+            if(type==='scss'){
+                this.sortedSCSS=data;
+            }else{
+                this.sortedJS=data;
             }
 
-            // Store the URL ungrouped by bundle and use the URL as key (resource ID)
-            var resources = type === 'scss' ? this.scss : this.js;
-            _.each(data, function (bundleInfos) {
-                _.each(bundleInfos[1], function (info) { info.bundle_xmlid = bundleInfos[0].xmlid; });
-                _.extend(resources, _.indexBy(bundleInfos[1], 'url'));
+            //StoretheURLungroupedbybundleandusetheURLaskey(resourceID)
+            varresources=type==='scss'?this.scss:this.js;
+            _.each(data,function(bundleInfos){
+                _.each(bundleInfos[1],function(info){info.bundle_xmlid=bundleInfos[0].xmlid;});
+                _.extend(resources,_.indexBy(bundleInfos[1],'url'));
             });
         }
     },
     /**
-     * Forces the view/scss/js file identified by its ID/URL to be reset to the way
-     * it was before the user started editing it.
+     *Forcestheview/scss/jsfileidentifiedbyitsID/URLtoberesettotheway
+     *itwasbeforetheuserstartededitingit.
      *
-     * @todo views reset is not supported yet
+     *@todoviewsresetisnotsupportedyet
      *
-     * @private
-     * @param {integer|string} [resID] (default to the currently selected one)
-     * @param {string} [type] (default to the currently selected one)
-     * @returns {Promise}
+     *@private
+     *@param{integer|string}[resID](defaulttothecurrentlyselectedone)
+     *@param{string}[type](defaulttothecurrentlyselectedone)
+     *@returns{Promise}
      */
-    _resetResource: function (resID, type) {
-        resID = resID || this._getSelectedResource();
-        type = type || this.currentType;
+    _resetResource:function(resID,type){
+        resID=resID||this._getSelectedResource();
+        type=type||this.currentType;
 
-        if (this.currentType === 'xml') {
-            return Promise.reject(_t("Reseting views is not supported yet"));
-        } else {
-            var resource = type === 'scss' ? this.scss[resID] : this.js[resID];
-            return this._rpc({
-                route: '/web_editor/reset_asset',
-                params: {
-                    url: resID,
-                    bundle_xmlid: resource.bundle_xmlid,
+        if(this.currentType==='xml'){
+            returnPromise.reject(_t("Resetingviewsisnotsupportedyet"));
+        }else{
+            varresource=type==='scss'?this.scss[resID]:this.js[resID];
+            returnthis._rpc({
+                route:'/web_editor/reset_asset',
+                params:{
+                    url:resID,
+                    bundle_xmlid:resource.bundle_xmlid,
                 },
             });
         }
     },
     /**
-     * Saves a unique SCSS or JS file.
+     *SavesauniqueSCSSorJSfile.
      *
-     * @private
-     * @param {Object} session - contains the 'id' (url) and the 'text' of the
-     *                         SCSS or JS file to save.
-     * @return {Promise} status indicates if the save is finished or if an
-     *                    error occured.
+     *@private
+     *@param{Object}session-containsthe'id'(url)andthe'text'ofthe
+     *                        SCSSorJSfiletosave.
+     *@return{Promise}statusindicatesifthesaveisfinishedorifan
+     *                   erroroccured.
      */
-    _saveSCSSorJS: function (session) {
-        var self = this;
-        var sessionIdEndsWithJS = _.string.endsWith(session.id, '.js');
-        var bundleXmlID = sessionIdEndsWithJS ? this.js[session.id].bundle_xmlid : this.scss[session.id].bundle_xmlid;
-        var fileType = sessionIdEndsWithJS ? 'js' : 'scss';
-        return self._rpc({
-            route: '/web_editor/save_asset',
-            params: {
-                url: session.id,
-                bundle_xmlid: bundleXmlID,
-                content: session.text,
-                file_type: fileType,
+    _saveSCSSorJS:function(session){
+        varself=this;
+        varsessionIdEndsWithJS=_.string.endsWith(session.id,'.js');
+        varbundleXmlID=sessionIdEndsWithJS?this.js[session.id].bundle_xmlid:this.scss[session.id].bundle_xmlid;
+        varfileType=sessionIdEndsWithJS?'js':'scss';
+        returnself._rpc({
+            route:'/web_editor/save_asset',
+            params:{
+                url:session.id,
+                bundle_xmlid:bundleXmlID,
+                content:session.text,
+                file_type:fileType,
             },
-        }).then(function () {
-            self._toggleDirtyInfo(session.id, fileType, false);
+        }).then(function(){
+            self._toggleDirtyInfo(session.id,fileType,false);
         });
     },
     /**
-     * Saves every resource that has been modified. If one cannot be saved, none
-     * is saved and an error message is displayed.
+     *Saveseveryresourcethathasbeenmodified.Ifonecannotbesaved,none
+     *issavedandanerrormessageisdisplayed.
      *
-     * @private
-     * @return {Promise} status indicates if the save is finished or if an
-     *                    error occured.
+     *@private
+     *@return{Promise}statusindicatesifthesaveisfinishedorifan
+     *                   erroroccured.
      */
-    _saveResources: function () {
-        var self = this;
-        var toSave = {};
-        var errorFound = false;
-        _.each(this.editingSessions, (function (editingSessions, type) {
-            if (errorFound) return;
+    _saveResources:function(){
+        varself=this;
+        vartoSave={};
+        varerrorFound=false;
+        _.each(this.editingSessions,(function(editingSessions,type){
+            if(errorFound)return;
 
-            var dirtySessions = _.pick(editingSessions, function (session) {
-                return session.getUndoManager().hasUndo();
+            vardirtySessions=_.pick(editingSessions,function(session){
+                returnsession.getUndoManager().hasUndo();
             });
-            toSave[type] = _.map(dirtySessions, function (session, resID) {
-                return {
-                    id: parseInt(resID, 10) || resID,
-                    text: session.getValue(),
+            toSave[type]=_.map(dirtySessions,function(session,resID){
+                return{
+                    id:parseInt(resID,10)||resID,
+                    text:session.getValue(),
                 };
             });
 
             this._showErrorLine();
-            for (var i = 0 ; i < toSave[type].length && !errorFound ; i++) {
-                var check = (type === 'xml' ? checkXML : checkSCSS)(toSave[type][i].text);
-                if (!check.isValid) {
-                    this._showErrorLine(check.error.line, check.error.message, toSave[type][i].id, type);
-                    errorFound = toSave[type][i];
+            for(vari=0;i<toSave[type].length&&!errorFound;i++){
+                varcheck=(type==='xml'?checkXML:checkSCSS)(toSave[type][i].text);
+                if(!check.isValid){
+                    this._showErrorLine(check.error.line,check.error.message,toSave[type][i].id,type);
+                    errorFound=toSave[type][i];
                 }
             }
         }).bind(this));
-        if (errorFound) return Promise.reject(errorFound);
+        if(errorFound)returnPromise.reject(errorFound);
 
-        var defs = [];
-        var mutex = new concurrency.Mutex();
-        _.each(toSave, (function (_toSave, type) {
-            // Child views first as COW on a parent would delete them
-            _toSave = _.sortBy(_toSave, 'id').reverse();
-            _.each(_toSave, function (session) {
-                defs.push(mutex.exec(function () {
-                    return (type === 'xml' ? self._saveView(session) : self._saveSCSSorJS(session));
+        vardefs=[];
+        varmutex=newconcurrency.Mutex();
+        _.each(toSave,(function(_toSave,type){
+            //ChildviewsfirstasCOWonaparentwoulddeletethem
+            _toSave=_.sortBy(_toSave,'id').reverse();
+            _.each(_toSave,function(session){
+                defs.push(mutex.exec(function(){
+                    return(type==='xml'?self._saveView(session):self._saveSCSSorJS(session));
                 }));
             });
         }).bind(this));
 
-        var self = this;
-        return Promise.all(defs).guardedCatch(function (results) {
-            // some overrides handle errors themselves
-            if (results === undefined) {
+        varself=this;
+        returnPromise.all(defs).guardedCatch(function(results){
+            //someoverrideshandleerrorsthemselves
+            if(results===undefined){
                 return;
             }
-            var error = results[1];
-            Dialog.alert(self, '', {
-                title: _t("Server error"),
-                $content: $('<div/>').html(
-                    _t("A server error occured. Please check you correctly signed in and that the file you are saving is correctly formatted.")
-                    + '<br/>'
-                    + error
+            varerror=results[1];
+            Dialog.alert(self,'',{
+                title:_t("Servererror"),
+                $content:$('<div/>').html(
+                    _t("Aservererroroccured.Pleasecheckyoucorrectlysignedinandthatthefileyouaresavingiscorrectlyformatted.")
+                    +'<br/>'
+                    +error
                 )
             });
         });
     },
     /**
-     * Saves an unique XML view.
+     *SavesanuniqueXMLview.
      *
-     * @private
-     * @param {Object} session - the 'id' and the 'text' of the view to save.
-     * @returns {Promise} status indicates if the save is finished or if an
-     *                     error occured.
+     *@private
+     *@param{Object}session-the'id'andthe'text'oftheviewtosave.
+     *@returns{Promise}statusindicatesifthesaveisfinishedorifan
+     *                    erroroccured.
      */
-    _saveView: function (session) {
-        var self = this;
-        return new Promise(function (resolve, reject) {
+    _saveView:function(session){
+        varself=this;
+        returnnewPromise(function(resolve,reject){
             self._rpc({
-                model: 'ir.ui.view',
-                method: 'write',
-                args: [[session.id], {arch: session.text}],
-            }, {
-                noContextKeys: 'lang',
-            }).then(function () {
-                self._toggleDirtyInfo(session.id, 'xml', false);
+                model:'ir.ui.view',
+                method:'write',
+                args:[[session.id],{arch:session.text}],
+            },{
+                noContextKeys:'lang',
+            }).then(function(){
+                self._toggleDirtyInfo(session.id,'xml',false);
                 resolve();
-            }, function (source, error) {
-                reject(session, error);
+            },function(source,error){
+                reject(session,error);
             });
         });
     },
     /**
-     * Shows a line which produced an error. Red color is added to the editor,
-     * the cursor move to the line and a message is opened on click on the line
-     * number. If called without argument, the effects are removed.
+     *Showsalinewhichproducedanerror.Redcolorisaddedtotheeditor,
+     *thecursormovetothelineandamessageisopenedonclickontheline
+     *number.Ifcalledwithoutargument,theeffectsareremoved.
      *
-     * @private
-     * @param {integer} [line] - the line number to highlight
-     * @param {string} [message] - to show on click on the line number
-     * @param {integer|string} [resID]
-     * @param {string} [type]
+     *@private
+     *@param{integer}[line]-thelinenumbertohighlight
+     *@param{string}[message]-toshowonclickonthelinenumber
+     *@param{integer|string}[resID]
+     *@param{string}[type]
      */
-    _showErrorLine: function (line, message, resID, type) {
-        if (line === undefined || line <= 0) {
+    _showErrorLine:function(line,message,resID,type){
+        if(line===undefined||line<=0){
             __restore.call(this);
             return;
         }
 
-        if (type) {
+        if(type){
             this._switchType(type);
         }
 
-        if (this._getSelectedResource() === resID) {
-            __showErrorLine.call(this, line);
-        } else {
-            var onChangeSession = (function () {
-                this.aceEditor.off('changeSession', onChangeSession);
-                _.delay(__showErrorLine.bind(this, line), 400);
+        if(this._getSelectedResource()===resID){
+            __showErrorLine.call(this,line);
+        }else{
+            varonChangeSession=(function(){
+                this.aceEditor.off('changeSession',onChangeSession);
+                _.delay(__showErrorLine.bind(this,line),400);
             }).bind(this);
-            this.aceEditor.on('changeSession', onChangeSession);
-            this._displayResource(resID, this.currentType);
+            this.aceEditor.on('changeSession',onChangeSession);
+            this._displayResource(resID,this.currentType);
         }
 
-        function __restore() {
-            if (this.errorSession) {
-                this.errorSession.off('change', this.errorSessionChangeCallback);
-                this.errorSession.off('changeScrollTop', this.errorSessionScrollCallback);
-                this.errorSession = undefined;
+        function__restore(){
+            if(this.errorSession){
+                this.errorSession.off('change',this.errorSessionChangeCallback);
+                this.errorSession.off('changeScrollTop',this.errorSessionScrollCallback);
+                this.errorSession=undefined;
             }
             __restoreErrorLine.call(this);
 
-            if (this.$errorContent) { // TODO remove in master
+            if(this.$errorContent){//TODOremoveinmaster
                 this.$errorContent.removeClass('o_error');
-                this.$errorContent = undefined;
+                this.$errorContent=undefined;
             }
         }
 
-        function __restoreErrorLine() {
-            if (this.$errorLine) {
+        function__restoreErrorLine(){
+            if(this.$errorLine){
                 this.$errorLine.removeClass('o_error');
                 this.$errorLine.popover('hide');
                 this.$errorLine.popover('dispose');
-                this.$errorLine = undefined;
+                this.$errorLine=undefined;
             }
         }
 
-        function __updateErrorLineDisplay(line) {
+        function__updateErrorLineDisplay(line){
             __restoreErrorLine.call(this);
 
-            const $lines = this.$viewEditor.find('.ace_gutter-cell');
-            this.$errorLine = $lines.filter(function (i, el) {
-                return parseInt($(el).text()) === line;
+            const$lines=this.$viewEditor.find('.ace_gutter-cell');
+            this.$errorLine=$lines.filter(function(i,el){
+                returnparseInt($(el).text())===line;
             });
-            if (!this.$errorLine.length) {
-                const $firstLine = $lines.first();
-                const firstLineNumber = parseInt($firstLine.text());
-                this.$errorLine = line < firstLineNumber ? $lines.eq(1) : $lines.eq($lines.length - 2);
+            if(!this.$errorLine.length){
+                const$firstLine=$lines.first();
+                constfirstLineNumber=parseInt($firstLine.text());
+                this.$errorLine=line<firstLineNumber?$lines.eq(1):$lines.eq($lines.length-2);
             }
             this.$errorLine.addClass('o_error');
             this.$errorLine.popover({
-                animation: false,
-                html: true,
-                content: message,
-                placement: 'left',
-                container: 'body',
-                trigger: 'manual',
-                template: '<div class="popover o_ace_error_popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>'
+                animation:false,
+                html:true,
+                content:message,
+                placement:'left',
+                container:'body',
+                trigger:'manual',
+                template:'<divclass="popovero_ace_error_popover"role="tooltip"><divclass="arrow"></div><h3class="popover-header"></h3><divclass="popover-body"></div></div>'
             });
             this.$errorLine.popover('show');
         }
 
-        function __showErrorLine(line) {
-            this.$errorContent = this.$viewEditor.find('.ace_scroller').addClass('o_error'); // TODO remove in master
+        function__showErrorLine(line){
+            this.$errorContent=this.$viewEditor.find('.ace_scroller').addClass('o_error');//TODOremoveinmaster
 
-            this.errorSession = this.aceEditor.getSession();
-            this.errorSessionChangeCallback = __restore.bind(this);
-            this.errorSession.on('change', this.errorSessionChangeCallback);
-            this.errorSessionScrollCallback = _.debounce(__updateErrorLineDisplay.bind(this, line), 10);
-            this.errorSession.on('changeScrollTop', this.errorSessionScrollCallback);
+            this.errorSession=this.aceEditor.getSession();
+            this.errorSessionChangeCallback=__restore.bind(this);
+            this.errorSession.on('change',this.errorSessionChangeCallback);
+            this.errorSessionScrollCallback=_.debounce(__updateErrorLineDisplay.bind(this,line),10);
+            this.errorSession.on('changeScrollTop',this.errorSessionScrollCallback);
 
-            __updateErrorLineDisplay.call(this, line);
+            __updateErrorLineDisplay.call(this,line);
 
-            setTimeout(() => this.aceEditor.gotoLine(line), 100);
+            setTimeout(()=>this.aceEditor.gotoLine(line),100);
         }
     },
     /**
-     * Switches to the SCSS, XML or JS edition. Calling this method will adapt all
-     * DOM elements to keep the editor consistent.
+     *SwitchestotheSCSS,XMLorJSedition.Callingthismethodwilladaptall
+     *DOMelementstokeeptheeditorconsistent.
      *
-     * @private
-     * @param {string} type - either 'xml', 'scss' or 'js'
+     *@private
+     *@param{string}type-either'xml','scss'or'js'
      */
-    _switchType: function (type) {
-        this.currentType = type;
-        this.$typeSwitcherBtn.html(this.$typeSwitcherChoices.filter('[data-type=' + type + ']').html());
-        _.each(this.$lists, function ($list, _type) { $list.toggleClass('d-none', type !== _type); });
+    _switchType:function(type){
+        this.currentType=type;
+        this.$typeSwitcherBtn.html(this.$typeSwitcherChoices.filter('[data-type='+type+']').html());
+        _.each(this.$lists,function($list,_type){$list.toggleClass('d-none',type!==_type);});
         this.$lists[type].change();
 
-        this.$includeBundlesArea.toggleClass('d-none', this.currentType !== 'xml' || !config.isDebug());
-        this.$includeAllSCSSArea.toggleClass('d-none', this.currentType !== 'scss' || !config.isDebug());
-        this.$includeAllSCSSArea.find('[data-value="restricted"]').toggleClass('d-none', this.options.defaultBundlesRestriction.length === 0);
-        this.$formatButton.toggleClass('d-none', this.currentType !== 'xml');
+        this.$includeBundlesArea.toggleClass('d-none',this.currentType!=='xml'||!config.isDebug());
+        this.$includeAllSCSSArea.toggleClass('d-none',this.currentType!=='scss'||!config.isDebug());
+        this.$includeAllSCSSArea.find('[data-value="restricted"]').toggleClass('d-none',this.options.defaultBundlesRestriction.length===0);
+        this.$formatButton.toggleClass('d-none',this.currentType!=='xml');
     },
     /**
-     * Updates the select option DOM element associated with a particular resID
-     * to indicate if the option is dirty or not.
+     *UpdatestheselectoptionDOMelementassociatedwithaparticularresID
+     *toindicateiftheoptionisdirtyornot.
      *
-     * @private
-     * @param {integer|string} resID
-     * @param {string} [type] (default to the currently selected one)
-     * @param {boolean} [isDirty] true if the view is dirty, default to content
-     *                            of UndoManager
+     *@private
+     *@param{integer|string}resID
+     *@param{string}[type](defaulttothecurrentlyselectedone)
+     *@param{boolean}[isDirty]trueiftheviewisdirty,defaulttocontent
+     *                           ofUndoManager
      */
-    _toggleDirtyInfo: function (resID, type, isDirty) {
-        type = type || this.currentType;
+    _toggleDirtyInfo:function(resID,type,isDirty){
+        type=type||this.currentType;
 
-        if (!resID || !this.editingSessions[type][resID]) return;
+        if(!resID||!this.editingSessions[type][resID])return;
 
-        var $option = this.$lists[type].find('[value="' + resID + '"]');
-        if (isDirty === undefined) {
-            isDirty = this.editingSessions[type][resID].getUndoManager().hasUndo();
+        var$option=this.$lists[type].find('[value="'+resID+'"]');
+        if(isDirty===undefined){
+            isDirty=this.editingSessions[type][resID].getUndoManager().hasUndo();
         }
-        $option.data('dirty', isDirty);
+        $option.data('dirty',isDirty);
     },
     /**
-     * Renders the content of the view/file <select/> DOM element according to
-     * current widget data.
+     *Rendersthecontentoftheview/file<select/>DOMelementaccordingto
+     *currentwidgetdata.
      *
-     * @private
+     *@private
      */
-    _updateViewSelectDOM: function () {
-        var currentId = this._getSelectedResource();
+    _updateViewSelectDOM:function(){
+        varcurrentId=this._getSelectedResource();
 
-        var self = this;
+        varself=this;
         this.$lists.xml.empty();
-        _.each(this.sortedViews, function (view) {
-            self.$lists.xml.append($('<option/>', {
-                value: view.id,
-                text: view.name,
-                selected: currentId === view.id,
-                'data-level': view.level,
-                'data-debug': view.xml_id,
+        _.each(this.sortedViews,function(view){
+            self.$lists.xml.append($('<option/>',{
+                value:view.id,
+                text:view.name,
+                selected:currentId===view.id,
+                'data-level':view.level,
+                'data-debug':view.xml_id,
             }));
         });
 
         this.$lists.scss.empty();
-        _populateList(this.sortedSCSS, this.$lists.scss, 5);
+        _populateList(this.sortedSCSS,this.$lists.scss,5);
 
         this.$lists.js.empty();
-        _populateList(this.sortedJS, this.$lists.js, 3);
+        _populateList(this.sortedJS,this.$lists.js,3);
 
         this.$lists.xml.select2('destroy');
         this.$lists.xml.select2({
-            formatResult: _formatDisplay.bind(this, false),
-            formatSelection: _formatDisplay.bind(this, true),
+            formatResult:_formatDisplay.bind(this,false),
+            formatSelection:_formatDisplay.bind(this,true),
         });
         this.$lists.xml.data('select2').dropdown.addClass('o_ace_select2_dropdown');
         this.$lists.scss.select2('destroy');
         this.$lists.scss.select2({
-            formatResult: _formatDisplay.bind(this, false),
-            formatSelection: _formatDisplay.bind(this, true),
+            formatResult:_formatDisplay.bind(this,false),
+            formatSelection:_formatDisplay.bind(this,true),
         });
         this.$lists.scss.data('select2').dropdown.addClass('o_ace_select2_dropdown');
         this.$lists.js.select2('destroy');
         this.$lists.js.select2({
-            formatResult: _formatDisplay.bind(this, false),
-            formatSelection: _formatDisplay.bind(this, true),
+            formatResult:_formatDisplay.bind(this,false),
+            formatSelection:_formatDisplay.bind(this,true),
         });
         this.$lists.js.data('select2').dropdown.addClass('o_ace_select2_dropdown');
 
-        function _populateList(sortedData, $list, lettersToRemove) {
-            _.each(sortedData, function (bundleInfos) {
-                var $optgroup = $('<optgroup/>', {
-                    label: bundleInfos[0].name,
+        function_populateList(sortedData,$list,lettersToRemove){
+            _.each(sortedData,function(bundleInfos){
+                var$optgroup=$('<optgroup/>',{
+                    label:bundleInfos[0].name,
                 }).appendTo($list);
-                _.each(bundleInfos[1], function (dataInfo) {
-                    var name = dataInfo.url.substring(_.lastIndexOf(dataInfo.url, '/') + 1, dataInfo.url.length - lettersToRemove);
-                    $optgroup.append($('<option/>', {
-                        value: dataInfo.url,
-                        text: name,
-                        selected: currentId === dataInfo.url,
-                        'data-debug': dataInfo.url,
-                        'data-customized': dataInfo.customized
+                _.each(bundleInfos[1],function(dataInfo){
+                    varname=dataInfo.url.substring(_.lastIndexOf(dataInfo.url,'/')+1,dataInfo.url.length-lettersToRemove);
+                    $optgroup.append($('<option/>',{
+                        value:dataInfo.url,
+                        text:name,
+                        selected:currentId===dataInfo.url,
+                        'data-debug':dataInfo.url,
+                        'data-customized':dataInfo.customized
                     }));
                 });
             });
         }
 
-        function _formatDisplay(isSelected, data) {
-            var $elem = $(data.element);
+        function_formatDisplay(isSelected,data){
+            var$elem=$(data.element);
 
-            var text = data.text || '';
-            if (!isSelected) {
-                text = Array(($elem.data('level') || 0) + 1).join('-') + ' ' + text;
+            vartext=data.text||'';
+            if(!isSelected){
+                text=Array(($elem.data('level')||0)+1).join('-')+''+text;
             }
-            var $div = $('<div/>',  {
-                text: text,
-                class: 'o_ace_select2_result',
+            var$div=$('<div/>', {
+                text:text,
+                class:'o_ace_select2_result',
             });
 
-            if ($elem.data('dirty') || $elem.data('customized')) {
-                $div.prepend($('<span/>', {
-                    class: 'mr8 fa fa-floppy-o ' + ($elem.data('dirty') ? 'text-warning' : 'text-success'),
+            if($elem.data('dirty')||$elem.data('customized')){
+                $div.prepend($('<span/>',{
+                    class:'mr8fafa-floppy-o'+($elem.data('dirty')?'text-warning':'text-success'),
                 }));
             }
 
-            if (!isSelected && config.isDebug() && $elem.data('debug')) {
-                $div.append($('<span/>', {
-                    text: ' (' + $elem.data('debug') + ')',
-                    class: 'ml4 small text-muted',
+            if(!isSelected&&config.isDebug()&&$elem.data('debug')){
+                $div.append($('<span/>',{
+                    text:'('+$elem.data('debug')+')',
+                    class:'ml4smalltext-muted',
                 }));
             }
 
-            return $div;
+            return$div;
         }
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when the close button is clicked -> hides the ace editor.
+     *Calledwhentheclosebuttonisclicked->hidestheaceeditor.
      *
-     * @private
+     *@private
      */
-    _onCloseClick: function () {
+    _onCloseClick:function(){
         this._showErrorLine();
         this.do_hide();
     },
     /**
-     * Called when the format button is clicked -> format the current resource.
+     *Calledwhentheformatbuttonisclicked->formatthecurrentresource.
      *
-     * @private
+     *@private
      */
-    _onFormatClick: function () {
+    _onFormatClick:function(){
         this._formatResource();
     },
     /**
-     * Called when a filter dropdown item is cliked. Reload the resources
-     * according to the new filter and make it visually active.
+     *Calledwhenafilterdropdownitemiscliked.Reloadtheresources
+     *accordingtothenewfilterandmakeitvisuallyactive.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onFilterChange: function (ev) {
-        var $item = $(ev.target);
+    _onFilterChange:function(ev){
+        var$item=$(ev.target);
         $item.addClass('active').siblings().removeClass('active');
-        if ($item.data('type') === 'xml') {
-            this.options.includeBundles = $(ev.target).data('value') === 'all';
-        } else {
-            this.options.filesFilter = $item.data('value');
+        if($item.data('type')==='xml'){
+            this.options.includeBundles=$(ev.target).data('value')==='all';
+        }else{
+            this.options.filesFilter=$item.data('value');
         }
         this._loadResources().then(this._updateViewSelectDOM.bind(this));
     },
     /**
-     * Called when another resource is selected -> displays it.
+     *Calledwhenanotherresourceisselected->displaysit.
      *
-     * @private
+     *@private
      */
-    _onResChange: function () {
+    _onResChange:function(){
         this._displayResource(this._getSelectedResource());
     },
     /**
-     * Called when the reset button is clicked -> resets the resources to its
-     * original standard flectra state.
+     *Calledwhentheresetbuttonisclicked->resetstheresourcestoits
+     *originalstandardflectrastate.
      *
-     * @private
+     *@private
      */
-    _onResetClick: function () {
-        var self = this;
-        Dialog.confirm(this, _t("If you reset this file, all your customizations will be lost as it will be reverted to the default file."), {
-            title: _t("Careful !"),
-            confirm_callback: function () {
+    _onResetClick:function(){
+        varself=this;
+        Dialog.confirm(this,_t("Ifyouresetthisfile,allyourcustomizationswillbelostasitwillberevertedtothedefaultfile."),{
+            title:_t("Careful!"),
+            confirm_callback:function(){
                 self._resetResource(self._getSelectedResource());
             },
         });
     },
     /**
-     * Called when the save button is clicked -> saves the dirty resources and
-     * reloads.
+     *Calledwhenthesavebuttonisclicked->savesthedirtyresourcesand
+     *reloads.
      *
-     * @private
+     *@private
      */
-    _onSaveClick: function (ev) {
-        const restore = dom.addButtonLoadingEffect(ev.currentTarget);
+    _onSaveClick:function(ev){
+        constrestore=dom.addButtonLoadingEffect(ev.currentTarget);
         this._saveResources().then(restore).guardedCatch(restore);
     },
     /**
-     * Called when the user wants to switch from xml to scss or vice-versa ->
-     * adapt resources choices and displays a resource of that type.
+     *Calledwhentheuserwantstoswitchfromxmltoscssorvice-versa->
+     *adaptresourceschoicesanddisplaysaresourceofthattype.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onTypeChoice: function (ev) {
+    _onTypeChoice:function(ev){
         ev.preventDefault();
         this._switchType($(ev.target).data('type'));
     },
     /**
-     * Allows to hide the warning message without removing it from the DOM
-     * -> by default Bootstrap removes alert from the DOM
+     *AllowstohidethewarningmessagewithoutremovingitfromtheDOM
+     *->bydefaultBootstrapremovesalertfromtheDOM
      */
-    _onCloseWarningClick: function () {
+    _onCloseWarningClick:function(){
         this.$warningMessage.addClass('d-none');
     },
 });
 
-return ViewEditor;
+returnViewEditor;
 });

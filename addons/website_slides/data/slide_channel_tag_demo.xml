@@ -1,36 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?>
-<flectra><data noupdate="1">
-    <record id="slide_channel_tag_group_role" model="slide.channel.tag.group">
-        <field name="name">Your Role</field>
-        <field name="is_published" eval="True"/>
+<?xmlversion="1.0"encoding="utf-8"?>
+<flectra><datanoupdate="1">
+    <recordid="slide_channel_tag_group_role"model="slide.channel.tag.group">
+        <fieldname="name">YourRole</field>
+        <fieldname="is_published"eval="True"/>
     </record>
-    <record id="slide_channel_tag_role_gardener" model="slide.channel.tag">
-        <field name="name">Gardener</field>
-        <field name="color">10</field>
-        <field name="group_id" ref="website_slides.slide_channel_tag_group_role"/>
+    <recordid="slide_channel_tag_role_gardener"model="slide.channel.tag">
+        <fieldname="name">Gardener</field>
+        <fieldname="color">10</field>
+        <fieldname="group_id"ref="website_slides.slide_channel_tag_group_role"/>
     </record>
-    <record id="slide_channel_tag_role_carpenter" model="slide.channel.tag">
-        <field name="name">Carpenter</field>
-        <field name="color">11</field>
-        <field name="group_id" ref="website_slides.slide_channel_tag_group_role"/>
+    <recordid="slide_channel_tag_role_carpenter"model="slide.channel.tag">
+        <fieldname="name">Carpenter</field>
+        <fieldname="color">11</field>
+        <fieldname="group_id"ref="website_slides.slide_channel_tag_group_role"/>
     </record>
-    <record id="slide_channel_tag_role_furniture" model="slide.channel.tag">
-        <field name="name">Furniture Designer</field>
-        <field name="color">3</field>
-        <field name="group_id" ref="website_slides.slide_channel_tag_group_role"/>
+    <recordid="slide_channel_tag_role_furniture"model="slide.channel.tag">
+        <fieldname="name">FurnitureDesigner</field>
+        <fieldname="color">3</field>
+        <fieldname="group_id"ref="website_slides.slide_channel_tag_group_role"/>
     </record>
 
-    <record id="slide_channel_tag_other_0" model="slide.channel.tag">
-        <field name="name">Quiz</field>
-        <field name="group_id" ref="website_slides.slide_channel_tag_group_data_other"/>
+    <recordid="slide_channel_tag_other_0"model="slide.channel.tag">
+        <fieldname="name">Quiz</field>
+        <fieldname="group_id"ref="website_slides.slide_channel_tag_group_data_other"/>
     </record>
-    <record id="slide_channel_tag_other_1" model="slide.channel.tag">
-        <field name="name">Certification</field>
-        <field name="color">7</field>
-        <field name="group_id" ref="website_slides.slide_channel_tag_group_data_other"/>
+    <recordid="slide_channel_tag_other_1"model="slide.channel.tag">
+        <fieldname="name">Certification</field>
+        <fieldname="color">7</field>
+        <fieldname="group_id"ref="website_slides.slide_channel_tag_group_data_other"/>
     </record>
-    <record id="slide_channel_tag_other_2" model="slide.channel.tag">
-        <field name="name">Dog Friendly</field>
-        <field name="group_id" ref="website_slides.slide_channel_tag_group_data_other"/>
+    <recordid="slide_channel_tag_other_2"model="slide.channel.tag">
+        <fieldname="name">DogFriendly</field>
+        <fieldname="group_id"ref="website_slides.slide_channel_tag_group_data_other"/>
     </record>
 </data></flectra>

@@ -1,187 +1,187 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template id="event_track_main" name="Event Exhibitor">
-    <t t-call="website_event.layout">
-        <div class="o_wevent_online o_wevent_online_bg o_wesession_index">
-            <!-- Options -->
-            <t t-set="option_widescreen" t-value="option_widescreen or False"/>
-            <t t-set="option_track_wishlist" t-value="not event.is_done and is_view_active('website_event_track.session_topbar_wishlist')"/>
-            <!-- Drag/Drop Area -->
-            <div id="oe_structure_wesession_track_index_1" class="oe_structure"/>
-            <!-- Content -->
-            <div t-att-class="'o_wevent_online_page_container %s' % ('container pb-3' if not option_widescreen else 'pb-3')">
-                <div class="row mb-5 mx-0">
-                    <t t-call="website_event_track.event_track_aside"/>
-                    <t t-call="website_event_track.event_track_content"/>
+<templateid="event_track_main"name="EventExhibitor">
+    <tt-call="website_event.layout">
+        <divclass="o_wevent_onlineo_wevent_online_bgo_wesession_index">
+            <!--Options-->
+            <tt-set="option_widescreen"t-value="option_widescreenorFalse"/>
+            <tt-set="option_track_wishlist"t-value="notevent.is_doneandis_view_active('website_event_track.session_topbar_wishlist')"/>
+            <!--Drag/DropArea-->
+            <divid="oe_structure_wesession_track_index_1"class="oe_structure"/>
+            <!--Content-->
+            <divt-att-class="'o_wevent_online_page_container%s'%('containerpb-3'ifnotoption_widescreenelse'pb-3')">
+                <divclass="rowmb-5mx-0">
+                    <tt-call="website_event_track.event_track_aside"/>
+                    <tt-call="website_event_track.event_track_content"/>
                 </div>
             </div>
-            <!-- Drag/Drop Area -->
-            <div id="oe_structure_wesession_track_index_2" class="oe_structure"/>
+            <!--Drag/DropArea-->
+            <divid="oe_structure_wesession_track_index_2"class="oe_structure"/>
         </div>
     </t>
 </template>
 
-<!-- ============================================================ -->
-<!-- CONTENT: MAIN TEMPLATES -->
-<!-- ============================================================ -->
+<!--============================================================-->
+<!--CONTENT:MAINTEMPLATES-->
+<!--============================================================-->
 
-<template id="event_track_content" name="Track: Main Description">
-    <div name="o_wesession_track_main"
-         t-att-class="'col-12 o_wevent_online_page_main o_wesession_track_main bg-white p-0 %s' % ('col-md-9 col-lg-10' if option_widescreen else 'col-md-8 col-lg-9')">
-        <!-- LIVE INFORMATIONS -->
-        <div t-if="not track.event_id.is_ongoing and track.event_id.start_remaining" class="pt-3">
-            <div class="mx-3 alert alert-warning">
-                Event <span t-esc="track.event_id.name" class="font-weight-bold"/>
-                <span t-if="track.event_id.start_today">
-                    starts in
-                    <span t-esc="track.event_id.start_remaining"
-                        t-options="{'widget': 'duration', 'digital': False, 'unit': 'minute', 'round': 'minute'}"/>
+<templateid="event_track_content"name="Track:MainDescription">
+    <divname="o_wesession_track_main"
+         t-att-class="'col-12o_wevent_online_page_maino_wesession_track_mainbg-whitep-0%s'%('col-md-9col-lg-10'ifoption_widescreenelse'col-md-8col-lg-9')">
+        <!--LIVEINFORMATIONS-->
+        <divt-if="nottrack.event_id.is_ongoingandtrack.event_id.start_remaining"class="pt-3">
+            <divclass="mx-3alertalert-warning">
+                Event<spant-esc="track.event_id.name"class="font-weight-bold"/>
+                <spant-if="track.event_id.start_today">
+                    startsin
+                    <spant-esc="track.event_id.start_remaining"
+                        t-options="{'widget':'duration','digital':False,'unit':'minute','round':'minute'}"/>
                 </span>
-                <span t-else="">
-                    starts on
-                    <span t-field="track.event_id.with_context(tz=track.event_id.date_tz).date_begin"
-                        t-options="{'format': 'long', 'tz_name': track.event_id.date_tz, 'hide_seconds': True}"/>
+                <spant-else="">
+                    startson
+                    <spant-field="track.event_id.with_context(tz=track.event_id.date_tz).date_begin"
+                        t-options="{'format':'long','tz_name':track.event_id.date_tz,'hide_seconds':True}"/>
                 </span>
             </div>
         </div>
-        <div t-elif="track.track_start_remaining" class="pt-3">
-            <div class="mx-3 alert alert-warning">
-                Starting in
-                <span t-esc="track.track_start_remaining"
-                    t-options="{'widget': 'duration', 'digital': False, 'unit': 'second', 'round': 'minute'}"/>
+        <divt-elif="track.track_start_remaining"class="pt-3">
+            <divclass="mx-3alertalert-warning">
+                Startingin
+                <spant-esc="track.track_start_remaining"
+                    t-options="{'widget':'duration','digital':False,'unit':'second','round':'minute'}"/>
             </div>
         </div>
-        <!-- TRACK DESCRIPTION -->
-        <div class="o_wesession_track_main_description overflow-auto">
-            <div class="mx-3 pt-3 mb-3 d-flex justify-content-between flex-column flex-md-row">
-                <div class="d-flex flex-column">
-                    <span class="h4 mb-0" t-esc="track.name"/>
+        <!--TRACKDESCRIPTION-->
+        <divclass="o_wesession_track_main_descriptionoverflow-auto">
+            <divclass="mx-3pt-3mb-3d-flexjustify-content-betweenflex-columnflex-md-row">
+                <divclass="d-flexflex-column">
+                    <spanclass="h4mb-0"t-esc="track.name"/>
                     <div>
-                        <t t-foreach="track.tag_ids" t-as="tag">
-                            <span t-if="tag.color"
-                                t-att-class="'badge o_tag_color_hovered_%s' % (tag.color)"
+                        <tt-foreach="track.tag_ids"t-as="tag">
+                            <spant-if="tag.color"
+                                t-att-class="'badgeo_tag_color_hovered_%s'%(tag.color)"
                                 t-esc="tag.name"/>
                         </t>
                     </div>
                 </div>
-                <div class="o_we_track_action_buttons d-flex justify-content-md-end align-items-center flex-wrap">
-                    <div class="o_we_track_reminder_button my-1">
-                        <div t-if="option_track_wishlist and not track.is_track_done"
+                <divclass="o_we_track_action_buttonsd-flexjustify-content-md-endalign-items-centerflex-wrap">
+                    <divclass="o_we_track_reminder_buttonmy-1">
+                        <divt-if="option_track_wishlistandnottrack.is_track_done"
                             t-call="website_event_track.track_widget_reminder">
-                            <t t-set="reminder_small" t-value="False"/>
-                            <t t-set="reminder_light" t-value="False"/>
+                            <tt-set="reminder_small"t-value="False"/>
+                            <tt-set="reminder_light"t-value="False"/>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="mx-3 text-muted">
-                <t t-if="track.location_id">
-                    <strong>Location:</strong> <span t-field="track.location_id"/>
-                    <span> - </span>
+            <divclass="mx-3text-muted">
+                <tt-if="track.location_id">
+                    <strong>Location:</strong><spant-field="track.location_id"/>
+                    <span>-</span>
                 </t>
-                <t t-if="track.date">
-                    <span t-field="track.date"
-                        t-options='{"hide_seconds":"True", "format": "short"}'/>
+                <tt-if="track.date">
+                    <spant-field="track.date"
+                        t-options='{"hide_seconds":"True","format":"short"}'/>
                     -
-                    <span t-field="track.date_end"
-                        t-options='{"hide_seconds":"True", "format": "short"}'/>
-                    <t t-if="event.date_tz">
-                        (<span t-field="track.date_end" t-options='{"format": "zzz"}'/>)
+                    <spant-field="track.date_end"
+                        t-options='{"hide_seconds":"True","format":"short"}'/>
+                    <tt-if="event.date_tz">
+                        (<spant-field="track.date_end"t-options='{"format":"zzz"}'/>)
                     </t>
                 </t>
-                <t t-if="track.duration">
-                    (<span t-field="track.duration"
-                        t-options='{"widget": "duration", "unit": "hour", "round": "minute"}'/>)
+                <tt-if="track.duration">
+                    (<spant-field="track.duration"
+                        t-options='{"widget":"duration","unit":"hour","round":"minute"}'/>)
                 </t>
             </div>
             
-            <hr class="mt-2 mb-0"/>
+            <hrclass="mt-2mb-0"/>
 
-            <!-- ABOUT AUTHOR -->
-            <div class="mx-3">
-                <div class="mt-2 d-flex">
-                    <span t-if="track.image" t-field="track.image" class="o_wevent_online_page_avatar"
-                        t-options="{'widget': 'image', 'class': 'rounded-circle', 'max_width': '96'}"/>
-                    <div class="pl-2 pr-0 pr-md-2 d-flex flex-column">
-                        <span t-field="track.partner_name" class="font-weight-bold mb-2"/>
-                        <span class="mb-1 d-flex align-items-baseline text-break" t-if="track.partner_function">
-                            <i class="fa fa-briefcase mr-2"/><span t-esc="track.partner_function"/>
-                            <t t-if="track.partner_company_name">
-                                <span>&amp;nbsp;at&amp;nbsp;</span><span t-esc="track.partner_company_name"/>
+            <!--ABOUTAUTHOR-->
+            <divclass="mx-3">
+                <divclass="mt-2d-flex">
+                    <spant-if="track.image"t-field="track.image"class="o_wevent_online_page_avatar"
+                        t-options="{'widget':'image','class':'rounded-circle','max_width':'96'}"/>
+                    <divclass="pl-2pr-0pr-md-2d-flexflex-column">
+                        <spant-field="track.partner_name"class="font-weight-boldmb-2"/>
+                        <spanclass="mb-1d-flexalign-items-baselinetext-break"t-if="track.partner_function">
+                            <iclass="fafa-briefcasemr-2"/><spant-esc="track.partner_function"/>
+                            <tt-if="track.partner_company_name">
+                                <span>&amp;nbsp;at&amp;nbsp;</span><spant-esc="track.partner_company_name"/>
                             </t>
                         </span>
-                        <span class="mb-1 d-flex align-items-baseline text-break" t-if="track.partner_id.website">
-                            <i class="fa fa-home mr-2"/><a t-att-href="track.partner_id.website"><span t-field="track.partner_id.website"/></a>
+                        <spanclass="mb-1d-flexalign-items-baselinetext-break"t-if="track.partner_id.website">
+                            <iclass="fafa-homemr-2"/><at-att-href="track.partner_id.website"><spant-field="track.partner_id.website"/></a>
                         </span>
-                        <span class="mb-1 d-flex align-items-baseline text-break" t-if="track.partner_email">
-                            <i class="fa fa-envelope mr-2"/><a t-att-mailto="track.partner_email"><span t-field="track.partner_email"/></a>
+                        <spanclass="mb-1d-flexalign-items-baselinetext-break"t-if="track.partner_email">
+                            <iclass="fafa-envelopemr-2"/><at-att-mailto="track.partner_email"><spant-field="track.partner_email"/></a>
                         </span>
-                        <span class="mb-1 d-flex align-items-baseline text-break" t-if="track.partner_phone">
-                            <i class="fa fa-phone mr-2"/><span t-field="track.partner_phone"/>
+                        <spanclass="mb-1d-flexalign-items-baselinetext-break"t-if="track.partner_phone">
+                            <iclass="fafa-phonemr-2"/><spant-field="track.partner_phone"/>
                         </span>
                     </div>
                 </div>
-                <div t-field="track.partner_biography" class="oe_no_empty"/>
-                <hr t-if="not is_html_empty(track.description)" class="mt-2 pb-1 mb-1"/>
+                <divt-field="track.partner_biography"class="oe_no_empty"/>
+                <hrt-if="notis_html_empty(track.description)"class="mt-2pb-1mb-1"/>
             </div>
-            <div t-field="track.description" class="my-2 mx-3 oe_no_empty"/>
+            <divt-field="track.description"class="my-2mx-3oe_no_empty"/>
         </div>
     </div>
 </template>
 
-<!-- ============================================================ -->
-<!-- ASIDE: CONTROL PANEL -->
-<!-- ============================================================ -->
+<!--============================================================-->
+<!--ASIDE:CONTROLPANEL-->
+<!--============================================================-->
 
-<template id="event_track_aside" name="Track: Aside">
-    <div t-att-class="'col-12 pl-0 pr-0 pr-md-3 o_wevent_online_page_aside o_wesession_track_aside %s' % ('col-md-3 col-lg-2' if option_widescreen else 'col-md-4 col-lg-3')">
-        <div class="bg-white pt-0 pt-md-3 o_wevent_online_page_aside_content">
-            <div class="mx-2" t-if="track.website_cta">
-                <t t-set="cta_coundown" t-value="bool(track.website_cta_start_remaining)"/>
-                <div t-if="cta_coundown" class="text-center mt-2 mt-md-0 w-100 btn btn-primary d-none">
-                    <t t-call="website_event.display_timer_widget">
-                        <t t-set="pre_remaining_time" t-value="int(track.track_start_remaining)"/>
-                        <!--<t t-set="pre_countdown_text" t-value="'Talk starts in'"/>-->
-                        <t t-set="pre_countdown_display" t-value="bool(False)"/>
-                        <t t-set="main_remaining_time" t-value="int(track.website_cta_start_remaining)"/>
-                        <!--<t t-set="main_countdown_text" t-value="'Magic happens in'"/>-->
-                        <t t-set="main_countdown_display" t-value="bool(False)"/>
-                        <t t-set="display_class" t-value="'.o_event_cta_action'"/>
+<templateid="event_track_aside"name="Track:Aside">
+    <divt-att-class="'col-12pl-0pr-0pr-md-3o_wevent_online_page_asideo_wesession_track_aside%s'%('col-md-3col-lg-2'ifoption_widescreenelse'col-md-4col-lg-3')">
+        <divclass="bg-whitept-0pt-md-3o_wevent_online_page_aside_content">
+            <divclass="mx-2"t-if="track.website_cta">
+                <tt-set="cta_coundown"t-value="bool(track.website_cta_start_remaining)"/>
+                <divt-if="cta_coundown"class="text-centermt-2mt-md-0w-100btnbtn-primaryd-none">
+                    <tt-call="website_event.display_timer_widget">
+                        <tt-set="pre_remaining_time"t-value="int(track.track_start_remaining)"/>
+                        <!--<tt-set="pre_countdown_text"t-value="'Talkstartsin'"/>-->
+                        <tt-set="pre_countdown_display"t-value="bool(False)"/>
+                        <tt-set="main_remaining_time"t-value="int(track.website_cta_start_remaining)"/>
+                        <!--<tt-set="main_countdown_text"t-value="'Magichappensin'"/>-->
+                        <tt-set="main_countdown_display"t-value="bool(False)"/>
+                        <tt-set="display_class"t-value="'.o_event_cta_action'"/>
                     </t>
                 </div>
-                <div t-att-class="'o_event_cta_action %s' % ('d-none' if cta_coundown else '')">
-                    <a t-att-href="track.website_cta_url"
+                <divt-att-class="'o_event_cta_action%s'%('d-none'ifcta_coundownelse'')">
+                    <at-att-href="track.website_cta_url"
                         target="_blank"
-                        class="btn btn-primary w-100 mb-3 mt-2 mt-md-0">
-                        <span t-esc="track.website_cta_title"/>
+                        class="btnbtn-primaryw-100mb-3mt-2mt-md-0">
+                        <spant-esc="track.website_cta_title"/>
                     </a>
                 </div>
             </div>
-            <div class="d-flex align-items-center justify-content-between mx-2">
-                <ul class="nav nav-tabs o_wesession_track_aside_nav d-flex border-0" role="tablist">
-                    <li class="nav-item flex-grow-1">
-                        <a href="#track_list" aria-controls="track_list" class="nav-link active" role="tab" data-toggle="tab">
+            <divclass="d-flexalign-items-centerjustify-content-betweenmx-2">
+                <ulclass="navnav-tabso_wesession_track_aside_navd-flexborder-0"role="tablist">
+                    <liclass="nav-itemflex-grow-1">
+                        <ahref="#track_list"aria-controls="track_list"class="nav-linkactive"role="tab"data-toggle="tab">
                             Talks
                         </a>
                     </li>
                 </ul>
-                <a href="#collapse_track_aside" data-toggle="collapse" class="d-md-none p-2 text-decoration-none o_wevent_online_page_aside_collapse collapsed">
-                    <i class="fa fa-chevron-down d-md-none"/>
+                <ahref="#collapse_track_aside"data-toggle="collapse"class="d-md-nonep-2text-decoration-noneo_wevent_online_page_aside_collapsecollapsed">
+                    <iclass="fafa-chevron-downd-md-none"/>
                 </a>
             </div>
-            <div id="collapse_track_aside"
-                class="tab-content collapse d-md-block o_wesession_track_aside_tabs">
-                <div class="tab-pane fade show active" id="track_list" role="tabpanel">
-                    <ul class="list-unstyled mb-0">
-                        <li t-foreach="tracks_other" t-as="track_other" class="w-100">
-                            <a t-if="user_event_manager or track_other.is_published"
-                                class="d-block w-100 h-100 px-2 pt-2 pb-1 text-decoration-none"
+            <divid="collapse_track_aside"
+                class="tab-contentcollapsed-md-blocko_wesession_track_aside_tabs">
+                <divclass="tab-panefadeshowactive"id="track_list"role="tabpanel">
+                    <ulclass="list-unstyledmb-0">
+                        <lit-foreach="tracks_other"t-as="track_other"class="w-100">
+                            <at-if="user_event_managerortrack_other.is_published"
+                                class="d-blockw-100h-100px-2pt-2pb-1text-decoration-none"
                                 t-att-href="track_other.website_url">
-                                <t t-call="website_event_track.event_track_aside_other_track"/>
+                                <tt-call="website_event_track.event_track_aside_other_track"/>
                             </a>
-                            <div t-else="" class="text-muted px-2 pt-2 pb-1">
-                                <t t-call="website_event_track.event_track_aside_other_track"/>
+                            <divt-else=""class="text-mutedpx-2pt-2pb-1">
+                                <tt-call="website_event_track.event_track_aside_other_track"/>
                             </div>
                         </li>
                     </ul>
@@ -191,23 +191,23 @@
     </div>
 </template>
 
-<template id="event_track_aside_other_track">
-    <span t-esc="track_other.name" class="w-100"/>
-    <div class="d-flex align-items-center">
-        <small class="text-muted" t-esc="track_other.partner_name"/>
-        <div class="d-inline-block ml-auto o_wesession_track_aside_info text-truncate">
-            <small t-if="track_other.is_track_live and not track_other.is_track_done"
-                class="badge badge-danger">Live</small>
-            <small t-elif="track_other.is_track_done"
-                class="badge badge-light">Done</small>
-            <small t-elif="track_other.is_track_today and track_other.track_start_remaining"
-                class="badge badge-light">
-                <span t-esc="track_other.track_start_remaining"
-                    t-options="{'widget': 'duration', 'digital': False, 'add_direction': True,
-                                'unit': 'second', 'round': 'minute', 'format': 'narrow'}"/>
+<templateid="event_track_aside_other_track">
+    <spant-esc="track_other.name"class="w-100"/>
+    <divclass="d-flexalign-items-center">
+        <smallclass="text-muted"t-esc="track_other.partner_name"/>
+        <divclass="d-inline-blockml-autoo_wesession_track_aside_infotext-truncate">
+            <smallt-if="track_other.is_track_liveandnottrack_other.is_track_done"
+                class="badgebadge-danger">Live</small>
+            <smallt-elif="track_other.is_track_done"
+                class="badgebadge-light">Done</small>
+            <smallt-elif="track_other.is_track_todayandtrack_other.track_start_remaining"
+                class="badgebadge-light">
+                <spant-esc="track_other.track_start_remaining"
+                    t-options="{'widget':'duration','digital':False,'add_direction':True,
+                                'unit':'second','round':'minute','format':'narrow'}"/>
             </small>
-            <div t-elif="track_other.date" class="badge badge-light">
-                <span t-esc="track_other.date" t-options="{'widget': 'datetime', 'tz_name': track_other.event_id.date_tz, 'format': 'MMM. dd'}"/>
+            <divt-elif="track_other.date"class="badgebadge-light">
+                <spant-esc="track_other.date"t-options="{'widget':'datetime','tz_name':track_other.event_id.date_tz,'format':'MMM.dd'}"/>
             </div>
         </div>
     </div>

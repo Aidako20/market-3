@@ -1,58 +1,58 @@
-flectra.define('website_event_track_live_quiz.event_quiz', function (require) {
-'use strict';
+flectra.define('website_event_track_live_quiz.event_quiz',function(require){
+'usestrict';
 
-var Quiz = require('website_event_track_quiz.event.quiz');
+varQuiz=require('website_event_track_quiz.event.quiz');
 
-var WebsiteEventTrackSuggestionQuiz = Quiz.include({
-    xmlDependencies: Quiz.prototype.xmlDependencies.concat([
+varWebsiteEventTrackSuggestionQuiz=Quiz.include({
+    xmlDependencies:Quiz.prototype.xmlDependencies.concat([
         '/website_event_track_live_quiz/static/src/xml/website_event_track_quiz_templates.xml',
     ]),
 
     /**
-     * @override
+     *@override
      */
-    willStart: function () {
-        return Promise.all([
+    willStart:function(){
+        returnPromise.all([
             this._super(...arguments),
             this._getTrackSuggestion()
         ]);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
-    _submitQuiz: function () {
-        var self = this;
-        return this._super(...arguments).then(function (data) {
-            if (data.quiz_completed) {
+    _submitQuiz:function(){
+        varself=this;
+        returnthis._super(...arguments).then(function(data){
+            if(data.quiz_completed){
                 self.$('.o_quiz_js_quiz_next_track')
                     .removeClass('btn-light')
                     .addClass('btn-secondary');
             }
 
-            return Promise.resolve(data);
+            returnPromise.resolve(data);
         });
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
-    _getTrackSuggestion: function () {
-        var self = this;
-        return this._rpc({
-            route: '/event_track/get_track_suggestion',
-            params: {
-                track_id: this.track.id,
+    _getTrackSuggestion:function(){
+        varself=this;
+        returnthis._rpc({
+            route:'/event_track/get_track_suggestion',
+            params:{
+                track_id:this.track.id,
             }
-        }).then(function (suggestion) {
-            self.nextSuggestion = suggestion;
-            return Promise.resolve();
+        }).then(function(suggestion){
+            self.nextSuggestion=suggestion;
+            returnPromise.resolve();
         });
     }
 });
 
-return WebsiteEventTrackSuggestionQuiz;
+returnWebsiteEventTrackSuggestionQuiz;
 
 });

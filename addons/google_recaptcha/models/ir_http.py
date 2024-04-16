@@ -1,96 +1,96 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-import logging
-import requests
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+importlogging
+importrequests
 
-from flectra import api, models, _
-from flectra.http import request
-from flectra.exceptions import UserError, ValidationError
+fromflectraimportapi,models,_
+fromflectra.httpimportrequest
+fromflectra.exceptionsimportUserError,ValidationError
 
-logger = logging.getLogger(__name__)
+logger=logging.getLogger(__name__)
 
 
-class Http(models.AbstractModel):
-    _inherit = 'ir.http'
+classHttp(models.AbstractModel):
+    _inherit='ir.http'
 
     @api.model
-    def _verify_request_recaptcha_token(self, action):
-        """ Verify the recaptcha token for the current request.
-            If no recaptcha private key is set the recaptcha verification
-            is considered inactive and this method will return True.
+    def_verify_request_recaptcha_token(self,action):
+        """Verifytherecaptchatokenforthecurrentrequest.
+            Ifnorecaptchaprivatekeyissettherecaptchaverification
+            isconsideredinactiveandthismethodwillreturnTrue.
         """
-        ip_addr = request.httprequest.remote_addr
-        token = request.params.pop('recaptcha_token_response', False)
-        recaptcha_result = request.env['ir.http']._verify_recaptcha_token(ip_addr, token, action)
-        if recaptcha_result in ['is_human', 'no_secret']:
-            return True
-        if recaptcha_result == 'wrong_secret':
-            raise ValidationError(_("The reCaptcha private key is invalid."))
-        elif recaptcha_result == 'wrong_token':
-            raise ValidationError(_("The reCaptcha token is invalid."))
-        elif recaptcha_result == 'timeout':
-            raise UserError(_("Your request has timed out, please retry."))
-        elif recaptcha_result == 'bad_request':
-            raise UserError(_("The request is invalid or malformed."))
+        ip_addr=request.httprequest.remote_addr
+        token=request.params.pop('recaptcha_token_response',False)
+        recaptcha_result=request.env['ir.http']._verify_recaptcha_token(ip_addr,token,action)
+        ifrecaptcha_resultin['is_human','no_secret']:
+            returnTrue
+        ifrecaptcha_result=='wrong_secret':
+            raiseValidationError(_("ThereCaptchaprivatekeyisinvalid."))
+        elifrecaptcha_result=='wrong_token':
+            raiseValidationError(_("ThereCaptchatokenisinvalid."))
+        elifrecaptcha_result=='timeout':
+            raiseUserError(_("Yourrequesthastimedout,pleaseretry."))
+        elifrecaptcha_result=='bad_request':
+            raiseUserError(_("Therequestisinvalidormalformed."))
         else:
-            return False
+            returnFalse
 
     @api.model
-    def _verify_recaptcha_token(self, ip_addr, token, action=False):
+    def_verify_recaptcha_token(self,ip_addr,token,action=False):
         """
-            Verify a recaptchaV3 token and returns the result as a string.
-            RecaptchaV3 verify DOC: https://developers.google.com/recaptcha/docs/verify
+            VerifyarecaptchaV3tokenandreturnstheresultasastring.
+            RecaptchaV3verifyDOC:https://developers.google.com/recaptcha/docs/verify
 
-            :return: The result of the call to the google API:
-                     is_human: The token is valid and the user trustworthy.
-                     is_bot: The user is not trustworthy and most likely a bot.
-                     no_secret: No reCaptcha secret set in settings.
-                     wrong_action: the action performed to obtain the token does not match the one we are verifying.
-                     wrong_token: The token provided is invalid or empty.
-                     wrong_secret: The private key provided in settings is invalid.
-                     timeout: The request has timout or the token provided is too old.
-                     bad_request: The request is invalid or malformed.
-            :rtype: str
+            :return:TheresultofthecalltothegoogleAPI:
+                     is_human:Thetokenisvalidandtheusertrustworthy.
+                     is_bot:Theuserisnottrustworthyandmostlikelyabot.
+                     no_secret:NoreCaptchasecretsetinsettings.
+                     wrong_action:theactionperformedtoobtainthetokendoesnotmatchtheoneweareverifying.
+                     wrong_token:Thetokenprovidedisinvalidorempty.
+                     wrong_secret:Theprivatekeyprovidedinsettingsisinvalid.
+                     timeout:Therequesthastimoutorthetokenprovidedistooold.
+                     bad_request:Therequestisinvalidormalformed.
+            :rtype:str
         """
-        private_key = request.env['ir.config_parameter'].sudo().get_param('recaptcha_private_key')
-        if not private_key:
-            return 'no_secret'
-        min_score = request.env['ir.config_parameter'].sudo().get_param('recaptcha_min_score')
+        private_key=request.env['ir.config_parameter'].sudo().get_param('recaptcha_private_key')
+        ifnotprivate_key:
+            return'no_secret'
+        min_score=request.env['ir.config_parameter'].sudo().get_param('recaptcha_min_score')
         try:
-            r = requests.post('https://www.recaptcha.net/recaptcha/api/siteverify', {
-                'secret': private_key,
-                'response': token,
-                'remoteip': ip_addr,
-            }, timeout=2)  # it takes ~50ms to retrieve the response
-            result = r.json()
-            res_success = result['success']
-            res_action = res_success and action and result['action']
-        except requests.exceptions.Timeout:
-            logger.error("Trial captcha verification timeout for ip address %s", ip_addr)
-            return 'timeout'
-        except Exception:
-            logger.error("Trial captcha verification bad request response")
-            return 'bad_request'
+            r=requests.post('https://www.recaptcha.net/recaptcha/api/siteverify',{
+                'secret':private_key,
+                'response':token,
+                'remoteip':ip_addr,
+            },timeout=2) #ittakes~50mstoretrievetheresponse
+            result=r.json()
+            res_success=result['success']
+            res_action=res_successandactionandresult['action']
+        exceptrequests.exceptions.Timeout:
+            logger.error("Trialcaptchaverificationtimeoutforipaddress%s",ip_addr)
+            return'timeout'
+        exceptException:
+            logger.error("Trialcaptchaverificationbadrequestresponse")
+            return'bad_request'
 
-        if res_success:
-            score = result.get('score', False)
-            if score < float(min_score):
-                logger.warning("Trial captcha verification for ip address %s failed with score %f.", ip_addr, score)
-                return 'is_bot'
-            if res_action and res_action != action:
-                logger.warning("Trial captcha verification for ip address %s failed with action %f, expected: %s.", ip_addr, score, action)
-                return 'wrong_action'
-            logger.info("Trial captcha verification for ip address %s succeeded with score %f.", ip_addr, score)
-            return 'is_human'
-        errors = result.get('error-codes', [])
-        logger.warning("Trial captcha verification for ip address %s failed error codes %r. token was: [%s]", ip_addr, errors, token)
-        for error in errors:
-            if error in ['missing-input-secret', 'invalid-input-secret']:
-                return 'wrong_secret'
-            if error in ['missing-input-response', 'invalid-input-response']:
-                return 'wrong_token'
-            if error == 'timeout-or-duplicate':
-                return 'timeout'
-            if error == 'bad-request':
-                return 'bad_request'
-        return 'is_bot'
+        ifres_success:
+            score=result.get('score',False)
+            ifscore<float(min_score):
+                logger.warning("Trialcaptchaverificationforipaddress%sfailedwithscore%f.",ip_addr,score)
+                return'is_bot'
+            ifres_actionandres_action!=action:
+                logger.warning("Trialcaptchaverificationforipaddress%sfailedwithaction%f,expected:%s.",ip_addr,score,action)
+                return'wrong_action'
+            logger.info("Trialcaptchaverificationforipaddress%ssucceededwithscore%f.",ip_addr,score)
+            return'is_human'
+        errors=result.get('error-codes',[])
+        logger.warning("Trialcaptchaverificationforipaddress%sfailederrorcodes%r.tokenwas:[%s]",ip_addr,errors,token)
+        forerrorinerrors:
+            iferrorin['missing-input-secret','invalid-input-secret']:
+                return'wrong_secret'
+            iferrorin['missing-input-response','invalid-input-response']:
+                return'wrong_token'
+            iferror=='timeout-or-duplicate':
+                return'timeout'
+            iferror=='bad-request':
+                return'bad_request'
+        return'is_bot'

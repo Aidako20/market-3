@@ -1,33 +1,33 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.fa = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.fa=factory()));
+}(this,function(){'usestrict';
 
-    var fa = {
-        code: "fa",
-        week: {
-            dow: 6,
-            doy: 12 // The week that contains Jan 1st is the first week of the year.
+    varfa={
+        code:"fa",
+        week:{
+            dow:6,
+            doy:12//TheweekthatcontainsJan1stisthefirstweekoftheyear.
         },
-        dir: 'rtl',
-        buttonText: {
-            prev: "قبلی",
-            next: "بعدی",
-            today: "امروز",
-            month: "ماه",
-            week: "هفته",
-            day: "روز",
-            list: "برنامه"
+        dir:'rtl',
+        buttonText:{
+            prev:"قبلی",
+            next:"بعدی",
+            today:"امروز",
+            month:"ماه",
+            week:"هفته",
+            day:"روز",
+            list:"برنامه"
         },
-        weekLabel: "هف",
-        allDayText: "تمام روز",
-        eventLimitText: function (n) {
-            return "بیش از " + n;
+        weekLabel:"هف",
+        allDayText:"تمامروز",
+        eventLimitText:function(n){
+            return"بیشاز"+n;
         },
-        noEventsMessage: "هیچ رویدادی به نمایش"
+        noEventsMessage:"هیچرویدادیبهنمایش"
     };
 
-    return fa;
+    returnfa;
 
 }));

@@ -1,11 +1,11 @@
-flectra.define('survey.session_colors', function (require) {
-'use strict';
+flectra.define('survey.session_colors',function(require){
+'usestrict';
 
 /**
- * Small tool that returns common colors for survey session widgets.
- * Source: https://www.materialui.co/colors (500)
+ *Smalltoolthatreturnscommoncolorsforsurveysessionwidgets.
+ *Source:https://www.materialui.co/colors(500)
  */
-return [
+return[
     '33,150,243',
     '63,81,181',
     '205,220,57',

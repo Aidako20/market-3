@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <button t-name="SaleProjectKanbanView.buttons" type="button" class="btn btn-secondary o_create_sale_order">
-        Create Sales Order
+    <buttont-name="SaleProjectKanbanView.buttons"type="button"class="btnbtn-secondaryo_create_sale_order">
+        CreateSalesOrder
     </button>
 
 </templates>

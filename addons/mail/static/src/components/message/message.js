@@ -1,442 +1,442 @@
-flectra.define('mail/static/src/components/message/message.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/message/message.js',function(require){
+'usestrict';
 
-const components = {
-    AttachmentList: require('mail/static/src/components/attachment_list/attachment_list.js'),
-    MessageSeenIndicator: require('mail/static/src/components/message_seen_indicator/message_seen_indicator.js'),
-    ModerationBanDialog: require('mail/static/src/components/moderation_ban_dialog/moderation_ban_dialog.js'),
-    ModerationDiscardDialog: require('mail/static/src/components/moderation_discard_dialog/moderation_discard_dialog.js'),
-    ModerationRejectDialog: require('mail/static/src/components/moderation_reject_dialog/moderation_reject_dialog.js'),
-    NotificationPopover: require('mail/static/src/components/notification_popover/notification_popover.js'),
-    PartnerImStatusIcon: require('mail/static/src/components/partner_im_status_icon/partner_im_status_icon.js'),
+constcomponents={
+    AttachmentList:require('mail/static/src/components/attachment_list/attachment_list.js'),
+    MessageSeenIndicator:require('mail/static/src/components/message_seen_indicator/message_seen_indicator.js'),
+    ModerationBanDialog:require('mail/static/src/components/moderation_ban_dialog/moderation_ban_dialog.js'),
+    ModerationDiscardDialog:require('mail/static/src/components/moderation_discard_dialog/moderation_discard_dialog.js'),
+    ModerationRejectDialog:require('mail/static/src/components/moderation_reject_dialog/moderation_reject_dialog.js'),
+    NotificationPopover:require('mail/static/src/components/notification_popover/notification_popover.js'),
+    PartnerImStatusIcon:require('mail/static/src/components/partner_im_status_icon/partner_im_status_icon.js'),
 };
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
-const useUpdate = require('mail/static/src/component_hooks/use_update/use_update.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
+constuseUpdate=require('mail/static/src/component_hooks/use_update/use_update.js');
 
-const { _lt } = require('web.core');
-const { format } = require('web.field_utils');
-const { getLangDatetimeFormat } = require('web.time');
+const{_lt}=require('web.core');
+const{format}=require('web.field_utils');
+const{getLangDatetimeFormat}=require('web.time');
 
-const { Component, useState } = owl;
-const { useRef } = owl.hooks;
+const{Component,useState}=owl;
+const{useRef}=owl.hooks;
 
-const READ_MORE = _lt("read more");
-const READ_LESS = _lt("read less");
-const { isEventHandled, markEventHandled } = require('mail/static/src/utils/utils.js');
+constREAD_MORE=_lt("readmore");
+constREAD_LESS=_lt("readless");
+const{isEventHandled,markEventHandled}=require('mail/static/src/utils/utils.js');
 
-class Message extends Component {
+classMessageextendsComponent{
 
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
-        this.state = useState({
-            // Determine if the moderation ban dialog is displayed.
-            hasModerationBanDialog: false,
-            // Determine if the moderation discard dialog is displayed.
-            hasModerationDiscardDialog: false,
-            // Determine if the moderation reject dialog is displayed.
-            hasModerationRejectDialog: false,
+        this.state=useState({
+            //Determineifthemoderationbandialogisdisplayed.
+            hasModerationBanDialog:false,
+            //Determineifthemoderationdiscarddialogisdisplayed.
+            hasModerationDiscardDialog:false,
+            //Determineifthemoderationrejectdialogisdisplayed.
+            hasModerationRejectDialog:false,
             /**
-             * Determine whether the message is clicked. When message is in
-             * clicked state, it keeps displaying the commands.
+             *Determinewhetherthemessageisclicked.Whenmessageisin
+             *clickedstate,itkeepsdisplayingthecommands.
              */
-            isClicked: false,
+            isClicked:false,
         });
         useShouldUpdateBasedOnProps();
-        useStore(props => {
-            const message = this.env.models['mail.message'].get(props.messageLocalId);
-            const author = message ? message.author : undefined;
-            const partnerRoot = this.env.messaging.partnerRoot;
-            const originThread = message ? message.originThread : undefined;
-            const threadView = this.env.models['mail.thread_view'].get(props.threadViewLocalId);
-            const thread = threadView ? threadView.thread : undefined;
-            return {
-                attachments: message
-                    ? message.attachments.map(attachment => attachment.__state)
-                    : [],
+        useStore(props=>{
+            constmessage=this.env.models['mail.message'].get(props.messageLocalId);
+            constauthor=message?message.author:undefined;
+            constpartnerRoot=this.env.messaging.partnerRoot;
+            constoriginThread=message?message.originThread:undefined;
+            constthreadView=this.env.models['mail.thread_view'].get(props.threadViewLocalId);
+            constthread=threadView?threadView.thread:undefined;
+            return{
+                attachments:message
+                    ?message.attachments.map(attachment=>attachment.__state)
+                    :[],
                 author,
-                authorAvatarUrl: author && author.avatarUrl,
-                authorImStatus: author && author.im_status,
-                authorNameOrDisplayName: author && author.nameOrDisplayName,
-                correspondent: thread && thread.correspondent,
-                hasMessageCheckbox: message ? message.hasCheckbox : false,
-                isDeviceMobile: this.env.messaging.device.isMobile,
-                isMessageChecked: message && threadView
-                    ? message.isChecked(thread, threadView.stringifiedDomain)
-                    : false,
-                message: message ? message.__state : undefined,
-                notifications: message ? message.notifications.map(notif => notif.__state) : [],
+                authorAvatarUrl:author&&author.avatarUrl,
+                authorImStatus:author&&author.im_status,
+                authorNameOrDisplayName:author&&author.nameOrDisplayName,
+                correspondent:thread&&thread.correspondent,
+                hasMessageCheckbox:message?message.hasCheckbox:false,
+                isDeviceMobile:this.env.messaging.device.isMobile,
+                isMessageChecked:message&&threadView
+                    ?message.isChecked(thread,threadView.stringifiedDomain)
+                    :false,
+                message:message?message.__state:undefined,
+                notifications:message?message.notifications.map(notif=>notif.__state):[],
                 originThread,
-                originThreadModel: originThread && originThread.model,
-                originThreadName: originThread && originThread.name,
-                originThreadUrl: originThread && originThread.url,
+                originThreadModel:originThread&&originThread.model,
+                originThreadName:originThread&&originThread.name,
+                originThreadUrl:originThread&&originThread.url,
                 partnerRoot,
                 thread,
-                threadHasSeenIndicators: thread && thread.hasSeenIndicators,
-                threadMassMailing: thread && thread.mass_mailing,
+                threadHasSeenIndicators:thread&&thread.hasSeenIndicators,
+                threadMassMailing:thread&&thread.mass_mailing,
             };
-        }, {
-            compareDepth: {
-                attachments: 1,
-                notifications: 1,
+        },{
+            compareDepth:{
+                attachments:1,
+                notifications:1,
             },
         });
-        useUpdate({ func: () => this._update() });
+        useUpdate({func:()=>this._update()});
         /**
-         * The intent of the reply button depends on the last rendered state.
+         *Theintentofthereplybuttondependsonthelastrenderedstate.
          */
         this._wasSelected;
         /**
-         * Value of the last rendered prettyBody. Useful to compare to new value
-         * to decide if it has to be updated.
+         *ValueofthelastrenderedprettyBody.Usefultocomparetonewvalue
+         *todecideifithastobeupdated.
          */
         this._lastPrettyBody;
         /**
-         * Reference to element containing the prettyBody. Useful to be able to
-         * replace prettyBody with new value in JS (which is faster than t-raw).
+         *ReferencetoelementcontainingtheprettyBody.Usefultobeableto
+         *replaceprettyBodywithnewvalueinJS(whichisfasterthant-raw).
          */
-        this._prettyBodyRef = useRef('prettyBody');
+        this._prettyBodyRef=useRef('prettyBody');
         /**
-         * Reference to the content of the message.
+         *Referencetothecontentofthemessage.
          */
-        this._contentRef = useRef('content');
+        this._contentRef=useRef('content');
         /**
-         * To get checkbox state.
+         *Togetcheckboxstate.
          */
-        this._checkboxRef = useRef('checkbox');
+        this._checkboxRef=useRef('checkbox');
         /**
-         * Id of setInterval used to auto-update time elapsed of message at
-         * regular time.
+         *IdofsetIntervalusedtoauto-updatetimeelapsedofmessageat
+         *regulartime.
          */
-        this._intervalId = undefined;
+        this._intervalId=undefined;
         /**
-         * States the index of the last "read more" that was inserted.
-         * Useful to remember the state for each "read more" even if their DOM
-         * is re-rendered.
+         *Statestheindexofthelast"readmore"thatwasinserted.
+         *Usefultorememberthestateforeach"readmore"eveniftheirDOM
+         *isre-rendered.
          */
-        this._lastReadMoreIndex = 0;
+        this._lastReadMoreIndex=0;
         /**
-         * Determines whether each "read more" is opened or closed. The keys are
-         * index, which is determined by their order of appearance in the DOM.
-         * If body changes so that "read more" count is different, their default
-         * value will be "wrong" at the next render but this is an acceptable
-         * limitation. It's more important to save the state correctly in a
-         * typical non-changing situation.
+         *Determineswhethereach"readmore"isopenedorclosed.Thekeysare
+         *index,whichisdeterminedbytheirorderofappearanceintheDOM.
+         *Ifbodychangessothat"readmore"countisdifferent,theirdefault
+         *valuewillbe"wrong"atthenextrenderbutthisisanacceptable
+         *limitation.It'smoreimportanttosavethestatecorrectlyina
+         *typicalnon-changingsituation.
          */
-        this._isReadMoreByIndex = new Map();
+        this._isReadMoreByIndex=newMap();
         this._constructor();
     }
 
     /**
-     * Allows patching constructor.
+     *Allowspatchingconstructor.
      */
-    _constructor() {}
+    _constructor(){}
 
-    willUnmount() {
+    willUnmount(){
         clearInterval(this._intervalId);
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    get avatar() {
-        if (this.message.author) {
-            // TODO FIXME for public user this might not be accessible. task-2223236
-            // we should probably use the correspondig attachment id + access token
-            // or create a dedicated route to get message image, checking the access right of the message
-            return this.message.author.avatarUrl;
-        } else if (this.message.message_type === 'email') {
-            return '/mail/static/src/img/email_icon.png';
+    getavatar(){
+        if(this.message.author){
+            //TODOFIXMEforpublicuserthismightnotbeaccessible.task-2223236
+            //weshouldprobablyusethecorrespondigattachmentid+accesstoken
+            //orcreateadedicatedroutetogetmessageimage,checkingtheaccessrightofthemessage
+            returnthis.message.author.avatarUrl;
+        }elseif(this.message.message_type==='email'){
+            return'/mail/static/src/img/email_icon.png';
         }
-        return '/mail/static/src/img/smiley/avatar.jpg';
+        return'/mail/static/src/img/smiley/avatar.jpg';
     }
 
     /**
-     * Get the date time of the message at current user locale time.
+     *Getthedatetimeofthemessageatcurrentuserlocaletime.
      *
-     * @returns {string}
+     *@returns{string}
      */
-    get datetime() {
-        return this.message.date.format(getLangDatetimeFormat());
+    getdatetime(){
+        returnthis.message.date.format(getLangDatetimeFormat());
     }
 
     /**
-     * Determines whether author open chat feature is enabled on message.
+     *Determineswhetherauthoropenchatfeatureisenabledonmessage.
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    get hasAuthorOpenChat() {
-        if (!this.message.author) {
-            return false;
+    gethasAuthorOpenChat(){
+        if(!this.message.author){
+            returnfalse;
         }
-        if (
-            this.threadView &&
-            this.threadView.thread &&
-            this.threadView.thread.correspondent === this.message.author
-        ) {
-            return false;
+        if(
+            this.threadView&&
+            this.threadView.thread&&
+            this.threadView.thread.correspondent===this.message.author
+        ){
+            returnfalse;
         }
-        return true;
+        returntrue;
     }
 
     /**
-     * Tell whether the bottom of this message is visible or not.
+     *Tellwhetherthebottomofthismessageisvisibleornot.
      *
-     * @param {Object} param0
-     * @param {integer} [offset=0]
-     * @returns {boolean}
+     *@param{Object}param0
+     *@param{integer}[offset=0]
+     *@returns{boolean}
      */
-    isBottomVisible({ offset=0 } = {}) {
-        if (!this.el) {
-            return false;
+    isBottomVisible({offset=0}={}){
+        if(!this.el){
+            returnfalse;
         }
-        const elRect = this.el.getBoundingClientRect();
-        if (!this.el.parentNode) {
-            return false;
+        constelRect=this.el.getBoundingClientRect();
+        if(!this.el.parentNode){
+            returnfalse;
         }
-        const parentRect = this.el.parentNode.getBoundingClientRect();
-        // bottom with (double) 10px offset
-        return (
-            elRect.bottom < parentRect.bottom + offset &&
-            parentRect.top < elRect.bottom + offset
+        constparentRect=this.el.parentNode.getBoundingClientRect();
+        //bottomwith(double)10pxoffset
+        return(
+            elRect.bottom<parentRect.bottom+offset&&
+            parentRect.top<elRect.bottom+offset
         );
     }
 
     /**
-     * Tell whether the message is partially visible on browser window or not.
+     *Tellwhetherthemessageispartiallyvisibleonbrowserwindowornot.
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    isPartiallyVisible() {
-        const elRect = this.el.getBoundingClientRect();
-        if (!this.el.parentNode) {
-            return false;
+    isPartiallyVisible(){
+        constelRect=this.el.getBoundingClientRect();
+        if(!this.el.parentNode){
+            returnfalse;
         }
-        const parentRect = this.el.parentNode.getBoundingClientRect();
-        // intersection with 5px offset
-        return (
-            elRect.top < parentRect.bottom + 5 &&
-            parentRect.top < elRect.bottom + 5
+        constparentRect=this.el.parentNode.getBoundingClientRect();
+        //intersectionwith5pxoffset
+        return(
+            elRect.top<parentRect.bottom+5&&
+            parentRect.top<elRect.bottom+5
         );
     }
 
     /**
-     * @returns {mail.message}
+     *@returns{mail.message}
      */
-    get message() {
-        return this.env.models['mail.message'].get(this.props.messageLocalId);
+    getmessage(){
+        returnthis.env.models['mail.message'].get(this.props.messageLocalId);
     }
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    get OPEN_CHAT() {
-        return this.env._t("Open chat");
+    getOPEN_CHAT(){
+        returnthis.env._t("Openchat");
     }
 
     /**
-     * Make this message viewable in its enclosing scroll environment (usually
-     * message list).
+     *Makethismessageviewableinitsenclosingscrollenvironment(usually
+     *messagelist).
      *
-     * @param {Object} [param0={}]
-     * @param {string} [param0.behavior='auto']
-     * @param {string} [param0.block='end']
-     * @returns {Promise}
+     *@param{Object}[param0={}]
+     *@param{string}[param0.behavior='auto']
+     *@param{string}[param0.block='end']
+     *@returns{Promise}
      */
-    async scrollIntoView({ behavior = 'auto', block = 'end' } = {}) {
+    asyncscrollIntoView({behavior='auto',block='end'}={}){
         this.el.scrollIntoView({
             behavior,
             block,
-            inline: 'nearest',
+            inline:'nearest',
         });
-        if (behavior === 'smooth') {
-            return new Promise(resolve => setTimeout(resolve, 500));
-        } else {
-            return Promise.resolve();
+        if(behavior==='smooth'){
+            returnnewPromise(resolve=>setTimeout(resolve,500));
+        }else{
+            returnPromise.resolve();
         }
     }
 
     /**
-     * Get the shorttime format of the message date.
+     *Gettheshorttimeformatofthemessagedate.
      *
-     * @returns {string}
+     *@returns{string}
      */
-    get shortTime() {
-        return this.message.date.format('hh:mm');
+    getshortTime(){
+        returnthis.message.date.format('hh:mm');
     }
 
     /**
-     * @returns {mail.thread_view}
+     *@returns{mail.thread_view}
      */
-    get threadView() {
-        return this.env.models['mail.thread_view'].get(this.props.threadViewLocalId);
+    getthreadView(){
+        returnthis.env.models['mail.thread_view'].get(this.props.threadViewLocalId);
     }
 
     /**
-     * @returns {Object}
+     *@returns{Object}
      */
-    get trackingValues() {
-        return this.message.tracking_value_ids.map(trackingValue => {
-            const value = Object.assign({}, trackingValue);
-            value.changed_field = _.str.sprintf(this.env._t("%s:"), value.changed_field);
+    gettrackingValues(){
+        returnthis.message.tracking_value_ids.map(trackingValue=>{
+            constvalue=Object.assign({},trackingValue);
+            value.changed_field=_.str.sprintf(this.env._t("%s:"),value.changed_field);
             /**
-             * Maps tracked field type to a JS formatter. Tracking values are
-             * not always stored in the same field type as their origin type.
-             * Field types that are not listed here are not supported by
-             * tracking in Python. Also see `create_tracking_values` in Python.
+             *MapstrackedfieldtypetoaJSformatter.Trackingvaluesare
+             *notalwaysstoredinthesamefieldtypeastheirorigintype.
+             *Fieldtypesthatarenotlistedherearenotsupportedby
+             *trackinginPython.Alsosee`create_tracking_values`inPython.
              */
-            switch (value.field_type) {
-                case 'boolean':
-                    value.old_value = format.boolean(value.old_value, undefined, { forceString: true });
-                    value.new_value = format.boolean(value.new_value, undefined, { forceString: true });
+            switch(value.field_type){
+                case'boolean':
+                    value.old_value=format.boolean(value.old_value,undefined,{forceString:true});
+                    value.new_value=format.boolean(value.new_value,undefined,{forceString:true});
                     break;
                 /**
-                 * many2one formatter exists but is expecting id/name_get or data
-                 * object but only the target record name is known in this context.
+                 *many2oneformatterexistsbutisexpectingid/name_getordata
+                 *objectbutonlythetargetrecordnameisknowninthiscontext.
                  *
-                 * Selection formatter exists but requires knowing all
-                 * possibilities and they are not given in this context.
+                 *Selectionformatterexistsbutrequiresknowingall
+                 *possibilitiesandtheyarenotgiveninthiscontext.
                  */
-                case 'char':
-                case 'many2one':
-                case 'selection':
-                    value.old_value = format.char(value.old_value);
-                    value.new_value = format.char(value.new_value);
+                case'char':
+                case'many2one':
+                case'selection':
+                    value.old_value=format.char(value.old_value);
+                    value.new_value=format.char(value.new_value);
                     break;
-                case 'date':
-                    if (value.old_value) {
-                        value.old_value = moment.utc(value.old_value);
+                case'date':
+                    if(value.old_value){
+                        value.old_value=moment.utc(value.old_value);
                     }
-                    if (value.new_value) {
-                        value.new_value = moment.utc(value.new_value);
+                    if(value.new_value){
+                        value.new_value=moment.utc(value.new_value);
                     }
-                    value.old_value = format.date(value.old_value);
-                    value.new_value = format.date(value.new_value);
+                    value.old_value=format.date(value.old_value);
+                    value.new_value=format.date(value.new_value);
                     break;
-                case 'datetime':
-                    if (value.old_value) {
-                        value.old_value = moment.utc(value.old_value);
+                case'datetime':
+                    if(value.old_value){
+                        value.old_value=moment.utc(value.old_value);
                     }
-                    if (value.new_value) {
-                        value.new_value = moment.utc(value.new_value);
+                    if(value.new_value){
+                        value.new_value=moment.utc(value.new_value);
                     }
-                    value.old_value = format.datetime(value.old_value);
-                    value.new_value = format.datetime(value.new_value);
+                    value.old_value=format.datetime(value.old_value);
+                    value.new_value=format.datetime(value.new_value);
                     break;
-                case 'float':
-                    value.old_value = format.float(value.old_value);
-                    value.new_value = format.float(value.new_value);
+                case'float':
+                    value.old_value=format.float(value.old_value);
+                    value.new_value=format.float(value.new_value);
                     break;
-                case 'integer':
-                    value.old_value = format.integer(value.old_value);
-                    value.new_value = format.integer(value.new_value);
+                case'integer':
+                    value.old_value=format.integer(value.old_value);
+                    value.new_value=format.integer(value.new_value);
                     break;
-                case 'monetary':
-                    value.old_value = format.monetary(value.old_value, undefined, { forceString: true });
-                    value.new_value = format.monetary(value.new_value, undefined, { forceString: true });
+                case'monetary':
+                    value.old_value=format.monetary(value.old_value,undefined,{forceString:true});
+                    value.new_value=format.monetary(value.new_value,undefined,{forceString:true});
                     break;
-                case 'text':
-                    value.old_value = format.text(value.old_value);
-                    value.new_value = format.text(value.new_value);
+                case'text':
+                    value.old_value=format.text(value.old_value);
+                    value.new_value=format.text(value.new_value);
                     break;
             }
-            return value;
+            returnvalue;
         });
     }
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Modifies the message to add the 'read more/read less' functionality
-     * All element nodes with 'data-o-mail-quote' attribute are concerned.
-     * All text nodes after a ``#stopSpelling`` element are concerned.
-     * Those text nodes need to be wrapped in a span (toggle functionality).
-     * All consecutive elements are joined in one 'read more/read less'.
+     *Modifiesthemessagetoaddthe'readmore/readless'functionality
+     *Allelementnodeswith'data-o-mail-quote'attributeareconcerned.
+     *Alltextnodesaftera``#stopSpelling``elementareconcerned.
+     *Thosetextnodesneedtobewrappedinaspan(togglefunctionality).
+     *Allconsecutiveelementsarejoinedinone'readmore/readless'.
      *
-     * FIXME This method should be rewritten (task-2308951)
+     *FIXMEThismethodshouldberewritten(task-2308951)
      *
-     * @private
-     * @param {jQuery} $element
+     *@private
+     *@param{jQuery}$element
      */
-    _insertReadMoreLess($element) {
-        const groups = [];
-        let readMoreNodes;
+    _insertReadMoreLess($element){
+        constgroups=[];
+        letreadMoreNodes;
 
-        // nodeType 1: element_node
-        // nodeType 3: text_node
-        const $children = $element.contents()
-            .filter((index, content) =>
-                content.nodeType === 1 || (content.nodeType === 3 && content.nodeValue.trim())
+        //nodeType1:element_node
+        //nodeType3:text_node
+        const$children=$element.contents()
+            .filter((index,content)=>
+                content.nodeType===1||(content.nodeType===3&&content.nodeValue.trim())
             );
 
-        for (const child of $children) {
-            let $child = $(child);
+        for(constchildof$children){
+            let$child=$(child);
 
-            // Hide Text nodes if "stopSpelling"
-            if (
-                child.nodeType === 3 &&
-                $child.prevAll('[id*="stopSpelling"]').length > 0
-            ) {
-                // Convert Text nodes to Element nodes
-                $child = $('<span>', {
-                    text: child.textContent,
-                    'data-o-mail-quote': '1',
+            //HideTextnodesif"stopSpelling"
+            if(
+                child.nodeType===3&&
+                $child.prevAll('[id*="stopSpelling"]').length>0
+            ){
+                //ConvertTextnodestoElementnodes
+                $child=$('<span>',{
+                    text:child.textContent,
+                    'data-o-mail-quote':'1',
                 });
-                child.parentNode.replaceChild($child[0], child);
+                child.parentNode.replaceChild($child[0],child);
             }
 
-            // Create array for each 'read more' with nodes to toggle
-            if (
-                $child.attr('data-o-mail-quote') ||
+            //Createarrayforeach'readmore'withnodestotoggle
+            if(
+                $child.attr('data-o-mail-quote')||
                 (
-                    $child.get(0).nodeName === 'BR' &&
-                    $child.prev('[data-o-mail-quote="1"]').length > 0
+                    $child.get(0).nodeName==='BR'&&
+                    $child.prev('[data-o-mail-quote="1"]').length>0
                 )
-            ) {
-                if (!readMoreNodes) {
-                    readMoreNodes = [];
+            ){
+                if(!readMoreNodes){
+                    readMoreNodes=[];
                     groups.push(readMoreNodes);
                 }
                 $child.hide();
                 readMoreNodes.push($child);
-            } else {
-                readMoreNodes = undefined;
+            }else{
+                readMoreNodes=undefined;
                 this._insertReadMoreLess($child);
             }
         }
 
-        for (const group of groups) {
-            const index = this._lastReadMoreIndex++;
-            // Insert link just before the first node
-            const $readMoreLess = $('<a>', {
-                class: 'o_Message_readMoreLess',
-                href: '#',
-                text: READ_MORE,
+        for(constgroupofgroups){
+            constindex=this._lastReadMoreIndex++;
+            //Insertlinkjustbeforethefirstnode
+            const$readMoreLess=$('<a>',{
+                class:'o_Message_readMoreLess',
+                href:'#',
+                text:READ_MORE,
             }).insertBefore(group[0]);
 
-            // Toggle All next nodes
-            if (!this._isReadMoreByIndex.has(index)) {
-                this._isReadMoreByIndex.set(index, true);
+            //ToggleAllnextnodes
+            if(!this._isReadMoreByIndex.has(index)){
+                this._isReadMoreByIndex.set(index,true);
             }
-            const updateFromState = () => {
-                const isReadMore = this._isReadMoreByIndex.get(index);
-                for (const $child of group) {
+            constupdateFromState=()=>{
+                constisReadMore=this._isReadMoreByIndex.get(index);
+                for(const$childofgroup){
                     $child.hide();
                     $child.toggle(!isReadMore);
                 }
-                $readMoreLess.text(isReadMore ? READ_MORE : READ_LESS);
+                $readMoreLess.text(isReadMore?READ_MORE:READ_LESS);
             };
-            $readMoreLess.click(e => {
+            $readMoreLess.click(e=>{
                 e.preventDefault();
-                this._isReadMoreByIndex.set(index, !this._isReadMoreByIndex.get(index));
+                this._isReadMoreByIndex.set(index,!this._isReadMoreByIndex.get(index));
                 updateFromState();
             });
             updateFromState();
@@ -444,256 +444,256 @@ class Message extends Component {
     }
 
     /**
-     * @private
+     *@private
      */
-    _update() {
-        if (!this.message) {
+    _update(){
+        if(!this.message){
             return;
         }
-        if (this._prettyBodyRef.el && this.message.prettyBody !== this._lastPrettyBody) {
-            this._prettyBodyRef.el.innerHTML = this.message.prettyBody;
-            this._lastPrettyBody = this.message.prettyBody;
+        if(this._prettyBodyRef.el&&this.message.prettyBody!==this._lastPrettyBody){
+            this._prettyBodyRef.el.innerHTML=this.message.prettyBody;
+            this._lastPrettyBody=this.message.prettyBody;
         }
-        // Remove all readmore before if any before reinsert them with _insertReadMoreLess.
-        // This is needed because _insertReadMoreLess is working with direct DOM mutations
-        // which are not sync with Owl.
-        if (this._contentRef.el) {
-            for (const el of [...this._contentRef.el.querySelectorAll(':scope .o_Message_readMoreLess')]) {
+        //Removeallreadmorebeforeifanybeforereinsertthemwith_insertReadMoreLess.
+        //Thisisneededbecause_insertReadMoreLessisworkingwithdirectDOMmutations
+        //whicharenotsyncwithOwl.
+        if(this._contentRef.el){
+            for(constelof[...this._contentRef.el.querySelectorAll(':scope.o_Message_readMoreLess')]){
                 el.remove();
             }
-            this._lastReadMoreIndex = 0;
+            this._lastReadMoreIndex=0;
             this._insertReadMoreLess($(this._contentRef.el));
-            this.env.messagingBus.trigger('o-component-message-read-more-less-inserted', {
-                message: this.message,
+            this.env.messagingBus.trigger('o-component-message-read-more-less-inserted',{
+                message:this.message,
             });
         }
-        this._wasSelected = this.props.isSelected;
+        this._wasSelected=this.props.isSelected;
         this.message.refreshDateFromNow();
         clearInterval(this._intervalId);
-        this._intervalId = setInterval(() => {
+        this._intervalId=setInterval(()=>{
             this.message.refreshDateFromNow();
-        }, 60 * 1000);
+        },60*1000);
     }
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onChangeCheckbox() {
-        this.message.toggleCheck(this.threadView.thread, this.threadView.stringifiedDomain);
+    _onChangeCheckbox(){
+        this.message.toggleCheck(this.threadView.thread,this.threadView.stringifiedDomain);
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClick(ev) {
-        if (ev.target.closest('.o_channel_redirect')) {
+    _onClick(ev){
+        if(ev.target.closest('.o_channel_redirect')){
             this.env.messaging.openProfile({
-                id: Number(ev.target.dataset.oeId),
-                model: 'mail.channel',
+                id:Number(ev.target.dataset.oeId),
+                model:'mail.channel',
             });
-            // avoid following dummy href
+            //avoidfollowingdummyhref
             ev.preventDefault();
             return;
         }
-        if (ev.target.tagName === 'A') {
-            if (ev.target.dataset.oeId && ev.target.dataset.oeModel) {
+        if(ev.target.tagName==='A'){
+            if(ev.target.dataset.oeId&&ev.target.dataset.oeModel){
                 this.env.messaging.openProfile({
-                    id: Number(ev.target.dataset.oeId),
-                    model: ev.target.dataset.oeModel,
+                    id:Number(ev.target.dataset.oeId),
+                    model:ev.target.dataset.oeModel,
                 });
-                // avoid following dummy href
+                //avoidfollowingdummyhref
                 ev.preventDefault();
             }
             return;
         }
-        if (
-            !isEventHandled(ev, 'Message.ClickAuthorAvatar') &&
-            !isEventHandled(ev, 'Message.ClickAuthorName') &&
-            !isEventHandled(ev, 'Message.ClickFailure')
-        ) {
-            this.state.isClicked = !this.state.isClicked;
+        if(
+            !isEventHandled(ev,'Message.ClickAuthorAvatar')&&
+            !isEventHandled(ev,'Message.ClickAuthorName')&&
+            !isEventHandled(ev,'Message.ClickFailure')
+        ){
+            this.state.isClicked=!this.state.isClicked;
         }
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickAuthorAvatar(ev) {
-        markEventHandled(ev, 'Message.ClickAuthorAvatar');
-        if (!this.hasAuthorOpenChat) {
+    _onClickAuthorAvatar(ev){
+        markEventHandled(ev,'Message.ClickAuthorAvatar');
+        if(!this.hasAuthorOpenChat){
             return;
         }
         this.message.author.openChat();
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickAuthorName(ev) {
-        markEventHandled(ev, 'Message.ClickAuthorName');
-        if (!this.message.author) {
+    _onClickAuthorName(ev){
+        markEventHandled(ev,'Message.ClickAuthorName');
+        if(!this.message.author){
             return;
         }
         this.message.author.openProfile();
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickFailure(ev) {
-        markEventHandled(ev, 'Message.ClickFailure');
+    _onClickFailure(ev){
+        markEventHandled(ev,'Message.ClickFailure');
         this.message.openResendAction();
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickModerationAccept(ev) {
+    _onClickModerationAccept(ev){
         ev.preventDefault();
         this.message.moderate('accept');
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickModerationAllow(ev) {
+    _onClickModerationAllow(ev){
         ev.preventDefault();
         this.message.moderate('allow');
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickModerationBan(ev) {
+    _onClickModerationBan(ev){
         ev.preventDefault();
-        this.state.hasModerationBanDialog = true;
+        this.state.hasModerationBanDialog=true;
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickModerationDiscard(ev) {
+    _onClickModerationDiscard(ev){
         ev.preventDefault();
-        this.state.hasModerationDiscardDialog = true;
+        this.state.hasModerationDiscardDialog=true;
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickModerationReject(ev) {
+    _onClickModerationReject(ev){
         ev.preventDefault();
-        this.state.hasModerationRejectDialog = true;
+        this.state.hasModerationRejectDialog=true;
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickOriginThread(ev) {
-        // avoid following dummy href
+    _onClickOriginThread(ev){
+        //avoidfollowingdummyhref
         ev.preventDefault();
         this.message.originThread.open();
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickStar(ev) {
+    _onClickStar(ev){
         ev.stopPropagation();
         this.message.toggleStar();
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickMarkAsRead(ev) {
+    _onClickMarkAsRead(ev){
         ev.stopPropagation();
         this.message.markAsRead();
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickReply(ev) {
-        // Use this._wasSelected because this.props.isSelected might be changed
-        // by a global capture click handler (for example the one from Composer)
-        // before the current handler is executed. Indeed because it does a
-        // toggle it needs to take into account the value before the click.
-        if (this._wasSelected) {
+    _onClickReply(ev){
+        //Usethis._wasSelectedbecausethis.props.isSelectedmightbechanged
+        //byaglobalcaptureclickhandler(forexampletheonefromComposer)
+        //beforethecurrenthandlerisexecuted.Indeedbecauseitdoesa
+        //toggleitneedstotakeintoaccountthevaluebeforetheclick.
+        if(this._wasSelected){
             this.env.messaging.discuss.clearReplyingToMessage();
-        } else {
+        }else{
             this.message.replyTo();
         }
     }
 
     /**
-     * @private
+     *@private
      */
-    _onDialogClosedModerationBan() {
-        this.state.hasModerationBanDialog = false;
+    _onDialogClosedModerationBan(){
+        this.state.hasModerationBanDialog=false;
     }
 
     /**
-     * @private
+     *@private
      */
-    _onDialogClosedModerationDiscard() {
-        this.state.hasModerationDiscardDialog = false;
+    _onDialogClosedModerationDiscard(){
+        this.state.hasModerationDiscardDialog=false;
     }
 
     /**
-     * @private
+     *@private
      */
-    _onDialogClosedModerationReject() {
-        this.state.hasModerationRejectDialog = false;
+    _onDialogClosedModerationReject(){
+        this.state.hasModerationRejectDialog=false;
     }
 
 }
 
-Object.assign(Message, {
+Object.assign(Message,{
     components,
-    defaultProps: {
-        hasCheckbox: false,
-        hasMarkAsReadIcon: false,
-        hasReplyIcon: false,
-        isSelected: false,
-        isSquashed: false,
+    defaultProps:{
+        hasCheckbox:false,
+        hasMarkAsReadIcon:false,
+        hasReplyIcon:false,
+        isSelected:false,
+        isSquashed:false,
     },
-    props: {
-        attachmentsDetailsMode: {
-            type: String,
-            optional: true,
-            validate: prop => ['auto', 'card', 'hover', 'none'].includes(prop),
+    props:{
+        attachmentsDetailsMode:{
+            type:String,
+            optional:true,
+            validate:prop=>['auto','card','hover','none'].includes(prop),
         },
-        hasCheckbox: Boolean,
-        hasMarkAsReadIcon: Boolean,
-        hasReplyIcon: Boolean,
-        isSelected: Boolean,
-        isSquashed: Boolean,
-        messageLocalId: String,
-        threadViewLocalId: {
-            type: String,
-            optional: true,
+        hasCheckbox:Boolean,
+        hasMarkAsReadIcon:Boolean,
+        hasReplyIcon:Boolean,
+        isSelected:Boolean,
+        isSquashed:Boolean,
+        messageLocalId:String,
+        threadViewLocalId:{
+            type:String,
+            optional:true,
         },
     },
-    template: 'mail.Message',
+    template:'mail.Message',
 });
 
-return Message;
+returnMessage;
 
 });

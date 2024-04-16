@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <!--My Dashboard-->
-        <record model="ir.ui.view" id="board_my_dash_view">
-            <field name="name">My Dashboard</field>
-            <field name="model">board.board</field>
-            <field name="arch" type="xml">
-                <form string="My Dashboard">
-                    <board style="2-1">
+    <datanoupdate="1">
+        <!--MyDashboard-->
+        <recordmodel="ir.ui.view"id="board_my_dash_view">
+            <fieldname="name">MyDashboard</field>
+            <fieldname="model">board.board</field>
+            <fieldname="arch"type="xml">
+                <formstring="MyDashboard">
+                    <boardstyle="2-1">
                         <column>
                         </column>
                     </board>
@@ -15,19 +15,19 @@
             </field>
         </record>
 
-        <!--My Dashboard Action-->
-        <record model="ir.actions.act_window" id="open_board_my_dash_action">
-            <field name="name">My Dashboard</field>
-            <field name="res_model">board.board</field>
-            <field name="view_mode">form</field>
-            <field name="usage">menu</field>
-            <field name="view_id" ref="board_my_dash_view"/>
-        </record> 
+        <!--MyDashboardAction-->
+        <recordmodel="ir.actions.act_window"id="open_board_my_dash_action">
+            <fieldname="name">MyDashboard</field>
+            <fieldname="res_model">board.board</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="usage">menu</field>
+            <fieldname="view_id"ref="board_my_dash_view"/>
+        </record>
     </data>
     <data>
 
-        <!--My Dashboard Menu-->
-        <menuitem 
+        <!--MyDashboardMenu-->
+        <menuitem
             id="menu_board_my_dash"
             parent="base.menu_board_root"
             action="open_board_my_dash_action"

@@ -1,144 +1,144 @@
-flectra.define('website_forum.editor', function (require) {
-"use strict";
+flectra.define('website_forum.editor',function(require){
+"usestrict";
 
-var core = require('web.core');
-var WebsiteNewMenu = require('website.newMenu');
-var Dialog = require('web.Dialog');
+varcore=require('web.core');
+varWebsiteNewMenu=require('website.newMenu');
+varDialog=require('web.Dialog');
 
-var _t = core._t;
+var_t=core._t;
 
-var ForumCreateDialog = Dialog.extend({
-    xmlDependencies: Dialog.prototype.xmlDependencies.concat(
+varForumCreateDialog=Dialog.extend({
+    xmlDependencies:Dialog.prototype.xmlDependencies.concat(
         ['/website_forum/static/src/xml/website_forum_templates.xml']
     ),
-    template: 'website_forum.add_new_forum',
-    events: _.extend({}, Dialog.prototype.events, {
-        'change input[name="privacy"]': '_onPrivacyChanged',
+    template:'website_forum.add_new_forum',
+    events:_.extend({},Dialog.prototype.events,{
+        'changeinput[name="privacy"]':'_onPrivacyChanged',
     }),
 
     /**
-     * @override
-     * @param {Object} parent
-     * @param {Object} options
+     *@override
+     *@param{Object}parent
+     *@param{Object}options
      */
-    init: function (parent, options) {
-        options = _.defaults(options || {}, {
-            title: _t("New Forum"),
-            size: 'medium',
-            buttons: [
+    init:function(parent,options){
+        options=_.defaults(options||{},{
+            title:_t("NewForum"),
+            size:'medium',
+            buttons:[
                 {
-                    text: _t("Create"),
-                    classes: 'btn-primary',
-                    click: this.onCreateClick.bind(this),
+                    text:_t("Create"),
+                    classes:'btn-primary',
+                    click:this.onCreateClick.bind(this),
                 },
                 {
-                    text: _t("Discard"),
-                    close: true
+                    text:_t("Discard"),
+                    close:true
                 },
             ]
         });
-        this._super(parent, options);
+        this._super(parent,options);
     },
-    start: function () {
-        var self = this;
-        return this._super.apply(this, arguments).then(function () {
-            var $input = self.$('#group_id');
+    start:function(){
+        varself=this;
+        returnthis._super.apply(this,arguments).then(function(){
+            var$input=self.$('#group_id');
             $input.select2({
-                width: '100%',
-                allowClear: true,
-                formatNoMatches: false,
-                multiple: false,
-                selection_data: false,
-                fill_data: function (query, data) {
-                    var that = this;
-                    var tags = {results: []};
-                    _.each(data, function (obj) {
-                        if (that.matcher(query.term, obj.display_name)) {
-                            tags.results.push({id: obj.id, text: obj.display_name});
+                width:'100%',
+                allowClear:true,
+                formatNoMatches:false,
+                multiple:false,
+                selection_data:false,
+                fill_data:function(query,data){
+                    varthat=this;
+                    vartags={results:[]};
+                    _.each(data,function(obj){
+                        if(that.matcher(query.term,obj.display_name)){
+                            tags.results.push({id:obj.id,text:obj.display_name});
                         }
                     });
                     query.callback(tags);
                 },
-                query: function (query) {
-                    var that = this;
-                    // fetch data only once and store it
-                    if (!this.selection_data) {
+                query:function(query){
+                    varthat=this;
+                    //fetchdataonlyonceandstoreit
+                    if(!this.selection_data){
                         self._rpc({
-                            model: 'res.groups',
-                            method: 'search_read',
-                            args: [[], ['display_name']],
-                        }).then(function (data) {
-                            that.fill_data(query, data);
-                            that.selection_data = data;
+                            model:'res.groups',
+                            method:'search_read',
+                            args:[[],['display_name']],
+                        }).then(function(data){
+                            that.fill_data(query,data);
+                            that.selection_data=data;
                         });
-                    } else {
-                        this.fill_data(query, this.selection_data);
+                    }else{
+                        this.fill_data(query,this.selection_data);
                     }
                 }
             });
         });
     },
-    onCreateClick: function () {
-        var $dialog = this.$el;
-        var $forumName = $dialog.find('input[name=forum_name]');
-        if (!$forumName.val()) {
+    onCreateClick:function(){
+        var$dialog=this.$el;
+        var$forumName=$dialog.find('input[name=forum_name]');
+        if(!$forumName.val()){
             $forumName.addClass('border-danger');
             return;
         }
-        var $forumPrivacyGroup = $dialog.find('input[name=group_id]');
-        var forumPrivacy = $dialog.find('input:radio[name=privacy]:checked').val();
-        if (forumPrivacy === 'private' && !$forumPrivacyGroup.val()) {
+        var$forumPrivacyGroup=$dialog.find('input[name=group_id]');
+        varforumPrivacy=$dialog.find('input:radio[name=privacy]:checked').val();
+        if(forumPrivacy==='private'&&!$forumPrivacyGroup.val()){
             this.$("#group-required").removeClass('d-none');
             return;
         }
-        var addMenu = ($dialog.find('input[type="checkbox"]').is(':checked'));
-        var forumMode = $dialog.find('input:radio[name=mode]:checked').val();
-        return this._rpc({
-            route: '/forum/new',
-            params: {
-                forum_name: $forumName.val(),
-                forum_mode: forumMode,
-                forum_privacy: forumPrivacy,
-                forum_privacy_group: $forumPrivacyGroup.val(),
-                add_menu: addMenu || "",
+        varaddMenu=($dialog.find('input[type="checkbox"]').is(':checked'));
+        varforumMode=$dialog.find('input:radio[name=mode]:checked').val();
+        returnthis._rpc({
+            route:'/forum/new',
+            params:{
+                forum_name:$forumName.val(),
+                forum_mode:forumMode,
+                forum_privacy:forumPrivacy,
+                forum_privacy_group:$forumPrivacyGroup.val(),
+                add_menu:addMenu||"",
             },
-        }).then(function (url) {
-            window.location.href = url;
-            return new Promise(function () {});
+        }).then(function(url){
+            window.location.href=url;
+            returnnewPromise(function(){});
         });
     },
     /**
-     * @private
+     *@private
      */
-    _onPrivacyChanged: function (ev) {
-        this.$('.show_visibility_group').toggleClass('d-none', ev.target.value !== 'private');
+    _onPrivacyChanged:function(ev){
+        this.$('.show_visibility_group').toggleClass('d-none',ev.target.value!=='private');
     },
 });
 
 WebsiteNewMenu.include({
-    actions: _.extend({}, WebsiteNewMenu.prototype.actions || {}, {
-        new_forum: '_createNewForum',
+    actions:_.extend({},WebsiteNewMenu.prototype.actions||{},{
+        new_forum:'_createNewForum',
     }),
 
     //--------------------------------------------------------------------------
-    // Actions
+    //Actions
     //--------------------------------------------------------------------------
 
     /**
-     * Asks the user information about a new forum to create, then creates it
-     * and redirects the user to this new forum.
+     *Askstheuserinformationaboutanewforumtocreate,thencreatesit
+     *andredirectstheusertothisnewforum.
      *
-     * @private
-     * @returns {Promise} Unresolved if there is a redirection
+     *@private
+     *@returns{Promise}Unresolvedifthereisaredirection
      */
-    _createNewForum: function () {
-        var self = this;
-        var def = new Promise(function (resolve) {
-            var dialog = new ForumCreateDialog(self, {});
+    _createNewForum:function(){
+        varself=this;
+        vardef=newPromise(function(resolve){
+            vardialog=newForumCreateDialog(self,{});
             dialog.open();
-            dialog.on('closed', self, resolve);
+            dialog.on('closed',self,resolve);
         });
-        return def;
+        returndef;
     },
 });
 });

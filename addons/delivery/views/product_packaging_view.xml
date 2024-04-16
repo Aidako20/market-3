@@ -1,44 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<record model="ir.ui.view" id="product_packaging_delivery_form">
-    <field name="name">product.packaging.form.delivery</field>
-    <field name="model">product.packaging</field>
-    <field name="inherit_id" eval="False"/>
-    <field name="arch" type="xml">
-        <form string="Delivery Packaging">
+<recordmodel="ir.ui.view"id="product_packaging_delivery_form">
+    <fieldname="name">product.packaging.form.delivery</field>
+    <fieldname="model">product.packaging</field>
+    <fieldname="inherit_id"eval="False"/>
+    <fieldname="arch"type="xml">
+        <formstring="DeliveryPackaging">
             <sheet>
-                <label for="name"/>
+                <labelfor="name"/>
                 <h1>
-                    <field name="name"/>
+                    <fieldname="name"/>
                 </h1>
-                <group name="delivery">
+                <groupname="delivery">
                   <group>
-                    <field name="package_carrier_type"/>
-                    <label for="height"/>
-                    <div class="o_row" name="height">
-                      <field name="height"/>
-                      <span><field name="length_uom_name"/></span>
+                    <fieldname="package_carrier_type"/>
+                    <labelfor="height"/>
+                    <divclass="o_row"name="height">
+                      <fieldname="height"/>
+                      <span><fieldname="length_uom_name"/></span>
                     </div>
-                    <label for="width"/>
-                    <div class="o_row" name="width">
-                      <field name="width"/>
-                      <span><field name="length_uom_name"/></span>
+                    <labelfor="width"/>
+                    <divclass="o_row"name="width">
+                      <fieldname="width"/>
+                      <span><fieldname="length_uom_name"/></span>
                     </div>
-                    <label for="packaging_length"/>
-                    <div class="o_row" name="packaging_length">
-                      <field name="packaging_length"/>
-                      <span><field name="length_uom_name"/></span>
+                    <labelfor="packaging_length"/>
+                    <divclass="o_row"name="packaging_length">
+                      <fieldname="packaging_length"/>
+                      <span><fieldname="length_uom_name"/></span>
                     </div>
                   </group>
                   <group>
-                    <label for="max_weight"/>
-                    <div class="o_row" name="max_weight">
-                      <field name="max_weight"/>
-                      <span><field name="weight_uom_name"/></span>
+                    <labelfor="max_weight"/>
+                    <divclass="o_row"name="max_weight">
+                      <fieldname="max_weight"/>
+                      <span><fieldname="weight_uom_name"/></span>
                     </div>
-                    <field name="barcode"/>
-                    <field name="shipper_package_code"/>
+                    <fieldname="barcode"/>
+                    <fieldname="shipper_package_code"/>
                   </group>
                 </group>
             </sheet>
@@ -46,21 +46,21 @@
     </field>
 </record>
 
-<record model="ir.ui.view" id="product_packaging_delivery_tree">
-    <field name="name">product.packaging.tree.delivery</field>
-    <field name="model">product.packaging</field>
-    <field name="inherit_id" eval="False"/>
-    <field name="arch" type="xml">
-        <tree string="Delivery Packages">
-            <field name="sequence" widget="handle"/>
-            <field name="package_carrier_type"/>
-            <field name="name"/>
-            <field name="height"/>
-            <field name="width"/>
-            <field name="packaging_length"/>
-            <field name="max_weight"/>
-            <field name="shipper_package_code"/>
-            <field name="barcode" invisible="1"/>
+<recordmodel="ir.ui.view"id="product_packaging_delivery_tree">
+    <fieldname="name">product.packaging.tree.delivery</field>
+    <fieldname="model">product.packaging</field>
+    <fieldname="inherit_id"eval="False"/>
+    <fieldname="arch"type="xml">
+        <treestring="DeliveryPackages">
+            <fieldname="sequence"widget="handle"/>
+            <fieldname="package_carrier_type"/>
+            <fieldname="name"/>
+            <fieldname="height"/>
+            <fieldname="width"/>
+            <fieldname="packaging_length"/>
+            <fieldname="max_weight"/>
+            <fieldname="shipper_package_code"/>
+            <fieldname="barcode"invisible="1"/>
         </tree>
     </field>
 </record>

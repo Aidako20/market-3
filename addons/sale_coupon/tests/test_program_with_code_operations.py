@@ -1,381 +1,381 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.addons.sale_coupon.tests.common import TestSaleCouponCommon
-from flectra.exceptions import UserError
+fromflectra.addons.sale_coupon.tests.commonimportTestSaleCouponCommon
+fromflectra.exceptionsimportUserError
 
 
-class TestProgramWithCodeOperations(TestSaleCouponCommon):
-    # Test the basic operation (apply_coupon) on an coupon program on which we should
-    # apply the reward when the code is correct or remove the reward automatically when the reward is
-    # not valid anymore.
+classTestProgramWithCodeOperations(TestSaleCouponCommon):
+    #Testthebasicoperation(apply_coupon)onancouponprogramonwhichweshould
+    #applytherewardwhenthecodeiscorrectorremovetherewardautomaticallywhentherewardis
+    #notvalidanymore.
 
-    def test_program_usability(self):
-        # After clicking "Generate coupons", there is no domain so it shows "Match all records".
-        # But when you click, domain is false (default field value; empty string) so it won't generate anything.
-        # This is even more weird because if you add something in the domain and then delete it,
-        # you visually come back to the initial state except the domain became '[]' instead of ''.
-        # In this case, it will generate the coupon for every partner.
-        # Thus, we should ensure that if you leave the domain untouched, it generates a coupon for each partner
-        # as hinted on the screen ('Match all records (X records)')
+    deftest_program_usability(self):
+        #Afterclicking"Generatecoupons",thereisnodomainsoitshows"Matchallrecords".
+        #Butwhenyouclick,domainisfalse(defaultfieldvalue;emptystring)soitwon'tgenerateanything.
+        #Thisisevenmoreweirdbecauseifyouaddsomethinginthedomainandthendeleteit,
+        #youvisuallycomebacktotheinitialstateexceptthedomainbecame'[]'insteadof''.
+        #Inthiscase,itwillgeneratethecouponforeverypartner.
+        #Thus,weshouldensurethatifyouleavethedomainuntouched,itgeneratesacouponforeachpartner
+        #ashintedonthescreen('Matchallrecords(Xrecords)')
         self.env['coupon.generate.wizard'].with_context(active_id=self.code_promotion_program.id).create({
-            'generation_type': 'nbr_customer',
+            'generation_type':'nbr_customer',
         }).generate_coupon()
-        self.assertEqual(len(self.code_promotion_program.coupon_ids), len(self.env['res.partner'].search([])), "It should have generated a coupon for every partner")
+        self.assertEqual(len(self.code_promotion_program.coupon_ids),len(self.env['res.partner'].search([])),"Itshouldhavegeneratedacouponforeverypartner")
 
-    def test_program_basic_operation_coupon_code(self):
-        # Test case: Generate a coupon for my customer, and add a reward then remove it automatically
+    deftest_program_basic_operation_coupon_code(self):
+        #Testcase:Generateacouponformycustomer,andaddarewardthenremoveitautomatically
 
-        self.code_promotion_program.reward_type = 'discount'
+        self.code_promotion_program.reward_type='discount'
 
         self.env['coupon.generate.wizard'].with_context(active_id=self.code_promotion_program.id).create({
-            'generation_type': 'nbr_customer',
-            'partners_domain': "[('id', 'in', [%s])]" % (self.steve.id),
+            'generation_type':'nbr_customer',
+            'partners_domain':"[('id','in',[%s])]"%(self.steve.id),
         }).generate_coupon()
-        coupon = self.code_promotion_program.coupon_ids
+        coupon=self.code_promotion_program.coupon_ids
 
-        # Test the valid code on a wrong sales order
-        wrong_partner_order = self.env['sale.order'].create({
-            'partner_id': self.env['res.partner'].create({'name': 'My Partner'}).id,
+        #Testthevalidcodeonawrongsalesorder
+        wrong_partner_order=self.env['sale.order'].create({
+            'partner_id':self.env['res.partner'].create({'name':'MyPartner'}).id,
         })
-        with self.assertRaises(UserError):
+        withself.assertRaises(UserError):
             self.env['sale.coupon.apply.code'].with_context(active_id=wrong_partner_order.id).create({
-                'coupon_code': coupon.code
+                'coupon_code':coupon.code
             }).process_coupon()
 
-        # Test now on a valid sales order
-        order = self.empty_order
-        order.write({'order_line': [
-            (0, False, {
-                'product_id': self.product_A.id,
-                'name': '1 Product A',
-                'product_uom': self.uom_unit.id,
-                'product_uom_qty': 1.0,
+        #Testnowonavalidsalesorder
+        order=self.empty_order
+        order.write({'order_line':[
+            (0,False,{
+                'product_id':self.product_A.id,
+                'name':'1ProductA',
+                'product_uom':self.uom_unit.id,
+                'product_uom_qty':1.0,
             })
         ]})
         self.env['sale.coupon.apply.code'].with_context(active_id=order.id).create({
-            'coupon_code': coupon.code
+            'coupon_code':coupon.code
         }).process_coupon()
         order.recompute_coupon_lines()
-        self.assertEqual(len(order.order_line.ids), 2)
-        self.assertEqual(coupon.state, 'used')
+        self.assertEqual(len(order.order_line.ids),2)
+        self.assertEqual(coupon.state,'used')
 
-        # Remove the product A from the sale order
-        order.write({'order_line': [(2, order.order_line[0].id, False)]})
+        #RemovetheproductAfromthesaleorder
+        order.write({'order_line':[(2,order.order_line[0].id,False)]})
         order.recompute_coupon_lines()
-        self.assertEqual(len(order.order_line.ids), 0)
-        self.assertEqual(coupon.state, 'new')
+        self.assertEqual(len(order.order_line.ids),0)
+        self.assertEqual(coupon.state,'new')
 
-    def test_program_coupon_double_consuming(self):
-        # Test case:
-        # - Generate a coupon
-        # - add to a sale order A, cancel the sale order
-        # - add to a sale order B, confirm the order
-        # - go back to A, reset to draft and confirm
+    deftest_program_coupon_double_consuming(self):
+        #Testcase:
+        #-Generateacoupon
+        #-addtoasaleorderA,cancelthesaleorder
+        #-addtoasaleorderB,confirmtheorder
+        #-gobacktoA,resettodraftandconfirm
 
-        self.code_promotion_program.reward_type = 'discount'
+        self.code_promotion_program.reward_type='discount'
 
         self.env['coupon.generate.wizard'].with_context(active_id=self.code_promotion_program.id).create({
-            'generation_type': 'nbr_coupon',
-            'nbr_coupons': 1,
+            'generation_type':'nbr_coupon',
+            'nbr_coupons':1,
         }).generate_coupon()
-        coupon = self.code_promotion_program.coupon_ids
+        coupon=self.code_promotion_program.coupon_ids
 
-        sale_order_a = self.empty_order.copy()
-        sale_order_b = self.empty_order.copy()
+        sale_order_a=self.empty_order.copy()
+        sale_order_b=self.empty_order.copy()
 
-        sale_order_a.write({'order_line': [
-            (0, False, {
-                'product_id': self.product_A.id,
-                'name': '1 Product A',
-                'product_uom': self.uom_unit.id,
-                'product_uom_qty': 1.0,
+        sale_order_a.write({'order_line':[
+            (0,False,{
+                'product_id':self.product_A.id,
+                'name':'1ProductA',
+                'product_uom':self.uom_unit.id,
+                'product_uom_qty':1.0,
             })
         ]})
         self.env['sale.coupon.apply.code'].with_context(active_id=sale_order_a.id).create({
-            'coupon_code': coupon.code
+            'coupon_code':coupon.code
         }).process_coupon()
         sale_order_a.recompute_coupon_lines()
-        self.assertEqual(len(sale_order_a.order_line.ids), 2)
-        self.assertEqual(coupon.state, 'used')
-        self.assertEqual(coupon.sales_order_id, sale_order_a)
+        self.assertEqual(len(sale_order_a.order_line.ids),2)
+        self.assertEqual(coupon.state,'used')
+        self.assertEqual(coupon.sales_order_id,sale_order_a)
 
         sale_order_a.action_cancel()
 
-        sale_order_b.write({'order_line': [
-            (0, False, {
-                'product_id': self.product_A.id,
-                'name': '1 Product A',
-                'product_uom': self.uom_unit.id,
-                'product_uom_qty': 1.0,
+        sale_order_b.write({'order_line':[
+            (0,False,{
+                'product_id':self.product_A.id,
+                'name':'1ProductA',
+                'product_uom':self.uom_unit.id,
+                'product_uom_qty':1.0,
             })
         ]})
         self.env['sale.coupon.apply.code'].with_context(active_id=sale_order_b.id).create({
-            'coupon_code': coupon.code
+            'coupon_code':coupon.code
         }).process_coupon()
         sale_order_b.recompute_coupon_lines()
-        self.assertEqual(len(sale_order_b.order_line.ids), 2)
-        self.assertEqual(coupon.state, 'used')
-        self.assertEqual(coupon.sales_order_id, sale_order_b)
+        self.assertEqual(len(sale_order_b.order_line.ids),2)
+        self.assertEqual(coupon.state,'used')
+        self.assertEqual(coupon.sales_order_id,sale_order_b)
 
         sale_order_b.action_confirm()
 
         sale_order_a.action_draft()
         sale_order_a.action_confirm()
-        # reward line removed automatically
-        self.assertEqual(len(sale_order_a.order_line.ids), 1)
+        #rewardlineremovedautomatically
+        self.assertEqual(len(sale_order_a.order_line.ids),1)
 
-    def test_coupon_code_with_pricelist(self):
-        # Test case: Generate a coupon (10% discount) and apply it on an order with a specific pricelist (10% discount)
+    deftest_coupon_code_with_pricelist(self):
+        #Testcase:Generateacoupon(10%discount)andapplyitonanorderwithaspecificpricelist(10%discount)
 
         self.env['coupon.generate.wizard'].with_context(active_id=self.code_promotion_program_with_discount.id).create({
-            'generation_type': 'nbr_coupon',
-            'nbr_coupons': 1,
+            'generation_type':'nbr_coupon',
+            'nbr_coupons':1,
         }).generate_coupon()
-        coupon = self.code_promotion_program_with_discount.coupon_ids
+        coupon=self.code_promotion_program_with_discount.coupon_ids
 
-        first_pricelist = self.env['product.pricelist'].create({
-            'name': 'First pricelist',
-            'discount_policy': 'with_discount',
-            'item_ids': [(0, 0, {
-                'compute_price': 'percentage',
-                'base': 'list_price',
-                'percent_price': 10,
-                'applied_on': '3_global',
-                'name': 'First discount'
+        first_pricelist=self.env['product.pricelist'].create({
+            'name':'Firstpricelist',
+            'discount_policy':'with_discount',
+            'item_ids':[(0,0,{
+                'compute_price':'percentage',
+                'base':'list_price',
+                'percent_price':10,
+                'applied_on':'3_global',
+                'name':'Firstdiscount'
             })]
         })
 
-        order = self.empty_order
-        order.pricelist_id = first_pricelist
-        order.write({'order_line': [
-            (0, False, {
-                'product_id': self.product_C.id,
-                'name': '1 Product C',
-                'product_uom': self.uom_unit.id,
-                'product_uom_qty': 1.0,
+        order=self.empty_order
+        order.pricelist_id=first_pricelist
+        order.write({'order_line':[
+            (0,False,{
+                'product_id':self.product_C.id,
+                'name':'1ProductC',
+                'product_uom':self.uom_unit.id,
+                'product_uom_qty':1.0,
             })
         ]})
         self.env['sale.coupon.apply.code'].with_context(active_id=order.id).create({
-            'coupon_code': coupon.code
+            'coupon_code':coupon.code
         }).process_coupon()
         order.recompute_coupon_lines()
-        self.assertEqual(len(order.order_line.ids), 2)
-        self.assertEqual(coupon.state, 'used')
-        self.assertEqual(order.amount_total, 81, "SO total should be 81: (10% of 100 with pricelist) + 10% of 90 with coupon code")
+        self.assertEqual(len(order.order_line.ids),2)
+        self.assertEqual(coupon.state,'used')
+        self.assertEqual(order.amount_total,81,"SOtotalshouldbe81:(10%of100withpricelist)+10%of90withcouponcode")
 
-    def test_on_next_order_reward_promotion_program(self):
-        # The flow:
-        # 1. Create a program `A` that gives a free `Product B` on next order if you buy a an `product A`
-        #    This program should be code_needed with code `free_B_on_next_order`
-        # 2. Create a program `B` that gives 10% discount on next order automatically
-        # 3. Create a SO with a `third product` and recompute coupon, you SHOULD get a coupon (from program `B`) for your next order that will discount 10%
-        # 4. Try to apply `A`, it should error since we did not buy any product A.
-        # 5. Add a product A to the cart and try to apply `A` again, this time it should work
-        # 6. Verify you have 2 generated coupons and validate the SO (so the 2 generated coupons will be valid)
-        # 7. Create a new SO (with the same partner) and try to apply coupon generated by `A`. it SHOULD error since we don't have any `Product B` in the cart
-        # 8. Add a Product B in the cart
-        # 9. Try to apply once again coupon generated by `A`, it should give you the free product B
-        # 10. Try to apply coupon generated by `B`, it should give you 10% discount.
-        # => SO will then be 0$ until we recompute the order lines
+    deftest_on_next_order_reward_promotion_program(self):
+        #Theflow:
+        #1.Createaprogram`A`thatgivesafree`ProductB`onnextorderifyoubuyaan`productA`
+        #   Thisprogramshouldbecode_neededwithcode`free_B_on_next_order`
+        #2.Createaprogram`B`thatgives10%discountonnextorderautomatically
+        #3.CreateaSOwitha`thirdproduct`andrecomputecoupon,youSHOULDgetacoupon(fromprogram`B`)foryournextorderthatwilldiscount10%
+        #4.Trytoapply`A`,itshoulderrorsincewedidnotbuyanyproductA.
+        #5.AddaproductAtothecartandtrytoapply`A`again,thistimeitshouldwork
+        #6.Verifyyouhave2generatedcouponsandvalidatetheSO(sothe2generatedcouponswillbevalid)
+        #7.CreateanewSO(withthesamepartner)andtrytoapplycoupongeneratedby`A`.itSHOULDerrorsincewedon'thaveany`ProductB`inthecart
+        #8.AddaProductBinthecart
+        #9.Trytoapplyonceagaincoupongeneratedby`A`,itshouldgiveyouthefreeproductB
+        #10.Trytoapplycoupongeneratedby`B`,itshouldgiveyou10%discount.
+        #=>SOwillthenbe0$untilwerecomputetheorderlines
 
-        # 1.
+        #1.
         self.immediate_promotion_program.write({
-            'promo_applicability': 'on_next_order',
-            'promo_code_usage': 'code_needed',
-            'promo_code': 'free_B_on_next_order',
+            'promo_applicability':'on_next_order',
+            'promo_code_usage':'code_needed',
+            'promo_code':'free_B_on_next_order',
         })
-        # 2.
-        self.p1 = self.env['coupon.program'].create({
-            'name': 'Code for 10% on next order',
-            'discount_type': 'percentage',
-            'discount_percentage': 10.0,
-            'program_type': 'promotion_program',
-            'promo_code_usage': 'no_code_needed',
-            'promo_applicability': 'on_next_order',
+        #2.
+        self.p1=self.env['coupon.program'].create({
+            'name':'Codefor10%onnextorder',
+            'discount_type':'percentage',
+            'discount_percentage':10.0,
+            'program_type':'promotion_program',
+            'promo_code_usage':'no_code_needed',
+            'promo_applicability':'on_next_order',
         })
-        # 3.
-        order = self.empty_order.copy()
-        self.third_product = self.env['product.product'].create({
-            'name': 'Thrid Product',
-            'list_price': 5,
-            'sale_ok': True
+        #3.
+        order=self.empty_order.copy()
+        self.third_product=self.env['product.product'].create({
+            'name':'ThridProduct',
+            'list_price':5,
+            'sale_ok':True
         })
-        order.write({'order_line': [
-            (0, False, {
-                'product_id': self.third_product.id,
-                'name': '1 Third Product',
-                'product_uom': self.uom_unit.id,
-                'product_uom_qty': 1.0,
+        order.write({'order_line':[
+            (0,False,{
+                'product_id':self.third_product.id,
+                'name':'1ThirdProduct',
+                'product_uom':self.uom_unit.id,
+                'product_uom_qty':1.0,
             })
         ]})
         order.recompute_coupon_lines()
-        self.assertEqual(len(self.p1.coupon_ids.ids), 1, "You should get a coupon for you next order that will offer 10% discount")
-        # 4.
-        with self.assertRaises(UserError):
+        self.assertEqual(len(self.p1.coupon_ids.ids),1,"Youshouldgetacouponforyounextorderthatwilloffer10%discount")
+        #4.
+        withself.assertRaises(UserError):
             self.env['sale.coupon.apply.code'].with_context(active_id=order.id).create({
-                'coupon_code': 'free_B_on_next_order'
+                'coupon_code':'free_B_on_next_order'
             }).process_coupon()
-        # 5.
-        order.write({'order_line': [
-            (0, False, {
-                'product_id': self.product_A.id,
-                'name': '1 Product A',
-                'product_uom': self.uom_unit.id,
-                'product_uom_qty': 1.0,
+        #5.
+        order.write({'order_line':[
+            (0,False,{
+                'product_id':self.product_A.id,
+                'name':'1ProductA',
+                'product_uom':self.uom_unit.id,
+                'product_uom_qty':1.0,
             })
         ]})
         self.env['sale.coupon.apply.code'].with_context(active_id=order.id).create({
-            'coupon_code': 'free_B_on_next_order'
+            'coupon_code':'free_B_on_next_order'
         }).process_coupon()
-        # 6.
-        self.assertEqual(len(order.generated_coupon_ids), 2, "You should get a second coupon for your next order that will offer a free Product B")
+        #6.
+        self.assertEqual(len(order.generated_coupon_ids),2,"YoushouldgetasecondcouponforyournextorderthatwillofferafreeProductB")
         order.action_confirm()
-        # 7.
-        order_bis = self.empty_order
-        with self.assertRaises(UserError):
+        #7.
+        order_bis=self.empty_order
+        withself.assertRaises(UserError):
             self.env['sale.coupon.apply.code'].with_context(active_id=order_bis.id).create({
-                'coupon_code': order.generated_coupon_ids[1].code
+                'coupon_code':order.generated_coupon_ids[1].code
             }).process_coupon()
-        # 8.
-        order_bis.write({'order_line': [
-            (0, False, {
-                'product_id': self.product_B.id,
-                'name': '1 Product B',
-                'product_uom': self.uom_unit.id,
-                'product_uom_qty': 1.0,
+        #8.
+        order_bis.write({'order_line':[
+            (0,False,{
+                'product_id':self.product_B.id,
+                'name':'1ProductB',
+                'product_uom':self.uom_unit.id,
+                'product_uom_qty':1.0,
             })
         ]})
-        # 9.
+        #9.
         self.env['sale.coupon.apply.code'].with_context(active_id=order_bis.id).create({
-            'coupon_code': order.generated_coupon_ids[1].code
+            'coupon_code':order.generated_coupon_ids[1].code
         }).process_coupon()
-        self.assertEqual(len(order_bis.order_line), 2, "You should get a free Product B")
-        # 10.
+        self.assertEqual(len(order_bis.order_line),2,"YoushouldgetafreeProductB")
+        #10.
         self.env['sale.coupon.apply.code'].with_context(active_id=order_bis.id).create({
-            'coupon_code': order.generated_coupon_ids[0].code
+            'coupon_code':order.generated_coupon_ids[0].code
         }).process_coupon()
-        self.assertEqual(len(order_bis.order_line), 3, "You should get a 10% discount line")
-        self.assertEqual(order_bis.amount_total, 0, "SO total should be null: (Paid product - Free product = 0) + 10% of nothing")
+        self.assertEqual(len(order_bis.order_line),3,"Youshouldgeta10%discountline")
+        self.assertEqual(order_bis.amount_total,0,"SOtotalshouldbenull:(Paidproduct-Freeproduct=0)+10%ofnothing")
 
-    def test_on_next_order_reward_promotion_program_with_requirements(self):
+    deftest_on_next_order_reward_promotion_program_with_requirements(self):
         self.immediate_promotion_program.write({
-            'promo_applicability': 'on_next_order',
-            'promo_code_usage': 'code_needed',
-            'promo_code': 'free_B_on_next_order',
-            'rule_minimum_amount': 700,
-            'rule_minimum_amount_tax_inclusion': 'tax_excluded'
+            'promo_applicability':'on_next_order',
+            'promo_code_usage':'code_needed',
+            'promo_code':'free_B_on_next_order',
+            'rule_minimum_amount':700,
+            'rule_minimum_amount_tax_inclusion':'tax_excluded'
         })
-        order = self.empty_order.copy()
-        self.product_A.lst_price = 700
-        order.write({'order_line': [
-            (0, False, {
-                'product_id': self.product_A.id,
-                'name': '1 Product A',
-                'product_uom': self.uom_unit.id,
-                'product_uom_qty': 1.0,
+        order=self.empty_order.copy()
+        self.product_A.lst_price=700
+        order.write({'order_line':[
+            (0,False,{
+                'product_id':self.product_A.id,
+                'name':'1ProductA',
+                'product_uom':self.uom_unit.id,
+                'product_uom_qty':1.0,
             })
         ]})
         self.env['sale.coupon.apply.code'].with_context(active_id=order.id).create({
-            'coupon_code': 'free_B_on_next_order'
+            'coupon_code':'free_B_on_next_order'
         }).process_coupon()
-        self.assertEqual(len(self.immediate_promotion_program.coupon_ids.ids), 1, "You should get a coupon for you next order that will offer a free product B")
-        order_bis = self.empty_order
-        order_bis.write({'order_line': [
-            (0, False, {
-                'product_id': self.product_B.id,
-                'name': '1 Product B',
-                'product_uom': self.uom_unit.id,
-                'product_uom_qty': 1.0,
+        self.assertEqual(len(self.immediate_promotion_program.coupon_ids.ids),1,"YoushouldgetacouponforyounextorderthatwillofferafreeproductB")
+        order_bis=self.empty_order
+        order_bis.write({'order_line':[
+            (0,False,{
+                'product_id':self.product_B.id,
+                'name':'1ProductB',
+                'product_uom':self.uom_unit.id,
+                'product_uom_qty':1.0,
             })
         ]})
-        with self.assertRaises(UserError):
-            # It should error since we did not validated the previous SO, so the coupon is `reserved` but not `new`
+        withself.assertRaises(UserError):
+            #ItshoulderrorsincewedidnotvalidatedthepreviousSO,sothecouponis`reserved`butnot`new`
             self.env['sale.coupon.apply.code'].with_context(active_id=order_bis.id).create({
-                'coupon_code': order.generated_coupon_ids[0].code
+                'coupon_code':order.generated_coupon_ids[0].code
             }).process_coupon()
         order.action_confirm()
-        # It should not error even if the SO does not have the requirements (700$ and 1 product A), since these requirements where only used to generate the coupon that we are now applying
+        #ItshouldnoterroreveniftheSOdoesnothavetherequirements(700$and1productA),sincetheserequirementswhereonlyusedtogeneratethecouponthatwearenowapplying
         self.env['sale.coupon.apply.code'].with_context(active_id=order_bis.id).create({
-            'coupon_code': order.generated_coupon_ids[0].code
+            'coupon_code':order.generated_coupon_ids[0].code
         }).process_coupon()
-        self.assertEqual(len(order_bis.order_line), 2, "You should get 1 regular product_B and 1 free product_B")
+        self.assertEqual(len(order_bis.order_line),2,"Youshouldget1regularproduct_Band1freeproduct_B")
         order_bis.recompute_coupon_lines()
-        self.assertEqual(len(order_bis.order_line), 2, "Free product from a coupon generated from a promotion program on next order should not dissapear")
+        self.assertEqual(len(order_bis.order_line),2,"Freeproductfromacoupongeneratedfromapromotionprogramonnextordershouldnotdissapear")
 
-    def test_edit_and_reapply_promotion_program(self):
-        # The flow:
-        # 1. Create a program auto applied, giving a fixed amount discount
-        # 2. Create a SO and apply the program
-        # 3. Change the program, requiring a mandatory code
-        # 4. Reapply the program on the same SO via code
+    deftest_edit_and_reapply_promotion_program(self):
+        #Theflow:
+        #1.Createaprogramautoapplied,givingafixedamountdiscount
+        #2.CreateaSOandapplytheprogram
+        #3.Changetheprogram,requiringamandatorycode
+        #4.ReapplytheprogramonthesameSOviacode
 
-        # 1.
-        self.p1 = self.env['coupon.program'].create({
-            'name': 'Promo fixed amount',
-            'promo_code_usage': 'no_code_needed',
-            'discount_type': 'fixed_amount',
-            'discount_fixed_amount': 10.0,
-            'program_type': 'promotion_program',
+        #1.
+        self.p1=self.env['coupon.program'].create({
+            'name':'Promofixedamount',
+            'promo_code_usage':'no_code_needed',
+            'discount_type':'fixed_amount',
+            'discount_fixed_amount':10.0,
+            'program_type':'promotion_program',
         })
-        # 2.
-        order = self.empty_order.copy()
-        order.write({'order_line': [
-            (0, False, {
-                'product_id': self.product_A.id,
-                'name': '1 Product A',
-                'product_uom': self.uom_unit.id,
-                'product_uom_qty': 1.0,
+        #2.
+        order=self.empty_order.copy()
+        order.write({'order_line':[
+            (0,False,{
+                'product_id':self.product_A.id,
+                'name':'1ProductA',
+                'product_uom':self.uom_unit.id,
+                'product_uom_qty':1.0,
             })
         ]})
         order.recompute_coupon_lines()
-        self.assertEqual(len(order.order_line), 2, "You should get a discount line")
-        # 3.
+        self.assertEqual(len(order.order_line),2,"Youshouldgetadiscountline")
+        #3.
         self.p1.write({
-            'promo_code_usage': 'code_needed',
-            'promo_code': 'test',
+            'promo_code_usage':'code_needed',
+            'promo_code':'test',
             })
         order.recompute_coupon_lines()
-        # 4.
-        with self.assertRaises(UserError):
+        #4.
+        withself.assertRaises(UserError):
             self.env['sale.coupon.apply.code'].with_context(active_id=order.id).create({
-                'coupon_code': 'test'
+                'coupon_code':'test'
             }).process_coupon()
-        self.assertEqual(len(order.order_line), 2, "You should get a discount line")
+        self.assertEqual(len(order.order_line),2,"Youshouldgetadiscountline")
 
-    def test_apply_program_no_reward_link(self):
-        # Tests that applying a promo code that does not generate reward lines
-        #  does not link on the order
+    deftest_apply_program_no_reward_link(self):
+        #Teststhatapplyingapromocodethatdoesnotgeneraterewardlines
+        # doesnotlinkontheorder
         self.env['coupon.program'].create({
-            'name': 'Code for 10% on orders',
-            'promo_code_usage': 'code_needed',
-            'promo_code': 'test_10pc',
-            'discount_type': 'percentage',
-            'discount_percentage': 10.0,
-            'program_type': 'promotion_program',
+            'name':'Codefor10%onorders',
+            'promo_code_usage':'code_needed',
+            'promo_code':'test_10pc',
+            'discount_type':'percentage',
+            'discount_percentage':10.0,
+            'program_type':'promotion_program',
         })
-        self.empty_order.write({'order_line': [
-            (0, False, {
-                'product_id': self.product_C.id,
-                'name': '1 Product C',
-                'product_uom': self.uom_unit.id,
-                'product_uom_qty': 1.0,
-                'price_unit': 0,
+        self.empty_order.write({'order_line':[
+            (0,False,{
+                'product_id':self.product_C.id,
+                'name':'1ProductC',
+                'product_uom':self.uom_unit.id,
+                'product_uom_qty':1.0,
+                'price_unit':0,
             })
         ]})
         self.env['sale.coupon.apply.code'].with_context(active_id=self.empty_order.id).create({
-            'coupon_code': 'test_10pc',
+            'coupon_code':'test_10pc',
         }).process_coupon()
-        self.assertFalse(self.empty_order.code_promo_program_id, 'The program should not be linked to the order')
+        self.assertFalse(self.empty_order.code_promo_program_id,'Theprogramshouldnotbelinkedtotheorder')
 
-        # Same for a coupon's code
+        #Sameforacoupon'scode
         self.env['coupon.generate.wizard'].with_context(active_id=self.code_promotion_program_with_discount.id).create({
-            'generation_type': 'nbr_coupon',
-            'nbr_coupons': 1,
+            'generation_type':'nbr_coupon',
+            'nbr_coupons':1,
         }).generate_coupon()
-        coupon = self.code_promotion_program_with_discount.coupon_ids
+        coupon=self.code_promotion_program_with_discount.coupon_ids
         self.env['sale.coupon.apply.code'].with_context(active_id=self.empty_order.id).create({
-            'coupon_code': coupon.code,
+            'coupon_code':coupon.code,
         }).process_coupon()
-        self.assertFalse(self.empty_order.applied_coupon_ids, 'No coupon should be linked to the order')
-        self.assertEqual(coupon.state, 'new', 'Coupon should be in a new state')
+        self.assertFalse(self.empty_order.applied_coupon_ids,'Nocouponshouldbelinkedtotheorder')
+        self.assertEqual(coupon.state,'new','Couponshouldbeinanewstate')

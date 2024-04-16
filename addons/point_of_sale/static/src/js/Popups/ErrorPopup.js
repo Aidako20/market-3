@@ -1,24 +1,24 @@
-flectra.define('point_of_sale.ErrorPopup', function(require) {
-    'use strict';
+flectra.define('point_of_sale.ErrorPopup',function(require){
+    'usestrict';
 
-    const AbstractAwaitablePopup = require('point_of_sale.AbstractAwaitablePopup');
-    const Registries = require('point_of_sale.Registries');
+    constAbstractAwaitablePopup=require('point_of_sale.AbstractAwaitablePopup');
+    constRegistries=require('point_of_sale.Registries');
 
-    // formerly ErrorPopupWidget
-    class ErrorPopup extends AbstractAwaitablePopup {
-        mounted() {
+    //formerlyErrorPopupWidget
+    classErrorPopupextendsAbstractAwaitablePopup{
+        mounted(){
             this.playSound('error');
         }
     }
-    ErrorPopup.template = 'ErrorPopup';
-    ErrorPopup.defaultProps = {
-        confirmText: 'Ok',
-        cancelText: 'Cancel',
-        title: 'Error',
-        body: '',
+    ErrorPopup.template='ErrorPopup';
+    ErrorPopup.defaultProps={
+        confirmText:'Ok',
+        cancelText:'Cancel',
+        title:'Error',
+        body:'',
     };
 
     Registries.Component.add(ErrorPopup);
 
-    return ErrorPopup;
+    returnErrorPopup;
 });

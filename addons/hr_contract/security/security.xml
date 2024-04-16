@@ -1,33 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record model="ir.module.category" id="base.module_category_human_resources_contracts">
-            <field name="description">Helps you manage your contracts.</field>
-            <field name="sequence">10</field>
+    <datanoupdate="1">
+        <recordmodel="ir.module.category"id="base.module_category_human_resources_contracts">
+            <fieldname="description">Helpsyoumanageyourcontracts.</field>
+            <fieldname="sequence">10</field>
         </record>
 
-        <record id="hr_contract.group_hr_contract_manager" model="res.groups">
-            <field name="name">Administrator</field>
-            <field name="category_id" ref="base.module_category_human_resources_contracts"/>
-            <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('hr.group_hr_user'))]"/>
-            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <recordid="hr_contract.group_hr_contract_manager"model="res.groups">
+            <fieldname="name">Administrator</field>
+            <fieldname="category_id"ref="base.module_category_human_resources_contracts"/>
+            <fieldname="implied_ids"eval="[(4,ref('base.group_user')),(4,ref('hr.group_hr_user'))]"/>
+            <fieldname="users"eval="[(4,ref('base.user_root')),(4,ref('base.user_admin'))]"/>
         </record>
 
-        <record id="base.default_user" model="res.users">
-            <field name="groups_id" eval="[(4,ref('hr_contract.group_hr_contract_manager'))]"/>
+        <recordid="base.default_user"model="res.users">
+            <fieldname="groups_id"eval="[(4,ref('hr_contract.group_hr_contract_manager'))]"/>
         </record>
 
-        <record id="ir_rule_hr_contract_multi_company" model="ir.rule">
-            <field name="name">HR Contract: Multi Company</field>
-            <field name="model_id" ref="model_hr_contract"/>
-            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <recordid="ir_rule_hr_contract_multi_company"model="ir.rule">
+            <fieldname="name">HRContract:MultiCompany</field>
+            <fieldname="model_id"ref="model_hr_contract"/>
+            <fieldname="domain_force">[('company_id','in',company_ids)]</field>
         </record>
 
-        <record id="ir_rule_hr_payroll_structure_type_multi_company" model="ir.rule">
-            <field name="name">HR Payroll Structure Type: Multi Company</field>
-            <field name="model_id" ref="model_hr_payroll_structure_type"/>
-            <field name="global" eval="True"/>
-            <field name="domain_force">['|', ('country_id', '=', False), ('country_id', 'in', user.env.companies.mapped('country_id').ids)]</field>
+        <recordid="ir_rule_hr_payroll_structure_type_multi_company"model="ir.rule">
+            <fieldname="name">HRPayrollStructureType:MultiCompany</field>
+            <fieldname="model_id"ref="model_hr_payroll_structure_type"/>
+            <fieldname="global"eval="True"/>
+            <fieldname="domain_force">['|',('country_id','=',False),('country_id','in',user.env.companies.mapped('country_id').ids)]</field>
         </record>
 
     </data>

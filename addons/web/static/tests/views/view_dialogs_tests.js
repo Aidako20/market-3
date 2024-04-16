@@ -1,762 +1,762 @@
-flectra.define('web.view_dialogs_tests', function (require) {
-"use strict";
+flectra.define('web.view_dialogs_tests',function(require){
+"usestrict";
 
-var dialogs = require('web.view_dialogs');
-var ListController = require('web.ListController');
-var testUtils = require('web.test_utils');
-var Widget = require('web.Widget');
-var FormView = require('web.FormView');
+vardialogs=require('web.view_dialogs');
+varListController=require('web.ListController');
+vartestUtils=require('web.test_utils');
+varWidget=require('web.Widget');
+varFormView=require('web.FormView');
 
-const cpHelpers = testUtils.controlPanel;
-var createView = testUtils.createView;
+constcpHelpers=testUtils.controlPanel;
+varcreateView=testUtils.createView;
 
-async function createParent(params) {
-    var widget = new Widget();
-    params.server = await testUtils.mock.addMockEnvironment(widget, params);
-    return widget;
+asyncfunctioncreateParent(params){
+    varwidget=newWidget();
+    params.server=awaittestUtils.mock.addMockEnvironment(widget,params);
+    returnwidget;
 }
 
-QUnit.module('Views', {
-    beforeEach: function () {
-        this.data = {
-            partner: {
-                fields: {
-                    display_name: { string: "Displayed name", type: "char" },
-                    foo: {string: "Foo", type: 'char'},
-                    bar: {string: "Bar", type: "boolean"},
-                    instrument: {string: 'Instruments', type: 'many2one', relation: 'instrument'},
+QUnit.module('Views',{
+    beforeEach:function(){
+        this.data={
+            partner:{
+                fields:{
+                    display_name:{string:"Displayedname",type:"char"},
+                    foo:{string:"Foo",type:'char'},
+                    bar:{string:"Bar",type:"boolean"},
+                    instrument:{string:'Instruments',type:'many2one',relation:'instrument'},
                 },
-                records: [
-                    {id: 1, foo: 'blip', display_name: 'blipblip', bar: true},
-                    {id: 2, foo: 'ta tata ta ta', display_name: 'macgyver', bar: false},
-                    {id: 3, foo: 'piou piou', display_name: "Jack O'Neill", bar: true},
+                records:[
+                    {id:1,foo:'blip',display_name:'blipblip',bar:true},
+                    {id:2,foo:'tatatatata',display_name:'macgyver',bar:false},
+                    {id:3,foo:'pioupiou',display_name:"JackO'Neill",bar:true},
                 ],
             },
-            instrument: {
-                fields: {
-                    name: {string: "name", type: "char"},
-                    badassery: {string: 'level', type: 'many2many', relation: 'badassery', domain: [['level', '=', 'Awsome']]},
+            instrument:{
+                fields:{
+                    name:{string:"name",type:"char"},
+                    badassery:{string:'level',type:'many2many',relation:'badassery',domain:[['level','=','Awsome']]},
                 },
             },
 
-            badassery: {
-                fields: {
-                    level: {string: 'level', type: "char"},
+            badassery:{
+                fields:{
+                    level:{string:'level',type:"char"},
                 },
-                records: [
-                    {id: 1, level: 'Awsome'},
+                records:[
+                    {id:1,level:'Awsome'},
                 ],
             },
 
-            product: {
-                fields : {
-                    name: {string: "name", type: "char" },
-                    partner : {string: 'Doors', type: 'one2many', relation: 'partner'},
+            product:{
+                fields:{
+                    name:{string:"name",type:"char"},
+                    partner:{string:'Doors',type:'one2many',relation:'partner'},
                 },
-                records: [
-                    {id: 1, name: 'The end'},
+                records:[
+                    {id:1,name:'Theend'},
                 ],
             },
         };
     },
-}, function () {
+},function(){
 
     QUnit.module('view_dialogs');
 
-    QUnit.test('formviewdialog buttons in footer are positioned properly', async function (assert) {
+    QUnit.test('formviewdialogbuttonsinfooterarepositionedproperly',asyncfunction(assert){
         assert.expect(2);
 
-        var parent = await createParent({
-            data: this.data,
-            archs: {
+        varparent=awaitcreateParent({
+            data:this.data,
+            archs:{
                 'partner,false,form':
-                    '<form string="Partner">' +
-                        '<sheet>' +
-                            '<group><field name="foo"/></group>' +
-                            '<footer><button string="Custom Button" type="object" class="btn-primary"/></footer>' +
-                        '</sheet>' +
+                    '<formstring="Partner">'+
+                        '<sheet>'+
+                            '<group><fieldname="foo"/></group>'+
+                            '<footer><buttonstring="CustomButton"type="object"class="btn-primary"/></footer>'+
+                        '</sheet>'+
                     '</form>',
             },
         });
 
-        new dialogs.FormViewDialog(parent, {
-            res_model: 'partner',
-            res_id: 1,
+        newdialogs.FormViewDialog(parent,{
+            res_model:'partner',
+            res_id:1,
         }).open();
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
 
-        assert.notOk($('.modal-body button').length,
-            "should not have any button in body");
-        assert.strictEqual($('.modal-footer button').length, 1,
-            "should have only one button in footer");
+        assert.notOk($('.modal-bodybutton').length,
+            "shouldnothaveanybuttoninbody");
+        assert.strictEqual($('.modal-footerbutton').length,1,
+            "shouldhaveonlyonebuttoninfooter");
         parent.destroy();
     });
 
-    QUnit.test('formviewdialog buttons in footer are not duplicated', async function (assert) {
+    QUnit.test('formviewdialogbuttonsinfooterarenotduplicated',asyncfunction(assert){
         assert.expect(2);
-        this.data.partner.fields.poney_ids = {string: "Poneys", type: "one2many", relation: 'partner'};
-        this.data.partner.records[0].poney_ids = [];
+        this.data.partner.fields.poney_ids={string:"Poneys",type:"one2many",relation:'partner'};
+        this.data.partner.records[0].poney_ids=[];
 
-        var parent = await createParent({
-            data: this.data,
-            archs: {
+        varparent=awaitcreateParent({
+            data:this.data,
+            archs:{
                 'partner,false,form':
-                    '<form string="Partner">' +
-                            '<field name="poney_ids"><tree editable="top"><field name="display_name"/></tree></field>' +
-                            '<footer><button string="Custom Button" type="object" class="btn-primary"/></footer>' +
+                    '<formstring="Partner">'+
+                            '<fieldname="poney_ids"><treeeditable="top"><fieldname="display_name"/></tree></field>'+
+                            '<footer><buttonstring="CustomButton"type="object"class="btn-primary"/></footer>'+
                     '</form>',
             },
         });
 
-        new dialogs.FormViewDialog(parent, {
-            res_model: 'partner',
-            res_id: 1,
+        newdialogs.FormViewDialog(parent,{
+            res_model:'partner',
+            res_id:1,
         }).open();
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
 
-        assert.strictEqual($('.modal button.btn-primary').length, 1,
-            "should have 1 buttons in modal");
+        assert.strictEqual($('.modalbutton.btn-primary').length,1,
+            "shouldhave1buttonsinmodal");
 
-        await testUtils.dom.click($('.o_field_x2many_list_row_add a'));
-        await testUtils.fields.triggerKeydown($('input.o_input'), 'escape');
+        awaittestUtils.dom.click($('.o_field_x2many_list_row_adda'));
+        awaittestUtils.fields.triggerKeydown($('input.o_input'),'escape');
 
-        assert.strictEqual($('.modal button.btn-primary').length, 1,
-            "should still have 1 buttons in modal");
+        assert.strictEqual($('.modalbutton.btn-primary').length,1,
+            "shouldstillhave1buttonsinmodal");
         parent.destroy();
     });
 
-    QUnit.test('SelectCreateDialog use domain, group_by and search default', async function (assert) {
+    QUnit.test('SelectCreateDialogusedomain,group_byandsearchdefault',asyncfunction(assert){
         assert.expect(3);
 
-        var search = 0;
-        var parent = await createParent({
-            data: this.data,
-            archs: {
+        varsearch=0;
+        varparent=awaitcreateParent({
+            data:this.data,
+            archs:{
                 'partner,false,list':
-                    '<tree string="Partner">' +
-                        '<field name="display_name"/>' +
-                        '<field name="foo"/>' +
+                    '<treestring="Partner">'+
+                        '<fieldname="display_name"/>'+
+                        '<fieldname="foo"/>'+
                     '</tree>',
                 'partner,false,search':
-                    '<search>' +
-                        '<field name="foo" filter_domain="[(\'display_name\',\'ilike\',self), (\'foo\',\'ilike\',self)]"/>' +
-                        '<group expand="0" string="Group By">' +
-                            '<filter name="groupby_bar" context="{\'group_by\' : \'bar\'}"/>' +
-                        '</group>' +
+                    '<search>'+
+                        '<fieldname="foo"filter_domain="[(\'display_name\',\'ilike\',self),(\'foo\',\'ilike\',self)]"/>'+
+                        '<groupexpand="0"string="GroupBy">'+
+                            '<filtername="groupby_bar"context="{\'group_by\':\'bar\'}"/>'+
+                        '</group>'+
                     '</search>',
             },
-            mockRPC: function (route, args) {
-                if (args.method === 'web_read_group') {
-                    assert.deepEqual(args.kwargs, {
-                        context: {
-                            search_default_foo: "piou",
-                            search_default_groupby_bar: true,
+            mockRPC:function(route,args){
+                if(args.method==='web_read_group'){
+                    assert.deepEqual(args.kwargs,{
+                        context:{
+                            search_default_foo:"piou",
+                            search_default_groupby_bar:true,
                         },
-                        domain: ["&", ["display_name", "like", "a"], "&", ["display_name", "ilike", "piou"], ["foo", "ilike", "piou"]],
-                        fields: ["display_name", "foo", "bar"],
-                        groupby: ["bar"],
-                        orderby: '',
-                        lazy: true,
-                        limit: 80,
-                    }, "should search with the complete domain (domain + search), and group by 'bar'");
+                        domain:["&",["display_name","like","a"],"&",["display_name","ilike","piou"],["foo","ilike","piou"]],
+                        fields:["display_name","foo","bar"],
+                        groupby:["bar"],
+                        orderby:'',
+                        lazy:true,
+                        limit:80,
+                    },"shouldsearchwiththecompletedomain(domain+search),andgroupby'bar'");
                 }
-                if (search === 0 && route === '/web/dataset/search_read') {
+                if(search===0&&route==='/web/dataset/search_read'){
                     search++;
-                    assert.deepEqual(args, {
-                        context: {
-                            search_default_foo: "piou",
-                            search_default_groupby_bar: true,
-                            bin_size: true
-                        },  // not part of the test, may change
-                        domain: ["&", ["display_name", "like", "a"], "&", ["display_name", "ilike", "piou"], ["foo", "ilike", "piou"]],
-                        fields: ["display_name", "foo"],
-                        model: "partner",
-                        limit: 80,
-                        sort: ""
-                    }, "should search with the complete domain (domain + search)");
-                } else if (search === 1 && route === '/web/dataset/search_read') {
-                    assert.deepEqual(args, {
-                        context: {
-                            search_default_foo: "piou",
-                            search_default_groupby_bar: true,
-                            bin_size: true
-                        },  // not part of the test, may change
-                        domain: [["display_name", "like", "a"]],
-                        fields: ["display_name", "foo"],
-                        model: "partner",
-                        limit: 80,
-                        sort: ""
-                    }, "should search with the domain");
+                    assert.deepEqual(args,{
+                        context:{
+                            search_default_foo:"piou",
+                            search_default_groupby_bar:true,
+                            bin_size:true
+                        }, //notpartofthetest,maychange
+                        domain:["&",["display_name","like","a"],"&",["display_name","ilike","piou"],["foo","ilike","piou"]],
+                        fields:["display_name","foo"],
+                        model:"partner",
+                        limit:80,
+                        sort:""
+                    },"shouldsearchwiththecompletedomain(domain+search)");
+                }elseif(search===1&&route==='/web/dataset/search_read'){
+                    assert.deepEqual(args,{
+                        context:{
+                            search_default_foo:"piou",
+                            search_default_groupby_bar:true,
+                            bin_size:true
+                        }, //notpartofthetest,maychange
+                        domain:[["display_name","like","a"]],
+                        fields:["display_name","foo"],
+                        model:"partner",
+                        limit:80,
+                        sort:""
+                    },"shouldsearchwiththedomain");
                 }
 
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
         });
 
-        var dialog;
-        new dialogs.SelectCreateDialog(parent, {
-            no_create: true,
-            readonly: true,
-            res_model: 'partner',
-            domain: [['display_name', 'like', 'a']],
-            context: {
-                search_default_groupby_bar: true,
-                search_default_foo: 'piou',
+        vardialog;
+        newdialogs.SelectCreateDialog(parent,{
+            no_create:true,
+            readonly:true,
+            res_model:'partner',
+            domain:[['display_name','like','a']],
+            context:{
+                search_default_groupby_bar:true,
+                search_default_foo:'piou',
             },
-        }).open().then(function (result) {
-            dialog = result;
+        }).open().then(function(result){
+            dialog=result;
         });
-        await testUtils.nextTick();
-        await cpHelpers.removeFacet('.modal', "Bar");
-        await cpHelpers.removeFacet('.modal');
+        awaittestUtils.nextTick();
+        awaitcpHelpers.removeFacet('.modal',"Bar");
+        awaitcpHelpers.removeFacet('.modal');
 
         parent.destroy();
     });
 
-    QUnit.test('SelectCreateDialog correctly evaluates domains', async function (assert) {
+    QUnit.test('SelectCreateDialogcorrectlyevaluatesdomains',asyncfunction(assert){
         assert.expect(1);
 
-        var parent = await createParent({
-            data: this.data,
-            archs: {
+        varparent=awaitcreateParent({
+            data:this.data,
+            archs:{
                 'partner,false,list':
-                    '<tree string="Partner">' +
-                        '<field name="display_name"/>' +
-                        '<field name="foo"/>' +
+                    '<treestring="Partner">'+
+                        '<fieldname="display_name"/>'+
+                        '<fieldname="foo"/>'+
                     '</tree>',
                 'partner,false,search':
-                    '<search>' +
-                        '<field name="foo"/>' +
+                    '<search>'+
+                        '<fieldname="foo"/>'+
                     '</search>',
             },
-            mockRPC: function (route, args) {
-                if (route === '/web/dataset/search_read') {
-                    assert.deepEqual(args.domain, [['id', '=', 2]],
-                        "should have correctly evaluated the domain");
+            mockRPC:function(route,args){
+                if(route==='/web/dataset/search_read'){
+                    assert.deepEqual(args.domain,[['id','=',2]],
+                        "shouldhavecorrectlyevaluatedthedomain");
                 }
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
-            session: {
-                user_context: {uid: 2},
+            session:{
+                user_context:{uid:2},
             },
         });
 
-        new dialogs.SelectCreateDialog(parent, {
-            no_create: true,
-            readonly: true,
-            res_model: 'partner',
-            domain: "[['id', '=', uid]]",
+        newdialogs.SelectCreateDialog(parent,{
+            no_create:true,
+            readonly:true,
+            res_model:'partner',
+            domain:"[['id','=',uid]]",
         }).open();
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
 
         parent.destroy();
     });
 
-    QUnit.test('SelectCreateDialog list view in readonly', async function (assert) {
+    QUnit.test('SelectCreateDialoglistviewinreadonly',asyncfunction(assert){
         assert.expect(1);
 
-        var parent = await createParent({
-            data: this.data,
-            archs: {
+        varparent=awaitcreateParent({
+            data:this.data,
+            archs:{
                 'partner,false,list':
-                    '<tree string="Partner" editable="bottom">' +
-                        '<field name="display_name"/>' +
-                        '<field name="foo"/>' +
+                    '<treestring="Partner"editable="bottom">'+
+                        '<fieldname="display_name"/>'+
+                        '<fieldname="foo"/>'+
                     '</tree>',
                 'partner,false,search':
                     '<search/>'
             },
         });
 
-        var dialog;
-        new dialogs.SelectCreateDialog(parent, {
-            res_model: 'partner',
-        }).open().then(function (result) {
-            dialog = result;
+        vardialog;
+        newdialogs.SelectCreateDialog(parent,{
+            res_model:'partner',
+        }).open().then(function(result){
+            dialog=result;
         });
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
 
-        // click on the first row to see if the list is editable
-        await testUtils.dom.click(dialog.$('.o_list_view tbody tr:first td:not(.o_list_record_selector):first'));
+        //clickonthefirstrowtoseeifthelistiseditable
+        awaittestUtils.dom.click(dialog.$('.o_list_viewtbodytr:firsttd:not(.o_list_record_selector):first'));
 
-        assert.equal(dialog.$('.o_list_view tbody tr:first td:not(.o_list_record_selector):first input').length, 0,
-            "list view should not be editable in a SelectCreateDialog");
+        assert.equal(dialog.$('.o_list_viewtbodytr:firsttd:not(.o_list_record_selector):firstinput').length,0,
+            "listviewshouldnotbeeditableinaSelectCreateDialog");
 
         parent.destroy();
     });
 
-    QUnit.test('SelectCreateDialog cascade x2many in create mode', async function (assert) {
+    QUnit.test('SelectCreateDialogcascadex2manyincreatemode',asyncfunction(assert){
         assert.expect(5);
 
-        var form = await createView({
-            View: FormView,
-            model: 'product',
-            data: this.data,
-            arch: '<form>' +
-                     '<field name="name"/>' +
-                     '<field name="partner" widget="one2many" >' +
-                        '<tree editable="top">' +
-                            '<field name="display_name"/>' +
-                            '<field name="instrument"/>' +
-                        '</tree>' +
-                    '</field>' +
+        varform=awaitcreateView({
+            View:FormView,
+            model:'product',
+            data:this.data,
+            arch:'<form>'+
+                     '<fieldname="name"/>'+
+                     '<fieldname="partner"widget="one2many">'+
+                        '<treeeditable="top">'+
+                            '<fieldname="display_name"/>'+
+                            '<fieldname="instrument"/>'+
+                        '</tree>'+
+                    '</field>'+
                   '</form>',
-            res_id: 1,
-            archs: {
-                'partner,false,form': '<form>' +
-                                           '<field name="name"/>' +
-                                           '<field name="instrument" widget="one2many" mode="tree"/>' +
+            res_id:1,
+            archs:{
+                'partner,false,form':'<form>'+
+                                           '<fieldname="name"/>'+
+                                           '<fieldname="instrument"widget="one2many"mode="tree"/>'+
                                         '</form>',
 
-                'instrument,false,form': '<form>'+
-                                            '<field name="name"/>'+
-                                            '<field name="badassery">' +
+                'instrument,false,form':'<form>'+
+                                            '<fieldname="name"/>'+
+                                            '<fieldname="badassery">'+
                                                 '<tree>'+
-                                                    '<field name="level"/>'+
-                                                '</tree>' +
-                                            '</field>' +
+                                                    '<fieldname="level"/>'+
+                                                '</tree>'+
+                                            '</field>'+
                                         '</form>',
 
-                'badassery,false,list': '<tree>'+
-                                                '<field name="level"/>'+
+                'badassery,false,list':'<tree>'+
+                                                '<fieldname="level"/>'+
                                             '</tree>',
 
-                'badassery,false,search': '<search>'+
-                                                '<field name="level"/>'+
+                'badassery,false,search':'<search>'+
+                                                '<fieldname="level"/>'+
                                             '</search>',
             },
 
-            mockRPC: function(route, args) {
-                if (route === '/web/dataset/call_kw/partner/get_formview_id') {
-                    return Promise.resolve(false);
+            mockRPC:function(route,args){
+                if(route==='/web/dataset/call_kw/partner/get_formview_id'){
+                    returnPromise.resolve(false);
                 }
-                if (route === '/web/dataset/call_kw/instrument/get_formview_id') {
-                    return Promise.resolve(false);
+                if(route==='/web/dataset/call_kw/instrument/get_formview_id'){
+                    returnPromise.resolve(false);
                 }
-                if (route === '/web/dataset/call_kw/instrument/create') {
-                    assert.deepEqual(args.args, [{badassery: [[6, false, [1]]], name: "ABC"}],
-                        'The method create should have been called with the right arguments');
-                    return Promise.resolve(false);
+                if(route==='/web/dataset/call_kw/instrument/create'){
+                    assert.deepEqual(args.args,[{badassery:[[6,false,[1]]],name:"ABC"}],
+                        'Themethodcreateshouldhavebeencalledwiththerightarguments');
+                    returnPromise.resolve(false);
                 }
-                return this._super(route, args);
+                returnthis._super(route,args);
             },
         });
 
-        await testUtils.form.clickEdit(form);
-        await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-        await testUtils.fields.many2one.createAndEdit("instrument");
+        awaittestUtils.form.clickEdit(form);
+        awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+        awaittestUtils.fields.many2one.createAndEdit("instrument");
 
-        var $modal = $('.modal-lg');
+        var$modal=$('.modal-lg');
 
-        assert.equal($modal.length, 1,
-            'There should be one modal');
+        assert.equal($modal.length,1,
+            'Thereshouldbeonemodal');
 
-        await testUtils.dom.click($modal.find('.o_field_x2many_list_row_add a'));
+        awaittestUtils.dom.click($modal.find('.o_field_x2many_list_row_adda'));
 
-        var $modals = $('.modal-lg');
+        var$modals=$('.modal-lg');
 
-        assert.equal($modals.length, 2,
-            'There should be two modals');
+        assert.equal($modals.length,2,
+            'Thereshouldbetwomodals');
 
-        var $second_modal = $modals.not($modal);
-        await testUtils.dom.click($second_modal.find('.o_list_table.table.table-sm.table-striped.o_list_table_ungrouped .o_data_row input[type=checkbox]'));
+        var$second_modal=$modals.not($modal);
+        awaittestUtils.dom.click($second_modal.find('.o_list_table.table.table-sm.table-striped.o_list_table_ungrouped.o_data_rowinput[type=checkbox]'));
 
-        await testUtils.dom.click($second_modal.find('.o_select_button'));
+        awaittestUtils.dom.click($second_modal.find('.o_select_button'));
 
-        $modal = $('.modal-lg');
+        $modal=$('.modal-lg');
 
-        assert.equal($modal.length, 1,
-            'There should be one modal');
+        assert.equal($modal.length,1,
+            'Thereshouldbeonemodal');
 
-        assert.equal($modal.find('.o_data_cell').text(), 'Awsome',
-            'There should be one item in the list of the modal');
+        assert.equal($modal.find('.o_data_cell').text(),'Awsome',
+            'Thereshouldbeoneiteminthelistofthemodal');
 
-        await testUtils.dom.click($modal.find('.btn.btn-primary'));
+        awaittestUtils.dom.click($modal.find('.btn.btn-primary'));
 
         form.destroy();
     });
 
-    QUnit.test('Form dialog and subview with _view_ref contexts', async function (assert) {
+    QUnit.test('Formdialogandsubviewwith_view_refcontexts',asyncfunction(assert){
         assert.expect(2);
 
-        this.data.instrument.records = [{id: 1, name: 'Tromblon', badassery: [1]}];
-        this.data.partner.records[0].instrument = 1;
+        this.data.instrument.records=[{id:1,name:'Tromblon',badassery:[1]}];
+        this.data.partner.records[0].instrument=1;
 
-        var form = await createView({
-            View: FormView,
-            model: 'partner',
-            data: this.data,
-            arch: '<form>' +
-                     '<field name="name"/>' +
-                     '<field name="instrument" context="{\'tree_view_ref\': \'some_tree_view\'}"/>' +
+        varform=awaitcreateView({
+            View:FormView,
+            model:'partner',
+            data:this.data,
+            arch:'<form>'+
+                     '<fieldname="name"/>'+
+                     '<fieldname="instrument"context="{\'tree_view_ref\':\'some_tree_view\'}"/>'+
                   '</form>',
-            res_id: 1,
-            archs: {
-                'instrument,false,form': '<form>'+
-                                            '<field name="name"/>'+
-                                            '<field name="badassery" context="{\'tree_view_ref\': \'some_other_tree_view\'}"/>' +
+            res_id:1,
+            archs:{
+                'instrument,false,form':'<form>'+
+                                            '<fieldname="name"/>'+
+                                            '<fieldname="badassery"context="{\'tree_view_ref\':\'some_other_tree_view\'}"/>'+
                                         '</form>',
 
-                'badassery,false,list': '<tree>'+
-                                                '<field name="level"/>'+
+                'badassery,false,list':'<tree>'+
+                                                '<fieldname="level"/>'+
                                             '</tree>',
             },
-            viewOptions: {
-                mode: 'edit',
+            viewOptions:{
+                mode:'edit',
             },
 
-            mockRPC: function(route, args) {
-                if (args.method === 'get_formview_id') {
-                    return Promise.resolve(false);
+            mockRPC:function(route,args){
+                if(args.method==='get_formview_id'){
+                    returnPromise.resolve(false);
                 }
-                return this._super(route, args);
+                returnthis._super(route,args);
             },
 
-            interceptsPropagate: {
-                load_views: function (ev) {
-                    var evaluatedContext = ev.data.context;
-                    if (ev.data.modelName === 'instrument') {
-                        assert.deepEqual(evaluatedContext, {tree_view_ref: 'some_tree_view'},
-                            'The correct _view_ref should have been sent to the server, first time');
+            interceptsPropagate:{
+                load_views:function(ev){
+                    varevaluatedContext=ev.data.context;
+                    if(ev.data.modelName==='instrument'){
+                        assert.deepEqual(evaluatedContext,{tree_view_ref:'some_tree_view'},
+                            'Thecorrect_view_refshouldhavebeensenttotheserver,firsttime');
                     }
-                    if (ev.data.modelName === 'badassery') {
-                        assert.deepEqual(evaluatedContext, {
-                            base_model_name: 'instrument',
-                            tree_view_ref: 'some_other_tree_view',
-                        }, 'The correct _view_ref should have been sent to the server for the subview');
+                    if(ev.data.modelName==='badassery'){
+                        assert.deepEqual(evaluatedContext,{
+                            base_model_name:'instrument',
+                            tree_view_ref:'some_other_tree_view',
+                        },'Thecorrect_view_refshouldhavebeensenttotheserverforthesubview');
                     }
                 },
             },
         });
 
-        await testUtils.dom.click(form.$('.o_field_widget[name="instrument"] button.o_external_button'));
+        awaittestUtils.dom.click(form.$('.o_field_widget[name="instrument"]button.o_external_button'));
         form.destroy();
     });
 
-    QUnit.test("Form dialog replaces the context with _createContext method when specified", async function (assert) {
+    QUnit.test("Formdialogreplacesthecontextwith_createContextmethodwhenspecified",asyncfunction(assert){
         assert.expect(5);
 
-        const parent = await createParent({
-            data: this.data,
-            archs: {
+        constparent=awaitcreateParent({
+            data:this.data,
+            archs:{
                 "partner,false,form":
-                    `<form string="Partner">
+                    `<formstring="Partner">
                         <sheet>
-                            <group><field name="foo"/></group>
+                            <group><fieldname="foo"/></group>
                         </sheet>
                     </form>`,
             },
 
-            mockRPC: function (route, args) {
-                if (args.method === "create") {
+            mockRPC:function(route,args){
+                if(args.method==="create"){
                     assert.step(JSON.stringify(args.kwargs.context));
                 }
-                return this._super(route, args);
+                returnthis._super(route,args);
             },
         });
 
-        new dialogs.FormViewDialog(parent, {
-            res_model: "partner",
-            context: { answer: 42 },
-            _createContext: () => ({ dolphin: 64 }),
+        newdialogs.FormViewDialog(parent,{
+            res_model:"partner",
+            context:{answer:42},
+            _createContext:()=>({dolphin:64}),
         }).open();
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
 
-        assert.notOk($(".modal-body button").length,
-            "should not have any button in body");
-        assert.strictEqual($(".modal-footer button").length, 3,
-            "should have 3 buttons in footer");
+        assert.notOk($(".modal-bodybutton").length,
+            "shouldnothaveanybuttoninbody");
+        assert.strictEqual($(".modal-footerbutton").length,3,
+            "shouldhave3buttonsinfooter");
 
-        await testUtils.dom.click($(".modal-footer button:contains(Save & New)"));
-        await testUtils.dom.click($(".modal-footer button:contains(Save & New)"));
-        assert.verifySteps(['{"answer":42}', '{"dolphin":64}']);
+        awaittestUtils.dom.click($(".modal-footerbutton:contains(Save&New)"));
+        awaittestUtils.dom.click($(".modal-footerbutton:contains(Save&New)"));
+        assert.verifySteps(['{"answer":42}','{"dolphin":64}']);
         parent.destroy();
     });
 
-    QUnit.test("Form dialog keeps full context when no _createContext is specified", async function (assert) {
+    QUnit.test("Formdialogkeepsfullcontextwhenno_createContextisspecified",asyncfunction(assert){
         assert.expect(5);
 
-        const parent = await createParent({
-            data: this.data,
-            archs: {
+        constparent=awaitcreateParent({
+            data:this.data,
+            archs:{
                 "partner,false,form":
-                    `<form string="Partner">
+                    `<formstring="Partner">
                         <sheet>
-                            <group><field name="foo"/></group>
+                            <group><fieldname="foo"/></group>
                         </sheet>
                     </form>`,
             },
 
-            mockRPC: function (route, args) {
-                if (args.method === "create") {
+            mockRPC:function(route,args){
+                if(args.method==="create"){
                     assert.step(JSON.stringify(args.kwargs.context));
                 }
-                return this._super(route, args);
+                returnthis._super(route,args);
             },
         });
 
-        new dialogs.FormViewDialog(parent, {
-            res_model: "partner",
-            context: { answer: 42 }
+        newdialogs.FormViewDialog(parent,{
+            res_model:"partner",
+            context:{answer:42}
         }).open();
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
 
-        assert.notOk($(".modal-body button").length,
-            "should not have any button in body");
-        assert.strictEqual($(".modal-footer button").length, 3,
-            "should have 3 buttons in footer");
+        assert.notOk($(".modal-bodybutton").length,
+            "shouldnothaveanybuttoninbody");
+        assert.strictEqual($(".modal-footerbutton").length,3,
+            "shouldhave3buttonsinfooter");
 
-        await testUtils.dom.click($(".modal-footer button:contains(Save & New)"));
-        await testUtils.dom.click($(".modal-footer button:contains(Save & New)"));
-        assert.verifySteps(['{"answer":42}', '{"answer":42}']);
+        awaittestUtils.dom.click($(".modal-footerbutton:contains(Save&New)"));
+        awaittestUtils.dom.click($(".modal-footerbutton:contains(Save&New)"));
+        assert.verifySteps(['{"answer":42}','{"answer":42}']);
         parent.destroy();
     });
 
-    QUnit.test('SelectCreateDialog: save current search', async function (assert) {
+    QUnit.test('SelectCreateDialog:savecurrentsearch',asyncfunction(assert){
         assert.expect(4);
 
-        testUtils.mock.patch(ListController, {
-            getOwnedQueryParams: function () {
-                return {
-                    context: {
-                        shouldBeInFilterContext: true,
+        testUtils.mock.patch(ListController,{
+            getOwnedQueryParams:function(){
+                return{
+                    context:{
+                        shouldBeInFilterContext:true,
                     },
                 };
             },
         });
 
-        var parent = await createParent({
-            data: this.data,
-            archs: {
+        varparent=awaitcreateParent({
+            data:this.data,
+            archs:{
                 'partner,false,list':
-                    '<tree>' +
-                        '<field name="display_name"/>' +
+                    '<tree>'+
+                        '<fieldname="display_name"/>'+
                     '</tree>',
                 'partner,false,search':
-                    '<search>' +
-                       '<filter name="bar" help="Bar" domain="[(\'bar\', \'=\', True)]"/>' +
+                    '<search>'+
+                       '<filtername="bar"help="Bar"domain="[(\'bar\',\'=\',True)]"/>'+
                     '</search>',
 
             },
-            env: {
-                dataManager: {
-                    create_filter: function (filter) {
-                        assert.strictEqual(filter.domain, `[("bar", "=", True)]`,
-                            "should save the correct domain");
-                        const expectedContext = {
-                            group_by: [], // default groupby is an empty list
-                            shouldBeInFilterContext: true,
+            env:{
+                dataManager:{
+                    create_filter:function(filter){
+                        assert.strictEqual(filter.domain,`[("bar","=",True)]`,
+                            "shouldsavethecorrectdomain");
+                        constexpectedContext={
+                            group_by:[],//defaultgroupbyisanemptylist
+                            shouldBeInFilterContext:true,
                         };
-                        assert.deepEqual(filter.context, expectedContext,
-                            "should save the correct context");
+                        assert.deepEqual(filter.context,expectedContext,
+                            "shouldsavethecorrectcontext");
                     },
                 }
             },
         });
 
-        var dialog;
-        new dialogs.SelectCreateDialog(parent, {
-            context: {shouldNotBeInFilterContext: false},
-            res_model: 'partner',
-        }).open().then(function (result) {
-            dialog = result;
+        vardialog;
+        newdialogs.SelectCreateDialog(parent,{
+            context:{shouldNotBeInFilterContext:false},
+            res_model:'partner',
+        }).open().then(function(result){
+            dialog=result;
         });
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
 
 
-        assert.containsN(dialog, '.o_data_row', 3, "should contain 3 records");
+        assert.containsN(dialog,'.o_data_row',3,"shouldcontain3records");
 
-        // filter on bar
-        await cpHelpers.toggleFilterMenu('.modal');
-        await cpHelpers.toggleMenuItem('.modal', "Bar");
+        //filteronbar
+        awaitcpHelpers.toggleFilterMenu('.modal');
+        awaitcpHelpers.toggleMenuItem('.modal',"Bar");
 
-        assert.containsN(dialog, '.o_data_row', 2, "should contain 2 records");
+        assert.containsN(dialog,'.o_data_row',2,"shouldcontain2records");
 
-        // save filter
-        await cpHelpers.toggleFavoriteMenu('.modal');
-        await cpHelpers.toggleSaveFavorite('.modal');
-        await cpHelpers.editFavoriteName('.modal', "some name");
-        await cpHelpers.saveFavorite('.modal');
+        //savefilter
+        awaitcpHelpers.toggleFavoriteMenu('.modal');
+        awaitcpHelpers.toggleSaveFavorite('.modal');
+        awaitcpHelpers.editFavoriteName('.modal',"somename");
+        awaitcpHelpers.saveFavorite('.modal');
 
         testUtils.mock.unpatch(ListController);
         parent.destroy();
     });
 
-    QUnit.test('SelectCreateDialog calls on_selected with every record matching the domain', async function (assert) {
+    QUnit.test('SelectCreateDialogcallson_selectedwitheveryrecordmatchingthedomain',asyncfunction(assert){
         assert.expect(3);
 
-        const parent = await createParent({
-            data: this.data,
-            archs: {
+        constparent=awaitcreateParent({
+            data:this.data,
+            archs:{
                 'partner,false,list':
-                    '<tree limit="2" string="Partner">' +
-                        '<field name="display_name"/>' +
-                        '<field name="foo"/>' +
+                    '<treelimit="2"string="Partner">'+
+                        '<fieldname="display_name"/>'+
+                        '<fieldname="foo"/>'+
                     '</tree>',
                 'partner,false,search':
-                    '<search>' +
-                        '<field name="foo"/>' +
+                    '<search>'+
+                        '<fieldname="foo"/>'+
                     '</search>',
             },
-            session: {},
+            session:{},
         });
 
-        new dialogs.SelectCreateDialog(parent, {
-            res_model: 'partner',
-            on_selected: function(records) {
-                assert.equal(records.length, 3);
-                assert.strictEqual(records.map((r) => r.display_name).toString(), "blipblip,macgyver,Jack O'Neill");
-                assert.strictEqual(records.map((r) => r.id).toString(), "1,2,3");
+        newdialogs.SelectCreateDialog(parent,{
+            res_model:'partner',
+            on_selected:function(records){
+                assert.equal(records.length,3);
+                assert.strictEqual(records.map((r)=>r.display_name).toString(),"blipblip,macgyver,JackO'Neill");
+                assert.strictEqual(records.map((r)=>r.id).toString(),"1,2,3");
             }
         }).open();
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
 
-        await testUtils.dom.click($('thead .o_list_record_selector input'));
-        await testUtils.dom.click($('.o_list_selection_box .o_list_select_domain'));
-        await testUtils.dom.click($('.modal .o_select_button'));
+        awaittestUtils.dom.click($('thead.o_list_record_selectorinput'));
+        awaittestUtils.dom.click($('.o_list_selection_box.o_list_select_domain'));
+        awaittestUtils.dom.click($('.modal.o_select_button'));
 
         parent.destroy();
     });
 
-    QUnit.test('SelectCreateDialog calls on_selected with every record matching without selecting a domain', async function (assert) {
+    QUnit.test('SelectCreateDialogcallson_selectedwitheveryrecordmatchingwithoutselectingadomain',asyncfunction(assert){
         assert.expect(3);
 
-        const parent = await createParent({
-            data: this.data,
-            archs: {
+        constparent=awaitcreateParent({
+            data:this.data,
+            archs:{
                 'partner,false,list':
-                    '<tree limit="2" string="Partner">' +
-                        '<field name="display_name"/>' +
-                        '<field name="foo"/>' +
+                    '<treelimit="2"string="Partner">'+
+                        '<fieldname="display_name"/>'+
+                        '<fieldname="foo"/>'+
                     '</tree>',
                 'partner,false,search':
-                    '<search>' +
-                        '<field name="foo"/>' +
+                    '<search>'+
+                        '<fieldname="foo"/>'+
                     '</search>',
             },
-            session: {},
+            session:{},
         });
 
-        new dialogs.SelectCreateDialog(parent, {
-            res_model: 'partner',
-            on_selected: function(records) {
-                assert.equal(records.length, 2);
-                assert.strictEqual(records.map((r) => r.display_name).toString(), "blipblip,macgyver");
-                assert.strictEqual(records.map((r) => r.id).toString(), "1,2");
+        newdialogs.SelectCreateDialog(parent,{
+            res_model:'partner',
+            on_selected:function(records){
+                assert.equal(records.length,2);
+                assert.strictEqual(records.map((r)=>r.display_name).toString(),"blipblip,macgyver");
+                assert.strictEqual(records.map((r)=>r.id).toString(),"1,2");
             }
         }).open();
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
 
-        await testUtils.dom.click($('thead .o_list_record_selector input'));
-        await testUtils.dom.click($('.o_list_selection_box '));
-        await testUtils.dom.click($('.modal .o_select_button'));
+        awaittestUtils.dom.click($('thead.o_list_record_selectorinput'));
+        awaittestUtils.dom.click($('.o_list_selection_box'));
+        awaittestUtils.dom.click($('.modal.o_select_button'));
 
         parent.destroy();
     });
 
-    QUnit.test('propagate can_create onto the search popup o2m', async function (assert) {
+    QUnit.test('propagatecan_createontothesearchpopupo2m',asyncfunction(assert){
         assert.expect(4);
 
-        this.data.instrument.records = [
-            {id: 1, name: 'Tromblon1'},
-            {id: 2, name: 'Tromblon2'},
-            {id: 3, name: 'Tromblon3'},
-            {id: 4, name: 'Tromblon4'},
-            {id: 5, name: 'Tromblon5'},
-            {id: 6, name: 'Tromblon6'},
-            {id: 7, name: 'Tromblon7'},
-            {id: 8, name: 'Tromblon8'},
+        this.data.instrument.records=[
+            {id:1,name:'Tromblon1'},
+            {id:2,name:'Tromblon2'},
+            {id:3,name:'Tromblon3'},
+            {id:4,name:'Tromblon4'},
+            {id:5,name:'Tromblon5'},
+            {id:6,name:'Tromblon6'},
+            {id:7,name:'Tromblon7'},
+            {id:8,name:'Tromblon8'},
         ];
 
-        var form = await createView({
-            View: FormView,
-            model: 'partner',
-            data: this.data,
-            arch: '<form>' +
-                     '<field name="name"/>' +
-                     '<field name="instrument" can_create="false"/>' +
+        varform=awaitcreateView({
+            View:FormView,
+            model:'partner',
+            data:this.data,
+            arch:'<form>'+
+                     '<fieldname="name"/>'+
+                     '<fieldname="instrument"can_create="false"/>'+
                   '</form>',
-            res_id: 1,
-            archs: {
-                'instrument,false,list': '<tree>'+
-                                                '<field name="name"/>'+
+            res_id:1,
+            archs:{
+                'instrument,false,list':'<tree>'+
+                                                '<fieldname="name"/>'+
                                             '</tree>',
-                'instrument,false,search': '<search>'+
-                                                '<field name="name"/>'+
+                'instrument,false,search':'<search>'+
+                                                '<fieldname="name"/>'+
                                             '</search>',
             },
-            viewOptions: {
-                mode: 'edit',
+            viewOptions:{
+                mode:'edit',
             },
 
-            mockRPC: function(route, args) {
-                if (args.method === 'get_formview_id') {
-                    return Promise.resolve(false);
+            mockRPC:function(route,args){
+                if(args.method==='get_formview_id'){
+                    returnPromise.resolve(false);
                 }
-                return this._super(route, args);
+                returnthis._super(route,args);
             },
         });
 
-        await testUtils.fields.many2one.clickOpenDropdown('instrument');
+        awaittestUtils.fields.many2one.clickOpenDropdown('instrument');
 
-        assert.containsNone(form, '.ui-autocomplete a:contains(Start typing...)');
+        assert.containsNone(form,'.ui-autocompletea:contains(Starttyping...)');
 
-        await testUtils.fields.editInput(form.el.querySelector(".o_field_many2one[name=instrument] input"), "a");
+        awaittestUtils.fields.editInput(form.el.querySelector(".o_field_many2one[name=instrument]input"),"a");
 
-        assert.containsNone(form, '.ui-autocomplete a:contains(Create and Edit)');
+        assert.containsNone(form,'.ui-autocompletea:contains(CreateandEdit)');
 
-        await testUtils.fields.editInput(form.el.querySelector(".o_field_many2one[name=instrument] input"), "");
-        await testUtils.fields.many2one.clickItem('instrument', 'Search More...');
+        awaittestUtils.fields.editInput(form.el.querySelector(".o_field_many2one[name=instrument]input"),"");
+        awaittestUtils.fields.many2one.clickItem('instrument','SearchMore...');
 
-        var $modal = $('.modal-dialog.modal-lg');
+        var$modal=$('.modal-dialog.modal-lg');
 
-        assert.strictEqual($modal.length, 1, 'Modal present');
+        assert.strictEqual($modal.length,1,'Modalpresent');
 
-        assert.strictEqual($modal.find('.modal-footer button').text(), "Cancel",
-            'Only the cancel button is present in modal');
+        assert.strictEqual($modal.find('.modal-footerbutton').text(),"Cancel",
+            'Onlythecancelbuttonispresentinmodal');
 
         form.destroy();
     });
 
-    QUnit.test('formviewdialog is not closed when button handlers return a rejected promise', async function (assert) {
+    QUnit.test('formviewdialogisnotclosedwhenbuttonhandlersreturnarejectedpromise',asyncfunction(assert){
         assert.expect(3);
 
-        this.data.partner.fields.poney_ids = { string: "Poneys", type: "one2many", relation: 'partner' };
-        this.data.partner.records[0].poney_ids = [];
-        var reject = true;
+        this.data.partner.fields.poney_ids={string:"Poneys",type:"one2many",relation:'partner'};
+        this.data.partner.records[0].poney_ids=[];
+        varreject=true;
 
-        var parent = await createParent({
-            data: this.data,
-            archs: {
+        varparent=awaitcreateParent({
+            data:this.data,
+            archs:{
                 'partner,false,form':
-                    '<form string="Partner">' +
-                    '<field name="poney_ids"><tree><field name="display_name"/></tree></field>' +
+                    '<formstring="Partner">'+
+                    '<fieldname="poney_ids"><tree><fieldname="display_name"/></tree></field>'+
                     '</form>',
             },
         });
 
-        new dialogs.FormViewDialog(parent, {
-            res_model: 'partner',
-            res_id: 1,
-            buttons: [{
-                text: 'Click me !',
-                classes: "btn-secondary o_form_button_magic",
-                close: true,
-                click: function () {
-                    return reject ? Promise.reject() : Promise.resolve();
+        newdialogs.FormViewDialog(parent,{
+            res_model:'partner',
+            res_id:1,
+            buttons:[{
+                text:'Clickme!',
+                classes:"btn-secondaryo_form_button_magic",
+                close:true,
+                click:function(){
+                    returnreject?Promise.reject():Promise.resolve();
                 },
             }],
         }).open();
 
-        await testUtils.nextTick();
-        assert.strictEqual($('.modal').length, 1, "should have a modal displayed");
+        awaittestUtils.nextTick();
+        assert.strictEqual($('.modal').length,1,"shouldhaveamodaldisplayed");
 
-        await testUtils.dom.click($('.modal .o_form_button_magic'));
-        assert.strictEqual($('.modal').length, 1, "modal should still be opened");
+        awaittestUtils.dom.click($('.modal.o_form_button_magic'));
+        assert.strictEqual($('.modal').length,1,"modalshouldstillbeopened");
 
-        reject = false;
-        await testUtils.dom.click($('.modal .o_form_button_magic'));
-        assert.strictEqual($('.modal').length, 0, "modal should be closed");
+        reject=false;
+        awaittestUtils.dom.click($('.modal.o_form_button_magic'));
+        assert.strictEqual($('.modal').length,0,"modalshouldbeclosed");
 
         parent.destroy();
     });

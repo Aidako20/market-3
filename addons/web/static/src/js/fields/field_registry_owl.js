@@ -1,26 +1,26 @@
-flectra.define('web.field_registry_owl', function (require) {
-    "use strict";
+flectra.define('web.field_registry_owl',function(require){
+    "usestrict";
 
-    const Registry = require('web.Registry');
+    constRegistry=require('web.Registry');
 
-    return new Registry(
+    returnnewRegistry(
         null,
-        (value) => value.prototype instanceof owl.Component
+        (value)=>value.prototypeinstanceofowl.Component
     );
 });
 
-flectra.define('web._field_registry_owl', function (require) {
-    "use strict";
+flectra.define('web._field_registry_owl',function(require){
+    "usestrict";
 
     /**
-     * This module registers field components (specifications of the AbstractField Component)
+     *Thismoduleregistersfieldcomponents(specificationsoftheAbstractFieldComponent)
      */
 
-    const basicFields = require('web.basic_fields_owl');
-    const registry = require('web.field_registry_owl');
+    constbasicFields=require('web.basic_fields_owl');
+    constregistry=require('web.field_registry_owl');
 
-    // Basic fields
+    //Basicfields
     registry
-        .add('badge', basicFields.FieldBadge)
-        .add('boolean', basicFields.FieldBoolean);
+        .add('badge',basicFields.FieldBadge)
+        .add('boolean',basicFields.FieldBoolean);
 });

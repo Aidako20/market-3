@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
 
-        <record id="view_full_reconcile_form" model="ir.ui.view">
-            <field name="name">account.full.reconcile.form</field>
-            <field name="model">account.full.reconcile</field>
-            <field name="arch" type="xml">
-                <form string="Matching">
+        <recordid="view_full_reconcile_form"model="ir.ui.view">
+            <fieldname="name">account.full.reconcile.form</field>
+            <fieldname="model">account.full.reconcile</field>
+            <fieldname="arch"type="xml">
+                <formstring="Matching">
                     <group>
-                        <div class="oe_title" colspan="4">
-                            <h1><field name="name" readonly="1"/></h1>
+                        <divclass="oe_title"colspan="4">
+                            <h1><fieldname="name"readonly="1"/></h1>
                         </div>
-                        <separator string="Matched Journal Items" colspan="4"/>
-                        <field name="reconciled_line_ids" readonly="1" colspan="4" nolabel="1"/>
+                        <separatorstring="MatchedJournalItems"colspan="4"/>
+                        <fieldname="reconciled_line_ids"readonly="1"colspan="4"nolabel="1"/>
                     </group>
                 </form>
             </field>

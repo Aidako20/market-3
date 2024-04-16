@@ -1,29 +1,29 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import api, fields, models
-from flectra.addons.bus.models.bus_presence import AWAY_TIMER
-from flectra.addons.bus.models.bus_presence import DISCONNECTION_TIMER
+fromflectraimportapi,fields,models
+fromflectra.addons.bus.models.bus_presenceimportAWAY_TIMER
+fromflectra.addons.bus.models.bus_presenceimportDISCONNECTION_TIMER
 
 
-class ResPartner(models.Model):
-    _inherit = 'res.partner'
+classResPartner(models.Model):
+    _inherit='res.partner'
 
-    im_status = fields.Char('IM Status', compute='_compute_im_status')
+    im_status=fields.Char('IMStatus',compute='_compute_im_status')
 
-    def _compute_im_status(self):
+    def_compute_im_status(self):
         self.env.cr.execute("""
             SELECT
-                U.partner_id as id,
-                CASE WHEN max(B.last_poll) IS NULL THEN 'offline'
-                    WHEN age(now() AT TIME ZONE 'UTC', max(B.last_poll)) > interval %s THEN 'offline'
-                    WHEN age(now() AT TIME ZONE 'UTC', max(B.last_presence)) > interval %s THEN 'away'
-                    ELSE 'online'
-                END as status
-            FROM bus_presence B
-            RIGHT JOIN res_users U ON B.user_id = U.id
-            WHERE U.partner_id IN %s AND U.active = 't'
-         GROUP BY U.partner_id
-        """, ("%s seconds" % DISCONNECTION_TIMER, "%s seconds" % AWAY_TIMER, tuple(self.ids)))
-        res = dict(((status['id'], status['status']) for status in self.env.cr.dictfetchall()))
-        for partner in self:
-            partner.im_status = res.get(partner.id, 'im_partner')  # if not found, it is a partner, useful to avoid to refresh status in js
+                U.partner_idasid,
+                CASEWHENmax(B.last_poll)ISNULLTHEN'offline'
+                    WHENage(now()ATTIMEZONE'UTC',max(B.last_poll))>interval%sTHEN'offline'
+                    WHENage(now()ATTIMEZONE'UTC',max(B.last_presence))>interval%sTHEN'away'
+                    ELSE'online'
+                ENDasstatus
+            FROMbus_presenceB
+            RIGHTJOINres_usersUONB.user_id=U.id
+            WHEREU.partner_idIN%sANDU.active='t'
+         GROUPBYU.partner_id
+        """,("%sseconds"%DISCONNECTION_TIMER,"%sseconds"%AWAY_TIMER,tuple(self.ids)))
+        res=dict(((status['id'],status['status'])forstatusinself.env.cr.dictfetchall()))
+        forpartnerinself:
+            partner.im_status=res.get(partner.id,'im_partner') #ifnotfound,itisapartner,usefultoavoidtorefreshstatusinjs

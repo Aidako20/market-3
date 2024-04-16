@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class MailComposeMessage(models.TransientModel):
-    _inherit = 'mail.compose.message'
+classMailComposeMessage(models.TransientModel):
+    _inherit='mail.compose.message'
 
-    def send_mail(self, auto_commit=False):
-        if self.env.context.get('mark_so_as_sent') and self.model == 'sale.order':
-            self = self.with_context(mail_notify_author=self.env.user.partner_id in self.partner_ids)
-        return super(MailComposeMessage, self).send_mail(auto_commit=auto_commit)
+    defsend_mail(self,auto_commit=False):
+        ifself.env.context.get('mark_so_as_sent')andself.model=='sale.order':
+            self=self.with_context(mail_notify_author=self.env.user.partner_idinself.partner_ids)
+        returnsuper(MailComposeMessage,self).send_mail(auto_commit=auto_commit)

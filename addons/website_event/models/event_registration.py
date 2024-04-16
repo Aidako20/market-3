@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class EventRegistration(models.Model):
-    _name = 'event.registration'
-    _inherit = ['event.registration']
+classEventRegistration(models.Model):
+    _name='event.registration'
+    _inherit=['event.registration']
 
-    visitor_id = fields.Many2one('website.visitor', string='Visitor', ondelete='set null')
+    visitor_id=fields.Many2one('website.visitor',string='Visitor',ondelete='setnull')
 
-    def _get_website_registration_allowed_fields(self):
-        return {'name', 'phone', 'email', 'mobile', 'event_id', 'partner_id', 'event_ticket_id'}
+    def_get_website_registration_allowed_fields(self):
+        return{'name','phone','email','mobile','event_id','partner_id','event_ticket_id'}

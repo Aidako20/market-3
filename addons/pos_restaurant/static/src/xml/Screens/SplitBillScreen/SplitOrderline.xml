@@ -1,44 +1,44 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="SplitOrderline" owl="1">
-        <li class="orderline" t-att-class="{ selected: isSelected, partially: props.split.quantity !== props.line.get_quantity() }">
-            <span class="product-name">
-                <t t-esc="props.line.get_product().display_name" />
+    <tt-name="SplitOrderline"owl="1">
+        <liclass="orderline"t-att-class="{selected:isSelected,partially:props.split.quantity!==props.line.get_quantity()}">
+            <spanclass="product-name">
+                <tt-esc="props.line.get_product().display_name"/>
             </span>
-            <span class="price">
-                <t t-esc="env.pos.format_currency(props.line.get_display_price())" />
+            <spanclass="price">
+                <tt-esc="env.pos.format_currency(props.line.get_display_price())"/>
             </span>
-            <ul class="info-list">
-                <t t-if="props.line.get_quantity_str() !== '1'">
-                    <li class="info">
-                        <t t-if="isSelected and props.line.get_unit().is_pos_groupable">
-                            <em class="big">
-                                <t t-esc="props.split.quantity" />
+            <ulclass="info-list">
+                <tt-if="props.line.get_quantity_str()!=='1'">
+                    <liclass="info">
+                        <tt-if="isSelectedandprops.line.get_unit().is_pos_groupable">
+                            <emclass="big">
+                                <tt-esc="props.split.quantity"/>
                             </em>
                             /
-                            <t t-esc="props.line.get_quantity_str()" />
+                            <tt-esc="props.line.get_quantity_str()"/>
                         </t>
-                        <t t-if="!(isSelected and props.line.get_unit().is_pos_groupable)">
+                        <tt-if="!(isSelectedandprops.line.get_unit().is_pos_groupable)">
                             <em>
-                                <t t-esc="props.line.get_quantity_str()" />
+                                <tt-esc="props.line.get_quantity_str()"/>
                             </em>
                         </t>
-                        <t t-esc="props.line.get_unit().name" />
+                        <tt-esc="props.line.get_unit().name"/>
                         at
-                        <t t-esc="env.pos.format_currency(props.line.get_unit_price())" />
+                        <tt-esc="env.pos.format_currency(props.line.get_unit_price())"/>
                         /
-                        <t t-esc="props.line.get_unit().name" />
+                        <tt-esc="props.line.get_unit().name"/>
                     </li>
                 </t>
-                <t t-if="props.line.get_discount_str() !== '0'">
-                    <li class="info">
-                        <span>With a </span>
+                <tt-if="props.line.get_discount_str()!=='0'">
+                    <liclass="info">
+                        <span>Witha</span>
                         <em>
-                            <t t-esc="props.line.get_discount_str()" />
+                            <tt-esc="props.line.get_discount_str()"/>
                             <span>%</span>
                         </em>
-                        <span> discount</span>
+                        <span>discount</span>
                     </li>
                 </t>
             </ul>

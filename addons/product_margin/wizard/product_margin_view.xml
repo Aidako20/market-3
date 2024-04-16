@@ -1,28 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-         <record id="product_margin_form_view" model="ir.ui.view">
-            <field name="name">product.margin.form</field>
-            <field name="model">product.margin</field>
-            <field name="arch" type="xml">
-                <form string="Properties categories">
-                    <group col="4" string="General Information">
-                        <field name="from_date" />
-                        <field name="to_date" />
-                        <field name="invoice_state" />
+         <recordid="product_margin_form_view"model="ir.ui.view">
+            <fieldname="name">product.margin.form</field>
+            <fieldname="model">product.margin</field>
+            <fieldname="arch"type="xml">
+                <formstring="Propertiescategories">
+                    <groupcol="4"string="GeneralInformation">
+                        <fieldname="from_date"/>
+                        <fieldname="to_date"/>
+                        <fieldname="invoice_state"/>
                     </group>
                     <footer>
-                        <button name="action_open_window" string="Open Margins" type="object" class="btn-primary"/>
-                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                        <buttonname="action_open_window"string="OpenMargins"type="object"class="btn-primary"/>
+                        <buttonstring="Cancel"class="btn-secondary"special="cancel"/>
                     </footer>
                 </form>
             </field>
         </record>
 
-        <record id="product_margin_act_window" model="ir.actions.act_window">
-            <field name="name">Product Margins</field>
-            <field name="res_model">product.margin</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
+        <recordid="product_margin_act_window"model="ir.actions.act_window">
+            <fieldname="name">ProductMargins</field>
+            <fieldname="res_model">product.margin</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="target">new</field>
         </record>
 
 </flectra>

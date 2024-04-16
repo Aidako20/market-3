@@ -1,78 +1,78 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="sms_composer_view_form" model="ir.ui.view">
-        <field name="name">sms.composer.view.form</field>
-        <field name="model">sms.composer</field>
-        <field name="arch" type="xml">
-            <form string="Send an SMS">
+    <recordid="sms_composer_view_form"model="ir.ui.view">
+        <fieldname="name">sms.composer.view.form</field>
+        <fieldname="model">sms.composer</field>
+        <fieldname="arch"type="xml">
+            <formstring="SendanSMS">
                 <sheet>
                     <group>
-                        <field name="composition_mode" invisible="1"/>
-                        <field name="comment_single_recipient" invisible="1"/>
-                        <field name="res_id" invisible="1"/>
-                        <field name="res_ids" invisible="1"/>
-                        <field name="active_domain" invisible="1"/>
-                        <field name="res_model" invisible="1"/>
-                        <field name="mass_force_send" invisible="1"/>
-                        <field name="recipient_single_valid" invisible="1"/>
-                        <field name="recipient_single_number" invisible="1"/>
-                        <field name="number_field_name" invisible="1"/>
-                        <field name="numbers" invisible="1"/>
-                        <field name="sanitized_numbers" invisible="1"/>
+                        <fieldname="composition_mode"invisible="1"/>
+                        <fieldname="comment_single_recipient"invisible="1"/>
+                        <fieldname="res_id"invisible="1"/>
+                        <fieldname="res_ids"invisible="1"/>
+                        <fieldname="active_domain"invisible="1"/>
+                        <fieldname="res_model"invisible="1"/>
+                        <fieldname="mass_force_send"invisible="1"/>
+                        <fieldname="recipient_single_valid"invisible="1"/>
+                        <fieldname="recipient_single_number"invisible="1"/>
+                        <fieldname="number_field_name"invisible="1"/>
+                        <fieldname="numbers"invisible="1"/>
+                        <fieldname="sanitized_numbers"invisible="1"/>
 
-                        <!-- Single mode information (invalid number) -->
-                        <div colspan="2" class="alert alert-danger text-center mb-3" role="alert"
-                            attrs="{'invisible': ['|', ('comment_single_recipient', '=', False), ('recipient_single_valid', '=', True)]}">
-                            <p class="my-0">Invalid phone number</p>
+                        <!--Singlemodeinformation(invalidnumber)-->
+                        <divcolspan="2"class="alertalert-dangertext-centermb-3"role="alert"
+                            attrs="{'invisible':['|',('comment_single_recipient','=',False),('recipient_single_valid','=',True)]}">
+                            <pclass="my-0">Invalidphonenumber</p>
                         </div>
 
-                        <!-- Mass mode information (res_ids versus active domain) -->
-                        <div colspan="2" class="alert alert-info text-center mb-3" role="alert"
-                                attrs="{'invisible': [('comment_single_recipient', '=', True)]}">
-                            <p class="my-0">
-                                <span attrs="{'invisible': [('use_active_domain', '=', 'True')]}">
-                                    <field class="oe_inline font-weight-bold" name="res_ids_count"/> records selected.
+                        <!--Massmodeinformation(res_idsversusactivedomain)-->
+                        <divcolspan="2"class="alertalert-infotext-centermb-3"role="alert"
+                                attrs="{'invisible':[('comment_single_recipient','=',True)]}">
+                            <pclass="my-0">
+                                <spanattrs="{'invisible':[('use_active_domain','=','True')]}">
+                                    <fieldclass="oe_inlinefont-weight-bold"name="res_ids_count"/>recordsselected.
                                 </span>
-                                Check <field class="oe_inline ml-2" name="use_active_domain"/> to send to all
-                                <field class="oe_inline font-weight-bold ml-2" name="active_domain_count"/> records instead. <br/>
-                                <field class="oe_inline font-weight-bold" name="recipient_valid_count"/> recipients are valid
-                                and <field class="oe_inline font-weight-bold" name="recipient_invalid_count"/> are invalid.
+                                Check<fieldclass="oe_inlineml-2"name="use_active_domain"/>tosendtoall
+                                <fieldclass="oe_inlinefont-weight-boldml-2"name="active_domain_count"/>recordsinstead.<br/>
+                                <fieldclass="oe_inlinefont-weight-bold"name="recipient_valid_count"/>recipientsarevalid
+                                and<fieldclass="oe_inlinefont-weight-bold"name="recipient_invalid_count"/>areinvalid.
                             </p>
                         </div>
 
-                        <label for="recipient_single_description" string="Recipient"
+                        <labelfor="recipient_single_description"string="Recipient"
                             class="font-weight-bold"
-                            attrs="{'invisible': [('comment_single_recipient', '=', False)]}"/>
-                        <div attrs="{'invisible': [('comment_single_recipient', '=', False)]}">
-                            <field name="recipient_single_description" class="oe_inline" attrs="{'invisible': [('recipient_single_description', '=', False)]}"/>
-                            <field name="recipient_single_number_itf" class="oe_inline" nolabel="1" options="{'onchange_on_keydown': True}" placeholder="e.g. +1 415 555 0100"/>
+                            attrs="{'invisible':[('comment_single_recipient','=',False)]}"/>
+                        <divattrs="{'invisible':[('comment_single_recipient','=',False)]}">
+                            <fieldname="recipient_single_description"class="oe_inline"attrs="{'invisible':[('recipient_single_description','=',False)]}"/>
+                            <fieldname="recipient_single_number_itf"class="oe_inline"nolabel="1"options="{'onchange_on_keydown':True}"placeholder="e.g.+14155550100"/>
                         </div>
                                                 
-                        <field name="body" widget="sms_widget"/>
-                        <field name="mass_keep_log" invisible="1"/>
+                        <fieldname="body"widget="sms_widget"/>
+                        <fieldname="mass_keep_log"invisible="1"/>
                     </group>
                 </sheet>
                 <footer>
-                    <!-- attrs doesn't work for 'disabled'-->
-                    <button string="Send SMS" type="object" class="oe_highlight" name="action_send_sms"
-                            attrs="{'invisible': ['|',('composition_mode', 'not in', ('comment', 'numbers')),('recipient_single_valid', '=', False)]}"/>
-                    <button string="Send SMS" type="object" class="oe_highlight" name="action_send_sms"
-                            attrs="{'invisible': ['|',('composition_mode', 'not in', ('comment', 'numbers')),('recipient_single_valid', '=', True)]}" disabled='1'/>
-                    <button string="Put in queue" type="object" class="oe_highlight" name="action_send_sms"
-                        attrs="{'invisible': [('composition_mode', '!=', 'mass')]}"/>
-                    <button string="Send Now" type="object" name="action_send_sms_mass_now"
-                        attrs="{'invisible': [('composition_mode', '!=', 'mass')]}"/>
-                    <button string="Close" class="btn btn-secondary" special="cancel"/>
+                    <!--attrsdoesn'tworkfor'disabled'-->
+                    <buttonstring="SendSMS"type="object"class="oe_highlight"name="action_send_sms"
+                            attrs="{'invisible':['|',('composition_mode','notin',('comment','numbers')),('recipient_single_valid','=',False)]}"/>
+                    <buttonstring="SendSMS"type="object"class="oe_highlight"name="action_send_sms"
+                            attrs="{'invisible':['|',('composition_mode','notin',('comment','numbers')),('recipient_single_valid','=',True)]}"disabled='1'/>
+                    <buttonstring="Putinqueue"type="object"class="oe_highlight"name="action_send_sms"
+                        attrs="{'invisible':[('composition_mode','!=','mass')]}"/>
+                    <buttonstring="SendNow"type="object"name="action_send_sms_mass_now"
+                        attrs="{'invisible':[('composition_mode','!=','mass')]}"/>
+                    <buttonstring="Close"class="btnbtn-secondary"special="cancel"/>
                 </footer>
             </form>
         </field>
     </record>
 
-    <record id="sms_composer_action_form" model="ir.actions.act_window">
-        <field name="name">Send SMS Text Message</field>
-        <field name="res_model">sms.composer</field>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
+    <recordid="sms_composer_action_form"model="ir.actions.act_window">
+        <fieldname="name">SendSMSTextMessage</field>
+        <fieldname="res_model">sms.composer</field>
+        <fieldname="view_mode">form</field>
+        <fieldname="target">new</field>
     </record>
 
 </flectra>

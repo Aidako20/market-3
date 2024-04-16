@@ -1,37 +1,37 @@
-flectra.define('mrp.MrpDocumentsKanbanController', function (require) {
-"use strict";
+flectra.define('mrp.MrpDocumentsKanbanController',function(require){
+"usestrict";
 
 /**
- * This file defines the Controller for the MRP Documents Kanban view, which is an
- * override of the KanbanController.
+ *ThisfiledefinestheControllerfortheMRPDocumentsKanbanview,whichisan
+ *overrideoftheKanbanController.
  */
 
-const MrpDocumentsControllerMixin = require('mrp.controllerMixin');
+constMrpDocumentsControllerMixin=require('mrp.controllerMixin');
 
-const KanbanController = require('web.KanbanController');
+constKanbanController=require('web.KanbanController');
 
-const MrpDocumentsKanbanController = KanbanController.extend(MrpDocumentsControllerMixin, {
-    events: Object.assign({}, KanbanController.prototype.events, MrpDocumentsControllerMixin.events),
-    custom_events: Object.assign({}, KanbanController.prototype.custom_events, MrpDocumentsControllerMixin.custom_events),
+constMrpDocumentsKanbanController=KanbanController.extend(MrpDocumentsControllerMixin,{
+    events:Object.assign({},KanbanController.prototype.events,MrpDocumentsControllerMixin.events),
+    custom_events:Object.assign({},KanbanController.prototype.custom_events,MrpDocumentsControllerMixin.custom_events),
 
     /**
-     * @override
+     *@override
     */
-    init() {
+    init(){
         this._super(...arguments);
-        MrpDocumentsControllerMixin.init.apply(this, arguments);
+        MrpDocumentsControllerMixin.init.apply(this,arguments);
     },
     /**
-     * Override to update the records selection.
+     *Overridetoupdatetherecordsselection.
      *
-     * @override
+     *@override
     */
-    async reload() {
-        await this._super(...arguments);
-        await MrpDocumentsControllerMixin.reload.apply(this, arguments);
+    asyncreload(){
+        awaitthis._super(...arguments);
+        awaitMrpDocumentsControllerMixin.reload.apply(this,arguments);
     },
 });
 
-return MrpDocumentsKanbanController;
+returnMrpDocumentsKanbanController;
 
 });

@@ -1,52 +1,52 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
-    <div t-name="WidgetWebsiteButton" class="o_stat_info published">
-        <span class="o_stat_text o_value"/>
-        <span class="o_stat_text">On Website</span>
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
+    <divt-name="WidgetWebsiteButton"class="o_stat_infopublished">
+        <spanclass="o_stat_texto_value"/>
+        <spanclass="o_stat_text">OnWebsite</span>
     </div>
 
-    <t t-name="WidgetWebsiteButtonIcon">
-        <button type="button" class="btn oe_stat_button">
-            <i class="fa fa-fw o_button_icon fa-globe"/>
-            <div class="o_stat_info">
-                <span class="o_stat_text">Go to<br/>Website</span>
+    <tt-name="WidgetWebsiteButtonIcon">
+        <buttontype="button"class="btnoe_stat_button">
+            <iclass="fafa-fwo_button_iconfa-globe"/>
+            <divclass="o_stat_info">
+                <spanclass="o_stat_text">Goto<br/>Website</span>
             </div>
         </button>
     </t>
 
-    <t t-name="website.WebsiteDashboardMain">
-        <div class="o_dashboards">
-            <div class="container-fluid o_website_dashboard">
-                <t t-call="website.dashboard_header"/>
-                <t t-call="website.dashboard_content"/>
+    <tt-name="website.WebsiteDashboardMain">
+        <divclass="o_dashboards">
+            <divclass="container-fluido_website_dashboard">
+                <tt-call="website.dashboard_header"/>
+                <tt-call="website.dashboard_content"/>
             </div>
         </div>
     </t>
 
-    <t t-name="website.dashboard_header">
-        <div class="row o_dashboard_common"/>
+    <tt-name="website.dashboard_header">
+        <divclass="rowo_dashboard_common"/>
     </t>
 
-    <t t-name="website.dashboard_content">
-        <div class="o_website_dashboard_content">
-            <t t-call="website.google_analytics_content"/>
+    <tt-name="website.dashboard_content">
+        <divclass="o_website_dashboard_content">
+            <tt-call="website.google_analytics_content"/>
         </div>
     </t>
-    <t t-name="website.google_analytics_content">
-        <div class="row o_dashboard_visits" t-if="widget.groups.website_designer">
-            <div class="col-12 o_box">
+    <tt-name="website.google_analytics_content">
+        <divclass="rowo_dashboard_visits"t-if="widget.groups.website_designer">
+            <divclass="col-12o_box">
                 <h2>Visits</h2>
-                <div t-if="widget.dashboards_data.visits &amp;&amp; widget.dashboards_data.visits.ga_client_id">
-                    <div class="row js_analytics_components"/>
-                    <a href="#" class="js_link_analytics_settings">Edit my Analytics Client ID</a>
+                <divt-if="widget.dashboards_data.visits&amp;&amp;widget.dashboards_data.visits.ga_client_id">
+                    <divclass="rowjs_analytics_components"/>
+                    <ahref="#"class="js_link_analytics_settings">EditmyAnalyticsClientID</a>
                 </div>
-                <div t-if="!(widget.dashboards_data.visits &amp;&amp; widget.dashboards_data.visits.ga_client_id)" class="col-lg-12">
-                    <div class="o_demo_background">
-                        <div class="o_layer">
+                <divt-if="!(widget.dashboards_data.visits&amp;&amp;widget.dashboards_data.visits.ga_client_id)"class="col-lg-12">
+                    <divclass="o_demo_background">
+                        <divclass="o_layer">
                         </div>
-                        <div class="o_buttons text-center">
-                            <h3>There is no data currently available.</h3>
-                            <button class="btn btn-primary js_link_analytics_settings d-block mx-auto mb8">Connect Google Analytics</button>
+                        <divclass="o_buttonstext-center">
+                            <h3>Thereisnodatacurrentlyavailable.</h3>
+                            <buttonclass="btnbtn-primaryjs_link_analytics_settingsd-blockmx-automb8">ConnectGoogleAnalytics</button>
                         </div>
                     </div>
                 </div>
@@ -54,51 +54,51 @@
         </div>
     </t>
 
-    <div t-name="website.unauthorized_analytics" class="col-12 js_unauthorized_message mb16">
-        <span t-if="reason === 'not_connected'">You need to log in to your Google Account before: </span>
-        <span t-if="reason === 'no_right'">You do not seem to have access to this Analytics Account.</span>
-        <p t-if="reason === 'not_initialized'">
-            Google deprecated both its "Universal Analytics" and "Google Sign-In" API. It means that only accounts and keys created before 2020 will be able to integrate their Analytics dashboard in Flectra (or any other website). This will be possible only up to mid 2023. After that, those services won't work anymore, at all.<br />
-            New Google Analytics accounts and keys are now using Google Analytics 4 which, for now, can't be integrated/embed in external websites.<br />
-            Those accounts should now check their Analytics dashboard in the Google platform directly.
+    <divt-name="website.unauthorized_analytics"class="col-12js_unauthorized_messagemb16">
+        <spant-if="reason==='not_connected'">YouneedtologintoyourGoogleAccountbefore:</span>
+        <spant-if="reason==='no_right'">YoudonotseemtohaveaccesstothisAnalyticsAccount.</span>
+        <pt-if="reason==='not_initialized'">
+            Googledeprecatedbothits"UniversalAnalytics"and"GoogleSign-In"API.Itmeansthatonlyaccountsandkeyscreatedbefore2020willbeabletointegratetheirAnalyticsdashboardinFlectra(oranyotherwebsite).Thiswillbepossibleonlyuptomid2023.Afterthat,thoseserviceswon'tworkanymore,atall.<br/>
+            NewGoogleAnalyticsaccountsandkeysarenowusingGoogleAnalytics4which,fornow,can'tbeintegrated/embedinexternalwebsites.<br/>
+            ThoseaccountsshouldnowchecktheirAnalyticsdashboardintheGoogleplatformdirectly.
         </p>
-        <span t-if="reason === 'not_initialized'">Google Analytics initialization failed. Maybe this domain is not whitelisted in your Google Analytics project for this client ID.</span>
+        <spant-if="reason==='not_initialized'">GoogleAnalyticsinitializationfailed.MaybethisdomainisnotwhitelistedinyourGoogleAnalyticsprojectforthisclientID.</span>
     </div>
 
-    <div t-name="website.ga_dialog_content">
-        Your Tracking ID: <input type="text" name="ga_analytics_key" placeholder="UA-XXXXXXXX-Y" t-att-value="ga_analytics_key" style="width: 100%"></input>
-        <a href="https://doc.flectrahq.com/2.0/applications/websites/website/optimize/google_analytics.html" target="_blank">
-            <i class="fa fa-arrow-right"/>
-            How to get my Tracking ID
+    <divt-name="website.ga_dialog_content">
+        YourTrackingID:<inputtype="text"name="ga_analytics_key"placeholder="UA-XXXXXXXX-Y"t-att-value="ga_analytics_key"style="width:100%"></input>
+        <ahref="https://doc.flectrahq.com/2.0/applications/websites/website/optimize/google_analytics.html"target="_blank">
+            <iclass="fafa-arrow-right"/>
+            HowtogetmyTrackingID
         </a>
         <br/><br/>
-        Your Client ID: <input type="text" name="ga_client_id" t-att-value="ga_key" style="width: 100%"></input>
-        <a href="https://doc.flectrahq.com/2.0/applications/websites/website/optimize/google_analytics_dashboard.html" target="_blank">
-            <i class="fa fa-arrow-right"/>
-            How to get my Client ID
+        YourClientID:<inputtype="text"name="ga_client_id"t-att-value="ga_key"style="width:100%"></input>
+        <ahref="https://doc.flectrahq.com/2.0/applications/websites/website/optimize/google_analytics_dashboard.html"target="_blank">
+            <iclass="fafa-arrow-right"/>
+            HowtogetmyClientID
         </a>
     </div>
 
-    <t t-name="website.DateRangeButtons">
-        <!-- TODO: Hide in mobile as it is going to push in control panel and it breaks UI, maybe we will improve it in future -->
-        <div class="btn-group o_date_range_buttons d-none d-md-inline-flex float-right">
-            <button class="btn btn-secondary js_date_range active" data-date="week">Last Week</button>
-            <button class="btn btn-secondary js_date_range" data-date="month">Last Month</button>
-            <button class="btn btn-secondary js_date_range" data-date="year">Last Year</button>
+    <tt-name="website.DateRangeButtons">
+        <!--TODO:HideinmobileasitisgoingtopushincontrolpanelanditbreaksUI,maybewewillimproveitinfuture-->
+        <divclass="btn-groupo_date_range_buttonsd-noned-md-inline-flexfloat-right">
+            <buttonclass="btnbtn-secondaryjs_date_rangeactive"data-date="week">LastWeek</button>
+            <buttonclass="btnbtn-secondaryjs_date_range"data-date="month">LastMonth</button>
+            <buttonclass="btnbtn-secondaryjs_date_range"data-date="year">LastYear</button>
         </div>
-        <div class="btn-group d-none d-md-inline-block float-right" style="margin-right: 20px;">
-            <t t-foreach="widget.websites" t-as="website">
-                <button t-attf-class="btn btn-secondary js_website #{website.selected ? 'active' : ''}"
+        <divclass="btn-groupd-noned-md-inline-blockfloat-right"style="margin-right:20px;">
+            <tt-foreach="widget.websites"t-as="website">
+                <buttont-attf-class="btnbtn-secondaryjs_website#{website.selected?'active':''}"
                         t-att-data-website-id="website.id">
-                    <t t-esc="website.name"/>
+                    <tt-esc="website.name"/>
                 </button>
             </t>
         </div>
     </t>
 
-    <t t-name="website.GoToButtons">
-        <a role="button" href="/" class="btn btn-primary" title="Go to Website">
-            Go to Website
+    <tt-name="website.GoToButtons">
+        <arole="button"href="/"class="btnbtn-primary"title="GotoWebsite">
+            GotoWebsite
         </a>
     </t>
 

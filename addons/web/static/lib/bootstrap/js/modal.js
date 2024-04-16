@@ -1,173 +1,173 @@
 /*!
-  * Bootstrap modal.js v4.3.1 (https://getbootstrap.com/)
-  * Copyright 2011-2019 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
-  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  *Bootstrapmodal.jsv4.3.1(https://getbootstrap.com/)
+  *Copyright2011-2019TheBootstrapAuthors(https://github.com/twbs/bootstrap/graphs/contributors)
+  *LicensedunderMIT(https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery'), require('./util.js')) :
-  typeof define === 'function' && define.amd ? define(['jquery', './util.js'], factory) :
-  (global = global || self, global.Modal = factory(global.jQuery, global.Util));
-}(this, function ($, Util) { 'use strict';
+(function(global,factory){
+  typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory(require('jquery'),require('./util.js')):
+  typeofdefine==='function'&&define.amd?define(['jquery','./util.js'],factory):
+  (global=global||self,global.Modal=factory(global.jQuery,global.Util));
+}(this,function($,Util){'usestrict';
 
-  $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
-  Util = Util && Util.hasOwnProperty('default') ? Util['default'] : Util;
+  $=$&&$.hasOwnProperty('default')?$['default']:$;
+  Util=Util&&Util.hasOwnProperty('default')?Util['default']:Util;
 
-  function _defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
+  function_defineProperties(target,props){
+    for(vari=0;i<props.length;i++){
+      vardescriptor=props[i];
+      descriptor.enumerable=descriptor.enumerable||false;
+      descriptor.configurable=true;
+      if("value"indescriptor)descriptor.writable=true;
+      Object.defineProperty(target,descriptor.key,descriptor);
     }
   }
 
-  function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
-    return Constructor;
+  function_createClass(Constructor,protoProps,staticProps){
+    if(protoProps)_defineProperties(Constructor.prototype,protoProps);
+    if(staticProps)_defineProperties(Constructor,staticProps);
+    returnConstructor;
   }
 
-  function _defineProperty(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, {
-        value: value,
-        enumerable: true,
-        configurable: true,
-        writable: true
+  function_defineProperty(obj,key,value){
+    if(keyinobj){
+      Object.defineProperty(obj,key,{
+        value:value,
+        enumerable:true,
+        configurable:true,
+        writable:true
       });
-    } else {
-      obj[key] = value;
+    }else{
+      obj[key]=value;
     }
 
-    return obj;
+    returnobj;
   }
 
-  function _objectSpread(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
-      var ownKeys = Object.keys(source);
+  function_objectSpread(target){
+    for(vari=1;i<arguments.length;i++){
+      varsource=arguments[i]!=null?arguments[i]:{};
+      varownKeys=Object.keys(source);
 
-      if (typeof Object.getOwnPropertySymbols === 'function') {
-        ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
-          return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      if(typeofObject.getOwnPropertySymbols==='function'){
+        ownKeys=ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym){
+          returnObject.getOwnPropertyDescriptor(source,sym).enumerable;
         }));
       }
 
-      ownKeys.forEach(function (key) {
-        _defineProperty(target, key, source[key]);
+      ownKeys.forEach(function(key){
+        _defineProperty(target,key,source[key]);
       });
     }
 
-    return target;
+    returntarget;
   }
 
   /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
+   *------------------------------------------------------------------------
+   *Constants
+   *------------------------------------------------------------------------
    */
 
-  var NAME = 'modal';
-  var VERSION = '4.3.1';
-  var DATA_KEY = 'bs.modal';
-  var EVENT_KEY = "." + DATA_KEY;
-  var DATA_API_KEY = '.data-api';
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
-  var ESCAPE_KEYCODE = 27; // KeyboardEvent.which value for Escape (Esc) key
+  varNAME='modal';
+  varVERSION='4.3.1';
+  varDATA_KEY='bs.modal';
+  varEVENT_KEY="."+DATA_KEY;
+  varDATA_API_KEY='.data-api';
+  varJQUERY_NO_CONFLICT=$.fn[NAME];
+  varESCAPE_KEYCODE=27;//KeyboardEvent.whichvalueforEscape(Esc)key
 
-  var Default = {
-    backdrop: true,
-    keyboard: true,
-    focus: true,
-    show: true
+  varDefault={
+    backdrop:true,
+    keyboard:true,
+    focus:true,
+    show:true
   };
-  var DefaultType = {
-    backdrop: '(boolean|string)',
-    keyboard: 'boolean',
-    focus: 'boolean',
-    show: 'boolean'
+  varDefaultType={
+    backdrop:'(boolean|string)',
+    keyboard:'boolean',
+    focus:'boolean',
+    show:'boolean'
   };
-  var Event = {
-    HIDE: "hide" + EVENT_KEY,
-    HIDDEN: "hidden" + EVENT_KEY,
-    SHOW: "show" + EVENT_KEY,
-    SHOWN: "shown" + EVENT_KEY,
-    FOCUSIN: "focusin" + EVENT_KEY,
-    RESIZE: "resize" + EVENT_KEY,
-    CLICK_DISMISS: "click.dismiss" + EVENT_KEY,
-    KEYDOWN_DISMISS: "keydown.dismiss" + EVENT_KEY,
-    MOUSEUP_DISMISS: "mouseup.dismiss" + EVENT_KEY,
-    MOUSEDOWN_DISMISS: "mousedown.dismiss" + EVENT_KEY,
-    CLICK_DATA_API: "click" + EVENT_KEY + DATA_API_KEY
+  varEvent={
+    HIDE:"hide"+EVENT_KEY,
+    HIDDEN:"hidden"+EVENT_KEY,
+    SHOW:"show"+EVENT_KEY,
+    SHOWN:"shown"+EVENT_KEY,
+    FOCUSIN:"focusin"+EVENT_KEY,
+    RESIZE:"resize"+EVENT_KEY,
+    CLICK_DISMISS:"click.dismiss"+EVENT_KEY,
+    KEYDOWN_DISMISS:"keydown.dismiss"+EVENT_KEY,
+    MOUSEUP_DISMISS:"mouseup.dismiss"+EVENT_KEY,
+    MOUSEDOWN_DISMISS:"mousedown.dismiss"+EVENT_KEY,
+    CLICK_DATA_API:"click"+EVENT_KEY+DATA_API_KEY
   };
-  var ClassName = {
-    SCROLLABLE: 'modal-dialog-scrollable',
-    SCROLLBAR_MEASURER: 'modal-scrollbar-measure',
-    BACKDROP: 'modal-backdrop',
-    OPEN: 'modal-open',
-    FADE: 'fade',
-    SHOW: 'show'
+  varClassName={
+    SCROLLABLE:'modal-dialog-scrollable',
+    SCROLLBAR_MEASURER:'modal-scrollbar-measure',
+    BACKDROP:'modal-backdrop',
+    OPEN:'modal-open',
+    FADE:'fade',
+    SHOW:'show'
   };
-  var Selector = {
-    DIALOG: '.modal-dialog',
-    MODAL_BODY: '.modal-body',
-    DATA_TOGGLE: '[data-toggle="modal"]',
-    DATA_DISMISS: '[data-dismiss="modal"]',
-    FIXED_CONTENT: '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top',
-    STICKY_CONTENT: '.sticky-top'
+  varSelector={
+    DIALOG:'.modal-dialog',
+    MODAL_BODY:'.modal-body',
+    DATA_TOGGLE:'[data-toggle="modal"]',
+    DATA_DISMISS:'[data-dismiss="modal"]',
+    FIXED_CONTENT:'.fixed-top,.fixed-bottom,.is-fixed,.sticky-top',
+    STICKY_CONTENT:'.sticky-top'
     /**
-     * ------------------------------------------------------------------------
-     * Class Definition
-     * ------------------------------------------------------------------------
+     *------------------------------------------------------------------------
+     *ClassDefinition
+     *------------------------------------------------------------------------
      */
 
   };
 
-  var Modal =
+  varModal=
   /*#__PURE__*/
-  function () {
-    function Modal(element, config) {
-      this._config = this._getConfig(config);
-      this._element = element;
-      this._dialog = element.querySelector(Selector.DIALOG);
-      this._backdrop = null;
-      this._isShown = false;
-      this._isBodyOverflowing = false;
-      this._ignoreBackdropClick = false;
-      this._isTransitioning = false;
-      this._scrollbarWidth = 0;
-    } // Getters
+  function(){
+    functionModal(element,config){
+      this._config=this._getConfig(config);
+      this._element=element;
+      this._dialog=element.querySelector(Selector.DIALOG);
+      this._backdrop=null;
+      this._isShown=false;
+      this._isBodyOverflowing=false;
+      this._ignoreBackdropClick=false;
+      this._isTransitioning=false;
+      this._scrollbarWidth=0;
+    }//Getters
 
 
-    var _proto = Modal.prototype;
+    var_proto=Modal.prototype;
 
-    // Public
-    _proto.toggle = function toggle(relatedTarget) {
-      return this._isShown ? this.hide() : this.show(relatedTarget);
+    //Public
+    _proto.toggle=functiontoggle(relatedTarget){
+      returnthis._isShown?this.hide():this.show(relatedTarget);
     };
 
-    _proto.show = function show(relatedTarget) {
-      var _this = this;
+    _proto.show=functionshow(relatedTarget){
+      var_this=this;
 
-      if (this._isShown || this._isTransitioning) {
+      if(this._isShown||this._isTransitioning){
         return;
       }
 
-      if ($(this._element).hasClass(ClassName.FADE)) {
-        this._isTransitioning = true;
+      if($(this._element).hasClass(ClassName.FADE)){
+        this._isTransitioning=true;
       }
 
-      var showEvent = $.Event(Event.SHOW, {
-        relatedTarget: relatedTarget
+      varshowEvent=$.Event(Event.SHOW,{
+        relatedTarget:relatedTarget
       });
       $(this._element).trigger(showEvent);
 
-      if (this._isShown || showEvent.isDefaultPrevented()) {
+      if(this._isShown||showEvent.isDefaultPrevented()){
         return;
       }
 
-      this._isShown = true;
+      this._isShown=true;
 
       this._checkScrollbar();
 
@@ -179,45 +179,45 @@
 
       this._setResizeEvent();
 
-      $(this._element).on(Event.CLICK_DISMISS, Selector.DATA_DISMISS, function (event) {
-        return _this.hide(event);
+      $(this._element).on(Event.CLICK_DISMISS,Selector.DATA_DISMISS,function(event){
+        return_this.hide(event);
       });
-      $(this._dialog).on(Event.MOUSEDOWN_DISMISS, function () {
-        $(_this._element).one(Event.MOUSEUP_DISMISS, function (event) {
-          if ($(event.target).is(_this._element)) {
-            _this._ignoreBackdropClick = true;
+      $(this._dialog).on(Event.MOUSEDOWN_DISMISS,function(){
+        $(_this._element).one(Event.MOUSEUP_DISMISS,function(event){
+          if($(event.target).is(_this._element)){
+            _this._ignoreBackdropClick=true;
           }
         });
       });
 
-      this._showBackdrop(function () {
-        return _this._showElement(relatedTarget);
+      this._showBackdrop(function(){
+        return_this._showElement(relatedTarget);
       });
     };
 
-    _proto.hide = function hide(event) {
-      var _this2 = this;
+    _proto.hide=functionhide(event){
+      var_this2=this;
 
-      if (event) {
+      if(event){
         event.preventDefault();
       }
 
-      if (!this._isShown || this._isTransitioning) {
+      if(!this._isShown||this._isTransitioning){
         return;
       }
 
-      var hideEvent = $.Event(Event.HIDE);
+      varhideEvent=$.Event(Event.HIDE);
       $(this._element).trigger(hideEvent);
 
-      if (!this._isShown || hideEvent.isDefaultPrevented()) {
+      if(!this._isShown||hideEvent.isDefaultPrevented()){
         return;
       }
 
-      this._isShown = false;
-      var transition = $(this._element).hasClass(ClassName.FADE);
+      this._isShown=false;
+      vartransition=$(this._element).hasClass(ClassName.FADE);
 
-      if (transition) {
-        this._isTransitioning = true;
+      if(transition){
+        this._isTransitioning=true;
       }
 
       this._setEscapeEvent();
@@ -229,154 +229,154 @@
       $(this._element).off(Event.CLICK_DISMISS);
       $(this._dialog).off(Event.MOUSEDOWN_DISMISS);
 
-      if (transition) {
-        var transitionDuration = Util.getTransitionDurationFromElement(this._element);
-        $(this._element).one(Util.TRANSITION_END, function (event) {
-          return _this2._hideModal(event);
+      if(transition){
+        vartransitionDuration=Util.getTransitionDurationFromElement(this._element);
+        $(this._element).one(Util.TRANSITION_END,function(event){
+          return_this2._hideModal(event);
         }).emulateTransitionEnd(transitionDuration);
-      } else {
+      }else{
         this._hideModal();
       }
     };
 
-    _proto.dispose = function dispose() {
-      [window, this._element, this._dialog].forEach(function (htmlElement) {
-        return $(htmlElement).off(EVENT_KEY);
+    _proto.dispose=functiondispose(){
+      [window,this._element,this._dialog].forEach(function(htmlElement){
+        return$(htmlElement).off(EVENT_KEY);
       });
       /**
-       * `document` has 2 events `Event.FOCUSIN` and `Event.CLICK_DATA_API`
-       * Do not move `document` in `htmlElements` array
-       * It will remove `Event.CLICK_DATA_API` event that should remain
+       *`document`has2events`Event.FOCUSIN`and`Event.CLICK_DATA_API`
+       *Donotmove`document`in`htmlElements`array
+       *Itwillremove`Event.CLICK_DATA_API`eventthatshouldremain
        */
 
       $(document).off(Event.FOCUSIN);
-      $.removeData(this._element, DATA_KEY);
-      this._config = null;
-      this._element = null;
-      this._dialog = null;
-      this._backdrop = null;
-      this._isShown = null;
-      this._isBodyOverflowing = null;
-      this._ignoreBackdropClick = null;
-      this._isTransitioning = null;
-      this._scrollbarWidth = null;
+      $.removeData(this._element,DATA_KEY);
+      this._config=null;
+      this._element=null;
+      this._dialog=null;
+      this._backdrop=null;
+      this._isShown=null;
+      this._isBodyOverflowing=null;
+      this._ignoreBackdropClick=null;
+      this._isTransitioning=null;
+      this._scrollbarWidth=null;
     };
 
-    _proto.handleUpdate = function handleUpdate() {
+    _proto.handleUpdate=functionhandleUpdate(){
       this._adjustDialog();
-    } // Private
+    }//Private
     ;
 
-    _proto._getConfig = function _getConfig(config) {
-      config = _objectSpread({}, Default, config);
-      Util.typeCheckConfig(NAME, config, DefaultType);
-      return config;
+    _proto._getConfig=function_getConfig(config){
+      config=_objectSpread({},Default,config);
+      Util.typeCheckConfig(NAME,config,DefaultType);
+      returnconfig;
     };
 
-    _proto._showElement = function _showElement(relatedTarget) {
-      var _this3 = this;
+    _proto._showElement=function_showElement(relatedTarget){
+      var_this3=this;
 
-      var transition = $(this._element).hasClass(ClassName.FADE);
+      vartransition=$(this._element).hasClass(ClassName.FADE);
 
-      if (!this._element.parentNode || this._element.parentNode.nodeType !== Node.ELEMENT_NODE) {
-        // Don't move modal's DOM position
+      if(!this._element.parentNode||this._element.parentNode.nodeType!==Node.ELEMENT_NODE){
+        //Don'tmovemodal'sDOMposition
         document.body.appendChild(this._element);
       }
 
-      this._element.style.display = 'block';
+      this._element.style.display='block';
 
       this._element.removeAttribute('aria-hidden');
 
-      this._element.setAttribute('aria-modal', true);
+      this._element.setAttribute('aria-modal',true);
 
-      if ($(this._dialog).hasClass(ClassName.SCROLLABLE)) {
-        this._dialog.querySelector(Selector.MODAL_BODY).scrollTop = 0;
-      } else {
-        this._element.scrollTop = 0;
+      if($(this._dialog).hasClass(ClassName.SCROLLABLE)){
+        this._dialog.querySelector(Selector.MODAL_BODY).scrollTop=0;
+      }else{
+        this._element.scrollTop=0;
       }
 
-      if (transition) {
+      if(transition){
         Util.reflow(this._element);
       }
 
       $(this._element).addClass(ClassName.SHOW);
 
-      if (this._config.focus) {
+      if(this._config.focus){
         this._enforceFocus();
       }
 
-      var shownEvent = $.Event(Event.SHOWN, {
-        relatedTarget: relatedTarget
+      varshownEvent=$.Event(Event.SHOWN,{
+        relatedTarget:relatedTarget
       });
 
-      var transitionComplete = function transitionComplete() {
-        if (_this3._config.focus) {
+      vartransitionComplete=functiontransitionComplete(){
+        if(_this3._config.focus){
           _this3._element.focus();
         }
 
-        _this3._isTransitioning = false;
+        _this3._isTransitioning=false;
         $(_this3._element).trigger(shownEvent);
       };
 
-      if (transition) {
-        var transitionDuration = Util.getTransitionDurationFromElement(this._dialog);
-        $(this._dialog).one(Util.TRANSITION_END, transitionComplete).emulateTransitionEnd(transitionDuration);
-      } else {
+      if(transition){
+        vartransitionDuration=Util.getTransitionDurationFromElement(this._dialog);
+        $(this._dialog).one(Util.TRANSITION_END,transitionComplete).emulateTransitionEnd(transitionDuration);
+      }else{
         transitionComplete();
       }
     };
 
-    _proto._enforceFocus = function _enforceFocus() {
-      var _this4 = this;
+    _proto._enforceFocus=function_enforceFocus(){
+      var_this4=this;
 
-      $(document).off(Event.FOCUSIN) // Guard against infinite focus loop
-      .on(Event.FOCUSIN, function (event) {
-        if (document !== event.target && _this4._element !== event.target && $(_this4._element).has(event.target).length === 0) {
+      $(document).off(Event.FOCUSIN)//Guardagainstinfinitefocusloop
+      .on(Event.FOCUSIN,function(event){
+        if(document!==event.target&&_this4._element!==event.target&&$(_this4._element).has(event.target).length===0){
           _this4._element.focus();
         }
       });
     };
 
-    _proto._setEscapeEvent = function _setEscapeEvent() {
-      var _this5 = this;
+    _proto._setEscapeEvent=function_setEscapeEvent(){
+      var_this5=this;
 
-      if (this._isShown && this._config.keyboard) {
-        $(this._element).on(Event.KEYDOWN_DISMISS, function (event) {
-          if (event.which === ESCAPE_KEYCODE) {
+      if(this._isShown&&this._config.keyboard){
+        $(this._element).on(Event.KEYDOWN_DISMISS,function(event){
+          if(event.which===ESCAPE_KEYCODE){
             event.preventDefault();
 
             _this5.hide();
           }
         });
-      } else if (!this._isShown) {
+      }elseif(!this._isShown){
         $(this._element).off(Event.KEYDOWN_DISMISS);
       }
     };
 
-    _proto._setResizeEvent = function _setResizeEvent() {
-      var _this6 = this;
+    _proto._setResizeEvent=function_setResizeEvent(){
+      var_this6=this;
 
-      if (this._isShown) {
-        $(window).on(Event.RESIZE, function (event) {
-          return _this6.handleUpdate(event);
+      if(this._isShown){
+        $(window).on(Event.RESIZE,function(event){
+          return_this6.handleUpdate(event);
         });
-      } else {
+      }else{
         $(window).off(Event.RESIZE);
       }
     };
 
-    _proto._hideModal = function _hideModal() {
-      var _this7 = this;
+    _proto._hideModal=function_hideModal(){
+      var_this7=this;
 
-      this._element.style.display = 'none';
+      this._element.style.display='none';
 
-      this._element.setAttribute('aria-hidden', true);
+      this._element.setAttribute('aria-hidden',true);
 
       this._element.removeAttribute('aria-modal');
 
-      this._isTransitioning = false;
+      this._isTransitioning=false;
 
-      this._showBackdrop(function () {
+      this._showBackdrop(function(){
         $(document.body).removeClass(ClassName.OPEN);
 
         _this7._resetAdjustments();
@@ -387,263 +387,263 @@
       });
     };
 
-    _proto._removeBackdrop = function _removeBackdrop() {
-      if (this._backdrop) {
+    _proto._removeBackdrop=function_removeBackdrop(){
+      if(this._backdrop){
         $(this._backdrop).remove();
-        this._backdrop = null;
+        this._backdrop=null;
       }
     };
 
-    _proto._showBackdrop = function _showBackdrop(callback) {
-      var _this8 = this;
+    _proto._showBackdrop=function_showBackdrop(callback){
+      var_this8=this;
 
-      var animate = $(this._element).hasClass(ClassName.FADE) ? ClassName.FADE : '';
+      varanimate=$(this._element).hasClass(ClassName.FADE)?ClassName.FADE:'';
 
-      if (this._isShown && this._config.backdrop) {
-        this._backdrop = document.createElement('div');
-        this._backdrop.className = ClassName.BACKDROP;
+      if(this._isShown&&this._config.backdrop){
+        this._backdrop=document.createElement('div');
+        this._backdrop.className=ClassName.BACKDROP;
 
-        if (animate) {
+        if(animate){
           this._backdrop.classList.add(animate);
         }
 
         $(this._backdrop).appendTo(document.body);
-        $(this._element).on(Event.CLICK_DISMISS, function (event) {
-          if (_this8._ignoreBackdropClick) {
-            _this8._ignoreBackdropClick = false;
+        $(this._element).on(Event.CLICK_DISMISS,function(event){
+          if(_this8._ignoreBackdropClick){
+            _this8._ignoreBackdropClick=false;
             return;
           }
 
-          if (event.target !== event.currentTarget) {
+          if(event.target!==event.currentTarget){
             return;
           }
 
-          if (_this8._config.backdrop === 'static') {
+          if(_this8._config.backdrop==='static'){
             _this8._element.focus();
-          } else {
+          }else{
             _this8.hide();
           }
         });
 
-        if (animate) {
+        if(animate){
           Util.reflow(this._backdrop);
         }
 
         $(this._backdrop).addClass(ClassName.SHOW);
 
-        if (!callback) {
+        if(!callback){
           return;
         }
 
-        if (!animate) {
+        if(!animate){
           callback();
           return;
         }
 
-        var backdropTransitionDuration = Util.getTransitionDurationFromElement(this._backdrop);
-        $(this._backdrop).one(Util.TRANSITION_END, callback).emulateTransitionEnd(backdropTransitionDuration);
-      } else if (!this._isShown && this._backdrop) {
+        varbackdropTransitionDuration=Util.getTransitionDurationFromElement(this._backdrop);
+        $(this._backdrop).one(Util.TRANSITION_END,callback).emulateTransitionEnd(backdropTransitionDuration);
+      }elseif(!this._isShown&&this._backdrop){
         $(this._backdrop).removeClass(ClassName.SHOW);
 
-        var callbackRemove = function callbackRemove() {
+        varcallbackRemove=functioncallbackRemove(){
           _this8._removeBackdrop();
 
-          if (callback) {
+          if(callback){
             callback();
           }
         };
 
-        if ($(this._element).hasClass(ClassName.FADE)) {
-          var _backdropTransitionDuration = Util.getTransitionDurationFromElement(this._backdrop);
+        if($(this._element).hasClass(ClassName.FADE)){
+          var_backdropTransitionDuration=Util.getTransitionDurationFromElement(this._backdrop);
 
-          $(this._backdrop).one(Util.TRANSITION_END, callbackRemove).emulateTransitionEnd(_backdropTransitionDuration);
-        } else {
+          $(this._backdrop).one(Util.TRANSITION_END,callbackRemove).emulateTransitionEnd(_backdropTransitionDuration);
+        }else{
           callbackRemove();
         }
-      } else if (callback) {
+      }elseif(callback){
         callback();
       }
-    } // ----------------------------------------------------------------------
-    // the following methods are used to handle overflowing modals
-    // todo (fat): these should probably be refactored out of modal.js
-    // ----------------------------------------------------------------------
+    }//----------------------------------------------------------------------
+    //thefollowingmethodsareusedtohandleoverflowingmodals
+    //todo(fat):theseshouldprobablyberefactoredoutofmodal.js
+    //----------------------------------------------------------------------
     ;
 
-    _proto._adjustDialog = function _adjustDialog() {
-      var isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight;
+    _proto._adjustDialog=function_adjustDialog(){
+      varisModalOverflowing=this._element.scrollHeight>document.documentElement.clientHeight;
 
-      if (!this._isBodyOverflowing && isModalOverflowing) {
-        this._element.style.paddingLeft = this._scrollbarWidth + "px";
+      if(!this._isBodyOverflowing&&isModalOverflowing){
+        this._element.style.paddingLeft=this._scrollbarWidth+"px";
       }
 
-      if (this._isBodyOverflowing && !isModalOverflowing) {
-        this._element.style.paddingRight = this._scrollbarWidth + "px";
+      if(this._isBodyOverflowing&&!isModalOverflowing){
+        this._element.style.paddingRight=this._scrollbarWidth+"px";
       }
     };
 
-    _proto._resetAdjustments = function _resetAdjustments() {
-      this._element.style.paddingLeft = '';
-      this._element.style.paddingRight = '';
+    _proto._resetAdjustments=function_resetAdjustments(){
+      this._element.style.paddingLeft='';
+      this._element.style.paddingRight='';
     };
 
-    _proto._checkScrollbar = function _checkScrollbar() {
-      var rect = document.body.getBoundingClientRect();
-      this._isBodyOverflowing = rect.left + rect.right < window.innerWidth;
-      this._scrollbarWidth = this._getScrollbarWidth();
+    _proto._checkScrollbar=function_checkScrollbar(){
+      varrect=document.body.getBoundingClientRect();
+      this._isBodyOverflowing=rect.left+rect.right<window.innerWidth;
+      this._scrollbarWidth=this._getScrollbarWidth();
     };
 
-    _proto._setScrollbar = function _setScrollbar() {
-      var _this9 = this;
+    _proto._setScrollbar=function_setScrollbar(){
+      var_this9=this;
 
-      if (this._isBodyOverflowing) {
-        // Note: DOMNode.style.paddingRight returns the actual value or '' if not set
-        //   while $(DOMNode).css('padding-right') returns the calculated value or 0 if not set
-        var fixedContent = [].slice.call(document.querySelectorAll(Selector.FIXED_CONTENT));
-        var stickyContent = [].slice.call(document.querySelectorAll(Selector.STICKY_CONTENT)); // Adjust fixed content padding
+      if(this._isBodyOverflowing){
+        //Note:DOMNode.style.paddingRightreturnstheactualvalueor''ifnotset
+        //  while$(DOMNode).css('padding-right')returnsthecalculatedvalueor0ifnotset
+        varfixedContent=[].slice.call(document.querySelectorAll(Selector.FIXED_CONTENT));
+        varstickyContent=[].slice.call(document.querySelectorAll(Selector.STICKY_CONTENT));//Adjustfixedcontentpadding
 
-        $(fixedContent).each(function (index, element) {
-          var actualPadding = element.style.paddingRight;
-          var calculatedPadding = $(element).css('padding-right');
-          $(element).data('padding-right', actualPadding).css('padding-right', parseFloat(calculatedPadding) + _this9._scrollbarWidth + "px");
-        }); // Adjust sticky content margin
+        $(fixedContent).each(function(index,element){
+          varactualPadding=element.style.paddingRight;
+          varcalculatedPadding=$(element).css('padding-right');
+          $(element).data('padding-right',actualPadding).css('padding-right',parseFloat(calculatedPadding)+_this9._scrollbarWidth+"px");
+        });//Adjuststickycontentmargin
 
-        $(stickyContent).each(function (index, element) {
-          var actualMargin = element.style.marginRight;
-          var calculatedMargin = $(element).css('margin-right');
-          $(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) - _this9._scrollbarWidth + "px");
-        }); // Adjust body padding
+        $(stickyContent).each(function(index,element){
+          varactualMargin=element.style.marginRight;
+          varcalculatedMargin=$(element).css('margin-right');
+          $(element).data('margin-right',actualMargin).css('margin-right',parseFloat(calculatedMargin)-_this9._scrollbarWidth+"px");
+        });//Adjustbodypadding
 
-        var actualPadding = document.body.style.paddingRight;
-        var calculatedPadding = $(document.body).css('padding-right');
-        $(document.body).data('padding-right', actualPadding).css('padding-right', parseFloat(calculatedPadding) + this._scrollbarWidth + "px");
+        varactualPadding=document.body.style.paddingRight;
+        varcalculatedPadding=$(document.body).css('padding-right');
+        $(document.body).data('padding-right',actualPadding).css('padding-right',parseFloat(calculatedPadding)+this._scrollbarWidth+"px");
       }
 
       $(document.body).addClass(ClassName.OPEN);
     };
 
-    _proto._resetScrollbar = function _resetScrollbar() {
-      // Restore fixed content padding
-      var fixedContent = [].slice.call(document.querySelectorAll(Selector.FIXED_CONTENT));
-      $(fixedContent).each(function (index, element) {
-        var padding = $(element).data('padding-right');
+    _proto._resetScrollbar=function_resetScrollbar(){
+      //Restorefixedcontentpadding
+      varfixedContent=[].slice.call(document.querySelectorAll(Selector.FIXED_CONTENT));
+      $(fixedContent).each(function(index,element){
+        varpadding=$(element).data('padding-right');
         $(element).removeData('padding-right');
-        element.style.paddingRight = padding ? padding : '';
-      }); // Restore sticky content
+        element.style.paddingRight=padding?padding:'';
+      });//Restorestickycontent
 
-      var elements = [].slice.call(document.querySelectorAll("" + Selector.STICKY_CONTENT));
-      $(elements).each(function (index, element) {
-        var margin = $(element).data('margin-right');
+      varelements=[].slice.call(document.querySelectorAll(""+Selector.STICKY_CONTENT));
+      $(elements).each(function(index,element){
+        varmargin=$(element).data('margin-right');
 
-        if (typeof margin !== 'undefined') {
-          $(element).css('margin-right', margin).removeData('margin-right');
+        if(typeofmargin!=='undefined'){
+          $(element).css('margin-right',margin).removeData('margin-right');
         }
-      }); // Restore body padding
+      });//Restorebodypadding
 
-      var padding = $(document.body).data('padding-right');
+      varpadding=$(document.body).data('padding-right');
       $(document.body).removeData('padding-right');
-      document.body.style.paddingRight = padding ? padding : '';
+      document.body.style.paddingRight=padding?padding:'';
     };
 
-    _proto._getScrollbarWidth = function _getScrollbarWidth() {
-      // thx d.walsh
-      var scrollDiv = document.createElement('div');
-      scrollDiv.className = ClassName.SCROLLBAR_MEASURER;
+    _proto._getScrollbarWidth=function_getScrollbarWidth(){
+      //thxd.walsh
+      varscrollDiv=document.createElement('div');
+      scrollDiv.className=ClassName.SCROLLBAR_MEASURER;
       document.body.appendChild(scrollDiv);
-      var scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth;
+      varscrollbarWidth=scrollDiv.getBoundingClientRect().width-scrollDiv.clientWidth;
       document.body.removeChild(scrollDiv);
-      return scrollbarWidth;
-    } // Static
+      returnscrollbarWidth;
+    }//Static
     ;
 
-    Modal._jQueryInterface = function _jQueryInterface(config, relatedTarget) {
-      return this.each(function () {
-        var data = $(this).data(DATA_KEY);
+    Modal._jQueryInterface=function_jQueryInterface(config,relatedTarget){
+      returnthis.each(function(){
+        vardata=$(this).data(DATA_KEY);
 
-        var _config = _objectSpread({}, Default, $(this).data(), typeof config === 'object' && config ? config : {});
+        var_config=_objectSpread({},Default,$(this).data(),typeofconfig==='object'&&config?config:{});
 
-        if (!data) {
-          data = new Modal(this, _config);
-          $(this).data(DATA_KEY, data);
+        if(!data){
+          data=newModal(this,_config);
+          $(this).data(DATA_KEY,data);
         }
 
-        if (typeof config === 'string') {
-          if (typeof data[config] === 'undefined') {
-            throw new TypeError("No method named \"" + config + "\"");
+        if(typeofconfig==='string'){
+          if(typeofdata[config]==='undefined'){
+            thrownewTypeError("Nomethodnamed\""+config+"\"");
           }
 
           data[config](relatedTarget);
-        } else if (_config.show) {
+        }elseif(_config.show){
           data.show(relatedTarget);
         }
       });
     };
 
-    _createClass(Modal, null, [{
-      key: "VERSION",
-      get: function get() {
-        return VERSION;
+    _createClass(Modal,null,[{
+      key:"VERSION",
+      get:functionget(){
+        returnVERSION;
       }
-    }, {
-      key: "Default",
-      get: function get() {
-        return Default;
+    },{
+      key:"Default",
+      get:functionget(){
+        returnDefault;
       }
     }]);
 
-    return Modal;
+    returnModal;
   }();
   /**
-   * ------------------------------------------------------------------------
-   * Data Api implementation
-   * ------------------------------------------------------------------------
+   *------------------------------------------------------------------------
+   *DataApiimplementation
+   *------------------------------------------------------------------------
    */
 
 
-  $(document).on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (event) {
-    var _this10 = this;
+  $(document).on(Event.CLICK_DATA_API,Selector.DATA_TOGGLE,function(event){
+    var_this10=this;
 
-    var target;
-    var selector = Util.getSelectorFromElement(this);
+    vartarget;
+    varselector=Util.getSelectorFromElement(this);
 
-    if (selector) {
-      target = document.querySelector(selector);
+    if(selector){
+      target=document.querySelector(selector);
     }
 
-    var config = $(target).data(DATA_KEY) ? 'toggle' : _objectSpread({}, $(target).data(), $(this).data());
+    varconfig=$(target).data(DATA_KEY)?'toggle':_objectSpread({},$(target).data(),$(this).data());
 
-    if (this.tagName === 'A' || this.tagName === 'AREA') {
+    if(this.tagName==='A'||this.tagName==='AREA'){
       event.preventDefault();
     }
 
-    var $target = $(target).one(Event.SHOW, function (showEvent) {
-      if (showEvent.isDefaultPrevented()) {
-        // Only register focus restorer if modal will actually get shown
+    var$target=$(target).one(Event.SHOW,function(showEvent){
+      if(showEvent.isDefaultPrevented()){
+        //Onlyregisterfocusrestorerifmodalwillactuallygetshown
         return;
       }
 
-      $target.one(Event.HIDDEN, function () {
-        if ($(_this10).is(':visible')) {
+      $target.one(Event.HIDDEN,function(){
+        if($(_this10).is(':visible')){
           _this10.focus();
         }
       });
     });
 
-    Modal._jQueryInterface.call($(target), config, this);
+    Modal._jQueryInterface.call($(target),config,this);
   });
   /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
+   *------------------------------------------------------------------------
+   *jQuery
+   *------------------------------------------------------------------------
    */
 
-  $.fn[NAME] = Modal._jQueryInterface;
-  $.fn[NAME].Constructor = Modal;
+  $.fn[NAME]=Modal._jQueryInterface;
+  $.fn[NAME].Constructor=Modal;
 
-  $.fn[NAME].noConflict = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Modal._jQueryInterface;
+  $.fn[NAME].noConflict=function(){
+    $.fn[NAME]=JQUERY_NO_CONFLICT;
+    returnModal._jQueryInterface;
   };
 
-  return Modal;
+  returnModal;
 
 }));

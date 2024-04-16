@@ -1,32 +1,32 @@
-flectra.define('root.widget', function (require) {
-'use strict';
+flectra.define('root.widget',function(require){
+'usestrict';
 
-const AbstractService = require('web.AbstractService');
-const env = require('web.public_env');
-var lazyloader = require('web.public.lazyloader');
-var rootData = require('web.public.root');
+constAbstractService=require('web.AbstractService');
+constenv=require('web.public_env');
+varlazyloader=require('web.public.lazyloader');
+varrootData=require('web.public.root');
 
 /**
- * Configure Owl with the public env
+ *ConfigureOwlwiththepublicenv
  */
-owl.config.mode = env.isDebug() ? "dev" : "prod";
-owl.Component.env = env;
+owl.config.mode=env.isDebug()?"dev":"prod";
+owl.Component.env=env;
 
 /**
- * Deploy services in the env
+ *Deployservicesintheenv
  */
 AbstractService.prototype.deployServices(env);
 
 /**
- * This widget is important, because the tour manager needs a root widget in
- * order to work. The root widget must be a service provider with the ajax
- * service, so that the tour manager can let the server know when tours have
- * been consumed.
+ *Thiswidgetisimportant,becausethetourmanagerneedsarootwidgetin
+ *ordertowork.Therootwidgetmustbeaserviceproviderwiththeajax
+ *service,sothatthetourmanagercanlettheserverknowwhentourshave
+ *beenconsumed.
  */
-var publicRoot = new rootData.PublicRoot(null);
-return lazyloader.allScriptsLoaded.then(function () {
-    return publicRoot.attachTo(document.body).then(function () {
-        return publicRoot;
+varpublicRoot=newrootData.PublicRoot(null);
+returnlazyloader.allScriptsLoaded.then(function(){
+    returnpublicRoot.attachTo(document.body).then(function(){
+        returnpublicRoot;
     });
 });
 

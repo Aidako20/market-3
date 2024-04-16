@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="CashierName" owl="1">
-        <div class="oe_status">
-            <span class="username">
-                <t t-esc="username" />
+    <tt-name="CashierName"owl="1">
+        <divclass="oe_status">
+            <spanclass="username">
+                <tt-esc="username"/>
             </span>
         </div>
     </t>

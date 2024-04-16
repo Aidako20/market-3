@@ -1,762 +1,762 @@
-flectra.define('web.relational_fields', function (require) {
-"use strict";
+flectra.define('web.relational_fields',function(require){
+"usestrict";
 
 /**
- * Relational Fields
+ *RelationalFields
  *
- * In this file, we have a collection of various relational field widgets.
- * Relational field widgets are more difficult to use/manipulate, because the
- * relations add a level of complexity: a value is not a basic type, it can be
- * a collection of other records.
+ *Inthisfile,wehaveacollectionofvariousrelationalfieldwidgets.
+ *Relationalfieldwidgetsaremoredifficulttouse/manipulate,becausethe
+ *relationsaddalevelofcomplexity:avalueisnotabasictype,itcanbe
+ *acollectionofotherrecords.
  *
- * Also, the way relational fields are edited is more complex.  We can change
- * the corresponding record(s), or alter some of their fields.
+ *Also,thewayrelationalfieldsareeditedismorecomplex. Wecanchange
+ *thecorrespondingrecord(s),oraltersomeoftheirfields.
  */
 
-var AbstractField = require('web.AbstractField');
-var basicFields = require('web.basic_fields');
-var concurrency = require('web.concurrency');
-const ControlPanelX2Many = require('web.ControlPanelX2Many');
-var core = require('web.core');
-var data = require('web.data');
-var Dialog = require('web.Dialog');
-var dialogs = require('web.view_dialogs');
-var dom = require('web.dom');
-const Domain = require('web.Domain');
-var KanbanRecord = require('web.KanbanRecord');
-var KanbanRenderer = require('web.KanbanRenderer');
-var ListRenderer = require('web.ListRenderer');
-const { ComponentWrapper, WidgetAdapterMixin } = require('web.OwlCompatibility');
-const { sprintf } = require("web.utils");
+varAbstractField=require('web.AbstractField');
+varbasicFields=require('web.basic_fields');
+varconcurrency=require('web.concurrency');
+constControlPanelX2Many=require('web.ControlPanelX2Many');
+varcore=require('web.core');
+vardata=require('web.data');
+varDialog=require('web.Dialog');
+vardialogs=require('web.view_dialogs');
+vardom=require('web.dom');
+constDomain=require('web.Domain');
+varKanbanRecord=require('web.KanbanRecord');
+varKanbanRenderer=require('web.KanbanRenderer');
+varListRenderer=require('web.ListRenderer');
+const{ComponentWrapper,WidgetAdapterMixin}=require('web.OwlCompatibility');
+const{sprintf}=require("web.utils");
 
-const { escape } = owl.utils;
-var _t = core._t;
-var _lt = core._lt;
-var qweb = core.qweb;
+const{escape}=owl.utils;
+var_t=core._t;
+var_lt=core._lt;
+varqweb=core.qweb;
 
 //------------------------------------------------------------------------------
-// Many2one widgets
+//Many2onewidgets
 //------------------------------------------------------------------------------
 
-var M2ODialog = Dialog.extend({
-    template: "M2ODialog",
-    init: function (parent, name, value) {
-        this.name = name;
-        this.value = value;
-        this._super(parent, {
-            title: _.str.sprintf(_t("New %s"), this.name),
-            size: 'medium',
-            buttons: [{
-                text: _t('Create'),
-                classes: 'btn-primary',
-                close: true,
-                click: function () {
-                    this.trigger_up('quick_create', { value: this.value });
+varM2ODialog=Dialog.extend({
+    template:"M2ODialog",
+    init:function(parent,name,value){
+        this.name=name;
+        this.value=value;
+        this._super(parent,{
+            title:_.str.sprintf(_t("New%s"),this.name),
+            size:'medium',
+            buttons:[{
+                text:_t('Create'),
+                classes:'btn-primary',
+                close:true,
+                click:function(){
+                    this.trigger_up('quick_create',{value:this.value});
                 },
-            }, {
-                text: _t('Create and edit'),
-                classes: 'btn-primary',
-                close: true,
-                click: function () {
-                    this.trigger_up('search_create_popup', {
-                        view_type: 'form',
-                        value: this.value,
+            },{
+                text:_t('Createandedit'),
+                classes:'btn-primary',
+                close:true,
+                click:function(){
+                    this.trigger_up('search_create_popup',{
+                        view_type:'form',
+                        value:this.value,
                     });
                 },
-            }, {
-                text: _t('Cancel'),
-                close: true,
+            },{
+                text:_t('Cancel'),
+                close:true,
             }],
         });
     },
     /**
-     * @override
-     * @param {boolean} isSet
+     *@override
+     *@param{boolean}isSet
      */
-    close: function (isSet) {
-        this.isSet = isSet;
-        this._super.apply(this, arguments);
+    close:function(isSet){
+        this.isSet=isSet;
+        this._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
-        if (!this.isSet) {
+    destroy:function(){
+        if(!this.isSet){
             this.trigger_up('closed_unset');
         }
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
 });
 
-var FieldMany2One = AbstractField.extend({
-    description: _lt("Many2one"),
-    supportedFieldTypes: ['many2one'],
-    template: 'FieldMany2One',
-    custom_events: _.extend({}, AbstractField.prototype.custom_events, {
-        'closed_unset': '_onDialogClosedUnset',
-        'field_changed': '_onFieldChanged',
-        'quick_create': '_onQuickCreate',
-        'search_create_popup': '_onSearchCreatePopup',
+varFieldMany2One=AbstractField.extend({
+    description:_lt("Many2one"),
+    supportedFieldTypes:['many2one'],
+    template:'FieldMany2One',
+    custom_events:_.extend({},AbstractField.prototype.custom_events,{
+        'closed_unset':'_onDialogClosedUnset',
+        'field_changed':'_onFieldChanged',
+        'quick_create':'_onQuickCreate',
+        'search_create_popup':'_onSearchCreatePopup',
     }),
-    events: _.extend({}, AbstractField.prototype.events, {
-        'click input': '_onInputClick',
-        'focusout input': '_onInputFocusout',
-        'keyup input': '_onInputKeyup',
-        'click .o_external_button': '_onExternalButtonClick',
-        'click': '_onClick',
+    events:_.extend({},AbstractField.prototype.events,{
+        'clickinput':'_onInputClick',
+        'focusoutinput':'_onInputFocusout',
+        'keyupinput':'_onInputKeyup',
+        'click.o_external_button':'_onExternalButtonClick',
+        'click':'_onClick',
     }),
-    AUTOCOMPLETE_DELAY: 200,
-    SEARCH_MORE_LIMIT: 320,
+    AUTOCOMPLETE_DELAY:200,
+    SEARCH_MORE_LIMIT:320,
 
     /**
-     * @override
-     * @param {boolean} [options.noOpen=false] if true, there is no external
-     *   button to open the related record in a dialog
-     * @param {boolean} [options.noCreate=false] if true, the many2one does not
-     *   allow to create records
+     *@override
+     *@param{boolean}[options.noOpen=false]iftrue,thereisnoexternal
+     *  buttontoopentherelatedrecordinadialog
+     *@param{boolean}[options.noCreate=false]iftrue,themany2onedoesnot
+     *  allowtocreaterecords
      */
-    init: function (parent, name, record, options) {
-        options = options || {};
-        this._super.apply(this, arguments);
-        this.limit = 7;
-        this.orderer = new concurrency.DropMisordered();
+    init:function(parent,name,record,options){
+        options=options||{};
+        this._super.apply(this,arguments);
+        this.limit=7;
+        this.orderer=newconcurrency.DropMisordered();
 
-        // should normally be set, except in standalone M20
-        const canCreate = 'can_create' in this.attrs ? JSON.parse(this.attrs.can_create) : true;
-        this.can_create = canCreate && !this.nodeOptions.no_create && !options.noCreate;
-        this.can_write = 'can_write' in this.attrs ? JSON.parse(this.attrs.can_write) : true;
+        //shouldnormallybeset,exceptinstandaloneM20
+        constcanCreate='can_create'inthis.attrs?JSON.parse(this.attrs.can_create):true;
+        this.can_create=canCreate&&!this.nodeOptions.no_create&&!options.noCreate;
+        this.can_write='can_write'inthis.attrs?JSON.parse(this.attrs.can_write):true;
 
-        this.nodeOptions = _.defaults(this.nodeOptions, {
-            quick_create: true,
+        this.nodeOptions=_.defaults(this.nodeOptions,{
+            quick_create:true,
         });
-        this.noOpen = 'noOpen' in options ? options.noOpen : this.nodeOptions.no_open;
-        this.m2o_value = this._formatValue(this.value);
-        // 'recordParams' is a dict of params used when calling functions
-        // 'getDomain' and 'getContext' on this.record
-        this.recordParams = {fieldName: this.name, viewType: this.viewType};
-        // We need to know if the widget is dirty (i.e. if the user has changed
-        // the value, and those changes haven't been acknowledged yet by the
-        // environment), to prevent erasing that new value on a reset (e.g.
-        // coming by an onchange on another field)
-        this.isDirty = false;
-        this.lastChangeEvent = undefined;
+        this.noOpen='noOpen'inoptions?options.noOpen:this.nodeOptions.no_open;
+        this.m2o_value=this._formatValue(this.value);
+        //'recordParams'isadictofparamsusedwhencallingfunctions
+        //'getDomain'and'getContext'onthis.record
+        this.recordParams={fieldName:this.name,viewType:this.viewType};
+        //Weneedtoknowifthewidgetisdirty(i.e.iftheuserhaschanged
+        //thevalue,andthosechangeshaven'tbeenacknowledgedyetbythe
+        //environment),topreventerasingthatnewvalueonareset(e.g.
+        //comingbyanonchangeonanotherfield)
+        this.isDirty=false;
+        this.lastChangeEvent=undefined;
 
-        // List of autocomplete sources
-        this._autocompleteSources = [];
-        // Add default search method for M20 (name_search)
-        this._addAutocompleteSource(this._search, {placeholder: _t('Loading...'), order: 1});
+        //Listofautocompletesources
+        this._autocompleteSources=[];
+        //AdddefaultsearchmethodforM20(name_search)
+        this._addAutocompleteSource(this._search,{placeholder:_t('Loading...'),order:1});
 
-        // use a DropPrevious to properly handle related record quick creations,
-        // and store a createDef to be able to notify the environment that there
-        // is pending quick create operation
-        this.dp = new concurrency.DropPrevious();
-        this.createDef = undefined;
+        //useaDropPrevioustoproperlyhandlerelatedrecordquickcreations,
+        //andstoreacreateDeftobeabletonotifytheenvironmentthatthere
+        //ispendingquickcreateoperation
+        this.dp=newconcurrency.DropPrevious();
+        this.createDef=undefined;
     },
-    start: function () {
-        // booleean indicating that the content of the input isn't synchronized
-        // with the current m2o value (for instance, the user is currently
-        // typing something in the input, and hasn't selected a value yet).
-        this.floating = false;
+    start:function(){
+        //booleeanindicatingthatthecontentoftheinputisn'tsynchronized
+        //withthecurrentm2ovalue(forinstance,theuseriscurrently
+        //typingsomethingintheinput,andhasn'tselectedavalueyet).
+        this.floating=false;
 
-        this.$input = this.$('input');
-        this.$external_button = this.$('.o_external_button');
-        return this._super.apply(this, arguments);
+        this.$input=this.$('input');
+        this.$external_button=this.$('.o_external_button');
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
-        if (this._onScroll) {
-            window.removeEventListener('scroll', this._onScroll, true);
+    destroy:function(){
+        if(this._onScroll){
+            window.removeEventListener('scroll',this._onScroll,true);
         }
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Override to make the caller wait for potential ongoing record creation.
-     * This ensures that the correct many2one value is set when the main record
-     * is saved.
+     *Overridetomakethecallerwaitforpotentialongoingrecordcreation.
+     *Thisensuresthatthecorrectmany2onevalueissetwhenthemainrecord
+     *issaved.
      *
-     * @override
-     * @returns {Promise} resolved as soon as there is no longer record being
-     *   (quick) created
+     *@override
+     *@returns{Promise}resolvedassoonasthereisnolongerrecordbeing
+     *  (quick)created
      */
-    commitChanges: function () {
-        return Promise.resolve(this.createDef);
+    commitChanges:function(){
+        returnPromise.resolve(this.createDef);
     },
     /**
-     * @override
-     * @returns {jQuery}
+     *@override
+     *@returns{jQuery}
      */
-    getFocusableElement: function () {
-        return this.mode === 'edit' && this.$input || this.$el;
+    getFocusableElement:function(){
+        returnthis.mode==='edit'&&this.$input||this.$el;
     },
     /**
-     * TODO
+     *TODO
      */
-    reinitialize: function (value) {
-        this.isDirty = false;
-        this.floating = false;
-        return this._setValue(value);
+    reinitialize:function(value){
+        this.isDirty=false;
+        this.floating=false;
+        returnthis._setValue(value);
     },
     /**
-     * Re-renders the widget if it isn't dirty. The widget is dirty if the user
-     * changed the value, and that change hasn't been acknowledged yet by the
-     * environment. For example, another field with an onchange has been updated
-     * and this field is updated before the onchange returns. Two '_setValue'
-     * are done (this is sequential), the first one returns and this widget is
-     * reset. However, it has pending changes, so we don't re-render.
+     *Re-rendersthewidgetifitisn'tdirty.Thewidgetisdirtyiftheuser
+     *changedthevalue,andthatchangehasn'tbeenacknowledgedyetbythe
+     *environment.Forexample,anotherfieldwithanonchangehasbeenupdated
+     *andthisfieldisupdatedbeforetheonchangereturns.Two'_setValue'
+     *aredone(thisissequential),thefirstonereturnsandthiswidgetis
+     *reset.However,ithaspendingchanges,sowedon'tre-render.
      *
-     * @override
+     *@override
      */
-    reset: function (record, event) {
-        this._reset(record, event);
-        if (!event || event === this.lastChangeEvent) {
-            this.isDirty = false;
+    reset:function(record,event){
+        this._reset(record,event);
+        if(!event||event===this.lastChangeEvent){
+            this.isDirty=false;
         }
-        if (this.isDirty) {
-            return Promise.resolve();
-        } else {
-            return this._render();
+        if(this.isDirty){
+            returnPromise.resolve();
+        }else{
+            returnthis._render();
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Add a source to the autocomplete results
+     *Addasourcetotheautocompleteresults
      *
-     * @param {function} method : A function that returns a list of results. If async source, the function should return a promise
-     * @param {Object} params : Parameters containing placeholder/validation/order
-     * @private
+     *@param{function}method:Afunctionthatreturnsalistofresults.Ifasyncsource,thefunctionshouldreturnapromise
+     *@param{Object}params:Parameterscontainingplaceholder/validation/order
+     *@private
      */
-    _addAutocompleteSource: function (method, params) {
+    _addAutocompleteSource:function(method,params){
         this._autocompleteSources.push({
-            method: method,
-            placeholder: (params.placeholder ? _t(params.placeholder) : _t('Loading...')) + '<i class="fa fa-spinner fa-spin pull-right"></i>' ,
-            validation: params.validation,
-            loading: false,
-            order: params.order || 999
+            method:method,
+            placeholder:(params.placeholder?_t(params.placeholder):_t('Loading...'))+'<iclass="fafa-spinnerfa-spinpull-right"></i>',
+            validation:params.validation,
+            loading:false,
+            order:params.order||999
         });
 
-        this._autocompleteSources = _.sortBy(this._autocompleteSources, 'order');
+        this._autocompleteSources=_.sortBy(this._autocompleteSources,'order');
     },
     /**
-     * @private
+     *@private
      */
-    _bindAutoComplete: function () {
-        var self = this;
-        // avoid ignoring autocomplete="off" by obfuscating placeholder, see #30439
-        if ($.browser.chrome && this.$input.attr('placeholder')) {
-            this.$input.attr('placeholder', function (index, val) {
-                return val.split('').join('\ufeff');
+    _bindAutoComplete:function(){
+        varself=this;
+        //avoidignoringautocomplete="off"byobfuscatingplaceholder,see#30439
+        if($.browser.chrome&&this.$input.attr('placeholder')){
+            this.$input.attr('placeholder',function(index,val){
+                returnval.split('').join('\ufeff');
             });
         }
         this.$input.autocomplete({
-            source: function (req, resp) {
-                _.each(self._autocompleteSources, function (source) {
-                    // Resets the results for this source
-                    source.results = [];
+            source:function(req,resp){
+                _.each(self._autocompleteSources,function(source){
+                    //Resetstheresultsforthissource
+                    source.results=[];
 
-                    // Check if this source should be used for the searched term
-                    const search = req.term.trim();
-                    if (!source.validation || source.validation.call(self, search)) {
-                        source.loading = true;
+                    //Checkifthissourceshouldbeusedforthesearchedterm
+                    constsearch=req.term.trim();
+                    if(!source.validation||source.validation.call(self,search)){
+                        source.loading=true;
 
-                        // Wrap the returned value of the source.method with a promise
-                        // So event if the returned value is not async, it will work
-                        Promise.resolve(source.method.call(self, search)).then(function (results) {
-                            source.results = results;
-                            source.loading = false;
+                        //Wrapthereturnedvalueofthesource.methodwithapromise
+                        //Soeventifthereturnedvalueisnotasync,itwillwork
+                        Promise.resolve(source.method.call(self,search)).then(function(results){
+                            source.results=results;
+                            source.loading=false;
                             resp(self._concatenateAutocompleteResults());
                         });
                     }
                 });
             },
-            select: function (event, ui) {
-                // we do not want the select event to trigger any additional
-                // effect, such as navigating to another field.
+            select:function(event,ui){
+                //wedonotwanttheselecteventtotriggeranyadditional
+                //effect,suchasnavigatingtoanotherfield.
                 event.stopImmediatePropagation();
                 event.preventDefault();
 
-                var item = ui.item;
-                self.floating = false;
-                if (item.id) {
-                    self.reinitialize({id: item.id, display_name: item.name});
-                } else if (item.action) {
+                varitem=ui.item;
+                self.floating=false;
+                if(item.id){
+                    self.reinitialize({id:item.id,display_name:item.name});
+                }elseif(item.action){
                     item.action();
                 }
-                return false;
+                returnfalse;
             },
-            focus: function (event) {
-                event.preventDefault(); // don't automatically select values on focus
+            focus:function(event){
+                event.preventDefault();//don'tautomaticallyselectvaluesonfocus
             },
-            open: function (event) {
-                self._onScroll = function (ev) {
-                    if (ev.target !== self.$input.get(0) && self.$input.hasClass('ui-autocomplete-input')) {
+            open:function(event){
+                self._onScroll=function(ev){
+                    if(ev.target!==self.$input.get(0)&&self.$input.hasClass('ui-autocomplete-input')){
                         self.$input.autocomplete('close');
                     }
                 };
-                window.addEventListener('scroll', self._onScroll, true);
+                window.addEventListener('scroll',self._onScroll,true);
             },
-            close: function (event) {
-                // it is necessary to prevent ESC key from propagating to field
-                // root, to prevent unwanted discard operations.
-                if (event.which === $.ui.keyCode.ESCAPE) {
+            close:function(event){
+                //itisnecessarytopreventESCkeyfrompropagatingtofield
+                //root,topreventunwanteddiscardoperations.
+                if(event.which===$.ui.keyCode.ESCAPE){
                     event.stopPropagation();
                 }
-                if (self._onScroll) {
-                    window.removeEventListener('scroll', self._onScroll, true);
+                if(self._onScroll){
+                    window.removeEventListener('scroll',self._onScroll,true);
                 }
             },
-            autoFocus: true,
-            html: true,
-            minLength: 0,
-            delay: this.AUTOCOMPLETE_DELAY,
+            autoFocus:true,
+            html:true,
+            minLength:0,
+            delay:this.AUTOCOMPLETE_DELAY,
         });
-        this.$input.autocomplete("option", "position", { my : "left top", at: "left bottom" });
-        this.autocomplete_bound = true;
+        this.$input.autocomplete("option","position",{my:"lefttop",at:"leftbottom"});
+        this.autocomplete_bound=true;
     },
     /**
-     * Concatenate async results for autocomplete.
+     *Concatenateasyncresultsforautocomplete.
      *
-     * @returns {Array}
-     * @private
+     *@returns{Array}
+     *@private
      */
-    _concatenateAutocompleteResults: function () {
-        var results = [];
-        _.each(this._autocompleteSources, function (source) {
-            if (source.results && source.results.length) {
-                results = results.concat(source.results);
-            } else if (source.loading) {
+    _concatenateAutocompleteResults:function(){
+        varresults=[];
+        _.each(this._autocompleteSources,function(source){
+            if(source.results&&source.results.length){
+                results=results.concat(source.results);
+            }elseif(source.loading){
                 results.push({
-                    label: source.placeholder
+                    label:source.placeholder
                 });
             }
         });
-        return results;
+        returnresults;
     },
     /**
-     * @private
-     * @param {string} [name]
-     * @returns {Object}
+     *@private
+     *@param{string}[name]
+     *@returns{Object}
      */
-    _createContext: function (name) {
-        var tmp = {};
-        var field = this.nodeOptions.create_name_field;
-        if (field === undefined) {
-            field = "name";
+    _createContext:function(name){
+        vartmp={};
+        varfield=this.nodeOptions.create_name_field;
+        if(field===undefined){
+            field="name";
         }
-        if (field !== false && name && this.nodeOptions.quick_create !== false) {
-            tmp["default_" + field] = name;
+        if(field!==false&&name&&this.nodeOptions.quick_create!==false){
+            tmp["default_"+field]=name;
         }
-        return tmp;
+        returntmp;
     },
     /**
-     * @private
-     * @returns {Array}
+     *@private
+     *@returns{Array}
      */
-    _getSearchBlacklist: function () {
-        return [];
+    _getSearchBlacklist:function(){
+        return[];
     },
     /**
-    * Returns the display_name from a string which contains it but was altered
-    * as a result of the show_address option using a horrible hack.
+    *Returnsthedisplay_namefromastringwhichcontainsitbutwasaltered
+    *asaresultoftheshow_addressoptionusingahorriblehack.
     *
-    * @private
-    * @param {string} value
-    * @returns {string} display_name without show_address mess
+    *@private
+    *@param{string}value
+    *@returns{string}display_namewithoutshow_addressmess
     */
-    _getDisplayName: function (value) {
-        return value.split('\n')[0];
+    _getDisplayName:function(value){
+        returnvalue.split('\n')[0];
     },
     /**
-     * Prepares and returns options for SelectCreateDialog
+     *PreparesandreturnsoptionsforSelectCreateDialog
      *
-     * @private
+     *@private
      */
-    _getSearchCreatePopupOptions: function(view, ids, context, dynamicFilters) {
-        var self = this;
-        return {
-            res_model: this.field.relation,
-            domain: this.record.getDomain({fieldName: this.name}),
-            context: _.extend({}, this.record.getContext(this.recordParams), context || {}),
-            _createContext: this._createContext.bind(this),
-            dynamicFilters: dynamicFilters || [],
-            title: (view === 'search' ? _t("Search: ") : _t("Create: ")) + this.string,
-            initial_ids: ids,
-            initial_view: view,
-            disable_multiple_selection: true,
-            no_create: !self.can_create,
-            kanban_view_ref: this.attrs.kanban_view_ref,
-            on_selected: function (records) {
+    _getSearchCreatePopupOptions:function(view,ids,context,dynamicFilters){
+        varself=this;
+        return{
+            res_model:this.field.relation,
+            domain:this.record.getDomain({fieldName:this.name}),
+            context:_.extend({},this.record.getContext(this.recordParams),context||{}),
+            _createContext:this._createContext.bind(this),
+            dynamicFilters:dynamicFilters||[],
+            title:(view==='search'?_t("Search:"):_t("Create:"))+this.string,
+            initial_ids:ids,
+            initial_view:view,
+            disable_multiple_selection:true,
+            no_create:!self.can_create,
+            kanban_view_ref:this.attrs.kanban_view_ref,
+            on_selected:function(records){
                 self.reinitialize(records[0]);
             },
-            on_closed: function () {
+            on_closed:function(){
                 self.activate();
             },
         };
     },
     /**
-     * @private
-     * @param {Object} values
-     * @param {string} search_val
-     * @param {Object} domain
-     * @param {Object} context
-     * @returns {Object}
+     *@private
+     *@param{Object}values
+     *@param{string}search_val
+     *@param{Object}domain
+     *@param{Object}context
+     *@returns{Object}
      */
-    _manageSearchMore: function (values, search_val, domain, context) {
-        var self = this;
-        values = values.slice(0, this.limit);
+    _manageSearchMore:function(values,search_val,domain,context){
+        varself=this;
+        values=values.slice(0,this.limit);
         values.push({
-            label: _t("Search More..."),
-            action: function () {
-                var prom;
-                if (search_val !== '') {
-                    prom = self._rpc({
-                        model: self.field.relation,
-                        method: 'name_search',
-                        kwargs: {
-                            name: search_val,
-                            args: domain,
-                            operator: "ilike",
-                            limit: self.SEARCH_MORE_LIMIT,
-                            context: context,
+            label:_t("SearchMore..."),
+            action:function(){
+                varprom;
+                if(search_val!==''){
+                    prom=self._rpc({
+                        model:self.field.relation,
+                        method:'name_search',
+                        kwargs:{
+                            name:search_val,
+                            args:domain,
+                            operator:"ilike",
+                            limit:self.SEARCH_MORE_LIMIT,
+                            context:context,
                         },
                     });
                 }
-                Promise.resolve(prom).then(function (results) {
-                    var dynamicFilters;
-                    if (results) {
-                        var ids = _.map(results, function (x) {
-                            return x[0];
+                Promise.resolve(prom).then(function(results){
+                    vardynamicFilters;
+                    if(results){
+                        varids=_.map(results,function(x){
+                            returnx[0];
                         });
-                        dynamicFilters = [{
-                            description: _.str.sprintf(_t('Quick search: %s'), search_val),
-                            domain: [['id', 'in', ids]],
+                        dynamicFilters=[{
+                            description:_.str.sprintf(_t('Quicksearch:%s'),search_val),
+                            domain:[['id','in',ids]],
                         }];
                     }
-                    self._searchCreatePopup("search", false, {}, dynamicFilters);
+                    self._searchCreatePopup("search",false,{},dynamicFilters);
                 });
             },
-            classname: 'o_m2o_dropdown_option',
+            classname:'o_m2o_dropdown_option',
         });
-        return values;
+        returnvalues;
     },
     /**
-     * Listens to events 'field_changed' to keep track of the last event that
-     * has been trigerred. This allows to detect that all changes have been
-     * acknowledged by the environment.
+     *Listenstoevents'field_changed'tokeeptrackofthelasteventthat
+     *hasbeentrigerred.Thisallowstodetectthatallchangeshavebeen
+     *acknowledgedbytheenvironment.
      *
-     * @param {FlectraEvent} event 'field_changed' event
+     *@param{FlectraEvent}event'field_changed'event
      */
-    _onFieldChanged: function (event) {
-        this.lastChangeEvent = event;
+    _onFieldChanged:function(event){
+        this.lastChangeEvent=event;
     },
     /**
-     * @private
-     * @param {string} name
-     * @returns {Promise} resolved after the name_create or when the slowcreate
-     *                     modal is closed.
+     *@private
+     *@param{string}name
+     *@returns{Promise}resolvedafterthename_createorwhentheslowcreate
+     *                    modalisclosed.
      */
-    _quickCreate: function (name) {
-        var self = this;
-        var createDone;
+    _quickCreate:function(name){
+        varself=this;
+        varcreateDone;
 
-        var def = new Promise(function (resolve, reject) {
-            self.createDef = new Promise(function (innerResolve) {
-                // called when the record has been quick created, or when the dialog has
-                // been closed (in the case of a 'slow' create), meaning that the job is
-                // done
-                createDone = function () {
+        vardef=newPromise(function(resolve,reject){
+            self.createDef=newPromise(function(innerResolve){
+                //calledwhentherecordhasbeenquickcreated,orwhenthedialoghas
+                //beenclosed(inthecaseofa'slow'create),meaningthatthejobis
+                //done
+                createDone=function(){
                     innerResolve();
                     resolve();
-                    self.createDef = undefined;
+                    self.createDef=undefined;
                 };
             });
 
-            // called if the quick create is disabled on this many2one, or if the
-            // quick creation failed (probably because there are mandatory fields on
-            // the model)
-            var slowCreate = function () {
-                var dialog = self._searchCreatePopup("form", false, self._createContext(name));
-                dialog.on('closed', self, createDone);
+            //calledifthequickcreateisdisabledonthismany2one,orifthe
+            //quickcreationfailed(probablybecausetherearemandatoryfieldson
+            //themodel)
+            varslowCreate=function(){
+                vardialog=self._searchCreatePopup("form",false,self._createContext(name));
+                dialog.on('closed',self,createDone);
             };
-            if (self.nodeOptions.quick_create) {
-                const prom = self.reinitialize({id: false, display_name: name});
-                prom.guardedCatch(reason => {
+            if(self.nodeOptions.quick_create){
+                constprom=self.reinitialize({id:false,display_name:name});
+                prom.guardedCatch(reason=>{
                     reason.event.preventDefault();
                     slowCreate();
                 });
                 self.dp.add(prom).then(createDone).guardedCatch(reject);
-            } else {
+            }else{
                 slowCreate();
             }
         });
 
-        return def;
+        returndef;
     },
     /**
-     * @private
+     *@private
      */
-    _renderEdit: function () {
-        var value = this.m2o_value;
+    _renderEdit:function(){
+        varvalue=this.m2o_value;
 
-        // this is a stupid hack necessary to support the always_reload flag.
-        // the field value has been reread by the basic model.  We use it to
-        // display the full address of a partner, separated by \n.  This is
-        // really a bad way to do it.  Now, we need to remove the extra lines
-        // and hope for the best that no one tries to uses this mechanism to do
-        // something else.
-        if (this.nodeOptions.always_reload) {
-            value = this._getDisplayName(value);
+        //thisisastupidhacknecessarytosupportthealways_reloadflag.
+        //thefieldvaluehasbeenrereadbythebasicmodel. Weuseitto
+        //displaythefulladdressofapartner,separatedby\n. Thisis
+        //reallyabadwaytodoit. Now,weneedtoremovetheextralines
+        //andhopeforthebestthatnoonetriestousesthismechanismtodo
+        //somethingelse.
+        if(this.nodeOptions.always_reload){
+            value=this._getDisplayName(value);
         }
         this.$input.val(value);
-        if (!this.autocomplete_bound) {
+        if(!this.autocomplete_bound){
             this._bindAutoComplete();
         }
         this._updateExternalButton();
     },
     /**
-     * @private
+     *@private
      */
-    _renderReadonly: function () {
-        var escapedValue = _.escape((this.m2o_value || "").trim());
-        var value = escapedValue.split('\n').map(function (line) {
-            return '<span>' + line + '</span>';
+    _renderReadonly:function(){
+        varescapedValue=_.escape((this.m2o_value||"").trim());
+        varvalue=escapedValue.split('\n').map(function(line){
+            return'<span>'+line+'</span>';
         }).join('<br/>');
         this.$el.html(value);
-        if (!this.noOpen && this.value) {
-            this.$el.attr('href', _.str.sprintf('#id=%s&model=%s', this.value.res_id, this.field.relation));
+        if(!this.noOpen&&this.value){
+            this.$el.attr('href',_.str.sprintf('#id=%s&model=%s',this.value.res_id,this.field.relation));
             this.$el.addClass('o_form_uri');
         }
     },
     /**
-     * @private
+     *@private
      */
-    _reset: function () {
-        this._super.apply(this, arguments);
-        this.floating = false;
-        this.m2o_value = this._formatValue(this.value);
+    _reset:function(){
+        this._super.apply(this,arguments);
+        this.floating=false;
+        this.m2o_value=this._formatValue(this.value);
     },
     /**
-     * Executes a 'name_search' and returns a list of formatted objects meant to
-     * be displayed in the autocomplete widget dropdown. These items are either:
-     * - a formatted version of a 'name_search' result
-     * - an option meant to display additional information or perform an action
+     *Executesa'name_search'andreturnsalistofformattedobjectsmeantto
+     *bedisplayedintheautocompletewidgetdropdown.Theseitemsareeither:
+     *-aformattedversionofa'name_search'result
+     *-anoptionmeanttodisplayadditionalinformationorperformanaction
      *
-     * @private
-     * @param {string} [searchValue=""]
-     * @returns {Promise<{
-     *      label: string,
-     *      id?: number,
-     *      name?: string,
-     *      value?: string,
-     *      classname?: string,
-     *      action?: () => Promise<any>,
-     * }[]>}
+     *@private
+     *@param{string}[searchValue=""]
+     *@returns{Promise<{
+     *     label:string,
+     *     id?:number,
+     *     name?:string,
+     *     value?:string,
+     *     classname?:string,
+     *     action?:()=>Promise<any>,
+     *}[]>}
      */
-    _search: async function (searchValue = "") {
-        const value = searchValue.trim();
-        const domain = this.record.getDomain(this.recordParams);
-        const context = Object.assign(
+    _search:asyncfunction(searchValue=""){
+        constvalue=searchValue.trim();
+        constdomain=this.record.getDomain(this.recordParams);
+        constcontext=Object.assign(
             this.record.getContext(this.recordParams),
             this.additionalContext
         );
 
-        // Exclude black-listed ids from the domain
-        const blackListedIds = this._getSearchBlacklist();
-        if (blackListedIds.length) {
-            domain.push(['id', 'not in', blackListedIds]);
+        //Excludeblack-listedidsfromthedomain
+        constblackListedIds=this._getSearchBlacklist();
+        if(blackListedIds.length){
+            domain.push(['id','notin',blackListedIds]);
         }
 
-        if (this.lastNameSearch) {
-            this.lastNameSearch.catch((reason) => {
-                // the last rpc name_search will be aborted, so we want to ignore its rejection
+        if(this.lastNameSearch){
+            this.lastNameSearch.catch((reason)=>{
+                //thelastrpcname_searchwillbeaborted,sowewanttoignoreitsrejection
                 reason.event.preventDefault();
             })
             this.lastNameSearch.abort(false)
         }
-        this.lastNameSearch = this._rpc({
-            model: this.field.relation,
-            method: "name_search",
-            kwargs: {
-                name: value,
-                args: domain,
-                operator: "ilike",
-                limit: this.limit + 1,
+        this.lastNameSearch=this._rpc({
+            model:this.field.relation,
+            method:"name_search",
+            kwargs:{
+                name:value,
+                args:domain,
+                operator:"ilike",
+                limit:this.limit+1,
                 context,
             }
         });
-        const results = await this.orderer.add(this.lastNameSearch);
+        constresults=awaitthis.orderer.add(this.lastNameSearch);
 
-        // Format results to fit the options dropdown
-        let values = results.map((result) => {
-            const [id, fullName] = result;
-            const displayName = this._getDisplayName(fullName).trim();
-            result[1] = displayName;
-            return {
+        //Formatresultstofittheoptionsdropdown
+        letvalues=results.map((result)=>{
+            const[id,fullName]=result;
+            constdisplayName=this._getDisplayName(fullName).trim();
+            result[1]=displayName;
+            return{
                 id,
-                label: escape(displayName) || data.noDisplayContent,
-                value: displayName,
-                name: displayName,
+                label:escape(displayName)||data.noDisplayContent,
+                value:displayName,
+                name:displayName,
             };
         });
 
-        // Add "Search more..." option if results count is higher than the limit
-        if (this.limit < values.length) {
-            values = this._manageSearchMore(values, value, domain, context);
+        //Add"Searchmore..."optionifresultscountishigherthanthelimit
+        if(this.limit<values.length){
+            values=this._manageSearchMore(values,value,domain,context);
         }
-        if (!this.can_create) {
-            return values;
+        if(!this.can_create){
+            returnvalues;
         }
 
-        // Additional options...
-        const canQuickCreate = !this.nodeOptions.no_quick_create;
-        const canCreateEdit = !this.nodeOptions.no_create_edit;
-        if (value.length) {
-            // "Quick create" option
-            const nameExists = results.some((result) => result[1] === value);
-            if (canQuickCreate && !nameExists) {
+        //Additionaloptions...
+        constcanQuickCreate=!this.nodeOptions.no_quick_create;
+        constcanCreateEdit=!this.nodeOptions.no_create_edit;
+        if(value.length){
+            //"Quickcreate"option
+            constnameExists=results.some((result)=>result[1]===value);
+            if(canQuickCreate&&!nameExists){
                 values.push({
-                    label: sprintf(
-                        _t(`Create "<strong>%s</strong>"`),
+                    label:sprintf(
+                        _t(`Create"<strong>%s</strong>"`),
                         escape(value)
                     ),
-                    action: () => this._quickCreate(value),
-                    classname: 'o_m2o_dropdown_option'
+                    action:()=>this._quickCreate(value),
+                    classname:'o_m2o_dropdown_option'
                 });
             }
-            // "Create and Edit" option
-            if (canCreateEdit) {
-                const valueContext = this._createContext(value);
+            //"CreateandEdit"option
+            if(canCreateEdit){
+                constvalueContext=this._createContext(value);
                 values.push({
-                    label: _t("Create and Edit..."),
-                    action: () => {
-                        // Input value is cleared and the form popup opens
-                        this.el.querySelector(':scope input').value = "";
-                        return this._searchCreatePopup('form', false, valueContext);
+                    label:_t("CreateandEdit..."),
+                    action:()=>{
+                        //Inputvalueisclearedandtheformpopupopens
+                        this.el.querySelector(':scopeinput').value="";
+                        returnthis._searchCreatePopup('form',false,valueContext);
                     },
-                    classname: 'o_m2o_dropdown_option',
+                    classname:'o_m2o_dropdown_option',
                 });
             }
-            // "No results" option
-            if (!values.length) {
+            //"Noresults"option
+            if(!values.length){
                 values.push({
-                    label: _t("No results to show..."),
+                    label:_t("Noresultstoshow..."),
                 });
             }
-        } else if (!this.value && (canQuickCreate || canCreateEdit)) {
-            // "Start typing" option
+        }elseif(!this.value&&(canQuickCreate||canCreateEdit)){
+            //"Starttyping"option
             values.push({
-                label: _t("Start typing..."),
-                classname: 'o_m2o_start_typing',
+                label:_t("Starttyping..."),
+                classname:'o_m2o_start_typing',
             });
         }
 
-        return values;
+        returnvalues;
     },
     /**
-     * all search/create popup handling
+     *allsearch/createpopuphandling
      *
-     * TODO: ids argument is no longer used, remove it in master (as well as
-     * initial_ids param of the dialog)
+     *TODO:idsargumentisnolongerused,removeitinmaster(aswellas
+     *initial_idsparamofthedialog)
      *
-     * @private
-     * @param {any} view
-     * @param {any} ids
-     * @param {any} context
-     * @param {Object[]} [dynamicFilters=[]] filters to add to the search view
-     *   in the dialog (each filter has keys 'description' and 'domain')
+     *@private
+     *@param{any}view
+     *@param{any}ids
+     *@param{any}context
+     *@param{Object[]}[dynamicFilters=[]]filterstoaddtothesearchview
+     *  inthedialog(eachfilterhaskeys'description'and'domain')
      */
-    _searchCreatePopup: function (view, ids, context, dynamicFilters) {
-        var options = this._getSearchCreatePopupOptions(view, ids, context, dynamicFilters);
-        return new dialogs.SelectCreateDialog(this, _.extend({}, this.nodeOptions, options)).open();
+    _searchCreatePopup:function(view,ids,context,dynamicFilters){
+        varoptions=this._getSearchCreatePopupOptions(view,ids,context,dynamicFilters);
+        returnnewdialogs.SelectCreateDialog(this,_.extend({},this.nodeOptions,options)).open();
     },
     /**
-     * @private
+     *@private
      */
-    _updateExternalButton: function () {
-        var has_external_button = !this.noOpen && !this.floating && this.isSet();
+    _updateExternalButton:function(){
+        varhas_external_button=!this.noOpen&&!this.floating&&this.isSet();
         this.$external_button.toggle(has_external_button);
-        this.$el.toggleClass('o_with_button', has_external_button); // Should not be required anymore but kept for compatibility
+        this.$el.toggleClass('o_with_button',has_external_button);//Shouldnotberequiredanymorebutkeptforcompatibility
     },
 
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {MouseEvent} event
+     *@private
+     *@param{MouseEvent}event
      */
-    _onClick: function (event) {
-        var self = this;
-        if (this.mode === 'readonly' && !this.noOpen) {
+    _onClick:function(event){
+        varself=this;
+        if(this.mode==='readonly'&&!this.noOpen){
             event.preventDefault();
             event.stopPropagation();
             this._rpc({
-                    model: this.field.relation,
-                    method: 'get_formview_action',
-                    args: [[this.value.res_id]],
-                    context: this.record.getContext(this.recordParams),
+                    model:this.field.relation,
+                    method:'get_formview_action',
+                    args:[[this.value.res_id]],
+                    context:this.record.getContext(this.recordParams),
                 })
-                .then(function (action) {
-                    self.trigger_up('do_action', {action: action});
+                .then(function(action){
+                    self.trigger_up('do_action',{action:action});
                 });
         }
     },
 
     /**
-     * Reset the input as dialog has been closed without m2o creation.
+     *Resettheinputasdialoghasbeenclosedwithoutm2ocreation.
      *
-     * @private
+     *@private
      */
-    _onDialogClosedUnset: function () {
-        this.isDirty = false;
-        this.floating = false;
+    _onDialogClosedUnset:function(){
+        this.isDirty=false;
+        this.floating=false;
         this._render();
     },
     /**
-     * @private
+     *@private
      */
-    _onExternalButtonClick: function () {
-        if (!this.value) {
+    _onExternalButtonClick:function(){
+        if(!this.value){
             this.activate();
             return;
         }
-        var self = this;
-        var context = this.record.getContext(this.recordParams);
+        varself=this;
+        varcontext=this.record.getContext(this.recordParams);
         this._rpc({
-                model: this.field.relation,
-                method: 'get_formview_id',
-                args: [[this.value.res_id]],
-                context: context,
+                model:this.field.relation,
+                method:'get_formview_id',
+                args:[[this.value.res_id]],
+                context:context,
             })
-            .then(function (view_id) {
-                new dialogs.FormViewDialog(self, {
-                    res_model: self.field.relation,
-                    res_id: self.value.res_id,
-                    context: context,
-                    title: _t("Open: ") + self.string,
-                    view_id: view_id,
-                    readonly: !self.can_write,
-                    on_saved: function (record, changed) {
-                        if (changed) {
-                            const _setValue = self._setValue.bind(self, self.value.data, {
-                                forceChange: true,
+            .then(function(view_id){
+                newdialogs.FormViewDialog(self,{
+                    res_model:self.field.relation,
+                    res_id:self.value.res_id,
+                    context:context,
+                    title:_t("Open:")+self.string,
+                    view_id:view_id,
+                    readonly:!self.can_write,
+                    on_saved:function(record,changed){
+                        if(changed){
+                            const_setValue=self._setValue.bind(self,self.value.data,{
+                                forceChange:true,
                             });
-                            self.trigger_up('reload', {
-                                db_id: self.value.id,
-                                onSuccess: _setValue,
-                                onFailure: _setValue,
+                            self.trigger_up('reload',{
+                                db_id:self.value.id,
+                                onSuccess:_setValue,
+                                onFailure:_setValue,
                             });
                         }
                     },
@@ -764,936 +764,936 @@ var FieldMany2One = AbstractField.extend({
             });
     },
     /**
-     * @private
+     *@private
      */
-    _onInputClick: function () {
-        if (this.$input.autocomplete("widget").is(":visible")) {
+    _onInputClick:function(){
+        if(this.$input.autocomplete("widget").is(":visible")){
             this.$input.autocomplete("close");
-        } else if (this.floating) {
-            this.$input.autocomplete("search"); // search with the input's content
-        } else {
-            this.$input.autocomplete("search", ''); // search with the empty string
+        }elseif(this.floating){
+            this.$input.autocomplete("search");//searchwiththeinput'scontent
+        }else{
+            this.$input.autocomplete("search",'');//searchwiththeemptystring
         }
     },
     /**
-     * @private
+     *@private
      */
-    _onInputFocusout: function () {
-        if (this.can_create && this.floating) {
-            new M2ODialog(this, this.string, this.$input.val()).open();
+    _onInputFocusout:function(){
+        if(this.can_create&&this.floating){
+            newM2ODialog(this,this.string,this.$input.val()).open();
         }
     },
     /**
-     * @private
+     *@private
      *
-     * @param {FlectraEvent} ev
+     *@param{FlectraEvent}ev
      */
-    _onInputKeyup: function (ev) {
-        if (ev.which === $.ui.keyCode.ENTER || ev.which === $.ui.keyCode.TAB) {
-            // If we pressed enter or tab, we want to prevent _onInputFocusout from
-            // executing since it would open a M2O dialog to request
-            // confirmation that the many2one is not properly set.
-            // It's a case that is already handled by the autocomplete lib.
+    _onInputKeyup:function(ev){
+        if(ev.which===$.ui.keyCode.ENTER||ev.which===$.ui.keyCode.TAB){
+            //Ifwepressedenterortab,wewanttoprevent_onInputFocusoutfrom
+            //executingsinceitwouldopenaM2Odialogtorequest
+            //confirmationthatthemany2oneisnotproperlyset.
+            //It'sacasethatisalreadyhandledbytheautocompletelib.
             return;
         }
-        this.isDirty = true;
-        if (this.$input.val() === "") {
+        this.isDirty=true;
+        if(this.$input.val()===""){
             this.reinitialize(false);
-        } else if (this._getDisplayName(this.m2o_value) !== this.$input.val()) {
-            this.floating = true;
+        }elseif(this._getDisplayName(this.m2o_value)!==this.$input.val()){
+            this.floating=true;
             this._updateExternalButton();
         }
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onKeydown: function () {
-        this.floating = false;
-        this._super.apply(this, arguments);
+    _onKeydown:function(){
+        this.floating=false;
+        this._super.apply(this,arguments);
     },
     /**
-     * Stops the left/right navigation move event if the cursor is not at the
-     * start/end of the input element. Stops any navigation move event if the
-     * user is selecting text.
+     *Stopstheleft/rightnavigationmoveeventifthecursorisnotatthe
+     *start/endoftheinputelement.Stopsanynavigationmoveeventifthe
+     *userisselectingtext.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onNavigationMove: function (ev) {
-        // TODO Maybe this should be done in a mixin or, better, the m2o field
-        // should be an InputField (but this requires some refactoring).
-        basicFields.InputField.prototype._onNavigationMove.apply(this, arguments);
-        if (this.mode === 'edit' && $(this.$input.autocomplete('widget')).is(':visible')) {
+    _onNavigationMove:function(ev){
+        //TODOMaybethisshouldbedoneinamixinor,better,them2ofield
+        //shouldbeanInputField(butthisrequiressomerefactoring).
+        basicFields.InputField.prototype._onNavigationMove.apply(this,arguments);
+        if(this.mode==='edit'&&$(this.$input.autocomplete('widget')).is(':visible')){
             ev.stopPropagation();
         }
     },
     /**
-     * @private
-     * @param {FlectraEvent} event
+     *@private
+     *@param{FlectraEvent}event
      */
-    _onQuickCreate: function (event) {
+    _onQuickCreate:function(event){
         this._quickCreate(event.data.value);
     },
     /**
-     * @private
-     * @param {FlectraEvent} event
+     *@private
+     *@param{FlectraEvent}event
      */
-    _onSearchCreatePopup: function (event) {
-        var data = event.data;
-        this._searchCreatePopup(data.view_type, false, this._createContext(data.value));
+    _onSearchCreatePopup:function(event){
+        vardata=event.data;
+        this._searchCreatePopup(data.view_type,false,this._createContext(data.value));
     },
 });
 
-var Many2oneBarcode = FieldMany2One.extend({
-    // We don't require this widget to be displayed in studio sidebar in
-    // non-debug mode hence just extended it from its original widget, so that
-    // description comes from parent and hasOwnProperty based condition fails
+varMany2oneBarcode=FieldMany2One.extend({
+    //Wedon'trequirethiswidgettobedisplayedinstudiosidebarin
+    //non-debugmodehencejustextendeditfromitsoriginalwidget,sothat
+    //descriptioncomesfromparentandhasOwnPropertybasedconditionfails
 });
 
-var ListFieldMany2One = FieldMany2One.extend({
-    events: _.extend({}, FieldMany2One.prototype.events, {
-        'focusin input': '_onInputFocusin',
+varListFieldMany2One=FieldMany2One.extend({
+    events:_.extend({},FieldMany2One.prototype.events,{
+        'focusininput':'_onInputFocusin',
     }),
 
     /**
-     * Should never be allowed to be opened while in readonly mode in a list
+     *Shouldneverbeallowedtobeopenedwhileinreadonlymodeinalist
      *
-     * @override
+     *@override
      */
-    init: function () {
-        this._super.apply(this, arguments);
-        // when we empty the input, we delay the setValue to prevent from
-        // triggering the 'fieldChanged' event twice when the user wants set
-        // another m2o value ; the following attribute is used to determine when
-        // we skipped the setValue, s.t. we can perform it later on if the user
-        // didn't select another value
-        this.mustSetValue = false;
-        this.m2oDialogFocused = false;
+    init:function(){
+        this._super.apply(this,arguments);
+        //whenweemptytheinput,wedelaythesetValuetopreventfrom
+        //triggeringthe'fieldChanged'eventtwicewhentheuserwantsset
+        //anotherm2ovalue;thefollowingattributeisusedtodeterminewhen
+        //weskippedthesetValue,s.t.wecanperformitlateroniftheuser
+        //didn'tselectanothervalue
+        this.mustSetValue=false;
+        this.m2oDialogFocused=false;
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * If in readonly, will never be considered as an active widget.
+     *Ifinreadonly,willneverbeconsideredasanactivewidget.
      *
-     * @override
+     *@override
      */
-    activate: function () {
-        if (this.mode === 'readonly') {
-            return false;
+    activate:function(){
+        if(this.mode==='readonly'){
+            returnfalse;
         }
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    reinitialize: function () {
-        this.mustSetValue = false;
-        return this._super.apply(this, arguments);
+    reinitialize:function(){
+        this.mustSetValue=false;
+        returnthis._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _renderReadonly: function () {
+    _renderReadonly:function(){
         this.$el.text(this.m2o_value);
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _searchCreatePopup: function () {
-        this.m2oDialogFocused = true;
-        return this._super.apply(this, arguments);
+    _searchCreatePopup:function(){
+        this.m2oDialogFocused=true;
+        returnthis._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onInputFocusin: function () {
-        this.m2oDialogFocused = false;
+    _onInputFocusin:function(){
+        this.m2oDialogFocused=false;
     },
     /**
-     * In case the focus is lost from a mousedown, we want to prevent the click occuring on the
-     * following mouseup since it might trigger some unwanted list functions.
-     * If it's not the case, we want to remove the added handler on the next mousedown.
-     * @see list_editable_renderer._onWindowClicked()
+     *Incasethefocusislostfromamousedown,wewanttopreventtheclickoccuringonthe
+     *followingmouseupsinceitmighttriggersomeunwantedlistfunctions.
+     *Ifit'snotthecase,wewanttoremovetheaddedhandleronthenextmousedown.
+     *@seelist_editable_renderer._onWindowClicked()
      *
-     * Also, in list views, we don't want to try to trigger a fieldChange when the field
-     * is being emptied. Instead, it will be triggered as the user leaves the field
-     * while it is empty.
+     *Also,inlistviews,wedon'twanttotrytotriggerafieldChangewhenthefield
+     *isbeingemptied.Instead,itwillbetriggeredastheuserleavesthefield
+     *whileitisempty.
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onInputFocusout: function () {
-        if (this.can_create && this.floating) {
-            // In case the focus out is due to a mousedown, we want to prevent the next click
-            var attachedEvents = ['click', 'mousedown'];
-            var stopNextClick = (function (ev) {
+    _onInputFocusout:function(){
+        if(this.can_create&&this.floating){
+            //Incasethefocusoutisduetoamousedown,wewanttopreventthenextclick
+            varattachedEvents=['click','mousedown'];
+            varstopNextClick=(function(ev){
                 ev.stopPropagation();
-                attachedEvents.forEach(function (eventName) {
-                    window.removeEventListener(eventName, stopNextClick, true);
+                attachedEvents.forEach(function(eventName){
+                    window.removeEventListener(eventName,stopNextClick,true);
                 });
             }).bind(this);
-            attachedEvents.forEach(function (eventName) {
-                window.addEventListener(eventName, stopNextClick, true);
+            attachedEvents.forEach(function(eventName){
+                window.addEventListener(eventName,stopNextClick,true);
             });
         }
-        this._super.apply(this, arguments);
-        if (!this.m2oDialogFocused && this.$input.val() === "" && this.mustSetValue) {
+        this._super.apply(this,arguments);
+        if(!this.m2oDialogFocused&&this.$input.val()===""&&this.mustSetValue){
             this.reinitialize(false);
         }
     },
     /**
-     * Prevents the triggering of an immediate _onFieldChanged when emptying the field.
+     *Preventsthetriggeringofanimmediate_onFieldChangedwhenemptyingthefield.
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onInputKeyup: function () {
-        if (this.$input.val() !== "") {
-            this._super.apply(this, arguments);
-        } else {
-            this.mustSetValue = true;
+    _onInputKeyup:function(){
+        if(this.$input.val()!==""){
+            this._super.apply(this,arguments);
+        }else{
+            this.mustSetValue=true;
         }
     },
 });
 
-var KanbanFieldMany2One = AbstractField.extend({
-    tagName: 'span',
-    init: function () {
-        this._super.apply(this, arguments);
-        this.m2o_value = this._formatValue(this.value);
+varKanbanFieldMany2One=AbstractField.extend({
+    tagName:'span',
+    init:function(){
+        this._super.apply(this,arguments);
+        this.m2o_value=this._formatValue(this.value);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _render: function () {
+    _render:function(){
         this.$el.text(this.m2o_value);
     },
 });
 
 /**
- * Widget Many2OneAvatar is only supported on many2one fields pointing to a
- * model which inherits from 'image.mixin'. In readonly, it displays the
- * record's image next to the display_name. In edit, it behaves exactly like a
- * regular many2one widget.
+ *WidgetMany2OneAvatarisonlysupportedonmany2onefieldspointingtoa
+ *modelwhichinheritsfrom'image.mixin'.Inreadonly,itdisplaysthe
+ *record'simagenexttothedisplay_name.Inedit,itbehavesexactlylikea
+ *regularmany2onewidget.
  */
-const Many2OneAvatar = FieldMany2One.extend({
-    _template: 'web.Many2OneAvatar',
+constMany2OneAvatar=FieldMany2One.extend({
+    _template:'web.Many2OneAvatar',
 
-    init() {
-        this._super.apply(this, arguments);
-        if (this.mode === 'readonly') {
-            this.template = null;
-            this.tagName = 'div';
-            this.className = 'o_field_many2one_avatar';
-            // disable the redirection to the related record on click, in readonly
-            this.noOpen = true;
+    init(){
+        this._super.apply(this,arguments);
+        if(this.mode==='readonly'){
+            this.template=null;
+            this.tagName='div';
+            this.className='o_field_many2one_avatar';
+            //disabletheredirectiontotherelatedrecordonclick,inreadonly
+            this.noOpen=true;
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _renderReadonly() {
+    _renderReadonly(){
         this.$el.empty();
-        if (this.value) {
-            this.$el.html(qweb.render(this._template, {
-                url: `/web/image/${this.field.relation}/${this.value.res_id}/image_128`,
-                value: this.m2o_value,
+        if(this.value){
+            this.$el.html(qweb.render(this._template,{
+                url:`/web/image/${this.field.relation}/${this.value.res_id}/image_128`,
+                value:this.m2o_value,
             }));
         }
     },
 });
 
 //------------------------------------------------------------------------------
-// X2Many widgets
+//X2Manywidgets
 //------------------------------------------------------------------------------
 
-var FieldX2Many = AbstractField.extend(WidgetAdapterMixin, {
-    tagName: 'div',
-    custom_events: _.extend({}, AbstractField.prototype.custom_events, {
-        add_record: '_onAddRecord',
-        discard_changes: '_onDiscardChanges',
-        edit_line: '_onEditLine',
-        field_changed: '_onFieldChanged',
-        open_record: '_onOpenRecord',
-        kanban_record_delete: '_onRemoveRecord',
-        list_record_remove: '_onRemoveRecord',
-        resequence_records: '_onResequenceRecords',
-        save_line: '_onSaveLine',
-        toggle_column_order: '_onToggleColumnOrder',
-        activate_next_widget: '_onActiveNextWidget',
-        navigation_move: '_onNavigationMove',
-        save_optional_fields: '_onSaveOrLoadOptionalFields',
-        load_optional_fields: '_onSaveOrLoadOptionalFields',
-        pager_changed: '_onPagerChanged',
+varFieldX2Many=AbstractField.extend(WidgetAdapterMixin,{
+    tagName:'div',
+    custom_events:_.extend({},AbstractField.prototype.custom_events,{
+        add_record:'_onAddRecord',
+        discard_changes:'_onDiscardChanges',
+        edit_line:'_onEditLine',
+        field_changed:'_onFieldChanged',
+        open_record:'_onOpenRecord',
+        kanban_record_delete:'_onRemoveRecord',
+        list_record_remove:'_onRemoveRecord',
+        resequence_records:'_onResequenceRecords',
+        save_line:'_onSaveLine',
+        toggle_column_order:'_onToggleColumnOrder',
+        activate_next_widget:'_onActiveNextWidget',
+        navigation_move:'_onNavigationMove',
+        save_optional_fields:'_onSaveOrLoadOptionalFields',
+        load_optional_fields:'_onSaveOrLoadOptionalFields',
+        pager_changed:'_onPagerChanged',
     }),
 
-    // We need to trigger the reset on every changes to be aware of the parent changes
-    // and then evaluate the 'column_invisible' modifier in case a evaluated value
-    // changed.
-    resetOnAnyFieldChange: true,
+    //Weneedtotriggertheresetoneverychangestobeawareoftheparentchanges
+    //andthenevaluatethe'column_invisible'modifierincaseaevaluatedvalue
+    //changed.
+    resetOnAnyFieldChange:true,
 
     /**
-     * useSubview is used in form view to load view of the related model of the x2many field
+     *useSubviewisusedinformviewtoloadviewoftherelatedmodelofthex2manyfield
      */
-    useSubview: true,
+    useSubview:true,
 
     /**
-     * @override
+     *@override
      */
-    init: function (parent, name, record, options) {
-        this._super.apply(this, arguments);
-        this.nodeOptions = _.defaults(this.nodeOptions, {
-            create_text: _t('Add'),
+    init:function(parent,name,record,options){
+        this._super.apply(this,arguments);
+        this.nodeOptions=_.defaults(this.nodeOptions,{
+            create_text:_t('Add'),
         });
-        this.operations = [];
-        this.isReadonly = this.mode === 'readonly';
-        this.view = this.attrs.views[this.attrs.mode];
-        this.isMany2Many = this.field.type === 'many2many' || this.attrs.widget === 'many2many';
-        this.activeActions = {};
-        this.recordParams = {fieldName: this.name, viewType: this.viewType};
-        // The limit is fixed so it cannot be changed by adding/removing lines in
-        // the widget. It will only change through a hard reload or when manually
-        // changing the pager (see _onPagerChanged).
-        this.pagingState = {
-            currentMinimum: this.value.offset + 1,
-            limit: this.value.limit,
-            size: this.value.count,
-            validate: () => {
-                // TODO: we should have some common method in the basic renderer...
-                return this.view.arch.tag === 'tree' ?
-                    this.renderer.unselectRow() :
+        this.operations=[];
+        this.isReadonly=this.mode==='readonly';
+        this.view=this.attrs.views[this.attrs.mode];
+        this.isMany2Many=this.field.type==='many2many'||this.attrs.widget==='many2many';
+        this.activeActions={};
+        this.recordParams={fieldName:this.name,viewType:this.viewType};
+        //Thelimitisfixedsoitcannotbechangedbyadding/removinglinesin
+        //thewidget.Itwillonlychangethroughahardreloadorwhenmanually
+        //changingthepager(see_onPagerChanged).
+        this.pagingState={
+            currentMinimum:this.value.offset+1,
+            limit:this.value.limit,
+            size:this.value.count,
+            validate:()=>{
+                //TODO:weshouldhavesomecommonmethodinthebasicrenderer...
+                returnthis.view.arch.tag==='tree'?
+                    this.renderer.unselectRow():
                     Promise.resolve();
             },
-            withAccessKey: false,
+            withAccessKey:false,
         };
-        var arch = this.view && this.view.arch;
-        if (arch) {
-            this.activeActions.create = arch.attrs.create ?
-                                            !!JSON.parse(arch.attrs.create) :
+        vararch=this.view&&this.view.arch;
+        if(arch){
+            this.activeActions.create=arch.attrs.create?
+                                            !!JSON.parse(arch.attrs.create):
                                             true;
-            this.activeActions.delete = arch.attrs.delete ?
-                                            !!JSON.parse(arch.attrs.delete) :
+            this.activeActions.delete=arch.attrs.delete?
+                                            !!JSON.parse(arch.attrs.delete):
                                             true;
-            this.editable = arch.attrs.editable;
+            this.editable=arch.attrs.editable;
         }
         this._computeAvailableActions(record);
-        if (this.attrs.columnInvisibleFields) {
+        if(this.attrs.columnInvisibleFields){
             this._processColumnInvisibleFields();
         }
     },
     /**
-     * @override
+     *@override
      */
-    start: async function () {
-        const _super = this._super.bind(this);
-        if (this.view) {
+    start:asyncfunction(){
+        const_super=this._super.bind(this);
+        if(this.view){
             this._renderButtons();
-            this._controlPanelWrapper = new ComponentWrapper(this, ControlPanelX2Many, {
-                cp_content: { $buttons: this.$buttons },
-                pager: this.pagingState,
+            this._controlPanelWrapper=newComponentWrapper(this,ControlPanelX2Many,{
+                cp_content:{$buttons:this.$buttons},
+                pager:this.pagingState,
             });
-            await this._controlPanelWrapper.mount(this.el, { position: 'first-child' });
+            awaitthis._controlPanelWrapper.mount(this.el,{position:'first-child'});
         }
-        return _super(...arguments);
+        return_super(...arguments);
     },
-    destroy: function () {
+    destroy:function(){
         WidgetAdapterMixin.destroy.call(this);
         this._super();
     },
     /**
-     * For the list renderer to properly work, it must know if it is in the DOM,
-     * and be notified when it is attached to the DOM.
+     *Forthelistrenderertoproperlywork,itmustknowifitisintheDOM,
+     *andbenotifiedwhenitisattachedtotheDOM.
      */
-    on_attach_callback: function () {
-        this.isInDOM = true;
+    on_attach_callback:function(){
+        this.isInDOM=true;
         WidgetAdapterMixin.on_attach_callback.call(this);
-        if (this.renderer) {
+        if(this.renderer){
             this.renderer.on_attach_callback();
         }
     },
     /**
-     * For the list renderer to properly work, it must know if it is in the DOM.
+     *Forthelistrenderertoproperlywork,itmustknowifitisintheDOM.
      */
-    on_detach_callback: function () {
-        this.isInDOM = false;
+    on_detach_callback:function(){
+        this.isInDOM=false;
         WidgetAdapterMixin.on_detach_callback.call(this);
-        if (this.renderer) {
+        if(this.renderer){
             this.renderer.on_detach_callback();
         }
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * A x2m field can only be saved if it finished the edition of all its rows.
-     * On parent view saving, we have to ask the x2m fields to commit their
-     * changes, that is confirming the save of the in-edition row or asking the
-     * user if he wants to discard it if necessary.
+     *Ax2mfieldcanonlybesavedifitfinishedtheeditionofallitsrows.
+     *Onparentviewsaving,wehavetoaskthex2mfieldstocommittheir
+     *changes,thatisconfirmingthesaveofthein-editionroworaskingthe
+     *userifhewantstodiscarditifnecessary.
      *
-     * @override
-     * @returns {Promise}
+     *@override
+     *@returns{Promise}
      */
-    commitChanges: function () {
-        var self = this;
-        var inEditionRecordID =
-            this.renderer &&
-            this.renderer.viewType === "list" &&
+    commitChanges:function(){
+        varself=this;
+        varinEditionRecordID=
+            this.renderer&&
+            this.renderer.viewType==="list"&&
             this.renderer.getEditableRecordID();
-        if (inEditionRecordID) {
-            return this.renderer.commitChanges(inEditionRecordID).then(function () {
-                return self._saveLine(inEditionRecordID);
+        if(inEditionRecordID){
+            returnthis.renderer.commitChanges(inEditionRecordID).then(function(){
+                returnself._saveLine(inEditionRecordID);
             });
         }
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    isSet: function () {
-        return true;
+    isSet:function(){
+        returntrue;
     },
     /**
-     * @override
-     * @param {Object} record
-     * @param {FlectraEvent} [ev] an event that triggered the reset action
-     * @param {Boolean} [fieldChanged] if true, the widget field has changed
-     * @returns {Promise}
+     *@override
+     *@param{Object}record
+     *@param{FlectraEvent}[ev]aneventthattriggeredtheresetaction
+     *@param{Boolean}[fieldChanged]iftrue,thewidgetfieldhaschanged
+     *@returns{Promise}
      */
-    reset: function (record, ev, fieldChanged) {
-        // re-evaluate available actions
-        const oldCanCreate = this.canCreate;
-        const oldCanDelete = this.canDelete;
-        const oldCanLink = this.canLink;
-        const oldCanUnlink = this.canUnlink;
+    reset:function(record,ev,fieldChanged){
+        //re-evaluateavailableactions
+        constoldCanCreate=this.canCreate;
+        constoldCanDelete=this.canDelete;
+        constoldCanLink=this.canLink;
+        constoldCanUnlink=this.canUnlink;
         this._computeAvailableActions(record);
-        const actionsChanged =
-            this.canCreate !== oldCanCreate ||
-            this.canDelete !== oldCanDelete ||
-            this.canLink !== oldCanLink ||
-            this.canUnlink !== oldCanUnlink;
+        constactionsChanged=
+            this.canCreate!==oldCanCreate||
+            this.canDelete!==oldCanDelete||
+            this.canLink!==oldCanLink||
+            this.canUnlink!==oldCanUnlink;
 
-        // If 'fieldChanged' is false, it means that the reset was triggered by
-        // the 'resetOnAnyFieldChange' mechanism. If it is the case, if neither
-        // the modifiers (so the visible columns) nor the available actions
-        // changed, the reset is skipped.
-        if (!fieldChanged && !actionsChanged) {
-            var newEval = this._evalColumnInvisibleFields();
-            if (_.isEqual(this.currentColInvisibleFields, newEval)) {
-                this._reset(record, ev); // update the internal state, but do not re-render
-                return Promise.resolve();
+        //If'fieldChanged'isfalse,itmeansthattheresetwastriggeredby
+        //the'resetOnAnyFieldChange'mechanism.Ifitisthecase,ifneither
+        //themodifiers(sothevisiblecolumns)northeavailableactions
+        //changed,theresetisskipped.
+        if(!fieldChanged&&!actionsChanged){
+            varnewEval=this._evalColumnInvisibleFields();
+            if(_.isEqual(this.currentColInvisibleFields,newEval)){
+                this._reset(record,ev);//updatetheinternalstate,butdonotre-render
+                returnPromise.resolve();
             }
-        } else if (ev && ev.target === this && ev.data.changes && this.view.arch.tag === 'tree') {
-            var command = ev.data.changes[this.name];
-            // Here, we only consider 'UPDATE' commands with data, which occur
-            // with editable list view. In order to keep the current line in
-            // edition, we call confirmUpdate which will try to reset the widgets
-            // of the line being edited, and rerender the rest of the list.
-            // 'UPDATE' commands with no data can be ignored: they occur in
-            // one2manys when the record is updated from a dialog and in this
-            // case, we can re-render the whole subview.
-            if (command && command.operation === 'UPDATE' && command.data) {
-                var state = record.data[this.name];
-                var fieldNames = state.getFieldNames({ viewType: 'list' });
-                this._reset(record, ev);
-                return this.renderer.confirmUpdate(state, command.id, fieldNames, ev.initialEvent);
+        }elseif(ev&&ev.target===this&&ev.data.changes&&this.view.arch.tag==='tree'){
+            varcommand=ev.data.changes[this.name];
+            //Here,weonlyconsider'UPDATE'commandswithdata,whichoccur
+            //witheditablelistview.Inordertokeepthecurrentlinein
+            //edition,wecallconfirmUpdatewhichwilltrytoresetthewidgets
+            //ofthelinebeingedited,andrerendertherestofthelist.
+            //'UPDATE'commandswithnodatacanbeignored:theyoccurin
+            //one2manyswhentherecordisupdatedfromadialogandinthis
+            //case,wecanre-renderthewholesubview.
+            if(command&&command.operation==='UPDATE'&&command.data){
+                varstate=record.data[this.name];
+                varfieldNames=state.getFieldNames({viewType:'list'});
+                this._reset(record,ev);
+                returnthis.renderer.confirmUpdate(state,command.id,fieldNames,ev.initialEvent);
             }
         }
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 
     /**
-     * @override
-     * @returns {jQuery}
+     *@override
+     *@returns{jQuery}
      */
-    getFocusableElement: function () {
-       return (this.mode === 'edit' && this.$input) || this.$el;
+    getFocusableElement:function(){
+       return(this.mode==='edit'&&this.$input)||this.$el;
     },
 
     /**
-     * @override
-     * @param {Object|undefined} [options={}]
-     * @param {boolean} [options.noAutomaticCreate=false]
+     *@override
+     *@param{Object|undefined}[options={}]
+     *@param{boolean}[options.noAutomaticCreate=false]
      */
-    activate: function (options) {
-        if (!this.activeActions.create || this.isReadonly || !this.$el.is(":visible")) {
-            return false;
+    activate:function(options){
+        if(!this.activeActions.create||this.isReadonly||!this.$el.is(":visible")){
+            returnfalse;
         }
-        if (this.view.type === 'kanban') {
+        if(this.view.type==='kanban'){
             this.$buttons.find(".o-kanban-button-new").focus();
         }
-        if (this.view.arch.tag === 'tree') {
-            if (options && options.noAutomaticCreate) {
-                this.renderer.$('.o_field_x2many_list_row_add a:first').focus();
-            } else {
-                this.renderer.$('.o_field_x2many_list_row_add a:first').click();
+        if(this.view.arch.tag==='tree'){
+            if(options&&options.noAutomaticCreate){
+                this.renderer.$('.o_field_x2many_list_row_adda:first').focus();
+            }else{
+                this.renderer.$('.o_field_x2many_list_row_adda:first').click();
             }
         }
-        return true;
+        returntrue;
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {Object} record
+     *@private
+     *@param{Object}record
      */
-    _computeAvailableActions: function (record) {
-        const evalContext = record.evalContext;
-        this.canCreate = 'create' in this.nodeOptions ?
-            new Domain(this.nodeOptions.create, evalContext).compute(evalContext) :
+    _computeAvailableActions:function(record){
+        constevalContext=record.evalContext;
+        this.canCreate='create'inthis.nodeOptions?
+            newDomain(this.nodeOptions.create,evalContext).compute(evalContext):
             true;
-        this.canDelete = 'delete' in this.nodeOptions ?
-            new Domain(this.nodeOptions.delete, evalContext).compute(evalContext) :
+        this.canDelete='delete'inthis.nodeOptions?
+            newDomain(this.nodeOptions.delete,evalContext).compute(evalContext):
             true;
-        this.canLink = 'link' in this.nodeOptions ?
-            new Domain(this.nodeOptions.link, evalContext).compute(evalContext) :
+        this.canLink='link'inthis.nodeOptions?
+            newDomain(this.nodeOptions.link,evalContext).compute(evalContext):
             true;
-        this.canUnlink = 'unlink' in this.nodeOptions ?
-            new Domain(this.nodeOptions.unlink, evalContext).compute(evalContext) :
+        this.canUnlink='unlink'inthis.nodeOptions?
+            newDomain(this.nodeOptions.unlink,evalContext).compute(evalContext):
             true;
     },
     /**
-     * Evaluates the 'column_invisible' modifier for the parent record.
+     *Evaluatesthe'column_invisible'modifierfortheparentrecord.
      *
-     * @return {Object} Object containing fieldName as key and the evaluated
-     *                         column_invisible modifier
+     *@return{Object}ObjectcontainingfieldNameaskeyandtheevaluated
+     *                        column_invisiblemodifier
      */
-    _evalColumnInvisibleFields: function () {
-        var self = this;
-        return _.mapObject(this.columnInvisibleFields, function (domains) {
-            return self.record.evalModifiers({
-                column_invisible: domains,
+    _evalColumnInvisibleFields:function(){
+        varself=this;
+        return_.mapObject(this.columnInvisibleFields,function(domains){
+            returnself.record.evalModifiers({
+                column_invisible:domains,
              }).column_invisible;
         });
     },
     /**
-     * Returns qweb context to render buttons.
+     *Returnsqwebcontexttorenderbuttons.
      *
-     * @private
-     * @returns {Object}
+     *@private
+     *@returns{Object}
      */
-    _getButtonsRenderingContext() {
-        return {
-            btnClass: 'btn-secondary',
-            create_text: this.nodeOptions.create_text,
+    _getButtonsRenderingContext(){
+        return{
+            btnClass:'btn-secondary',
+            create_text:this.nodeOptions.create_text,
         };
     },
     /**
-     * Computes the default renderer to use depending on the view type.
-     * We create this as a method so we can override it if we want to use
-     * another renderer instead (eg. section_and_note_one2many).
+     *Computesthedefaultrenderertousedependingontheviewtype.
+     *Wecreatethisasamethodsowecanoverrideitifwewanttouse
+     *anotherrendererinstead(eg.section_and_note_one2many).
      *
-     * @private
-     * @returns {Object} The renderer to use
+     *@private
+     *@returns{Object}Therenderertouse
      */
-    _getRenderer: function () {
-        if (this.view.arch.tag === 'tree') {
-            return ListRenderer;
+    _getRenderer:function(){
+        if(this.view.arch.tag==='tree'){
+            returnListRenderer;
         }
-        if (this.view.arch.tag === 'kanban') {
-            return KanbanRenderer;
+        if(this.view.arch.tag==='kanban'){
+            returnKanbanRenderer;
         }
     },
     /**
-     * @private
-     * @returns {boolean} true iff the list should contain a 'create' line.
+     *@private
+     *@returns{boolean}trueiffthelistshouldcontaina'create'line.
      */
-    _hasCreateLine: function () {
-        return !this.isReadonly && (
-            (!this.isMany2Many && this.activeActions.create && this.canCreate) ||
-            (this.isMany2Many && this.canLink)
+    _hasCreateLine:function(){
+        return!this.isReadonly&&(
+            (!this.isMany2Many&&this.activeActions.create&&this.canCreate)||
+            (this.isMany2Many&&this.canLink)
         );
     },
     /**
-     * @private
-     * @returns {boolean} true iff the list should add a trash icon on each row.
+     *@private
+     *@returns{boolean}trueiffthelistshouldaddatrashicononeachrow.
      */
-    _hasTrashIcon: function () {
-        return !this.isReadonly && (
-            (!this.isMany2Many && this.activeActions.delete && this.canDelete) ||
-            (this.isMany2Many && this.canUnlink)
+    _hasTrashIcon:function(){
+        return!this.isReadonly&&(
+            (!this.isMany2Many&&this.activeActions.delete&&this.canDelete)||
+            (this.isMany2Many&&this.canUnlink)
         );
     },
     /**
-     * Instanciates or updates the adequate renderer.
+     *Instanciatesorupdatestheadequaterenderer.
      *
-     * @override
-     * @private
-     * @returns {Promise|undefined}
+     *@override
+     *@private
+     *@returns{Promise|undefined}
      */
-    _render: function () {
-        var self = this;
-        if (!this.view) {
-            return this._super();
+    _render:function(){
+        varself=this;
+        if(!this.view){
+            returnthis._super();
         }
 
-        if (this.renderer) {
-            this.currentColInvisibleFields = this._evalColumnInvisibleFields();
-            return this.renderer.updateState(this.value, {
-                addCreateLine: this._hasCreateLine(),
-                addTrashIcon: this._hasTrashIcon(),
-                columnInvisibleFields: this.currentColInvisibleFields,
-                keepWidths: true,
-            }).then(() => {
-                return this._updateControlPanel({ size: this.value.count });
+        if(this.renderer){
+            this.currentColInvisibleFields=this._evalColumnInvisibleFields();
+            returnthis.renderer.updateState(this.value,{
+                addCreateLine:this._hasCreateLine(),
+                addTrashIcon:this._hasTrashIcon(),
+                columnInvisibleFields:this.currentColInvisibleFields,
+                keepWidths:true,
+            }).then(()=>{
+                returnthis._updateControlPanel({size:this.value.count});
             });
         }
-        var arch = this.view.arch;
-        var viewType;
-        var rendererParams = {
-            arch: arch,
+        vararch=this.view.arch;
+        varviewType;
+        varrendererParams={
+            arch:arch,
         };
 
-        if (arch.tag === 'tree') {
-            viewType = 'list';
-            this.currentColInvisibleFields = this._evalColumnInvisibleFields();
-            _.extend(rendererParams, {
-                editable: this.mode === 'edit' && arch.attrs.editable,
-                addCreateLine: this._hasCreateLine(),
-                addTrashIcon: this._hasTrashIcon(),
-                isMany2Many: this.isMany2Many,
-                columnInvisibleFields: this.currentColInvisibleFields,
+        if(arch.tag==='tree'){
+            viewType='list';
+            this.currentColInvisibleFields=this._evalColumnInvisibleFields();
+            _.extend(rendererParams,{
+                editable:this.mode==='edit'&&arch.attrs.editable,
+                addCreateLine:this._hasCreateLine(),
+                addTrashIcon:this._hasTrashIcon(),
+                isMany2Many:this.isMany2Many,
+                columnInvisibleFields:this.currentColInvisibleFields,
             });
         }
 
-        if (arch.tag === 'kanban') {
-            viewType = 'kanban';
-            var record_options = {
-                editable: false,
-                deletable: false,
-                read_only_mode: this.isReadonly,
+        if(arch.tag==='kanban'){
+            viewType='kanban';
+            varrecord_options={
+                editable:false,
+                deletable:false,
+                read_only_mode:this.isReadonly,
             };
-            _.extend(rendererParams, {
-                record_options: record_options,
-                readOnlyMode: this.isReadonly,
+            _.extend(rendererParams,{
+                record_options:record_options,
+                readOnlyMode:this.isReadonly,
             });
         }
 
-        _.extend(rendererParams, {
-            viewType: viewType,
+        _.extend(rendererParams,{
+            viewType:viewType,
         });
-        var Renderer = this._getRenderer();
-        this.renderer = new Renderer(this, this.value, rendererParams);
+        varRenderer=this._getRenderer();
+        this.renderer=newRenderer(this,this.value,rendererParams);
 
-        this.$el.addClass('o_field_x2many o_field_x2many_' + viewType);
-        if (this.renderer) {
-            return this.renderer.appendTo(document.createDocumentFragment()).then(function () {
-                dom.append(self.$el, self.renderer.$el, {
-                    in_DOM: self.isInDOM,
-                    callbacks: [{widget: self.renderer}],
+        this.$el.addClass('o_field_x2manyo_field_x2many_'+viewType);
+        if(this.renderer){
+            returnthis.renderer.appendTo(document.createDocumentFragment()).then(function(){
+                dom.append(self.$el,self.renderer.$el,{
+                    in_DOM:self.isInDOM,
+                    callbacks:[{widget:self.renderer}],
                 });
             });
-        } else {
-            return this._super();
+        }else{
+            returnthis._super();
         }
     },
     /**
-     * Renders the buttons and sets this.$buttons.
+     *Rendersthebuttonsandsetsthis.$buttons.
      *
-     * @private
+     *@private
      */
-    _renderButtons: function () {
-        if (!this.isReadonly && this.view.arch.tag === 'kanban') {
-            const renderingContext = this._getButtonsRenderingContext();
-            this.$buttons = $(qweb.render('KanbanView.buttons', renderingContext));
-            this.$buttons.on('click', 'button.o-kanban-button-new', this._onAddRecord.bind(this));
+    _renderButtons:function(){
+        if(!this.isReadonly&&this.view.arch.tag==='kanban'){
+            constrenderingContext=this._getButtonsRenderingContext();
+            this.$buttons=$(qweb.render('KanbanView.buttons',renderingContext));
+            this.$buttons.on('click','button.o-kanban-button-new',this._onAddRecord.bind(this));
         }
     },
     /**
-     * Saves the line associated to the given recordID. If the line is valid,
-     * it only has to be switched to readonly mode as all the line changes have
-     * already been notified to the model so that they can be saved in db if the
-     * parent view is actually saved. If the line is not valid, the line is to
-     * be discarded if the user agrees (this behavior is not a list editable
-     * one but a x2m one as it is made to replace the "discard" button which
-     * exists for list editable views).
+     *SavesthelineassociatedtothegivenrecordID.Ifthelineisvalid,
+     *itonlyhastobeswitchedtoreadonlymodeasallthelinechangeshave
+     *alreadybeennotifiedtothemodelsothattheycanbesavedindbifthe
+     *parentviewisactuallysaved.Ifthelineisnotvalid,thelineisto
+     *bediscardediftheuseragrees(thisbehaviorisnotalisteditable
+     *onebutax2moneasitismadetoreplacethe"discard"buttonwhich
+     *existsforlisteditableviews).
      *
-     * @private
-     * @param {string} recordID
-     * @returns {Promise} resolved if the line was properly saved or discarded.
-     *                     rejected if the line could not be saved and the user
-     *                     did not agree to discard.
+     *@private
+     *@param{string}recordID
+     *@returns{Promise}resolvedifthelinewasproperlysavedordiscarded.
+     *                    rejectedifthelinecouldnotbesavedandtheuser
+     *                    didnotagreetodiscard.
      */
-    _saveLine: function (recordID) {
-        var self = this;
-        return new Promise(function (resolve, reject) {
-            var fieldNames = self.renderer.canBeSaved(recordID);
-            if (fieldNames.length) {
-                self.trigger_up('discard_changes', {
-                    recordID: recordID,
-                    onSuccess: resolve,
-                    onFailure: reject,
+    _saveLine:function(recordID){
+        varself=this;
+        returnnewPromise(function(resolve,reject){
+            varfieldNames=self.renderer.canBeSaved(recordID);
+            if(fieldNames.length){
+                self.trigger_up('discard_changes',{
+                    recordID:recordID,
+                    onSuccess:resolve,
+                    onFailure:reject,
                 });
-            } else {
-                self.renderer.setRowMode(recordID, 'readonly').then(resolve);
+            }else{
+                self.renderer.setRowMode(recordID,'readonly').then(resolve);
             }
-        }).then(async function () {
-            self._updateControlPanel({ size: self.value.count });
-            var newEval = self._evalColumnInvisibleFields();
-            if (!_.isEqual(self.currentColInvisibleFields, newEval)) {
-                self.currentColInvisibleFields = newEval;
-                self.renderer.updateState(self.value, {
-                    columnInvisibleFields: self.currentColInvisibleFields,
+        }).then(asyncfunction(){
+            self._updateControlPanel({size:self.value.count});
+            varnewEval=self._evalColumnInvisibleFields();
+            if(!_.isEqual(self.currentColInvisibleFields,newEval)){
+                self.currentColInvisibleFields=newEval;
+                self.renderer.updateState(self.value,{
+                    columnInvisibleFields:self.currentColInvisibleFields,
                 });
             }
         });
     },
     /**
-     * Re-renders buttons and updates the control panel. This method is called
-     * when the widget is reset, as the available buttons might have changed.
-     * The only mutable element in X2Many fields will be the pager.
+     *Re-rendersbuttonsandupdatesthecontrolpanel.Thismethodiscalled
+     *whenthewidgetisreset,astheavailablebuttonsmighthavechanged.
+     *TheonlymutableelementinX2Manyfieldswillbethepager.
      *
-     * @private
+     *@private
      */
-    _updateControlPanel: function (pagingState) {
-        if (this._controlPanelWrapper) {
+    _updateControlPanel:function(pagingState){
+        if(this._controlPanelWrapper){
             this._renderButtons();
-            const pagerProps = Object.assign(this.pagingState, pagingState, {
-                // sometimes, we temporarily want to increase the pager limit
-                // (for instance, when we add a new record on a page that already
-                // contains the maximum number of records)
-                limit: Math.max(this.value.limit, this.value.data.length),
+            constpagerProps=Object.assign(this.pagingState,pagingState,{
+                //sometimes,wetemporarilywanttoincreasethepagerlimit
+                //(forinstance,whenweaddanewrecordonapagethatalready
+                //containsthemaximumnumberofrecords)
+                limit:Math.max(this.value.limit,this.value.data.length),
             });
-            const newProps = {
-                cp_content: { $buttons: this.$buttons },
-                pager: pagerProps,
+            constnewProps={
+                cp_content:{$buttons:this.$buttons},
+                pager:pagerProps,
             };
-            return this._controlPanelWrapper.update(newProps);
+            returnthis._controlPanelWrapper.update(newProps);
         }
     },
     /**
-     * Parses the 'columnInvisibleFields' attribute to search for the domains
-     * containing the key 'parent'. If there are such domains, the string
-     * 'parent.field' is replaced with 'field' in order to be evaluated
-     * with the right field name in the parent context.
+     *Parsesthe'columnInvisibleFields'attributetosearchforthedomains
+     *containingthekey'parent'.Iftherearesuchdomains,thestring
+     *'parent.field'isreplacedwith'field'inordertobeevaluated
+     *withtherightfieldnameintheparentcontext.
      *
-     * @private
+     *@private
      */
-    _processColumnInvisibleFields: function () {
-        var columnInvisibleFields = {};
-        _.each(this.attrs.columnInvisibleFields, function (domains, fieldName) {
-            if (_.isArray(domains)) {
-                columnInvisibleFields[fieldName] = _.map(domains, function (domain) {
-                    // We check if the domain is an array to avoid processing
-                    // the '|' and '&' cases
-                    if (_.isArray(domain)) {
-                        return [domain[0].split('.')[1]].concat(domain.slice(1));
+    _processColumnInvisibleFields:function(){
+        varcolumnInvisibleFields={};
+        _.each(this.attrs.columnInvisibleFields,function(domains,fieldName){
+            if(_.isArray(domains)){
+                columnInvisibleFields[fieldName]=_.map(domains,function(domain){
+                    //Wecheckifthedomainisanarraytoavoidprocessing
+                    //the'|'and'&'cases
+                    if(_.isArray(domain)){
+                        return[domain[0].split('.')[1]].concat(domain.slice(1));
                     }
-                    return domain;
+                    returndomain;
                 });
             }
         });
-        this.columnInvisibleFields = columnInvisibleFields;
+        this.columnInvisibleFields=columnInvisibleFields;
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when the user clicks on the 'Add a line' link (list case) or the
-     * 'Add' button (kanban case).
+     *Calledwhentheuserclicksonthe'Addaline'link(listcase)orthe
+     *'Add'button(kanbancase).
      *
-     * @abstract
-     * @private
+     *@abstract
+     *@private
      */
-    _onAddRecord: function () {
-        // to implement
+    _onAddRecord:function(){
+        //toimplement
     },
     /**
-     * Removes the given record from the relation.
-     * Stops the propagation of the event to prevent it from being handled again
-     * by the parent controller.
+     *Removesthegivenrecordfromtherelation.
+     *Stopsthepropagationoftheeventtopreventitfrombeinghandledagain
+     *bytheparentcontroller.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onRemoveRecord: function (ev) {
+    _onRemoveRecord:function(ev){
         ev.stopPropagation();
-        var operation = this.isMany2Many ? 'FORGET' : 'DELETE';
+        varoperation=this.isMany2Many?'FORGET':'DELETE';
         this._setValue({
-            operation: operation,
-            ids: [ev.data.id],
+            operation:operation,
+            ids:[ev.data.id],
         });
     },
     /**
-     * When the discard_change event go through this field, we can just decorate
-     * the data with the name of the field.  The origin field ignore this
-     * information (it is a subfield in a o2m), and the controller will need to
-     * know which field needs to be handled.
+     *Whenthediscard_changeeventgothroughthisfield,wecanjustdecorate
+     *thedatawiththenameofthefield. Theoriginfieldignorethis
+     *information(itisasubfieldinao2m),andthecontrollerwillneedto
+     *knowwhichfieldneedstobehandled.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onDiscardChanges: function (ev) {
-        if (ev.target !== this) {
+    _onDiscardChanges:function(ev){
+        if(ev.target!==this){
             ev.stopPropagation();
-            this.trigger_up('discard_changes', _.extend({}, ev.data, {fieldName: this.name}));
+            this.trigger_up('discard_changes',_.extend({},ev.data,{fieldName:this.name}));
         }
     },
     /**
-     * Called when the renderer asks to edit a line, in that case simply tells
-     * him back to toggle the mode of this row.
+     *Calledwhentherendereraskstoeditaline,inthatcasesimplytells
+     *himbacktotogglethemodeofthisrow.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onEditLine: function (ev) {
+    _onEditLine:function(ev){
         ev.stopPropagation();
-        this.trigger_up('edited_list', { id: this.value.id });
-        this.renderer.setRowMode(ev.data.recordId, 'edit')
+        this.trigger_up('edited_list',{id:this.value.id});
+        this.renderer.setRowMode(ev.data.recordId,'edit')
             .then(ev.data.onSuccess);
     },
     /**
-     * Updates the given record with the changes.
+     *Updatesthegivenrecordwiththechanges.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onFieldChanged: function (ev) {
-        if (ev.target === this) {
-            ev.initialEvent = this.lastInitialEvent;
+    _onFieldChanged:function(ev){
+        if(ev.target===this){
+            ev.initialEvent=this.lastInitialEvent;
             return;
         }
         ev.stopPropagation();
-        // changes occured in an editable list
-        var changes = ev.data.changes;
-        // save the initial event triggering the field_changed, as it will be
-        // necessary when the field triggering this event will be reset (to
-        // prevent it from re-rendering itself, formatting its value, loosing
-        // the focus... while still being edited)
-        this.lastInitialEvent = undefined;
-        if (Object.keys(changes).length) {
-            this.lastInitialEvent = ev;
+        //changesoccuredinaneditablelist
+        varchanges=ev.data.changes;
+        //savetheinitialeventtriggeringthefield_changed,asitwillbe
+        //necessarywhenthefieldtriggeringthiseventwillbereset(to
+        //preventitfromre-renderingitself,formattingitsvalue,loosing
+        //thefocus...whilestillbeingedited)
+        this.lastInitialEvent=undefined;
+        if(Object.keys(changes).length){
+            this.lastInitialEvent=ev;
             this._setValue({
-                operation: 'UPDATE',
-                id: ev.data.dataPointID,
-                data: changes,
-            }).then(function () {
-                if (ev.data.onSuccess) {
+                operation:'UPDATE',
+                id:ev.data.dataPointID,
+                data:changes,
+            }).then(function(){
+                if(ev.data.onSuccess){
                     ev.data.onSuccess();
                 }
-            }).guardedCatch(function (reason) {
-                if (ev.data.onFailure) {
+            }).guardedCatch(function(reason){
+                if(ev.data.onFailure){
                     ev.data.onFailure(reason);
                 }
             });
         }
     },
     /**
-     * Override to handle the navigation inside editable list controls
+     *Overridetohandlethenavigationinsideeditablelistcontrols
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onNavigationMove: function (ev) {
-        if (this.view.arch.tag === 'tree') {
-            var $curControl = this.renderer.$('.o_field_x2many_list_row_add a:focus');
-            if ($curControl.length) {
-                var $nextControl;
-                if (ev.data.direction === 'right') {
-                    $nextControl = $curControl.next('a');
-                } else if (ev.data.direction === 'left') {
-                    $nextControl = $curControl.prev('a');
+    _onNavigationMove:function(ev){
+        if(this.view.arch.tag==='tree'){
+            var$curControl=this.renderer.$('.o_field_x2many_list_row_adda:focus');
+            if($curControl.length){
+                var$nextControl;
+                if(ev.data.direction==='right'){
+                    $nextControl=$curControl.next('a');
+                }elseif(ev.data.direction==='left'){
+                    $nextControl=$curControl.prev('a');
                 }
-                if ($nextControl && $nextControl.length) {
+                if($nextControl&&$nextControl.length){
                     ev.stopPropagation();
                     $nextControl.focus();
                     return;
                 }
             }
         }
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
     /**
-     * Called when the user clicks on a relational record.
+     *Calledwhentheuserclicksonarelationalrecord.
      *
-     * @abstract
-     * @private
+     *@abstract
+     *@private
      */
-    _onOpenRecord: function () {
-        // to implement
+    _onOpenRecord:function(){
+        //toimplement
     },
     /**
-     * We re-render the pager immediately with the new event values to allow
-     * it to request another pager change while another one is still ongoing.
-     * @see field_manager_mixin for concurrency handling.
+     *Were-renderthepagerimmediatelywiththeneweventvaluestoallow
+     *ittorequestanotherpagerchangewhileanotheroneisstillongoing.
+     *@seefield_manager_mixinforconcurrencyhandling.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onPagerChanged: function (ev) {
+    _onPagerChanged:function(ev){
         ev.stopPropagation();
-        const { currentMinimum, limit } = ev.data;
-        this._updateControlPanel({ currentMinimum, limit });
-        this.trigger_up('load', {
-            id: this.value.id,
+        const{currentMinimum,limit}=ev.data;
+        this._updateControlPanel({currentMinimum,limit});
+        this.trigger_up('load',{
+            id:this.value.id,
             limit,
-            offset: currentMinimum - 1,
-            on_success: value => {
-                this.value = value;
-                this.pagingState.limit = value.limit;
-                this.pagingState.size = value.count;
+            offset:currentMinimum-1,
+            on_success:value=>{
+                this.value=value;
+                this.pagingState.limit=value.limit;
+                this.pagingState.size=value.count;
                 this._render();
             },
         });
     },
     /**
-     * Called when the renderer ask to save a line (the user tries to leave it)
-     * -> Nothing is to "save" here, the model was already notified of the line
-     * changes; if the row could be saved, we make the row readonly. Otherwise,
-     * we trigger a new event for the view to tell it to discard the changes
-     * made to that row.
-     * Note that we do that in the controller mutex to ensure that the check on
-     * the row (whether or not it can be saved) is done once all potential
-     * onchange RPCs are done (those RPCs being executed in the same mutex).
-     * This particular handling is done in this handler, instead of in the
-     * _saveLine function directly, because _saveLine is also called from
-     * the controller (via commitChanges), and in this case, it is already
-     * executed in the mutex.
+     *Calledwhentherendererasktosavealine(theusertriestoleaveit)
+     *->Nothingisto"save"here,themodelwasalreadynotifiedoftheline
+     *changes;iftherowcouldbesaved,wemaketherowreadonly.Otherwise,
+     *wetriggeraneweventfortheviewtotellittodiscardthechanges
+     *madetothatrow.
+     *Notethatwedothatinthecontrollermutextoensurethatthecheckon
+     *therow(whetherornotitcanbesaved)isdoneonceallpotential
+     *onchangeRPCsaredone(thoseRPCsbeingexecutedinthesamemutex).
+     *Thisparticularhandlingisdoneinthishandler,insteadofinthe
+     *_saveLinefunctiondirectly,because_saveLineisalsocalledfrom
+     *thecontroller(viacommitChanges),andinthiscase,itisalready
+     *executedinthemutex.
      *
-     * @private
-     * @param {FlectraEvent} ev
-     * @param {string} ev.recordID
-     * @param {function} ev.onSuccess success callback (see '_saveLine')
-     * @param {function} ev.onFailure fail callback (see '_saveLine')
+     *@private
+     *@param{FlectraEvent}ev
+     *@param{string}ev.recordID
+     *@param{function}ev.onSuccesssuccesscallback(see'_saveLine')
+     *@param{function}ev.onFailurefailcallback(see'_saveLine')
      */
-    _onSaveLine: function (ev) {
-        var self = this;
+    _onSaveLine:function(ev){
+        varself=this;
         ev.stopPropagation();
-        this.renderer.commitChanges(ev.data.recordID).then(function () {
-            self.trigger_up('mutexify', {
-                action: function () {
-                    return self._saveLine(ev.data.recordID)
+        this.renderer.commitChanges(ev.data.recordID).then(function(){
+            self.trigger_up('mutexify',{
+                action:function(){
+                    returnself._saveLine(ev.data.recordID)
                         .then(ev.data.onSuccess)
                         .guardedCatch(ev.data.onFailure);
                 },
@@ -1701,392 +1701,392 @@ var FieldX2Many = AbstractField.extend(WidgetAdapterMixin, {
         });
     },
     /**
-     * Add necessary key parts for the basic controller to compute the local
-     * storage key. The event will be properly handled by the basic controller.
+     *Addnecessarykeypartsforthebasiccontrollertocomputethelocal
+     *storagekey.Theeventwillbeproperlyhandledbythebasiccontroller.
      *
-     * @param {FlectraEvent} ev
-     * @private
+     *@param{FlectraEvent}ev
+     *@private
      */
-    _onSaveOrLoadOptionalFields: function (ev) {
-        ev.data.keyParts.relationalField = this.name;
-        ev.data.keyParts.subViewId = this.view.view_id;
-        ev.data.keyParts.subViewType = this.view.type;
+    _onSaveOrLoadOptionalFields:function(ev){
+        ev.data.keyParts.relationalField=this.name;
+        ev.data.keyParts.subViewId=this.view.view_id;
+        ev.data.keyParts.subViewType=this.view.type;
     },
     /**
-     * Forces a resequencing of the records.
+     *Forcesaresequencingoftherecords.
      *
-     * @private
-     * @param {FlectraEvent} ev
-     * @param {string[]} ev.data.recordIds
-     * @param {integer} ev.data.offset
-     * @param {string} ev.data.handleField
+     *@private
+     *@param{FlectraEvent}ev
+     *@param{string[]}ev.data.recordIds
+     *@param{integer}ev.data.offset
+     *@param{string}ev.data.handleField
      */
-    _onResequenceRecords: function (ev) {
+    _onResequenceRecords:function(ev){
         ev.stopPropagation();
-        var self = this;
-        if (this.view.arch.tag === 'tree') {
-            this.trigger_up('edited_list', { id: this.value.id });
+        varself=this;
+        if(this.view.arch.tag==='tree'){
+            this.trigger_up('edited_list',{id:this.value.id});
         }
-        var handleField = ev.data.handleField;
-        var offset = ev.data.offset;
-        var recordIds = ev.data.recordIds.slice();
-        // trigger an update of all records but the last one with option
-        // 'notifyChanges' set to false, and once all those changes have been
-        // validated by the model, trigger the change on the last record
-        // (without the option, s.t. the potential onchange on parent record
-        // is triggered)
-        var recordId = recordIds.pop();
-        var proms = recordIds.map(function (recordId, index) {
-            var data = {};
-            data[handleField] = offset + index;
-            return self._setValue({
-                operation: 'UPDATE',
-                id: recordId,
-                data: data,
-            }, {
-                notifyChange: false,
+        varhandleField=ev.data.handleField;
+        varoffset=ev.data.offset;
+        varrecordIds=ev.data.recordIds.slice();
+        //triggeranupdateofallrecordsbutthelastonewithoption
+        //'notifyChanges'settofalse,andonceallthosechangeshavebeen
+        //validatedbythemodel,triggerthechangeonthelastrecord
+        //(withouttheoption,s.t.thepotentialonchangeonparentrecord
+        //istriggered)
+        varrecordId=recordIds.pop();
+        varproms=recordIds.map(function(recordId,index){
+            vardata={};
+            data[handleField]=offset+index;
+            returnself._setValue({
+                operation:'UPDATE',
+                id:recordId,
+                data:data,
+            },{
+                notifyChange:false,
             });
         });
-        Promise.all(proms).then(function () {
-            function always() {
-                if (self.view.arch.tag === 'tree') {
-                    self.trigger_up('toggle_column_order', {
-                        id: self.value.id,
-                        name: handleField,
+        Promise.all(proms).then(function(){
+            functionalways(){
+                if(self.view.arch.tag==='tree'){
+                    self.trigger_up('toggle_column_order',{
+                        id:self.value.id,
+                        name:handleField,
                     });
                 }
             }
-            var data = {};
-            data[handleField] = offset + recordIds.length;
+            vardata={};
+            data[handleField]=offset+recordIds.length;
             self._setValue({
-                operation: 'UPDATE',
-                id: recordId,
-                data: data,
+                operation:'UPDATE',
+                id:recordId,
+                data:data,
             }).then(always).guardedCatch(always);
         });
     },
     /**
-     * Adds field name information to the event, so that the view upstream is
-     * aware of which widgets it has to redraw.
+     *Addsfieldnameinformationtotheevent,sothattheviewupstreamis
+     *awareofwhichwidgetsithastoredraw.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onToggleColumnOrder: function (ev) {
-        ev.data.field = this.name;
+    _onToggleColumnOrder:function(ev){
+        ev.data.field=this.name;
     },
     /*
-    * Move to next widget.
+    *Movetonextwidget.
     *
-    * @private
+    *@private
     */
-    _onActiveNextWidget: function (e) {
+    _onActiveNextWidget:function(e){
         e.stopPropagation();
         this.renderer.unselectRow();
-        this.trigger_up('navigation_move', {
-            direction: e.data.direction || 'next',
+        this.trigger_up('navigation_move',{
+            direction:e.data.direction||'next',
         });
     },
 });
 
-var One2ManyKanbanRecord = KanbanRecord.extend({
+varOne2ManyKanbanRecord=KanbanRecord.extend({
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Apply same logic as in the ListRenderer: buttons with type="object"
-     * are disabled for no saved yet records, as calling the python method
-     * with no id would make no sense.
+     *ApplysamelogicasintheListRenderer:buttonswithtype="object"
+     *aredisabledfornosavedyetrecords,ascallingthepythonmethod
+     *withnoidwouldmakenosense.
      *
-     * To avoid to expose this logic inside all Kanban views, we define
-     * a specific KanbanRecord Class for the One2many case.
+     *ToavoidtoexposethislogicinsideallKanbanviews,wedefine
+     *aspecificKanbanRecordClassfortheOne2manycase.
      *
-     * This could be refactored to prevent from duplicating this logic in
-     * list and kanban views.
+     *Thiscouldberefactoredtopreventfromduplicatingthislogicin
+     *listandkanbanviews.
      *
-     * @private
+     *@private
      */
-    _postProcessObjectButtons: function () {
-        var self = this;
-        // if the res_id is defined, it's already correctly handled by the Kanban record global event click
-        if (!this.state.res_id) {
-            this.$('.oe_kanban_action[data-type=object]').each(function (index, button) {
-                var $button = $(button);
-                if ($button.attr('warn')) {
-                    $button.on('click', function (e) {
+    _postProcessObjectButtons:function(){
+        varself=this;
+        //iftheres_idisdefined,it'salreadycorrectlyhandledbytheKanbanrecordglobaleventclick
+        if(!this.state.res_id){
+            this.$('.oe_kanban_action[data-type=object]').each(function(index,button){
+                var$button=$(button);
+                if($button.attr('warn')){
+                    $button.on('click',function(e){
                         e.stopPropagation();
-                        self.do_warn(false, _t('Please click on the "save" button first'));
+                        self.do_warn(false,_t('Pleaseclickonthe"save"buttonfirst'));
                     });
-                } else {
-                    $button.attr('disabled', 'disabled');
+                }else{
+                    $button.attr('disabled','disabled');
                 }
             });
         }
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _render: function () {
-        var self = this;
-        return this._super.apply(this, arguments).then(function () {
+    _render:function(){
+        varself=this;
+        returnthis._super.apply(this,arguments).then(function(){
             self._postProcessObjectButtons();
         });
     },
 });
 
-var One2ManyKanbanRenderer = KanbanRenderer.extend({
-    config: _.extend({}, KanbanRenderer.prototype.config, {
-        KanbanRecord: One2ManyKanbanRecord,
+varOne2ManyKanbanRenderer=KanbanRenderer.extend({
+    config:_.extend({},KanbanRenderer.prototype.config,{
+        KanbanRecord:One2ManyKanbanRecord,
     }),
 });
 
-var FieldOne2Many = FieldX2Many.extend({
-    description: _lt("One2many"),
-    className: 'o_field_one2many',
-    supportedFieldTypes: ['one2many'],
+varFieldOne2Many=FieldX2Many.extend({
+    description:_lt("One2many"),
+    className:'o_field_one2many',
+    supportedFieldTypes:['one2many'],
 
     /**
-     * @override
+     *@override
      */
-    init: function () {
-        this._super.apply(this, arguments);
+    init:function(){
+        this._super.apply(this,arguments);
 
-        // boolean used to prevent concurrent record creation
-        this.creatingRecord = false;
+        //booleanusedtopreventconcurrentrecordcreation
+        this.creatingRecord=false;
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
     /**
-     * @override
-     * @param {Object} record
-     * @param {FlectraEvent} [ev] an event that triggered the reset action
-     * @returns {Promise}
+     *@override
+     *@param{Object}record
+     *@param{FlectraEvent}[ev]aneventthattriggeredtheresetaction
+     *@returns{Promise}
      */
-    reset: function (record, ev) {
-        var self = this;
-        return this._super.apply(this, arguments).then(() => {
-            if (ev && ev.target === self && ev.data.changes && self.view.arch.tag === 'tree') {
-                if (ev.data.changes[self.name] && ev.data.changes[self.name].operation === 'CREATE') {
-                    var index = 0;
-                    if (self.editable !== 'top') {
-                        index = self.value.data.length - 1;
+    reset:function(record,ev){
+        varself=this;
+        returnthis._super.apply(this,arguments).then(()=>{
+            if(ev&&ev.target===self&&ev.data.changes&&self.view.arch.tag==='tree'){
+                if(ev.data.changes[self.name]&&ev.data.changes[self.name].operation==='CREATE'){
+                    varindex=0;
+                    if(self.editable!=='top'){
+                        index=self.value.data.length-1;
                     }
-                    var newID = self.value.data[index].id;
-                    return self.renderer.editRecord(newID);
+                    varnewID=self.value.data[index].id;
+                    returnself.renderer.editRecord(newID);
                 }
             }
         });
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _getButtonsRenderingContext() {
-        const renderingContext = this._super(...arguments);
-        renderingContext.noCreate = !this.canCreate;
-        return renderingContext;
+    _getButtonsRenderingContext(){
+        constrenderingContext=this._super(...arguments);
+        renderingContext.noCreate=!this.canCreate;
+        returnrenderingContext;
     },
     /**
-      * @override
-      * @private
+      *@override
+      *@private
       */
-    _getRenderer: function () {
-        if (this.view.arch.tag === 'kanban') {
-            return One2ManyKanbanRenderer;
+    _getRenderer:function(){
+        if(this.view.arch.tag==='kanban'){
+            returnOne2ManyKanbanRenderer;
         }
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * Overrides to only render the buttons if the 'create' action is available.
+     *Overridestoonlyrenderthebuttonsifthe'create'actionisavailable.
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _renderButtons: function () {
-        if (this.activeActions.create) {
-            return this._super(...arguments);
+    _renderButtons:function(){
+        if(this.activeActions.create){
+            returnthis._super(...arguments);
         }
     },
     /**
-     * Trigger the event to open a dialog containing the corresponding Form view for the current record.
-     * If the options 'no_open' is specified, the dialog will not be opened.
+     *TriggertheeventtoopenadialogcontainingthecorrespondingFormviewforthecurrentrecord.
+     *Iftheoptions'no_open'isspecified,thedialogwillnotbeopened.
      *
-     * @private
-     * @param {Object} params
-     * @param {Object} [params.context] We allow additional context, this is
-     *   used for example to define default values when adding new lines to
-     *   a one2many with control/create tags.
+     *@private
+     *@param{Object}params
+     *@param{Object}[params.context]Weallowadditionalcontext,thisis
+     *  usedforexampletodefinedefaultvalueswhenaddingnewlinesto
+     *  aone2manywithcontrol/createtags.
      */
-    _openFormDialog: function (params) {
-        var context = this.record.getContext(_.extend({},
+    _openFormDialog:function(params){
+        varcontext=this.record.getContext(_.extend({},
             this.recordParams,
-            { additionalContext: params.context }
+            {additionalContext:params.context}
         ));
 
-        if (this.nodeOptions.no_open) {
+        if(this.nodeOptions.no_open){
             return;
         }
 
-        this.trigger_up('open_one2many_record', _.extend(params, {
-            domain: this.record.getDomain(this.recordParams),
-            context: context,
-            field: this.field,
-            fields_view: this.attrs.views && this.attrs.views.form,
-            parentID: this.value.id,
-            viewInfo: this.view,
-            deletable: this.activeActions.delete && params.deletable && this.canDelete,
+        this.trigger_up('open_one2many_record',_.extend(params,{
+            domain:this.record.getDomain(this.recordParams),
+            context:context,
+            field:this.field,
+            fields_view:this.attrs.views&&this.attrs.views.form,
+            parentID:this.value.id,
+            viewInfo:this.view,
+            deletable:this.activeActions.delete&&params.deletable&&this.canDelete,
         }));
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Opens a FormViewDialog to allow creating a new record for a one2many.
+     *OpensaFormViewDialogtoallowcreatinganewrecordforaone2many.
      *
-     * @override
-     * @private
-     * @param {FlectraEvent|MouseEvent} ev this event comes either from the 'Add
-     *   record' link in the list editable renderer, or from the 'Create' button
-     *   in the kanban view
-     * @param {Array} ev.data.context additional context for the added records,
-     *   if several contexts are provided, multiple records will be added
-     *   (form dialog will only use the context at index 0 if provided)
-     * @param {boolean} ev.data.forceEditable this is used to bypass the dialog opening
-     *   in case you want to add record(s) to a list
-     * @param {function} ev.data.onSuccess called when the records are correctly created
-     *   (not supported by form dialog)
-     * @param {boolean} ev.data.allowWarning defines if the records can be added
-     *   to the list even if warnings are triggered (e.g: stock warning for product availability)
+     *@override
+     *@private
+     *@param{FlectraEvent|MouseEvent}evthiseventcomeseitherfromthe'Add
+     *  record'linkinthelisteditablerenderer,orfromthe'Create'button
+     *  inthekanbanview
+     *@param{Array}ev.data.contextadditionalcontextfortheaddedrecords,
+     *  ifseveralcontextsareprovided,multiplerecordswillbeadded
+     *  (formdialogwillonlyusethecontextatindex0ifprovided)
+     *@param{boolean}ev.data.forceEditablethisisusedtobypassthedialogopening
+     *  incaseyouwanttoaddrecord(s)toalist
+     *@param{function}ev.data.onSuccesscalledwhentherecordsarecorrectlycreated
+     *  (notsupportedbyformdialog)
+     *@param{boolean}ev.data.allowWarningdefinesiftherecordscanbeadded
+     *  tothelistevenifwarningsaretriggered(e.g:stockwarningforproductavailability)
      */
-    _onAddRecord: function (ev) {
-        var self = this;
-        var data = ev.data || {};
+    _onAddRecord:function(ev){
+        varself=this;
+        vardata=ev.data||{};
 
-        // we don't want interference with the components upstream.
+        //wedon'twantinterferencewiththecomponentsupstream.
         ev.stopPropagation();
 
-        if (this.editable || data.forceEditable) {
-            if (!this.activeActions.create) {
-                if (data.onFail) {
+        if(this.editable||data.forceEditable){
+            if(!this.activeActions.create){
+                if(data.onFail){
                     data.onFail();
                 }
-            } else if (!this.creatingRecord) {
-                this.creatingRecord = true;
-                this.trigger_up('edited_list', { id: this.value.id });
+            }elseif(!this.creatingRecord){
+                this.creatingRecord=true;
+                this.trigger_up('edited_list',{id:this.value.id});
                 this._setValue({
-                    operation: 'CREATE',
-                    position: this.editable || data.forceEditable,
-                    context: data.context,
-                }, {
-                    allowWarning: data.allowWarning
-                }).then(function () {
-                    self.creatingRecord = false;
-                }).then(function (){
-                    if (data.onSuccess){
+                    operation:'CREATE',
+                    position:this.editable||data.forceEditable,
+                    context:data.context,
+                },{
+                    allowWarning:data.allowWarning
+                }).then(function(){
+                    self.creatingRecord=false;
+                }).then(function(){
+                    if(data.onSuccess){
                         data.onSuccess();
                     }
-                }).guardedCatch(function() {
-                    self.creatingRecord = false;
+                }).guardedCatch(function(){
+                    self.creatingRecord=false;
                 })
                 ;
             }
-        } else {
+        }else{
             this._openFormDialog({
-                context: data.context && data.context[0],
-                on_saved: function (record) {
-                    self._setValue({ operation: 'ADD', id: record.id });
+                context:data.context&&data.context[0],
+                on_saved:function(record){
+                    self._setValue({operation:'ADD',id:record.id});
                 },
             });
         }
     },
     /**
-     * Overrides the handler to set a specific 'on_save' callback as the o2m
-     * sub-records aren't saved directly when the user clicks on 'Save' in the
-     * dialog. Instead, the relational record is changed in the local data, and
-     * this change is saved in DB when the user clicks on 'Save' in the main
-     * form view.
+     *Overridesthehandlertosetaspecific'on_save'callbackastheo2m
+     *sub-recordsaren'tsaveddirectlywhentheuserclickson'Save'inthe
+     *dialog.Instead,therelationalrecordischangedinthelocaldata,and
+     *thischangeissavedinDBwhentheuserclickson'Save'inthemain
+     *formview.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onOpenRecord: function (ev) {
-        // we don't want interference with the components upstream.
-        var self = this;
+    _onOpenRecord:function(ev){
+        //wedon'twantinterferencewiththecomponentsupstream.
+        varself=this;
         ev.stopPropagation();
 
-        var id = ev.data.id;
-        var onSaved = function (record) {
-            if (_.some(self.value.data, {id: record.id})) {
-                // the record already exists in the relation, so trigger an
-                // empty 'UPDATE' operation when the user clicks on 'Save' in
-                // the dialog, to notify the main record that a subrecord of
-                // this relational field has changed (those changes will be
-                // already stored on that subrecord, thanks to the 'Save').
-                self._setValue({ operation: 'UPDATE', id: record.id });
-            } else {
-                // the record isn't in the relation yet, so add it ; this can
-                // happen if the user clicks on 'Save & New' in the dialog (the
-                // opened record will be updated, and other records will be
-                // created)
-                self._setValue({ operation: 'ADD', id: record.id });
+        varid=ev.data.id;
+        varonSaved=function(record){
+            if(_.some(self.value.data,{id:record.id})){
+                //therecordalreadyexistsintherelation,sotriggeran
+                //empty'UPDATE'operationwhentheuserclickson'Save'in
+                //thedialog,tonotifythemainrecordthatasubrecordof
+                //thisrelationalfieldhaschanged(thosechangeswillbe
+                //alreadystoredonthatsubrecord,thankstothe'Save').
+                self._setValue({operation:'UPDATE',id:record.id});
+            }else{
+                //therecordisn'tintherelationyet,soaddit;thiscan
+                //happeniftheuserclickson'Save&New'inthedialog(the
+                //openedrecordwillbeupdated,andotherrecordswillbe
+                //created)
+                self._setValue({operation:'ADD',id:record.id});
             }
         };
         this._openFormDialog({
-            id: id,
-            on_saved: onSaved,
-            on_remove: function () {
-                self._setValue({operation: 'DELETE', ids: [id]});
+            id:id,
+            on_saved:onSaved,
+            on_remove:function(){
+                self._setValue({operation:'DELETE',ids:[id]});
             },
-            deletable: this.activeActions.delete && this.view.arch.tag !== 'tree' && this.canDelete,
-            readonly: this.mode === 'readonly',
+            deletable:this.activeActions.delete&&this.view.arch.tag!=='tree'&&this.canDelete,
+            readonly:this.mode==='readonly',
         });
     },
 });
 
-var FieldMany2Many = FieldX2Many.extend({
-    description: _lt("Many2many"),
-    className: 'o_field_many2many',
-    supportedFieldTypes: ['many2many'],
+varFieldMany2Many=FieldX2Many.extend({
+    description:_lt("Many2many"),
+    className:'o_field_many2many',
+    supportedFieldTypes:['many2many'],
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
     /**
-     * Opens a SelectCreateDialog
+     *OpensaSelectCreateDialog
      */
-    onAddRecordOpenDialog: function () {
-        var self = this;
-        var domain = this.record.getDomain({fieldName: this.name});
+    onAddRecordOpenDialog:function(){
+        varself=this;
+        vardomain=this.record.getDomain({fieldName:this.name});
 
-        new dialogs.SelectCreateDialog(this, {
-            res_model: this.field.relation,
-            domain: domain.concat(["!", ["id", "in", this.value.res_ids]]),
-            context: this.record.getContext(this.recordParams),
-            title: _t("Add: ") + this.string,
-            no_create: this.nodeOptions.no_create || !this.activeActions.create || !this.canCreate,
-            fields_view: this.attrs.views.form,
-            kanban_view_ref: this.attrs.kanban_view_ref,
-            on_selected: function (records) {
-                var resIDs = _.pluck(records, 'id');
-                var newIDs = _.difference(resIDs, self.value.res_ids);
-                if (newIDs.length) {
-                    var values = _.map(newIDs, function (id) {
-                        return {id: id};
+        newdialogs.SelectCreateDialog(this,{
+            res_model:this.field.relation,
+            domain:domain.concat(["!",["id","in",this.value.res_ids]]),
+            context:this.record.getContext(this.recordParams),
+            title:_t("Add:")+this.string,
+            no_create:this.nodeOptions.no_create||!this.activeActions.create||!this.canCreate,
+            fields_view:this.attrs.views.form,
+            kanban_view_ref:this.attrs.kanban_view_ref,
+            on_selected:function(records){
+                varresIDs=_.pluck(records,'id');
+                varnewIDs=_.difference(resIDs,self.value.res_ids);
+                if(newIDs.length){
+                    varvalues=_.map(newIDs,function(id){
+                        return{id:id};
                     });
                     self._setValue({
-                        operation: 'ADD_M2M',
-                        ids: values,
+                        operation:'ADD_M2M',
+                        ids:values,
                     });
                 }
             }
@@ -2094,226 +2094,226 @@ var FieldMany2Many = FieldX2Many.extend({
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _getButtonsRenderingContext() {
-        const renderingContext = this._super(...arguments);
-        renderingContext.noCreate = !this.canLink;
-        return renderingContext;
+    _getButtonsRenderingContext(){
+        constrenderingContext=this._super(...arguments);
+        renderingContext.noCreate=!this.canLink;
+        returnrenderingContext;
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Opens a SelectCreateDialog.
+     *OpensaSelectCreateDialog.
      *
-     * @override
-     * @private
-     * @param {FlectraEvent|MouseEvent} ev this event comes either from the 'Add
-     *   record' link in the list editable renderer, or from the 'Create' button
-     *   in the kanban view
+     *@override
+     *@private
+     *@param{FlectraEvent|MouseEvent}evthiseventcomeseitherfromthe'Add
+     *  record'linkinthelisteditablerenderer,orfromthe'Create'button
+     *  inthekanbanview
      */
-    _onAddRecord: function (ev) {
+    _onAddRecord:function(ev){
         ev.stopPropagation();
         this.onAddRecordOpenDialog();
     },
 
     /**
-     * Intercepts the 'open_record' event to edit its data and lets it bubble up
-     * to the form view.
+     *Interceptsthe'open_record'eventtoedititsdataandletsitbubbleup
+     *totheformview.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onOpenRecord: function (ev) {
-        var self = this;
-        _.extend(ev.data, {
-            context: this.record.getContext(this.recordParams),
-            domain: this.record.getDomain(this.recordParams),
-            fields_view: this.attrs.views && this.attrs.views.form,
-            on_saved: function () {
-                self._setValue({operation: 'TRIGGER_ONCHANGE'}, {forceChange: true})
-                    .then(function () {
-                        self.trigger_up('reload', {db_id: ev.data.id});
+    _onOpenRecord:function(ev){
+        varself=this;
+        _.extend(ev.data,{
+            context:this.record.getContext(this.recordParams),
+            domain:this.record.getDomain(this.recordParams),
+            fields_view:this.attrs.views&&this.attrs.views.form,
+            on_saved:function(){
+                self._setValue({operation:'TRIGGER_ONCHANGE'},{forceChange:true})
+                    .then(function(){
+                        self.trigger_up('reload',{db_id:ev.data.id});
                     });
             },
-            on_remove: function () {
-                self._setValue({operation: 'FORGET', ids: [ev.data.id]});
+            on_remove:function(){
+                self._setValue({operation:'FORGET',ids:[ev.data.id]});
             },
-            readonly: this.mode === 'readonly',
-            deletable: this.activeActions.delete && this.view.arch.tag !== 'tree' && this.canDelete,
-            string: this.string,
+            readonly:this.mode==='readonly',
+            deletable:this.activeActions.delete&&this.view.arch.tag!=='tree'&&this.canDelete,
+            string:this.string,
         });
     },
 });
 
 /**
- * Widget to upload or delete one or more files at the same time.
+ *Widgettouploadordeleteoneormorefilesatthesametime.
  */
-var FieldMany2ManyBinaryMultiFiles = AbstractField.extend({
-    template: "FieldBinaryFileUploader",
-    template_files: "FieldBinaryFileUploader.files",
-    supportedFieldTypes: ['many2many'],
-    fieldsToFetch: {
-        name: {type: 'char'},
-        mimetype: {type: 'char'},
+varFieldMany2ManyBinaryMultiFiles=AbstractField.extend({
+    template:"FieldBinaryFileUploader",
+    template_files:"FieldBinaryFileUploader.files",
+    supportedFieldTypes:['many2many'],
+    fieldsToFetch:{
+        name:{type:'char'},
+        mimetype:{type:'char'},
     },
-    events: {
-        'click .o_attach': '_onAttach',
-        'click .o_attachment_delete': '_onDelete',
-        'change .o_input_file': '_onFileChanged',
+    events:{
+        'click.o_attach':'_onAttach',
+        'click.o_attachment_delete':'_onDelete',
+        'change.o_input_file':'_onFileChanged',
     },
     /**
-     * @constructor
+     *@constructor
      */
-    init: function () {
-        this._super.apply(this, arguments);
+    init:function(){
+        this._super.apply(this,arguments);
 
-        if (this.field.type !== 'many2many' || this.field.relation !== 'ir.attachment') {
-            var msg = _t("The type of the field '%s' must be a many2many field with a relation to 'ir.attachment' model.");
-            throw _.str.sprintf(msg, this.field.string);
+        if(this.field.type!=='many2many'||this.field.relation!=='ir.attachment'){
+            varmsg=_t("Thetypeofthefield'%s'mustbeamany2manyfieldwitharelationto'ir.attachment'model.");
+            throw_.str.sprintf(msg,this.field.string);
         }
 
-        this.uploadedFiles = {};
-        this.uploadingFiles = [];
-        this.fileupload_id = _.uniqueId('oe_fileupload_temp');
-        this.accepted_file_extensions = (this.nodeOptions && this.nodeOptions.accepted_file_extensions) || this.accepted_file_extensions || '*';
-        $(window).on(this.fileupload_id, this._onFileLoaded.bind(this));
+        this.uploadedFiles={};
+        this.uploadingFiles=[];
+        this.fileupload_id=_.uniqueId('oe_fileupload_temp');
+        this.accepted_file_extensions=(this.nodeOptions&&this.nodeOptions.accepted_file_extensions)||this.accepted_file_extensions||'*';
+        $(window).on(this.fileupload_id,this._onFileLoaded.bind(this));
 
-        this.metadata = {};
+        this.metadata={};
     },
 
-    destroy: function () {
+    destroy:function(){
         this._super();
         $(window).off(this.fileupload_id);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Compute the URL of an attachment.
+     *ComputetheURLofanattachment.
      *
-     * @private
-     * @param {Object} attachment
-     * @returns {string} URL of the attachment
+     *@private
+     *@param{Object}attachment
+     *@returns{string}URLoftheattachment
      */
-    _getFileUrl: function (attachment) {
-        return '/web/content/' + attachment.id + '?download=true';
+    _getFileUrl:function(attachment){
+        return'/web/content/'+attachment.id+'?download=true';
     },
     /**
-     * Process the field data to add some information (url, etc.).
+     *Processthefielddatatoaddsomeinformation(url,etc.).
      *
-     * @private
+     *@private
      */
-    _generatedMetadata: function () {
-        var self = this;
-        _.each(this.value.data, function (record) {
-            // tagging `allowUnlink` ascertains if the attachment was user
-            // uploaded or was an existing or system generated attachment
-            self.metadata[record.id] = {
-                allowUnlink: self.uploadedFiles[record.data.id] || false,
-                url: self._getFileUrl(record.data),
+    _generatedMetadata:function(){
+        varself=this;
+        _.each(this.value.data,function(record){
+            //tagging`allowUnlink`ascertainsiftheattachmentwasuser
+            //uploadedorwasanexistingorsystemgeneratedattachment
+            self.metadata[record.id]={
+                allowUnlink:self.uploadedFiles[record.data.id]||false,
+                url:self._getFileUrl(record.data),
             };
         });
     },
     /**
-     * @private
-     * @override
+     *@private
+     *@override
      */
-    _render: function () {
-        // render the attachments ; as the attachments will changes after each
-        // _setValue, we put the rendering here to ensure they will be updated
+    _render:function(){
+        //rendertheattachments;astheattachmentswillchangesaftereach
+        //_setValue,weputtherenderingheretoensuretheywillbeupdated
         this._generatedMetadata();
-        this.$('.oe_placeholder_files, .o_attachments')
-            .replaceWith($(qweb.render(this.template_files, {
-                widget: this,
+        this.$('.oe_placeholder_files,.o_attachments')
+            .replaceWith($(qweb.render(this.template_files,{
+                widget:this,
             })));
         this.$('.oe_fileupload').show();
 
-        // display image thumbnail
-        this.$('.o_image[data-mimetype^="image"]').each(function () {
-            var $img = $(this);
-            if (/gif|jpe|jpg|png/.test($img.data('mimetype')) && $img.data('src')) {
-                $img.css('background-image', "url('" + $img.data('src') + "')");
+        //displayimagethumbnail
+        this.$('.o_image[data-mimetype^="image"]').each(function(){
+            var$img=$(this);
+            if(/gif|jpe|jpg|png/.test($img.data('mimetype'))&&$img.data('src')){
+                $img.css('background-image',"url('"+$img.data('src')+"')");
             }
         });
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onAttach: function () {
-        // This widget uses a hidden form to upload files. Clicking on 'Attach'
-        // will simulate a click on the related input.
+    _onAttach:function(){
+        //Thiswidgetusesahiddenformtouploadfiles.Clickingon'Attach'
+        //willsimulateaclickontherelatedinput.
         this.$('.o_input_file').click();
     },
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onDelete: function (ev) {
+    _onDelete:function(ev){
         ev.preventDefault();
         ev.stopPropagation();
 
-        var fileID = $(ev.currentTarget).data('id');
-        var record = _.findWhere(this.value.data, {res_id: fileID});
-        if (record) {
+        varfileID=$(ev.currentTarget).data('id');
+        varrecord=_.findWhere(this.value.data,{res_id:fileID});
+        if(record){
             this._setValue({
-                operation: 'FORGET',
-                ids: [record.id],
+                operation:'FORGET',
+                ids:[record.id],
             });
-            var metadata = this.metadata[record.id];
-            if (!metadata || metadata.allowUnlink) {
+            varmetadata=this.metadata[record.id];
+            if(!metadata||metadata.allowUnlink){
                 this._rpc({
-                    model: 'ir.attachment',
-                    method: 'unlink',
-                    args: [record.res_id],
+                    model:'ir.attachment',
+                    method:'unlink',
+                    args:[record.res_id],
                 });
             }
         }
     },
     /**
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onFileChanged: function (ev) {
-        var self = this;
+    _onFileChanged:function(ev){
+        varself=this;
         ev.stopPropagation();
 
-        var files = ev.target.files;
-        var attachment_ids = this.value.res_ids;
+        varfiles=ev.target.files;
+        varattachment_ids=this.value.res_ids;
 
-        // Don't create an attachment if the upload window is cancelled.
-        if(files.length === 0)
+        //Don'tcreateanattachmentiftheuploadwindowiscancelled.
+        if(files.length===0)
             return;
 
-        _.each(files, function (file) {
-            var record = _.find(self.value.data, function (attachment) {
-                return attachment.data.name === file.name;
+        _.each(files,function(file){
+            varrecord=_.find(self.value.data,function(attachment){
+                returnattachment.data.name===file.name;
             });
-            if (record) {
-                var metadata = self.metadata[record.id];
-                if (!metadata || metadata.allowUnlink) {
-                    // there is a existing attachment with the same name so we
-                    // replace it
-                    attachment_ids = _.without(attachment_ids, record.res_id);
+            if(record){
+                varmetadata=self.metadata[record.id];
+                if(!metadata||metadata.allowUnlink){
+                    //thereisaexistingattachmentwiththesamenamesowe
+                    //replaceit
+                    attachment_ids=_.without(attachment_ids,record.res_id);
                     self._rpc({
-                        model: 'ir.attachment',
-                        method: 'unlink',
-                        args: [record.res_id],
+                        model:'ir.attachment',
+                        method:'unlink',
+                        args:[record.res_id],
                     });
                 }
             }
@@ -2321,419 +2321,419 @@ var FieldMany2ManyBinaryMultiFiles = AbstractField.extend({
         });
 
         this._setValue({
-            operation: 'REPLACE_WITH',
-            ids: attachment_ids,
+            operation:'REPLACE_WITH',
+            ids:attachment_ids,
         });
 
         this.$('form.o_form_binary_form').submit();
         this.$('.oe_fileupload').hide();
-        ev.target.value = "";
+        ev.target.value="";
     },
     /**
-     * @private
+     *@private
      */
-    _onFileLoaded: function () {
-        var self = this;
-        // the first argument isn't a file but the jQuery.Event
-        var files = Array.prototype.slice.call(arguments, 1);
-        // files has been uploaded, clear uploading
-        this.uploadingFiles = [];
+    _onFileLoaded:function(){
+        varself=this;
+        //thefirstargumentisn'tafilebutthejQuery.Event
+        varfiles=Array.prototype.slice.call(arguments,1);
+        //fileshasbeenuploaded,clearuploading
+        this.uploadingFiles=[];
 
-        var attachment_ids = this.value.res_ids;
-        _.each(files, function (file) {
-            if (file.error) {
-                self.do_warn(_t('Uploading Error'), file.error);
-            } else {
+        varattachment_ids=this.value.res_ids;
+        _.each(files,function(file){
+            if(file.error){
+                self.do_warn(_t('UploadingError'),file.error);
+            }else{
                 attachment_ids.push(file.id);
-                self.uploadedFiles[file.id] = true;
+                self.uploadedFiles[file.id]=true;
             }
         });
 
         this._setValue({
-            operation: 'REPLACE_WITH',
-            ids: attachment_ids,
+            operation:'REPLACE_WITH',
+            ids:attachment_ids,
         });
     },
 });
 
-var FieldMany2ManyTags = AbstractField.extend({
-    description: _lt("Tags"),
-    tag_template: "FieldMany2ManyTag",
-    className: "o_field_many2manytags",
-    supportedFieldTypes: ['many2many'],
-    custom_events: _.extend({}, AbstractField.prototype.custom_events, {
-        field_changed: '_onFieldChanged',
+varFieldMany2ManyTags=AbstractField.extend({
+    description:_lt("Tags"),
+    tag_template:"FieldMany2ManyTag",
+    className:"o_field_many2manytags",
+    supportedFieldTypes:['many2many'],
+    custom_events:_.extend({},AbstractField.prototype.custom_events,{
+        field_changed:'_onFieldChanged',
     }),
-    events: _.extend({}, AbstractField.prototype.events, {
-        'click .o_delete': '_onDeleteTag',
+    events:_.extend({},AbstractField.prototype.events,{
+        'click.o_delete':'_onDeleteTag',
     }),
-    fieldsToFetch: {
-        display_name: {type: 'char'},
+    fieldsToFetch:{
+        display_name:{type:'char'},
     },
-    limit: 1000,
+    limit:1000,
 
     /**
-     * @constructor
+     *@constructor
      */
-    init: function () {
-        this._super.apply(this, arguments);
+    init:function(){
+        this._super.apply(this,arguments);
 
-        if (this.mode === 'edit') {
-            this.className += ' o_input';
+        if(this.mode==='edit'){
+            this.className+='o_input';
         }
 
-        this.colorField = this.nodeOptions.color_field;
-        this.hasDropdown = false;
+        this.colorField=this.nodeOptions.color_field;
+        this.hasDropdown=false;
 
         this._computeAvailableActions(this.record);
-        // have listen to react to other fields changes to re-evaluate 'create' option
-        this.resetOnAnyFieldChange = this.resetOnAnyFieldChange || 'create' in this.nodeOptions;
+        //havelistentoreacttootherfieldschangestore-evaluate'create'option
+        this.resetOnAnyFieldChange=this.resetOnAnyFieldChange||'create'inthis.nodeOptions;
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    activate: function () {
-        return this.many2one ? this.many2one.activate() : false;
+    activate:function(){
+        returnthis.many2one?this.many2one.activate():false;
     },
     /**
-     * @override
-     * @returns {jQuery}
+     *@override
+     *@returns{jQuery}
      */
-    getFocusableElement: function () {
-        return this.many2one ? this.many2one.getFocusableElement() : $();
+    getFocusableElement:function(){
+        returnthis.many2one?this.many2one.getFocusableElement():$();
     },
     /**
-     * @override
-     * @returns {boolean}
+     *@override
+     *@returns{boolean}
      */
-    isSet: function () {
-        return !!this.value && this.value.count;
+    isSet:function(){
+        return!!this.value&&this.value.count;
     },
     /**
-     * Reset the focus on this field if it was the origin of the onchange call.
+     *Resetthefocusonthisfieldifitwastheoriginoftheonchangecall.
      *
-     * @override
+     *@override
      */
-    reset: function (record, event) {
-        var self = this;
+    reset:function(record,event){
+        varself=this;
         this._computeAvailableActions(record);
-        return this._super.apply(this, arguments).then(function () {
-            if (event && event.target === self) {
+        returnthis._super.apply(this,arguments).then(function(){
+            if(event&&event.target===self){
                 self.activate();
             }
         });
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {any} data
-     * @returns {Promise}
+     *@private
+     *@param{any}data
+     *@returns{Promise}
      */
-    _addTag: function (data) {
-        if (!_.contains(this.value.res_ids, data.id)) {
-            return this._setValue({
-                operation: 'ADD_M2M',
-                ids: data
+    _addTag:function(data){
+        if(!_.contains(this.value.res_ids,data.id)){
+            returnthis._setValue({
+                operation:'ADD_M2M',
+                ids:data
             });
         }
-        return Promise.resolve();
+        returnPromise.resolve();
     },
     /**
-     * @private
-     * @param {Object} record
+     *@private
+     *@param{Object}record
      */
-    _computeAvailableActions: function (record) {
-        const evalContext = record.evalContext;
-        this.canCreate = 'create' in this.nodeOptions ?
-            new Domain(this.nodeOptions.create, evalContext).compute(evalContext) :
+    _computeAvailableActions:function(record){
+        constevalContext=record.evalContext;
+        this.canCreate='create'inthis.nodeOptions?
+            newDomain(this.nodeOptions.create,evalContext).compute(evalContext):
             true;
     },
     /**
-     * Get the QWeb rendering context used by the tag template; this computation
-     * is placed in a separate function for other tags to override it.
+     *GettheQWebrenderingcontextusedbythetagtemplate;thiscomputation
+     *isplacedinaseparatefunctionforothertagstooverrideit.
      *
-     * @private
-     * @returns {Object}
+     *@private
+     *@returns{Object}
      */
-    _getRenderTagsContext: function () {
-        var elements = this.value ? _.pluck(this.value.data, 'data') : [];
-        return {
-            colorField: this.colorField,
-            elements: elements,
-            hasDropdown: this.hasDropdown,
-            readonly: this.mode === "readonly",
+    _getRenderTagsContext:function(){
+        varelements=this.value?_.pluck(this.value.data,'data'):[];
+        return{
+            colorField:this.colorField,
+            elements:elements,
+            hasDropdown:this.hasDropdown,
+            readonly:this.mode==="readonly",
         };
     },
     /**
-     * @private
-     * @param {any} id
+     *@private
+     *@param{any}id
      */
-    _removeTag: function (id) {
-        var record = _.findWhere(this.value.data, {res_id: id});
+    _removeTag:function(id){
+        varrecord=_.findWhere(this.value.data,{res_id:id});
         this._setValue({
-            operation: 'FORGET',
-            ids: [record.id],
+            operation:'FORGET',
+            ids:[record.id],
         });
     },
     /**
-     * @private
+     *@private
      */
-    _renderEdit: function () {
-        var self = this;
+    _renderEdit:function(){
+        varself=this;
         this._renderTags();
-        if (this.many2one) {
+        if(this.many2one){
             this.many2one.destroy();
         }
-        this.many2one = new FieldMany2One(this, this.name, this.record, {
-            mode: 'edit',
-            noOpen: true,
-            noCreate: !this.canCreate,
-            viewType: this.viewType,
-            attrs: this.attrs,
+        this.many2one=newFieldMany2One(this,this.name,this.record,{
+            mode:'edit',
+            noOpen:true,
+            noCreate:!this.canCreate,
+            viewType:this.viewType,
+            attrs:this.attrs,
         });
-        // to prevent the M2O to take the value of the M2M
-        this.many2one.value = false;
-        // to prevent the M2O to take the relational values of the M2M
-        this.many2one.m2o_value = '';
+        //topreventtheM2OtotakethevalueoftheM2M
+        this.many2one.value=false;
+        //topreventtheM2OtotaketherelationalvaluesoftheM2M
+        this.many2one.m2o_value='';
 
-        this.many2one._getSearchBlacklist = function () {
-            return self.value.res_ids;
+        this.many2one._getSearchBlacklist=function(){
+            returnself.value.res_ids;
         };
-        var _getSearchCreatePopupOptions = this.many2one._getSearchCreatePopupOptions;
-        this.many2one._getSearchCreatePopupOptions = function (view, ids, context, dynamicFilters) {
-            var options = _getSearchCreatePopupOptions.apply(this, arguments);
-            var domain = this.record.getDomain({fieldName: this.name});
-            var m2mRecords = [];
-            return _.extend({}, options, {
-                domain: domain.concat(["!", ["id", "in", self.value.res_ids]]),
-                disable_multiple_selection: false,
-                on_selected: function (records) {
+        var_getSearchCreatePopupOptions=this.many2one._getSearchCreatePopupOptions;
+        this.many2one._getSearchCreatePopupOptions=function(view,ids,context,dynamicFilters){
+            varoptions=_getSearchCreatePopupOptions.apply(this,arguments);
+            vardomain=this.record.getDomain({fieldName:this.name});
+            varm2mRecords=[];
+            return_.extend({},options,{
+                domain:domain.concat(["!",["id","in",self.value.res_ids]]),
+                disable_multiple_selection:false,
+                on_selected:function(records){
                     m2mRecords.push(...records);
                 },
-                on_closed: function () {
+                on_closed:function(){
                     self.many2one.reinitialize(m2mRecords);
                 },
             });
         };
-        return this.many2one.appendTo(this.$el);
+        returnthis.many2one.appendTo(this.$el);
     },
     /**
-     * @private
+     *@private
      */
-    _renderReadonly: function () {
+    _renderReadonly:function(){
         this._renderTags();
     },
     /**
-     * @private
+     *@private
      */
-    _renderTags: function () {
-        this.$el.html(qweb.render(this.tag_template, this._getRenderTagsContext()));
+    _renderTags:function(){
+        this.$el.html(qweb.render(this.tag_template,this._getRenderTagsContext()));
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {MouseEvent} event
+     *@private
+     *@param{MouseEvent}event
      */
-    _onDeleteTag: function (event) {
+    _onDeleteTag:function(event){
         event.preventDefault();
         event.stopPropagation();
         this._removeTag($(event.target).parent().data('id'));
     },
     /**
-     * Controls the changes made in the internal m2o field.
+     *Controlsthechangesmadeintheinternalm2ofield.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onFieldChanged: function (ev) {
-        if (ev.target !== this.many2one) {
+    _onFieldChanged:function(ev){
+        if(ev.target!==this.many2one){
             return;
         }
         ev.stopPropagation();
-        var newValue = ev.data.changes[this.name];
-        if (newValue) {
+        varnewValue=ev.data.changes[this.name];
+        if(newValue){
             this._addTag(newValue)
-                .then(ev.data.onSuccess || function () {})
-                .guardedCatch(ev.data.onFailure || function () {});
+                .then(ev.data.onSuccess||function(){})
+                .guardedCatch(ev.data.onFailure||function(){});
             this.many2one.reinitialize(false);
         }
     },
     /**
-     * @private
-     * @param {KeyboardEvent} ev
+     *@private
+     *@param{KeyboardEvent}ev
      */
-    _onKeydown: function (ev) {
-        if (ev.which === $.ui.keyCode.BACKSPACE && this.$('input').val() === "") {
-            var $badges = this.$('.badge');
-            if ($badges.length) {
+    _onKeydown:function(ev){
+        if(ev.which===$.ui.keyCode.BACKSPACE&&this.$('input').val()===""){
+            var$badges=this.$('.badge');
+            if($badges.length){
                 this._removeTag($badges.last().data('id'));
                 return;
             }
         }
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
     /**
-     * @private
-     * @param {FlectraEvent} event
+     *@private
+     *@param{FlectraEvent}event
      */
-    _onQuickCreate: function (event) {
+    _onQuickCreate:function(event){
         this._quickCreate(event.data.value);
     },
 });
 
-var FieldMany2ManyTagsAvatar = FieldMany2ManyTags.extend({
-    tag_template: 'FieldMany2ManyTagAvatar',
-    className: 'o_field_many2manytags avatar',
+varFieldMany2ManyTagsAvatar=FieldMany2ManyTags.extend({
+    tag_template:'FieldMany2ManyTagAvatar',
+    className:'o_field_many2manytagsavatar',
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _getRenderTagsContext: function () {
-        var result = this._super.apply(this, arguments);
-        result.avatarModel = this.nodeOptions.avatarModel || this.field.relation;
-        result.avatarField = this.nodeOptions.avatarField || 'image_128';
-        return result;
+    _getRenderTagsContext:function(){
+        varresult=this._super.apply(this,arguments);
+        result.avatarModel=this.nodeOptions.avatarModel||this.field.relation;
+        result.avatarField=this.nodeOptions.avatarField||'image_128';
+        returnresult;
     },
 });
 
-var FormFieldMany2ManyTags = FieldMany2ManyTags.extend({
-    events: _.extend({}, FieldMany2ManyTags.prototype.events, {
-        'click .dropdown-toggle': '_onOpenColorPicker',
-        'mousedown .o_colorpicker a': '_onUpdateColor',
-        'mousedown .o_colorpicker .o_hide_in_kanban': '_onUpdateColor',
+varFormFieldMany2ManyTags=FieldMany2ManyTags.extend({
+    events:_.extend({},FieldMany2ManyTags.prototype.events,{
+        'click.dropdown-toggle':'_onOpenColorPicker',
+        'mousedown.o_colorpickera':'_onUpdateColor',
+        'mousedown.o_colorpicker.o_hide_in_kanban':'_onUpdateColor',
     }),
     /**
-     * @override
+     *@override
      */
-    init: function () {
-        this._super.apply(this, arguments);
+    init:function(){
+        this._super.apply(this,arguments);
 
-        this.hasDropdown = !!this.colorField;
+        this.hasDropdown=!!this.colorField;
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onOpenColorPicker: function (ev) {
+    _onOpenColorPicker:function(ev){
         ev.preventDefault();
-        if (this.nodeOptions.no_edit_color) {
+        if(this.nodeOptions.no_edit_color){
             ev.stopPropagation();
             return;
         }
-        var tagID = $(ev.currentTarget).parent().data('id');
-        var tagColor = $(ev.currentTarget).parent().data('color');
-        var tag = _.findWhere(this.value.data, { res_id: tagID });
-        if (tag && this.colorField in tag.data) { // if there is a color field on the related model
-            this.$color_picker = $(qweb.render('FieldMany2ManyTag.colorpicker', {
-                'widget': this,
-                'tag_id': tagID,
+        vartagID=$(ev.currentTarget).parent().data('id');
+        vartagColor=$(ev.currentTarget).parent().data('color');
+        vartag=_.findWhere(this.value.data,{res_id:tagID});
+        if(tag&&this.colorFieldintag.data){//ifthereisacolorfieldontherelatedmodel
+            this.$color_picker=$(qweb.render('FieldMany2ManyTag.colorpicker',{
+                'widget':this,
+                'tag_id':tagID,
             }));
 
             $(ev.currentTarget).after(this.$color_picker);
             this.$color_picker.dropdown();
-            this.$color_picker.attr("tabindex", 1).focus();
-            if (!tagColor) {
-                this.$('.custom-checkbox input').prop('checked', true);
+            this.$color_picker.attr("tabindex",1).focus();
+            if(!tagColor){
+                this.$('.custom-checkboxinput').prop('checked',true);
             }
         }
     },
     /**
-     * Update color based on target of ev
-     * either by clicking on a color item or
-     * by toggling the 'Hide in Kanban' checkbox.
+     *Updatecolorbasedontargetofev
+     *eitherbyclickingonacoloritemor
+     *bytogglingthe'HideinKanban'checkbox.
      *
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onUpdateColor: function (ev) {
+    _onUpdateColor:function(ev){
         ev.preventDefault();
-        var $target = $(ev.currentTarget);
-        var color = $target.data('color');
-        var id = $target.data('id');
-        var $tag = this.$(".badge[data-id='" + id + "']");
-        var currentColor = $tag.data('color');
-        var changes = {};
+        var$target=$(ev.currentTarget);
+        varcolor=$target.data('color');
+        varid=$target.data('id');
+        var$tag=this.$(".badge[data-id='"+id+"']");
+        varcurrentColor=$tag.data('color');
+        varchanges={};
 
-        if ($target.is('.o_hide_in_kanban')) {
-            var $checkbox = $('.o_hide_in_kanban .custom-checkbox input');
-            $checkbox.prop('checked', !$checkbox.prop('checked')); // toggle checkbox
-            this.prevColors = this.prevColors ? this.prevColors : {};
-            if ($checkbox.is(':checked')) {
-                this.prevColors[id] = currentColor;
-            } else {
-                color = this.prevColors[id] ? this.prevColors[id] : 1;
+        if($target.is('.o_hide_in_kanban')){
+            var$checkbox=$('.o_hide_in_kanban.custom-checkboxinput');
+            $checkbox.prop('checked',!$checkbox.prop('checked'));//togglecheckbox
+            this.prevColors=this.prevColors?this.prevColors:{};
+            if($checkbox.is(':checked')){
+                this.prevColors[id]=currentColor;
+            }else{
+                color=this.prevColors[id]?this.prevColors[id]:1;
             }
-        } else if ($target.is('[class^="o_tag_color"]')) { // $target.is('o_tag_color_')
-            if (color === currentColor) { return; }
+        }elseif($target.is('[class^="o_tag_color"]')){//$target.is('o_tag_color_')
+            if(color===currentColor){return;}
         }
 
-        changes[this.colorField] = color;
+        changes[this.colorField]=color;
 
-        this.trigger_up('field_changed', {
-            dataPointID: _.findWhere(this.value.data, {res_id: id}).id,
-            changes: changes,
-            force_save: true,
+        this.trigger_up('field_changed',{
+            dataPointID:_.findWhere(this.value.data,{res_id:id}).id,
+            changes:changes,
+            force_save:true,
         });
     },
 });
 
-var KanbanFieldMany2ManyTags = FieldMany2ManyTags.extend({
-    // Remove event handlers on this widget to ensure that the kanban 'global
-    // click' opens the clicked record, even if the click is done on a tag
-    // This is necessary because of the weird 'global click' logic in
-    // KanbanRecord, which should definitely be cleaned.
-    // Anyway, those handlers are only necessary in Form and List views, so we
-    // can removed them here.
-    events: AbstractField.prototype.events,
+varKanbanFieldMany2ManyTags=FieldMany2ManyTags.extend({
+    //Removeeventhandlersonthiswidgettoensurethatthekanban'global
+    //click'openstheclickedrecord,eveniftheclickisdoneonatag
+    //Thisisnecessarybecauseoftheweird'globalclick'logicin
+    //KanbanRecord,whichshoulddefinitelybecleaned.
+    //Anyway,thosehandlersareonlynecessaryinFormandListviews,sowe
+    //canremovedthemhere.
+    events:AbstractField.prototype.events,
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _render: function () {
-        var self = this;
+    _render:function(){
+        varself=this;
 
-        if (this.$el) {
-            this.$el.empty().addClass('o_field_many2manytags o_kanban_tags');
+        if(this.$el){
+            this.$el.empty().addClass('o_field_many2manytagso_kanban_tags');
         }
 
-        _.each(this.value.data, function (m2m) {
-            if (self.colorField in m2m.data && !m2m.data[self.colorField]) {
-                // When a color field is specified and that color is the default
-                // one, the kanban tag is not rendered.
+        _.each(this.value.data,function(m2m){
+            if(self.colorFieldinm2m.data&&!m2m.data[self.colorField]){
+                //Whenacolorfieldisspecifiedandthatcoloristhedefault
+                //one,thekanbantagisnotrendered.
                 return;
             }
 
-            $('<span>', {
-                class: 'o_tag o_tag_color_' + (m2m.data[self.colorField] || 0),
-                text: m2m.data.display_name,
+            $('<span>',{
+                class:'o_tago_tag_color_'+(m2m.data[self.colorField]||0),
+                text:m2m.data.display_name,
             })
             .prepend('<span>')
             .appendTo(self.$el);
@@ -2741,735 +2741,735 @@ var KanbanFieldMany2ManyTags = FieldMany2ManyTags.extend({
     },
 });
 
-var FieldMany2ManyCheckBoxes = AbstractField.extend({
-    description: _lt("Checkboxes"),
-    template: 'FieldMany2ManyCheckBoxes',
-    events: _.extend({}, AbstractField.prototype.events, {
-        change: '_onChange',
+varFieldMany2ManyCheckBoxes=AbstractField.extend({
+    description:_lt("Checkboxes"),
+    template:'FieldMany2ManyCheckBoxes',
+    events:_.extend({},AbstractField.prototype.events,{
+        change:'_onChange',
     }),
-    specialData: "_fetchSpecialRelation",
-    supportedFieldTypes: ['many2many'],
-    // set an arbitrary high limit to ensure that all data returned by the server
-    // are processed by the BasicModel (otherwise it would be 40)
-    limit: 100000,
-    init: function () {
-        this._super.apply(this, arguments);
-        this.m2mValues = this.record.specialData[this.name];
+    specialData:"_fetchSpecialRelation",
+    supportedFieldTypes:['many2many'],
+    //setanarbitraryhighlimittoensurethatalldatareturnedbytheserver
+    //areprocessedbytheBasicModel(otherwiseitwouldbe40)
+    limit:100000,
+    init:function(){
+        this._super.apply(this,arguments);
+        this.m2mValues=this.record.specialData[this.name];
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
-    isSet: function () {
-        return true;
+    isSet:function(){
+        returntrue;
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _renderCheckboxes: function () {
-        var self = this;
-        this.m2mValues = this.record.specialData[this.name];
-        this.$el.html(qweb.render(this.template, {widget: this}));
-        _.each(this.value.res_ids, function (id) {
-            self.$('input[data-record-id="' + id + '"]').prop('checked', true);
+    _renderCheckboxes:function(){
+        varself=this;
+        this.m2mValues=this.record.specialData[this.name];
+        this.$el.html(qweb.render(this.template,{widget:this}));
+        _.each(this.value.res_ids,function(id){
+            self.$('input[data-record-id="'+id+'"]').prop('checked',true);
         });
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _renderEdit: function () {
+    _renderEdit:function(){
         this._renderCheckboxes();
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _renderReadonly: function () {
+    _renderReadonly:function(){
         this._renderCheckboxes();
-        this.$("input").prop("disabled", true);
+        this.$("input").prop("disabled",true);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onChange: function () {
-        // Get the list of selected ids
-        var ids = _.map(this.$('input:checked'), function (input) {
-            return $(input).data("record-id");
+    _onChange:function(){
+        //Getthelistofselectedids
+        varids=_.map(this.$('input:checked'),function(input){
+            return$(input).data("record-id");
         });
-        // The number of displayed checkboxes is limited to 100 (name_search
-        // limit, server-side), to prevent extreme cases where thousands of
-        // records are fetched/displayed. If not all values are displayed, it may
-        // happen that some values that are in the relation aren't available in the
-        // widget. In this case, when the user (un)selects a value, we don't
-        // want to remove those non displayed values from the relation. For that
-        // reason, we manually add those values to the list of ids.
-        const displayedIds = this.m2mValues.map(v => v[0]);
-        const idsInRelation = this.value.res_ids;
-        ids = ids.concat(idsInRelation.filter(a => !displayedIds.includes(a)));
+        //Thenumberofdisplayedcheckboxesislimitedto100(name_search
+        //limit,server-side),topreventextremecaseswherethousandsof
+        //recordsarefetched/displayed.Ifnotallvaluesaredisplayed,itmay
+        //happenthatsomevaluesthatareintherelationaren'tavailableinthe
+        //widget.Inthiscase,whentheuser(un)selectsavalue,wedon't
+        //wanttoremovethosenondisplayedvaluesfromtherelation.Forthat
+        //reason,wemanuallyaddthosevaluestothelistofids.
+        constdisplayedIds=this.m2mValues.map(v=>v[0]);
+        constidsInRelation=this.value.res_ids;
+        ids=ids.concat(idsInRelation.filter(a=>!displayedIds.includes(a)));
         this._setValue({
-            operation: 'REPLACE_WITH',
-            ids: ids,
+            operation:'REPLACE_WITH',
+            ids:ids,
         });
     },
 });
 
 //------------------------------------------------------------------------------
-// Widgets handling both basic and relational fields (selection and Many2one)
+//Widgetshandlingbothbasicandrelationalfields(selectionandMany2one)
 //------------------------------------------------------------------------------
 
-var FieldStatus = AbstractField.extend({
-    className: 'o_statusbar_status',
-    events: {
-        'click button:not(.dropdown-toggle)': '_onClickStage',
+varFieldStatus=AbstractField.extend({
+    className:'o_statusbar_status',
+    events:{
+        'clickbutton:not(.dropdown-toggle)':'_onClickStage',
     },
-    specialData: "_fetchSpecialStatus",
-    supportedFieldTypes: ['selection', 'many2one'],
+    specialData:"_fetchSpecialStatus",
+    supportedFieldTypes:['selection','many2one'],
     /**
-     * @override init from AbstractField
+     *@overrideinitfromAbstractField
      */
-    init: function () {
-        this._super.apply(this, arguments);
+    init:function(){
+        this._super.apply(this,arguments);
         this._setState();
-        this._onClickStage = _.debounce(this._onClickStage, 300, true); // TODO maybe not useful anymore ?
+        this._onClickStage=_.debounce(this._onClickStage,300,true);//TODOmaybenotusefulanymore?
 
-        // Retro-compatibility: clickable used to be defined in the field attrs
-        // instead of options.
-        // If not set, the statusbar is not clickable.
-        try {
-            this.isClickable = !!JSON.parse(this.attrs.clickable);
-        } catch (_) {
-            this.isClickable = !!this.nodeOptions.clickable;
+        //Retro-compatibility:clickableusedtobedefinedinthefieldattrs
+        //insteadofoptions.
+        //Ifnotset,thestatusbarisnotclickable.
+        try{
+            this.isClickable=!!JSON.parse(this.attrs.clickable);
+        }catch(_){
+            this.isClickable=!!this.nodeOptions.clickable;
         }
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Returns false to force the statusbar to be always visible (even the field
-     * it not set).
+     *Returnsfalsetoforcethestatusbartobealwaysvisible(eventhefield
+     *itnotset).
      *
-     * @override
-     * @returns {boolean} always false
+     *@override
+     *@returns{boolean}alwaysfalse
      */
-    isEmpty: function () {
-        return false;
+    isEmpty:function(){
+        returnfalse;
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override _reset from AbstractField
-     * @private
+     *@override_resetfromAbstractField
+     *@private
      */
-    _reset: function () {
-        this._super.apply(this, arguments);
+    _reset:function(){
+        this._super.apply(this,arguments);
         this._setState();
     },
     /**
-     * Prepares the rendering data from the field and record data.
-     * @private
+     *Preparestherenderingdatafromthefieldandrecorddata.
+     *@private
      */
-    _setState: function () {
-        var self = this;
-        if (this.field.type === 'many2one') {
-            this.status_information = _.map(this.record.specialData[this.name], function (info) {
-                return _.extend({
-                    selected: info.id === self.value.res_id,
-                }, info);
+    _setState:function(){
+        varself=this;
+        if(this.field.type==='many2one'){
+            this.status_information=_.map(this.record.specialData[this.name],function(info){
+                return_.extend({
+                    selected:info.id===self.value.res_id,
+                },info);
             });
-        } else {
-            var selection = this.field.selection;
-            if (this.attrs.statusbar_visible) {
-                var restriction = this.attrs.statusbar_visible.split(",");
-                selection = _.filter(selection, function (val) {
-                    return _.contains(restriction, val[0]) || val[0] === self.value;
+        }else{
+            varselection=this.field.selection;
+            if(this.attrs.statusbar_visible){
+                varrestriction=this.attrs.statusbar_visible.split(",");
+                selection=_.filter(selection,function(val){
+                    return_.contains(restriction,val[0])||val[0]===self.value;
                 });
             }
-            this.status_information = _.map(selection, function (val) {
-                return { id: val[0], display_name: val[1], selected: val[0] === self.value, fold: false };
+            this.status_information=_.map(selection,function(val){
+                return{id:val[0],display_name:val[1],selected:val[0]===self.value,fold:false};
             });
         }
     },
     /**
-     * @override _render from AbstractField
-     * @private
+     *@override_renderfromAbstractField
+     *@private
      */
-    _render: function () {
-        var selections = _.partition(this.status_information, function (info) {
-            return (info.selected || !info.fold);
+    _render:function(){
+        varselections=_.partition(this.status_information,function(info){
+            return(info.selected||!info.fold);
         });
-        this.$el.html(qweb.render("FieldStatus.content", {
-            selection_unfolded: selections[0],
-            selection_folded: selections[1],
-            clickable: this.isClickable,
+        this.$el.html(qweb.render("FieldStatus.content",{
+            selection_unfolded:selections[0],
+            selection_folded:selections[1],
+            clickable:this.isClickable,
         }));
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when on status stage is clicked -> sets the field value.
+     *Calledwhenonstatusstageisclicked->setsthefieldvalue.
      *
-     * @private
-     * @param {MouseEvent} e
+     *@private
+     *@param{MouseEvent}e
      */
-    _onClickStage: function (e) {
+    _onClickStage:function(e){
         this._setValue($(e.currentTarget).data("value"));
     },
 });
 
 /**
- * The FieldSelection widget is a simple select tag with a dropdown menu to
- * allow the selection of a range of values.  It is designed to work with fields
- * of type 'selection' and 'many2one'.
+ *TheFieldSelectionwidgetisasimpleselecttagwithadropdownmenuto
+ *allowtheselectionofarangeofvalues. Itisdesignedtoworkwithfields
+ *oftype'selection'and'many2one'.
  */
-var FieldSelection = AbstractField.extend({
-    description: _lt("Selection"),
-    template: 'FieldSelection',
-    specialData: "_fetchSpecialRelation",
-    supportedFieldTypes: ['selection'],
-    events: _.extend({}, AbstractField.prototype.events, {
-        'change': '_onChange',
+varFieldSelection=AbstractField.extend({
+    description:_lt("Selection"),
+    template:'FieldSelection',
+    specialData:"_fetchSpecialRelation",
+    supportedFieldTypes:['selection'],
+    events:_.extend({},AbstractField.prototype.events,{
+        'change':'_onChange',
     }),
     /**
-     * @override
+     *@override
      */
-    init: function () {
-        this._super.apply(this, arguments);
+    init:function(){
+        this._super.apply(this,arguments);
         this._setValues();
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @returns {jQuery}
+     *@override
+     *@returns{jQuery}
      */
-    getFocusableElement: function () {
-        return this.$el && this.$el.is('select') ? this.$el : $();
+    getFocusableElement:function(){
+        returnthis.$el&&this.$el.is('select')?this.$el:$();
     },
     /**
-     * @override
+     *@override
      */
-    isSet: function () {
-        return this.value !== false;
+    isSet:function(){
+        returnthis.value!==false;
     },
     /**
-     * Listen to modifiers updates to hide/show the falsy value in the dropdown
-     * according to the required modifier.
+     *Listentomodifiersupdatestohide/showthefalsyvalueinthedropdown
+     *accordingtotherequiredmodifier.
      *
-     * @override
+     *@override
      */
-    updateModifiersValue: function () {
-        this._super.apply(this, arguments);
-        if (!this.attrs.modifiersValue.invisible && this.mode !== 'readonly') {
+    updateModifiersValue:function(){
+        this._super.apply(this,arguments);
+        if(!this.attrs.modifiersValue.invisible&&this.mode!=='readonly'){
             this._setValues();
             this._renderEdit();
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _renderEdit: function () {
+    _renderEdit:function(){
         this.$el.empty();
-        var required = this.attrs.modifiersValue && this.attrs.modifiersValue.required;
-        for (var i = 0 ; i < this.values.length ; i++) {
-            var disabled = required && this.values[i][0] === false;
+        varrequired=this.attrs.modifiersValue&&this.attrs.modifiersValue.required;
+        for(vari=0;i<this.values.length;i++){
+            vardisabled=required&&this.values[i][0]===false;
 
-            this.$el.append($('<option/>', {
-                value: JSON.stringify(this.values[i][0]),
-                text: this.values[i][1],
-                style: disabled ? "display: none" : "",
+            this.$el.append($('<option/>',{
+                value:JSON.stringify(this.values[i][0]),
+                text:this.values[i][1],
+                style:disabled?"display:none":"",
             }));
         }
         this.$el.val(JSON.stringify(this._getRawValue()));
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _renderReadonly: function () {
+    _renderReadonly:function(){
         this.$el.empty().text(this._formatValue(this.value));
-        this.$el.attr('raw-value', this._getRawValue());
+        this.$el.attr('raw-value',this._getRawValue());
     },
-    _getRawValue: function() {
-        var raw_value = this.value;
-        if (this.field.type === 'many2one' && raw_value) {
-            raw_value = raw_value.data.id;
+    _getRawValue:function(){
+        varraw_value=this.value;
+        if(this.field.type==='many2one'&&raw_value){
+            raw_value=raw_value.data.id;
         }
-        return raw_value;
+        returnraw_value;
     },
     /**
-     * @override
+     *@override
      */
-    _reset: function () {
-        this._super.apply(this, arguments);
+    _reset:function(){
+        this._super.apply(this,arguments);
         this._setValues();
     },
     /**
-     * Sets the possible field values. If the field is a many2one, those values
-     * may change during the lifecycle of the widget if the domain change (an
-     * onchange may change the domain).
+     *Setsthepossiblefieldvalues.Ifthefieldisamany2one,thosevalues
+     *maychangeduringthelifecycleofthewidgetifthedomainchange(an
+     *onchangemaychangethedomain).
      *
-     * @private
+     *@private
      */
-    _setValues: function () {
-        if (this.field.type === 'many2one') {
-            this.values = this.record.specialData[this.name];
-            this.formatType = 'many2one';
-        } else {
-            this.values = _.reject(this.field.selection, function (v) {
-                return v[0] === false && v[1] === '';
+    _setValues:function(){
+        if(this.field.type==='many2one'){
+            this.values=this.record.specialData[this.name];
+            this.formatType='many2one';
+        }else{
+            this.values=_.reject(this.field.selection,function(v){
+                returnv[0]===false&&v[1]==='';
             });
         }
-        this.values = [[false, this.attrs.placeholder || '']].concat(this.values);
+        this.values=[[false,this.attrs.placeholder||'']].concat(this.values);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * The small slight difficulty is that we have to set the value differently
-     * depending on the field type.
+     *Thesmallslightdifficultyisthatwehavetosetthevaluedifferently
+     *dependingonthefieldtype.
      *
-     * @private
+     *@private
      */
-    _onChange: function () {
-        var res_id = JSON.parse(this.$el.val());
-        if (this.field.type === 'many2one') {
-            var value = _.find(this.values, function (val) {
-                return val[0] === res_id;
+    _onChange:function(){
+        varres_id=JSON.parse(this.$el.val());
+        if(this.field.type==='many2one'){
+            varvalue=_.find(this.values,function(val){
+                returnval[0]===res_id;
             });
-            this._setValue({id: res_id, display_name: value[1]});
-        } else {
+            this._setValue({id:res_id,display_name:value[1]});
+        }else{
             this._setValue(res_id);
         }
     },
 });
 
-var FieldRadio = FieldSelection.extend({
-    description: _lt("Radio"),
-    template: null,
-    className: 'o_field_radio',
-    tagName: 'span',
-    specialData: "_fetchSpecialMany2ones",
-    supportedFieldTypes: ['selection', 'many2one'],
-    events: _.extend({}, AbstractField.prototype.events, {
-        'click input': '_onInputClick',
+varFieldRadio=FieldSelection.extend({
+    description:_lt("Radio"),
+    template:null,
+    className:'o_field_radio',
+    tagName:'span',
+    specialData:"_fetchSpecialMany2ones",
+    supportedFieldTypes:['selection','many2one'],
+    events:_.extend({},AbstractField.prototype.events,{
+        'clickinput':'_onInputClick',
     }),
     /**
-     * @constructs FieldRadio
+     *@constructsFieldRadio
      */
-    init: function () {
-        this._super.apply(this, arguments);
-        if (this.mode === 'edit') {
-            this.tagName = 'div';
-            this.className += this.nodeOptions.horizontal ? ' o_horizontal' : ' o_vertical';
+    init:function(){
+        this._super.apply(this,arguments);
+        if(this.mode==='edit'){
+            this.tagName='div';
+            this.className+=this.nodeOptions.horizontal?'o_horizontal':'o_vertical';
         }
-        this.unique_id = _.uniqueId("radio");
+        this.unique_id=_.uniqueId("radio");
         this._setValues();
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @returns {boolean} always true
+     *@override
+     *@returns{boolean}alwaystrue
      */
-    isSet: function () {
-        return true;
+    isSet:function(){
+        returntrue;
     },
 
     /**
-     * Returns the currently-checked radio button, or the first one if no radio
-     * button is checked.
+     *Returnsthecurrently-checkedradiobutton,orthefirstoneifnoradio
+     *buttonischecked.
      *
-     * @override
+     *@override
      */
-    getFocusableElement: function () {
-        var checked = this.$("[checked='true']");
-        return checked.length ? checked : this.$("[data-index='0']");
+    getFocusableElement:function(){
+        varchecked=this.$("[checked='true']");
+        returnchecked.length?checked:this.$("[data-index='0']");
     },
 
     /**
-     * Associates the 'for' attribute to the radiogroup, instead of the selected
-     * radio button.
+     *Associatesthe'for'attributetotheradiogroup,insteadoftheselected
+     *radiobutton.
      *
-     * @param {string} id
+     *@param{string}id
      */
-    setIDForLabel: function (id) {
-        this.$el.attr('id', id);
+    setIDForLabel:function(id){
+        this.$el.attr('id',id);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @override
+     *@private
+     *@override
      */
-    _renderEdit: function () {
-        var self = this;
-        var currentValue;
-        if (this.field.type === 'many2one') {
-            currentValue = this.value && this.value.data.id;
-        } else {
-            currentValue = this.value;
+    _renderEdit:function(){
+        varself=this;
+        varcurrentValue;
+        if(this.field.type==='many2one'){
+            currentValue=this.value&&this.value.data.id;
+        }else{
+            currentValue=this.value;
         }
         this.$el.empty();
-        this.$el.attr('role', 'radiogroup')
-            .attr('aria-label', this.string);
-        _.each(this.values, function (value, index) {
-            self.$el.append(qweb.render('FieldRadio.button', {
-                checked: value[0] === currentValue,
-                id: self.unique_id + '_' + value[0],
-                index: index,
-                name: self.unique_id,
-                value: value,
+        this.$el.attr('role','radiogroup')
+            .attr('aria-label',this.string);
+        _.each(this.values,function(value,index){
+            self.$el.append(qweb.render('FieldRadio.button',{
+                checked:value[0]===currentValue,
+                id:self.unique_id+'_'+value[0],
+                index:index,
+                name:self.unique_id,
+                value:value,
             }));
         });
     },
     /**
-     * @override
+     *@override
      */
-    _reset: function () {
-        this._super.apply(this, arguments);
+    _reset:function(){
+        this._super.apply(this,arguments);
         this._setValues();
     },
     /**
-     * Sets the possible field values. If the field is a many2one, those values
-     * may change during the lifecycle of the widget if the domain change (an
-     * onchange may change the domain).
+     *Setsthepossiblefieldvalues.Ifthefieldisamany2one,thosevalues
+     *maychangeduringthelifecycleofthewidgetifthedomainchange(an
+     *onchangemaychangethedomain).
      *
-     * @private
+     *@private
      */
-    _setValues: function () {
-        if (this.field.type === 'selection') {
-            this.values = this.field.selection || [];
-        } else if (this.field.type === 'many2one') {
-            this.values = _.map(this.record.specialData[this.name], function (val) {
-                return [val.id, val.display_name];
+    _setValues:function(){
+        if(this.field.type==='selection'){
+            this.values=this.field.selection||[];
+        }elseif(this.field.type==='many2one'){
+            this.values=_.map(this.record.specialData[this.name],function(val){
+                return[val.id,val.display_name];
             });
         }
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {MouseEvent} event
+     *@private
+     *@param{MouseEvent}event
      */
-    _onInputClick: function (event) {
-        var index = $(event.target).data('index');
-        var value = this.values[index];
-        if (this.field.type === 'many2one') {
-            this._setValue({id: value[0], display_name: value[1]});
-        } else {
+    _onInputClick:function(event){
+        varindex=$(event.target).data('index');
+        varvalue=this.values[index];
+        if(this.field.type==='many2one'){
+            this._setValue({id:value[0],display_name:value[1]});
+        }else{
             this._setValue(value[0]);
         }
     },
 });
 
 
-var FieldSelectionBadge = FieldSelection.extend({
-    description: _lt("Badges"),
-    template: null,
-    className: 'o_field_selection_badge',
-    tagName: 'span',
-    specialData: "_fetchSpecialMany2ones",
-    events: _.extend({}, AbstractField.prototype.events, {
-        'click span.o_selection_badge': '_onBadgeClicked',
+varFieldSelectionBadge=FieldSelection.extend({
+    description:_lt("Badges"),
+    template:null,
+    className:'o_field_selection_badge',
+    tagName:'span',
+    specialData:"_fetchSpecialMany2ones",
+    events:_.extend({},AbstractField.prototype.events,{
+        'clickspan.o_selection_badge':'_onBadgeClicked',
     }),
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @override
+     *@private
+     *@override
      */
-    _renderEdit: function () {
-        this.currentValue = this.value;
+    _renderEdit:function(){
+        this.currentValue=this.value;
 
-        if (this.field.type === 'many2one') {
-            this.currentValue = this.value && this.value.data.id;
+        if(this.field.type==='many2one'){
+            this.currentValue=this.value&&this.value.data.id;
         }
         this.$el.empty();
-        this.$el.html(qweb.render('FieldSelectionBadge', {'values': this.values, 'current_value': this.currentValue}));
+        this.$el.html(qweb.render('FieldSelectionBadge',{'values':this.values,'current_value':this.currentValue}));
     },
     /**
-     * Sets the possible field values. If the field is a many2one, those values
-     * may change during the life cycle of the widget if the domain change (an
-     * onchange may change the domain).
+     *Setsthepossiblefieldvalues.Ifthefieldisamany2one,thosevalues
+     *maychangeduringthelifecycleofthewidgetifthedomainchange(an
+     *onchangemaychangethedomain).
      *
-     * @private
-     * @override
+     *@private
+     *@override
      */
-    _setValues: function () {
-        // Note: We can make abstract widget for common code in radio and selection badge
-        if (this.field.type === 'selection') {
-            this.values = this.field.selection || [];
-        } else if (this.field.type === 'many2one') {
-            this.values = _.map(this.record.specialData[this.name], function (val) {
-                return [val.id, val.display_name];
+    _setValues:function(){
+        //Note:Wecanmakeabstractwidgetforcommoncodeinradioandselectionbadge
+        if(this.field.type==='selection'){
+            this.values=this.field.selection||[];
+        }elseif(this.field.type==='many2one'){
+            this.values=_.map(this.record.specialData[this.name],function(val){
+                return[val.id,val.display_name];
             });
         }
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {MouseEvent} event
+     *@private
+     *@param{MouseEvent}event
      */
-    _onBadgeClicked: function (event) {
-        var index = $(event.target).data('index');
-        var value = this.values[index];
-        if (value[0] !== this.currentValue) {
-            if (this.field.type === 'many2one') {
-                this._setValue({id: value[0], display_name: value[1]});
-            } else {
+    _onBadgeClicked:function(event){
+        varindex=$(event.target).data('index');
+        varvalue=this.values[index];
+        if(value[0]!==this.currentValue){
+            if(this.field.type==='many2one'){
+                this._setValue({id:value[0],display_name:value[1]});
+            }else{
                 this._setValue(value[0]);
             }
-        } else {
+        }else{
             this._setValue(false);
         }
     },
 });
 
-var FieldSelectionFont = FieldSelection.extend({
+varFieldSelectionFont=FieldSelection.extend({
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Changes CSS for all options according to their value.
-     * Also removes empty labels.
+     *ChangesCSSforalloptionsaccordingtotheirvalue.
+     *Alsoremovesemptylabels.
      *
-     * @private
-     * @override
+     *@private
+     *@override
      */
-    _renderEdit: function () {
-        this._super.apply(this, arguments);
+    _renderEdit:function(){
+        this._super.apply(this,arguments);
 
-        this.$('option').each(function (i, option) {
-            if (! option.label) {
+        this.$('option').each(function(i,option){
+            if(!option.label){
                 $(option).remove();
             }
-            $(option).css('font-family', option.value);
+            $(option).css('font-family',option.value);
         });
-        this.$el.css('font-family', this.value);
+        this.$el.css('font-family',this.value);
     },
 });
 
 /**
- * The FieldReference is a combination of a select (for the model) and
- * a FieldMany2one for its value.
- * Its intern representation is similar to the many2one (a datapoint with a
- * `name_get` as data).
- * Note that there is some logic to support char field because of one use in our
- * codebase, but this use should be removed along with this note.
+ *TheFieldReferenceisacombinationofaselect(forthemodel)and
+ *aFieldMany2oneforitsvalue.
+ *Itsinternrepresentationissimilartothemany2one(adatapointwitha
+ *`name_get`asdata).
+ *Notethatthereissomelogictosupportcharfieldbecauseofoneuseinour
+ *codebase,butthisuseshouldberemovedalongwiththisnote.
  */
-var FieldReference = FieldMany2One.extend({
-    specialData: "_fetchSpecialReference",
-    supportedFieldTypes: ['reference'],
-    template: 'FieldReference',
-    events: _.extend({}, FieldMany2One.prototype.events, {
-        'change select': '_onSelectionChange',
+varFieldReference=FieldMany2One.extend({
+    specialData:"_fetchSpecialReference",
+    supportedFieldTypes:['reference'],
+    template:'FieldReference',
+    events:_.extend({},FieldMany2One.prototype.events,{
+        'changeselect':'_onSelectionChange',
     }),
     /**
-     * @override
+     *@override
      */
-    init: function () {
-        this._super.apply(this, arguments);
+    init:function(){
+        this._super.apply(this,arguments);
 
-        // needs to be copied as it is an unmutable object
-        this.field = _.extend({}, this.field);
+        //needstobecopiedasitisanunmutableobject
+        this.field=_.extend({},this.field);
 
         this._setState();
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
+    start:function(){
         this.$('select').val(this.field.relation);
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @returns {jQuery}
+     *@override
+     *@returns{jQuery}
      */
-    getFocusableElement: function () {
-        if (this.mode === 'edit' && !this.field.relation) {
-            return this.$('select');
+    getFocusableElement:function(){
+        if(this.mode==='edit'&&!this.field.relation){
+            returnthis.$('select');
         }
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Get the encompassing record's display_name
+     *Gettheencompassingrecord'sdisplay_name
      *
-     * @override
+     *@override
      */
-    _formatValue: function () {
-        var value;
-        if (this.field.type === 'char') {
-            value = this.record.specialData[this.name];
-        } else {
-            value = this.value;
+    _formatValue:function(){
+        varvalue;
+        if(this.field.type==='char'){
+            value=this.record.specialData[this.name];
+        }else{
+            value=this.value;
         }
-        return value && value.data && value.data.display_name || '';
+        returnvalue&&value.data&&value.data.display_name||'';
     },
 
     /**
-     * Add a select in edit mode (for the model).
+     *Addaselectineditmode(forthemodel).
      *
-     * @override
+     *@override
      */
-    _renderEdit: function () {
-        this._super.apply(this, arguments);
+    _renderEdit:function(){
+        this._super.apply(this,arguments);
 
-        if (this.$('select').val()) {
+        if(this.$('select').val()){
             this.$('.o_input_dropdown').show();
-            this.$el.addClass('o_row'); // this class is used to display the two
-                                        // components (select & input) on the same line
-        } else {
-            // hide the many2one if the selection is empty
+            this.$el.addClass('o_row');//thisclassisusedtodisplaythetwo
+                                        //components(select&input)onthesameline
+        }else{
+            //hidethemany2oneiftheselectionisempty
             this.$('.o_input_dropdown').hide();
         }
 
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _reset: function () {
-        this._super.apply(this, arguments);
-        var value = this.$('select').val();
+    _reset:function(){
+        this._super.apply(this,arguments);
+        varvalue=this.$('select').val();
         this._setState();
-        this.$('select').val(this.value && this.value.model || value);
+        this.$('select').val(this.value&&this.value.model||value);
     },
     /**
-     * Set `relation` key in field properties.
+     *Set`relation`keyinfieldproperties.
      *
-     * @private
-     * @param {string} model
+     *@private
+     *@param{string}model
      */
-    _setRelation: function (model) {
-        // used to generate the search in many2one
-        this.field.relation = model;
+    _setRelation:function(model){
+        //usedtogeneratethesearchinmany2one
+        this.field.relation=model;
     },
     /**
-     * @private
+     *@private
      */
-    _setState: function () {
-        if (this.field.type === 'char') {
-            // in this case, the value is stored in specialData instead
-            this.value = this.record.specialData[this.name];
+    _setState:function(){
+        if(this.field.type==='char'){
+            //inthiscase,thevalueisstoredinspecialDatainstead
+            this.value=this.record.specialData[this.name];
         }
 
-        if (this.value) {
+        if(this.value){
             this._setRelation(this.value.model);
         }
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _setValue: function (value, options) {
-        value = value || {};
-        // we need to specify the model for the change in basic_model
-        // the value is then now a dict with id, display_name and model
-        value.model = this.$('select').val();
-        return this._super(value, options);
+    _setValue:function(value,options){
+        value=value||{};
+        //weneedtospecifythemodelforthechangeinbasic_model
+        //thevalueisthennowadictwithid,display_nameandmodel
+        value.model=this.$('select').val();
+        returnthis._super(value,options);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * When the selection (model) changes, the many2one is reset.
+     *Whentheselection(model)changes,themany2oneisreset.
      *
-     * @private
+     *@private
      */
-    _onSelectionChange: function () {
-        var value = this.$('select').val();
+    _onSelectionChange:function(){
+        varvalue=this.$('select').val();
         this.reinitialize(false);
         this._setRelation(value);
     },
 });
 
-return {
-    FieldMany2One: FieldMany2One,
-    Many2oneBarcode: Many2oneBarcode,
-    KanbanFieldMany2One: KanbanFieldMany2One,
-    ListFieldMany2One: ListFieldMany2One,
-    Many2OneAvatar: Many2OneAvatar,
+return{
+    FieldMany2One:FieldMany2One,
+    Many2oneBarcode:Many2oneBarcode,
+    KanbanFieldMany2One:KanbanFieldMany2One,
+    ListFieldMany2One:ListFieldMany2One,
+    Many2OneAvatar:Many2OneAvatar,
 
-    FieldX2Many: FieldX2Many,
-    FieldOne2Many: FieldOne2Many,
+    FieldX2Many:FieldX2Many,
+    FieldOne2Many:FieldOne2Many,
 
-    FieldMany2Many: FieldMany2Many,
-    FieldMany2ManyBinaryMultiFiles: FieldMany2ManyBinaryMultiFiles,
-    FieldMany2ManyCheckBoxes: FieldMany2ManyCheckBoxes,
-    FieldMany2ManyTags: FieldMany2ManyTags,
-    FieldMany2ManyTagsAvatar: FieldMany2ManyTagsAvatar,
-    FormFieldMany2ManyTags: FormFieldMany2ManyTags,
-    KanbanFieldMany2ManyTags: KanbanFieldMany2ManyTags,
+    FieldMany2Many:FieldMany2Many,
+    FieldMany2ManyBinaryMultiFiles:FieldMany2ManyBinaryMultiFiles,
+    FieldMany2ManyCheckBoxes:FieldMany2ManyCheckBoxes,
+    FieldMany2ManyTags:FieldMany2ManyTags,
+    FieldMany2ManyTagsAvatar:FieldMany2ManyTagsAvatar,
+    FormFieldMany2ManyTags:FormFieldMany2ManyTags,
+    KanbanFieldMany2ManyTags:KanbanFieldMany2ManyTags,
 
-    FieldRadio: FieldRadio,
-    FieldSelectionBadge: FieldSelectionBadge,
-    FieldSelection: FieldSelection,
-    FieldStatus: FieldStatus,
-    FieldSelectionFont: FieldSelectionFont,
+    FieldRadio:FieldRadio,
+    FieldSelectionBadge:FieldSelectionBadge,
+    FieldSelection:FieldSelection,
+    FieldStatus:FieldStatus,
+    FieldSelectionFont:FieldSelectionFont,
 
-    FieldReference: FieldReference,
+    FieldReference:FieldReference,
 };
 
 });

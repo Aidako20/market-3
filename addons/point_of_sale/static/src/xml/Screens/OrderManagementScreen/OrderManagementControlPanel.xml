@@ -1,35 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="OrderManagementControlPanel" owl="1">
-        <div class="control-panel">
-            <div class="item button back" t-on-click="trigger('close-screen')">
-                <i class="fa fa-angle-double-left"></i>
-                <span> Back</span>
+    <tt-name="OrderManagementControlPanel"owl="1">
+        <divclass="control-panel">
+            <divclass="itembuttonback"t-on-click="trigger('close-screen')">
+                <iclass="fafa-angle-double-left"></i>
+                <span>Back</span>
             </div>
-            <div class="item search-box">
-                <span class="icon">
-                    <i class="fa fa-search" />
+            <divclass="itemsearch-box">
+                <spanclass="icon">
+                    <iclass="fafa-search"/>
                 </span>
-                <input type="text" t-model="orderManagementContext.searchString" t-on-keydown="onInputKeydown" placeholder="E.g. customer: Steward, date: 2020-05-09" />
-                <span class="clear" t-on-click="trigger('clear-search')">
-                    <i class="fa fa-remove" />
+                <inputtype="text"t-model="orderManagementContext.searchString"t-on-keydown="onInputKeydown"placeholder="E.g.customer:Steward,date:2020-05-09"/>
+                <spanclass="clear"t-on-click="trigger('clear-search')">
+                    <iclass="fafa-remove"/>
                 </span>
             </div>
-            <div t-if="showPageControls" class="item">
-                <div class="page-controls">
-                    <div class="previous" t-on-click="trigger('prev-page')">
-                        <i class="fa fa-fw fa-caret-left" role="img" aria-label="Previous Order List" title="Previous Order List"></i>
+            <divt-if="showPageControls"class="item">
+                <divclass="page-controls">
+                    <divclass="previous"t-on-click="trigger('prev-page')">
+                        <iclass="fafa-fwfa-caret-left"role="img"aria-label="PreviousOrderList"title="PreviousOrderList"></i>
                     </div>
-                    <div class="next" t-on-click="trigger('next-page')">
-                        <i class="fa fa-fw fa-caret-right" role="img" aria-label="Next Order List" title="Next Order List"></i>
+                    <divclass="next"t-on-click="trigger('next-page')">
+                        <iclass="fafa-fwfa-caret-right"role="img"aria-label="NextOrderList"title="NextOrderList"></i>
                     </div>
                 </div>
-                <div class="page">
-                    <span><t t-esc="pageNumber" /></span>
+                <divclass="page">
+                    <span><tt-esc="pageNumber"/></span>
                 </div>
             </div>
-            <div t-else="" class="item"></div>
+            <divt-else=""class="item"></div>
         </div>
     </t>
 

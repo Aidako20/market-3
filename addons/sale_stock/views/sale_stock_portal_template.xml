@@ -1,35 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <template id="sale_order_portal_content_inherit_sale_stock" name="Orders Shipping Followup" inherit_id="sale.sale_order_portal_content">
-        <xpath expr="//div[@id='so_date']" position="after">
-            <div class="row" t-if="sale_order.incoterm">
-                <div class="mb-3 col-6 ml-auto">
-                    <strong>Incoterm: </strong> <span t-field="sale_order.incoterm"/>
+    <templateid="sale_order_portal_content_inherit_sale_stock"name="OrdersShippingFollowup"inherit_id="sale.sale_order_portal_content">
+        <xpathexpr="//div[@id='so_date']"position="after">
+            <divclass="row"t-if="sale_order.incoterm">
+                <divclass="mb-3col-6ml-auto">
+                    <strong>Incoterm:</strong><spant-field="sale_order.incoterm"/>
                 </div>
             </div>
         </xpath>
-        <xpath expr="//div[@id='informations']" position="inside">
-            <t t-set="delivery_orders" t-value="sale_order.picking_ids.filtered(lambda picking: picking.picking_type_id.code == 'outgoing')"/>
-            <t t-if="delivery_orders">
+        <xpathexpr="//div[@id='informations']"position="inside">
+            <tt-set="delivery_orders"t-value="sale_order.picking_ids.filtered(lambdapicking:picking.picking_type_id.code=='outgoing')"/>
+            <tt-if="delivery_orders">
                 <div>
-                    <strong>Delivery Orders</strong>
+                    <strong>DeliveryOrders</strong>
                 </div>
                 <div>
-                    <t t-foreach="delivery_orders" t-as="i">
-                        <t t-set="delivery_report_url" t-value="'/my/picking/pdf/%s?%s' % (i.id, keep_query())"/>
-                        <div class="d-flex flex-wrap align-items-center justify-content-between o_sale_stock_picking">
+                    <tt-foreach="delivery_orders"t-as="i">
+                        <tt-set="delivery_report_url"t-value="'/my/picking/pdf/%s?%s'%(i.id,keep_query())"/>
+                        <divclass="d-flexflex-wrapalign-items-centerjustify-content-betweeno_sale_stock_picking">
                             <div>
-                                <a t-att-href="delivery_report_url">
-                                    <span t-esc="i.name"/>
+                                <at-att-href="delivery_report_url">
+                                    <spant-esc="i.name"/>
                                 </a>
-                                <div class="small d-lg-inline-block ml-3">Date:
-                                    <span class="text-muted" t-field="i.date_done" t-options="{'date_only': True}"/>
-                                    <span t-if="i.state in ['draft', 'waiting', 'confirmed', 'assigned']" class="text-muted" t-field="i.scheduled_date" t-options="{'date_only': True}"/>
+                                <divclass="smalld-lg-inline-blockml-3">Date:
+                                    <spanclass="text-muted"t-field="i.date_done"t-options="{'date_only':True}"/>
+                                    <spant-if="i.statein['draft','waiting','confirmed','assigned']"class="text-muted"t-field="i.scheduled_date"t-options="{'date_only':True}"/>
                                 </div>
                             </div>
-                            <span t-if="i.state == 'done'" class="small badge badge-success orders_label_text_align"><i class="fa fa-fw fa-truck"/> <b>Shipped</b></span>
-                            <span t-if="i.state == 'cancel'" class="small badge badge-danger orders_label_text_align"><i class="fa fa-fw fa-times"/> <b>Cancelled</b></span>
-                            <span t-if="i.state in ['draft', 'waiting', 'confirmed', 'assigned']" class="small badge badge-info orders_label_text_align"><i class="fa fa-fw fa-clock-o"/> <b>Preparation</b></span>
+                            <spant-if="i.state=='done'"class="smallbadgebadge-successorders_label_text_align"><iclass="fafa-fwfa-truck"/><b>Shipped</b></span>
+                            <spant-if="i.state=='cancel'"class="smallbadgebadge-dangerorders_label_text_align"><iclass="fafa-fwfa-times"/><b>Cancelled</b></span>
+                            <spant-if="i.statein['draft','waiting','confirmed','assigned']"class="smallbadgebadge-infoorders_label_text_align"><iclass="fafa-fwfa-clock-o"/><b>Preparation</b></span>
                         </div>
                     </t>
                 </div>

@@ -1,143 +1,143 @@
-flectra.define('website_sale.tour_shop_customize', function (require) {
-    'use strict';
+flectra.define('website_sale.tour_shop_customize',function(require){
+    'usestrict';
 
-    var tour = require("web_tour.tour");
+    vartour=require("web_tour.tour");
 
-    tour.register('shop_customize', {
-        test: true,
-        url: '/shop',
+    tour.register('shop_customize',{
+        test:true,
+        url:'/shop',
     },
         [
             {
-                content: "open customize menu",
-                trigger: '#customize-menu > a',
+                content:"opencustomizemenu",
+                trigger:'#customize-menu>a',
             },
             {
-                content: "click on 'Product Attribute's Filters'",
-                trigger: "#customize-menu a:contains(Product Attribute's Filters)",
+                content:"clickon'ProductAttribute'sFilters'",
+                trigger:"#customize-menua:contains(ProductAttribute'sFilters)",
             },
             {
-                content: "select product attribute Steel",
-                extra_trigger: 'body:not(:has(#customize-menu:visible .dropdown-menu:visible))',
-                trigger: 'form.js_attributes label:contains(Steel - Test) input:not(:checked)',
+                content:"selectproductattributeSteel",
+                extra_trigger:'body:not(:has(#customize-menu:visible.dropdown-menu:visible))',
+                trigger:'form.js_attributeslabel:contains(Steel-Test)input:not(:checked)',
             },
             {
-                content: "check the selection",
-                trigger: 'form.js_attributes label:contains(Steel - Test) input:checked',
-                run: function () {}, // it's a check
+                content:"checktheselection",
+                trigger:'form.js_attributeslabel:contains(Steel-Test)input:checked',
+                run:function(){},//it'sacheck
             },
             {
-                content: "select product",
-                extra_trigger: 'body:not(:has(.oe_website_sale .oe_product_cart:eq(3)))',
-                trigger: '.oe_product_cart a:contains("Test Product")',
+                content:"selectproduct",
+                extra_trigger:'body:not(:has(.oe_website_sale.oe_product_cart:eq(3)))',
+                trigger:'.oe_product_carta:contains("TestProduct")',
             },
             {
-                content: "open customize menu",
-                trigger: '#customize-menu > a',
-                extra_trigger: '#product_detail',
+                content:"opencustomizemenu",
+                trigger:'#customize-menu>a',
+                extra_trigger:'#product_detail',
             },
             {
-                content: "check page loaded after enable  variant group",
-                trigger: '#customize-menu a:contains(List View of Variants)',
-                run: function () {}, // it's a check
+                content:"checkpageloadedafterenable variantgroup",
+                trigger:'#customize-menua:contains(ListViewofVariants)',
+                run:function(){},//it'sacheck
             },
             {
-                content: "check list view of variants is disabled initially",
-                trigger: 'body:not(:has(.js_product_change))',
-                run: function () {},
+                content:"checklistviewofvariantsisdisabledinitially",
+                trigger:'body:not(:has(.js_product_change))',
+                run:function(){},
             },
             {
-                content: "click on 'List View of Variants'",
-                trigger: "#customize-menu a:contains(List View of Variants)",
+                content:"clickon'ListViewofVariants'",
+                trigger:"#customize-menua:contains(ListViewofVariants)",
             },
             {
-                content: "check page loaded after list of variant customization enabled",
-                trigger: '.js_product_change',
-                run: function () {}, // it's a check
+                content:"checkpageloadedafterlistofvariantcustomizationenabled",
+                trigger:'.js_product_change',
+                run:function(){},//it'sacheck
             },
             {
-                context: "check variant price",
-                trigger: '.custom-radio:contains("Aluminium") .badge:contains("+") .oe_currency_value:contains("50.4")',
-                run: function () {},
+                context:"checkvariantprice",
+                trigger:'.custom-radio:contains("Aluminium").badge:contains("+").oe_currency_value:contains("50.4")',
+                run:function(){},
             },
             {
-                content: "check price is 750",
-                trigger: ".product_price .oe_price .oe_currency_value:containsExact(750.00)",
-                run: function () {},
+                content:"checkpriceis750",
+                trigger:".product_price.oe_price.oe_currency_value:containsExact(750.00)",
+                run:function(){},
             },
             {
-                content: "switch to another variant",
-                trigger: ".js_product label:contains('Aluminium')",
+                content:"switchtoanothervariant",
+                trigger:".js_productlabel:contains('Aluminium')",
             },
             {
-                content: "verify that price has changed when changing variant",
-                trigger: ".product_price .oe_price .oe_currency_value:containsExact(800.40)",
-                run: function () {},
+                content:"verifythatpricehaschangedwhenchangingvariant",
+                trigger:".product_price.oe_price.oe_currency_value:containsExact(800.40)",
+                run:function(){},
             },
             {
-                content: "open customize menu",
-                trigger: '#customize-menu > a',
+                content:"opencustomizemenu",
+                trigger:'#customize-menu>a',
             },
             {
-                content: "remove 'List View of Variants'",
-                trigger: "#customize-menu a:contains(List View of Variants):has(input:checked)",
+                content:"remove'ListViewofVariants'",
+                trigger:"#customize-menua:contains(ListViewofVariants):has(input:checked)",
             },
             {
-                content: "check page loaded after list of variant customization disabled",
-                trigger: ".js_product:not(:has(.js_product_change))",
-                run: function () {}, // it's a check
+                content:"checkpageloadedafterlistofvariantcustomizationdisabled",
+                trigger:".js_product:not(:has(.js_product_change))",
+                run:function(){},//it'sacheck
             },
             {
-                content: "check price is 750",
-                trigger: ".product_price .oe_price .oe_currency_value:containsExact(750.00)",
-                run: function () {},
+                content:"checkpriceis750",
+                trigger:".product_price.oe_price.oe_currency_value:containsExact(750.00)",
+                run:function(){},
             },
             {
-                content: "switch to Aluminium variant",
-                trigger: '.js_product input[data-value_name="Aluminium"]',
+                content:"switchtoAluminiumvariant",
+                trigger:'.js_productinput[data-value_name="Aluminium"]',
             },
             {
-                content: "verify that price has changed when changing variant",
-                trigger: ".product_price .oe_price .oe_currency_value:containsExact(800.40)",
-                run: function () {}, // it's a check
+                content:"verifythatpricehaschangedwhenchangingvariant",
+                trigger:".product_price.oe_price.oe_currency_value:containsExact(800.40)",
+                run:function(){},//it'sacheck
             },
             {
-                content: "switch back to Steel variant",
-                trigger: ".js_product label:contains('Steel - Test')",
+                content:"switchbacktoSteelvariant",
+                trigger:".js_productlabel:contains('Steel-Test')",
             },
             {
-                content: "check price is 750",
-                trigger: ".product_price .oe_price .oe_currency_value:containsExact(750.00)",
-                run: function () {},
+                content:"checkpriceis750",
+                trigger:".product_price.oe_price.oe_currency_value:containsExact(750.00)",
+                run:function(){},
             },
             {
-                content: "click on 'Add to Cart' button",
-                trigger: "a:contains(Add to Cart)",
+                content:"clickon'AddtoCart'button",
+                trigger:"a:contains(AddtoCart)",
             },
             {
-                content: "check quantity",
-                trigger: '.my_cart_quantity:containsExact(1),.o_extra_menu_items .fa-plus',
-                run: function () {}, // it's a check
+                content:"checkquantity",
+                trigger:'.my_cart_quantity:containsExact(1),.o_extra_menu_items.fa-plus',
+                run:function(){},//it'sacheck
             },
             {
-                content: "click on shop",
-                trigger: "a:contains(Continue Shopping)",
-                extra_trigger: 'body:not(:has(#products_grid_before .js_attributes))',
+                content:"clickonshop",
+                trigger:"a:contains(ContinueShopping)",
+                extra_trigger:'body:not(:has(#products_grid_before.js_attributes))',
             },
             {
-                content: "open customize menu bis",
-                extra_trigger: '#products_grid_before .js_attributes',
-                trigger: '#customize-menu > a',
+                content:"opencustomizemenubis",
+                extra_trigger:'#products_grid_before.js_attributes',
+                trigger:'#customize-menu>a',
             },
             {
-                content: "remove 'Product Attribute's Filters'",
-                trigger: "#customize-menu a:contains(Product Attribute's Filters):has(input:checked)",
+                content:"remove'ProductAttribute'sFilters'",
+                trigger:"#customize-menua:contains(ProductAttribute'sFilters):has(input:checked)",
             },
             {
-                content: "finish",
-                extra_trigger: 'body:not(:has(#products_grid_before .js_attributes))',
-                trigger: '#wrap:not(:has(li:has(.my_cart_quantity):visible))',
-                run: function () {}, // it's a check
+                content:"finish",
+                extra_trigger:'body:not(:has(#products_grid_before.js_attributes))',
+                trigger:'#wrap:not(:has(li:has(.my_cart_quantity):visible))',
+                run:function(){},//it'sacheck
             },
         ]
     );

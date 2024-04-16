@@ -1,99 +1,99 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
-from flectra.exceptions import UserError
-
-
-class RestaurantFloor(models.Model):
-
-    _name = 'restaurant.floor'
-    _description = 'Restaurant Floor'
-
-    name = fields.Char('Floor Name', required=True, help='An internal identification of the restaurant floor')
-    pos_config_id = fields.Many2one('pos.config', string='Point of Sale')
-    background_image = fields.Binary('Background Image', help='A background image used to display a floor layout in the point of sale interface')
-    background_color = fields.Char('Background Color', help='The background color of the floor layout, (must be specified in a html-compatible format)', default='rgb(210, 210, 210)')
-    table_ids = fields.One2many('restaurant.table', 'floor_id', string='Tables', help='The list of tables in this floor')
-    sequence = fields.Integer('Sequence', help='Used to sort Floors', default=1)
-    active = fields.Boolean(default=True)
-
-    def unlink(self):
-        confs = self.mapped('pos_config_id').filtered(lambda c: c.is_table_management == True)
-        opened_session = self.env['pos.session'].search([('config_id', 'in', confs.ids), ('state', '!=', 'closed')])
-        if opened_session:
-            error_msg = _("You cannot remove a floor that is used in a PoS session, close the session(s) first: \n")
-            for floor in self:
-                for session in opened_session:
-                    if floor in session.config_id.floor_ids:
-                        error_msg += _("Floor: %s - PoS Config: %s \n") % (floor.name, session.config_id.name)
-            if confs:
-                raise UserError(error_msg)
-        return super(RestaurantFloor, self).unlink()
-
-    def write(self, vals):
-        for floor in self:
-            if floor.pos_config_id.has_active_session and (vals.get('pos_config_id') or vals.get('active')) :
-                raise UserError(
-                    'Please close and validate the following open PoS Session before modifying this floor.\n'
-                    'Open session: %s' % (' '.join(floor.pos_config_id.mapped('name')),))
-            if vals.get('pos_config_id') and floor.pos_config_id.id and vals.get('pos_config_id') != floor.pos_config_id.id:
-                raise UserError('The %s is already used in another Pos Config.' % floor.name)
-        return super(RestaurantFloor, self).write(vals)
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportUserError
 
 
-class RestaurantTable(models.Model):
+classRestaurantFloor(models.Model):
 
-    _name = 'restaurant.table'
-    _description = 'Restaurant Table'
+    _name='restaurant.floor'
+    _description='RestaurantFloor'
 
-    name = fields.Char('Table Name', required=True, help='An internal identification of a table')
-    floor_id = fields.Many2one('restaurant.floor', string='Floor')
-    shape = fields.Selection([('square', 'Square'), ('round', 'Round')], string='Shape', required=True, default='square')
-    position_h = fields.Float('Horizontal Position', default=10,
-        help="The table's horizontal position from the left side to the table's center, in pixels")
-    position_v = fields.Float('Vertical Position', default=10,
-        help="The table's vertical position from the top to the table's center, in pixels")
-    width = fields.Float('Width', default=50, help="The table's width in pixels")
-    height = fields.Float('Height', default=50, help="The table's height in pixels")
-    seats = fields.Integer('Seats', default=1, help="The default number of customer served at this table.")
-    color = fields.Char('Color', help="The table's color, expressed as a valid 'background' CSS property value")
-    active = fields.Boolean('Active', default=True, help='If false, the table is deactivated and will not be available in the point of sale')
+    name=fields.Char('FloorName',required=True,help='Aninternalidentificationoftherestaurantfloor')
+    pos_config_id=fields.Many2one('pos.config',string='PointofSale')
+    background_image=fields.Binary('BackgroundImage',help='Abackgroundimageusedtodisplayafloorlayoutinthepointofsaleinterface')
+    background_color=fields.Char('BackgroundColor',help='Thebackgroundcolorofthefloorlayout,(mustbespecifiedinahtml-compatibleformat)',default='rgb(210,210,210)')
+    table_ids=fields.One2many('restaurant.table','floor_id',string='Tables',help='Thelistoftablesinthisfloor')
+    sequence=fields.Integer('Sequence',help='UsedtosortFloors',default=1)
+    active=fields.Boolean(default=True)
+
+    defunlink(self):
+        confs=self.mapped('pos_config_id').filtered(lambdac:c.is_table_management==True)
+        opened_session=self.env['pos.session'].search([('config_id','in',confs.ids),('state','!=','closed')])
+        ifopened_session:
+            error_msg=_("YoucannotremoveafloorthatisusedinaPoSsession,closethesession(s)first:\n")
+            forfloorinself:
+                forsessioninopened_session:
+                    iffloorinsession.config_id.floor_ids:
+                        error_msg+=_("Floor:%s-PoSConfig:%s\n")%(floor.name,session.config_id.name)
+            ifconfs:
+                raiseUserError(error_msg)
+        returnsuper(RestaurantFloor,self).unlink()
+
+    defwrite(self,vals):
+        forfloorinself:
+            iffloor.pos_config_id.has_active_sessionand(vals.get('pos_config_id')orvals.get('active')):
+                raiseUserError(
+                    'PleasecloseandvalidatethefollowingopenPoSSessionbeforemodifyingthisfloor.\n'
+                    'Opensession:%s'%(''.join(floor.pos_config_id.mapped('name')),))
+            ifvals.get('pos_config_id')andfloor.pos_config_id.idandvals.get('pos_config_id')!=floor.pos_config_id.id:
+                raiseUserError('The%sisalreadyusedinanotherPosConfig.'%floor.name)
+        returnsuper(RestaurantFloor,self).write(vals)
+
+
+classRestaurantTable(models.Model):
+
+    _name='restaurant.table'
+    _description='RestaurantTable'
+
+    name=fields.Char('TableName',required=True,help='Aninternalidentificationofatable')
+    floor_id=fields.Many2one('restaurant.floor',string='Floor')
+    shape=fields.Selection([('square','Square'),('round','Round')],string='Shape',required=True,default='square')
+    position_h=fields.Float('HorizontalPosition',default=10,
+        help="Thetable'shorizontalpositionfromtheleftsidetothetable'scenter,inpixels")
+    position_v=fields.Float('VerticalPosition',default=10,
+        help="Thetable'sverticalpositionfromthetoptothetable'scenter,inpixels")
+    width=fields.Float('Width',default=50,help="Thetable'swidthinpixels")
+    height=fields.Float('Height',default=50,help="Thetable'sheightinpixels")
+    seats=fields.Integer('Seats',default=1,help="Thedefaultnumberofcustomerservedatthistable.")
+    color=fields.Char('Color',help="Thetable'scolor,expressedasavalid'background'CSSpropertyvalue")
+    active=fields.Boolean('Active',default=True,help='Iffalse,thetableisdeactivatedandwillnotbeavailableinthepointofsale')
 
     @api.model
-    def create_from_ui(self, table):
-        """ create or modify a table from the point of sale UI.
-            table contains the table's fields. If it contains an
-            id, it will modify the existing table. It then
-            returns the id of the table.
+    defcreate_from_ui(self,table):
+        """createormodifyatablefromthepointofsaleUI.
+            tablecontainsthetable'sfields.Ifitcontainsan
+            id,itwillmodifytheexistingtable.Itthen
+            returnstheidofthetable.
         """
-        if table.get('floor_id'):
-            table['floor_id'] = table['floor_id'][0]
+        iftable.get('floor_id'):
+            table['floor_id']=table['floor_id'][0]
 
-        table_id = table.pop('id', False)
-        if table_id:
+        table_id=table.pop('id',False)
+        iftable_id:
             self.browse(table_id).write(table)
         else:
-            table_id = self.create(table).id
-        return table_id
+            table_id=self.create(table).id
+        returntable_id
 
-    def unlink(self):
-        confs = self.mapped('floor_id').mapped('pos_config_id').filtered(lambda c: c.is_table_management == True)
-        opened_session = self.env['pos.session'].search([('config_id', 'in', confs.ids), ('state', '!=', 'closed')])
-        if opened_session:
-            error_msg = _("You cannot remove a table that is used in a PoS session, close the session(s) first.")
-            if confs:
-                raise UserError(error_msg)
-        return super(RestaurantTable, self).unlink()
+    defunlink(self):
+        confs=self.mapped('floor_id').mapped('pos_config_id').filtered(lambdac:c.is_table_management==True)
+        opened_session=self.env['pos.session'].search([('config_id','in',confs.ids),('state','!=','closed')])
+        ifopened_session:
+            error_msg=_("YoucannotremoveatablethatisusedinaPoSsession,closethesession(s)first.")
+            ifconfs:
+                raiseUserError(error_msg)
+        returnsuper(RestaurantTable,self).unlink()
 
 
-class RestaurantPrinter(models.Model):
+classRestaurantPrinter(models.Model):
 
-    _name = 'restaurant.printer'
-    _description = 'Restaurant Printer'
+    _name='restaurant.printer'
+    _description='RestaurantPrinter'
 
-    name = fields.Char('Printer Name', required=True, default='Printer', help='An internal identification of the printer')
-    printer_type = fields.Selection(string='Printer Type', default='iot',
-        selection=[('iot', ' Use a printer connected to the IoT Box')])
-    proxy_ip = fields.Char('Proxy IP Address', help="The IP Address or hostname of the Printer's hardware proxy")
-    product_categories_ids = fields.Many2many('pos.category', 'printer_category_rel', 'printer_id', 'category_id', string='Printed Product Categories')
+    name=fields.Char('PrinterName',required=True,default='Printer',help='Aninternalidentificationoftheprinter')
+    printer_type=fields.Selection(string='PrinterType',default='iot',
+        selection=[('iot','UseaprinterconnectedtotheIoTBox')])
+    proxy_ip=fields.Char('ProxyIPAddress',help="TheIPAddressorhostnameofthePrinter'shardwareproxy")
+    product_categories_ids=fields.Many2many('pos.category','printer_category_rel','printer_id','category_id',string='PrintedProductCategories')

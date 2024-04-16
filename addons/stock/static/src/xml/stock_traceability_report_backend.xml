@@ -1,20 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 
 <templates>
 
-    <t t-name="stockReports.buttons">
-        <button type="button" class='btn btn-primary o_stock-widget-pdf'>PRINT</button>
+    <tt-name="stockReports.buttons">
+        <buttontype="button"class='btnbtn-primaryo_stock-widget-pdf'>PRINT</button>
     </t>
 
-    <div role="dialog" t-name='stockReports.errorModal' class="modal" id="editable_error" tabindex="-1" data-backdrop="static" style="z-index:9999;">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <header class="modal-header">
-                    <h3 class="modal-title">Error</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+    <divrole="dialog"t-name='stockReports.errorModal'class="modal"id="editable_error"tabindex="-1"data-backdrop="static"style="z-index:9999;">
+        <divclass="modal-dialogmodal-sm">
+            <divclass="modal-content">
+                <headerclass="modal-header">
+                    <h3class="modal-title">Error</h3>
+                    <buttontype="button"class="close"data-dismiss="modal"aria-label="Close">×</button>
                 </header>
-                <main class="modal-body">
-                    <p id='insert_error' class='text-center'></p>
+                <mainclass="modal-body">
+                    <pid='insert_error'class='text-center'></p>
                 </main>
             </div>
         </div>

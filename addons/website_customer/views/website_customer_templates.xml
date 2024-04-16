@@ -1,53 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template id="index" name="Our References">
-    <t t-call="website.layout">
-        <div id="wrap">
-            <div class="oe_structure">
+<templateid="index"name="OurReferences">
+    <tt-call="website.layout">
+        <divid="wrap">
+            <divclass="oe_structure">
                 <section>
-                    <h1 class="text-center">
-                        Our References
-                    </h1><h2 class="text-center text-muted">
-                        Trusted by millions worldwide
+                    <h1class="text-center">
+                        OurReferences
+                    </h1><h2class="text-centertext-muted">
+                        Trustedbymillionsworldwide
                     </h2>
                 </section>
             </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-3 mb32" id="ref_left_column">
+            <divclass="container">
+                <divclass="row">
+                    <divclass="col-lg-3mb32"id="ref_left_column">
                     </div>
-                    <div class="col-lg-8 offset-lg-1" id="ref_content">
-                        <div class='d-flex m-2'>
-                            <t t-call="website.pager">
-                               <t t-set="classname" t-value="'float-left'"/>
+                    <divclass="col-lg-8offset-lg-1"id="ref_content">
+                        <divclass='d-flexm-2'>
+                            <tt-call="website.pager">
+                               <tt-set="classname"t-value="'float-left'"/>
                             </t>
-                            <form action="" method="get" class="navbar-search ml-auto pagination form-inline">
-                                <div class="form-group">
-                                    <input type="text" name="search" class="search-query form-control"
-                                        placeholder="Search" t-att-value="post.get('search', '')"/>
+                            <formaction=""method="get"class="navbar-searchml-autopaginationform-inline">
+                                <divclass="form-group">
+                                    <inputtype="text"name="search"class="search-queryform-control"
+                                        placeholder="Search"t-att-value="post.get('search','')"/>
                                 </div>
                             </form>
                         </div>
 
                         <div>
 
-                    <p t-if="not partners">No result found</p>
-                    <t t-foreach="partners" t-as="partner">
-                        <div class="media mt-3">
-                            <a t-attf-href="/customers/#{slug(partner)}"
+                    <pt-if="notpartners">Noresultfound</p>
+                    <tt-foreach="partners"t-as="partner">
+                        <divclass="mediamt-3">
+                            <at-attf-href="/customers/#{slug(partner)}"
                                t-field="partner.image_128"
-                               class="d-block mr-3 text-center o_width_128"
-                               t-options='{"widget": "image", "qweb_img_responsive": False, "class": "o_image_128_max"}'
+                               class="d-blockmr-3text-centero_width_128"
+                               t-options='{"widget":"image","qweb_img_responsive":False,"class":"o_image_128_max"}'
                             ></a>
-                            <div class="media-body" style="min-height: 64px;">
-                                <a t-attf-href="/customers/#{slug(partner)}">
-                                    <span t-field="partner.display_name"/>
+                            <divclass="media-body"style="min-height:64px;">
+                                <at-attf-href="/customers/#{slug(partner)}">
+                                    <spant-field="partner.display_name"/>
                                 </a>
-                                <t t-if="partner.industry_id">
-                                    <a class="badge badge-secondary" t-attf-href="/customers/#{ 'industry/%s/' % slug(partner.industry_id) }#{ current_country_id and 'country/%s' % slug(current_country) or '' }" t-esc="partner.industry_id.name"/>
+                                <tt-if="partner.industry_id">
+                                    <aclass="badgebadge-secondary"t-attf-href="/customers/#{'industry/%s/'%slug(partner.industry_id)}#{current_country_idand'country/%s'%slug(current_country)or''}"t-esc="partner.industry_id.name"/>
                                 </t>
-                                <div t-field="partner.website_short_description"/>
+                                <divt-field="partner.website_short_description"/>
                             </div>
                         </div>
                     </t>
@@ -56,49 +56,49 @@
 
                 </div>
             </div>
-            <div class="oe_structure"/>
+            <divclass="oe_structure"/>
         </div>
     </t>
 </template>
 
-<!-- Option: left column: World Map -->
-<template id="opt_country" inherit_id="website_customer.index" customize_show="True" name="Show Map">
-    <xpath expr="//div[@id='ref_left_column']" position="inside">
-        <t t-if="google_maps_api_key">
-            <!-- modal for large map -->
-            <div role="dialog" class="modal fade customer_map_modal" tabindex="-1">
-              <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <header class="modal-header">
-                        <h4 class="modal-title">World Map</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+<!--Option:leftcolumn:WorldMap-->
+<templateid="opt_country"inherit_id="website_customer.index"customize_show="True"name="ShowMap">
+    <xpathexpr="//div[@id='ref_left_column']"position="inside">
+        <tt-if="google_maps_api_key">
+            <!--modalforlargemap-->
+            <divrole="dialog"class="modalfadecustomer_map_modal"tabindex="-1">
+              <divclass="modal-dialogmodal-lg">
+                <divclass="modal-content">
+                    <headerclass="modal-header">
+                        <h4class="modal-title">WorldMap</h4>
+                        <buttontype="button"class="close"data-dismiss="modal"aria-label="Close">×</button>
                     </header>
-                    <iframe t-attf-src="/google_map/?width=898&amp;height=485&amp;partner_ids=#{ google_map_partner_ids }&amp;partner_url=/customers/"
-                    style="width:898px; height:485px; border:0; padding:0; margin:0;"></iframe>
+                    <iframet-attf-src="/google_map/?width=898&amp;height=485&amp;partner_ids=#{google_map_partner_ids}&amp;partner_url=/customers/"
+                    style="width:898px;height:485px;border:0;padding:0;margin:0;"></iframe>
                 </div>
               </div>
             </div>
-            <!-- modal end -->
-            <h3>World Map<button class="btn btn-link" data-toggle="modal" data-target=".customer_map_modal"><span class="fa fa-external-link" role="img" aria-label="External link" title="External link"/></button></h3>
-            <ul class="nav">
-                <iframe t-attf-src="/google_map?width=260&amp;height=240&amp;partner_ids=#{ google_map_partner_ids }&amp;partner_url=/customers/"
-                    style="width:260px; height:240px; border:0; padding:0; margin:0;" scrolling="no"></iframe>
+            <!--modalend-->
+            <h3>WorldMap<buttonclass="btnbtn-link"data-toggle="modal"data-target=".customer_map_modal"><spanclass="fafa-external-link"role="img"aria-label="Externallink"title="Externallink"/></button></h3>
+            <ulclass="nav">
+                <iframet-attf-src="/google_map?width=260&amp;height=240&amp;partner_ids=#{google_map_partner_ids}&amp;partner_url=/customers/"
+                    style="width:260px;height:240px;border:0;padding:0;margin:0;"scrolling="no"></iframe>
             </ul>
         </t>
     </xpath>
 </template>
 
-<template id="opt_industry_list" inherit_id="website_customer.index" customize_show="True" name="Filter on Industry" priority="20">
-    <xpath expr="//div[@id='ref_left_column']" position="inside">
-        <h3>References by Industries</h3>
-        <ul class="nav nav-pills flex-column mt16 mb32">
-            <t t-foreach="industries" t-as="industry_dict">
-                <t t-if="industry_dict['industry_id']">
-                    <li class="nav-item">
-                        <a t-attf-href="/customers/#{ industry_dict['industry_id'][0] and 'industry/%s/' % slug(industry_dict['industry_id']) or '' }#{ current_country_id and 'country/%s' % current_country_id or '' }#{ search_path }"
-                           t-attf-class="nav-link#{industry_dict['industry_id'][0] == current_industry_id and ' active' or ''}">
-                            <span class="badge badge-pill float-right" t-esc="industry_dict['industry_id_count'] or '0'"/>
-                            <t t-esc="industry_dict['industry_id'][1]"/>
+<templateid="opt_industry_list"inherit_id="website_customer.index"customize_show="True"name="FilteronIndustry"priority="20">
+    <xpathexpr="//div[@id='ref_left_column']"position="inside">
+        <h3>ReferencesbyIndustries</h3>
+        <ulclass="navnav-pillsflex-columnmt16mb32">
+            <tt-foreach="industries"t-as="industry_dict">
+                <tt-if="industry_dict['industry_id']">
+                    <liclass="nav-item">
+                        <at-attf-href="/customers/#{industry_dict['industry_id'][0]and'industry/%s/'%slug(industry_dict['industry_id'])or''}#{current_country_idand'country/%s'%current_country_idor''}#{search_path}"
+                           t-attf-class="nav-link#{industry_dict['industry_id'][0]==current_industry_idand'active'or''}">
+                            <spanclass="badgebadge-pillfloat-right"t-esc="industry_dict['industry_id_count']or'0'"/>
+                            <tt-esc="industry_dict['industry_id'][1]"/>
                         </a>
                     </li>
                 </t>
@@ -107,17 +107,17 @@
     </xpath>
 </template>
 
-<template id="opt_country_list" inherit_id="website_customer.index" customize_show="True" name="Filter on Countries" priority="30">
-    <xpath expr="//div[@id='ref_left_column']" position="inside">
-        <h3>References by Country</h3>
-        <ul class="nav nav-pills flex-column mt16 mb32">
-            <t t-foreach="countries" t-as="country_dict">
-                <t t-if="country_dict['country_id']">
-                    <li class="nav-item">
-                        <a t-attf-href="/customers/#{ current_industry_id and 'industry/%s/' % slug(current_industry) or '' }#{ country_dict['country_id'][0] and 'country/%s' % slug(country_dict['country_id']) or '' }#{ search_path }"
-                           t-attf-class="nav-link#{country_dict['country_id'][0] == current_country_id and ' active' or ''}">
-                            <span class="badge badge-pill float-right" t-esc="country_dict['country_id_count'] or '0'"/>
-                            <t t-esc="country_dict['country_id'][1]"/>
+<templateid="opt_country_list"inherit_id="website_customer.index"customize_show="True"name="FilteronCountries"priority="30">
+    <xpathexpr="//div[@id='ref_left_column']"position="inside">
+        <h3>ReferencesbyCountry</h3>
+        <ulclass="navnav-pillsflex-columnmt16mb32">
+            <tt-foreach="countries"t-as="country_dict">
+                <tt-if="country_dict['country_id']">
+                    <liclass="nav-item">
+                        <at-attf-href="/customers/#{current_industry_idand'industry/%s/'%slug(current_industry)or''}#{country_dict['country_id'][0]and'country/%s'%slug(country_dict['country_id'])or''}#{search_path}"
+                           t-attf-class="nav-link#{country_dict['country_id'][0]==current_country_idand'active'or''}">
+                            <spanclass="badgebadge-pillfloat-right"t-esc="country_dict['country_id_count']or'0'"/>
+                            <tt-esc="country_dict['country_id'][1]"/>
                         </a>
                     </li>
                 </t>
@@ -127,92 +127,92 @@
 </template>
 
 
-<template id="opt_tag_list" inherit_id="website_customer.index" customize_show="True" name="Filter on Tags" priority="40">
-    <xpath expr="//div[@id='ref_left_column']" position="inside">
+<templateid="opt_tag_list"inherit_id="website_customer.index"customize_show="True"name="FilteronTags"priority="40">
+    <xpathexpr="//div[@id='ref_left_column']"position="inside">
 
-        <h3 t-if="len(tags)">References by Tag</h3>
-        <ul class="nav nav-pills flex-column mt16 mb32" t-if="len(tags)">
-            <li class="nav-item"><a class="nav-link mr8" t-attf-href="/customers/#{ current_industry_id and 'industry/%s/' % slug(current_industry) or '' }#{ current_country_id and 'country/%s' % slug(current_country) or '' }">
-                <span class="fa fa-1x fa-tags"/> All </a></li>
-            <li t-foreach="tags" t-as="o_tag" class="nav-item">
-                <a t-attf-class="nav-link badge badge-#{o_tag.classname}" t-esc="o_tag.name" t-att-style="tag and tag.id==o_tag.id and 'text-decoration: underline'"
-                    t-attf-href="/customers/#{ current_industry_id and 'industry/%s/' % slug(current_industry) or '' }#{ current_country_id and 'country/%s' % slug(current_country) or '' }?tag_id=#{slug(o_tag)}"/>
+        <h3t-if="len(tags)">ReferencesbyTag</h3>
+        <ulclass="navnav-pillsflex-columnmt16mb32"t-if="len(tags)">
+            <liclass="nav-item"><aclass="nav-linkmr8"t-attf-href="/customers/#{current_industry_idand'industry/%s/'%slug(current_industry)or''}#{current_country_idand'country/%s'%slug(current_country)or''}">
+                <spanclass="fafa-1xfa-tags"/>All</a></li>
+            <lit-foreach="tags"t-as="o_tag"class="nav-item">
+                <at-attf-class="nav-linkbadgebadge-#{o_tag.classname}"t-esc="o_tag.name"t-att-style="tagandtag.id==o_tag.idand'text-decoration:underline'"
+                    t-attf-href="/customers/#{current_industry_idand'industry/%s/'%slug(current_industry)or''}#{current_country_idand'country/%s'%slug(current_country)or''}?tag_id=#{slug(o_tag)}"/>
             </li>
         </ul>
     </xpath>
 </template>
 
-<template id="contact_edit_options" inherit_id="website.user_navbar" name="Edit Customer Options">
-    <xpath expr="//li[@id='edit-page-menu']" position="after">
-        <t t-if="main_object._name == 'res.partner'" t-set="action" t-value="'contacts.action_contacts'"/>
+<templateid="contact_edit_options"inherit_id="website.user_navbar"name="EditCustomerOptions">
+    <xpathexpr="//li[@id='edit-page-menu']"position="after">
+        <tt-if="main_object._name=='res.partner'"t-set="action"t-value="'contacts.action_contacts'"/>
     </xpath>
 </template>
 
-<template id="details" name="Customer Detail">
-  <t t-call="website.layout">
-    <div id="wrap">
-        <div class="oe_structure" id="oe_structure_website_customer_details_1"/>
-        <div class="container mt16">
-            <div class="row">
-                <div class="col-lg-5">
-                    <ol t-if="not edit_page" class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/customers">Our References</a></li>
-                        <li class="breadcrumb-item active"><span t-field="partner.display_name"/></li>
+<templateid="details"name="CustomerDetail">
+  <tt-call="website.layout">
+    <divid="wrap">
+        <divclass="oe_structure"id="oe_structure_website_customer_details_1"/>
+        <divclass="containermt16">
+            <divclass="row">
+                <divclass="col-lg-5">
+                    <olt-if="notedit_page"class="breadcrumb">
+                        <liclass="breadcrumb-item"><ahref="/customers">OurReferences</a></li>
+                        <liclass="breadcrumb-itemactive"><spant-field="partner.display_name"/></li>
                     </ol>
                 </div>
-                <t t-call="website_partner.partner_detail">
-                    <t t-set="left_column">
-                        <div id="left_column"><t t-call="website_customer.implemented_by_block"/></div>
+                <tt-call="website_partner.partner_detail">
+                    <tt-set="left_column">
+                        <divid="left_column"><tt-call="website_customer.implemented_by_block"/></div>
                     </t>
-                    <t t-set="right_column">
-                        <div id="right_column"><t t-call="website_customer.references_block"/></div>
+                    <tt-set="right_column">
+                        <divid="right_column"><tt-call="website_customer.references_block"/></div>
                     </t>
                 </t>
             </div>
         </div>
-        <div class="oe_structure" id="oe_structure_website_customer_details_2"/>
+        <divclass="oe_structure"id="oe_structure_website_customer_details_2"/>
     </div>
   </t>
 </template>
 
-<template id="partner_details" inherit_id="website_partner.partner_page" name="Partner Detail Columns">
- <xpath expr="//t[@t-call='website_partner.partner_detail']" position="inside">
-    <t t-set="left_column"><div id="left_column"><t t-call="website_customer.implemented_by_block"/></div></t>
-    <t t-set="right_column"><div id="right_column"><t t-call="website_customer.references_block"/></div></t>
+<templateid="partner_details"inherit_id="website_partner.partner_page"name="PartnerDetailColumns">
+ <xpathexpr="//t[@t-call='website_partner.partner_detail']"position="inside">
+    <tt-set="left_column"><divid="left_column"><tt-call="website_customer.implemented_by_block"/></div></t>
+    <tt-set="right_column"><divid="right_column"><tt-call="website_customer.references_block"/></div></t>
  </xpath>
 </template>
 
-<template id="partner_detail" inherit_id="website_partner.partner_detail" name="Partner Details">
-    <xpath expr="//address" position="inside">
-        <t t-if="partner.industry_id">
-            <span class="badge badge-secondary"><t t-esc="partner.industry_id.name"/></span>
+<templateid="partner_detail"inherit_id="website_partner.partner_detail"name="PartnerDetails">
+    <xpathexpr="//address"position="inside">
+        <tt-if="partner.industry_id">
+            <spanclass="badgebadge-secondary"><tt-esc="partner.industry_id.name"/></span>
         </t>
     </xpath>
 </template>
 
-<template id="implemented_by_block" name="Partner Implemented By Block">
-        <t t-if="partner.assigned_partner_id and partner.assigned_partner_id.website_published">
-            <div class="card">
-                <div class="card-header">
-                    <h4>Implemented By</h4>
+<templateid="implemented_by_block"name="PartnerImplementedByBlock">
+        <tt-if="partner.assigned_partner_idandpartner.assigned_partner_id.website_published">
+            <divclass="card">
+                <divclass="card-header">
+                    <h4>ImplementedBy</h4>
                 </div>
-                <div class="card-body text-center">
+                <divclass="card-bodytext-center">
         <h4>
-            <a t-attf-href="/partners/#{slug(partner.assigned_partner_id)}">
-              <span t-field="partner.assigned_partner_id"/>
-              <span class="small"> (<t t-esc="len([p for p in partner.assigned_partner_id.implemented_partner_ids if p.website_published])"/> reference(s))</span>
+            <at-attf-href="/partners/#{slug(partner.assigned_partner_id)}">
+              <spant-field="partner.assigned_partner_id"/>
+              <spanclass="small">(<tt-esc="len([pforpinpartner.assigned_partner_id.implemented_partner_idsifp.website_published])"/>reference(s))</span>
             </a>
         </h4>
-        <div><a t-attf-href="/partners/#{slug(partner.assigned_partner_id)}"
+        <div><at-attf-href="/partners/#{slug(partner.assigned_partner_id)}"
                 t-field="partner.assigned_partner_id.image_128"
                 class="d-block"
-                t-options='{"widget": "image", "qweb_img_responsive": False, "class": "o_image_128_max"}'
+                t-options='{"widget":"image","qweb_img_responsive":False,"class":"o_image_128_max"}'
              />
         </div>
-        <address class="text-left">
-             <div t-field="partner.assigned_partner_id" t-options='{
-                 "widget": "contact",
-                 "fields": ["address", "website", "phone", "email"]
+        <addressclass="text-left">
+             <divt-field="partner.assigned_partner_id"t-options='{
+                 "widget":"contact",
+                 "fields":["address","website","phone","email"]
              }'/>
         </address>
                 </div>
@@ -220,34 +220,34 @@
         </t>
 </template>
 
-<template id="references_block" name="Partner References Block">
-        <t t-if="any(p.website_published for p in partner.implemented_partner_ids)">
-            <h3 id="references">References</h3>
-            <div t-foreach="partner.implemented_partner_ids" t-as="reference" class="media mt-3">
-              <t t-if="reference.website_published">
-                <a t-attf-href="/customers/#{slug(reference)}">
-                    <span t-field="reference.image_128" class="d-block mr-3 text-center o_width_128" t-options='{"widget": "image", "qweb_img_responsive": False, "class": "o_image_128_max"}'/>
+<templateid="references_block"name="PartnerReferencesBlock">
+        <tt-if="any(p.website_publishedforpinpartner.implemented_partner_ids)">
+            <h3id="references">References</h3>
+            <divt-foreach="partner.implemented_partner_ids"t-as="reference"class="mediamt-3">
+              <tt-if="reference.website_published">
+                <at-attf-href="/customers/#{slug(reference)}">
+                    <spant-field="reference.image_128"class="d-blockmr-3text-centero_width_128"t-options='{"widget":"image","qweb_img_responsive":False,"class":"o_image_128_max"}'/>
                 </a>
-                <div class="media-body" style="min-height: 64px;">
-                    <a t-attf-href="/customers/#{slug(reference)}">
-                        <span t-field="reference.self"/>
+                <divclass="media-body"style="min-height:64px;">
+                    <at-attf-href="/customers/#{slug(reference)}">
+                        <spant-field="reference.self"/>
                     </a>
-                    <t t-if="reference.industry_id">
-                        <span class="badge badge-secondary"><t t-esc="reference.industry_id.name"/></span>
+                    <tt-if="reference.industry_id">
+                        <spanclass="badgebadge-secondary"><tt-esc="reference.industry_id.name"/></span>
                     </t>
-                    <div t-field='reference.website_short_description'/>
+                    <divt-field='reference.website_short_description'/>
                 </div>
               </t>
             </div>
         </t>
 </template>
 
-<template id="references_block_href" inherit_id="website_crm_partner_assign.references_block" name="Partner References Block">
-    <xpath expr="//div/span" position="replace">
-        <a t-attf-href="/customers/#{slug(reference)}">$0</a>
+<templateid="references_block_href"inherit_id="website_crm_partner_assign.references_block"name="PartnerReferencesBlock">
+    <xpathexpr="//div/span"position="replace">
+        <at-attf-href="/customers/#{slug(reference)}">$0</a>
     </xpath>
-    <xpath expr="//div[hasclass('media-body')]/span" position="replace">
-        <a t-attf-href="/customers/#{slug(reference)}">$0</a>
+    <xpathexpr="//div[hasclass('media-body')]/span"position="replace">
+        <at-attf-href="/customers/#{slug(reference)}">$0</a>
     </xpath>
 </template>
 

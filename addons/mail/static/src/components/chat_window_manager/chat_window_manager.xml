@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="mail.ChatWindowManager" owl="1">
-        <div class="o_ChatWindowManager">
-            <t t-if="env.isMessagingInitialized()">
-                <!-- Note: DOM elements are ordered from left to right -->
-                <t t-if="env.messaging.chatWindowManager.hasHiddenChatWindows">
-                    <ChatWindowHiddenMenu class="o_ChatWindowManager_hiddenMenu"/>
+    <tt-name="mail.ChatWindowManager"owl="1">
+        <divclass="o_ChatWindowManager">
+            <tt-if="env.isMessagingInitialized()">
+                <!--Note:DOMelementsareorderedfromlefttoright-->
+                <tt-if="env.messaging.chatWindowManager.hasHiddenChatWindows">
+                    <ChatWindowHiddenMenuclass="o_ChatWindowManager_hiddenMenu"/>
                 </t>
-                <t t-foreach="env.messaging.chatWindowManager.allOrderedVisible" t-as="chatWindow" t-key="chatWindow.localId">
+                <tt-foreach="env.messaging.chatWindowManager.allOrderedVisible"t-as="chatWindow"t-key="chatWindow.localId">
                     <ChatWindow
                         chatWindowLocalId="chatWindow.localId"
                         hasCloseAsBackButton="env.messaging.device.isMobile"
-                        isExpandable="!env.messaging.device.isMobile and !!chatWindow.thread"
+                        isExpandable="!env.messaging.device.isMobileand!!chatWindow.thread"
                         isFullscreen="env.messaging.device.isMobile"
                     />
                 </t>

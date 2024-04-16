@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-    <record id="gamification_badge_view_form" model="ir.ui.view">
-        <field name="name">gamification.badge.view.form.inherit.website</field>
-        <field name="model">gamification.badge</field>
-        <field name="inherit_id" ref="gamification.badge_form_view"/>
-        <field name="arch" type="xml">
-        	<xpath expr="//div[@name='button_box']" position="inside">
-                <button name="website_publish_button" type="object" class="oe_stat_button" icon="fa-globe">
-                    <field name="is_published" widget="website_publish_button"/>
+    <recordid="gamification_badge_view_form"model="ir.ui.view">
+        <fieldname="name">gamification.badge.view.form.inherit.website</field>
+        <fieldname="model">gamification.badge</field>
+        <fieldname="inherit_id"ref="gamification.badge_form_view"/>
+        <fieldname="arch"type="xml">
+        	<xpathexpr="//div[@name='button_box']"position="inside">
+                <buttonname="website_publish_button"type="object"class="oe_stat_button"icon="fa-globe">
+                    <fieldname="is_published"widget="website_publish_button"/>
                 </button>
             </xpath>
         </field>

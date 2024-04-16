@@ -1,68 +1,68 @@
-flectra.define('sale_timesheet.sale_project_kanban_controller', function (require) {
-"use strict";
+flectra.define('sale_timesheet.sale_project_kanban_controller',function(require){
+"usestrict";
 
-var core = require('web.core');
-var ProjectKanbanController = require('project.project_kanban');
-var session = require('web.session');
+varcore=require('web.core');
+varProjectKanbanController=require('project.project_kanban');
+varsession=require('web.session');
 
-var QWeb = core.qweb;
+varQWeb=core.qweb;
 
-// YTI TODO : Master remove file
+//YTITODO:Masterremovefile
 
-var SaleProjectKanbanController = ProjectKanbanController.include({
+varSaleProjectKanbanController=ProjectKanbanController.include({
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
-    _showCreateSOButton: async function () {
-        var self = this;
-        this.activeProjectIds = this.initialState.context.active_ids;
+    _showCreateSOButton:asyncfunction(){
+        varself=this;
+        this.activeProjectIds=this.initialState.context.active_ids;
 
-        if (!this.activeProjectIds || this.activeProjectIds.length !== 1) {
-            this.showCreateSaleOrder = false;
+        if(!this.activeProjectIds||this.activeProjectIds.length!==1){
+            this.showCreateSaleOrder=false;
             return;
         }
-        var canCreateSO = await session.user_has_group('sales_team.group_sale_salesman');
-        if (canCreateSO) {
-            await this._rpc({
-                model: 'project.project',
-                method: 'search_count',
-                args: [[
-                    ["id", "in", this.activeProjectIds],
-                    ["bill_type", "=", "customer_project"],
-                    ["sale_order_id", "=", false],
-                    ["allow_billable", "=", true],
-                    ["allow_timesheets", "=", true],
+        varcanCreateSO=awaitsession.user_has_group('sales_team.group_sale_salesman');
+        if(canCreateSO){
+            awaitthis._rpc({
+                model:'project.project',
+                method:'search_count',
+                args:[[
+                    ["id","in",this.activeProjectIds],
+                    ["bill_type","=","customer_project"],
+                    ["sale_order_id","=",false],
+                    ["allow_billable","=",true],
+                    ["allow_timesheets","=",true],
                 ]],
-            }).then(function (projectCount) {
-                self.showCreateSaleOrder = projectCount !== 0;
+            }).then(function(projectCount){
+                self.showCreateSaleOrder=projectCount!==0;
             });
-        } else {
-            this.showCreateSaleOrder = false;
+        }else{
+            this.showCreateSaleOrder=false;
         }
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onCreateSaleOrder: function (ev) {
+    _onCreateSaleOrder:function(ev){
         ev.preventDefault();
-        this.do_action('sale_timesheet.project_project_action_multi_create_sale_order', {
-            additional_context: {
-                'active_id': this.activeProjectIds && this.activeProjectIds[0],
-                'active_model': "project.project",
+        this.do_action('sale_timesheet.project_project_action_multi_create_sale_order',{
+            additional_context:{
+                'active_id':this.activeProjectIds&&this.activeProjectIds[0],
+                'active_model':"project.project",
             },
-            on_close: async () => await this.reload()
+            on_close:async()=>awaitthis.reload()
         });
     },
 });
 
-return SaleProjectKanbanController;
+returnSaleProjectKanbanController;
 
 });

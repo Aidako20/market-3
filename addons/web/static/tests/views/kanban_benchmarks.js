@@ -1,37 +1,37 @@
-flectra.define('web.kanban_benchmarks', function (require) {
-    "use strict";
+flectra.define('web.kanban_benchmarks',function(require){
+    "usestrict";
 
-    const KanbanView = require('web.KanbanView');
-    const { createView } = require('web.test_utils');
+    constKanbanView=require('web.KanbanView');
+    const{createView}=require('web.test_utils');
 
-    QUnit.module('Kanban View', {
-        beforeEach: function () {
-            this.data = {
-                foo: {
-                    fields: {
-                        foo: {string: "Foo", type: "char"},
-                        bar: {string: "Bar", type: "boolean"},
-                        int_field: {string: "int_field", type: "integer", sortable: true},
-                        qux: {string: "my float", type: "float"},
+    QUnit.module('KanbanView',{
+        beforeEach:function(){
+            this.data={
+                foo:{
+                    fields:{
+                        foo:{string:"Foo",type:"char"},
+                        bar:{string:"Bar",type:"boolean"},
+                        int_field:{string:"int_field",type:"integer",sortable:true},
+                        qux:{string:"myfloat",type:"float"},
                     },
-                    records: [
-                        { id: 1, bar: true, foo: "yop", int_field: 10, qux: 0.4},
-                        {id: 2, bar: true, foo: "blip", int_field: 9, qux: 13},
+                    records:[
+                        {id:1,bar:true,foo:"yop",int_field:10,qux:0.4},
+                        {id:2,bar:true,foo:"blip",int_field:9,qux:13},
                     ]
                 },
             };
-            this.arch = null;
-            this.run = function (assert) {
-                const data = this.data;
-                const arch = this.arch;
-                return new Promise(resolve => {
-                    new Benchmark.Suite({})
-                        .add('kanban', {
-                            defer: true,
-                            fn: async (deferred) => {
-                                const kanban = await createView({
-                                    View: KanbanView,
-                                    model: 'foo',
+            this.arch=null;
+            this.run=function(assert){
+                constdata=this.data;
+                constarch=this.arch;
+                returnnewPromise(resolve=>{
+                    newBenchmark.Suite({})
+                        .add('kanban',{
+                            defer:true,
+                            fn:async(deferred)=>{
+                                constkanban=awaitcreateView({
+                                    View:KanbanView,
+                                    model:'foo',
                                     data,
                                     arch,
                                 });
@@ -39,54 +39,54 @@ flectra.define('web.kanban_benchmarks', function (require) {
                                 deferred.resolve();
                             },
                         })
-                        .on('cycle', event => {
-                            assert.ok(true, String(event.target));
+                        .on('cycle',event=>{
+                            assert.ok(true,String(event.target));
                         })
-                        .on('complete', resolve)
-                        .run({ async: true });
+                        .on('complete',resolve)
+                        .run({async:true});
                 });
             };
         }
-    }, function () {
-        QUnit.test('simple kanban view with 2 records', function (assert) {
+    },function(){
+        QUnit.test('simplekanbanviewwith2records',function(assert){
             assert.expect(1);
 
-            this.arch = `
+            this.arch=`
                 <kanban>
                     <templates>
-                        <t t-name="kanban-box">
+                        <tt-name="kanban-box">
                             <div>
-                                <t t-esc="record.foo.value"/>
-                                <field name="foo"/>
+                                <tt-esc="record.foo.value"/>
+                                <fieldname="foo"/>
                             </div>
                         </t>
                     </templates>
                 </kanban>`;
-            return this.run(assert);
+            returnthis.run(assert);
         });
 
-        QUnit.test('simple kanban view with 200 records', function (assert) {
+        QUnit.test('simplekanbanviewwith200records',function(assert){
             assert.expect(1);
 
-            for (let i = 2; i < 200; i++) {
+            for(leti=2;i<200;i++){
                 this.data.foo.records.push({
-                    id: i,
-                    foo: `automated data ${i}`,
+                    id:i,
+                    foo:`automateddata${i}`,
                 });
             }
 
-            this.arch = `
+            this.arch=`
                 <kanban>
                     <templates>
-                        <t t-name="kanban-box">
+                        <tt-name="kanban-box">
                             <div>
-                                <t t-esc="record.foo.value"/>
-                                <field name="foo"/>
+                                <tt-esc="record.foo.value"/>
+                                <fieldname="foo"/>
                             </div>
                         </t>
                     </templates>
                 </kanban>`;
-            return this.run(assert);
+            returnthis.run(assert);
         });
     });
 });

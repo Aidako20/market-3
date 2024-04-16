@@ -1,48 +1,48 @@
-from flectra import models, fields, api, _
-from flectra.tools import format_date
+fromflectraimportmodels,fields,api,_
+fromflectra.toolsimportformat_date
 
 
-class PurchaseOrder(models.Model):
-    _inherit = 'purchase.order'
+classPurchaseOrder(models.Model):
+    _inherit='purchase.order'
 
-    l10n_de_template_data = fields.Binary(compute='_compute_l10n_de_template_data')
-    l10n_de_document_title = fields.Char(compute='_compute_l10n_de_document_title')
-    l10n_de_addresses = fields.Binary(compute='_compute_l10n_de_addresses')
+    l10n_de_template_data=fields.Binary(compute='_compute_l10n_de_template_data')
+    l10n_de_document_title=fields.Char(compute='_compute_l10n_de_document_title')
+    l10n_de_addresses=fields.Binary(compute='_compute_l10n_de_addresses')
 
-    def _compute_l10n_de_template_data(self):
-        for record in self:
-            record.l10n_de_template_data = data = []
-            if record.state == 'draft':
-                data.append((_("Request for Quotation No."), record.name))
-            elif record.state in ['sent', 'to approve', 'purchase', 'done']:
-                data.append((_("Purchase Order No."), record.name))
-            elif record.state == 'cancel':
-                data.append((_("Cancelled Purchase Order No."), record.name))
+    def_compute_l10n_de_template_data(self):
+        forrecordinself:
+            record.l10n_de_template_data=data=[]
+            ifrecord.state=='draft':
+                data.append((_("RequestforQuotationNo."),record.name))
+            elifrecord.statein['sent','toapprove','purchase','done']:
+                data.append((_("PurchaseOrderNo."),record.name))
+            elifrecord.state=='cancel':
+                data.append((_("CancelledPurchaseOrderNo."),record.name))
 
-            if record.user_id:
-                data.append((_("Purchase Representative"), record.user_id.name))
-            if record.partner_ref:
-                data.append((_("Order Reference"), record.partner_ref))
-            if record.date_order:
-                data.append((_("Order Date"), format_date(self.env, record.date_order)))
-            if record.incoterm_id:
-                data.append((_("Incoterm"), record.incoterm_id.code))
+            ifrecord.user_id:
+                data.append((_("PurchaseRepresentative"),record.user_id.name))
+            ifrecord.partner_ref:
+                data.append((_("OrderReference"),record.partner_ref))
+            ifrecord.date_order:
+                data.append((_("OrderDate"),format_date(self.env,record.date_order)))
+            ifrecord.incoterm_id:
+                data.append((_("Incoterm"),record.incoterm_id.code))
 
 
 
-    def _compute_l10n_de_document_title(self):
-        for record in self:
-            if record.state == 'draft':
-                record.l10n_de_document_title = _("Request for Quotation")
-            elif record.state in ['sent', 'to approve', 'purchase', 'done']:
-                record.l10n_de_document_title = _("Purchase Order")
-            elif record.state == 'cancel':
-                record.l10n_de_document_title = _("Cancelled Purchase Order")
+    def_compute_l10n_de_document_title(self):
+        forrecordinself:
+            ifrecord.state=='draft':
+                record.l10n_de_document_title=_("RequestforQuotation")
+            elifrecord.statein['sent','toapprove','purchase','done']:
+                record.l10n_de_document_title=_("PurchaseOrder")
+            elifrecord.state=='cancel':
+                record.l10n_de_document_title=_("CancelledPurchaseOrder")
 
-    def _compute_l10n_de_addresses(self):
-        for record in self:
-            record.l10n_de_addresses = data = []
-            if record.dest_address_id:
-                data.append((_("Shipping Address:"), record.dest_address_id))
-            elif 'picking_type_id' in record._fields and record.picking_type_id.warehouse_id:
-                data.append((_("Shipping Address:"), record.picking_type_id.warehouse_id.partner_id))
+    def_compute_l10n_de_addresses(self):
+        forrecordinself:
+            record.l10n_de_addresses=data=[]
+            ifrecord.dest_address_id:
+                data.append((_("ShippingAddress:"),record.dest_address_id))
+            elif'picking_type_id'inrecord._fieldsandrecord.picking_type_id.warehouse_id:
+                data.append((_("ShippingAddress:"),record.picking_type_id.warehouse_id.partner_id))

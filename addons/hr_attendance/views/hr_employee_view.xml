@@ -1,55 +1,55 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-    <record id="view_employee_form_inherit_hr_attendance" model="ir.ui.view">
-        <field name="name">hr.employee</field>
-        <field name="model">hr.employee</field>
-        <field name="inherit_id" ref="hr.view_employee_form"/>
-        <field name="priority">20</field>
-        <field name="groups_id" eval="[(4,ref('hr_attendance.group_hr_attendance_user'))]"/>
-        <field name="arch" type="xml">
-            <xpath expr="//button[@id='hr_presence_button']" position="attributes">
-                <attribute name="attrs">
-                    {'invisible': ['|', '|', ('user_id', '=', False), ('hr_presence_state', '=', 'absent'), ('attendance_state', '=', 'checked_in')]}
+    <recordid="view_employee_form_inherit_hr_attendance"model="ir.ui.view">
+        <fieldname="name">hr.employee</field>
+        <fieldname="model">hr.employee</field>
+        <fieldname="inherit_id"ref="hr.view_employee_form"/>
+        <fieldname="priority">20</field>
+        <fieldname="groups_id"eval="[(4,ref('hr_attendance.group_hr_attendance_user'))]"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//button[@id='hr_presence_button']"position="attributes">
+                <attributename="attrs">
+                    {'invisible':['|','|',('user_id','=',False),('hr_presence_state','=','absent'),('attendance_state','=','checked_in')]}
                 </attribute>
             </xpath>
-            <xpath expr="//div[@name='button_box']" position="inside">
-                <field name="attendance_state" invisible="1"/>
-                <button name="%(hr_attendance_action_employee)d"
+            <xpathexpr="//div[@name='button_box']"position="inside">
+                <fieldname="attendance_state"invisible="1"/>
+                <buttonname="%(hr_attendance_action_employee)d"
                     id="hr_attendance_button"
                     class="oe_stat_button"
-                    type="action" attrs="{'invisible': [
-                        '|', ('attendance_state', '=', False),
+                    type="action"attrs="{'invisible':[
+                        '|',('attendance_state','=',False),
                         '&amp;',
-                            ('hr_presence_state', '=', 'present'),
-                            ('attendance_state', '=', 'checked_out')]}"
-                    context="{'search_default_employee_id': id}">
-                    <div role="img" id="oe_hr_attendance_status" class="fa fa-fw fa-circle o_button_icon oe_hr_attendance_status_green" attrs="{'invisible': [('attendance_state', '=', 'checked_out')]}" aria-label="Available" title="Available"/>
-                    <div role="img" id="oe_hr_attendance_status" class="fa fa-fw fa-circle o_button_icon oe_hr_attendance_status_red" attrs="{'invisible': [('attendance_state', '=', 'checked_in')]}" aria-label="Not available" title="Not available"/>
-                    <div class="o_stat_info" attrs="{'invisible': ['|', ('last_check_in', '=', False), ('last_check_out', '!=', False)]}">
-                        <span class="o_stat_text">Attended Since</span>
-                        <span class="o_stat_value"><field name="last_check_in" widget="relative_time"/></span>
+                            ('hr_presence_state','=','present'),
+                            ('attendance_state','=','checked_out')]}"
+                    context="{'search_default_employee_id':id}">
+                    <divrole="img"id="oe_hr_attendance_status"class="fafa-fwfa-circleo_button_iconoe_hr_attendance_status_green"attrs="{'invisible':[('attendance_state','=','checked_out')]}"aria-label="Available"title="Available"/>
+                    <divrole="img"id="oe_hr_attendance_status"class="fafa-fwfa-circleo_button_iconoe_hr_attendance_status_red"attrs="{'invisible':[('attendance_state','=','checked_in')]}"aria-label="Notavailable"title="Notavailable"/>
+                    <divclass="o_stat_info"attrs="{'invisible':['|',('last_check_in','=',False),('last_check_out','!=',False)]}">
+                        <spanclass="o_stat_text">AttendedSince</span>
+                        <spanclass="o_stat_value"><fieldname="last_check_in"widget="relative_time"/></span>
                     </div>
-                    <div class="o_stat_info" attrs="{'invisible': [('last_check_out', '=', False)]}">
-                        <span class="o_stat_text">Not Attended Since</span>
-                        <span class="o_stat_value"><field name="last_check_out" widget="relative_time"/></span>
+                    <divclass="o_stat_info"attrs="{'invisible':[('last_check_out','=',False)]}">
+                        <spanclass="o_stat_text">NotAttendedSince</span>
+                        <spanclass="o_stat_value"><fieldname="last_check_out"widget="relative_time"/></span>
                     </div>
-                    <div class="o_stat_info" attrs="{'invisible': [('last_check_in', '!=', False)]}">
-                        <span class="o_stat_text">Attendance</span>
+                    <divclass="o_stat_info"attrs="{'invisible':[('last_check_in','!=',False)]}">
+                        <spanclass="o_stat_text">Attendance</span>
                     </div>
                 </button>
-                <button name="%(hr_attendance_action)d"
+                <buttonname="%(hr_attendance_action)d"
                         class="oe_stat_button"
                         icon="fa-clock-o"
                         type="action"
-                        context="{'search_default_employee_id': id, 'search_default_check_in_filter': '1'}"
+                        context="{'search_default_employee_id':id,'search_default_check_in_filter':'1'}"
                         groups="base.group_user"
-                        help="Worked hours last month">
-                    <div class="o_field_widget o_stat_info">
-                        <span class="o_stat_value">
-                            <field name="hours_last_month_display" widget="float_time"/> Hours
+                        help="Workedhourslastmonth">
+                    <divclass="o_field_widgeto_stat_info">
+                        <spanclass="o_stat_value">
+                            <fieldname="hours_last_month_display"widget="float_time"/>Hours
                         </span>
-                        <span class="o_stat_text">
-                            Last Month
+                        <spanclass="o_stat_text">
+                            LastMonth
                         </span>
                     </div>
                 </button>
@@ -57,53 +57,53 @@
         </field>
     </record>
 
-    <record id="hr_user_view_form" model="ir.ui.view">
-        <field name="name">hr.user.preferences.view.form.attendance.inherit</field>
-        <field name="model">res.users</field>
-        <field name="inherit_id" ref="hr.res_users_view_form_profile"/>
-        <field name="arch" type="xml">
-            <xpath expr="//button[@id='hr_presence_button']" position="attributes">
-                <attribute name="attrs">
-                    {'invisible': ['|', ('hr_presence_state', '=', 'absent'), ('attendance_state', '=', 'checked_in')]}
+    <recordid="hr_user_view_form"model="ir.ui.view">
+        <fieldname="name">hr.user.preferences.view.form.attendance.inherit</field>
+        <fieldname="model">res.users</field>
+        <fieldname="inherit_id"ref="hr.res_users_view_form_profile"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//button[@id='hr_presence_button']"position="attributes">
+                <attributename="attrs">
+                    {'invisible':['|',('hr_presence_state','=','absent'),('attendance_state','=','checked_in')]}
                 </attribute>
             </xpath>
-            <xpath expr="//div[@name='button_box']" position="inside">
-                <field name="attendance_state" invisible="1"/>
-                <button name="%(hr_attendance_action_my_attendances)d"
+            <xpathexpr="//div[@name='button_box']"position="inside">
+                <fieldname="attendance_state"invisible="1"/>
+                <buttonname="%(hr_attendance_action_my_attendances)d"
                     id="hr_attendance_button"
                     class="oe_stat_button"
-                    invisible="context.get('from_my_profile', False)"
-                    type="action" attrs="{'invisible': ['|', ('attendance_state', '=', False), '&amp;', ('hr_presence_state', '=', 'present'), ('attendance_state', '=', 'checked_out')]}">
-                    <div role="img" id="oe_hr_attendance_status" class="fa fa-fw fa-circle o_button_icon oe_hr_attendance_status_green" attrs="{'invisible': [('attendance_state', '=', 'checked_out')]}" aria-label="Available" title="Available"/>
-                    <div role="img" id="oe_hr_attendance_status" class="fa fa-fw fa-circle o_button_icon oe_hr_attendance_status_red" attrs="{'invisible': [('attendance_state', '=', 'checked_in')]}" aria-label="Not available" title="Not available"/>
-                    <div class="o_stat_info" attrs="{'invisible': ['|', ('last_check_in', '=', False), ('last_check_out', '!=', False)]}">
-                        <span class="o_stat_text">Attended Since</span>
-                        <span class="o_stat_value"><field name="last_check_in" widget="relative_time"/></span>
+                    invisible="context.get('from_my_profile',False)"
+                    type="action"attrs="{'invisible':['|',('attendance_state','=',False),'&amp;',('hr_presence_state','=','present'),('attendance_state','=','checked_out')]}">
+                    <divrole="img"id="oe_hr_attendance_status"class="fafa-fwfa-circleo_button_iconoe_hr_attendance_status_green"attrs="{'invisible':[('attendance_state','=','checked_out')]}"aria-label="Available"title="Available"/>
+                    <divrole="img"id="oe_hr_attendance_status"class="fafa-fwfa-circleo_button_iconoe_hr_attendance_status_red"attrs="{'invisible':[('attendance_state','=','checked_in')]}"aria-label="Notavailable"title="Notavailable"/>
+                    <divclass="o_stat_info"attrs="{'invisible':['|',('last_check_in','=',False),('last_check_out','!=',False)]}">
+                        <spanclass="o_stat_text">AttendedSince</span>
+                        <spanclass="o_stat_value"><fieldname="last_check_in"widget="relative_time"/></span>
                     </div>
-                    <div class="o_stat_info" attrs="{'invisible': [('last_check_out', '=', False)]}">
-                        <span class="o_stat_text">Not Attended Since</span>
-                        <span class="o_stat_value"><field name="last_check_out" widget="relative_time"/></span>
+                    <divclass="o_stat_info"attrs="{'invisible':[('last_check_out','=',False)]}">
+                        <spanclass="o_stat_text">NotAttendedSince</span>
+                        <spanclass="o_stat_value"><fieldname="last_check_out"widget="relative_time"/></span>
                     </div>
-                    <div class="o_stat_info" attrs="{'invisible': [('last_check_in', '!=', False)]}">
-                        <span class="o_stat_text">Attendance</span>
+                    <divclass="o_stat_info"attrs="{'invisible':[('last_check_in','!=',False)]}">
+                        <spanclass="o_stat_text">Attendance</span>
                     </div>
                 </button>
             </xpath>
-            <xpath expr="//div[@name='button_box']" position="inside">
-                <field name="employee_ids" invisible="1"/>
-                <button name="%(hr_attendance_action_employee)d"
+            <xpathexpr="//div[@name='button_box']"position="inside">
+                <fieldname="employee_ids"invisible="1"/>
+                <buttonname="%(hr_attendance_action_employee)d"
                         class="oe_stat_button"
                         icon="fa-calendar"
                         type="action"
-                        context="{'search_default_employee_id': employee_ids, 'search_default_check_in_filter': '1'}"
+                        context="{'search_default_employee_id':employee_ids,'search_default_check_in_filter':'1'}"
                         groups="base.group_user"
-                        help="Worked hours last month">
-                    <div class="o_field_widget o_stat_info">
-                        <span class="o_stat_value">
-                            <field name="hours_last_month_display" widget="float_time"/> Hours
+                        help="Workedhourslastmonth">
+                    <divclass="o_field_widgeto_stat_info">
+                        <spanclass="o_stat_value">
+                            <fieldname="hours_last_month_display"widget="float_time"/>Hours
                         </span>
-                        <span class="o_stat_text">
-                            Last Month
+                        <spanclass="o_stat_text">
+                            LastMonth
                         </span>
                     </div>
                 </button>
@@ -111,39 +111,39 @@
         </field>
     </record>
 
-    <!-- employee kanban view specifically for hr_attendance (to check in/out) -->
-    <record id="hr_employees_view_kanban" model="ir.ui.view">
-        <field name="name">hr.employee.kanban</field>
-        <field name="model">hr.employee</field>
-        <field name="priority">99</field>
-        <field name="arch" type="xml">
-            <kanban class="o_hr_employee_attendance_kanban" create="false">
-                <field name="attendance_state"/>
-                <field name="hours_today"/>
-                <field name="id"/>
+    <!--employeekanbanviewspecificallyforhr_attendance(tocheckin/out)-->
+    <recordid="hr_employees_view_kanban"model="ir.ui.view">
+        <fieldname="name">hr.employee.kanban</field>
+        <fieldname="model">hr.employee</field>
+        <fieldname="priority">99</field>
+        <fieldname="arch"type="xml">
+            <kanbanclass="o_hr_employee_attendance_kanban"create="false">
+                <fieldname="attendance_state"/>
+                <fieldname="hours_today"/>
+                <fieldname="id"/>
                 <templates>
-                    <t t-name="kanban-box">
-                    <div class="oe_kanban_global_click">
-                        <div class="o_kanban_image">
-                            <img t-att-src="kanban_image('hr.employee', 'image_128', record.id.raw_value)" alt="Employee"/>
+                    <tt-name="kanban-box">
+                    <divclass="oe_kanban_global_click">
+                        <divclass="o_kanban_image">
+                            <imgt-att-src="kanban_image('hr.employee','image_128',record.id.raw_value)"alt="Employee"/>
                         </div>
-                        <div class="oe_kanban_details">
-                            <div id="textbox">
-                                <div class="float-right" t-if="record.attendance_state.raw_value == 'checked_in'">
-                                    <span id="oe_hr_attendance_status" class="fa fa-circle oe_hr_attendance_status_green" role="img" aria-label="Available" title="Available"></span>
+                        <divclass="oe_kanban_details">
+                            <divid="textbox">
+                                <divclass="float-right"t-if="record.attendance_state.raw_value=='checked_in'">
+                                    <spanid="oe_hr_attendance_status"class="fafa-circleoe_hr_attendance_status_green"role="img"aria-label="Available"title="Available"></span>
                                 </div>
-                                <div class="float-right" t-if="record.attendance_state.raw_value == 'checked_out'">
-                                    <span id="oe_hr_attendance_status" class="fa fa-circle oe_hr_attendance_status_orange"
-                                          role="img" aria-label="Not available" title="Not available">
+                                <divclass="float-right"t-if="record.attendance_state.raw_value=='checked_out'">
+                                    <spanid="oe_hr_attendance_status"class="fafa-circleoe_hr_attendance_status_orange"
+                                          role="img"aria-label="Notavailable"title="Notavailable">
                                     </span>
                                 </div>
                                 <strong>
-                                    <field name="name"/>
+                                    <fieldname="name"/>
                                 </strong>
                             </div>
                             <ul>
-                                <li t-if="record.job_id.raw_value"><field name="job_id"/></li>
-                                <li t-if="record.work_location.raw_value"><field name="work_location"/></li>
+                                <lit-if="record.job_id.raw_value"><fieldname="job_id"/></li>
+                                <lit-if="record.work_location.raw_value"><fieldname="work_location"/></li>
                             </ul>
                         </div>
                     </div>
@@ -153,18 +153,18 @@
         </field>
     </record>
 
-    <record id="hr_employee_attendance_action_kanban" model="ir.actions.act_window">
-        <field name="name">Employees</field>
-        <field name="res_model">hr.employee.public</field>
-        <field name="view_mode">kanban</field>
-        <field name="view_id" ref="hr_employees_view_kanban"/>
-        <field name="target">fullscreen</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Create a new employee
+    <recordid="hr_employee_attendance_action_kanban"model="ir.actions.act_window">
+        <fieldname="name">Employees</field>
+        <fieldname="res_model">hr.employee.public</field>
+        <fieldname="view_mode">kanban</field>
+        <fieldname="view_id"ref="hr_employees_view_kanban"/>
+        <fieldname="target">fullscreen</field>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_smiling_face">
+                Createanewemployee
             </p><p>
-                Add a few employees to be able to select an employee here and perform his check in / check out.
-                To create employees go to the Employees menu.
+                Addafewemployeestobeabletoselectanemployeehereandperformhischeckin/checkout.
+                TocreateemployeesgototheEmployeesmenu.
             </p>
         </field>
     </record>

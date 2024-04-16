@@ -1,37 +1,37 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
     <data>
 
-        <!--  FOLLOWERS !-->
-        <record model="ir.ui.view" id="view_followers_tree">
-            <field name="name">mail.followers.tree</field>
-            <field name="model">mail.followers</field>
-            <field name="priority">10</field>
-            <field name="arch" type="xml">
-                <tree string="Followers">
-                    <field name="res_model"/>
-                    <field name="res_id" widget="integer"/>
-                    <field name="partner_id"/>
-                    <field name="channel_id"/>
+        <!-- FOLLOWERS!-->
+        <recordmodel="ir.ui.view"id="view_followers_tree">
+            <fieldname="name">mail.followers.tree</field>
+            <fieldname="model">mail.followers</field>
+            <fieldname="priority">10</field>
+            <fieldname="arch"type="xml">
+                <treestring="Followers">
+                    <fieldname="res_model"/>
+                    <fieldname="res_id"widget="integer"/>
+                    <fieldname="partner_id"/>
+                    <fieldname="channel_id"/>
                 </tree>
             </field>
         </record>
 
-        <record model="ir.ui.view" id="view_mail_subscription_form">
-            <field name="name">mail.followers.form</field>
-            <field name="model">mail.followers</field>
-            <field name="arch" type="xml">
-                <form string="Followers Form">
+        <recordmodel="ir.ui.view"id="view_mail_subscription_form">
+            <fieldname="name">mail.followers.form</field>
+            <fieldname="model">mail.followers</field>
+            <fieldname="arch"type="xml">
+                <formstring="FollowersForm">
                     <sheet>
                         <group>
                             <group>
-                                <field name="res_model"/>
-                                <field name="partner_id"/>
-                                <field name="channel_id"/>
+                                <fieldname="res_model"/>
+                                <fieldname="partner_id"/>
+                                <fieldname="channel_id"/>
                             </group>
                             <group>
-                                <field name="res_id" widget="integer"/>
-                                <field name="subtype_ids" widget="many2many_tags"/>
+                                <fieldname="res_id"widget="integer"/>
+                                <fieldname="subtype_ids"widget="many2many_tags"/>
                             </group>
                         </group>
                     </sheet>
@@ -39,14 +39,14 @@
             </field>
         </record>
         
-        <record id="action_view_followers" model="ir.actions.act_window">
-            <field name="name">Followers</field>
-            <field name="res_model">mail.followers</field>
-            <field name="view_mode">tree,form</field>
+        <recordid="action_view_followers"model="ir.actions.act_window">
+            <fieldname="name">Followers</field>
+            <fieldname="res_model">mail.followers</field>
+            <fieldname="view_mode">tree,form</field>
         </record>
 
-        <!-- Add followers related menu entries in Settings/Email -->
-        <menuitem name="Followers"
+        <!--AddfollowersrelatedmenuentriesinSettings/Email-->
+        <menuitemname="Followers"
             id="menu_email_followers"
             parent="mail.mail_menu_technical"
             action="action_view_followers"

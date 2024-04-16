@@ -1,64 +1,64 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-        <!-- MEMBERSHIP -->
+        <!--MEMBERSHIP-->
 
-        <!-- MEMBERSHIP/MEMBERSHIP PRODUCTS -->
+        <!--MEMBERSHIP/MEMBERSHIPPRODUCTS-->
 
-        <record model="ir.ui.view" id="membership_product_search_form_view">
-            <field name="name">membership.product.search.form</field>
-            <field name="model">product.template</field>
-            <field name="priority">50</field>
-            <field name="arch" type="xml">
-                <search string="Membership Products">
-                    <field name="name" string="Membership Product"/>
-                    <filter string="Inactive" name="inactive" domain="[('active','=',False)]"/>
-                    <field name="categ_id" operator="child_of"/>
-                    <group  expand='0' string='Group by...'>
-                        <filter string='Category' name="category" domain="[]" context="{'group_by' : 'categ_id'}"/>
-                        <filter string='Start Date' name="from_month" domain="[]" context="{'group_by' : 'membership_date_from'}"/>
+        <recordmodel="ir.ui.view"id="membership_product_search_form_view">
+            <fieldname="name">membership.product.search.form</field>
+            <fieldname="model">product.template</field>
+            <fieldname="priority">50</field>
+            <fieldname="arch"type="xml">
+                <searchstring="MembershipProducts">
+                    <fieldname="name"string="MembershipProduct"/>
+                    <filterstring="Inactive"name="inactive"domain="[('active','=',False)]"/>
+                    <fieldname="categ_id"operator="child_of"/>
+                    <group expand='0'string='Groupby...'>
+                        <filterstring='Category'name="category"domain="[]"context="{'group_by':'categ_id'}"/>
+                        <filterstring='StartDate'name="from_month"domain="[]"context="{'group_by':'membership_date_from'}"/>
                     </group>
                 </search>
             </field>
         </record>
 
-        <record model="ir.ui.view" id="membership_products_tree">
-            <field name="name">Membership products</field>
-            <field name="model">product.template</field>
-            <field name="priority">50</field>
-            <field name="arch" type="xml">
-                <tree string="Membership products">
-                    <field name="name"/>
-                    <field name="membership_date_from"/>
-                    <field name="membership_date_to"/>
-                    <field name="list_price" string="Membership Fee"/>
-                    <field name="categ_id" invisible="1"/>
-                    <field name="uom_id" invisible="1"/>
-                    <field name="type" invisible="1"/>
+        <recordmodel="ir.ui.view"id="membership_products_tree">
+            <fieldname="name">Membershipproducts</field>
+            <fieldname="model">product.template</field>
+            <fieldname="priority">50</field>
+            <fieldname="arch"type="xml">
+                <treestring="Membershipproducts">
+                    <fieldname="name"/>
+                    <fieldname="membership_date_from"/>
+                    <fieldname="membership_date_to"/>
+                    <fieldname="list_price"string="MembershipFee"/>
+                    <fieldname="categ_id"invisible="1"/>
+                    <fieldname="uom_id"invisible="1"/>
+                    <fieldname="type"invisible="1"/>
                 </tree>
             </field>
         </record>
 
-        <record id="membership_products_kanban" model="ir.ui.view">
-            <field name="name">product.template.kanban</field>
-            <field name="model">product.template</field>
-            <field name="arch" type="xml">
-                <kanban class="o_kanban_mobile">
-                    <field name="name"/>
-                    <field name="membership_date_from"/>
-                    <field name="membership_date_to"/>
-                    <field name="list_price"/>
+        <recordid="membership_products_kanban"model="ir.ui.view">
+            <fieldname="name">product.template.kanban</field>
+            <fieldname="model">product.template</field>
+            <fieldname="arch"type="xml">
+                <kanbanclass="o_kanban_mobile">
+                    <fieldname="name"/>
+                    <fieldname="membership_date_from"/>
+                    <fieldname="membership_date_to"/>
+                    <fieldname="list_price"/>
                     <templates>
-                        <t t-name="kanban-box">
-                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
-                                <div class="o_kanban_record_top">
-                                    <div class="o_kanban_record_headings">
-                                        <strong class="o_kanban_record_title"><span class="mt4"><field name="name"/></span></strong>
+                        <tt-name="kanban-box">
+                            <divt-attf-class="oe_kanban_cardoe_kanban_global_click">
+                                <divclass="o_kanban_record_top">
+                                    <divclass="o_kanban_record_headings">
+                                        <strongclass="o_kanban_record_title"><spanclass="mt4"><fieldname="name"/></span></strong>
                                     </div>
-                                    <span class="badge badge-pill"><i class="fa fa-money" role="img" aria-label="Price" title="Price"/> <field name="list_price"/></span>
+                                    <spanclass="badgebadge-pill"><iclass="fafa-money"role="img"aria-label="Price"title="Price"/><fieldname="list_price"/></span>
                                 </div>
-                                <div class="o_kanban_record_body">
-                                    <i class="fa fa-clock-o" role="img" aria-label="Period" title="Period"></i><strong> From: </strong><field name="membership_date_from"/><strong> To:</strong> <field name="membership_date_to"/>
+                                <divclass="o_kanban_record_body">
+                                    <iclass="fafa-clock-o"role="img"aria-label="Period"title="Period"></i><strong>From:</strong><fieldname="membership_date_from"/><strong>To:</strong><fieldname="membership_date_to"/>
                                 </div>
                             </div>
                         </t>
@@ -67,81 +67,81 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="membership_products_form">
-            <field name="name">Membership Products</field>
-            <field name="model">product.template</field>
-            <field name="priority">50</field>
-            <field name="arch" type="xml">
-                <form string="Membership products">
+        <recordmodel="ir.ui.view"id="membership_products_form">
+            <fieldname="name">MembershipProducts</field>
+            <fieldname="model">product.template</field>
+            <fieldname="priority">50</field>
+            <fieldname="arch"type="xml">
+                <formstring="Membershipproducts">
                     <sheet>
-                        <label for="name" class="oe_edit_only"/>
+                        <labelfor="name"class="oe_edit_only"/>
                         <h1>
-                            <field name="name"/>
+                            <fieldname="name"/>
                         </h1>
                         <group>
-                            <group name="product_details">
-                                <field name="default_code"/>
-                                <field name="categ_id"/>
-                                <field name="membership" invisible="1"/>
-                                <field name="company_id"
+                            <groupname="product_details">
+                                <fieldname="default_code"/>
+                                <fieldname="categ_id"/>
+                                <fieldname="membership"invisible="1"/>
+                                <fieldname="company_id"
                                     groups="base.group_multi_company"
-                                    options="{'no_create': True}"/>
-                                <field name="active" widget="boolean_toggle"/>
+                                    options="{'no_create':True}"/>
+                                <fieldname="active"widget="boolean_toggle"/>
                             </group>
-                            <group name="membership_details">
-                                <label for="membership_date_from" string="Membership Duration"/>
-                                <div class="o_row">
-                                    <field name="membership_date_from" required="1"/> -
-                                    <field name="membership_date_to" required="1"/>
+                            <groupname="membership_details">
+                                <labelfor="membership_date_from"string="MembershipDuration"/>
+                                <divclass="o_row">
+                                    <fieldname="membership_date_from"required="1"/>-
+                                    <fieldname="membership_date_to"required="1"/>
                                 </div>
-                                <field name="list_price" string="Membership Fee"/>
+                                <fieldname="list_price"string="MembershipFee"/>
                                 <field
                                     name="property_account_income_id"/>
-                                <field name="taxes_id" widget="many2many_tags" string="Taxes"/>
+                                <fieldname="taxes_id"widget="many2many_tags"string="Taxes"/>
                             </group>
                         </group>
-                        <label for="description"/>
-                        <field colspan="4" name="description" placeholder="Add a description..."/>
-                        <label for="description_sale"/>
-                        <field colspan="4" name="description_sale" placeholder="This note will be displayed on quotations..."/>
+                        <labelfor="description"/>
+                        <fieldcolspan="4"name="description"placeholder="Addadescription..."/>
+                        <labelfor="description_sale"/>
+                        <fieldcolspan="4"name="description_sale"placeholder="Thisnotewillbedisplayedonquotations..."/>
                     </sheet>
                  </form>
             </field>
         </record>
 
-        <record model="ir.actions.act_window" id="action_membership_products">
-            <field name="name">Membership Products</field>
-            <field name="res_model">product.template</field>
-            <field name="domain">[('membership','=',True), ('type', '=', 'service')]</field>
-            <field name="context">{'membership':True, 'type':'service', 'default_membership': True, 'default_type': 'service'}</field>
-            <field name="search_view_id" ref="membership_product_search_form_view"/>
+        <recordmodel="ir.actions.act_window"id="action_membership_products">
+            <fieldname="name">MembershipProducts</field>
+            <fieldname="res_model">product.template</field>
+            <fieldname="domain">[('membership','=',True),('type','=','service')]</field>
+            <fieldname="context">{'membership':True,'type':'service','default_membership':True,'default_type':'service'}</field>
+            <fieldname="search_view_id"ref="membership_product_search_form_view"/>
         </record>
 
-        <record model="ir.actions.act_window.view" id="action_membership_product_view_tree">
-            <field name="sequence" eval="1"/>
-            <field name="view_mode">tree</field>
-            <field name="view_id" ref="membership_products_tree"/>
-            <field name="act_window_id" ref="action_membership_products"/>
+        <recordmodel="ir.actions.act_window.view"id="action_membership_product_view_tree">
+            <fieldname="sequence"eval="1"/>
+            <fieldname="view_mode">tree</field>
+            <fieldname="view_id"ref="membership_products_tree"/>
+            <fieldname="act_window_id"ref="action_membership_products"/>
         </record>
 
-        <record model="ir.actions.act_window.view" id="action_membership_product_view_form">
-            <field name="sequence" eval="2"/>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="membership_products_form"/>
-            <field name="act_window_id" ref="action_membership_products"/>
+        <recordmodel="ir.actions.act_window.view"id="action_membership_product_view_form">
+            <fieldname="sequence"eval="2"/>
+            <fieldname="view_mode">form</field>
+            <fieldname="view_id"ref="membership_products_form"/>
+            <fieldname="act_window_id"ref="action_membership_products"/>
         </record>
 
-        <record model="ir.actions.act_window.view" id="action_membership_product_view_kanban">
-            <field name="sequence" eval="3"/>
-            <field name="view_mode">kanban</field>
-            <field name="view_id" ref="membership_products_kanban"/>
-            <field name="act_window_id" ref="action_membership_products"/>
+        <recordmodel="ir.actions.act_window.view"id="action_membership_product_view_kanban">
+            <fieldname="sequence"eval="3"/>
+            <fieldname="view_mode">kanban</field>
+            <fieldname="view_id"ref="membership_products_kanban"/>
+            <fieldname="act_window_id"ref="action_membership_products"/>
         </record>
 
-        <menuitem name="Members" id="menu_association" sequence="15" web_icon="membership,static/description/icon.png"/>
-        <menuitem name="Configuration" id="menu_marketing_config_association"
-            parent="menu_association" sequence="100"/>
-        <menuitem name="Membership Products" id="menu_membership_products" parent="menu_marketing_config_association"
+        <menuitemname="Members"id="menu_association"sequence="15"web_icon="membership,static/description/icon.png"/>
+        <menuitemname="Configuration"id="menu_marketing_config_association"
+            parent="menu_association"sequence="100"/>
+        <menuitemname="MembershipProducts"id="menu_membership_products"parent="menu_marketing_config_association"
             action="action_membership_products"/>
 
 </flectra>

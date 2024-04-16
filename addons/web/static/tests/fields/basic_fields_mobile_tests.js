@@ -1,224 +1,224 @@
-flectra.define('web.basic_fields_mobile_tests', function (require) {
-"use strict";
+flectra.define('web.basic_fields_mobile_tests',function(require){
+"usestrict";
 
-var FormView = require('web.FormView');
-var ListView = require('web.ListView');
-var testUtils = require('web.test_utils');
+varFormView=require('web.FormView');
+varListView=require('web.ListView');
+vartestUtils=require('web.test_utils');
 
-var createView = testUtils.createView;
+varcreateView=testUtils.createView;
 
-QUnit.module('fields', {}, function () {
+QUnit.module('fields',{},function(){
 
-QUnit.module('basic_fields', {
-    beforeEach: function () {
-        this.data = {
-            partner: {
-                fields: {
-                    date: {string: "A date", type: "date", searchable: true},
-                    datetime: {string: "A datetime", type: "datetime", searchable: true},
-                    display_name: {string: "Displayed name", type: "char", searchable: true},
-                    foo: {string: "Foo", type: "char", default: "My little Foo Value", searchable: true, trim: true},
-                    bar: {string: "Bar", type: "boolean", default: true, searchable: true},
-                    int_field: {string: "int_field", type: "integer", sortable: true, searchable: true},
-                    qux: {string: "Qux", type: "float", digits: [16,1], searchable: true},
+QUnit.module('basic_fields',{
+    beforeEach:function(){
+        this.data={
+            partner:{
+                fields:{
+                    date:{string:"Adate",type:"date",searchable:true},
+                    datetime:{string:"Adatetime",type:"datetime",searchable:true},
+                    display_name:{string:"Displayedname",type:"char",searchable:true},
+                    foo:{string:"Foo",type:"char",default:"MylittleFooValue",searchable:true,trim:true},
+                    bar:{string:"Bar",type:"boolean",default:true,searchable:true},
+                    int_field:{string:"int_field",type:"integer",sortable:true,searchable:true},
+                    qux:{string:"Qux",type:"float",digits:[16,1],searchable:true},
                 },
-                records: [{
-                    id: 1,
-                    date: "2017-02-03",
-                    datetime: "2017-02-08 10:00:00",
-                    display_name: "first record",
-                    bar: true,
-                    foo: "yop",
-                    int_field: 10,
-                    qux: 0.44444,
-                }, {
-                    id: 2,
-                    display_name: "second record",
-                    bar: true,
-                    foo: "blip",
-                    int_field: 0,
-                    qux: 0,
-                }, {
-                    id: 4,
-                    display_name: "aaa",
-                    foo: "abc",
-                    int_field: false,
-                    qux: false,
+                records:[{
+                    id:1,
+                    date:"2017-02-03",
+                    datetime:"2017-02-0810:00:00",
+                    display_name:"firstrecord",
+                    bar:true,
+                    foo:"yop",
+                    int_field:10,
+                    qux:0.44444,
+                },{
+                    id:2,
+                    display_name:"secondrecord",
+                    bar:true,
+                    foo:"blip",
+                    int_field:0,
+                    qux:0,
+                },{
+                    id:4,
+                    display_name:"aaa",
+                    foo:"abc",
+                    int_field:false,
+                    qux:false,
                 }],
-                onchanges: {},
+                onchanges:{},
             },
         };
     }
-}, function () {
+},function(){
 
     QUnit.module('PhoneWidget');
 
-    QUnit.test('phone field in form view on extra small screens', async function (assert) {
+    QUnit.test('phonefieldinformviewonextrasmallscreens',asyncfunction(assert){
         assert.expect(7);
 
-        var form = await createView({
-            View: FormView,
-            model: 'partner',
-            data: this.data,
-            arch:'<form string="Partners">' +
-                    '<sheet>' +
-                        '<group>' +
-                            '<field name="foo" widget="phone"/>' +
-                        '</group>' +
-                    '</sheet>' +
+        varform=awaitcreateView({
+            View:FormView,
+            model:'partner',
+            data:this.data,
+            arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                        '<group>'+
+                            '<fieldname="foo"widget="phone"/>'+
+                        '</group>'+
+                    '</sheet>'+
                 '</form>',
-            res_id: 1,
+            res_id:1,
         });
 
-        var $phoneLink = form.$('a.o_form_uri.o_field_widget');
-        assert.strictEqual($phoneLink.length, 1,
-            "should have a anchor with correct classes");
-        assert.strictEqual($phoneLink.text(), 'yop',
-            "value should be displayed properly");
-        assert.hasAttrValue($phoneLink, 'href', 'tel:yop',
-            "should have proper tel prefix");
+        var$phoneLink=form.$('a.o_form_uri.o_field_widget');
+        assert.strictEqual($phoneLink.length,1,
+            "shouldhaveaanchorwithcorrectclasses");
+        assert.strictEqual($phoneLink.text(),'yop',
+            "valueshouldbedisplayedproperly");
+        assert.hasAttrValue($phoneLink,'href','tel:yop',
+            "shouldhavepropertelprefix");
 
-        // switch to edit mode and check the result
-        await testUtils.form.clickEdit(form);
-        assert.containsOnce(form, 'input[type="text"].o_field_widget',
-            "should have an int for the phone field");
-        assert.strictEqual(form.$('input[type="text"].o_field_widget').val(), 'yop',
-            "input should contain field value in edit mode");
+        //switchtoeditmodeandchecktheresult
+        awaittestUtils.form.clickEdit(form);
+        assert.containsOnce(form,'input[type="text"].o_field_widget',
+            "shouldhaveanintforthephonefield");
+        assert.strictEqual(form.$('input[type="text"].o_field_widget').val(),'yop',
+            "inputshouldcontainfieldvalueineditmode");
 
-        // change value in edit mode
-        await testUtils.fields.editInput(form.$('input[type="text"].o_field_widget'), 'new');
+        //changevalueineditmode
+        awaittestUtils.fields.editInput(form.$('input[type="text"].o_field_widget'),'new');
 
-        // save
-        await testUtils.form.clickSave(form);
-        $phoneLink = form.$('a.o_form_uri.o_field_widget');
-        assert.strictEqual($phoneLink.text(), 'new',
-            "new value should be displayed properly");
-        assert.hasAttrValue($phoneLink, 'href', 'tel:new',
-            "should still have proper tel prefix");
+        //save
+        awaittestUtils.form.clickSave(form);
+        $phoneLink=form.$('a.o_form_uri.o_field_widget');
+        assert.strictEqual($phoneLink.text(),'new',
+            "newvalueshouldbedisplayedproperly");
+        assert.hasAttrValue($phoneLink,'href','tel:new',
+            "shouldstillhavepropertelprefix");
 
         form.destroy();
     });
 
-    QUnit.test('phone field in editable list view on extra small screens', async function (assert) {
+    QUnit.test('phonefieldineditablelistviewonextrasmallscreens',asyncfunction(assert){
         assert.expect(10);
 
-        var list = await createView({
-            View: ListView,
-            model: 'partner',
-            data: this.data,
-            arch: '<tree editable="bottom"><field name="foo" widget="phone"/></tree>',
+        varlist=awaitcreateView({
+            View:ListView,
+            model:'partner',
+            data:this.data,
+            arch:'<treeeditable="bottom"><fieldname="foo"widget="phone"/></tree>',
         });
 
-        assert.containsN(list, '.o_data_row', 3,
-            "should have 3 record");
-        assert.strictEqual(list.$('tbody td:not(.o_list_record_selector) a').first().text(), 'yop',
-            "value should be displayed properly");
+        assert.containsN(list,'.o_data_row',3,
+            "shouldhave3record");
+        assert.strictEqual(list.$('tbodytd:not(.o_list_record_selector)a').first().text(),'yop',
+            "valueshouldbedisplayedproperly");
 
-        var $phoneLink = list.$('a.o_form_uri.o_field_widget');
-        assert.strictEqual($phoneLink.length, 3,
-            "should have anchors with correct classes");
-        assert.hasAttrValue($phoneLink.first(), 'href', 'tel:yop',
-            "should have proper tel prefix");
+        var$phoneLink=list.$('a.o_form_uri.o_field_widget');
+        assert.strictEqual($phoneLink.length,3,
+            "shouldhaveanchorswithcorrectclasses");
+        assert.hasAttrValue($phoneLink.first(),'href','tel:yop',
+            "shouldhavepropertelprefix");
 
-        // Edit a line and check the result
-        var $cell = list.$('tbody td:not(.o_list_record_selector)').first();
-        await testUtils.dom.click($cell);
-        assert.hasClass($cell.parent(),'o_selected_row', 'should be set as edit mode');
-        assert.strictEqual($cell.find('input').val(), 'yop',
-            'should have the corect value in internal input');
-        await testUtils.fields.editInput($cell.find('input'), 'new');
+        //Editalineandchecktheresult
+        var$cell=list.$('tbodytd:not(.o_list_record_selector)').first();
+        awaittestUtils.dom.click($cell);
+        assert.hasClass($cell.parent(),'o_selected_row','shouldbesetaseditmode');
+        assert.strictEqual($cell.find('input').val(),'yop',
+            'shouldhavethecorectvalueininternalinput');
+        awaittestUtils.fields.editInput($cell.find('input'),'new');
 
-        // save
-        await testUtils.dom.click(list.$buttons.find('.o_list_button_save'));
-        $cell = list.$('tbody td:not(.o_list_record_selector)').first();
-        assert.doesNotHaveClass($cell.parent(), 'o_selected_row', 'should not be in edit mode anymore');
-        assert.strictEqual(list.$('tbody td:not(.o_list_record_selector) a').first().text(), 'new',
-            "value should be properly updated");
-        $phoneLink = list.$('a.o_form_uri.o_field_widget');
-        assert.strictEqual($phoneLink.length, 3,
-            "should still have anchors with correct classes");
-        assert.hasAttrValue($phoneLink.first(), 'href', 'tel:new',
-            "should still have proper tel prefix");
+        //save
+        awaittestUtils.dom.click(list.$buttons.find('.o_list_button_save'));
+        $cell=list.$('tbodytd:not(.o_list_record_selector)').first();
+        assert.doesNotHaveClass($cell.parent(),'o_selected_row','shouldnotbeineditmodeanymore');
+        assert.strictEqual(list.$('tbodytd:not(.o_list_record_selector)a').first().text(),'new',
+            "valueshouldbeproperlyupdated");
+        $phoneLink=list.$('a.o_form_uri.o_field_widget');
+        assert.strictEqual($phoneLink.length,3,
+            "shouldstillhaveanchorswithcorrectclasses");
+        assert.hasAttrValue($phoneLink.first(),'href','tel:new',
+            "shouldstillhavepropertelprefix");
 
         list.destroy();
     });
 
-    QUnit.test('phone field does not allow html injections', async function (assert) {
+    QUnit.test('phonefielddoesnotallowhtmlinjections',asyncfunction(assert){
         assert.expect(1);
 
-        var form = await createView({
-            View: FormView,
-            model: 'partner',
-            data: this.data,
-            arch:'<form string="Partners">' +
-                    '<sheet>' +
-                        '<group>' +
-                            '<field name="foo" widget="phone"/>' +
-                        '</group>' +
-                    '</sheet>' +
+        varform=awaitcreateView({
+            View:FormView,
+            model:'partner',
+            data:this.data,
+            arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                        '<group>'+
+                            '<fieldname="foo"widget="phone"/>'+
+                        '</group>'+
+                    '</sheet>'+
                 '</form>',
-            res_id: 1,
-            viewOptions: {
-                mode: 'edit',
+            res_id:1,
+            viewOptions:{
+                mode:'edit',
             },
         });
 
-        var val = '<script>throw Error();</script><script>throw Error();</script>';
-        await testUtils.fields.editInput(form.$('input.o_field_widget[name="foo"]'), val);
+        varval='<script>throwError();</script><script>throwError();</script>';
+        awaittestUtils.fields.editInput(form.$('input.o_field_widget[name="foo"]'),val);
 
-        // save
-        await testUtils.form.clickSave(form);
-        assert.strictEqual(form.$('.o_field_widget').text(), val,
-            "value should have been correctly escaped");
+        //save
+        awaittestUtils.form.clickSave(form);
+        assert.strictEqual(form.$('.o_field_widget').text(),val,
+            "valueshouldhavebeencorrectlyescaped");
 
         form.destroy();
     });
 
     QUnit.module('FieldDateRange');
 
-    QUnit.test('date field: toggle daterangepicker then scroll', async function (assert) {
+    QUnit.test('datefield:toggledaterangepickerthenscroll',asyncfunction(assert){
         assert.expect(4);
-        const scrollEvent = new UIEvent('scroll');
+        constscrollEvent=newUIEvent('scroll');
 
-        function scrollAtHeight(height) {
-            window.scrollTo(0, height);
+        functionscrollAtHeight(height){
+            window.scrollTo(0,height);
             document.dispatchEvent(scrollEvent);
         }
-        this.data.partner.fields.date_end = {string: 'Date End', type: 'date'};
+        this.data.partner.fields.date_end={string:'DateEnd',type:'date'};
 
-        var form = await createView({
-            View: FormView,
-            model: 'partner',
-            data: this.data,
-            arch: '<form>' +
-                    '<field name="date" widget="daterange" options="{\'related_end_date\': \'date_end\'}"/>' +
-                    '<field name="date_end" widget="daterange" options="{\'related_start_date\': \'date\'}"/>' +
+        varform=awaitcreateView({
+            View:FormView,
+            model:'partner',
+            data:this.data,
+            arch:'<form>'+
+                    '<fieldname="date"widget="daterange"options="{\'related_end_date\':\'date_end\'}"/>'+
+                    '<fieldname="date_end"widget="daterange"options="{\'related_start_date\':\'date\'}"/>'+
                 '</form>',
-            session: {
-                getTZOffset: function () {
-                    return 330;
+            session:{
+                getTZOffset:function(){
+                    return330;
                 },
             },
         });
 
-        // Check date range picker initialization
-        assert.containsN(document.body, '.daterangepicker', 2,
-            "should initialize 2 date range picker");
+        //Checkdaterangepickerinitialization
+        assert.containsN(document.body,'.daterangepicker',2,
+            "shouldinitialize2daterangepicker");
 
-        // Open date range picker
-        await testUtils.dom.click("input[name=date]");
+        //Opendaterangepicker
+        awaittestUtils.dom.click("input[name=date]");
         assert.isVisible($('.daterangepicker:first'),
-            "date range picker should be opened");
+            "daterangepickershouldbeopened");
 
-        // Scroll
+        //Scroll
         scrollAtHeight(50);
         assert.isVisible($('.daterangepicker:first'),
-            "date range picker should be opened");
+            "daterangepickershouldbeopened");
 
-        // Close picker
-        await testUtils.dom.click($('.daterangepicker:first .cancelBtn'));
+        //Closepicker
+        awaittestUtils.dom.click($('.daterangepicker:first.cancelBtn'));
         assert.isNotVisible($('.daterangepicker:first'),
-            "date range picker should be closed");
+            "daterangepickershouldbeclosed");
 
         form.destroy();
     });

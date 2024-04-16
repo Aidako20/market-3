@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+classResConfigSettings(models.TransientModel):
+    _inherit='res.config.settings'
 
-    adyen_account_id = fields.Many2one(string='Adyen Account', related='company_id.adyen_account_id')
+    adyen_account_id=fields.Many2one(string='AdyenAccount',related='company_id.adyen_account_id')
 
-    def create_adyen_account(self):
-        return self.env['adyen.account'].action_create_redirect()
+    defcreate_adyen_account(self):
+        returnself.env['adyen.account'].action_create_redirect()

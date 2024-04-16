@@ -1,170 +1,170 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import time
+importtime
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class ProductProduct(models.Model):
-    _inherit = "product.product"
+classProductProduct(models.Model):
+    _inherit="product.product"
 
-    date_from = fields.Date(compute='_compute_product_margin_fields_values', string='Margin Date From')
-    date_to = fields.Date(compute='_compute_product_margin_fields_values', string='Margin Date To')
-    invoice_state = fields.Selection(compute='_compute_product_margin_fields_values',
+    date_from=fields.Date(compute='_compute_product_margin_fields_values',string='MarginDateFrom')
+    date_to=fields.Date(compute='_compute_product_margin_fields_values',string='MarginDateTo')
+    invoice_state=fields.Selection(compute='_compute_product_margin_fields_values',
         selection=[
-            ('paid', 'Paid'),
-            ('open_paid', 'Open and Paid'),
-            ('draft_open_paid', 'Draft, Open and Paid')
-        ], string='Invoice State', readonly=True)
-    sale_avg_price = fields.Float(compute='_compute_product_margin_fields_values', string='Avg. Sale Unit Price',
-        help="Avg. Price in Customer Invoices.")
-    purchase_avg_price = fields.Float(compute='_compute_product_margin_fields_values', string='Avg. Purchase Unit Price',
-        help="Avg. Price in Vendor Bills ")
-    sale_num_invoiced = fields.Float(compute='_compute_product_margin_fields_values', string='# Invoiced in Sale',
-        help="Sum of Quantity in Customer Invoices")
-    purchase_num_invoiced = fields.Float(compute='_compute_product_margin_fields_values', string='# Invoiced in Purchase',
-        help="Sum of Quantity in Vendor Bills")
-    sales_gap = fields.Float(compute='_compute_product_margin_fields_values', string='Sales Gap',
-        help="Expected Sale - Turn Over")
-    purchase_gap = fields.Float(compute='_compute_product_margin_fields_values', string='Purchase Gap',
-        help="Normal Cost - Total Cost")
-    turnover = fields.Float(compute='_compute_product_margin_fields_values', string='Turnover',
-        help="Sum of Multiplication of Invoice price and quantity of Customer Invoices")
-    total_cost = fields.Float(compute='_compute_product_margin_fields_values', string='Total Cost',
-        help="Sum of Multiplication of Invoice price and quantity of Vendor Bills ")
-    sale_expected = fields.Float(compute='_compute_product_margin_fields_values', string='Expected Sale',
-        help="Sum of Multiplication of Sale Catalog price and quantity of Customer Invoices")
-    normal_cost = fields.Float(compute='_compute_product_margin_fields_values', string='Normal Cost',
-        help="Sum of Multiplication of Cost price and quantity of Vendor Bills")
-    total_margin = fields.Float(compute='_compute_product_margin_fields_values', string='Total Margin',
-        help="Turnover - Standard price")
-    expected_margin = fields.Float(compute='_compute_product_margin_fields_values', string='Expected Margin',
-        help="Expected Sale - Normal Cost")
-    total_margin_rate = fields.Float(compute='_compute_product_margin_fields_values', string='Total Margin Rate(%)',
-        help="Total margin * 100 / Turnover")
-    expected_margin_rate = fields.Float(compute='_compute_product_margin_fields_values', string='Expected Margin (%)',
-        help="Expected margin * 100 / Expected Sale")
+            ('paid','Paid'),
+            ('open_paid','OpenandPaid'),
+            ('draft_open_paid','Draft,OpenandPaid')
+        ],string='InvoiceState',readonly=True)
+    sale_avg_price=fields.Float(compute='_compute_product_margin_fields_values',string='Avg.SaleUnitPrice',
+        help="Avg.PriceinCustomerInvoices.")
+    purchase_avg_price=fields.Float(compute='_compute_product_margin_fields_values',string='Avg.PurchaseUnitPrice',
+        help="Avg.PriceinVendorBills")
+    sale_num_invoiced=fields.Float(compute='_compute_product_margin_fields_values',string='#InvoicedinSale',
+        help="SumofQuantityinCustomerInvoices")
+    purchase_num_invoiced=fields.Float(compute='_compute_product_margin_fields_values',string='#InvoicedinPurchase',
+        help="SumofQuantityinVendorBills")
+    sales_gap=fields.Float(compute='_compute_product_margin_fields_values',string='SalesGap',
+        help="ExpectedSale-TurnOver")
+    purchase_gap=fields.Float(compute='_compute_product_margin_fields_values',string='PurchaseGap',
+        help="NormalCost-TotalCost")
+    turnover=fields.Float(compute='_compute_product_margin_fields_values',string='Turnover',
+        help="SumofMultiplicationofInvoicepriceandquantityofCustomerInvoices")
+    total_cost=fields.Float(compute='_compute_product_margin_fields_values',string='TotalCost',
+        help="SumofMultiplicationofInvoicepriceandquantityofVendorBills")
+    sale_expected=fields.Float(compute='_compute_product_margin_fields_values',string='ExpectedSale',
+        help="SumofMultiplicationofSaleCatalogpriceandquantityofCustomerInvoices")
+    normal_cost=fields.Float(compute='_compute_product_margin_fields_values',string='NormalCost',
+        help="SumofMultiplicationofCostpriceandquantityofVendorBills")
+    total_margin=fields.Float(compute='_compute_product_margin_fields_values',string='TotalMargin',
+        help="Turnover-Standardprice")
+    expected_margin=fields.Float(compute='_compute_product_margin_fields_values',string='ExpectedMargin',
+        help="ExpectedSale-NormalCost")
+    total_margin_rate=fields.Float(compute='_compute_product_margin_fields_values',string='TotalMarginRate(%)',
+        help="Totalmargin*100/Turnover")
+    expected_margin_rate=fields.Float(compute='_compute_product_margin_fields_values',string='ExpectedMargin(%)',
+        help="Expectedmargin*100/ExpectedSale")
 
     @api.model
-    def read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):
+    defread_group(self,domain,fields,groupby,offset=0,limit=None,orderby=False,lazy=True):
         """
-            Inherit read_group to calculate the sum of the non-stored fields, as it is not automatically done anymore through the XML.
+            Inheritread_grouptocalculatethesumofthenon-storedfields,asitisnotautomaticallydoneanymorethroughtheXML.
         """
-        res = super(ProductProduct, self).read_group(domain, fields, groupby, offset=offset, limit=limit, orderby=orderby, lazy=lazy)
-        fields_list = ['turnover', 'sale_avg_price', 'sale_purchase_price', 'sale_num_invoiced', 'purchase_num_invoiced',
-                       'sales_gap', 'purchase_gap', 'total_cost', 'sale_expected', 'normal_cost', 'total_margin',
-                       'expected_margin', 'total_margin_rate', 'expected_margin_rate']
-        if any(x in fields for x in fields_list):
-            # Calculate first for every product in which line it needs to be applied
-            re_ind = 0
-            prod_re = {}
-            tot_products = self.browse([])
-            for re in res:
-                if re.get('__domain'):
-                    products = self.search(re['__domain'])
-                    tot_products |= products
-                    for prod in products:
-                        prod_re[prod.id] = re_ind
-                re_ind += 1
-            res_val = tot_products._compute_product_margin_fields_values(field_names=[x for x in fields if fields in fields_list])
-            for key in res_val:
-                for l in res_val[key]:
-                    re = res[prod_re[key]]
-                    if re.get(l):
-                        re[l] += res_val[key][l]
+        res=super(ProductProduct,self).read_group(domain,fields,groupby,offset=offset,limit=limit,orderby=orderby,lazy=lazy)
+        fields_list=['turnover','sale_avg_price','sale_purchase_price','sale_num_invoiced','purchase_num_invoiced',
+                       'sales_gap','purchase_gap','total_cost','sale_expected','normal_cost','total_margin',
+                       'expected_margin','total_margin_rate','expected_margin_rate']
+        ifany(xinfieldsforxinfields_list):
+            #Calculatefirstforeveryproductinwhichlineitneedstobeapplied
+            re_ind=0
+            prod_re={}
+            tot_products=self.browse([])
+            forreinres:
+                ifre.get('__domain'):
+                    products=self.search(re['__domain'])
+                    tot_products|=products
+                    forprodinproducts:
+                        prod_re[prod.id]=re_ind
+                re_ind+=1
+            res_val=tot_products._compute_product_margin_fields_values(field_names=[xforxinfieldsiffieldsinfields_list])
+            forkeyinres_val:
+                forlinres_val[key]:
+                    re=res[prod_re[key]]
+                    ifre.get(l):
+                        re[l]+=res_val[key][l]
                     else:
-                        re[l] = res_val[key][l]
-        return res
+                        re[l]=res_val[key][l]
+        returnres
 
-    def _compute_product_margin_fields_values(self, field_names=None):
-        if field_names is None:
-            field_names = []
-        date_from = self.env.context.get('date_from', time.strftime('%Y-01-01'))
-        date_to = self.env.context.get('date_to', time.strftime('%Y-12-31'))
-        invoice_state = self.env.context.get('invoice_state', 'open_paid')
-        res = {
-            product_id: {'date_from': date_from, 'date_to': date_to, 'invoice_state': invoice_state, 'turnover': 0.0,
-                'sale_avg_price': 0.0, 'purchase_avg_price': 0.0, 'sale_num_invoiced': 0.0, 'purchase_num_invoiced': 0.0,
-                'sales_gap': 0.0, 'purchase_gap': 0.0, 'total_cost': 0.0, 'sale_expected': 0.0, 'normal_cost': 0.0, 'total_margin': 0.0,
-                'expected_margin': 0.0, 'total_margin_rate': 0.0, 'expected_margin_rate': 0.0}
-            for product_id in self.ids
+    def_compute_product_margin_fields_values(self,field_names=None):
+        iffield_namesisNone:
+            field_names=[]
+        date_from=self.env.context.get('date_from',time.strftime('%Y-01-01'))
+        date_to=self.env.context.get('date_to',time.strftime('%Y-12-31'))
+        invoice_state=self.env.context.get('invoice_state','open_paid')
+        res={
+            product_id:{'date_from':date_from,'date_to':date_to,'invoice_state':invoice_state,'turnover':0.0,
+                'sale_avg_price':0.0,'purchase_avg_price':0.0,'sale_num_invoiced':0.0,'purchase_num_invoiced':0.0,
+                'sales_gap':0.0,'purchase_gap':0.0,'total_cost':0.0,'sale_expected':0.0,'normal_cost':0.0,'total_margin':0.0,
+                'expected_margin':0.0,'total_margin_rate':0.0,'expected_margin_rate':0.0}
+            forproduct_idinself.ids
         }
-        states = ()
-        payment_states = ()
-        if invoice_state == 'paid':
-            states = ('posted',)
-            payment_states = ('in_payment', 'paid',)
-        elif invoice_state == 'open_paid':
-            states = ('posted',)
-            payment_states = ('not_paid', 'in_payment', 'paid')
-        elif invoice_state == 'draft_open_paid':
-            states = ('posted', 'draft')
-            payment_states = ('not_paid', 'in_payment', 'paid')
-        if "force_company" in self.env.context:
-            company_id = self.env.context['force_company']
+        states=()
+        payment_states=()
+        ifinvoice_state=='paid':
+            states=('posted',)
+            payment_states=('in_payment','paid',)
+        elifinvoice_state=='open_paid':
+            states=('posted',)
+            payment_states=('not_paid','in_payment','paid')
+        elifinvoice_state=='draft_open_paid':
+            states=('posted','draft')
+            payment_states=('not_paid','in_payment','paid')
+        if"force_company"inself.env.context:
+            company_id=self.env.context['force_company']
         else:
-            company_id = self.env.company.id
-        self.env['account.move.line'].flush(['price_unit', 'quantity', 'balance', 'product_id', 'display_type'])
-        self.env['account.move'].flush(['state', 'payment_state', 'move_type', 'invoice_date', 'company_id'])
+            company_id=self.env.company.id
+        self.env['account.move.line'].flush(['price_unit','quantity','balance','product_id','display_type'])
+        self.env['account.move'].flush(['state','payment_state','move_type','invoice_date','company_id'])
         self.env['product.template'].flush(['list_price'])
-        sqlstr = """
-                WITH currency_rate AS ({})
+        sqlstr="""
+                WITHcurrency_rateAS({})
                 SELECT
-                    l.product_id as product_id,
+                    l.product_idasproduct_id,
                     SUM(
-                        l.price_unit / (CASE COALESCE(cr.rate, 0) WHEN 0 THEN 1.0 ELSE cr.rate END) *
-                        l.quantity * (CASE WHEN i.move_type IN ('out_invoice', 'in_invoice') THEN 1 ELSE -1 END) * ((100 - l.discount) * 0.01)
-                    ) / NULLIF(SUM(l.quantity * (CASE WHEN i.move_type IN ('out_invoice', 'in_invoice') THEN 1 ELSE -1 END)), 0) AS avg_unit_price,
-                    SUM(l.quantity * (CASE WHEN i.move_type IN ('out_invoice', 'in_invoice') THEN 1 ELSE -1 END)) AS num_qty,
-                    SUM(ABS(l.balance) * (CASE WHEN i.move_type IN ('out_invoice', 'in_invoice') THEN 1 ELSE -1 END)) AS total,
-                    SUM(l.quantity * pt.list_price * (CASE WHEN i.move_type IN ('out_invoice', 'in_invoice') THEN 1 ELSE -1 END)) AS sale_expected
-                FROM account_move_line l
-                LEFT JOIN account_move i ON (l.move_id = i.id)
-                LEFT JOIN product_product product ON (product.id=l.product_id)
-                LEFT JOIN product_template pt ON (pt.id = product.product_tmpl_id)
-                left join currency_rate cr on
-                (cr.currency_id = i.currency_id and
-                 cr.company_id = i.company_id and
-                 cr.date_start <= COALESCE(i.invoice_date, NOW()) and
-                 (cr.date_end IS NULL OR cr.date_end > COALESCE(i.invoice_date, NOW())))
-                WHERE l.product_id IN %s
-                AND i.state IN %s
-                AND i.payment_state IN %s
-                AND i.move_type IN %s
-                AND i.invoice_date BETWEEN %s AND  %s
-                AND i.company_id = %s
-                AND l.display_type IS NULL
-                AND l.exclude_from_invoice_tab = false
-                GROUP BY l.product_id
+                        l.price_unit/(CASECOALESCE(cr.rate,0)WHEN0THEN1.0ELSEcr.rateEND)*
+                        l.quantity*(CASEWHENi.move_typeIN('out_invoice','in_invoice')THEN1ELSE-1END)*((100-l.discount)*0.01)
+                    )/NULLIF(SUM(l.quantity*(CASEWHENi.move_typeIN('out_invoice','in_invoice')THEN1ELSE-1END)),0)ASavg_unit_price,
+                    SUM(l.quantity*(CASEWHENi.move_typeIN('out_invoice','in_invoice')THEN1ELSE-1END))ASnum_qty,
+                    SUM(ABS(l.balance)*(CASEWHENi.move_typeIN('out_invoice','in_invoice')THEN1ELSE-1END))AStotal,
+                    SUM(l.quantity*pt.list_price*(CASEWHENi.move_typeIN('out_invoice','in_invoice')THEN1ELSE-1END))ASsale_expected
+                FROMaccount_move_linel
+                LEFTJOINaccount_moveiON(l.move_id=i.id)
+                LEFTJOINproduct_productproductON(product.id=l.product_id)
+                LEFTJOINproduct_templateptON(pt.id=product.product_tmpl_id)
+                leftjoincurrency_ratecron
+                (cr.currency_id=i.currency_idand
+                 cr.company_id=i.company_idand
+                 cr.date_start<=COALESCE(i.invoice_date,NOW())and
+                 (cr.date_endISNULLORcr.date_end>COALESCE(i.invoice_date,NOW())))
+                WHEREl.product_idIN%s
+                ANDi.stateIN%s
+                ANDi.payment_stateIN%s
+                ANDi.move_typeIN%s
+                ANDi.invoice_dateBETWEEN%sAND %s
+                ANDi.company_id=%s
+                ANDl.display_typeISNULL
+                ANDl.exclude_from_invoice_tab=false
+                GROUPBYl.product_id
                 """.format(self.env['res.currency']._select_companies_rates())
-        invoice_types = ('out_invoice', 'out_refund')
-        self.env.cr.execute(sqlstr, (tuple(self.ids), states, payment_states, invoice_types, date_from, date_to, company_id))
-        for product_id, avg, qty, total, sale in self.env.cr.fetchall():
-            res[product_id]['sale_avg_price'] = avg and avg or 0.0
-            res[product_id]['sale_num_invoiced'] = qty and qty or 0.0
-            res[product_id]['turnover'] = total and total or 0.0
-            res[product_id]['sale_expected'] = sale and sale or 0.0
-            res[product_id]['sales_gap'] = res[product_id]['sale_expected'] - res[product_id]['turnover']
-            res[product_id]['total_margin'] = res[product_id]['turnover']
-            res[product_id]['expected_margin'] = res[product_id]['sale_expected']
-            res[product_id]['total_margin_rate'] = res[product_id]['turnover'] and res[product_id]['total_margin'] * 100 / res[product_id]['turnover'] or 0.0
-            res[product_id]['expected_margin_rate'] = res[product_id]['sale_expected'] and res[product_id]['expected_margin'] * 100 / res[product_id]['sale_expected'] or 0.0
+        invoice_types=('out_invoice','out_refund')
+        self.env.cr.execute(sqlstr,(tuple(self.ids),states,payment_states,invoice_types,date_from,date_to,company_id))
+        forproduct_id,avg,qty,total,saleinself.env.cr.fetchall():
+            res[product_id]['sale_avg_price']=avgandavgor0.0
+            res[product_id]['sale_num_invoiced']=qtyandqtyor0.0
+            res[product_id]['turnover']=totalandtotalor0.0
+            res[product_id]['sale_expected']=saleandsaleor0.0
+            res[product_id]['sales_gap']=res[product_id]['sale_expected']-res[product_id]['turnover']
+            res[product_id]['total_margin']=res[product_id]['turnover']
+            res[product_id]['expected_margin']=res[product_id]['sale_expected']
+            res[product_id]['total_margin_rate']=res[product_id]['turnover']andres[product_id]['total_margin']*100/res[product_id]['turnover']or0.0
+            res[product_id]['expected_margin_rate']=res[product_id]['sale_expected']andres[product_id]['expected_margin']*100/res[product_id]['sale_expected']or0.0
 
-        ctx = self.env.context.copy()
-        ctx['force_company'] = company_id
-        invoice_types = ('in_invoice', 'in_refund')
-        self.env.cr.execute(sqlstr, (tuple(self.ids), states, payment_states, invoice_types, date_from, date_to, company_id))
-        for product_id, avg, qty, total, dummy in self.env.cr.fetchall():
-            res[product_id]['purchase_avg_price'] = avg and avg or 0.0
-            res[product_id]['purchase_num_invoiced'] = qty and qty or 0.0
-            res[product_id]['total_cost'] = total and total or 0.0
-            res[product_id]['total_margin'] = res[product_id].get('turnover', 0.0) - res[product_id]['total_cost']
-            res[product_id]['total_margin_rate'] = res[product_id].get('turnover', 0.0) and res[product_id]['total_margin'] * 100 / res[product_id].get('turnover', 0.0) or 0.0
-        for product in self:
-            res[product.id]['normal_cost'] = product.standard_price * res[product.id]['purchase_num_invoiced']
-            res[product.id]['purchase_gap'] = res[product.id]['normal_cost'] - res[product.id]['total_cost']
-            res[product.id]['expected_margin'] = res[product.id].get('sale_expected', 0.0) - res[product.id]['normal_cost']
-            res[product.id]['expected_margin_rate'] = res[product.id].get('sale_expected', 0.0) and res[product.id]['expected_margin'] * 100 / res[product.id].get('sale_expected', 0.0) or 0.0
+        ctx=self.env.context.copy()
+        ctx['force_company']=company_id
+        invoice_types=('in_invoice','in_refund')
+        self.env.cr.execute(sqlstr,(tuple(self.ids),states,payment_states,invoice_types,date_from,date_to,company_id))
+        forproduct_id,avg,qty,total,dummyinself.env.cr.fetchall():
+            res[product_id]['purchase_avg_price']=avgandavgor0.0
+            res[product_id]['purchase_num_invoiced']=qtyandqtyor0.0
+            res[product_id]['total_cost']=totalandtotalor0.0
+            res[product_id]['total_margin']=res[product_id].get('turnover',0.0)-res[product_id]['total_cost']
+            res[product_id]['total_margin_rate']=res[product_id].get('turnover',0.0)andres[product_id]['total_margin']*100/res[product_id].get('turnover',0.0)or0.0
+        forproductinself:
+            res[product.id]['normal_cost']=product.standard_price*res[product.id]['purchase_num_invoiced']
+            res[product.id]['purchase_gap']=res[product.id]['normal_cost']-res[product.id]['total_cost']
+            res[product.id]['expected_margin']=res[product.id].get('sale_expected',0.0)-res[product.id]['normal_cost']
+            res[product.id]['expected_margin_rate']=res[product.id].get('sale_expected',0.0)andres[product.id]['expected_margin']*100/res[product.id].get('sale_expected',0.0)or0.0
             product.write(res[product.id])
-        return res
+        returnres

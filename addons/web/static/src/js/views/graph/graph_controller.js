@@ -1,143 +1,143 @@
-flectra.define('web.GraphController', function (require) {
-"use strict";
+flectra.define('web.GraphController',function(require){
+"usestrict";
 
 /*---------------------------------------------------------
- * Flectra Graph view
+ *FlectraGraphview
  *---------------------------------------------------------*/
 
-const AbstractController = require('web.AbstractController');
-const { ComponentWrapper } = require('web.OwlCompatibility');
-const DropdownMenu = require('web.DropdownMenu');
-const { DEFAULT_INTERVAL, INTERVAL_OPTIONS } = require('web.searchUtils');
-const { qweb } = require('web.core');
-const { _t } = require('web.core');
+constAbstractController=require('web.AbstractController');
+const{ComponentWrapper}=require('web.OwlCompatibility');
+constDropdownMenu=require('web.DropdownMenu');
+const{DEFAULT_INTERVAL,INTERVAL_OPTIONS}=require('web.searchUtils');
+const{qweb}=require('web.core');
+const{_t}=require('web.core');
 
-class CarretDropdownMenu extends DropdownMenu {
+classCarretDropdownMenuextendsDropdownMenu{
     /**
-     * @override
+     *@override
      */
-    get displayCaret() {
-        return true;
+    getdisplayCaret(){
+        returntrue;
     }
 }
 
-var GraphController = AbstractController.extend({
-    custom_events: _.extend({}, AbstractController.prototype.custom_events, {
-        item_selected: '_onItemSelected',
-        open_view: '_onOpenView',
+varGraphController=AbstractController.extend({
+    custom_events:_.extend({},AbstractController.prototype.custom_events,{
+        item_selected:'_onItemSelected',
+        open_view:'_onOpenView',
     }),
 
     /**
-     * @override
-     * @param {Widget} parent
-     * @param {GraphModel} model
-     * @param {GraphRenderer} renderer
-     * @param {Object} params
-     * @param {string[]} params.measures
-     * @param {boolean} params.isEmbedded
-     * @param {string[]} params.groupableFields,
+     *@override
+     *@param{Widget}parent
+     *@param{GraphModel}model
+     *@param{GraphRenderer}renderer
+     *@param{Object}params
+     *@param{string[]}params.measures
+     *@param{boolean}params.isEmbedded
+     *@param{string[]}params.groupableFields,
      */
-    init: function (parent, model, renderer, params) {
-        this._super.apply(this, arguments);
-        this.measures = params.measures;
-        // this parameter condition the appearance of a 'Group By'
-        // button in the control panel owned by the graph view.
-        this.isEmbedded = params.isEmbedded;
-        this.withButtons = params.withButtons;
-        // views to use in the action triggered when the graph is clicked
-        this.views = params.views;
-        this.title = params.title;
+    init:function(parent,model,renderer,params){
+        this._super.apply(this,arguments);
+        this.measures=params.measures;
+        //thisparameterconditiontheappearanceofa'GroupBy'
+        //buttoninthecontrolpanelownedbythegraphview.
+        this.isEmbedded=params.isEmbedded;
+        this.withButtons=params.withButtons;
+        //viewstouseintheactiontriggeredwhenthegraphisclicked
+        this.views=params.views;
+        this.title=params.title;
 
-        // this parameter determines what is the list of fields
-        // that may be used within the groupby menu available when
-        // the view is embedded
-        this.groupableFields = params.groupableFields;
-        this.buttonDropdownPromises = [];
+        //thisparameterdetermineswhatisthelistoffields
+        //thatmaybeusedwithinthegroupbymenuavailablewhen
+        //theviewisembedded
+        this.groupableFields=params.groupableFields;
+        this.buttonDropdownPromises=[];
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
+    start:function(){
         this.$el.addClass('o_graph_controller');
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @todo check if this can be removed (mostly duplicate with
-     * AbstractController method)
+     *@todocheckifthiscanberemoved(mostlyduplicatewith
+     *AbstractControllermethod)
      */
-    destroy: function () {
-        if (this.$buttons) {
-            // remove jquery's tooltip() handlers
+    destroy:function(){
+        if(this.$buttons){
+            //removejquery'stooltip()handlers
             this.$buttons.find('button').off().tooltip('dispose');
         }
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Returns the current mode, measure and groupbys, so we can restore the
-     * view when we save the current state in the search view, or when we add it
-     * to the dashboard.
+     *Returnsthecurrentmode,measureandgroupbys,sowecanrestorethe
+     *viewwhenwesavethecurrentstateinthesearchview,orwhenweaddit
+     *tothedashboard.
      *
-     * @override
-     * @returns {Object}
+     *@override
+     *@returns{Object}
      */
-    getOwnedQueryParams: function () {
-        var state = this.model.get();
-        return {
-            context: {
-                graph_measure: state.measure,
-                graph_mode: state.mode,
-                graph_groupbys: state.groupBy,
+    getOwnedQueryParams:function(){
+        varstate=this.model.get();
+        return{
+            context:{
+                graph_measure:state.measure,
+                graph_mode:state.mode,
+                graph_groupbys:state.groupBy,
             }
         };
     },
     /**
-     * @override
+     *@override
      */
-    reload: async function () {
-        const promises = [this._super(...arguments)];
-        if (this.withButtons) {
-            const state = this.model.get();
-            this.measures.forEach(m => m.isActive = m.fieldName === state.measure);
-            promises.push(this.measureMenu.update({ items: this.measures }));
+    reload:asyncfunction(){
+        constpromises=[this._super(...arguments)];
+        if(this.withButtons){
+            conststate=this.model.get();
+            this.measures.forEach(m=>m.isActive=m.fieldName===state.measure);
+            promises.push(this.measureMenu.update({items:this.measures}));
         }
-        return Promise.all(promises);
+        returnPromise.all(promises);
     },
     /**
-     * Render the buttons according to the GraphView.buttons and
-     * add listeners on it.
-     * Set this.$buttons with the produced jQuery element
+     *RenderthebuttonsaccordingtotheGraphView.buttonsand
+     *addlistenersonit.
+     *Setthis.$buttonswiththeproducedjQueryelement
      *
-     * @param {jQuery} [$node] a jQuery node where the rendered buttons should
-     * be inserted $node may be undefined, in which case the GraphView does
-     * nothing
+     *@param{jQuery}[$node]ajQuerynodewheretherenderedbuttonsshould
+     *beinserted$nodemaybeundefined,inwhichcasetheGraphViewdoes
+     *nothing
      */
-    renderButtons: function ($node) {
-        this.$buttons = $(qweb.render('GraphView.buttons'));
+    renderButtons:function($node){
+        this.$buttons=$(qweb.render('GraphView.buttons'));
         this.$buttons.find('button').tooltip();
-        this.$buttons.click(ev => this._onButtonClick(ev));
+        this.$buttons.click(ev=>this._onButtonClick(ev));
 
-        if (this.withButtons) {
-            const state = this.model.get();
-            const fragment = document.createDocumentFragment();
-            // Instantiate and append MeasureMenu
-            this.measures.forEach(m => m.isActive = m.fieldName === state.measure);
-            this.measureMenu = new ComponentWrapper(this, CarretDropdownMenu, {
-                title: _t("Measures"),
-                items: this.measures,
+        if(this.withButtons){
+            conststate=this.model.get();
+            constfragment=document.createDocumentFragment();
+            //InstantiateandappendMeasureMenu
+            this.measures.forEach(m=>m.isActive=m.fieldName===state.measure);
+            this.measureMenu=newComponentWrapper(this,CarretDropdownMenu,{
+                title:_t("Measures"),
+                items:this.measures,
             });
-            this.buttonDropdownPromises = [this.measureMenu.mount(fragment)];
-            if ($node) {
-                if (this.isEmbedded) {
-                    // Instantiate and append GroupBy menu
-                    this.groupByMenu = new ComponentWrapper(this, CarretDropdownMenu, {
-                        title: _t("Group By"),
-                        icon: 'fa fa-bars',
-                        items: this._getGroupBys(state.groupBy),
+            this.buttonDropdownPromises=[this.measureMenu.mount(fragment)];
+            if($node){
+                if(this.isEmbedded){
+                    //InstantiateandappendGroupBymenu
+                    this.groupByMenu=newComponentWrapper(this,CarretDropdownMenu,{
+                        title:_t("GroupBy"),
+                        icon:'fafa-bars',
+                        items:this._getGroupBys(state.groupBy),
                     });
                     this.buttonDropdownPromises.push(this.groupByMenu.mount(fragment));
                 }
@@ -146,211 +146,211 @@ var GraphController = AbstractController.extend({
         }
     },
     /**
-     * Makes sure that the buttons in the control panel matches the current
-     * state (so, correct active buttons and stuff like that).
+     *Makessurethatthebuttonsinthecontrolpanelmatchesthecurrent
+     *state(so,correctactivebuttonsandstufflikethat).
      *
-     * @override
+     *@override
      */
-    updateButtons: function () {
-        if (!this.$buttons) {
+    updateButtons:function(){
+        if(!this.$buttons){
             return;
         }
-        var state = this.model.get();
+        varstate=this.model.get();
         this.$buttons.find('.o_graph_button').removeClass('active');
         this.$buttons
-            .find('.o_graph_button[data-mode="' + state.mode + '"]')
+            .find('.o_graph_button[data-mode="'+state.mode+'"]')
             .addClass('active');
         this.$buttons
             .find('.o_graph_button[data-mode="stack"]')
-            .data('stacked', state.stacked)
-            .toggleClass('active', state.stacked)
-            .toggleClass('o_hidden', state.mode !== 'bar');
+            .data('stacked',state.stacked)
+            .toggleClass('active',state.stacked)
+            .toggleClass('o_hidden',state.mode!=='bar');
         this.$buttons
             .find('.o_graph_button[data-order]')
-            .toggleClass('o_hidden', state.mode === 'pie' || !!Object.keys(state.timeRanges).length)
-            .filter('.o_graph_button[data-order="' + state.orderBy + '"]')
-            .toggleClass('active', !!state.orderBy);
+            .toggleClass('o_hidden',state.mode==='pie'||!!Object.keys(state.timeRanges).length)
+            .filter('.o_graph_button[data-order="'+state.orderBy+'"]')
+            .toggleClass('active',!!state.orderBy);
 
-        if (this.withButtons) {
+        if(this.withButtons){
             this._attachDropdownComponents();
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Attaches the different dropdown components to the buttons container.
+     *Attachesthedifferentdropdowncomponentstothebuttonscontainer.
      *
-     * @returns {Promise}
+     *@returns{Promise}
      */
-    async _attachDropdownComponents() {
-        await Promise.all(this.buttonDropdownPromises);
-        const actionsContainer = this.$buttons[0];
-        // Attach "measures" button
+    async_attachDropdownComponents(){
+        awaitPromise.all(this.buttonDropdownPromises);
+        constactionsContainer=this.$buttons[0];
+        //Attach"measures"button
         actionsContainer.appendChild(this.measureMenu.el);
         this.measureMenu.el.classList.add('o_graph_measures_list');
-        if (this.isEmbedded) {
-            // Attach "groupby" button
+        if(this.isEmbedded){
+            //Attach"groupby"button
             actionsContainer.appendChild(this.groupByMenu.el);
             this.groupByMenu.el.classList.add('o_group_by_menu');
         }
-        // Update button classes accordingly to the current mode
-        const buttons = actionsContainer.querySelectorAll('.o_dropdown_toggler_btn');
-        for (const button of buttons) {
-            button.classList.remove('o_dropdown_toggler_btn', 'btn-secondary');
-            if (this.isEmbedded) {
+        //Updatebuttonclassesaccordinglytothecurrentmode
+        constbuttons=actionsContainer.querySelectorAll('.o_dropdown_toggler_btn');
+        for(constbuttonofbuttons){
+            button.classList.remove('o_dropdown_toggler_btn','btn-secondary');
+            if(this.isEmbedded){
                 button.classList.add('btn-outline-secondary');
-            } else {
+            }else{
                 button.classList.add('btn-primary');
-                button.tabIndex = 0;
+                button.tabIndex=0;
             }
         }
     },
 
     /**
-     * Returns the items used by the Group By menu in embedded mode.
+     *ReturnstheitemsusedbytheGroupBymenuinembeddedmode.
      *
-     * @private
-     * @param {string[]} activeGroupBys
-     * @returns {Object[]}
+     *@private
+     *@param{string[]}activeGroupBys
+     *@returns{Object[]}
      */
-    _getGroupBys(activeGroupBys) {
-        const normalizedGroupBys = this._normalizeActiveGroupBys(activeGroupBys);
-        const groupBys = Object.keys(this.groupableFields).map(fieldName => {
-            const field = this.groupableFields[fieldName];
-            const groupByActivity = normalizedGroupBys.filter(gb => gb.fieldName === fieldName);
-            const groupBy = {
-                id: fieldName,
-                isActive: Boolean(groupByActivity.length),
-                description: field.string,
-                itemType: 'groupBy',
+    _getGroupBys(activeGroupBys){
+        constnormalizedGroupBys=this._normalizeActiveGroupBys(activeGroupBys);
+        constgroupBys=Object.keys(this.groupableFields).map(fieldName=>{
+            constfield=this.groupableFields[fieldName];
+            constgroupByActivity=normalizedGroupBys.filter(gb=>gb.fieldName===fieldName);
+            constgroupBy={
+                id:fieldName,
+                isActive:Boolean(groupByActivity.length),
+                description:field.string,
+                itemType:'groupBy',
             };
-            if (['date', 'datetime'].includes(field.type)) {
-                groupBy.hasOptions = true;
-                const activeOptionIds = groupByActivity.map(gb => gb.interval);
-                groupBy.options = Object.values(INTERVAL_OPTIONS).map(o => {
-                    return Object.assign({}, o, { isActive: activeOptionIds.includes(o.id) });
+            if(['date','datetime'].includes(field.type)){
+                groupBy.hasOptions=true;
+                constactiveOptionIds=groupByActivity.map(gb=>gb.interval);
+                groupBy.options=Object.values(INTERVAL_OPTIONS).map(o=>{
+                    returnObject.assign({},o,{isActive:activeOptionIds.includes(o.id)});
                 });
             }
-            return groupBy;
-        }).sort((gb1, gb2) => {
-            return gb1.description.localeCompare(gb2.description);
+            returngroupBy;
+        }).sort((gb1,gb2)=>{
+            returngb1.description.localeCompare(gb2.description);
         });
-        return groupBys;
+        returngroupBys;
     },
 
     /**
-     * This method puts the active groupBys in a convenient form.
+     *ThismethodputstheactivegroupBysinaconvenientform.
      *
-     * @private
-     * @param {string[]} activeGroupBys
-     * @returns {Object[]} normalizedGroupBys
+     *@private
+     *@param{string[]}activeGroupBys
+     *@returns{Object[]}normalizedGroupBys
      */
-    _normalizeActiveGroupBys(activeGroupBys) {
-        return activeGroupBys.map(groupBy => {
-            const fieldName = groupBy.split(':')[0];
-            const field = this.groupableFields[fieldName];
-            const normalizedGroupBy = { fieldName };
-            if (['date', 'datetime'].includes(field.type)) {
-                normalizedGroupBy.interval = groupBy.split(':')[1] || DEFAULT_INTERVAL;
+    _normalizeActiveGroupBys(activeGroupBys){
+        returnactiveGroupBys.map(groupBy=>{
+            constfieldName=groupBy.split(':')[0];
+            constfield=this.groupableFields[fieldName];
+            constnormalizedGroupBy={fieldName};
+            if(['date','datetime'].includes(field.type)){
+                normalizedGroupBy.interval=groupBy.split(':')[1]||DEFAULT_INTERVAL;
             }
-            return normalizedGroupBy;
+            returnnormalizedGroupBy;
         });
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Do what need to be done when a button from the control panel is clicked.
+     *Dowhatneedtobedonewhenabuttonfromthecontrolpanelisclicked.
      *
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onButtonClick: function (ev) {
-        var $target = $(ev.target);
-        if ($target.hasClass('o_graph_button')) {
-            if (_.contains(['bar','line', 'pie'], $target.data('mode'))) {
-                this.update({ mode: $target.data('mode') });
-            } else if ($target.data('mode') === 'stack') {
-                this.update({ stacked: !$target.data('stacked') });
-            } else if (['asc', 'desc'].includes($target.data('order'))) {
-                const order = $target.data('order');
-                const state = this.model.get();
-                this.update({ orderBy: state.orderBy === order ? false : order });
+    _onButtonClick:function(ev){
+        var$target=$(ev.target);
+        if($target.hasClass('o_graph_button')){
+            if(_.contains(['bar','line','pie'],$target.data('mode'))){
+                this.update({mode:$target.data('mode')});
+            }elseif($target.data('mode')==='stack'){
+                this.update({stacked:!$target.data('stacked')});
+            }elseif(['asc','desc'].includes($target.data('order'))){
+                constorder=$target.data('order');
+                conststate=this.model.get();
+                this.update({orderBy:state.orderBy===order?false:order});
             }
         }
     },
 
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onItemSelected(ev) {
-        const item = ev.data.item;
-        if (this.isEmbedded && item.itemType === 'groupBy') {
-            const fieldName = item.id;
-            const optionId = ev.data.option && ev.data.option.id;
-            const activeGroupBys = this.model.get().groupBy;
-            if (optionId) {
-                const normalizedGroupBys = this._normalizeActiveGroupBys(activeGroupBys);
-                const index = normalizedGroupBys.findIndex(ngb =>
-                    ngb.fieldName === fieldName && ngb.interval === optionId);
-                if (index === -1) {
-                    activeGroupBys.push(fieldName + ':' + optionId);
-                } else {
-                    activeGroupBys.splice(index, 1);
+    _onItemSelected(ev){
+        constitem=ev.data.item;
+        if(this.isEmbedded&&item.itemType==='groupBy'){
+            constfieldName=item.id;
+            constoptionId=ev.data.option&&ev.data.option.id;
+            constactiveGroupBys=this.model.get().groupBy;
+            if(optionId){
+                constnormalizedGroupBys=this._normalizeActiveGroupBys(activeGroupBys);
+                constindex=normalizedGroupBys.findIndex(ngb=>
+                    ngb.fieldName===fieldName&&ngb.interval===optionId);
+                if(index===-1){
+                    activeGroupBys.push(fieldName+':'+optionId);
+                }else{
+                    activeGroupBys.splice(index,1);
                 }
-            } else {
-                const groupByFieldNames = activeGroupBys.map(gb => gb.split(':')[0]);
-                const indexOfGroupby = groupByFieldNames.indexOf(fieldName);
-                if (indexOfGroupby === -1) {
+            }else{
+                constgroupByFieldNames=activeGroupBys.map(gb=>gb.split(':')[0]);
+                constindexOfGroupby=groupByFieldNames.indexOf(fieldName);
+                if(indexOfGroupby===-1){
                     activeGroupBys.push(fieldName);
-                } else {
-                    activeGroupBys.splice(indexOfGroupby, 1);
+                }else{
+                    activeGroupBys.splice(indexOfGroupby,1);
                 }
             }
-            this.update({ groupBy: activeGroupBys });
+            this.update({groupBy:activeGroupBys});
             this.groupByMenu.update({
-                items: this._getGroupBys(activeGroupBys),
+                items:this._getGroupBys(activeGroupBys),
             });
-        } else if (item.itemType === 'measure') {
-            this.update({ measure: item.fieldName });
-            this.measures.forEach(m => m.isActive = m.fieldName === item.fieldName);
-            this.measureMenu.update({ items: this.measures });
+        }elseif(item.itemType==='measure'){
+            this.update({measure:item.fieldName});
+            this.measures.forEach(m=>m.isActive=m.fieldName===item.fieldName);
+            this.measureMenu.update({items:this.measures});
         }
     },
 
     /**
-     * @private
-     * @param {FlectraEvent} ev
-     * @param {Array[]} ev.data.domain
+     *@private
+     *@param{FlectraEvent}ev
+     *@param{Array[]}ev.data.domain
      */
-    _onOpenView(ev) {
+    _onOpenView(ev){
         ev.stopPropagation();
-        const state = this.model.get();
-        const context = Object.assign({}, state.context);
-        Object.keys(context).forEach(x => {
-            if (x === 'group_by' || x.startsWith('search_default_')) {
-                delete context[x];
+        conststate=this.model.get();
+        constcontext=Object.assign({},state.context);
+        Object.keys(context).forEach(x=>{
+            if(x==='group_by'||x.startsWith('search_default_')){
+                deletecontext[x];
             }
         });
         this.do_action({
-            context: context,
-            domain: ev.data.domain,
-            name: this.title,
-            res_model: this.modelName,
-            target: 'current',
-            type: 'ir.actions.act_window',
-            view_mode: 'list',
-            views: this.views,
+            context:context,
+            domain:ev.data.domain,
+            name:this.title,
+            res_model:this.modelName,
+            target:'current',
+            type:'ir.actions.act_window',
+            view_mode:'list',
+            views:this.views,
         });
     },
 });
 
-return GraphController;
+returnGraphController;
 
 });

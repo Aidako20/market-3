@@ -1,122 +1,122 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="payment" xml:space="preserve">
-    <!-- The templates here as rendered by 'payment_processing.js', you can also take
-            a look at payment_templates.xml (xmlid: payment_process_page) for more infos-->
-    <t t-name="payment.display_tx_list">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="payment"xml:space="preserve">
+    <!--Thetemplateshereasrenderedby'payment_processing.js',youcanalsotake
+            alookatpayment_templates.xml(xmlid:payment_process_page)formoreinfos-->
+    <tt-name="payment.display_tx_list">
         <div>
-            <!-- Error transactions -->
-            <div t-if="tx_error.length > 0">
-                <h1>Payments failed</h1>
-                <ul class="list-group">
-                    <t t-foreach="tx_error" t-as="tx">
-                        <li class="list-group-item">
-                            <h4 class="list-group-item-heading mb5">
-                                <t t-esc="tx['reference']"/>
-                                <span class="badge pull-right"><t t-esc="tx['amount']"/> <t t-esc="tx['currency']"/></span>
+            <!--Errortransactions-->
+            <divt-if="tx_error.length>0">
+                <h1>Paymentsfailed</h1>
+                <ulclass="list-group">
+                    <tt-foreach="tx_error"t-as="tx">
+                        <liclass="list-group-item">
+                            <h4class="list-group-item-headingmb5">
+                                <tt-esc="tx['reference']"/>
+                                <spanclass="badgepull-right"><tt-esc="tx['amount']"/><tt-esc="tx['currency']"/></span>
                             </h4>
-                            <small class="list-group-item-text">
-                                An error occured during the processing of this payment.<br/>
-                                <strong>Reason:</strong> <t t-esc="tx['state_message']"/>
+                            <smallclass="list-group-item-text">
+                                Anerroroccuredduringtheprocessingofthispayment.<br/>
+                                <strong>Reason:</strong><tt-esc="tx['state_message']"/>
                             </small>
                         </li>
                     </t>
                 </ul>
             </div>
-            <div t-if="tx_done.length > 0 || tx_authorized.length > 0 || tx_pending.length > 0">
-                <h1>Payments received</h1>
-                <div class="list-group">
-                    <!-- Done transactions -->
-                    <t t-foreach="tx_done" t-as="tx">
-                        <a t-att-href="tx['return_url']" class="list-group-item">
-                            <h4 class="list-group-item-heading mb5">
-                                <t t-esc="tx['reference']"/>
-                                <span class="badge pull-right"><t t-esc="tx['amount']"/> <t t-esc="tx['currency']"/></span>
+            <divt-if="tx_done.length>0||tx_authorized.length>0||tx_pending.length>0">
+                <h1>Paymentsreceived</h1>
+                <divclass="list-group">
+                    <!--Donetransactions-->
+                    <tt-foreach="tx_done"t-as="tx">
+                        <at-att-href="tx['return_url']"class="list-group-item">
+                            <h4class="list-group-item-headingmb5">
+                                <tt-esc="tx['reference']"/>
+                                <spanclass="badgepull-right"><tt-esc="tx['amount']"/><tt-esc="tx['currency']"/></span>
                             </h4>
-                            <small class="list-group-item-text">
-                                <t t-if="!tx['is_processed']">
-                                    Your order is being processed, please wait ... <i class="fa fa-cog fa-spin"/>
+                            <smallclass="list-group-item-text">
+                                <tt-if="!tx['is_processed']">
+                                    Yourorderisbeingprocessed,pleasewait...<iclass="fafa-cogfa-spin"/>
                                 </t>
-                                <t t-else="">
-                                    Your order has been processed.<br/>
-                                    Click here to be redirected to the confirmation page.
+                                <tt-else="">
+                                    Yourorderhasbeenprocessed.<br/>
+                                    Clickheretoberedirectedtotheconfirmationpage.
                                 </t>
                             </small>
                         </a>
                     </t>
-                    <!-- Pending transactions -->
-                    <t t-foreach="tx_pending" t-as="tx">
-                        <a t-att-href="tx['return_url']" class="list-group-item">
-                            <h4 class="list-group-item-heading mb5">
-                                <t t-esc="tx['reference']"/>
-                                <span class="badge pull-right"><t t-esc="tx['amount']"/> <t t-esc="tx['currency']"/></span>
+                    <!--Pendingtransactions-->
+                    <tt-foreach="tx_pending"t-as="tx">
+                        <at-att-href="tx['return_url']"class="list-group-item">
+                            <h4class="list-group-item-headingmb5">
+                                <tt-esc="tx['reference']"/>
+                                <spanclass="badgepull-right"><tt-esc="tx['amount']"/><tt-esc="tx['currency']"/></span>
                             </h4>
-                            <small class="list-group-item-text">
-                                <t t-if="tx['message_to_display']">
-                                    <t t-raw="tx['message_to_display']"/>
+                            <smallclass="list-group-item-text">
+                                <tt-if="tx['message_to_display']">
+                                    <tt-raw="tx['message_to_display']"/>
                                 </t>
-                                <t t-else="">
-                                    Your payment is in pending state.<br/>
-                                    You will be notified when the payment is fully confirmed.<br/>
-                                    You can click here to be redirected to the confirmation page.
+                                <tt-else="">
+                                    Yourpaymentisinpendingstate.<br/>
+                                    Youwillbenotifiedwhenthepaymentisfullyconfirmed.<br/>
+                                    Youcanclickheretoberedirectedtotheconfirmationpage.
                                 </t>
                             </small>
                         </a>
                     </t>
-                    <!-- Authorized transactions -->
-                    <t t-foreach="tx_authorized" t-as="tx">
-                        <li class="list-group-item">
-                            <h4 class="list-group-item-heading mb5">
-                                <t t-esc="tx['reference']"/>
-                                <span class="badge pull-right"><t t-esc="tx['amount']"/> <t t-esc="tx['currency']"/></span>
+                    <!--Authorizedtransactions-->
+                    <tt-foreach="tx_authorized"t-as="tx">
+                        <liclass="list-group-item">
+                            <h4class="list-group-item-headingmb5">
+                                <tt-esc="tx['reference']"/>
+                                <spanclass="badgepull-right"><tt-esc="tx['amount']"/><tt-esc="tx['currency']"/></span>
                             </h4>
-                            <small class="list-group-item-text">
-                                <t t-if="tx['message_to_display']">
-                                    <t t-raw="tx['message_to_display']"/>
+                            <smallclass="list-group-item-text">
+                                <tt-if="tx['message_to_display']">
+                                    <tt-raw="tx['message_to_display']"/>
                                 </t>
-                                <t t-else="">
-                                    Your payment has been received but need to be confirmed manually.<br/>
-                                    You will be notified when the payment is confirmed.
+                                <tt-else="">
+                                    Yourpaymenthasbeenreceivedbutneedtobeconfirmedmanually.<br/>
+                                    Youwillbenotifiedwhenthepaymentisconfirmed.
                                 </t>
                             </small>
                         </li>
                     </t>
                 </div>
             </div>
-            <!-- Draft transactions -->
-            <div t-if="tx_draft.length > 0">
-                <h1>Waiting for payment</h1>
-                <ul class="list-group">
-                    <t t-foreach="tx_draft" t-as="tx">
-                        <li class="list-group-item">
-                            <h4 class="list-group-item-heading mb5">
-                                <t t-esc="tx['reference']"/>
-                                <span class="badge pull-right"><t t-esc="tx['amount']"/> <t t-esc="tx['currency']"/></span>
+            <!--Drafttransactions-->
+            <divt-if="tx_draft.length>0">
+                <h1>Waitingforpayment</h1>
+                <ulclass="list-group">
+                    <tt-foreach="tx_draft"t-as="tx">
+                        <liclass="list-group-item">
+                            <h4class="list-group-item-headingmb5">
+                                <tt-esc="tx['reference']"/>
+                                <spanclass="badgepull-right"><tt-esc="tx['amount']"/><tt-esc="tx['currency']"/></span>
                             </h4>
-                            <small class="list-group-item-text">
-                                <t t-if="tx['message_to_display']">
-                                    <t t-raw="tx['message_to_display']"/>
+                            <smallclass="list-group-item-text">
+                                <tt-if="tx['message_to_display']">
+                                    <tt-raw="tx['message_to_display']"/>
                                 </t>
-                                <t t-else="">
-                                    We are waiting for the payment acquirer to confirm the payment.
+                                <tt-else="">
+                                    Wearewaitingforthepaymentacquirertoconfirmthepayment.
                                 </t>
                             </small>
                         </li>
                     </t>
                 </ul>
             </div>
-            <!-- Cancel transactions -->
-            <div t-if="tx_cancel.length > 0">
-                <h1>Cancelled payments</h1>
-                <ul class="list-group">
-                    <t t-foreach="tx_cancel" t-as="tx">
-                        <li class="list-group-item">
-                            <h4 class="list-group-item-heading mb5">
-                                <t t-esc="tx['reference']"/>
-                                <span class="badge pull-right"><t t-esc="tx['amount']"/> <t t-esc="tx['currency']"/></span>
+            <!--Canceltransactions-->
+            <divt-if="tx_cancel.length>0">
+                <h1>Cancelledpayments</h1>
+                <ulclass="list-group">
+                    <tt-foreach="tx_cancel"t-as="tx">
+                        <liclass="list-group-item">
+                            <h4class="list-group-item-headingmb5">
+                                <tt-esc="tx['reference']"/>
+                                <spanclass="badgepull-right"><tt-esc="tx['amount']"/><tt-esc="tx['currency']"/></span>
                             </h4>
-                            <small class="list-group-item-text">
-                                This transaction has been cancelled.<br/>
-                                No payment has been processed.
+                            <smallclass="list-group-item-text">
+                                Thistransactionhasbeencancelled.<br/>
+                                Nopaymenthasbeenprocessed.
                             </small>
                         </li>
                     </t>
@@ -125,25 +125,25 @@
         </div>
     </t>
 
-    <t t-name="payment.no_tx_found">
-        <div class="text-center">
-            <p>We are not able to find your payment, but don't worry.</p>
-            <p>You should receive an email confirming your payment in a few minutes.</p>
-            <p>If the payment hasn't been confirmed you can contact us.</p>
+    <tt-name="payment.no_tx_found">
+        <divclass="text-center">
+            <p>Wearenotabletofindyourpayment,butdon'tworry.</p>
+            <p>Youshouldreceiveanemailconfirmingyourpaymentinafewminutes.</p>
+            <p>Ifthepaymenthasn'tbeenconfirmedyoucancontactus.</p>
         </div>
     </t>
 
-    <t t-name="payment.rpc_error">
-        <div class="text-center">
-            <p><strong>Server error:</strong> Unable to contact the Flectra server.</p>
-            <p>Please wait ... <i class="fa fa-refresh fa-spin"></i></p>
+    <tt-name="payment.rpc_error">
+        <divclass="text-center">
+            <p><strong>Servererror:</strong>UnabletocontacttheFlectraserver.</p>
+            <p>Pleasewait...<iclass="fafa-refreshfa-spin"></i></p>
         </div>
     </t>
 
-    <t t-name="payment.exception">
-        <div class="text-center">
-            <h2>Internal server error</h2>
-            <pre><t t-esc="exception_msg"/></pre>
+    <tt-name="payment.exception">
+        <divclass="text-center">
+            <h2>Internalservererror</h2>
+            <pre><tt-esc="exception_msg"/></pre>
         </div>
     </t>
 

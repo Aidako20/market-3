@@ -1,157 +1,157 @@
-flectra.define('website_event_track_quiz.event.quiz', function (require) {
+flectra.define('website_event_track_quiz.event.quiz',function(require){
 
-'use strict';
+'usestrict';
 
-var publicWidget = require('web.public.widget');
-var core = require('web.core');
-var session = require('web.session');
-var utils = require('web.utils');
+varpublicWidget=require('web.public.widget');
+varcore=require('web.core');
+varsession=require('web.session');
+varutils=require('web.utils');
 
-var QWeb = core.qweb;
-var _t = core._t;
+varQWeb=core.qweb;
+var_t=core._t;
 
 /**
- * This widget is responsible of displaying quiz questions and propositions. Submitting the quiz will fetch the
- * correction and decorate the answers according to the result. Error message can be displayed.
+ *Thiswidgetisresponsibleofdisplayingquizquestionsandpropositions.Submittingthequizwillfetchthe
+ *correctionanddecoratetheanswersaccordingtotheresult.Errormessagecanbedisplayed.
  *
- * This widget can be attached to DOM rendered server-side by `gamification_quiz.`
+ *ThiswidgetcanbeattachedtoDOMrenderedserver-sideby`gamification_quiz.`
  *
  */
-var Quiz = publicWidget.Widget.extend({
-    template: 'quiz.main',
-    xmlDependencies: ['/website_event_track_quiz/static/src/xml/quiz_templates.xml'],
-    events: {
-        "click .o_quiz_quiz_answer": '_onAnswerClick',
-        "click .o_quiz_js_quiz_submit": '_submitQuiz',
-        "click .o_quiz_js_quiz_reset": '_onClickReset',
+varQuiz=publicWidget.Widget.extend({
+    template:'quiz.main',
+    xmlDependencies:['/website_event_track_quiz/static/src/xml/quiz_templates.xml'],
+    events:{
+        "click.o_quiz_quiz_answer":'_onAnswerClick',
+        "click.o_quiz_js_quiz_submit":'_submitQuiz',
+        "click.o_quiz_js_quiz_reset":'_onClickReset',
     },
 
     /**
-    * @override
-    * @param {Object} parent
-    * @param {Object} data holding all the container information
-    * @param {Object} quizData : quiz data to display
+    *@override
+    *@param{Object}parent
+    *@param{Object}dataholdingallthecontainerinformation
+    *@param{Object}quizData:quizdatatodisplay
     */
-    init: function (parent, data, quizData) {
-        this._super.apply(this, arguments);
-        this.track = _.defaults(data, {
-            id: 0,
-            name: '',
-            eventId: '',
-            completed: false,
-            isMember: false,
-            progressBar: false,
-            isManager: false
+    init:function(parent,data,quizData){
+        this._super.apply(this,arguments);
+        this.track=_.defaults(data,{
+            id:0,
+            name:'',
+            eventId:'',
+            completed:false,
+            isMember:false,
+            progressBar:false,
+            isManager:false
         });
-        this.quiz = quizData || false;
-        if (this.quiz) {
-            this.quiz.questionsCount = quizData.questions.length;
+        this.quiz=quizData||false;
+        if(this.quiz){
+            this.quiz.questionsCount=quizData.questions.length;
         }
-        this.isMember = data.isMember || false;
-        this.userId = session.user_id;
-        this.redirectURL = encodeURIComponent(document.URL);
+        this.isMember=data.isMember||false;
+        this.userId=session.user_id;
+        this.redirectURL=encodeURIComponent(document.URL);
     },
 
     /**
-     * @override
+     *@override
      */
-    willStart: function () {
-        var defs = [this._super.apply(this, arguments)];
-        if (!this.quiz) {
+    willStart:function(){
+        vardefs=[this._super.apply(this,arguments)];
+        if(!this.quiz){
             defs.push(this._fetchQuiz());
         }
-        return Promise.all(defs);
+        returnPromise.all(defs);
     },
 
     /**
-     * Overridden to add custom rendering behavior upon start of the widget.
+     *Overriddentoaddcustomrenderingbehavioruponstartofthewidget.
      *
-     * If the user has answered the quiz before having joined the course, we check
-     * his answers (saved into his session) here as well.
+     *Iftheuserhasansweredthequizbeforehavingjoinedthecourse,wecheck
+     *hisanswers(savedintohissession)hereaswell.
      *
-     * @override
+     *@override
      */
-    start: function () {
-        var self = this;
-        return this._super.apply(this, arguments).then(function ()  {
+    start:function(){
+        varself=this;
+        returnthis._super.apply(this,arguments).then(function() {
             self._renderValidationInfo();
         });
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
-    _alertShow: function (alertCode) {
-        var message = _t('There was an error validating this quiz.');
-        if (alertCode === 'quiz_incomplete') {
-            message = _t('All questions must be answered !');
-        } else if (alertCode === 'quiz_done') {
-            message = _t('This quiz is already done. Retaking it is not possible.');
+    _alertShow:function(alertCode){
+        varmessage=_t('Therewasanerrorvalidatingthisquiz.');
+        if(alertCode==='quiz_incomplete'){
+            message=_t('Allquestionsmustbeanswered!');
+        }elseif(alertCode==='quiz_done'){
+            message=_t('Thisquizisalreadydone.Retakingitisnotpossible.');
         }
 
         this.displayNotification({
-            type: 'warning',
-            title: _t('Quiz validation error'),
-            message: message,
-            sticky: true
+            type:'warning',
+            title:_t('Quizvalidationerror'),
+            message:message,
+            sticky:true
         });
     },
 
     /**
-     * Get all the questions ID from the displayed Quiz
-     * @returns {Array}
-     * @private
+     *GetallthequestionsIDfromthedisplayedQuiz
+     *@returns{Array}
+     *@private
      */
-    _getQuestionsIds: function () {
-        return this.$('.o_quiz_js_quiz_question').map(function () {
-            return $(this).data('question-id');
+    _getQuestionsIds:function(){
+        returnthis.$('.o_quiz_js_quiz_question').map(function(){
+            return$(this).data('question-id');
         }).get();
     },
 
     /**
-     * @private
-     * Decorate the answers according to state
+     *@private
+     *Decoratetheanswersaccordingtostate
      */
-    _disableAnswers: function () {
-        var self = this;
+    _disableAnswers:function(){
+        varself=this;
         this.$('.o_quiz_js_quiz_question').addClass('completed-disabled');
-        this.$('input[type=radio]').each(function () {
-            $(this).prop('disabled', self.track.completed);
+        this.$('input[type=radio]').each(function(){
+            $(this).prop('disabled',self.track.completed);
         });
     },
 
     /**
-     * Decorate the answer inputs according to the correction and adds the answer comment if
-     * any.
+     *Decoratetheanswerinputsaccordingtothecorrectionandaddstheanswercommentif
+     *any.
      *
-     * @private
+     *@private
      */
-    _renderAnswersHighlightingAndComments: function () {
-        var self = this;
-        this.$('.o_quiz_js_quiz_question').each(function () {
-            var $question = $(this);
-            var questionId = $question.data('questionId');
-            var isCorrect = self.quiz.answers[questionId].is_correct;
-            $question.find('a.o_quiz_quiz_answer').each(function () {
-                var $answer = $(this);
+    _renderAnswersHighlightingAndComments:function(){
+        varself=this;
+        this.$('.o_quiz_js_quiz_question').each(function(){
+            var$question=$(this);
+            varquestionId=$question.data('questionId');
+            varisCorrect=self.quiz.answers[questionId].is_correct;
+            $question.find('a.o_quiz_quiz_answer').each(function(){
+                var$answer=$(this);
                 $answer.find('i.fa').addClass('d-none');
-                if ($answer.find('input[type=radio]')[0].checked) {
-                    if (isCorrect) {
+                if($answer.find('input[type=radio]')[0].checked){
+                    if(isCorrect){
                         $answer.removeClass('list-group-item-danger').addClass('list-group-item-success');
                         $answer.find('i.fa-check-circle').removeClass('d-none');
-                    } else {
+                    }else{
                         $answer.removeClass('list-group-item-success').addClass('list-group-item-danger');
                         $answer.find('i.fa-times-circle').removeClass('d-none');
-                        $answer.find('label input').prop('checked', false);
+                        $answer.find('labelinput').prop('checked',false);
                     }
-                } else {
-                    $answer.removeClass('list-group-item-danger list-group-item-success');
+                }else{
+                    $answer.removeClass('list-group-item-dangerlist-group-item-success');
                     $answer.find('i.fa-circle').removeClass('d-none');
                 }
             });
-            var comment = self.quiz.answers[questionId].comment;
-            if (comment) {
+            varcomment=self.quiz.answers[questionId].comment;
+            if(comment){
                 $question.find('.o_quiz_quiz_answer_info').removeClass('d-none');
                 $question.find('.o_quiz_quiz_answer_comment').text(comment);
             }
@@ -159,165 +159,165 @@ var Quiz = publicWidget.Widget.extend({
     },
 
     /*
-        * @private
-        * Update validation box (karma, buttons) according to widget state
+        *@private
+        *Updatevalidationbox(karma,buttons)accordingtowidgetstate
         */
-    _renderValidationInfo: function () {
-        var $validationElem = this.$('.o_quiz_js_quiz_validation');
+    _renderValidationInfo:function(){
+        var$validationElem=this.$('.o_quiz_js_quiz_validation');
         $validationElem.html(
-            QWeb.render('quiz.validation', {'widget': this})
+            QWeb.render('quiz.validation',{'widget':this})
         );
     },
 
     /**
-     * Get the quiz answers filled in by the User
+     *GetthequizanswersfilledinbytheUser
      *
-     * @private
+     *@private
      */
-    _getQuizAnswers: function () {
-        return this.$('input[type=radio]:checked').map(function (index, element) {
-            return parseInt($(element).val());
+    _getQuizAnswers:function(){
+        returnthis.$('input[type=radio]:checked').map(function(index,element){
+            returnparseInt($(element).val());
         }).get();
     },
 
     /**
-     * Submit a quiz and get the correction. It will display messages
-     * according to quiz result.
+     *Submitaquizandgetthecorrection.Itwilldisplaymessages
+     *accordingtoquizresult.
      *
-     * @private
+     *@private
      */
-    _submitQuiz: function () {
-        var self = this;
+    _submitQuiz:function(){
+        varself=this;
 
-        return this._rpc({
-            route: '/event_track/quiz/submit',
-            params: {
-                event_id: self.track.eventId,
-                track_id: self.track.id,
-                answer_ids: this._getQuizAnswers(),
+        returnthis._rpc({
+            route:'/event_track/quiz/submit',
+            params:{
+                event_id:self.track.eventId,
+                track_id:self.track.id,
+                answer_ids:this._getQuizAnswers(),
             }
-        }).then(function (data) {
-            if (data.error) {
+        }).then(function(data){
+            if(data.error){
                 self._alertShow(data.error);
-            } else {
-                self.quiz = _.extend(self.quiz, data);
-                self.quiz.quizPointsGained = data.quiz_points;
-                if (data.quiz_completed) {
+            }else{
+                self.quiz=_.extend(self.quiz,data);
+                self.quiz.quizPointsGained=data.quiz_points;
+                if(data.quiz_completed){
                     self._disableAnswers();
-                    self.track.completed = data.quiz_completed;
+                    self.track.completed=data.quiz_completed;
                 }
                 self._renderAnswersHighlightingAndComments();
                 self._renderValidationInfo();
-                if (data.visitor_uuid) {
-                    utils.set_cookie('visitor_uuid', data.visitor_uuid);
+                if(data.visitor_uuid){
+                    utils.set_cookie('visitor_uuid',data.visitor_uuid);
                 }
             }
 
-            return Promise.resolve(data);
+            returnPromise.resolve(data);
         });
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * When clicking on an answer, this one should be marked as "checked".
+     *Whenclickingonananswer,thisoneshouldbemarkedas"checked".
      *
-     * @private
-     * @param FlectraEvent ev
+     *@private
+     *@paramFlectraEventev
      */
-    _onAnswerClick: function (ev) {
+    _onAnswerClick:function(ev){
         ev.preventDefault();
-        if (!this.track.completed) {
-            $(ev.currentTarget).find('input[type=radio]').prop('checked', true);
+        if(!this.track.completed){
+            $(ev.currentTarget).find('input[type=radio]').prop('checked',true);
         }
     },
 
     /**
-     * Resets the completion of the track so the user can take
-     * the quiz again
+     *Resetsthecompletionofthetracksotheusercantake
+     *thequizagain
      *
-     * @private
+     *@private
      */
-    _onClickReset: function () {
+    _onClickReset:function(){
         this._rpc({
-            route: '/event_track/quiz/reset',
-            params: {
-                event_id: this.track.eventId,
-                track_id: this.track.id
+            route:'/event_track/quiz/reset',
+            params:{
+                event_id:this.track.eventId,
+                track_id:this.track.id
             }
-        }).then(function () {
+        }).then(function(){
             window.location.reload();
         });
     },
 
 });
 
-publicWidget.registry.Quiz = publicWidget.Widget.extend({
-    selector: '.o_quiz_main',
+publicWidget.registry.Quiz=publicWidget.Widget.extend({
+    selector:'.o_quiz_main',
 
     //----------------------------------------------------------------------
-    // Public
+    //Public
     //----------------------------------------------------------------------
 
     /**
-     * @override
-     * @param {Object} parent
+     *@override
+     *@param{Object}parent
      */
-    start: function () {
-        var self = this;
-        this.quizWidgets = [];
-        var defs = [this._super.apply(this, arguments)];
-        this.$('.o_quiz_js_quiz').each(function () {
-            var data = $(this).data();
-            data.quizData = {
-                questions: self._extractQuestionsAndAnswers(),
-                sessionAnswers: data.sessionAnswers || [],
-                quizKarmaMax: data.quizKarmaMax,
-                quizKarmaWon: data.quizKarmaWon,
-                quizKarmaGain: data.quizKarmaGain,
-                quizPointsGained: data.quizPointsGained,
-                quizAttemptsCount: data.quizAttemptsCount,
+    start:function(){
+        varself=this;
+        this.quizWidgets=[];
+        vardefs=[this._super.apply(this,arguments)];
+        this.$('.o_quiz_js_quiz').each(function(){
+            vardata=$(this).data();
+            data.quizData={
+                questions:self._extractQuestionsAndAnswers(),
+                sessionAnswers:data.sessionAnswers||[],
+                quizKarmaMax:data.quizKarmaMax,
+                quizKarmaWon:data.quizKarmaWon,
+                quizKarmaGain:data.quizKarmaGain,
+                quizPointsGained:data.quizPointsGained,
+                quizAttemptsCount:data.quizAttemptsCount,
             };
-            defs.push(new Quiz(self, data, data.quizData).attachTo($(this)));
+            defs.push(newQuiz(self,data,data.quizData).attachTo($(this)));
         });
-        return Promise.all(defs);
+        returnPromise.all(defs);
     },
 
     //----------------------------------------------------------------------
-    // Private
+    //Private
     //---------------------------------------------------------------------
 
     /**
-     * Extract data from exiting DOM rendered server-side, to have the list of questions with their
-     * relative answers.
-     * This method should return the same format as /gamification_quiz/quiz/get controller.
+     *ExtractdatafromexitingDOMrenderedserver-side,tohavethelistofquestionswiththeir
+     *relativeanswers.
+     *Thismethodshouldreturnthesameformatas/gamification_quiz/quiz/getcontroller.
      *
-     * @return {Array<Object>} list of questions with answers
+     *@return{Array<Object>}listofquestionswithanswers
      */
-    _extractQuestionsAndAnswers: function () {
-        var questions = [];
-        this.$('.o_quiz_js_quiz_question').each(function () {
-            var $question = $(this);
-            var answers = [];
-            $question.find('.o_quiz_quiz_answer').each(function () {
-                var $answer = $(this);
+    _extractQuestionsAndAnswers:function(){
+        varquestions=[];
+        this.$('.o_quiz_js_quiz_question').each(function(){
+            var$question=$(this);
+            varanswers=[];
+            $question.find('.o_quiz_quiz_answer').each(function(){
+                var$answer=$(this);
                 answers.push({
-                    id: $answer.data('answerId'),
-                    text: $answer.data('text'),
+                    id:$answer.data('answerId'),
+                    text:$answer.data('text'),
                 });
             });
             questions.push({
-                id: $question.data('questionId'),
-                title: $question.data('title'),
-                answer_ids: answers,
+                id:$question.data('questionId'),
+                title:$question.data('title'),
+                answer_ids:answers,
             });
         });
-        return questions;
+        returnquestions;
     },
 });
 
-return Quiz;
+returnQuiz;
 
 });

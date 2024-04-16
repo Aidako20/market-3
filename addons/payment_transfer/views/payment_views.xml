@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="payment_acquirer_view_form_inherit_transfer" model="ir.ui.view">
-        <field name="name">payment.acquirer.view.form.inherit.transfer</field>
-        <field name="model">payment.acquirer</field>
-        <field name="inherit_id" ref="payment.acquirer_form"/>
-        <field name="arch" type="xml">
-            <page name="acquirer_credentials" position="attributes">
-                <attribute name="attrs">{'invisible': [('provider', 'in', ['manual', 'transfer'])]}</attribute>
+    <recordid="payment_acquirer_view_form_inherit_transfer"model="ir.ui.view">
+        <fieldname="name">payment.acquirer.view.form.inherit.transfer</field>
+        <fieldname="model">payment.acquirer</field>
+        <fieldname="inherit_id"ref="payment.acquirer_form"/>
+        <fieldname="arch"type="xml">
+            <pagename="acquirer_credentials"position="attributes">
+                <attributename="attrs">{'invisible':[('provider','in',['manual','transfer'])]}</attribute>
             </page>
-            <field name="pre_msg" position="attributes">
-                <attribute name="attrs">{'invisible': [('provider', '=', 'transfer')]}</attribute>
+            <fieldname="pre_msg"position="attributes">
+                <attributename="attrs">{'invisible':[('provider','=','transfer')]}</attribute>
             </field>
-            <field name="done_msg" position="attributes">
-                <attribute name="attrs">{'invisible': [('provider', '=', 'transfer')]}</attribute>
+            <fieldname="done_msg"position="attributes">
+                <attributename="attrs">{'invisible':[('provider','=','transfer')]}</attribute>
             </field>
-            <field name="cancel_msg" position="attributes">
-                <attribute name="attrs">{'invisible': [('provider', '=', 'transfer')]}</attribute>
+            <fieldname="cancel_msg"position="attributes">
+                <attributename="attrs">{'invisible':[('provider','=','transfer')]}</attribute>
             </field>
         </field>
     </record>

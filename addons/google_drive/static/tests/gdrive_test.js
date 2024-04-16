@@ -1,152 +1,152 @@
-flectra.define('google_drive.gdrive_integration', function (require) {
-    "use strict";
+flectra.define('google_drive.gdrive_integration',function(require){
+    "usestrict";
 
-    const FormView = require('web.FormView');
-    const testUtils = require('web.test_utils');
+    constFormView=require('web.FormView');
+    consttestUtils=require('web.test_utils');
 
-    const cpHelpers = testUtils.controlPanel;
+    constcpHelpers=testUtils.controlPanel;
 
-    QUnit.module('Google Drive Integration', {
-        beforeEach() {
-            this.data = {
-                partner: {
-                    fields: {
-                        display_name: { string: "Displayed name", type: "char", searchable: true },
+    QUnit.module('GoogleDriveIntegration',{
+        beforeEach(){
+            this.data={
+                partner:{
+                    fields:{
+                        display_name:{string:"Displayedname",type:"char",searchable:true},
                     },
-                    records: [
-                        { id: 1, display_name: "Locomotive Breath" },
-                        { id: 2, display_name: "Hey Macarena" },
+                    records:[
+                        {id:1,display_name:"LocomotiveBreath"},
+                        {id:2,display_name:"HeyMacarena"},
                     ],
                 },
             };
         },
-    }, function () {
+    },function(){
 
-        QUnit.module('Google Drive ActionMenus');
+        QUnit.module('GoogleDriveActionMenus');
 
-        QUnit.test('rendering of the google drive attachments in action menus', async function (assert) {
+        QUnit.test('renderingofthegoogledriveattachmentsinactionmenus',asyncfunction(assert){
             assert.expect(3);
 
-            const form = await testUtils.createView({
-                actionMenusRegistry: true,
+            constform=awaittestUtils.createView({
+                actionMenusRegistry:true,
                 arch:
-                    `<form string="Partners">
-                        <field name="display_name"/>
+                    `<formstring="Partners">
+                        <fieldname="display_name"/>
                     </form>`,
-                data: this.data,
-                async mockRPC(route, args) {
-                    switch (route) {
-                        case '/web/dataset/call_kw/google.drive.config/get_google_drive_config':
-                            assert.deepEqual(args.args, ['partner', 1],
-                                'The route to get google drive config should have been called');
-                            return [{
-                                id: 27,
-                                name: 'Cyberdyne Systems',
+                data:this.data,
+                asyncmockRPC(route,args){
+                    switch(route){
+                        case'/web/dataset/call_kw/google.drive.config/get_google_drive_config':
+                            assert.deepEqual(args.args,['partner',1],
+                                'Theroutetogetgoogledriveconfigshouldhavebeencalled');
+                            return[{
+                                id:27,
+                                name:'CyberdyneSystems',
                             }];
-                        case '/web/dataset/call_kw/google.drive.config/search_read':
-                            return [{
-                                google_drive_resource_id: "T1000",
-                                google_drive_client_id: "cyberdyne.org",
-                                id: 1,
+                        case'/web/dataset/call_kw/google.drive.config/search_read':
+                            return[{
+                                google_drive_resource_id:"T1000",
+                                google_drive_client_id:"cyberdyne.org",
+                                id:1,
                             }];
-                        case '/web/dataset/call_kw/google.drive.config/get_google_drive_url':
-                            assert.deepEqual(args.args, [27, 1, 'T1000'],
-                                'The route to get the Google url should have been called');
-                            return; // do not return anything or it will open a new tab.
+                        case'/web/dataset/call_kw/google.drive.config/get_google_drive_url':
+                            assert.deepEqual(args.args,[27,1,'T1000'],
+                                'TheroutetogettheGoogleurlshouldhavebeencalled');
+                            return;//donotreturnanythingoritwillopenanewtab.
                     }
                 },
-                model: 'partner',
-                res_id: 1,
-                View: FormView,
-                viewOptions: {
-                    hasActionMenus: true,
+                model:'partner',
+                res_id:1,
+                View:FormView,
+                viewOptions:{
+                    hasActionMenus:true,
                 },
             });
-            await cpHelpers.toggleActionMenu(form);
+            awaitcpHelpers.toggleActionMenu(form);
 
-            assert.containsOnce(form, '.oe_share_gdoc_item',
-                "The button to the google action should be present");
+            assert.containsOnce(form,'.oe_share_gdoc_item',
+                "Thebuttontothegoogleactionshouldbepresent");
 
-            await cpHelpers.toggleMenuItem(form, "Cyberdyne Systems");
+            awaitcpHelpers.toggleMenuItem(form,"CyberdyneSystems");
 
             form.destroy();
         });
 
-        QUnit.test("no google drive data", async function (assert) {
+        QUnit.test("nogoogledrivedata",asyncfunction(assert){
             assert.expect(1);
 
-            const form = await testUtils.createView({
-                actionMenusRegistry: true,
+            constform=awaittestUtils.createView({
+                actionMenusRegistry:true,
                 arch:
-                    `<form string="Partners">
-                        <field name="display_name"/>
+                    `<formstring="Partners">
+                        <fieldname="display_name"/>
                     </form>`,
-                data: this.data,
-                model: 'partner',
-                res_id: 1,
-                View: FormView,
-                viewOptions: {
-                    hasActionMenus: true,
-                    ids: [1, 2],
-                    index: 0,
+                data:this.data,
+                model:'partner',
+                res_id:1,
+                View:FormView,
+                viewOptions:{
+                    hasActionMenus:true,
+                    ids:[1,2],
+                    index:0,
                 },
             });
 
-            assert.containsNone(form, ".o_cp_action_menus .o_embed_menu");
+            assert.containsNone(form,".o_cp_action_menus.o_embed_menu");
 
             form.destroy();
         });
 
-        QUnit.test('click on the google drive attachments after switching records', async function (assert) {
+        QUnit.test('clickonthegoogledriveattachmentsafterswitchingrecords',asyncfunction(assert){
             assert.expect(4);
 
-            let currentRecordId = 1;
-            const form = await testUtils.createView({
-                actionMenusRegistry: true,
+            letcurrentRecordId=1;
+            constform=awaittestUtils.createView({
+                actionMenusRegistry:true,
                 arch:
-                    `<form string="Partners">
-                        <field name="display_name"/>
+                    `<formstring="Partners">
+                        <fieldname="display_name"/>
                     </form>`,
-                data: this.data,
-                async mockRPC(route, args) {
-                    switch (route) {
-                        case '/web/dataset/call_kw/google.drive.config/get_google_drive_config':
-                            assert.deepEqual(args.args, ['partner', currentRecordId],
-                                'The route to get google drive config should have been called');
-                            return [{
-                                id: 27,
-                                name: 'Cyberdyne Systems',
+                data:this.data,
+                asyncmockRPC(route,args){
+                    switch(route){
+                        case'/web/dataset/call_kw/google.drive.config/get_google_drive_config':
+                            assert.deepEqual(args.args,['partner',currentRecordId],
+                                'Theroutetogetgoogledriveconfigshouldhavebeencalled');
+                            return[{
+                                id:27,
+                                name:'CyberdyneSystems',
                             }];
-                        case '/web/dataset/call_kw/google.drive.config/search_read':
-                            return [{
-                                google_drive_resource_id: "T1000",
-                                google_drive_client_id: "cyberdyne.org",
-                                id: 1,
+                        case'/web/dataset/call_kw/google.drive.config/search_read':
+                            return[{
+                                google_drive_resource_id:"T1000",
+                                google_drive_client_id:"cyberdyne.org",
+                                id:1,
                             }];
-                        case '/web/dataset/call_kw/google.drive.config/get_google_drive_url':
-                            assert.deepEqual(args.args, [27, currentRecordId, 'T1000'],
-                                'The route to get the Google url should have been called');
-                            return; // do not return anything or it will open a new tab.
+                        case'/web/dataset/call_kw/google.drive.config/get_google_drive_url':
+                            assert.deepEqual(args.args,[27,currentRecordId,'T1000'],
+                                'TheroutetogettheGoogleurlshouldhavebeencalled');
+                            return;//donotreturnanythingoritwillopenanewtab.
                     }
                 },
-                model: 'partner',
-                res_id: 1,
-                View: FormView,
-                viewOptions: {
-                    hasActionMenus: true,
-                    ids: [1, 2],
-                    index: 0,
+                model:'partner',
+                res_id:1,
+                View:FormView,
+                viewOptions:{
+                    hasActionMenus:true,
+                    ids:[1,2],
+                    index:0,
                 },
             });
 
-            await cpHelpers.toggleActionMenu(form);
-            await cpHelpers.toggleMenuItem(form, "Cyberdyne Systems");
+            awaitcpHelpers.toggleActionMenu(form);
+            awaitcpHelpers.toggleMenuItem(form,"CyberdyneSystems");
 
-            currentRecordId = 2;
-            await cpHelpers.pagerNext(form);
+            currentRecordId=2;
+            awaitcpHelpers.pagerNext(form);
 
-            await cpHelpers.toggleActionMenu(form);
-            await cpHelpers.toggleMenuItem(form, "Cyberdyne Systems");
+            awaitcpHelpers.toggleActionMenu(form);
+            awaitcpHelpers.toggleMenuItem(form,"CyberdyneSystems");
 
             form.destroy();
         });

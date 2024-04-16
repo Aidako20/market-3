@@ -1,56 +1,56 @@
-flectra.define('options.s_google_map_options', function (require) {
-'use strict';
+flectra.define('options.s_google_map_options',function(require){
+'usestrict';
 
-const {_t} = require('web.core');
-const options = require('web_editor.snippets.options');
+const{_t}=require('web.core');
+constoptions=require('web_editor.snippets.options');
 
-options.registry.GoogleMap = options.Class.extend({
+options.registry.GoogleMap=options.Class.extend({
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    resetMapColor(previewMode, widgetValue, params) {
-        this.$target[0].dataset.mapColor = '';
+    resetMapColor(previewMode,widgetValue,params){
+        this.$target[0].dataset.mapColor='';
     },
     /**
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    setFormattedAddress(previewMode, widgetValue, params) {
-        this.$target[0].dataset.pinAddress = params.gmapPlace.formatted_address;
+    setFormattedAddress(previewMode,widgetValue,params){
+        this.$target[0].dataset.pinAddress=params.gmapPlace.formatted_address;
     },
     /**
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    async showDescription(previewMode, widgetValue, params) {
-        const descriptionEl = this.$target[0].querySelector('.description');
-        if (widgetValue && !descriptionEl) {
+    asyncshowDescription(previewMode,widgetValue,params){
+        constdescriptionEl=this.$target[0].querySelector('.description');
+        if(widgetValue&&!descriptionEl){
             this.$target.append($(`
-                <div class="description">
-                    <font>${_t('Visit us:')}</font>
-                    <span>${_t('Our office is located in the northeast of Brussels. TEL (555) 432 2365')}</span>
+                <divclass="description">
+                    <font>${_t('Visitus:')}</font>
+                    <span>${_t('OurofficeislocatedinthenortheastofBrussels.TEL(555)4322365')}</span>
                 </div>`)
             );
-        } else if (!widgetValue && descriptionEl) {
+        }elseif(!widgetValue&&descriptionEl){
             descriptionEl.remove();
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _computeWidgetState(methodName, params) {
-        if (methodName === 'showDescription') {
-            return this.$target[0].querySelector('.description') ? 'true' : '';
+    _computeWidgetState(methodName,params){
+        if(methodName==='showDescription'){
+            returnthis.$target[0].querySelector('.description')?'true':'';
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 });
 });

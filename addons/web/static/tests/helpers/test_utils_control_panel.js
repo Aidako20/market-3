@@ -1,351 +1,351 @@
-flectra.define('web.test_utils_control_panel', function (require) {
-    "use strict";
+flectra.define('web.test_utils_control_panel',function(require){
+    "usestrict";
 
-    const { click, findItem, getNode, triggerEvent } = require('web.test_utils_dom');
-    const { editInput, editSelect, editAndTrigger } = require('web.test_utils_fields');
+    const{click,findItem,getNode,triggerEvent}=require('web.test_utils_dom');
+    const{editInput,editSelect,editAndTrigger}=require('web.test_utils_fields');
 
     //-------------------------------------------------------------------------
-    // Exported functions
+    //Exportedfunctions
     //-------------------------------------------------------------------------
 
     /**
-     * @param {EventTarget} el
-     * @param {(number|string)} menuFinder
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@param{(number|string)}menuFinder
+     *@returns{Promise}
      */
-    async function toggleMenu(el, menuFinder) {
-        const menu = findItem(el, `.o_dropdown > button`, menuFinder);
-        await click(menu);
+    asyncfunctiontoggleMenu(el,menuFinder){
+        constmenu=findItem(el,`.o_dropdown>button`,menuFinder);
+        awaitclick(menu);
     }
 
     /**
-     * @param {EventTarget} el
-     * @param {(number|string)} itemFinder
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@param{(number|string)}itemFinder
+     *@returns{Promise}
      */
-    async function toggleMenuItem(el, itemFinder) {
-        const item = findItem(el, `.o_menu_item > a`, itemFinder);
-        await click(item);
+    asyncfunctiontoggleMenuItem(el,itemFinder){
+        constitem=findItem(el,`.o_menu_item>a`,itemFinder);
+        awaitclick(item);
     }
 
     /**
-     * @param {EventTarget} el
-     * @param {(number|string)} itemFinder
-     * @param {(number|string)} optionFinder
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@param{(number|string)}itemFinder
+     *@param{(number|string)}optionFinder
+     *@returns{Promise}
      */
-    async function toggleMenuItemOption(el, itemFinder, optionFinder) {
-        const item = findItem(el, `.o_menu_item > a`, itemFinder);
-        const option = findItem(item.parentNode, '.o_item_option > a', optionFinder);
-        await click(option);
+    asyncfunctiontoggleMenuItemOption(el,itemFinder,optionFinder){
+        constitem=findItem(el,`.o_menu_item>a`,itemFinder);
+        constoption=findItem(item.parentNode,'.o_item_option>a',optionFinder);
+        awaitclick(option);
     }
 
     /**
-     * @param {EventTarget} el
-     * @param {(number|string)} itemFinder
-     * @returns {boolean}
+     *@param{EventTarget}el
+     *@param{(number|string)}itemFinder
+     *@returns{boolean}
      */
-    function isItemSelected(el, itemFinder) {
-        const item = findItem(el, `.o_menu_item > a`, itemFinder);
-        return item.classList.contains('selected');
+    functionisItemSelected(el,itemFinder){
+        constitem=findItem(el,`.o_menu_item>a`,itemFinder);
+        returnitem.classList.contains('selected');
     }
 
     /**
-     * @param {EventTarget} el
-     * @param {(number|string)} itemuFinder
-     * @param {(number|string)} optionFinder
-     * @returns {boolean}
+     *@param{EventTarget}el
+     *@param{(number|string)}itemuFinder
+     *@param{(number|string)}optionFinder
+     *@returns{boolean}
      */
-    function isOptionSelected(el, itemFinder, optionFinder) {
-        const item = findItem(el, `.o_menu_item > a`, itemFinder);
-        const option = findItem(item.parentNode, '.o_item_option > a', optionFinder);
-        return option.classList.contains('selected');
+    functionisOptionSelected(el,itemFinder,optionFinder){
+        constitem=findItem(el,`.o_menu_item>a`,itemFinder);
+        constoption=findItem(item.parentNode,'.o_item_option>a',optionFinder);
+        returnoption.classList.contains('selected');
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {string[]}
+     *@param{EventTarget}el
+     *@returns{string[]}
      */
-    function getMenuItemTexts(el) {
-        return [...getNode(el).querySelectorAll(`.o_dropdown ul .o_menu_item`)].map(
-            e => e.innerText.trim()
+    functiongetMenuItemTexts(el){
+        return[...getNode(el).querySelectorAll(`.o_dropdownul.o_menu_item`)].map(
+            e=>e.innerText.trim()
         );
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {HTMLButtonElement[]}
+     *@param{EventTarget}el
+     *@returns{HTMLButtonElement[]}
      */
-    function getButtons(el) {
-        return [...getNode(el).querySelector((`div.o_cp_bottom div.o_cp_buttons`)).children];
+    functiongetButtons(el){
+        return[...getNode(el).querySelector((`div.o_cp_bottomdiv.o_cp_buttons`)).children];
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@returns{Promise}
      */
-    async function toggleFilterMenu(el) {
-        await click(getNode(el).querySelector(`.o_filter_menu button`));
+    asyncfunctiontoggleFilterMenu(el){
+        awaitclick(getNode(el).querySelector(`.o_filter_menubutton`));
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@returns{Promise}
      */
-    async function toggleAddCustomFilter(el) {
-        await click(getNode(el).querySelector(`button.o_add_custom_filter`));
+    asyncfunctiontoggleAddCustomFilter(el){
+        awaitclick(getNode(el).querySelector(`button.o_add_custom_filter`));
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@returns{Promise}
      */
-    async function applyFilter(el) {
-        await click(getNode(el).querySelector(`div.o_add_filter_menu > button.o_apply_filter`));
+    asyncfunctionapplyFilter(el){
+        awaitclick(getNode(el).querySelector(`div.o_add_filter_menu>button.o_apply_filter`));
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@returns{Promise}
      */
-    async function toggleGroupByMenu(el) {
-        await click(getNode(el).querySelector(`.o_group_by_menu button`));
+    asyncfunctiontoggleGroupByMenu(el){
+        awaitclick(getNode(el).querySelector(`.o_group_by_menubutton`));
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@returns{Promise}
      */
-    async function toggleAddCustomGroup(el) {
-        await click(getNode(el).querySelector(`button.o_add_custom_group_by`));
+    asyncfunctiontoggleAddCustomGroup(el){
+        awaitclick(getNode(el).querySelector(`button.o_add_custom_group_by`));
     }
 
     /**
-     * @param {EventTarget} el
-     * @param {string} fieldName
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@param{string}fieldName
+     *@returns{Promise}
      */
-    async function selectGroup(el, fieldName) {
-        await editSelect(
+    asyncfunctionselectGroup(el,fieldName){
+        awaiteditSelect(
             getNode(el).querySelector(`select.o_group_by_selector`),
             fieldName
         );
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@returns{Promise}
      */
-    async function applyGroup(el) {
-        await click(getNode(el).querySelector(`div.o_add_group_by_menu > button.o_apply_group_by`));
+    asyncfunctionapplyGroup(el){
+        awaitclick(getNode(el).querySelector(`div.o_add_group_by_menu>button.o_apply_group_by`));
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@returns{Promise}
      */
-    async function toggleFavoriteMenu(el) {
-        await click(getNode(el).querySelector(`.o_favorite_menu button`));
+    asyncfunctiontoggleFavoriteMenu(el){
+        awaitclick(getNode(el).querySelector(`.o_favorite_menubutton`));
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@returns{Promise}
      */
-    async function toggleSaveFavorite(el) {
-        await click(getNode(el).querySelector(`.o_favorite_menu .o_add_favorite button`));
+    asyncfunctiontoggleSaveFavorite(el){
+        awaitclick(getNode(el).querySelector(`.o_favorite_menu.o_add_favoritebutton`));
     }
 
     /**
-     * @param {EventTarget} el
-     * @param {string} name
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@param{string}name
+     *@returns{Promise}
      */
-    async function editFavoriteName(el, name) {
-        await editInput(getNode(el).querySelector(`.o_favorite_menu .o_add_favorite input[type="text"]`), name);
+    asyncfunctioneditFavoriteName(el,name){
+        awaiteditInput(getNode(el).querySelector(`.o_favorite_menu.o_add_favoriteinput[type="text"]`),name);
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@returns{Promise}
      */
-    async function saveFavorite(el) {
-        await click(getNode(el).querySelector(`.o_favorite_menu .o_add_favorite button.o_save_favorite`));
+    asyncfunctionsaveFavorite(el){
+        awaitclick(getNode(el).querySelector(`.o_favorite_menu.o_add_favoritebutton.o_save_favorite`));
     }
 
     /**
-     * @param {EventTarget} el
-     * @param {(string|number)} favoriteFinder
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@param{(string|number)}favoriteFinder
+     *@returns{Promise}
      */
-    async function deleteFavorite(el, favoriteFinder) {
-        const favorite = findItem(el, `.o_favorite_menu .o_menu_item`, favoriteFinder);
-        await click(favorite.querySelector('i.fa-trash-o'));
+    asyncfunctiondeleteFavorite(el,favoriteFinder){
+        constfavorite=findItem(el,`.o_favorite_menu.o_menu_item`,favoriteFinder);
+        awaitclick(favorite.querySelector('i.fa-trash-o'));
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@returns{Promise}
      */
-    async function toggleComparisonMenu(el) {
-        await click(getNode(el).querySelector(`div.o_comparison_menu > button`));
+    asyncfunctiontoggleComparisonMenu(el){
+        awaitclick(getNode(el).querySelector(`div.o_comparison_menu>button`));
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@returns{Promise}
      */
-    function getFacetTexts(el) {
-        return [...getNode(el).querySelectorAll(`.o_searchview .o_searchview_facet`)].map(
-            facet => facet.innerText.trim()
+    functiongetFacetTexts(el){
+        return[...getNode(el).querySelectorAll(`.o_searchview.o_searchview_facet`)].map(
+            facet=>facet.innerText.trim()
         );
     }
 
     /**
-     * @param {EventTarget} el
-     * @param {(string|number)} facetFinder
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@param{(string|number)}facetFinder
+     *@returns{Promise}
      */
-    async function removeFacet(el, facetFinder = 0) {
-        const facet = findItem(el, `.o_searchview .o_searchview_facet`, facetFinder);
-        await click(facet.querySelector('.o_facet_remove'));
+    asyncfunctionremoveFacet(el,facetFinder=0){
+        constfacet=findItem(el,`.o_searchview.o_searchview_facet`,facetFinder);
+        awaitclick(facet.querySelector('.o_facet_remove'));
     }
 
     /**
-     * @param {EventTarget} el
-     * @param {string} value
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@param{string}value
+     *@returns{Promise}
      */
-    async function editSearch(el, value) {
-        await editInput(getNode(el).querySelector(`.o_searchview_input`), value);
+    asyncfunctioneditSearch(el,value){
+        awaiteditInput(getNode(el).querySelector(`.o_searchview_input`),value);
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@returns{Promise}
      */
-    async function validateSearch(el) {
-        await triggerEvent(
+    asyncfunctionvalidateSearch(el){
+        awaittriggerEvent(
             getNode(el).querySelector(`.o_searchview_input`),
-            'keydown', { key: 'Enter' }
+            'keydown',{key:'Enter'}
         );
     }
 
     /**
-     * @param {EventTarget} el
-     * @param {string} [menuFinder="Action"]
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@param{string}[menuFinder="Action"]
+     *@returns{Promise}
      */
-    async function toggleActionMenu(el, menuFinder = "Action") {
-        const dropdown = findItem(el, `.o_cp_action_menus button`, menuFinder);
-        await click(dropdown);
+    asyncfunctiontoggleActionMenu(el,menuFinder="Action"){
+        constdropdown=findItem(el,`.o_cp_action_menusbutton`,menuFinder);
+        awaitclick(dropdown);
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@returns{Promise}
      */
-    async function pagerPrevious(el) {
-        await click(getNode(el).querySelector(`.o_pager button.o_pager_previous`));
+    asyncfunctionpagerPrevious(el){
+        awaitclick(getNode(el).querySelector(`.o_pagerbutton.o_pager_previous`));
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@returns{Promise}
      */
-    async function pagerNext(el) {
-        await click(getNode(el).querySelector(`.o_pager button.o_pager_next`));
+    asyncfunctionpagerNext(el){
+        awaitclick(getNode(el).querySelector(`.o_pagerbutton.o_pager_next`));
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {string}
+     *@param{EventTarget}el
+     *@returns{string}
      */
-    function getPagerValue(el) {
-        const pagerValue = getNode(el).querySelector(`.o_pager_counter .o_pager_value`);
-        switch (pagerValue.tagName) {
-            case 'INPUT':
-                return pagerValue.value;
-            case 'SPAN':
-                return pagerValue.innerText.trim();
+    functiongetPagerValue(el){
+        constpagerValue=getNode(el).querySelector(`.o_pager_counter.o_pager_value`);
+        switch(pagerValue.tagName){
+            case'INPUT':
+                returnpagerValue.value;
+            case'SPAN':
+                returnpagerValue.innerText.trim();
         }
     }
 
     /**
-     * @param {EventTarget} el
-     * @returns {string}
+     *@param{EventTarget}el
+     *@returns{string}
      */
-    function getPagerSize(el) {
-        return getNode(el).querySelector(`.o_pager_counter span.o_pager_limit`).innerText.trim();
+    functiongetPagerSize(el){
+        returngetNode(el).querySelector(`.o_pager_counterspan.o_pager_limit`).innerText.trim();
     }
 
     /**
-     * @param {EventTarget} el
-     * @param {string} value
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@param{string}value
+     *@returns{Promise}
      */
-    async function setPagerValue(el, value) {
-        let pagerValue = getNode(el).querySelector(`.o_pager_counter .o_pager_value`);
-        if (pagerValue.tagName === 'SPAN') {
-            await click(pagerValue);
+    asyncfunctionsetPagerValue(el,value){
+        letpagerValue=getNode(el).querySelector(`.o_pager_counter.o_pager_value`);
+        if(pagerValue.tagName==='SPAN'){
+            awaitclick(pagerValue);
         }
-        pagerValue = getNode(el).querySelector(`.o_pager_counter input.o_pager_value`);
-        if (!pagerValue) {
-            throw new Error("Pager value is being edited and cannot be changed.");
+        pagerValue=getNode(el).querySelector(`.o_pager_counterinput.o_pager_value`);
+        if(!pagerValue){
+            thrownewError("Pagervalueisbeingeditedandcannotbechanged.");
         }
-        await editAndTrigger(pagerValue, value, ['change', 'blur']);
+        awaiteditAndTrigger(pagerValue,value,['change','blur']);
     }
 
     /**
-     * @param {EventTarget} el
-     * @param {string} viewType
-     * @returns {Promise}
+     *@param{EventTarget}el
+     *@param{string}viewType
+     *@returns{Promise}
      */
-    async function switchView(el, viewType) {
-        await click(getNode(el).querySelector(`button.o_switch_view.o_${viewType}`));
+    asyncfunctionswitchView(el,viewType){
+        awaitclick(getNode(el).querySelector(`button.o_switch_view.o_${viewType}`));
     }
 
-    return {
-        // Generic interactions
+    return{
+        //Genericinteractions
         toggleMenu,
         toggleMenuItem,
         toggleMenuItemOption,
         isItemSelected,
         isOptionSelected,
         getMenuItemTexts,
-        // Button interactions
+        //Buttoninteractions
         getButtons,
-        // FilterMenu interactions
+        //FilterMenuinteractions
         toggleFilterMenu,
         toggleAddCustomFilter,
         applyFilter,
-        // GroupByMenu interactions
+        //GroupByMenuinteractions
         toggleGroupByMenu,
         toggleAddCustomGroup,
         selectGroup,
         applyGroup,
-        // FavoriteMenu interactions
+        //FavoriteMenuinteractions
         toggleFavoriteMenu,
         toggleSaveFavorite,
         editFavoriteName,
         saveFavorite,
         deleteFavorite,
-        // ComparisonMenu interactions
+        //ComparisonMenuinteractions
         toggleComparisonMenu,
-        // SearchBar interactions
+        //SearchBarinteractions
         getFacetTexts,
         removeFacet,
         editSearch,
         validateSearch,
-        // Action menus interactions
+        //Actionmenusinteractions
         toggleActionMenu,
-        // Pager interactions
+        //Pagerinteractions
         pagerPrevious,
         pagerNext,
         getPagerValue,
         getPagerSize,
         setPagerValue,
-        // View switcher
+        //Viewswitcher
         switchView,
     };
 });

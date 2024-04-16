@@ -1,44 +1,44 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import models, fields
+fromflectraimportmodels,fields
 
 
-class res_company(models.Model):
-    _inherit = "res.company"
+classres_company(models.Model):
+    _inherit="res.company"
 
-    # This field needs to be overridden with `selection_add` in the modules which intends to add report layouts.
-    # The xmlID of all the report actions which are actually Check Layouts has to be kept as key of the selection.
-    account_check_printing_layout = fields.Selection(
-        string="Check Layout",
+    #Thisfieldneedstobeoverriddenwith`selection_add`inthemoduleswhichintendstoaddreportlayouts.
+    #ThexmlIDofallthereportactionswhichareactuallyCheckLayoutshastobekeptaskeyoftheselection.
+    account_check_printing_layout=fields.Selection(
+        string="CheckLayout",
         selection=[
-            ('disabled', 'None'),
+            ('disabled','None'),
         ],
         default='disabled',
-        help="Select the format corresponding to the check paper you will be printing your checks on.\n"
-             "In order to disable the printing feature, select 'None'.",
+        help="Selecttheformatcorrespondingtothecheckpaperyouwillbeprintingyourcheckson.\n"
+             "Inordertodisabletheprintingfeature,select'None'.",
     )
-    account_check_printing_date_label = fields.Boolean(
-        string='Print Date Label',
+    account_check_printing_date_label=fields.Boolean(
+        string='PrintDateLabel',
         default=True,
-        help="This option allows you to print the date label on the check as per CPA.\n"
-             "Disable this if your pre-printed check includes the date label.",
+        help="ThisoptionallowsyoutoprintthedatelabelonthecheckasperCPA.\n"
+             "Disablethisifyourpre-printedcheckincludesthedatelabel.",
     )
-    account_check_printing_multi_stub = fields.Boolean(
-        string='Multi-Pages Check Stub',
-        help="This option allows you to print check details (stub) on multiple pages if they don't fit on a single page.",
+    account_check_printing_multi_stub=fields.Boolean(
+        string='Multi-PagesCheckStub',
+        help="Thisoptionallowsyoutoprintcheckdetails(stub)onmultiplepagesiftheydon'tfitonasinglepage.",
     )
-    account_check_printing_margin_top = fields.Float(
-        string='Check Top Margin',
+    account_check_printing_margin_top=fields.Float(
+        string='CheckTopMargin',
         default=0.25,
-        help="Adjust the margins of generated checks to make it fit your printer's settings.",
+        help="Adjustthemarginsofgeneratedcheckstomakeitfityourprinter'ssettings.",
     )
-    account_check_printing_margin_left = fields.Float(
-        string='Check Left Margin',
+    account_check_printing_margin_left=fields.Float(
+        string='CheckLeftMargin',
         default=0.25,
-        help="Adjust the margins of generated checks to make it fit your printer's settings.",
+        help="Adjustthemarginsofgeneratedcheckstomakeitfityourprinter'ssettings.",
     )
-    account_check_printing_margin_right = fields.Float(
-        string='Right Margin',
+    account_check_printing_margin_right=fields.Float(
+        string='RightMargin',
         default=0.25,
-        help="Adjust the margins of generated checks to make it fit your printer's settings.",
+        help="Adjustthemarginsofgeneratedcheckstomakeitfityourprinter'ssettings.",
     )

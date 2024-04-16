@@ -1,276 +1,276 @@
 /**
  *------------------------------------------------------------------------------
- * Flectra Web Boostrap Code
+ *FlectraWebBoostrapCode
  *------------------------------------------------------------------------------
  *
- * Each module can return a promise. In that case, the module is marked as loaded
- * only when the promise is resolved, and its value is equal to the resolved value.
- * The module can be rejected (unloaded). This will be logged in the console as info.
+ *Eachmodulecanreturnapromise.Inthatcase,themoduleismarkedasloaded
+ *onlywhenthepromiseisresolved,anditsvalueisequaltotheresolvedvalue.
+ *Themodulecanberejected(unloaded).Thiswillbeloggedintheconsoleasinfo.
  *
- * logs:
- *      Missing dependencies:
- *          These modules do not appear in the page. It is possible that the
- *          JavaScript file is not in the page or that the module name is wrong
- *      Failed modules:
- *          A javascript error is detected
- *      Rejected modules:
- *          The module returns a rejected promise. It (and its dependent modules)
- *          is not loaded.
- *      Rejected linked modules:
- *          Modules who depend on a rejected module
- *      Non loaded modules:
- *          Modules who depend on a missing or a failed module
- *      Debug:
- *          Non loaded or failed module informations for debugging
+ *logs:
+ *     Missingdependencies:
+ *         Thesemodulesdonotappearinthepage.Itispossiblethatthe
+ *         JavaScriptfileisnotinthepageorthatthemodulenameiswrong
+ *     Failedmodules:
+ *         Ajavascripterrorisdetected
+ *     Rejectedmodules:
+ *         Themodulereturnsarejectedpromise.It(anditsdependentmodules)
+ *         isnotloaded.
+ *     Rejectedlinkedmodules:
+ *         Moduleswhodependonarejectedmodule
+ *     Nonloadedmodules:
+ *         Moduleswhodependonamissingorafailedmodule
+ *     Debug:
+ *         Nonloadedorfailedmoduleinformationsfordebugging
  */
-(function () {
-    "use strict";
+(function(){
+    "usestrict";
 
-    var jobUID = Date.now();
+    varjobUID=Date.now();
 
-    var jobs = [];
-    var factories = Object.create(null);
-    var jobDeps = [];
-    var jobPromises = [];
+    varjobs=[];
+    varfactories=Object.create(null);
+    varjobDeps=[];
+    varjobPromises=[];
 
-    var services = Object.create({});
+    varservices=Object.create({});
 
-    var commentRegExp = /(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/mg;
-    var cjsRequireRegExp = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g;
+    varcommentRegExp=/(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/mg;
+    varcjsRequireRegExp=/[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g;
 
-    if (!window.flectra) {
-        window.flectra = {};
+    if(!window.flectra){
+        window.flectra={};
     }
-    var flectra = window.flectra;
+    varflectra=window.flectra;
 
-    var didLogInfoResolve;
-    var didLogInfoPromise = new Promise(function (resolve) {
-        didLogInfoResolve = resolve;
+    vardidLogInfoResolve;
+    vardidLogInfoPromise=newPromise(function(resolve){
+        didLogInfoResolve=resolve;
     });
 
-    flectra.testing = typeof QUnit === 'object';
-    flectra.remainingJobs = jobs;
-    flectra.__DEBUG__ = {
-        didLogInfo: didLogInfoPromise,
-        getDependencies: function (name, transitive) {
-            var deps = name instanceof Array ? name : [name];
-            var changed;
-            do {
-                changed = false;
-                jobDeps.forEach(function (dep) {
-                    if (deps.indexOf(dep.to) >= 0 && deps.indexOf(dep.from) < 0) {
+    flectra.testing=typeofQUnit==='object';
+    flectra.remainingJobs=jobs;
+    flectra.__DEBUG__={
+        didLogInfo:didLogInfoPromise,
+        getDependencies:function(name,transitive){
+            vardeps=nameinstanceofArray?name:[name];
+            varchanged;
+            do{
+                changed=false;
+                jobDeps.forEach(function(dep){
+                    if(deps.indexOf(dep.to)>=0&&deps.indexOf(dep.from)<0){
                         deps.push(dep.from);
-                        changed = true;
+                        changed=true;
                     }
                 });
-            } while (changed && transitive);
-            return deps;
+            }while(changed&&transitive);
+            returndeps;
         },
-        getDependents: function (name) {
-            return jobDeps.filter(function (dep) {
-                return dep.from === name;
-            }).map(function (dep) {
-                return dep.to;
+        getDependents:function(name){
+            returnjobDeps.filter(function(dep){
+                returndep.from===name;
+            }).map(function(dep){
+                returndep.to;
             });
         },
-        getWaitedJobs: function () {
-            return jobs.map(function (job) {
-                return job.name;
-            }).filter(function (item, index, self) { // uniq
-                return self.indexOf(item) === index;
+        getWaitedJobs:function(){
+            returnjobs.map(function(job){
+                returnjob.name;
+            }).filter(function(item,index,self){//uniq
+                returnself.indexOf(item)===index;
             });
         },
-        getMissingJobs: function () {
-            var self = this;
-            var waited = this.getWaitedJobs();
-            var missing = [];
-            waited.forEach(function (job) {
-                self.getDependencies(job).forEach(function (job) {
-                    if (!(job in self.services)) {
+        getMissingJobs:function(){
+            varself=this;
+            varwaited=this.getWaitedJobs();
+            varmissing=[];
+            waited.forEach(function(job){
+                self.getDependencies(job).forEach(function(job){
+                    if(!(jobinself.services)){
                         missing.push(job);
                     }
                 });
             });
-            return missing.filter(function (item, index, self) {
-                return self.indexOf(item) === index;
-            }).filter(function (item) {
-                return waited.indexOf(item) < 0;
-            }).filter(function (job) {
-                return !job.error;
+            returnmissing.filter(function(item,index,self){
+                returnself.indexOf(item)===index;
+            }).filter(function(item){
+                returnwaited.indexOf(item)<0;
+            }).filter(function(job){
+                return!job.error;
             });
         },
-        getFailedJobs: function () {
-            return jobs.filter(function (job) {
-                return !!job.error;
+        getFailedJobs:function(){
+            returnjobs.filter(function(job){
+                return!!job.error;
             });
         },
-        factories: factories,
-        services: services,
+        factories:factories,
+        services:services,
     };
-    flectra.define = function () {
-        var args = Array.prototype.slice.call(arguments);
-        var name = typeof args[0] === 'string' ? args.shift() : ('__flectra_job' + (jobUID++));
-        var factory = args[args.length - 1];
-        var deps;
-        if (args[0] instanceof Array) {
-            deps = args[0];
-        } else {
-            deps = [];
+    flectra.define=function(){
+        varargs=Array.prototype.slice.call(arguments);
+        varname=typeofargs[0]==='string'?args.shift():('__flectra_job'+(jobUID++));
+        varfactory=args[args.length-1];
+        vardeps;
+        if(args[0]instanceofArray){
+            deps=args[0];
+        }else{
+            deps=[];
             factory.toString()
-                .replace(commentRegExp, '')
-                .replace(cjsRequireRegExp, function (match, dep) {
+                .replace(commentRegExp,'')
+                .replace(cjsRequireRegExp,function(match,dep){
                     deps.push(dep);
                 });
         }
 
-        if (flectra.debug) {
-            if (!(deps instanceof Array)) {
-                throw new Error('Dependencies should be defined by an array', deps);
+        if(flectra.debug){
+            if(!(depsinstanceofArray)){
+                thrownewError('Dependenciesshouldbedefinedbyanarray',deps);
             }
-            if (typeof factory !== 'function') {
-                throw new Error('Factory should be defined by a function', factory);
+            if(typeoffactory!=='function'){
+                thrownewError('Factoryshouldbedefinedbyafunction',factory);
             }
-            if (typeof name !== 'string') {
-                throw new Error("Invalid name definition (should be a string", name);
+            if(typeofname!=='string'){
+                thrownewError("Invalidnamedefinition(shouldbeastring",name);
             }
-            if (name in factories) {
-                throw new Error("Service " + name + " already defined");
+            if(nameinfactories){
+                thrownewError("Service"+name+"alreadydefined");
             }
         }
 
-        factory.deps = deps;
-        factories[name] = factory;
+        factory.deps=deps;
+        factories[name]=factory;
 
         jobs.push({
-            name: name,
-            factory: factory,
-            deps: deps,
+            name:name,
+            factory:factory,
+            deps:deps,
         });
 
-        deps.forEach(function (dep) {
-            jobDeps.push({from: dep, to: name});
+        deps.forEach(function(dep){
+            jobDeps.push({from:dep,to:name});
         });
 
-        this.processJobs(jobs, services);
+        this.processJobs(jobs,services);
     };
-    flectra.log = function () {
-        var missing = [];
-        var failed = [];
+    flectra.log=function(){
+        varmissing=[];
+        varfailed=[];
 
-        if (jobs.length) {
-            var debugJobs = {};
-            var rejected = [];
-            var rejectedLinked = [];
-            var job;
-            var jobdep;
+        if(jobs.length){
+            vardebugJobs={};
+            varrejected=[];
+            varrejectedLinked=[];
+            varjob;
+            varjobdep;
 
-            for (var k = 0; k < jobs.length; k++) {
-                debugJobs[jobs[k].name] = job = {
-                    dependencies: jobs[k].deps,
-                    dependents: flectra.__DEBUG__.getDependents(jobs[k].name),
-                    name: jobs[k].name
+            for(vark=0;k<jobs.length;k++){
+                debugJobs[jobs[k].name]=job={
+                    dependencies:jobs[k].deps,
+                    dependents:flectra.__DEBUG__.getDependents(jobs[k].name),
+                    name:jobs[k].name
                 };
-                if (jobs[k].error) {
-                    job.error = jobs[k].error;
+                if(jobs[k].error){
+                    job.error=jobs[k].error;
                 }
-                if (jobs[k].rejected) {
-                    job.rejected = jobs[k].rejected;
+                if(jobs[k].rejected){
+                    job.rejected=jobs[k].rejected;
                     rejected.push(job.name);
                 }
-                var deps = flectra.__DEBUG__.getDependencies(job.name);
-                for (var i = 0; i < deps.length; i++) {
-                    if (job.name !== deps[i] && !(deps[i] in services)) {
-                        jobdep = debugJobs[deps[i]];
-                        if (!jobdep && deps[i] in factories) {
-                            for (var j = 0; j < jobs.length; j++) {
-                                if (jobs[j].name === deps[i]) {
-                                    jobdep = jobs[j];
+                vardeps=flectra.__DEBUG__.getDependencies(job.name);
+                for(vari=0;i<deps.length;i++){
+                    if(job.name!==deps[i]&&!(deps[i]inservices)){
+                        jobdep=debugJobs[deps[i]];
+                        if(!jobdep&&deps[i]infactories){
+                            for(varj=0;j<jobs.length;j++){
+                                if(jobs[j].name===deps[i]){
+                                    jobdep=jobs[j];
                                     break;
                                 }
                             }
                         }
-                        if (jobdep && jobdep.rejected) {
-                            if (!job.rejected) {
-                                job.rejected = [];
+                        if(jobdep&&jobdep.rejected){
+                            if(!job.rejected){
+                                job.rejected=[];
                                 rejectedLinked.push(job.name);
                             }
                             job.rejected.push(deps[i]);
-                        } else {
-                            if (!job.missing) {
-                                job.missing = [];
+                        }else{
+                            if(!job.missing){
+                                job.missing=[];
                             }
                             job.missing.push(deps[i]);
                         }
                     }
                 }
             }
-            missing = flectra.__DEBUG__.getMissingJobs();
-            failed = flectra.__DEBUG__.getFailedJobs();
-            var unloaded = Object.keys(debugJobs) // Object.values is not supported
-                .map(function (key) {
-                    return debugJobs[key];
-                }).filter(function (job) {
-                    return job.missing;
+            missing=flectra.__DEBUG__.getMissingJobs();
+            failed=flectra.__DEBUG__.getFailedJobs();
+            varunloaded=Object.keys(debugJobs)//Object.valuesisnotsupported
+                .map(function(key){
+                    returndebugJobs[key];
+                }).filter(function(job){
+                    returnjob.missing;
                 });
 
-            if (flectra.debug || failed.length || unloaded.length) {
-                var log = window.console[!failed.length || !unloaded.length ? 'info' : 'error'].bind(window.console);
-                log((failed.length ? 'error' : (unloaded.length ? 'warning' : 'info')) + ': Some modules could not be started');
-                if (missing.length) {
-                    log('Missing dependencies:    ', missing);
+            if(flectra.debug||failed.length||unloaded.length){
+                varlog=window.console[!failed.length||!unloaded.length?'info':'error'].bind(window.console);
+                log((failed.length?'error':(unloaded.length?'warning':'info'))+':Somemodulescouldnotbestarted');
+                if(missing.length){
+                    log('Missingdependencies:   ',missing);
                 }
-                if (failed.length) {
-                    log('Failed modules:          ', failed.map(function (fail) {
-                        return fail.name;
+                if(failed.length){
+                    log('Failedmodules:         ',failed.map(function(fail){
+                        returnfail.name;
                     }));
                 }
-                if (rejected.length) {
-                    log('Rejected modules:        ', rejected);
+                if(rejected.length){
+                    log('Rejectedmodules:       ',rejected);
                 }
-                if (rejectedLinked.length) {
-                    log('Rejected linked modules: ', rejectedLinked);
+                if(rejectedLinked.length){
+                    log('Rejectedlinkedmodules:',rejectedLinked);
                 }
-                if (unloaded.length) {
-                    log('Non loaded modules:      ', unloaded.map(function (unload) {
-                        return unload.name;
+                if(unloaded.length){
+                    log('Nonloadedmodules:     ',unloaded.map(function(unload){
+                        returnunload.name;
                     }));
                 }
-                if (flectra.debug && Object.keys(debugJobs).length) {
-                    log('Debug:                   ', debugJobs);
+                if(flectra.debug&&Object.keys(debugJobs).length){
+                    log('Debug:                  ',debugJobs);
                 }
             }
         }
-        flectra.__DEBUG__.jsModules = {
-            missing: missing,
-            failed: failed.map(function (fail) {
-                return fail.name;
+        flectra.__DEBUG__.jsModules={
+            missing:missing,
+            failed:failed.map(function(fail){
+                returnfail.name;
             }),
         };
         didLogInfoResolve();
     };
-    flectra.processJobs = function (jobs, services) {
-        var job;
+    flectra.processJobs=function(jobs,services){
+        varjob;
 
-        function processJob(job) {
-            var require = makeRequire(job);
+        functionprocessJob(job){
+            varrequire=makeRequire(job);
 
-            var jobExec;
-            var def = new Promise(function (resolve) {
-                try {
-                    jobExec = job.factory.call(null, require);
-                    jobs.splice(jobs.indexOf(job), 1);
-                } catch (e) {
-                    job.error = e;
-                    console.error('Error while loading ' + job.name + ': '+ e.stack);
+            varjobExec;
+            vardef=newPromise(function(resolve){
+                try{
+                    jobExec=job.factory.call(null,require);
+                    jobs.splice(jobs.indexOf(job),1);
+                }catch(e){
+                    job.error=e;
+                    console.error('Errorwhileloading'+job.name+':'+e.stack);
                 }
-                if (!job.error) {
+                if(!job.error){
                     Promise.resolve(jobExec).then(
-                        function (data) {
-                            services[job.name] = data;
+                        function(data){
+                            services[job.name]=data;
                             resolve();
-                            flectra.processJobs(jobs, services);
-                        }).guardedCatch(function (e) {
-                            job.rejected = e || true;
+                            flectra.processJobs(jobs,services);
+                        }).guardedCatch(function(e){
+                            job.rejected=e||true;
                             jobs.push(job);
                             resolve();
                         }
@@ -280,56 +280,56 @@
             jobPromises.push(def);
         }
 
-        function isReady(job) {
-            return !job.error && !job.rejected && job.factory.deps.every(function (name) {
-                return name in services;
+        functionisReady(job){
+            return!job.error&&!job.rejected&&job.factory.deps.every(function(name){
+                returnnameinservices;
             });
         }
 
-        function makeRequire(job) {
-            var deps = {};
-            Object.keys(services).filter(function (item) {
-                return job.deps.indexOf(item) >= 0;
-            }).forEach(function (key) {
-                deps[key] = services[key];
+        functionmakeRequire(job){
+            vardeps={};
+            Object.keys(services).filter(function(item){
+                returnjob.deps.indexOf(item)>=0;
+            }).forEach(function(key){
+                deps[key]=services[key];
             });
 
-            return function require(name) {
-                if (!(name in deps)) {
-                    console.error('Undefined dependency: ', name);
+            returnfunctionrequire(name){
+                if(!(nameindeps)){
+                    console.error('Undefineddependency:',name);
                 }
-                return deps[name];
+                returndeps[name];
             };
         }
 
-        while (jobs.length) {
-            job = undefined;
-            for (var i = 0; i < jobs.length; i++) {
-                if (isReady(jobs[i])) {
-                    job = jobs[i];
+        while(jobs.length){
+            job=undefined;
+            for(vari=0;i<jobs.length;i++){
+                if(isReady(jobs[i])){
+                    job=jobs[i];
                     break;
                 }
             }
-            if (!job) {
+            if(!job){
                 break;
             }
             processJob(job);
         }
 
-        return services;
+        returnservices;
     };
 
-    // Automatically log errors detected when loading modules
-    window.addEventListener('load', function logWhenLoaded() {
-        setTimeout(function () {
-            var len = jobPromises.length;
-            Promise.all(jobPromises).then(function () {
-                if (len === jobPromises.length) {
+    //Automaticallylogerrorsdetectedwhenloadingmodules
+    window.addEventListener('load',functionlogWhenLoaded(){
+        setTimeout(function(){
+            varlen=jobPromises.length;
+            Promise.all(jobPromises).then(function(){
+                if(len===jobPromises.length){
                     flectra.log();
-                } else {
+                }else{
                     logWhenLoaded();
                 }
             });
-        }, 9999);
+        },9999);
     });
 })();

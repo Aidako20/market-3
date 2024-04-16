@@ -1,30 +1,30 @@
-flectra.define('website.tour_reset_password', function (require) {
-'use strict';
+flectra.define('website.tour_reset_password',function(require){
+'usestrict';
 
-var tour = require('web_tour.tour');
+vartour=require('web_tour.tour');
 require('web.dom_ready');
 
-tour.register('website_reset_password', {
-    test: true,
-}, [
+tour.register('website_reset_password',{
+    test:true,
+},[
     {
-        content: "fill new password",
-        trigger: '.oe_reset_password_form input[name="password"]',
-        run: "text adminadmin"
+        content:"fillnewpassword",
+        trigger:'.oe_reset_password_forminput[name="password"]',
+        run:"textadminadmin"
     },
     {
-        content: "fill confirm password",
-        trigger: '.oe_reset_password_form input[name="confirm_password"]',
-        run: "text adminadmin"
+        content:"fillconfirmpassword",
+        trigger:'.oe_reset_password_forminput[name="confirm_password"]',
+        run:"textadminadmin"
     },
     {
-        content: "submit reset password form",
-        trigger: '.oe_reset_password_form button[type="submit"]',
+        content:"submitresetpasswordform",
+        trigger:'.oe_reset_password_formbutton[type="submit"]',
     },
     {
-        content: "check that we're logged in",
-        trigger: '.oe_topbar_name:contains("The King")',
-        run: function () {}
+        content:"checkthatwe'reloggedin",
+        trigger:'.oe_topbar_name:contains("TheKing")',
+        run:function(){}
     },
 ]);
 });

@@ -1,29 +1,29 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.tests.common import TransactionCase
+fromflectra.tests.commonimportTransactionCase
 
 
-class TestName(TransactionCase):
+classTestName(TransactionCase):
 
-    def setUp(self):
+    defsetUp(self):
         super().setUp()
-        self.product_name = 'Product Test Name'
-        self.product_code = 'PTN'
-        self.product = self.env['product.product'].create({
-            'name': self.product_name,
-            'default_code': self.product_code,
+        self.product_name='ProductTestName'
+        self.product_code='PTN'
+        self.product=self.env['product.product'].create({
+            'name':self.product_name,
+            'default_code':self.product_code,
         })
 
-    def test_10_product_name(self):
-        display_name = self.product.display_name
-        self.assertEqual(display_name, "[%s] %s" % (self.product_code, self.product_name),
-                         "Code should be preprended the the name as the context is not preventing it.")
-        display_name = self.product.with_context(display_default_code=False).display_name
-        self.assertEqual(display_name, self.product_name,
-                         "Code should not be preprended to the name as context should prevent it.")
+    deftest_10_product_name(self):
+        display_name=self.product.display_name
+        self.assertEqual(display_name,"[%s]%s"%(self.product_code,self.product_name),
+                         "Codeshouldbepreprendedthethenameasthecontextisnotpreventingit.")
+        display_name=self.product.with_context(display_default_code=False).display_name
+        self.assertEqual(display_name,self.product_name,
+                         "Codeshouldnotbepreprendedtothenameascontextshouldpreventit.")
 
-    def test_default_code_and_negative_operator(self):
-        res = self.env['product.template'].name_search(name='PTN', operator='not ilike')
-        res_ids = [r[0] for r in res]
-        self.assertNotIn(self.product.id, res_ids)
+    deftest_default_code_and_negative_operator(self):
+        res=self.env['product.template'].name_search(name='PTN',operator='notilike')
+        res_ids=[r[0]forrinres]
+        self.assertNotIn(self.product.id,res_ids)

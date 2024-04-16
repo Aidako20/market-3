@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <template id="sale_report_product_product_replenishment" inherit_id="stock.report_product_product_replenishment">
-        <xpath expr="//tr[@name='draft_picking_out']" position="after">
-            <tr t-if="docs['draft_sale_qty']" name="draft_so_out">
-                <td colspan="2">Draft SO</td>
-                <td t-esc="-docs['draft_sale_qty']" class="text-right" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
-                <td t-esc="docs['uom']" groups="uom.group_uom"/>
+    <templateid="sale_report_product_product_replenishment"inherit_id="stock.report_product_product_replenishment">
+        <xpathexpr="//tr[@name='draft_picking_out']"position="after">
+            <trt-if="docs['draft_sale_qty']"name="draft_so_out">
+                <tdcolspan="2">DraftSO</td>
+                <tdt-esc="-docs['draft_sale_qty']"class="text-right"t-options='{"widget":"float","decimal_precision":"ProductUnitofMeasure"}'/>
+                <tdt-esc="docs['uom']"groups="uom.group_uom"/>
             </tr>
         </xpath>
     </template>

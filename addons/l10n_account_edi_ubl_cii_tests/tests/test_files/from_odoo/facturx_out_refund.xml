@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<rsm:CrossIndustryInvoice xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100">
+<?xmlversion='1.0'encoding='UTF-8'?>
+<rsm:CrossIndustryInvoicexmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100"xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100">
   <rsm:ExchangedDocumentContext>
     <ram:GuidelineSpecifiedDocumentContextParameter>
       <ram:ID>urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended</ram:ID>
@@ -9,10 +9,10 @@
     <ram:ID>RINV/2017/01/0001</ram:ID>
     <ram:TypeCode>381</ram:TypeCode>
     <ram:IssueDateTime>
-      <udt:DateTimeString format="102">20170101</udt:DateTimeString>
+      <udt:DateTimeStringformat="102">20170101</udt:DateTimeString>
     </ram:IssueDateTime>
     <ram:IncludedNote>
-      <ram:Content>test narration</ram:Content>
+      <ram:Content>testnarration</ram:Content>
     </ram:IncludedNote>
   </rsm:ExchangedDocument>
   <rsm:SupplyChainTradeTransaction>
@@ -38,7 +38,7 @@
         </ram:NetPriceProductTradePrice>
       </ram:SpecifiedLineTradeAgreement>
       <ram:SpecifiedLineTradeDelivery>
-        <ram:BilledQuantity unitCode="DZN">2.0</ram:BilledQuantity>
+        <ram:BilledQuantityunitCode="DZN">2.0</ram:BilledQuantity>
       </ram:SpecifiedLineTradeDelivery>
       <ram:SpecifiedLineTradeSettlement>
         <ram:ApplicableTradeTax>
@@ -67,7 +67,7 @@
         </ram:NetPriceProductTradePrice>
       </ram:SpecifiedLineTradeAgreement>
       <ram:SpecifiedLineTradeDelivery>
-        <ram:BilledQuantity unitCode="C62">10.0</ram:BilledQuantity>
+        <ram:BilledQuantityunitCode="C62">10.0</ram:BilledQuantity>
       </ram:SpecifiedLineTradeDelivery>
       <ram:SpecifiedLineTradeSettlement>
         <ram:ApplicableTradeTax>
@@ -96,7 +96,7 @@
         </ram:NetPriceProductTradePrice>
       </ram:SpecifiedLineTradeAgreement>
       <ram:SpecifiedLineTradeDelivery>
-        <ram:BilledQuantity unitCode="C62">-1.0</ram:BilledQuantity>
+        <ram:BilledQuantityunitCode="C62">-1.0</ram:BilledQuantity>
       </ram:SpecifiedLineTradeDelivery>
       <ram:SpecifiedLineTradeSettlement>
         <ram:ApplicableTradeTax>
@@ -116,20 +116,20 @@
         <ram:DefinedTradeContact>
           <ram:PersonName>partner_1</ram:PersonName>
           <ram:TelephoneUniversalCommunication>
-            <ram:CompleteNumber>+1 (650) 555-0111</ram:CompleteNumber>
+            <ram:CompleteNumber>+1(650)555-0111</ram:CompleteNumber>
           </ram:TelephoneUniversalCommunication>
           <ram:EmailURIUniversalCommunication>
-            <ram:URIID schemeID="SMTP">partner1@yourcompany.com</ram:URIID>
+            <ram:URIIDschemeID="SMTP">partner1@yourcompany.com</ram:URIID>
           </ram:EmailURIUniversalCommunication>
         </ram:DefinedTradeContact>
         <ram:PostalTradeAddress>
           <ram:PostcodeCode>75000</ram:PostcodeCode>
-          <ram:LineOne>Rue Jean Jaurès, 42</ram:LineOne>
+          <ram:LineOne>RueJeanJaurès,42</ram:LineOne>
           <ram:CityName>Paris</ram:CityName>
           <ram:CountryID>FR</ram:CountryID>
         </ram:PostalTradeAddress>
         <ram:SpecifiedTaxRegistration>
-          <ram:ID schemeID="VA">FR05677404089</ram:ID>
+          <ram:IDschemeID="VA">FR05677404089</ram:ID>
         </ram:SpecifiedTaxRegistration>
       </ram:SellerTradeParty>
       <ram:BuyerTradeParty>
@@ -139,12 +139,12 @@
         </ram:DefinedTradeContact>
         <ram:PostalTradeAddress>
           <ram:PostcodeCode>52330</ram:PostcodeCode>
-          <ram:LineOne>Rue Charles de Gaulle</ram:LineOne>
+          <ram:LineOne>RueCharlesdeGaulle</ram:LineOne>
           <ram:CityName>Colombey-les-Deux-Églises</ram:CityName>
           <ram:CountryID>FR</ram:CountryID>
         </ram:PostalTradeAddress>
         <ram:SpecifiedTaxRegistration>
-          <ram:ID schemeID="VA">FR35562153452</ram:ID>
+          <ram:IDschemeID="VA">FR35562153452</ram:ID>
         </ram:SpecifiedTaxRegistration>
       </ram:BuyerTradeParty>
       <ram:BuyerOrderReferencedDocument>
@@ -159,14 +159,14 @@
         </ram:DefinedTradeContact>
         <ram:PostalTradeAddress>
           <ram:PostcodeCode>52330</ram:PostcodeCode>
-          <ram:LineOne>Rue Charles de Gaulle</ram:LineOne>
+          <ram:LineOne>RueCharlesdeGaulle</ram:LineOne>
           <ram:CityName>Colombey-les-Deux-Églises</ram:CityName>
           <ram:CountryID>FR</ram:CountryID>
         </ram:PostalTradeAddress>
       </ram:ShipToTradeParty>
       <ram:ActualDeliverySupplyChainEvent>
         <ram:OccurrenceDateTime>
-          <udt:DateTimeString format="102">20170101</udt:DateTimeString>
+          <udt:DateTimeStringformat="102">20170101</udt:DateTimeString>
         </ram:OccurrenceDateTime>
       </ram:ActualDeliverySupplyChainEvent>
     </ram:ApplicableHeaderTradeDelivery>
@@ -195,15 +195,15 @@
         <ram:RateApplicablePercent>12.0</ram:RateApplicablePercent>
       </ram:ApplicableTradeTax>
       <ram:SpecifiedTradePaymentTerms>
-        <ram:Description>30% Advance End of Following Month</ram:Description>
+        <ram:Description>30%AdvanceEndofFollowingMonth</ram:Description>
         <ram:DueDateDateTime>
-          <udt:DateTimeString format="102">20170228</udt:DateTimeString>
+          <udt:DateTimeStringformat="102">20170228</udt:DateTimeString>
         </ram:DueDateDateTime>
       </ram:SpecifiedTradePaymentTerms>
       <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
         <ram:LineTotalAmount>2682.00</ram:LineTotalAmount>
         <ram:TaxBasisTotalAmount>2682.00</ram:TaxBasisTotalAmount>
-        <ram:TaxTotalAmount currencyID="USD">482.22</ram:TaxTotalAmount>
+        <ram:TaxTotalAmountcurrencyID="USD">482.22</ram:TaxTotalAmount>
         <ram:GrandTotalAmount>3164.22</ram:GrandTotalAmount>
         <ram:TotalPrepaidAmount>0.00</ram:TotalPrepaidAmount>
         <ram:DuePayableAmount>3164.22</ram:DuePayableAmount>

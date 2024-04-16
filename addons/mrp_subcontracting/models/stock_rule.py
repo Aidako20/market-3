@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class StockRule(models.Model):
-    _inherit = "stock.rule"
+classStockRule(models.Model):
+    _inherit="stock.rule"
 
-    def _push_prepare_move_copy_values(self, move_to_copy, new_date):
-        new_move_vals = super(StockRule, self)._push_prepare_move_copy_values(move_to_copy, new_date)
-        new_move_vals["is_subcontract"] = False
-        return new_move_vals
+    def_push_prepare_move_copy_values(self,move_to_copy,new_date):
+        new_move_vals=super(StockRule,self)._push_prepare_move_copy_values(move_to_copy,new_date)
+        new_move_vals["is_subcontract"]=False
+        returnnew_move_vals

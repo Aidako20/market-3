@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
-    <t t-name="stripe.error">
-        <div role="dialog" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <header class="modal-header">
-                        <h4 class="modal-title">Error</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
+    <tt-name="stripe.error">
+        <divrole="dialog"class="modalfade">
+            <divclass="modal-dialog">
+                <divclass="modal-content">
+                    <headerclass="modal-header">
+                        <h4class="modal-title">Error</h4>
+                        <buttontype="button"class="close"data-dismiss="modal"aria-label="Close">×</button>
                     </header>
-                    <main class="modal-body">
-                        <t t-esc="msg"></t>
+                    <mainclass="modal-body">
+                        <tt-esc="msg"></t>
                     </main>
-                    <footer class="modal-footer">
-                        <a role="button" href="#" class="btn btn-link btn-sm" data-dismiss="modal">Close</a>
+                    <footerclass="modal-footer">
+                        <arole="button"href="#"class="btnbtn-linkbtn-sm"data-dismiss="modal">Close</a>
                     </footer>
                 </div>
             </div>

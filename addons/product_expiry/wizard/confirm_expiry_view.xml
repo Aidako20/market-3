@@ -1,30 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="confirm_expiry_view" model="ir.ui.view">
-        <field name="name">Confirm</field>
-        <field name="model">expiry.picking.confirmation</field>
-        <field name="arch" type="xml">
-            <form string="Confirmation">
+    <recordid="confirm_expiry_view"model="ir.ui.view">
+        <fieldname="name">Confirm</field>
+        <fieldname="model">expiry.picking.confirmation</field>
+        <fieldname="arch"type="xml">
+            <formstring="Confirmation">
                 <p>
-                    <field name="description"/>
+                    <fieldname="description"/>
                 </p>
-                <field name="show_lots" invisible="1"/>
-                <field name="lot_ids" attrs="{'invisible': [('show_lots', '=', False)]}">
-                    <tree string="Expired Lot(s)">
-                        <field name="product_id"/>
-                        <field name="name"/>
+                <fieldname="show_lots"invisible="1"/>
+                <fieldname="lot_ids"attrs="{'invisible':[('show_lots','=',False)]}">
+                    <treestring="ExpiredLot(s)">
+                        <fieldname="product_id"/>
+                        <fieldname="name"/>
                     </tree>
                 </field>
                 <footer>
-                    <button name="process"
+                    <buttonname="process"
                         string="Confirm"
                         type="object"
                         class="btn-primary"/>
-                    <button name="process_no_expired"
-                        string="Proceed except for expired one"
+                    <buttonname="process_no_expired"
+                        string="Proceedexceptforexpiredone"
                         type="object"
                         class="btn-secondary"/>
-                    <button string="Discard"
+                    <buttonstring="Discard"
                         class="btn-secondary"
                         special="cancel"/>
                 </footer>

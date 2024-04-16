@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <!-- rename for demo-data -->
-        <record model="crm.team" id="team_sales_department">
-            <field name="name">Europe</field>
-            <field name="member_ids" eval="[(4, ref('base.user_demo'))]"/>
-            <field name="company_id" eval="False"/>
+    <datanoupdate="1">
+        <!--renamefordemo-data-->
+        <recordmodel="crm.team"id="team_sales_department">
+            <fieldname="name">Europe</field>
+            <fieldname="member_ids"eval="[(4,ref('base.user_demo'))]"/>
+            <fieldname="company_id"eval="False"/>
         </record>
-        <record id="base.user_demo" model="res.users">
-            <field name="groups_id" eval="[(4,ref('sales_team.group_sale_salesman'))]"/>
-        </record>
-
-        <record id="team_sales_department" model="crm.team">
-            <field name="member_ids" eval="[(4, ref('base.user_demo'))]"/>
+        <recordid="base.user_demo"model="res.users">
+            <fieldname="groups_id"eval="[(4,ref('sales_team.group_sale_salesman'))]"/>
         </record>
 
-        <record model="crm.team" id="crm_team_1">
-            <field name="name">America</field>
-            <field name="company_id" eval="False"/>
-            <field name="member_ids" eval="[(4, ref('base.user_demo'))]"/>
+        <recordid="team_sales_department"model="crm.team">
+            <fieldname="member_ids"eval="[(4,ref('base.user_demo'))]"/>
+        </record>
+
+        <recordmodel="crm.team"id="crm_team_1">
+            <fieldname="name">America</field>
+            <fieldname="company_id"eval="False"/>
+            <fieldname="member_ids"eval="[(4,ref('base.user_demo'))]"/>
         </record>
     </data>
 </flectra>

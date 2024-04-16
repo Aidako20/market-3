@@ -1,127 +1,127 @@
-flectra.define('website_event_track_exhibitor.event_exhibitor_connect', function (require) {
-'use strict';
+flectra.define('website_event_track_exhibitor.event_exhibitor_connect',function(require){
+'usestrict';
 
-var Dialog = require('web.Dialog');
-var publicWidget = require('web.public.widget');
+varDialog=require('web.Dialog');
+varpublicWidget=require('web.public.widget');
 
-var ExhibitorConnectClosedDialog = Dialog.extend({
-    events: _.extend({}, Dialog.prototype.events, {
-        'click .o_wesponsor_js_connect_modal_contry': '_onClickCountryFlag',
+varExhibitorConnectClosedDialog=Dialog.extend({
+    events:_.extend({},Dialog.prototype.events,{
+        'click.o_wesponsor_js_connect_modal_contry':'_onClickCountryFlag',
     }),
-    template: 'exhibitor.connect.closed.modal',
+    template:'exhibitor.connect.closed.modal',
 
     /**
-     * @override
-     * @param {Object} parent;
-     * @param {Object} options holding a sponsorData obj with required values to
-     *   display (see .xml for details);
+     *@override
+     *@param{Object}parent;
+     *@param{Object}optionsholdingasponsorDataobjwithrequiredvaluesto
+     *  display(see.xmlfordetails);
      */
-    init: function (parent, options) {
-        options = _.defaults(options || {}, {
-            size: 'medium',
-            renderHeader: false,
-            renderFooter: false,
-            backdrop: true,
+    init:function(parent,options){
+        options=_.defaults(options||{},{
+            size:'medium',
+            renderHeader:false,
+            renderFooter:false,
+            backdrop:true,
         });
-        this.sponsorId = options.sponsorId;
-        this._super(parent, options);
+        this.sponsorId=options.sponsorId;
+        this._super(parent,options);
     },
 
     /**
-     * @override
-     * Wait for fetching sponsor data;
+     *@override
+     *Waitforfetchingsponsordata;
      */
-    willStart: function () {
-        return Promise.all([
+    willStart:function(){
+        returnPromise.all([
             this._super(...arguments),
             this._fetchSponsor()
         ]);
     },
 
     //---------------------------------------------------------------------
-    // Private
+    //Private
     //---------------------------------------------------------------------
 
     /**
-     * @private
-     * @returns {Promise<*>} promise after fetching sponsor data, given its
-     *   sponsorId. Necessary to render template content;
+     *@private
+     *@returns{Promise<*>}promiseafterfetchingsponsordata,givenits
+     *  sponsorId.Necessarytorendertemplatecontent;
      */
-    _fetchSponsor: function () {
-        let self = this;
-        let rpcPromise = this._rpc({
-            route: `/event_sponsor/${this.sponsorId}/read`,
-        }).then(function (readData) {
-            self.sponsorData = readData;
-            return Promise.resolve();
+    _fetchSponsor:function(){
+        letself=this;
+        letrpcPromise=this._rpc({
+            route:`/event_sponsor/${this.sponsorId}/read`,
+        }).then(function(readData){
+            self.sponsorData=readData;
+            returnPromise.resolve();
         });
-        return rpcPromise;
+        returnrpcPromise;
     },
 });
 
 
-publicWidget.registry.eventExhibitorConnect = publicWidget.Widget.extend({
-    selector: '.o_wesponsor_js_connect',
-    xmlDependencies: ['/website_event_track_exhibitor/static/src/xml/event_exhibitor_connect.xml'],
+publicWidget.registry.eventExhibitorConnect=publicWidget.Widget.extend({
+    selector:'.o_wesponsor_js_connect',
+    xmlDependencies:['/website_event_track_exhibitor/static/src/xml/event_exhibitor_connect.xml'],
 
     /**
-     * @override
-     * @public
+     *@override
+     *@public
      */
-    init: function () {
+    init:function(){
         this._super(...arguments);
-        this._onConnectClick = _.debounce(this._onConnectClick, 500, true);
+        this._onConnectClick=_.debounce(this._onConnectClick,500,true);
     },
 
     /**
-     * @override
-     * @public
+     *@override
+     *@public
      */
-    start: function () {
-        var self = this;
-        return this._super(...arguments).then(function () {
-            self.eventIsOngoing = self.$el.data('eventIsOngoing') || false;
-            self.sponsorIsOngoing = self.$el.data('sponsorIsOngoing') || false;
-            self.isParticipating = self.$el.data('isParticipating') || false;
-            self.userEventManager = self.$el.data('userEventManager') || false;
-            self.$el.on('click', self._onConnectClick.bind(self));
+    start:function(){
+        varself=this;
+        returnthis._super(...arguments).then(function(){
+            self.eventIsOngoing=self.$el.data('eventIsOngoing')||false;
+            self.sponsorIsOngoing=self.$el.data('sponsorIsOngoing')||false;
+            self.isParticipating=self.$el.data('isParticipating')||false;
+            self.userEventManager=self.$el.data('userEventManager')||false;
+            self.$el.on('click',self._onConnectClick.bind(self));
         });
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //-------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {Event} ev
-     * On click, if sponsor is not within opening hours, display a modal instead
-     * of redirecting on the sponsor view;
+     *@private
+     *@param{Event}ev
+     *Onclick,ifsponsorisnotwithinopeninghours,displayamodalinstead
+     *ofredirectingonthesponsorview;
      */
-    _onConnectClick: function (ev) {
+    _onConnectClick:function(ev){
         ev.stopPropagation();
         ev.preventDefault();
 
-        if (this.userEventManager) {
-            document.location = this.$el.data('sponsorUrl');
-        } else if (!this.eventIsOngoing && !this.isParticipating) {
-            document.location = this.$el.data('registerUrl');
-        } else if (!this.eventIsOngoing || ! this.sponsorIsOngoing) {
-            return this._openClosedDialog();
-        } else {
-            document.location = this.$el.data('sponsorUrl');
+        if(this.userEventManager){
+            document.location=this.$el.data('sponsorUrl');
+        }elseif(!this.eventIsOngoing&&!this.isParticipating){
+            document.location=this.$el.data('registerUrl');
+        }elseif(!this.eventIsOngoing||!this.sponsorIsOngoing){
+            returnthis._openClosedDialog();
+        }else{
+            document.location=this.$el.data('sponsorUrl');
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
-    _openClosedDialog: function ($element) {
-        const sponsorId = this.$el.data('sponsorId');
-        return new ExhibitorConnectClosedDialog(
-            this, {
-                sponsorId: sponsorId,
+    _openClosedDialog:function($element){
+        constsponsorId=this.$el.data('sponsorId');
+        returnnewExhibitorConnectClosedDialog(
+            this,{
+                sponsorId:sponsorId,
             }
         ).open();
     },
@@ -129,9 +129,9 @@ publicWidget.registry.eventExhibitorConnect = publicWidget.Widget.extend({
 });
 
 
-return {
-    ExhibitorConnectClosedDialog: ExhibitorConnectClosedDialog,
-    eventExhibitorConnect: publicWidget.registry.eventExhibitorConnect,
+return{
+    ExhibitorConnectClosedDialog:ExhibitorConnectClosedDialog,
+    eventExhibitorConnect:publicWidget.registry.eventExhibitorConnect,
 };
 
 });

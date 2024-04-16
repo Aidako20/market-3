@@ -1,29 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="mail.ComposerSuggestion" owl="1">
-        <a class="o_ComposerSuggestion dropdown-item" t-att-class="{ 'active': props.isActive }" href="#" t-att-title="title()" role="menuitem" t-on-click="_onClick">
-            <t t-if="record">
-                <t t-if="isCannedResponse">
-                    <span class="o_ComposerSuggestion_part1"><t t-esc="record.source"/></span>
-                    <span class="o_ComposerSuggestion_part2"><t t-esc="record.substitution"/></span>
+    <tt-name="mail.ComposerSuggestion"owl="1">
+        <aclass="o_ComposerSuggestiondropdown-item"t-att-class="{'active':props.isActive}"href="#"t-att-title="title()"role="menuitem"t-on-click="_onClick">
+            <tt-if="record">
+                <tt-if="isCannedResponse">
+                    <spanclass="o_ComposerSuggestion_part1"><tt-esc="record.source"/></span>
+                    <spanclass="o_ComposerSuggestion_part2"><tt-esc="record.substitution"/></span>
                 </t>
-                <t t-if="isChannel">
-                    <span class="o_ComposerSuggestion_part1"><t t-esc="record.name"/></span>
+                <tt-if="isChannel">
+                    <spanclass="o_ComposerSuggestion_part1"><tt-esc="record.name"/></span>
                 </t>
-                <t t-if="isCommand">
-                    <span class="o_ComposerSuggestion_part1"><t t-esc="record.name"/></span>
-                    <span class="o_ComposerSuggestion_part2"><t t-esc="record.help"/></span>
+                <tt-if="isCommand">
+                    <spanclass="o_ComposerSuggestion_part1"><tt-esc="record.name"/></span>
+                    <spanclass="o_ComposerSuggestion_part2"><tt-esc="record.help"/></span>
                 </t>
-                <t t-if="isPartner">
+                <tt-if="isPartner">
                     <PartnerImStatusIcon
                         class="o_ComposerSuggestion_partnerImStatusIcon"
                         hasBackground="false"
                         partnerLocalId="record.localId"
                     />
-                    <span class="o_ComposerSuggestion_part1"><t t-esc="record.nameOrDisplayName"/></span>
-                    <t t-if="record.email">
-                        <span class="o_ComposerSuggestion_part2">(<t t-esc="record.email"/>)</span>
+                    <spanclass="o_ComposerSuggestion_part1"><tt-esc="record.nameOrDisplayName"/></span>
+                    <tt-if="record.email">
+                        <spanclass="o_ComposerSuggestion_part2">(<tt-esc="record.email"/>)</span>
                     </t>
                 </t>
             </t>

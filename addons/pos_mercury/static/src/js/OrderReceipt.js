@@ -1,24 +1,24 @@
-flectra.define('pos_mercury.OrderReceipt', function(require) {
-    'use strict';
+flectra.define('pos_mercury.OrderReceipt',function(require){
+    'usestrict';
 
-    const OrderReceipt = require('point_of_sale.OrderReceipt');
-    const Registries = require('point_of_sale.Registries');
+    constOrderReceipt=require('point_of_sale.OrderReceipt');
+    constRegistries=require('point_of_sale.Registries');
 
-    const PosMercuryOrderReceipt = OrderReceipt =>
-        class extends OrderReceipt {
+    constPosMercuryOrderReceipt=OrderReceipt=>
+        classextendsOrderReceipt{
             /**
-             * The receipt has signature if one of the paymentlines
-             * is paid with mercury.
+             *Thereceipthassignatureifoneofthepaymentlines
+             *ispaidwithmercury.
              */
-            get hasPosMercurySignature() {
-                for (let line of this.paymentlines) {
-                    if (line.mercury_data) return true;
+            gethasPosMercurySignature(){
+                for(letlineofthis.paymentlines){
+                    if(line.mercury_data)returntrue;
                 }
-                return false;
+                returnfalse;
             }
         };
 
-    Registries.Component.extend(OrderReceipt, PosMercuryOrderReceipt);
+    Registries.Component.extend(OrderReceipt,PosMercuryOrderReceipt);
 
-    return OrderReceipt;
+    returnOrderReceipt;
 });

@@ -1,60 +1,60 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <template id="ogone_form">
-            <input type="hidden" name="data_set" t-att-data-action-url="tx_url" data-remove-me=""/>
-            <!-- seller -->
-            <input type="hidden" name='PSPID' t-att-value='PSPID'/>
-            <input type="hidden" name='ORDERID' t-att-value='ORDERID'/>
-            <!-- cart -->
-            <input type="hidden" name='AMOUNT' t-att-value='AMOUNT or "0.0"'/>
-            <input type="hidden" name='CURRENCY' t-att-value='CURRENCY'/>
-            <!-- buyer -->
-            <input type="hidden" name='LANGUAGE' t-att-value='LANGUAGE'/>
-            <input type="hidden" name='CN' t-att-value='CN'/>
-            <input type="hidden" name='EMAIL' t-att-value='EMAIL'/>
-            <input type="hidden" name='OWNERZIP' t-att-value='OWNERZIP'/>
-            <input type="hidden" name='OWNERADDRESS' t-att-value='OWNERADDRESS'/>
-            <input type="hidden" name='OWNERCTY' t-att-value='OWNERCTY'/>
-            <input type="hidden" name='OWNERTOWN' t-att-value='OWNERTOWN'/>
-            <input type="hidden" name='OWNERTELNO' t-att-value='OWNERTELNO'/>
-            <t t-if="acquirer.save_token in ['ask', 'always']">
-                <input type="hidden" name='ALIAS' t-att-value='ALIAS'/>
-                <input type="hidden" name='ALIASUSAGE' t-att-value='ALIASUSAGE'/>
+        <templateid="ogone_form">
+            <inputtype="hidden"name="data_set"t-att-data-action-url="tx_url"data-remove-me=""/>
+            <!--seller-->
+            <inputtype="hidden"name='PSPID't-att-value='PSPID'/>
+            <inputtype="hidden"name='ORDERID't-att-value='ORDERID'/>
+            <!--cart-->
+            <inputtype="hidden"name='AMOUNT't-att-value='AMOUNTor"0.0"'/>
+            <inputtype="hidden"name='CURRENCY't-att-value='CURRENCY'/>
+            <!--buyer-->
+            <inputtype="hidden"name='LANGUAGE't-att-value='LANGUAGE'/>
+            <inputtype="hidden"name='CN't-att-value='CN'/>
+            <inputtype="hidden"name='EMAIL't-att-value='EMAIL'/>
+            <inputtype="hidden"name='OWNERZIP't-att-value='OWNERZIP'/>
+            <inputtype="hidden"name='OWNERADDRESS't-att-value='OWNERADDRESS'/>
+            <inputtype="hidden"name='OWNERCTY't-att-value='OWNERCTY'/>
+            <inputtype="hidden"name='OWNERTOWN't-att-value='OWNERTOWN'/>
+            <inputtype="hidden"name='OWNERTELNO't-att-value='OWNERTELNO'/>
+            <tt-if="acquirer.save_tokenin['ask','always']">
+                <inputtype="hidden"name='ALIAS't-att-value='ALIAS'/>
+                <inputtype="hidden"name='ALIASUSAGE't-att-value='ALIASUSAGE'/>
             </t>
-            <!-- before payment verification -->
-            <input type="hidden" name='SHASIGN' t-att-value='SHASIGN'/>
-            <!-- after payment parameters -->
-            <t t-if='PARAMPLUS'>
-                <input type="hidden" name="PARAMPLUS" t-att-value='PARAMPLUS'/>
+            <!--beforepaymentverification-->
+            <inputtype="hidden"name='SHASIGN't-att-value='SHASIGN'/>
+            <!--afterpaymentparameters-->
+            <tt-if='PARAMPLUS'>
+                <inputtype="hidden"name="PARAMPLUS"t-att-value='PARAMPLUS'/>
             </t>
-            <!-- redirection -->
-            <input type="hidden" name='ACCEPTURL' t-att-value='ACCEPTURL'/>
-            <input type="hidden" name='DECLINEURL' t-att-value='DECLINEURL'/>
-            <input type="hidden" name='EXCEPTIONURL' t-att-value='EXCEPTIONURL'/>
-            <input type="hidden" name='CANCELURL' t-att-value='CANCELURL'/>
+            <!--redirection-->
+            <inputtype="hidden"name='ACCEPTURL't-att-value='ACCEPTURL'/>
+            <inputtype="hidden"name='DECLINEURL't-att-value='DECLINEURL'/>
+            <inputtype="hidden"name='EXCEPTIONURL't-att-value='EXCEPTIONURL'/>
+            <inputtype="hidden"name='CANCELURL't-att-value='CANCELURL'/>
         </template>
 
-        <template id="ogone_s2s_form">
-            <input type="hidden" name="data_set" data-create-route="/payment/ogone/s2s/create_json_3ds"/>
-            <input type="hidden" name="acquirer_id" t-att-value="id"/>
-            <input t-if="return_url" type="hidden" name="return_url" t-att-value="return_url"/>
-            <input t-if="partner_id" type="hidden" name="partner_id" t-att-value="partner_id"/>
-            <div t-attf-class="row mt8 #{'' if bootstrap_formatting else 'o_card_brand_detail'}">
-                <div t-att-class="'form-group col-lg-12' if bootstrap_formatting else 'form-group'">
-                    <input type="tel" name="cc_number" id="cc_number" class="form-control" placeholder="Card number" data-is-required="true"/>
-                    <div class="card_placeholder"></div>
-                    <div class="visa"></div>
-                    <input type="hidden" name="cc_brand" value=""/>
+        <templateid="ogone_s2s_form">
+            <inputtype="hidden"name="data_set"data-create-route="/payment/ogone/s2s/create_json_3ds"/>
+            <inputtype="hidden"name="acquirer_id"t-att-value="id"/>
+            <inputt-if="return_url"type="hidden"name="return_url"t-att-value="return_url"/>
+            <inputt-if="partner_id"type="hidden"name="partner_id"t-att-value="partner_id"/>
+            <divt-attf-class="rowmt8#{''ifbootstrap_formattingelse'o_card_brand_detail'}">
+                <divt-att-class="'form-groupcol-lg-12'ifbootstrap_formattingelse'form-group'">
+                    <inputtype="tel"name="cc_number"id="cc_number"class="form-control"placeholder="Cardnumber"data-is-required="true"/>
+                    <divclass="card_placeholder"></div>
+                    <divclass="visa"></div>
+                    <inputtype="hidden"name="cc_brand"value=""/>
                 </div>
-                <div t-att-class="'form-group col-lg-5' if bootstrap_formatting else 'form-group'">
-                    <input type="text" name="cc_holder_name" id="cc_holder_name" class="form-control" placeholder="Cardholder name" data-is-required="true"/>
+                <divt-att-class="'form-groupcol-lg-5'ifbootstrap_formattingelse'form-group'">
+                    <inputtype="text"name="cc_holder_name"id="cc_holder_name"class="form-control"placeholder="Cardholdername"data-is-required="true"/>
                 </div>
-                <div t-att-class="'form-group col-lg-3' if bootstrap_formatting else 'form-group'">
-                    <input type="text" name="cc_expiry" id="cc_expiry" class="form-control" maxlength="7" placeholder="Expires (MM / YY)" data-is-required="true"/>
+                <divt-att-class="'form-groupcol-lg-3'ifbootstrap_formattingelse'form-group'">
+                    <inputtype="text"name="cc_expiry"id="cc_expiry"class="form-control"maxlength="7"placeholder="Expires(MM/YY)"data-is-required="true"/>
                 </div>
-                <div t-att-class="'form-group col-lg-4' if bootstrap_formatting else 'form-group'">
-                    <input type="text" name="cc_cvc" id="cc_cvc" class="form-control" maxlength="4" placeholder="CVC" data-is-required="true"/>
+                <divt-att-class="'form-groupcol-lg-4'ifbootstrap_formattingelse'form-group'">
+                    <inputtype="text"name="cc_cvc"id="cc_cvc"class="form-control"maxlength="4"placeholder="CVC"data-is-required="true"/>
                 </div>
             </div>
         </template>

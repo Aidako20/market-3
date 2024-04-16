@@ -1,31 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="hr_job_survey_inherit" model="ir.ui.view">
-        <field name="name">hr.job.form.inherit</field>
-        <field name="model">hr.job</field>
-        <field name="inherit_id" ref="hr_recruitment.hr_job_survey"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='user_id']" position="before">
-                <label for="survey_id" groups="survey.group_survey_user"/>
-                <div groups="survey.group_survey_user" class="o_row">
-                    <field name="survey_id"
-                        context="{'default_access_mode': 'token'}"/>
-                    <button string="Display Interview Form" name="action_print_survey" type="object" attrs="{'invisible':[('survey_id','=',False)]}" class="oe_link"/>
+    <recordid="hr_job_survey_inherit"model="ir.ui.view">
+        <fieldname="name">hr.job.form.inherit</field>
+        <fieldname="model">hr.job</field>
+        <fieldname="inherit_id"ref="hr_recruitment.hr_job_survey"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='user_id']"position="before">
+                <labelfor="survey_id"groups="survey.group_survey_user"/>
+                <divgroups="survey.group_survey_user"class="o_row">
+                    <fieldname="survey_id"
+                        context="{'default_access_mode':'token'}"/>
+                    <buttonstring="DisplayInterviewForm"name="action_print_survey"type="object"attrs="{'invisible':[('survey_id','=',False)]}"class="oe_link"/>
                 </div>
             </xpath>
         </field>
     </record>
-    <record id="view_hr_job_kanban_inherit" model="ir.ui.view">
-        <field name="name">hr.job.kanban.inherit</field>
-        <field name="model">hr.job</field>
-        <field name="inherit_id" ref="hr_recruitment.view_hr_job_kanban"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='manager_id']" position="after">
-                <field name="survey_id"/>
+    <recordid="view_hr_job_kanban_inherit"model="ir.ui.view">
+        <fieldname="name">hr.job.kanban.inherit</field>
+        <fieldname="model">hr.job</field>
+        <fieldname="inherit_id"ref="hr_recruitment.view_hr_job_kanban"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='manager_id']"position="after">
+                <fieldname="survey_id"/>
             </xpath>
-            <xpath expr='//a[@name="edit_job"]' position="after">
-                <a t-if="record.survey_id.raw_value" name="action_print_survey" type="object" title="Display Interview Form">Preview Interview</a>
-                <a t-if="!record.survey_id.raw_value" name="action_new_survey" type="object" title="Create Interview Form">Create Interview Form</a>
+            <xpathexpr='//a[@name="edit_job"]'position="after">
+                <at-if="record.survey_id.raw_value"name="action_print_survey"type="object"title="DisplayInterviewForm">PreviewInterview</a>
+                <at-if="!record.survey_id.raw_value"name="action_new_survey"type="object"title="CreateInterviewForm">CreateInterviewForm</a>
             </xpath>
         </field>
     </record>

@@ -1,28 +1,28 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-        <record id="applicant_get_refuse_reason_view_form" model="ir.ui.view">
-            <field name="name">applicant.get.refuse.reason.form</field>
-            <field name="model">applicant.get.refuse.reason</field>
-            <field name="arch" type="xml">
-                <form string="Refuse Reason">
-                    <group class="oe_title">
-                        <field name="refuse_reason_id"/>
-                        <field name="applicant_ids" invisible="1"/>
+        <recordid="applicant_get_refuse_reason_view_form"model="ir.ui.view">
+            <fieldname="name">applicant.get.refuse.reason.form</field>
+            <fieldname="model">applicant.get.refuse.reason</field>
+            <fieldname="arch"type="xml">
+                <formstring="RefuseReason">
+                    <groupclass="oe_title">
+                        <fieldname="refuse_reason_id"/>
+                        <fieldname="applicant_ids"invisible="1"/>
                     </group>
                     <footer>
-                        <button name="action_refuse_reason_apply" string="Submit" type="object" class="btn-primary"/>
-                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                        <buttonname="action_refuse_reason_apply"string="Submit"type="object"class="btn-primary"/>
+                        <buttonstring="Cancel"class="btn-secondary"special="cancel"/>
                     </footer>
                 </form>
             </field>
         </record>
 
-        <record id="applicant_get_refuse_reason_action" model="ir.actions.act_window">
-            <field name="name">Refuse Reason</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">applicant.get.refuse.reason</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="applicant_get_refuse_reason_view_form"/>
-            <field name="target">new</field>
+        <recordid="applicant_get_refuse_reason_action"model="ir.actions.act_window">
+            <fieldname="name">RefuseReason</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">applicant.get.refuse.reason</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="view_id"ref="applicant_get_refuse_reason_view_form"/>
+            <fieldname="target">new</field>
         </record>
 </flectra>

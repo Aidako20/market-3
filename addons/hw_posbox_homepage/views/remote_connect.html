@@ -1,25 +1,25 @@
-{% extends "layout.html" %}
-{% block head %}
+{%extends"layout.html"%}
+{%blockhead%}
     <script>
-        $(function () {
-            var upgrading = false;
-            $('#enable_debug').click(function () {
-                var auth_token = $('#auth_token').val();
-                if (auth_token == "") {
-                    alert('Please provide an authentication token.');
-                } else {
+        $(function(){
+            varupgrading=false;
+            $('#enable_debug').click(function(){
+                varauth_token=$('#auth_token').val();
+                if(auth_token==""){
+                    alert('Pleaseprovideanauthenticationtoken.');
+                }else{
                     $.ajax({
-                        url: '/enable_ngrok',
-                        data: {
-                            'auth_token': auth_token
+                        url:'/enable_ngrok',
+                        data:{
+                            'auth_token':auth_token
                         }
-                    }).always(function (response) {
-                        if (response === 'already running') {
-                            alert('Remote debugging already activated.');
-                        } else {
+                    }).always(function(response){
+                        if(response==='alreadyrunning'){
+                            alert('Remotedebuggingalreadyactivated.');
+                        }else{
                             $('#auth_token').attr('disabled','disabled');
-                            $('#enable_debug').html('Enabled remote debugging');
-                            $('#enable_debug').removeAttr('href', '')
+                            $('#enable_debug').html('Enabledremotedebugging');
+                            $('#enable_debug').removeAttr('href','')
                             $('#enable_debug').off('click');
                         }
                     });
@@ -27,16 +27,16 @@
             });
         });
     </script>
-{% endblock %}
-{% block content %}
-    <h2 class="text-center">Remote Debugging</h2>
-    <p class='text-red'>
-        This allows someone who give a ngrok authtoken to gain remote access to your IoT Box, and
-        thus your entire local network. Only enable this for someone
-        you trust.
+{%endblock%}
+{%blockcontent%}
+    <h2class="text-center">RemoteDebugging</h2>
+    <pclass='text-red'>
+        ThisallowssomeonewhogiveangrokauthtokentogainremoteaccesstoyourIoTBox,and
+        thusyourentirelocalnetwork.Onlyenablethisforsomeone
+        youtrust.
     </p>
-    <div class='text-center'>
-        <input type="text" id="auth_token" size="42" placeholder="Authentication Token"/> <br/>
-        <a class="btn" style="margin: 18px auto;" id="enable_debug" href="#">Enable Remote Debugging</a>
+    <divclass='text-center'>
+        <inputtype="text"id="auth_token"size="42"placeholder="AuthenticationToken"/><br/>
+        <aclass="btn"style="margin:18pxauto;"id="enable_debug"href="#">EnableRemoteDebugging</a>
     </div>
-{% endblock %}
+{%endblock%}

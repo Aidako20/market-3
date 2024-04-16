@@ -1,53 +1,53 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
-    <t t-name="website.prompt">
-        <div role="dialog" class="modal o_technical_modal" tabindex="-1">
-                <div class="modal-dialog">
-                <div class="modal-content">
-                    <header class="modal-header" t-if="window_title">
-                        <h3 class="modal-title"><t t-esc="window_title"/></h3>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
+    <tt-name="website.prompt">
+        <divrole="dialog"class="modalo_technical_modal"tabindex="-1">
+                <divclass="modal-dialog">
+                <divclass="modal-content">
+                    <headerclass="modal-header"t-if="window_title">
+                        <h3class="modal-title"><tt-esc="window_title"/></h3>
+                        <buttontype="button"class="close"data-dismiss="modal"aria-label="Close">×</button>
                     </header>
-                    <main class="modal-body">
-                        <form role="form" t-att-id="id">
-                            <div class="form-group row mb0">
-                                <label for="page-name" class="col-md-3 col-form-label">
-                                    <t t-esc="field_name"/>:
+                    <mainclass="modal-body">
+                        <formrole="form"t-att-id="id">
+                            <divclass="form-grouprowmb0">
+                                <labelfor="page-name"class="col-md-3col-form-label">
+                                    <tt-esc="field_name"/>:
                                 </label>
-                                <div class="col-md-9">
-                                    <input t-if="field_type == 'input'" type="text" class="form-control" required="required"/>
-                                    <textarea t-if="field_type == 'textarea'" class="form-control" required="required" rows="5"></textarea>
-                                    <select t-if="field_type == 'select'" class="form-control"></select>
+                                <divclass="col-md-9">
+                                    <inputt-if="field_type=='input'"type="text"class="form-control"required="required"/>
+                                    <textareat-if="field_type=='textarea'"class="form-control"required="required"rows="5"></textarea>
+                                    <selectt-if="field_type=='select'"class="form-control"></select>
                                 </div>
                             </div>
                         </form>
                     </main>
-                    <footer class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-continue">Continue</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Cancel">Cancel</button>
+                    <footerclass="modal-footer">
+                        <buttontype="button"class="btnbtn-primarybtn-continue">Continue</button>
+                        <buttontype="button"class="btnbtn-secondary"data-dismiss="modal"aria-label="Cancel">Cancel</button>
                     </footer>
                 </div>
             </div>
         </div>
     </t>
 
-    <t t-name="website.dependencies">
-        <p class="text-warning">Don't forget to update all links referring to this page.</p>
-        <t t-if="dependencies and _.keys(dependencies).length">
-            <p class="text-warning">We found these ones:</p>
-            <div t-foreach="dependencies" t-as="type" class="mb16">
-                <a class="collapsed fa fa-caret-right" data-toggle="collapse" t-attf-href="#collapseDependencies#{type_index}" aria-expanded="false" t-attf-aria-controls="collapseDependencies#{type_index}">
-                    <t t-esc="type"/>&amp;nbsp;
-                    <span class="text-muted"><t t-esc="type_value.length"/> found(s)</span>
+    <tt-name="website.dependencies">
+        <pclass="text-warning">Don'tforgettoupdatealllinksreferringtothispage.</p>
+        <tt-if="dependenciesand_.keys(dependencies).length">
+            <pclass="text-warning">Wefoundtheseones:</p>
+            <divt-foreach="dependencies"t-as="type"class="mb16">
+                <aclass="collapsedfafa-caret-right"data-toggle="collapse"t-attf-href="#collapseDependencies#{type_index}"aria-expanded="false"t-attf-aria-controls="collapseDependencies#{type_index}">
+                    <tt-esc="type"/>&amp;nbsp;
+                    <spanclass="text-muted"><tt-esc="type_value.length"/>found(s)</span>
                 </a>
-                <div t-attf-id="collapseDependencies#{type_index}" class="collapse" aria-expanded="false">
+                <divt-attf-id="collapseDependencies#{type_index}"class="collapse"aria-expanded="false">
                     <ul>
-                        <li t-foreach="type_value" t-as="error">
-                            <a t-if="!_.contains(['', '#', false], error.link)" t-att-href="error.link">
-                                <t t-raw="error.text"/>
+                        <lit-foreach="type_value"t-as="error">
+                            <at-if="!_.contains(['','#',false],error.link)"t-att-href="error.link">
+                                <tt-raw="error.text"/>
                             </a>
-                            <t t-else="">
-                                <t t-raw="error.text"/>
+                            <tt-else="">
+                                <tt-raw="error.text"/>
                             </t>
                         </li>
                     </ul>
@@ -56,45 +56,45 @@
         </t>
     </t>
 
-    <div t-name="website.delete_page">
-        <p>Are you sure you want to delete this page ?</p>
-        <t t-call="website.dependencies"/>
+    <divt-name="website.delete_page">
+        <p>Areyousureyouwanttodeletethispage?</p>
+        <tt-call="website.dependencies"/>
     </div>
 
-    <div t-name="website.rename_page">
-        <div class="card">
-            <div class="card-body">
+    <divt-name="website.rename_page">
+        <divclass="card">
+            <divclass="card-body">
                 <form>
-                    <div class="form-group row mb0">
-                        <label for="new_name" class="col-form-label col-md-4">Rename Page To:</label>
-                        <div class="col-md-8">
-                            <input type="text" class="form-control" id="new_name" placeholder="e.g. About Us"/>
+                    <divclass="form-grouprowmb0">
+                        <labelfor="new_name"class="col-form-labelcol-md-4">RenamePageTo:</label>
+                        <divclass="col-md-8">
+                            <inputtype="text"class="form-control"id="new_name"placeholder="e.g.AboutUs"/>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-        <t t-call="website.dependencies"/>
+        <tt-call="website.dependencies"/>
     </div>
 
-    <div t-name="website.duplicate_page_action_dialog">
-        <div class="form-group row">
-            <label class="col-form-label col-md-3" for="page_name">Page Name</label>
-            <div class="col-md-9">
-                <input type="text" class="form-control" id="page_name"/>
+    <divt-name="website.duplicate_page_action_dialog">
+        <divclass="form-grouprow">
+            <labelclass="col-form-labelcol-md-3"for="page_name">PageName</label>
+            <divclass="col-md-9">
+                <inputtype="text"class="form-control"id="page_name"/>
             </div>
         </div>
     </div>
 
-    <t t-name="website.oe_applications_menu">
-        <t t-as="menu" t-foreach="menu_data.children">
-            <a role="menuitem" class="dropdown-item"
-               t-att-data-action-id="menu.action ? menu.action.split(',')[1] : undefined"
-               t-att-data-action-model="menu.action ? menu.action.split(',')[0] : undefined"
+    <tt-name="website.oe_applications_menu">
+        <tt-as="menu"t-foreach="menu_data.children">
+            <arole="menuitem"class="dropdown-item"
+               t-att-data-action-id="menu.action?menu.action.split(',')[1]:undefined"
+               t-att-data-action-model="menu.action?menu.action.split(',')[0]:undefined"
                t-att-data-menu="menu.id"
                t-att-data-menu-xmlid="menu.xmlid"
-               t-att-href="_.str.sprintf('/web#menu_id=%s&amp;action=%s', menu.id, menu.action ? menu.action.split(',')[1] : '')">
-                <span class="oe_menu_text" t-esc="menu.name"/>
+               t-att-href="_.str.sprintf('/web#menu_id=%s&amp;action=%s',menu.id,menu.action?menu.action.split(',')[1]:'')">
+                <spanclass="oe_menu_text"t-esc="menu.name"/>
             </a>
         </t>
     </t>

@@ -1,72 +1,72 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-    <record model='l10n_ar.afip.responsibility.type' id='res_IVARI'>
-        <field name='code'>1</field>
-        <field name='name'>IVA Responsable Inscripto</field>
-        <field name='active' eval="True"/>
+    <recordmodel='l10n_ar.afip.responsibility.type'id='res_IVARI'>
+        <fieldname='code'>1</field>
+        <fieldname='name'>IVAResponsableInscripto</field>
+        <fieldname='active'eval="True"/>
     </record>
-    <record model='l10n_ar.afip.responsibility.type' id='res_IVARNI'>
-        <field name='code'>2</field>
-        <field name='name'>IVA Responsable no Inscripto</field>
-        <field name='active' eval="False"/>
+    <recordmodel='l10n_ar.afip.responsibility.type'id='res_IVARNI'>
+        <fieldname='code'>2</field>
+        <fieldname='name'>IVAResponsablenoInscripto</field>
+        <fieldname='active'eval="False"/>
     </record>
-    <record model='l10n_ar.afip.responsibility.type' id='res_IVANR'>
-        <field name='code'>3</field>
-        <field name='name'>IVA no Responsable</field>
-        <field name='active' eval="False"/>
+    <recordmodel='l10n_ar.afip.responsibility.type'id='res_IVANR'>
+        <fieldname='code'>3</field>
+        <fieldname='name'>IVAnoResponsable</field>
+        <fieldname='active'eval="False"/>
     </record>
-    <record model='l10n_ar.afip.responsibility.type' id='res_IVAE'>
-        <field name='code'>4</field>
-        <field name='name'>IVA Sujeto Exento</field>
-        <field name='active' eval="True"/>
+    <recordmodel='l10n_ar.afip.responsibility.type'id='res_IVAE'>
+        <fieldname='code'>4</field>
+        <fieldname='name'>IVASujetoExento</field>
+        <fieldname='active'eval="True"/>
     </record>
-    <record model='l10n_ar.afip.responsibility.type' id='res_CF'>
-        <field name='code'>5</field>
-        <field name='name'>Consumidor Final</field>
-        <field name='active' eval="True"/>
+    <recordmodel='l10n_ar.afip.responsibility.type'id='res_CF'>
+        <fieldname='code'>5</field>
+        <fieldname='name'>ConsumidorFinal</field>
+        <fieldname='active'eval="True"/>
     </record>
-    <record model='l10n_ar.afip.responsibility.type' id='res_RM'>
-        <field name='code'>6</field>
-        <field name='name'>Responsable Monotributo</field>
-        <field name='active' eval="True"/>
+    <recordmodel='l10n_ar.afip.responsibility.type'id='res_RM'>
+        <fieldname='code'>6</field>
+        <fieldname='name'>ResponsableMonotributo</field>
+        <fieldname='active'eval="True"/>
     </record>
-    <record model='l10n_ar.afip.responsibility.type' id='res_NOCATEG'>
-        <field name='code'>7</field>
-        <field name='name'>Sujeto no Categorizado</field>
-        <field name='active' eval="False"/>
+    <recordmodel='l10n_ar.afip.responsibility.type'id='res_NOCATEG'>
+        <fieldname='code'>7</field>
+        <fieldname='name'>SujetonoCategorizado</field>
+        <fieldname='active'eval="False"/>
     </record>
-    <record model='l10n_ar.afip.responsibility.type' id='res_EXT'>
-        <field name='code'>9</field>
-        <field name='name'>Cliente / Proveedor del Exterior</field>
-        <field name='active' eval="True"/>
+    <recordmodel='l10n_ar.afip.responsibility.type'id='res_EXT'>
+        <fieldname='code'>9</field>
+        <fieldname='name'>Cliente/ProveedordelExterior</field>
+        <fieldname='active'eval="True"/>
     </record>
-    <record model='l10n_ar.afip.responsibility.type' id='res_IVA_LIB'>
-        <field name='code'>10</field>
-        <field name='name'>IVA Liberado – Ley Nº 19.640</field>
-        <field name='active' eval="True"/>
+    <recordmodel='l10n_ar.afip.responsibility.type'id='res_IVA_LIB'>
+        <fieldname='code'>10</field>
+        <fieldname='name'>IVALiberado–LeyNº19.640</field>
+        <fieldname='active'eval="True"/>
     </record>
-    <record model='l10n_ar.afip.responsibility.type' id='res_IVARI_AP'>
-        <field name='code'>11</field>
-        <field name='name'>IVA Responsable Inscripto – Agente de Percepción</field>
-        <field name='active' eval="False"/>
+    <recordmodel='l10n_ar.afip.responsibility.type'id='res_IVARI_AP'>
+        <fieldname='code'>11</field>
+        <fieldname='name'>IVAResponsableInscripto–AgentedePercepción</field>
+        <fieldname='active'eval="False"/>
     </record>
-    <record model='l10n_ar.afip.responsibility.type' id='res_EVENTUAL'>
-        <field name='code'>12</field>
-        <field name='name'>Pequeño Contribuyente Eventual</field>
-        <field name='active' eval="False"/>
+    <recordmodel='l10n_ar.afip.responsibility.type'id='res_EVENTUAL'>
+        <fieldname='code'>12</field>
+        <fieldname='name'>PequeñoContribuyenteEventual</field>
+        <fieldname='active'eval="False"/>
     </record>
-    <record model='l10n_ar.afip.responsibility.type' id='res_MON_SOCIAL'>
-        <field name='code'>13</field>
-        <field name='name'>Monotributista Social</field>
-        <field name='active' eval="False"/>
+    <recordmodel='l10n_ar.afip.responsibility.type'id='res_MON_SOCIAL'>
+        <fieldname='code'>13</field>
+        <fieldname='name'>MonotributistaSocial</field>
+        <fieldname='active'eval="False"/>
     </record>
-    <record model='l10n_ar.afip.responsibility.type' id='res_EVENTUAL_SOCIAL'>
-        <field name='code'>14</field>
-        <field name='name'>Pequeño Contribuyente Eventual Social</field>
-        <field name='active' eval="False"/>
+    <recordmodel='l10n_ar.afip.responsibility.type'id='res_EVENTUAL_SOCIAL'>
+        <fieldname='code'>14</field>
+        <fieldname='name'>PequeñoContribuyenteEventualSocial</field>
+        <fieldname='active'eval="False"/>
     </record>
-    <record model='l10n_ar.afip.responsibility.type' id='res_IVA_NO_ALC'>
-        <field name='code'>99</field>
-        <field name='name'>IVA No Alcanzado</field>
+    <recordmodel='l10n_ar.afip.responsibility.type'id='res_IVA_NO_ALC'>
+        <fieldname='code'>99</field>
+        <fieldname='name'>IVANoAlcanzado</field>
     </record>
 </flectra>

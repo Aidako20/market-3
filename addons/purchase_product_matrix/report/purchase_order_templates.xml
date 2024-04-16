@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <template id="grid_purchaseorder_inherit" inherit_id="purchase.report_purchaseorder_document">
-        <xpath expr="//div[@id='informations']" position="after">
-            <t t-call="product_matrix.matrix">
-                <t t-set="order" t-value="o"/>
+    <templateid="grid_purchaseorder_inherit"inherit_id="purchase.report_purchaseorder_document">
+        <xpathexpr="//div[@id='informations']"position="after">
+            <tt-call="product_matrix.matrix">
+                <tt-set="order"t-value="o"/>
             </t>
         </xpath>
     </template>

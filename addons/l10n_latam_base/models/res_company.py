@@ -1,18 +1,18 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, fields, api
+fromflectraimportmodels,fields,api
 
 
-class ResCompany(models.Model):
-    _inherit = 'res.company'
+classResCompany(models.Model):
+    _inherit='res.company'
 
     @api.model
-    def create(self, vals):
-        """ If exists, use specific vat identification.type for the country of the company """
-        country_id = vals.get('country_id')
-        if country_id:
-            country_vat_type = self.env['l10n_latam.identification.type'].search(
-                [('is_vat', '=', True), ('country_id', '=', country_id)], limit=1)
-            if country_vat_type:
-                self = self.with_context(default_l10n_latam_identification_type_id=country_vat_type.id)
-        return super().create(vals)
+    defcreate(self,vals):
+        """Ifexists,usespecificvatidentification.typeforthecountryofthecompany"""
+        country_id=vals.get('country_id')
+        ifcountry_id:
+            country_vat_type=self.env['l10n_latam.identification.type'].search(
+                [('is_vat','=',True),('country_id','=',country_id)],limit=1)
+            ifcountry_vat_type:
+                self=self.with_context(default_l10n_latam_identification_type_id=country_vat_type.id)
+        returnsuper().create(vals)

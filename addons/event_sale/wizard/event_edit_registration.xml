@@ -1,40 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-        <record id="view_event_registration_editor_form" model="ir.ui.view">
-            <field name="name">registration.editor.form</field>
-            <field name="model">registration.editor</field>
-            <field name="arch" type="xml">
-                <form string="Registration">
-                    <p>Before confirming <field name="sale_order_id" readonly="1" class="oe_inline"/>
-                    please give details about the registrations</p>
-                    <field name="event_registration_ids">
-                        <tree string="Registration" editable="top" create="false" delete="false">
-                            <field name="event_id" readonly='1' force_save="1"/>
-                            <field name="registration_id" readonly='1' force_save="1"/>
-                            <field name="event_ticket_id" domain="[('event_id', '=', event_id)]" readonly='1' force_save="1"/>
-                            <field name="name"/>
-                            <field name="email"/>
-                            <field name="mobile" class="o_force_ltr"/>
-                            <field name="phone" class="o_force_ltr"/>
-                            <field name="sale_order_line_id" invisible="1"/>
+        <recordid="view_event_registration_editor_form"model="ir.ui.view">
+            <fieldname="name">registration.editor.form</field>
+            <fieldname="model">registration.editor</field>
+            <fieldname="arch"type="xml">
+                <formstring="Registration">
+                    <p>Beforeconfirming<fieldname="sale_order_id"readonly="1"class="oe_inline"/>
+                    pleasegivedetailsabouttheregistrations</p>
+                    <fieldname="event_registration_ids">
+                        <treestring="Registration"editable="top"create="false"delete="false">
+                            <fieldname="event_id"readonly='1'force_save="1"/>
+                            <fieldname="registration_id"readonly='1'force_save="1"/>
+                            <fieldname="event_ticket_id"domain="[('event_id','=',event_id)]"readonly='1'force_save="1"/>
+                            <fieldname="name"/>
+                            <fieldname="email"/>
+                            <fieldname="mobile"class="o_force_ltr"/>
+                            <fieldname="phone"class="o_force_ltr"/>
+                            <fieldname="sale_order_line_id"invisible="1"/>
                         </tree>
                     </field>
                     <footer>
-                        <button string="Confirm" name="action_make_registration" type="object" class="btn-primary"/>
-                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                        <buttonstring="Confirm"name="action_make_registration"type="object"class="btn-primary"/>
+                        <buttonstring="Cancel"class="btn-secondary"special="cancel"/>
                     </footer>
                 </form>
             </field>
         </record>
 
-        <record id="action_sale_order_event_registration" model="ir.actions.act_window">
-            <field name="name">Event Registrations</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">registration.editor</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="view_event_registration_editor_form"/>
-            <field name="target">new</field>
-            <field name="context">{}</field>
+        <recordid="action_sale_order_event_registration"model="ir.actions.act_window">
+            <fieldname="name">EventRegistrations</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">registration.editor</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="view_id"ref="view_event_registration_editor_form"/>
+            <fieldname="target">new</field>
+            <fieldname="context">{}</field>
         </record>
 </flectra>

@@ -1,52 +1,52 @@
-flectra.define('mail/static/src/models/dialog_manager/dialog_manager.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/dialog_manager/dialog_manager.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { one2many } = require('mail/static/src/model/model_field.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{one2many}=require('mail/static/src/model/model_field.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class DialogManager extends dependencies['mail.model'] {
+    classDialogManagerextendsdependencies['mail.model']{
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * @param {string} modelName
-         * @param {Object} [recordData]
+         *@param{string}modelName
+         *@param{Object}[recordData]
          */
-        open(modelName, recordData) {
-            if (!modelName) {
-                throw new Error("Dialog should have a link to a model");
+        open(modelName,recordData){
+            if(!modelName){
+                thrownewError("Dialogshouldhavealinktoamodel");
             }
-            const Model = this.env.models[modelName];
-            if (!Model) {
-                throw new Error(`No model exists with name ${modelName}`);
+            constModel=this.env.models[modelName];
+            if(!Model){
+                thrownewError(`Nomodelexistswithname${modelName}`);
             }
-            const record = Model.create(recordData);
-            const dialog = this.env.models['mail.dialog'].create({
-                manager: [['link', this]],
-                record: [['link', record]],
+            constrecord=Model.create(recordData);
+            constdialog=this.env.models['mail.dialog'].create({
+                manager:[['link',this]],
+                record:[['link',record]],
             });
-            return dialog;
+            returndialog;
         }
 
     }
 
-    DialogManager.fields = {
-        // FIXME: dependent on implementation that uses insert order in relations!!
-        dialogs: one2many('mail.dialog', {
-            inverse: 'manager',
-            isCausal: true,
+    DialogManager.fields={
+        //FIXME:dependentonimplementationthatusesinsertorderinrelations!!
+        dialogs:one2many('mail.dialog',{
+            inverse:'manager',
+            isCausal:true,
         }),
     };
 
-    DialogManager.modelName = 'mail.dialog_manager';
+    DialogManager.modelName='mail.dialog_manager';
 
-    return DialogManager;
+    returnDialogManager;
 }
 
-registerNewModel('mail.dialog_manager', factory);
+registerNewModel('mail.dialog_manager',factory);
 
 });

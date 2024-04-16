@@ -1,70 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="view_account_analytic_line_form_inherit_account" model="ir.ui.view">
-            <field name="name">account.analytic.line.form.inherit.account</field>
-            <field name="model">account.analytic.line</field>
-            <field name="inherit_id" ref="analytic.view_account_analytic_line_form"/>
-            <field name="arch" type="xml">
+        <recordid="view_account_analytic_line_form_inherit_account"model="ir.ui.view">
+            <fieldname="name">account.analytic.line.form.inherit.account</field>
+            <fieldname="model">account.analytic.line</field>
+            <fieldname="inherit_id"ref="analytic.view_account_analytic_line_form"/>
+            <fieldname="arch"type="xml">
                 <data>
-                    <xpath expr="//field[@name='tag_ids']" position="after">
-                        <field name="ref"/>
-                        <field name="partner_id"/>
+                    <xpathexpr="//field[@name='tag_ids']"position="after">
+                        <fieldname="ref"/>
+                        <fieldname="partner_id"/>
                     </xpath>
-                    <xpath expr="//field[@name='product_uom_id']" position="before">
-                        <field name="product_id"/>
+                    <xpathexpr="//field[@name='product_uom_id']"position="before">
+                        <fieldname="product_id"/>
                     </xpath>
-                    <group name="amount" position="after">
-                        <group/> <!-- put Accounting group under Amount group -->
-                        <group name="accounting" string="Accounting">
-                            <field name="general_account_id" options="{'no_create': True}"/>
-                            <field name="move_id" options="{'no_create': True}"/>
+                    <groupname="amount"position="after">
+                        <group/><!--putAccountinggroupunderAmountgroup-->
+                        <groupname="accounting"string="Accounting">
+                            <fieldname="general_account_id"options="{'no_create':True}"/>
+                            <fieldname="move_id"options="{'no_create':True}"/>
                         </group>
                     </group>
                 </data>
             </field>
         </record>
-        <record id="view_account_analytic_line_tree_inherit_account" model="ir.ui.view">
-            <field name="name">account.analytic.line.tree.inherit.account</field>
-            <field name="model">account.analytic.line</field>
-            <field name="inherit_id" ref="analytic.view_account_analytic_line_tree"/>
-            <field name="arch" type="xml">
+        <recordid="view_account_analytic_line_tree_inherit_account"model="ir.ui.view">
+            <fieldname="name">account.analytic.line.tree.inherit.account</field>
+            <fieldname="model">account.analytic.line</field>
+            <fieldname="inherit_id"ref="analytic.view_account_analytic_line_tree"/>
+            <fieldname="arch"type="xml">
                 <data>
-                    <xpath expr="//field[@name='account_id']" position="after">
-                        <field name="ref" invisible="context.get('to_invoice', False)" optional="hide"/>
-                        <field name="general_account_id" optional="hide"/>
-                        <field name="move_id" optional="hide"/>
-                        <field name="product_id" optional="hide"/>
+                    <xpathexpr="//field[@name='account_id']"position="after">
+                        <fieldname="ref"invisible="context.get('to_invoice',False)"optional="hide"/>
+                        <fieldname="general_account_id"optional="hide"/>
+                        <fieldname="move_id"optional="hide"/>
+                        <fieldname="product_id"optional="hide"/>
                     </xpath>
                 </data>
             </field>
         </record>
-        <record id="view_account_analytic_line_filter_inherit_account" model="ir.ui.view">
-            <field name="name">account.analytic.line.select.inherit.account</field>
-            <field name="model">account.analytic.line</field>
-            <field name="inherit_id" ref="analytic.view_account_analytic_line_filter"/>
-            <field name="arch" type="xml">
+        <recordid="view_account_analytic_line_filter_inherit_account"model="ir.ui.view">
+            <fieldname="name">account.analytic.line.select.inherit.account</field>
+            <fieldname="model">account.analytic.line</field>
+            <fieldname="inherit_id"ref="analytic.view_account_analytic_line_filter"/>
+            <fieldname="arch"type="xml">
                 <data>
-                    <xpath expr="//field[@name='date']" position="after">
-                        <field name="product_id"/>
-                        <field name="partner_id" filter_domain="[('partner_id','child_of',self)]"/>
+                    <xpathexpr="//field[@name='date']"position="after">
+                        <fieldname="product_id"/>
+                        <fieldname="partner_id"filter_domain="[('partner_id','child_of',self)]"/>
                     </xpath>
-                    <xpath expr="//group[@name='groupby']" position="after">
-                        <filter string="Financial Account" name="financialaccount" context="{'group_by':'general_account_id'}"/>
-                        <filter string="Product" name="product" context="{'group_by':'product_id'}"/>
-                        <filter string="Partner" name="partner" context="{'group_by':'partner_id'}"/>
+                    <xpathexpr="//group[@name='groupby']"position="after">
+                        <filterstring="FinancialAccount"name="financialaccount"context="{'group_by':'general_account_id'}"/>
+                        <filterstring="Product"name="product"context="{'group_by':'product_id'}"/>
+                        <filterstring="Partner"name="partner"context="{'group_by':'partner_id'}"/>
                     </xpath>
                 </data>
             </field>
         </record>
 
-        <record id="view_account_analytic_line_pivot" model="ir.ui.view">
-            <field name="name">account.analytic.line.pivot</field>
-            <field name="model">account.analytic.line</field>
-            <field name="inherit_id" ref="analytic.view_account_analytic_line_pivot"/>
-            <field name="arch" type="xml">
-                <field name="account_id" position="after">
-                    <field name="partner_id" type="row"/>
+        <recordid="view_account_analytic_line_pivot"model="ir.ui.view">
+            <fieldname="name">account.analytic.line.pivot</field>
+            <fieldname="model">account.analytic.line</field>
+            <fieldname="inherit_id"ref="analytic.view_account_analytic_line_pivot"/>
+            <fieldname="arch"type="xml">
+                <fieldname="account_id"position="after">
+                    <fieldname="partner_id"type="row"/>
                 </field>
             </field>
         </record>

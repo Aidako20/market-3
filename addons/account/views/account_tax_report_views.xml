@@ -1,102 +1,102 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
 
-        <record id="account_tax_report_tree" model="ir.ui.view">
-            <field name="name">account.tax.report.tree</field>
-            <field name="model">account.tax.report</field>
-            <field name="arch" type="xml">
+        <recordid="account_tax_report_tree"model="ir.ui.view">
+            <fieldname="name">account.tax.report.tree</field>
+            <fieldname="model">account.tax.report</field>
+            <fieldname="arch"type="xml">
                 <tree>
-                    <field name="name"/>
-                    <field name="country_id"/>
+                    <fieldname="name"/>
+                    <fieldname="country_id"/>
                 </tree>
             </field>
         </record>
 
-        <record id="account_tax_report_line_tree" model="ir.ui.view">
-            <field name="name">account.tax.report.line.tree</field>
-            <field name="model">account.tax.report.line</field>
-            <field name="arch" type="xml">
-                <tree create="1" delete="1">
-                    <field name="sequence" widget="handle"/>
-                    <field name="name"/>
-                    <field name="tag_name"/>
-                    <field name="code"/>
-                    <field name="formula"/>
+        <recordid="account_tax_report_line_tree"model="ir.ui.view">
+            <fieldname="name">account.tax.report.line.tree</field>
+            <fieldname="model">account.tax.report.line</field>
+            <fieldname="arch"type="xml">
+                <treecreate="1"delete="1">
+                    <fieldname="sequence"widget="handle"/>
+                    <fieldname="name"/>
+                    <fieldname="tag_name"/>
+                    <fieldname="code"/>
+                    <fieldname="formula"/>
                 </tree>
             </field>
         </record>
 
-        <record id="account_tax_report_form" model="ir.ui.view">
-            <field name="name">account.tax.report.form</field>
-            <field name="model">account.tax.report</field>
-            <field name="arch" type="xml">
+        <recordid="account_tax_report_form"model="ir.ui.view">
+            <fieldname="name">account.tax.report.form</field>
+            <fieldname="model">account.tax.report</field>
+            <fieldname="arch"type="xml">
                 <form>
                     <sheet>
                         <group>
                             <group>
-                                <field name="name"/>
+                                <fieldname="name"/>
                             </group>
                             <group>
-                                <field name="country_id"/>
+                                <fieldname="country_id"/>
                             </group>
                         </group>
 
-                        <field name="id" invisible="1"/>
-                        <field name="root_line_ids" context="{'default_report_id': id}"/>
+                        <fieldname="id"invisible="1"/>
+                        <fieldname="root_line_ids"context="{'default_report_id':id}"/>
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <record id="account_tax_report_line_form" model="ir.ui.view">
-            <field name="name">account.tax.report.line.form</field>
-            <field name="model">account.tax.report.line</field>
-            <field name="arch" type="xml">
+        <recordid="account_tax_report_line_form"model="ir.ui.view">
+            <fieldname="name">account.tax.report.line.form</field>
+            <fieldname="model">account.tax.report.line</field>
+            <fieldname="arch"type="xml">
                 <form>
                 <sheet>
                     <group>
                         <group>
-                            <field name="sequence" invisible="1"/>
-                            <field name="name"/>
-                            <field name="tag_name"/>
+                            <fieldname="sequence"invisible="1"/>
+                            <fieldname="name"/>
+                            <fieldname="tag_name"/>
                         </group>
                         <group>
-                            <field name="report_id" invisible="1"/>
-                            <field name="parent_id" readonly="1"/>
-                            <field name="code"/>
+                            <fieldname="report_id"invisible="1"/>
+                            <fieldname="parent_id"readonly="1"/>
+                            <fieldname="code"/>
                         </group>
                     </group>
                     <group>
-                        <field name="formula"/>
+                        <fieldname="formula"/>
                     </group>
-                    <group string="Sublines">
-                        <field name="children_line_ids" context="{'default_report_id': report_id}"/>
+                    <groupstring="Sublines">
+                        <fieldname="children_line_ids"context="{'default_report_id':report_id}"/>
                     </group>
                 </sheet>
                 </form>
             </field>
         </record>
 
-        <record id="account_tax_report_search" model="ir.ui.view">
-            <field name="name">account.tax.report.search</field>
-            <field name="model">account.tax.report</field>
-            <field name="arch" type="xml">
+        <recordid="account_tax_report_search"model="ir.ui.view">
+            <fieldname="name">account.tax.report.search</field>
+            <fieldname="model">account.tax.report</field>
+            <fieldname="arch"type="xml">
                 <search>
-                    <group expand="0" string="Group By">
-                        <field name="name"/>
-                        <field name="country_id"/>
+                    <groupexpand="0"string="GroupBy">
+                        <fieldname="name"/>
+                        <fieldname="country_id"/>
                     </group>
                 </search>
             </field>
         </record>
 
-        <record id="action_configure_tax_report" model="ir.actions.act_window">
-            <field name="name">Tax Reports</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">account.tax.report</field>
-            <field name="view_mode">tree,form</field>
-            <field name="view_id" ref="account_tax_report_tree"/>
+        <recordid="action_configure_tax_report"model="ir.actions.act_window">
+            <fieldname="name">TaxReports</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">account.tax.report</field>
+            <fieldname="view_mode">tree,form</field>
+            <fieldname="view_id"ref="account_tax_report_tree"/>
         </record>
 
     </data>

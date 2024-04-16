@@ -1,26 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
-    <t t-name="LoginScreen" owl="1">
-        <div class="login-overlay">
-            <div class="screen-login">
-                <div class="login-title"><small>Log in to </small>
-                    <t t-esc="shopName" />
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
+    <tt-name="LoginScreen"owl="1">
+        <divclass="login-overlay">
+            <divclass="screen-login">
+                <divclass="login-title"><small>Loginto</small>
+                    <tt-esc="shopName"/>
                 </div>
-                <div class="login-body">
-                    <span class="login-element">
-                        <img class="login-barcode-img"
-                             src="/point_of_sale/static/img/barcode.png" />
-                        <div class="login-barcode-text">Scan your badge</div>
+                <divclass="login-body">
+                    <spanclass="login-element">
+                        <imgclass="login-barcode-img"
+                             src="/point_of_sale/static/img/barcode.png"/>
+                        <divclass="login-barcode-text">Scanyourbadge</div>
                     </span>
-                    <span class="login-or">or</span>
-                    <span class="login-element">
-                        <button class="login-button select-employee"
-                                t-on-click="selectCashier">Select Cashier</button>
+                    <spanclass="login-or">or</span>
+                    <spanclass="login-element">
+                        <buttonclass="login-buttonselect-employee"
+                                t-on-click="selectCashier">SelectCashier</button>
                     </span>
                 </div>
-                <div class="login-footer">
+                <divclass="login-footer">
                     <small>
-                        <button class="login-button close-session" t-on-click="closeSession">Close session</button>
+                        <buttonclass="login-buttonclose-session"t-on-click="closeSession">Closesession</button>
                     </small>
                 </div>
             </div>

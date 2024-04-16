@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="report_coupon_code" model="ir.actions.report">
-            <field name="name">Coupon Code</field>
-            <field name="model">coupon.coupon</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">coupon.report_coupon_i18n</field>
-            <field name="report_file">coupon.report_coupon_i18n</field>
-            <field name="binding_model_id" ref="model_coupon_coupon"/>
-            <field name="binding_type">report</field>
+        <recordid="report_coupon_code"model="ir.actions.report">
+            <fieldname="name">CouponCode</field>
+            <fieldname="model">coupon.coupon</field>
+            <fieldname="report_type">qweb-pdf</field>
+            <fieldname="report_name">coupon.report_coupon_i18n</field>
+            <fieldname="report_file">coupon.report_coupon_i18n</field>
+            <fieldname="binding_model_id"ref="model_coupon_coupon"/>
+            <fieldname="binding_type">report</field>
         </record>
     </data>
 </flectra>

@@ -1,22 +1,22 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import models
+fromflectraimportmodels
 
-import re
+importre
 
-class AccountMove(models.Model):
-    _inherit = 'account.move'
+classAccountMove(models.Model):
+    _inherit='account.move'
 
-    def _get_ubl_values(self):
-        values = super(AccountMove, self)._get_ubl_values()
+    def_get_ubl_values(self):
+        values=super(AccountMove,self)._get_ubl_values()
 
-        # E-fff uses ubl_version 2.0, account_edi_ubl supports ubl_version 2.1 but generates 2.0 UBL
-        # so we only need to override the version to be compatible with E-FFF
-        values['ubl_version'] = 2.0
+        #E-fffusesubl_version2.0,account_edi_ublsupportsubl_version2.1butgenerates2.0UBL
+        #soweonlyneedtooverridetheversiontobecompatiblewithE-FFF
+        values['ubl_version']=2.0
 
-        return values
+        returnvalues
 
-    def _get_efff_name(self):
+    def_get_efff_name(self):
         self.ensure_one()
-        vat = self.company_id.partner_id.commercial_partner_id.vat
-        return 'efff_%s%s%s' % (vat or '', '_' if vat else '', re.sub('[\W_]', '', self.name))  # official naming convention
+        vat=self.company_id.partner_id.commercial_partner_id.vat
+        return'efff_%s%s%s'%(vator'','_'ifvatelse'',re.sub('[\W_]','',self.name)) #officialnamingconvention

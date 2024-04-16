@@ -1,118 +1,118 @@
-define(['summernote/core/range', 'summernote/core/dom'], function (range, dom) { // FLECTRA: suggest upstream
+define(['summernote/core/range','summernote/core/dom'],function(range,dom){//FLECTRA:suggestupstream
   /**
-   * @class editing.History
+   *@classediting.History
    *
-   * Editor History
+   *EditorHistory
    *
    */
-  var History = function ($editable) {
-    var stack = [], stackOffset = -1;
-    var editable = $editable[0];
+  varHistory=function($editable){
+    varstack=[],stackOffset=-1;
+    vareditable=$editable[0];
 
-    var makeSnapshot = function () {
-      var rng = range.create();
-      var emptyBookmark = {s: {path: [], offset: 0}, e: {path: [], offset: 0}};
+    varmakeSnapshot=function(){
+      varrng=range.create();
+      varemptyBookmark={s:{path:[],offset:0},e:{path:[],offset:0}};
 
-      return {
-        contents: $editable.html(),
-        bookmark: (rng && dom.ancestor(rng.sc, dom.isEditable) ? rng.bookmark(editable) : emptyBookmark)
-        // FLECTRA: suggest upstream added " && dom.ancestor(rng.sc, dom.isEditable) "
+      return{
+        contents:$editable.html(),
+        bookmark:(rng&&dom.ancestor(rng.sc,dom.isEditable)?rng.bookmark(editable):emptyBookmark)
+        //FLECTRA:suggestupstreamadded"&&dom.ancestor(rng.sc,dom.isEditable)"
       };
     };
 
-    var applySnapshot = function (snapshot) {
-      if (snapshot.contents !== null) {
+    varapplySnapshot=function(snapshot){
+      if(snapshot.contents!==null){
         $editable.html(snapshot.contents);
       }
-      if (snapshot.bookmark !== null) {
-        range.createFromBookmark(editable, snapshot.bookmark).select();
+      if(snapshot.bookmark!==null){
+        range.createFromBookmark(editable,snapshot.bookmark).select();
       }
     };
 
     /**
-     * undo
+     *undo
      */
-    this.undo = function () {
-      // Create snap shot if not yet recorded
-      if ($editable.html() !== stack[stackOffset].contents) {
+    this.undo=function(){
+      //Createsnapshotifnotyetrecorded
+      if($editable.html()!==stack[stackOffset].contents){
         this.recordUndo();
       }
 
-      if (0 < stackOffset) {
+      if(0<stackOffset){
         stackOffset--;
         applySnapshot(stack[stackOffset]);
       }
     };
 
-    /* FLECTRA: to suggest upstream */
-    this.hasUndo = function () {
-        return 0 < stackOffset;
+    /*FLECTRA:tosuggestupstream*/
+    this.hasUndo=function(){
+        return0<stackOffset;
     };
 
     /**
-     * redo
+     *redo
      */
-    this.redo = function () {
-      if (stack.length - 1 > stackOffset) {
+    this.redo=function(){
+      if(stack.length-1>stackOffset){
         stackOffset++;
         applySnapshot(stack[stackOffset]);
       }
     };
 
-    /* FLECTRA: to suggest upstream */
-    this.hasRedo = function () {
-        return stack.length - 1 > stackOffset;
+    /*FLECTRA:tosuggestupstream*/
+    this.hasRedo=function(){
+        returnstack.length-1>stackOffset;
     };
 
-    var last; // FLECTRA: to suggest upstream (since we may have several editor)
+    varlast;//FLECTRA:tosuggestupstream(sincewemayhaveseveraleditor)
     /**
-     * recorded undo
+     *recordedundo
      */
-    this.recordUndo = function () {
-      // FLECTRA: method totally rewritten
-      // test event for firefox: remove stack of history because event doesn't exists
-      var key = typeof event !== 'undefined' ? event : false;
-      if (key && !event.metaKey && !event.ctrlKey && !event.altKey && event.type === "keydown") {
-        key = event.type + "-";
-        if (event.which === 8 || event.which === 46) key += 'delete';
-        else if (event.which === 13) key += 'enter';
-        else key += 'other';
-        if (key === last) return;
-        hasUndo = true;
+    this.recordUndo=function(){
+      //FLECTRA:methodtotallyrewritten
+      //testeventforfirefox:removestackofhistorybecauseeventdoesn'texists
+      varkey=typeofevent!=='undefined'?event:false;
+      if(key&&!event.metaKey&&!event.ctrlKey&&!event.altKey&&event.type==="keydown"){
+        key=event.type+"-";
+        if(event.which===8||event.which===46)key+='delete';
+        elseif(event.which===13)key+='enter';
+        elsekey+='other';
+        if(key===last)return;
+        hasUndo=true;
       }
-      last = key;
+      last=key;
 
-      // Wash out stack after stackOffset
-      if (stack.length > stackOffset+1) {
-        stack = stack.slice(0, stackOffset+1);
+      //WashoutstackafterstackOffset
+      if(stack.length>stackOffset+1){
+        stack=stack.slice(0,stackOffset+1);
       }
 
-      if (stack[stackOffset] && stack[stackOffset].contents === $editable.html()) {
+      if(stack[stackOffset]&&stack[stackOffset].contents===$editable.html()){
         return;
       }
 
       stackOffset++;
 
-      // Create new snapshot and push it to the end
+      //Createnewsnapshotandpushittotheend
       stack.push(makeSnapshot());
     };
 
-    /* FLECTRA: to suggest upstream */
-    this.splitNext = function () {
-        last = false;
+    /*FLECTRA:tosuggestupstream*/
+    this.splitNext=function(){
+        last=false;
     };
 
-    /* FLECTRA: to suggest upstream */
-    this.reset = function () {
-        last = false;
-        stack = [];
-        stackOffset = -1;
+    /*FLECTRA:tosuggestupstream*/
+    this.reset=function(){
+        last=false;
+        stack=[];
+        stackOffset=-1;
         this.recordUndo();
     };
 
-    // Create first undo stack
+    //Createfirstundostack
     this.recordUndo();
   };
 
-  return History;
+  returnHistory;
 });

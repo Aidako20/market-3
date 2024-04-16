@@ -1,86 +1,86 @@
-flectra.define('snailmail/static/src/components/snailmail_notification_popover/snailmail_notification_popover.js', function (require) {
-'use strict';
+flectra.define('snailmail/static/src/components/snailmail_notification_popover/snailmail_notification_popover.js',function(require){
+'usestrict';
 
-const { Component } = owl;
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+const{Component}=owl;
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
 
-class SnailmailNotificationPopover extends Component {
+classSnailmailNotificationPopoverextendsComponent{
 
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
-        useStore(props => {
-            const message = this.env.models['mail.message'].get(props.messageLocalId);
-            const notifications = message ? message.notifications : [];
-            return {
-                message: message ? message.__state : undefined,
-                notifications: notifications.map(notification => notification ? notification.__state : undefined),
+        useStore(props=>{
+            constmessage=this.env.models['mail.message'].get(props.messageLocalId);
+            constnotifications=message?message.notifications:[];
+            return{
+                message:message?message.__state:undefined,
+                notifications:notifications.map(notification=>notification?notification.__state:undefined),
             };
-        }, {
-            compareDepth: {
-                notifications: 1,
+        },{
+            compareDepth:{
+                notifications:1,
             },
         });
     }
 
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    get iconClass() {
-        switch (this.notification.notification_status) {
-            case 'sent':
-                return 'fa fa-check';
-            case 'ready':
-                return 'fa fa-clock-o';
-            case 'canceled':
-                return 'fa fa-trash-o';
+    geticonClass(){
+        switch(this.notification.notification_status){
+            case'sent':
+                return'fafa-check';
+            case'ready':
+                return'fafa-clock-o';
+            case'canceled':
+                return'fafa-trash-o';
             default:
-                return 'fa fa-exclamation text-danger';
+                return'fafa-exclamationtext-danger';
         }
     }
 
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    get iconTitle() {
-        switch (this.notification.notification_status) {
-            case 'sent':
-                return this.env._t("Sent");
-            case 'ready':
-                return this.env._t("Awaiting Dispatch");
-            case 'canceled':
-                return this.env._t("Canceled");
+    geticonTitle(){
+        switch(this.notification.notification_status){
+            case'sent':
+                returnthis.env._t("Sent");
+            case'ready':
+                returnthis.env._t("AwaitingDispatch");
+            case'canceled':
+                returnthis.env._t("Canceled");
             default:
-                return this.env._t("Error");
+                returnthis.env._t("Error");
         }
     }
 
     /**
-     * @returns {mail.message}
+     *@returns{mail.message}
      */
-    get message() {
-        return this.env.models['mail.message'].get(this.props.messageLocalId);
+    getmessage(){
+        returnthis.env.models['mail.message'].get(this.props.messageLocalId);
     }
 
     /**
-     * @returns {mail.notification}
+     *@returns{mail.notification}
      */
-    get notification() {
-        // Messages from snailmail are considered to have at most one notification.
-        return this.message.notifications[0];
+    getnotification(){
+        //Messagesfromsnailmailareconsideredtohaveatmostonenotification.
+        returnthis.message.notifications[0];
     }
 
 }
 
-Object.assign(SnailmailNotificationPopover, {
-    props: {
-        messageLocalId: String,
+Object.assign(SnailmailNotificationPopover,{
+    props:{
+        messageLocalId:String,
     },
-    template: 'snailmail.SnailmailNotificationPopover',
+    template:'snailmail.SnailmailNotificationPopover',
 });
 
-return SnailmailNotificationPopover;
+returnSnailmailNotificationPopover;
 
 });

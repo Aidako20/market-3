@@ -1,336 +1,336 @@
-flectra.define('web.public.root', function (require) {
-'use strict';
+flectra.define('web.public.root',function(require){
+'usestrict';
 
-var ajax = require('web.ajax');
-var dom = require('web.dom');
-const env = require('web.public_env');
-var session = require('web.session');
-var utils = require('web.utils');
-var publicWidget = require('web.public.widget');
+varajax=require('web.ajax');
+vardom=require('web.dom');
+constenv=require('web.public_env');
+varsession=require('web.session');
+varutils=require('web.utils');
+varpublicWidget=require('web.public.widget');
 
-var publicRootRegistry = new publicWidget.RootWidgetRegistry();
+varpublicRootRegistry=newpublicWidget.RootWidgetRegistry();
 
-// Load localizations outside the PublicRoot to not wait for DOM ready (but
-// wait for them in PublicRoot)
-function getLang() {
-    var html = document.documentElement;
-    return (html.getAttribute('lang') || 'en_US').replace('-', '_');
+//LoadlocalizationsoutsidethePublicRoottonotwaitforDOMready(but
+//waitfortheminPublicRoot)
+functiongetLang(){
+    varhtml=document.documentElement;
+    return(html.getAttribute('lang')||'en_US').replace('-','_');
 }
-var lang = utils.get_cookie('frontend_lang') || getLang(); // FIXME the cookie value should maybe be in the ctx?
-var localeDef = ajax.loadJS('/web/webclient/locale/' + lang.replace('-', '_'));
+varlang=utils.get_cookie('frontend_lang')||getLang();//FIXMEthecookievalueshouldmaybebeinthectx?
+varlocaleDef=ajax.loadJS('/web/webclient/locale/'+lang.replace('-','_'));
 
 /**
- * Element which is designed to be unique and that will be the top-most element
- * in the widget hierarchy. So, all other widgets will be indirectly linked to
- * this Class instance. Its main role will be to retrieve RPC demands from its
- * children and handle them.
+ *Elementwhichisdesignedtobeuniqueandthatwillbethetop-mostelement
+ *inthewidgethierarchy.So,allotherwidgetswillbeindirectlylinkedto
+ *thisClassinstance.ItsmainrolewillbetoretrieveRPCdemandsfromits
+ *childrenandhandlethem.
  */
-var PublicRoot = publicWidget.RootWidget.extend({
-    events: _.extend({}, publicWidget.RootWidget.prototype.events || {}, {
-        'submit .js_website_submit_form': '_onWebsiteFormSubmit',
-        'click .js_disable_on_click': '_onDisableOnClick',
+varPublicRoot=publicWidget.RootWidget.extend({
+    events:_.extend({},publicWidget.RootWidget.prototype.events||{},{
+        'submit.js_website_submit_form':'_onWebsiteFormSubmit',
+        'click.js_disable_on_click':'_onDisableOnClick',
     }),
-    custom_events: _.extend({}, publicWidget.RootWidget.prototype.custom_events || {}, {
-        call_service: '_onCallService',
-        context_get: '_onContextGet',
-        main_object_request: '_onMainObjectRequest',
-        widgets_start_request: '_onWidgetsStartRequest',
-        widgets_stop_request: '_onWidgetsStopRequest',
+    custom_events:_.extend({},publicWidget.RootWidget.prototype.custom_events||{},{
+        call_service:'_onCallService',
+        context_get:'_onContextGet',
+        main_object_request:'_onMainObjectRequest',
+        widgets_start_request:'_onWidgetsStartRequest',
+        widgets_stop_request:'_onWidgetsStopRequest',
     }),
 
     /**
-     * @constructor
+     *@constructor
      */
-    init: function () {
-        this._super.apply(this, arguments);
-        this.env = env;
-        this.publicWidgets = [];
+    init:function(){
+        this._super.apply(this,arguments);
+        this.env=env;
+        this.publicWidgets=[];
     },
     /**
-     * @override
+     *@override
      */
-    willStart: function () {
-        // TODO would be even greater to wait for localeDef only when necessary
-        return Promise.all([
-            this._super.apply(this, arguments),
+    willStart:function(){
+        //TODOwouldbeevengreatertowaitforlocaleDefonlywhennecessary
+        returnPromise.all([
+            this._super.apply(this,arguments),
             session.is_bound,
             localeDef
         ]);
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var defs = [
-            this._super.apply(this, arguments),
+    start:function(){
+        vardefs=[
+            this._super.apply(this,arguments),
             this._startWidgets()
         ];
 
-        // Display image thumbnail
-        this.$(".o_image[data-mimetype^='image']").each(function () {
-            var $img = $(this);
-            if (/gif|jpe|jpg|png/.test($img.data('mimetype')) && $img.data('src')) {
-                $img.css('background-image', "url('" + $img.data('src') + "')");
+        //Displayimagethumbnail
+        this.$(".o_image[data-mimetype^='image']").each(function(){
+            var$img=$(this);
+            if(/gif|jpe|jpg|png/.test($img.data('mimetype'))&&$img.data('src')){
+                $img.css('background-image',"url('"+$img.data('src')+"')");
             }
         });
 
-        // Auto scroll
-        if (window.location.hash.indexOf("scrollTop=") > -1) {
-            this.el.scrollTop = +window.location.hash.match(/scrollTop=([0-9]+)/)[1];
+        //Autoscroll
+        if(window.location.hash.indexOf("scrollTop=")>-1){
+            this.el.scrollTop=+window.location.hash.match(/scrollTop=([0-9]+)/)[1];
         }
 
-        // Fix for IE:
-        if ($.fn.placeholder) {
-            $('input, textarea').placeholder();
+        //FixforIE:
+        if($.fn.placeholder){
+            $('input,textarea').placeholder();
         }
 
-        this.$el.children().on('error.datetimepicker', this._onDateTimePickerError.bind(this));
+        this.$el.children().on('error.datetimepicker',this._onDateTimePickerError.bind(this));
 
-        return Promise.all(defs);
+        returnPromise.all(defs);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Retrieves the global context of the public environment. This is the
-     * context which is automatically added to each RPC.
+     *Retrievestheglobalcontextofthepublicenvironment.Thisisthe
+     *contextwhichisautomaticallyaddedtoeachRPC.
      *
-     * @private
-     * @param {Object} [context]
-     * @returns {Object}
+     *@private
+     *@param{Object}[context]
+     *@returns{Object}
      */
-    _getContext: function (context) {
-        return _.extend({
-            'lang': getLang(),
-        }, context || {});
+    _getContext:function(context){
+        return_.extend({
+            'lang':getLang(),
+        },context||{});
     },
     /**
-     * Retrieves the global context of the public environment (as
-     * @see _getContext) but with extra informations that would be useless to
-     * send with each RPC.
+     *Retrievestheglobalcontextofthepublicenvironment(as
+     *@see_getContext)butwithextrainformationsthatwouldbeuselessto
+     *sendwitheachRPC.
      *
-     * @private
-     * @param {Object} [context]
-     * @returns {Object}
+     *@private
+     *@param{Object}[context]
+     *@returns{Object}
      */
-    _getExtraContext: function (context) {
-        return this._getContext(context);
+    _getExtraContext:function(context){
+        returnthis._getContext(context);
     },
     /**
-     * @private
-     * @param {Object} [options]
-     * @returns {Object}
+     *@private
+     *@param{Object}[options]
+     *@returns{Object}
      */
-    _getPublicWidgetsRegistry: function (options) {
-        return publicWidget.registry;
+    _getPublicWidgetsRegistry:function(options){
+        returnpublicWidget.registry;
     },
     /**
-     * As the root instance is designed to be unique, the associated
-     * registry has been instantiated outside of the class and is simply
-     * returned here.
+     *Astherootinstanceisdesignedtobeunique,theassociated
+     *registryhasbeeninstantiatedoutsideoftheclassandissimply
+     *returnedhere.
      *
-     * @private
-     * @override
+     *@private
+     *@override
      */
-    _getRegistry: function () {
-        return publicRootRegistry;
+    _getRegistry:function(){
+        returnpublicRootRegistry;
     },
     /**
-     * Creates an PublicWidget instance for each DOM element which matches the
-     * `selector` key of one of the registered widgets
-     * (@see PublicWidget.selector).
+     *CreatesanPublicWidgetinstanceforeachDOMelementwhichmatchesthe
+     *`selector`keyofoneoftheregisteredwidgets
+     *(@seePublicWidget.selector).
      *
-     * @private
-     * @param {jQuery} [$from]
-     *        only initialize the public widgets whose `selector` matches the
-     *        element or one of its descendant (default to the wrapwrap element)
-     * @param {Object} [options]
-     * @returns {Deferred}
+     *@private
+     *@param{jQuery}[$from]
+     *       onlyinitializethepublicwidgetswhose`selector`matchesthe
+     *       elementoroneofitsdescendant(defaulttothewrapwrapelement)
+     *@param{Object}[options]
+     *@returns{Deferred}
      */
-    _startWidgets: function ($from, options) {
-        var self = this;
+    _startWidgets:function($from,options){
+        varself=this;
 
-        if ($from === undefined) {
-            $from = this.$('#wrapwrap');
-            if (!$from.length) {
-                // TODO Remove this once all frontend layouts possess a
-                // #wrapwrap element (which is necessary for those pages to be
-                // adapted correctly if the user installs website).
-                $from = this.$el;
+        if($from===undefined){
+            $from=this.$('#wrapwrap');
+            if(!$from.length){
+                //TODORemovethisonceallfrontendlayoutspossessa
+                //#wrapwrapelement(whichisnecessaryforthosepagestobe
+                //adaptedcorrectlyiftheuserinstallswebsite).
+                $from=this.$el;
             }
         }
-        if (options === undefined) {
-            options = {};
+        if(options===undefined){
+            options={};
         }
 
         this._stopWidgets($from);
 
-        var defs = _.map(this._getPublicWidgetsRegistry(options), function (PublicWidget) {
-            var selector = PublicWidget.prototype.selector || '';
-            var $target = dom.cssFind($from, selector, true);
+        vardefs=_.map(this._getPublicWidgetsRegistry(options),function(PublicWidget){
+            varselector=PublicWidget.prototype.selector||'';
+            var$target=dom.cssFind($from,selector,true);
 
-            var defs = _.map($target, function (el) {
-                var widget = new PublicWidget(self, options);
+            vardefs=_.map($target,function(el){
+                varwidget=newPublicWidget(self,options);
                 self.publicWidgets.push(widget);
-                return widget.attachTo($(el));
+                returnwidget.attachTo($(el));
             });
-            return Promise.all(defs);
+            returnPromise.all(defs);
         });
-        return Promise.all(defs);
+        returnPromise.all(defs);
     },
     /**
-     * Destroys all registered widget instances. Website would need this before
-     * saving while in edition mode for example.
+     *Destroysallregisteredwidgetinstances.Websitewouldneedthisbefore
+     *savingwhileineditionmodeforexample.
      *
-     * @private
-     * @param {jQuery} [$from]
-     *        only stop the public widgets linked to the given element(s) or one
-     *        of its descendants
+     *@private
+     *@param{jQuery}[$from]
+     *       onlystopthepublicwidgetslinkedtothegivenelement(s)orone
+     *       ofitsdescendants
      */
-    _stopWidgets: function ($from) {
-        var removedWidgets = _.map(this.publicWidgets, function (widget) {
-            if (!$from
-                || $from.filter(widget.el).length
-                || $from.find(widget.el).length) {
+    _stopWidgets:function($from){
+        varremovedWidgets=_.map(this.publicWidgets,function(widget){
+            if(!$from
+                ||$from.filter(widget.el).length
+                ||$from.find(widget.el).length){
                 widget.destroy();
-                return widget;
+                returnwidget;
             }
-            return null;
+            returnnull;
         });
-        this.publicWidgets = _.difference(this.publicWidgets, removedWidgets);
+        this.publicWidgets=_.difference(this.publicWidgets,removedWidgets);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Calls the requested service from the env. Automatically adds the global
-     * context to RPCs.
+     *Callstherequestedservicefromtheenv.Automaticallyaddstheglobal
+     *contexttoRPCs.
      *
-     * @private
-     * @param {FlectraEvent} event
+     *@private
+     *@param{FlectraEvent}event
      */
-    _onCallService: function (ev) {
-        function _computeContext(context, noContextKeys) {
-            context = _.extend({}, this._getContext(), context);
-            if (noContextKeys) {
-                context = _.omit(context, noContextKeys);
+    _onCallService:function(ev){
+        function_computeContext(context,noContextKeys){
+            context=_.extend({},this._getContext(),context);
+            if(noContextKeys){
+                context=_.omit(context,noContextKeys);
             }
-            return JSON.parse(JSON.stringify(context));
+            returnJSON.parse(JSON.stringify(context));
         }
 
-        const payload = ev.data;
-        let args = payload.args || [];
-        if (payload.service === 'ajax' && payload.method === 'rpc') {
-            // ajax service uses an extra 'target' argument for rpc
-            args = args.concat(ev.target);
+        constpayload=ev.data;
+        letargs=payload.args||[];
+        if(payload.service==='ajax'&&payload.method==='rpc'){
+            //ajaxserviceusesanextra'target'argumentforrpc
+            args=args.concat(ev.target);
 
-            var route = args[0];
-            if (_.str.startsWith(route, '/web/dataset/call_kw/')) {
-                var params = args[1];
-                var options = args[2];
-                var noContextKeys;
-                if (options) {
-                    noContextKeys = options.noContextKeys;
-                    args[2] = _.omit(options, 'noContextKeys');
+            varroute=args[0];
+            if(_.str.startsWith(route,'/web/dataset/call_kw/')){
+                varparams=args[1];
+                varoptions=args[2];
+                varnoContextKeys;
+                if(options){
+                    noContextKeys=options.noContextKeys;
+                    args[2]=_.omit(options,'noContextKeys');
                 }
-                params.kwargs.context = _computeContext.call(this, params.kwargs.context, noContextKeys);
+                params.kwargs.context=_computeContext.call(this,params.kwargs.context,noContextKeys);
             }
-        } else if (payload.service === 'ajax' && payload.method === 'loadLibs') {
-            args[1] = _computeContext.call(this, args[1]);
+        }elseif(payload.service==='ajax'&&payload.method==='loadLibs'){
+            args[1]=_computeContext.call(this,args[1]);
         }
 
-        const service = this.env.services[payload.service];
-        const result = service[payload.method].apply(service, args);
+        constservice=this.env.services[payload.service];
+        constresult=service[payload.method].apply(service,args);
         payload.callback(result);
     },
     /**
-     * Called when someone asked for the global public context.
+     *Calledwhensomeoneaskedfortheglobalpubliccontext.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onContextGet: function (ev) {
-        if (ev.data.extra) {
+    _onContextGet:function(ev){
+        if(ev.data.extra){
             ev.data.callback(this._getExtraContext(ev.data.context));
-        } else {
+        }else{
             ev.data.callback(this._getContext(ev.data.context));
         }
     },
     /**
-     * Checks information about the page main object.
+     *Checksinformationaboutthepagemainobject.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onMainObjectRequest: function (ev) {
-        var repr = $('html').data('main-object');
-        var m = repr.match(/(.+)\((\d+),(.*)\)/);
+    _onMainObjectRequest:function(ev){
+        varrepr=$('html').data('main-object');
+        varm=repr.match(/(.+)\((\d+),(.*)\)/);
         ev.data.callback({
-            model: m[1],
-            id: m[2] | 0,
+            model:m[1],
+            id:m[2]|0,
         });
     },
     /**
-     * Called when the root is notified that the public widgets have to be
-     * (re)started.
+     *Calledwhentherootisnotifiedthatthepublicwidgetshavetobe
+     *(re)started.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onWidgetsStartRequest: function (ev) {
-        this._startWidgets(ev.data.$target, ev.data.options)
+    _onWidgetsStartRequest:function(ev){
+        this._startWidgets(ev.data.$target,ev.data.options)
             .then(ev.data.onSuccess)
             .guardedCatch(ev.data.onFailure);
     },
     /**
-     * Called when the root is notified that the public widgets have to be
-     * stopped.
+     *Calledwhentherootisnotifiedthatthepublicwidgetshavetobe
+     *stopped.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onWidgetsStopRequest: function (ev) {
+    _onWidgetsStopRequest:function(ev){
         this._stopWidgets(ev.data.$target);
     },
     /**
-     * @todo review
-     * @private
+     *@todoreview
+     *@private
      */
-    _onWebsiteFormSubmit: function (ev) {
-        var $buttons = $(ev.currentTarget).find('button[type="submit"], a.a-submit');
-        _.each($buttons, function (btn) {
-            var $btn = $(btn);
-            $btn.html('<i class="fa fa-spinner fa-spin"></i> ' + $btn.text());
-            $btn.prop('disabled', true);
+    _onWebsiteFormSubmit:function(ev){
+        var$buttons=$(ev.currentTarget).find('button[type="submit"],a.a-submit');
+        _.each($buttons,function(btn){
+            var$btn=$(btn);
+            $btn.html('<iclass="fafa-spinnerfa-spin"></i>'+$btn.text());
+            $btn.prop('disabled',true);
         });
     },
     /**
-     * Called when the root is notified that the button should be
-     * disabled after the first click.
+     *Calledwhentherootisnotifiedthatthebuttonshouldbe
+     *disabledafterthefirstclick.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onDisableOnClick: function (ev) {
+    _onDisableOnClick:function(ev){
         $(ev.currentTarget).addClass('disabled');
     },
     /**
-     * Library clears the wrong date format so just ignore error
+     *Libraryclearsthewrongdateformatsojustignoreerror
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onDateTimePickerError: function (ev) {
-        return false;
+    _onDateTimePickerError:function(ev){
+        returnfalse;
     },
 });
 
-return {
-    PublicRoot: PublicRoot,
-    publicRootRegistry: publicRootRegistry,
+return{
+    PublicRoot:PublicRoot,
+    publicRootRegistry:publicRootRegistry,
 };
 });

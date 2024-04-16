@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <record id="product_template_form_view" model="ir.ui.view">
-            <field name="name">product.template.form.inherit.email.template</field>
-            <field name="model">product.template</field>
-            <field name="inherit_id" ref="product.product_template_form_view"/>
-            <field name="arch" type="xml">
-                <xpath expr="//page[@name='sales']//group[@name='sale']" position="inside">
-                    <group name="email_template" string="Automatic Email at Invoice">
-                        <field name="email_template_id" string="Email Template" help="Send a product-specific email once the invoice is validated"
+        <recordid="product_template_form_view"model="ir.ui.view">
+            <fieldname="name">product.template.form.inherit.email.template</field>
+            <fieldname="model">product.template</field>
+            <fieldname="inherit_id"ref="product.product_template_form_view"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//page[@name='sales']//group[@name='sale']"position="inside">
+                    <groupname="email_template"string="AutomaticEmailatInvoice">
+                        <fieldname="email_template_id"string="EmailTemplate"help="Sendaproduct-specificemailoncetheinvoiceisvalidated"
                             domain="[('model','=','account.move')]"
                             context="{
                                 'form_view_ref':'product_email_template.email_template_form_simplified',
-                                'default_model': 'account.move',
-                                'default_subject': name,
-                                'default_name': name,
+                                'default_model':'account.move',
+                                'default_subject':name,
+                                'default_name':name,
                             }"/>
                     </group>
                 </xpath>

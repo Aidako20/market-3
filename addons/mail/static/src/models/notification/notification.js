@@ -1,80 +1,80 @@
-flectra.define('mail/static/src/models/notification/notification.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/notification/notification.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr, many2one } = require('mail/static/src/model/model_field.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{attr,many2one}=require('mail/static/src/model/model_field.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class Notification extends dependencies['mail.model'] {
+    classNotificationextendsdependencies['mail.model']{
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * @static
-         * @param {Object} data
-         * @return {Object}
+         *@static
+         *@param{Object}data
+         *@return{Object}
          */
-        static convertData(data) {
-            const data2 = {};
-            if ('failure_type' in data) {
-                data2.failure_type = data.failure_type;
+        staticconvertData(data){
+            constdata2={};
+            if('failure_type'indata){
+                data2.failure_type=data.failure_type;
             }
-            if ('id' in data) {
-                data2.id = data.id;
+            if('id'indata){
+                data2.id=data.id;
             }
-            if ('notification_status' in data) {
-                data2.notification_status = data.notification_status;
+            if('notification_status'indata){
+                data2.notification_status=data.notification_status;
             }
-            if ('notification_type' in data) {
-                data2.notification_type = data.notification_type;
+            if('notification_type'indata){
+                data2.notification_type=data.notification_type;
             }
-            if ('res_partner_id' in data) {
-                if (!data.res_partner_id) {
-                    data2.partner = [['unlink-all']];
-                } else {
-                    data2.partner = [
-                        ['insert', {
-                            display_name: data.res_partner_id[1],
-                            id: data.res_partner_id[0],
+            if('res_partner_id'indata){
+                if(!data.res_partner_id){
+                    data2.partner=[['unlink-all']];
+                }else{
+                    data2.partner=[
+                        ['insert',{
+                            display_name:data.res_partner_id[1],
+                            id:data.res_partner_id[0],
                         }],
                     ];
                 }
             }
-            return data2;
+            returndata2;
         }
 
         //----------------------------------------------------------------------
-        // Private
+        //Private
         //----------------------------------------------------------------------
 
         /**
-         * @override
+         *@override
          */
-        static _createRecordLocalId(data) {
-            return `${this.modelName}_${data.id}`;
+        static_createRecordLocalId(data){
+            return`${this.modelName}_${data.id}`;
         }
 
     }
 
-    Notification.fields = {
-        failure_type: attr(),
-        id: attr(),
-        message: many2one('mail.message', {
-            inverse: 'notifications',
+    Notification.fields={
+        failure_type:attr(),
+        id:attr(),
+        message:many2one('mail.message',{
+            inverse:'notifications',
         }),
-        notification_status: attr(),
-        notification_type: attr(),
-        partner: many2one('mail.partner'),
+        notification_status:attr(),
+        notification_type:attr(),
+        partner:many2one('mail.partner'),
     };
 
-    Notification.modelName = 'mail.notification';
+    Notification.modelName='mail.notification';
 
-    return Notification;
+    returnNotification;
 }
 
-registerNewModel('mail.notification', factory);
+registerNewModel('mail.notification',factory);
 
 });

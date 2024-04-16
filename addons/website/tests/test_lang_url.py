@@ -1,66 +1,66 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.addons.http_routing.models.ir_http import url_lang
-from flectra.addons.website.tools import MockRequest
-from flectra.tests import HttpCase, tagged
+fromflectra.addons.http_routing.models.ir_httpimporturl_lang
+fromflectra.addons.website.toolsimportMockRequest
+fromflectra.testsimportHttpCase,tagged
 
 
-@tagged('-at_install', 'post_install')
-class TestLangUrl(HttpCase):
-    def setUp(self):
-        super(TestLangUrl, self).setUp()
+@tagged('-at_install','post_install')
+classTestLangUrl(HttpCase):
+    defsetUp(self):
+        super(TestLangUrl,self).setUp()
 
-        # Simulate multi lang without loading translations
-        self.website = self.env.ref('website.default_website')
-        self.lang_fr = self.env['res.lang']._activate_lang('fr_FR')
-        self.lang_fr.write({'url_code': 'fr'})
-        self.website.language_ids = self.env.ref('base.lang_en') + self.lang_fr
-        self.website.default_lang_id = self.env.ref('base.lang_en')
+        #Simulatemultilangwithoutloadingtranslations
+        self.website=self.env.ref('website.default_website')
+        self.lang_fr=self.env['res.lang']._activate_lang('fr_FR')
+        self.lang_fr.write({'url_code':'fr'})
+        self.website.language_ids=self.env.ref('base.lang_en')+self.lang_fr
+        self.website.default_lang_id=self.env.ref('base.lang_en')
 
-    def test_01_url_lang(self):
-        with MockRequest(self.env, website=self.website):
-            self.assertEqual(url_lang('', '[lang]'), '/[lang]/hello', "`[lang]` is used to be replaced in the url_return after installing a language, it should not be replaced or removed.")
+    deftest_01_url_lang(self):
+        withMockRequest(self.env,website=self.website):
+            self.assertEqual(url_lang('','[lang]'),'/[lang]/hello',"`[lang]`isusedtobereplacedintheurl_returnafterinstallingalanguage,itshouldnotbereplacedorremoved.")
 
-    def test_02_url_redirect(self):
-        url = '/fr_WHATEVER/contactus'
-        r = self.url_open(url)
-        self.assertEqual(r.status_code, 200)
-        self.assertTrue(r.url.endswith('/fr/contactus'), "fr_WHATEVER should be forwarded to 'fr_FR' lang as closest match")
+    deftest_02_url_redirect(self):
+        url='/fr_WHATEVER/contactus'
+        r=self.url_open(url)
+        self.assertEqual(r.status_code,200)
+        self.assertTrue(r.url.endswith('/fr/contactus'),"fr_WHATEVERshouldbeforwardedto'fr_FR'langasclosestmatch")
 
-        url = '/fr_FR/contactus'
-        r = self.url_open(url)
-        self.assertEqual(r.status_code, 200)
-        self.assertTrue(r.url.endswith('/fr/contactus'), "lang in url should use url_code ('fr' in this case)")
+        url='/fr_FR/contactus'
+        r=self.url_open(url)
+        self.assertEqual(r.status_code,200)
+        self.assertTrue(r.url.endswith('/fr/contactus'),"langinurlshoulduseurl_code('fr'inthiscase)")
 
-    def test_03_url_cook_lang_not_available(self):
-        """ An activated res.lang should not be displayed in the frontend if not a website lang. """
-        self.website.language_ids = self.env.ref('base.lang_en')
-        r = self.url_open('/fr/contactus')
-        self.assertTrue('lang="en-US"' in r.text, "french should not be displayed as not a frontend lang")
+    deftest_03_url_cook_lang_not_available(self):
+        """Anactivatedres.langshouldnotbedisplayedinthefrontendifnotawebsitelang."""
+        self.website.language_ids=self.env.ref('base.lang_en')
+        r=self.url_open('/fr/contactus')
+        self.assertTrue('lang="en-US"'inr.text,"frenchshouldnotbedisplayedasnotafrontendlang")
 
-    def test_04_url_cook_lang_not_available(self):
-        """ `nearest_lang` should filter out lang not available in frontend.
-        Eg: 1. go in backend in english -> request.context['lang'] = `en_US`
-            2. go in frontend, the request.context['lang'] is passed through
-               `nearest_lang` which should not return english. More then a
-               misbehavior it will crash in website language selector template.
+    deftest_04_url_cook_lang_not_available(self):
+        """`nearest_lang`shouldfilteroutlangnotavailableinfrontend.
+        Eg:1.goinbackendinenglish->request.context['lang']=`en_US`
+            2.goinfrontend,therequest.context['lang']ispassedthrough
+               `nearest_lang`whichshouldnotreturnenglish.Morethena
+               misbehavioritwillcrashinwebsitelanguageselectortemplate.
         """
-        # 1. Load backend
-        self.authenticate('admin', 'admin')
-        r = self.url_open('/web')
-        self.assertTrue('"lang": "en_US"' in r.text, "ensure english was loaded")
+        #1.Loadbackend
+        self.authenticate('admin','admin')
+        r=self.url_open('/web')
+        self.assertTrue('"lang":"en_US"'inr.text,"ensureenglishwasloaded")
 
-        # 2. Remove en_US from frontend
-        self.website.language_ids = self.lang_fr
-        self.website.default_lang_id = self.lang_fr
+        #2.Removeen_USfromfrontend
+        self.website.language_ids=self.lang_fr
+        self.website.default_lang_id=self.lang_fr
 
-        # 3. Ensure visiting /contactus do not crash
-        url = '/contactus'
-        r = self.url_open(url)
-        self.assertEqual(r.status_code, 200)
-        self.assertTrue('lang="fr-FR"' in r.text, "Ensure contactus did not soft crash + loaded in correct lang")
+        #3.Ensurevisiting/contactusdonotcrash
+        url='/contactus'
+        r=self.url_open(url)
+        self.assertEqual(r.status_code,200)
+        self.assertTrue('lang="fr-FR"'inr.text,"Ensurecontactusdidnotsoftcrash+loadedincorrectlang")
 
-    def test_05_reroute_unicode(self):
-        res = self.url_open('/fr/привет')
-        self.assertEqual(res.status_code, 404, "Rerouting didn't crash because of non latin-1 characters")
+    deftest_05_reroute_unicode(self):
+        res=self.url_open('/fr/привет')
+        self.assertEqual(res.status_code,404,"Reroutingdidn'tcrashbecauseofnonlatin-1characters")

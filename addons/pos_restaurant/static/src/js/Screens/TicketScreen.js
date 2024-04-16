@@ -1,155 +1,155 @@
-flectra.define('pos_restaurant.TicketScreen', function (require) {
-    'use strict';
+flectra.define('pos_restaurant.TicketScreen',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const TicketScreen = require('point_of_sale.TicketScreen');
-    const Registries = require('point_of_sale.Registries');
-    const { useAutofocus } = require('web.custom_hooks');
-    const { posbus } = require('point_of_sale.utils');
-    const { parse } = require('web.field_utils');
-    const { useState, useContext } = owl.hooks;
+    constPosComponent=require('point_of_sale.PosComponent');
+    constTicketScreen=require('point_of_sale.TicketScreen');
+    constRegistries=require('point_of_sale.Registries');
+    const{useAutofocus}=require('web.custom_hooks');
+    const{posbus}=require('point_of_sale.utils');
+    const{parse}=require('web.field_utils');
+    const{useState,useContext}=owl.hooks;
 
-    const PosResTicketScreen = (TicketScreen) =>
-        class extends TicketScreen {
-            close() {
+    constPosResTicketScreen=(TicketScreen)=>
+        classextendsTicketScreen{
+            close(){
                 super.close();
-                if (!this.env.pos.config.iface_floorplan) {
-                    // Make sure the 'table-set' event is triggered
-                    // to properly rerender the components that listens to it.
+                if(!this.env.pos.config.iface_floorplan){
+                    //Makesurethe'table-set'eventistriggered
+                    //toproperlyrerenderthecomponentsthatlistenstoit.
                     posbus.trigger('table-set');
                 }
             }
-            get filterOptions() {
-                const { Payment, Open, Tipping } = this.getOrderStates();
-                var filterOptions = super.filterOptions;
-                if (this.env.pos.config.set_tip_after_payment) {
-                    var idx = filterOptions.indexOf(Payment);
-                    filterOptions[idx] = Open;
+            getfilterOptions(){
+                const{Payment,Open,Tipping}=this.getOrderStates();
+                varfilterOptions=super.filterOptions;
+                if(this.env.pos.config.set_tip_after_payment){
+                    varidx=filterOptions.indexOf(Payment);
+                    filterOptions[idx]=Open;
                 }
-                return [...filterOptions, Tipping];
+                return[...filterOptions,Tipping];
             }
-            get _screenToStatusMap() {
-                const { Open, Tipping } = this.getOrderStates();
-                return Object.assign(super._screenToStatusMap, {
-                    PaymentScreen: this.env.pos.config.set_tip_after_payment ? Open : super._screenToStatusMap.PaymentScreen,
-                    TipScreen: Tipping,
+            get_screenToStatusMap(){
+                const{Open,Tipping}=this.getOrderStates();
+                returnObject.assign(super._screenToStatusMap,{
+                    PaymentScreen:this.env.pos.config.set_tip_after_payment?Open:super._screenToStatusMap.PaymentScreen,
+                    TipScreen:Tipping,
                 });
             }
-            getTable(order) {
-                return `${order.table.floor.name} (${order.table.name})`;
+            getTable(order){
+                return`${order.table.floor.name}(${order.table.name})`;
             }
-            get _searchFields() {
-                if (!this.env.pos.config.iface_floorplan) {
-                    return super._searchFields;
+            get_searchFields(){
+                if(!this.env.pos.config.iface_floorplan){
+                    returnsuper._searchFields;
                 }
-                return Object.assign({}, super._searchFields, {
-                    Table: (order) => `${order.table.floor.name} (${order.table.name})`,
+                returnObject.assign({},super._searchFields,{
+                    Table:(order)=>`${order.table.floor.name}(${order.table.name})`,
                 });
             }
-            _setOrder(order) {
-                if (!this.env.pos.config.iface_floorplan || this.env.pos.table) {
+            _setOrder(order){
+                if(!this.env.pos.config.iface_floorplan||this.env.pos.table){
                     super._setOrder(order);
-                } else {
-                    this.env.pos.set_table(order.table, order);
+                }else{
+                    this.env.pos.set_table(order.table,order);
                 }
             }
-            get showNewTicketButton() {
-                return this.env.pos.config.iface_floorplan ? Boolean(this.env.pos.table) : super.showNewTicketButton;
+            getshowNewTicketButton(){
+                returnthis.env.pos.config.iface_floorplan?Boolean(this.env.pos.table):super.showNewTicketButton;
             }
-            get orderList() {
-                if (this.env.pos.table) {
-                    return super.orderList;
-                } else {
-                    return this.env.pos.get('orders').models;
+            getorderList(){
+                if(this.env.pos.table){
+                    returnsuper.orderList;
+                }else{
+                    returnthis.env.pos.get('orders').models;
                 }
             }
-            async settleTips() {
-                // set tip in each order
-                for (const order of this.filteredOrderList) {
-                    const tipAmount = parse.float(order.uiState.TipScreen.state.inputTipAmount || '0');
-                    const serverId = this.env.pos.validated_orders_name_server_id_map[order.name];
-                    if (!serverId) {
-                        console.warn(`${order.name} is not yet sync. Sync it to server before setting a tip.`);
-                    } else {
-                        const result = await this.setTip(order, serverId, tipAmount);
-                        if (!result) break;
+            asyncsettleTips(){
+                //settipineachorder
+                for(constorderofthis.filteredOrderList){
+                    consttipAmount=parse.float(order.uiState.TipScreen.state.inputTipAmount||'0');
+                    constserverId=this.env.pos.validated_orders_name_server_id_map[order.name];
+                    if(!serverId){
+                        console.warn(`${order.name}isnotyetsync.Syncittoserverbeforesettingatip.`);
+                    }else{
+                        constresult=awaitthis.setTip(order,serverId,tipAmount);
+                        if(!result)break;
                     }
                 }
             }
-            async setTip(order, serverId, amount) {
-                try {
-                    const paymentline = order.get_paymentlines()[0];
-                    if (paymentline.payment_method.payment_terminal) {
-                        paymentline.amount += amount;
-                        this.env.pos.set_order(order, {silent: true});
-                        await paymentline.payment_method.payment_terminal.send_payment_adjust(paymentline.cid);
+            asyncsetTip(order,serverId,amount){
+                try{
+                    constpaymentline=order.get_paymentlines()[0];
+                    if(paymentline.payment_method.payment_terminal){
+                        paymentline.amount+=amount;
+                        this.env.pos.set_order(order,{silent:true});
+                        awaitpaymentline.payment_method.payment_terminal.send_payment_adjust(paymentline.cid);
                     }
 
-                    if (!amount) {
-                        await this.setNoTip();
-                    } else {
-                        order.finalized = false;
+                    if(!amount){
+                        awaitthis.setNoTip();
+                    }else{
+                        order.finalized=false;
                         order.set_tip(amount);
-                        order.finalized = true;
-                        const tip_line = order.selected_orderline;
-                        await this.rpc({
-                            method: 'set_tip',
-                            model: 'pos.order',
-                            args: [serverId, tip_line.export_as_JSON()],
+                        order.finalized=true;
+                        consttip_line=order.selected_orderline;
+                        awaitthis.rpc({
+                            method:'set_tip',
+                            model:'pos.order',
+                            args:[serverId,tip_line.export_as_JSON()],
                         });
                     }
                     order.finalize();
-                    return true;
-                } catch (error) {
-                    const { confirmed } = await this.showPopup('ConfirmPopup', {
-                        title: 'Failed to set tip',
-                        body: `Failed to set tip to ${order.name}. Do you want to proceed on setting the tips of the remaining?`,
+                    returntrue;
+                }catch(error){
+                    const{confirmed}=awaitthis.showPopup('ConfirmPopup',{
+                        title:'Failedtosettip',
+                        body:`Failedtosettipto${order.name}.Doyouwanttoproceedonsettingthetipsoftheremaining?`,
                     });
-                    return confirmed;
+                    returnconfirmed;
                 }
             }
-            async setNoTip() {
-                await this.rpc({
-                    method: 'set_no_tip',
-                    model: 'pos.order',
-                    args: [serverId],
+            asyncsetNoTip(){
+                awaitthis.rpc({
+                    method:'set_no_tip',
+                    model:'pos.order',
+                    args:[serverId],
                 });
             }
-            getOrderStates() {
-                return Object.assign(super.getOrderStates(), {
-                    Tipping: this.env._t('Tipping'),
-                    Open: this.env._t('Open'),
+            getOrderStates(){
+                returnObject.assign(super.getOrderStates(),{
+                    Tipping:this.env._t('Tipping'),
+                    Open:this.env._t('Open'),
                 });
             }
         };
 
-    Registries.Component.extend(TicketScreen, PosResTicketScreen);
+    Registries.Component.extend(TicketScreen,PosResTicketScreen);
 
-    class TipCell extends PosComponent {
-        constructor() {
+    classTipCellextendsPosComponent{
+        constructor(){
             super(...arguments);
-            this.state = useState({ isEditing: false });
-            this.orderUiState = useContext(this.props.order.uiState.TipScreen);
-            useAutofocus({ selector: 'input' });
+            this.state=useState({isEditing:false});
+            this.orderUiState=useContext(this.props.order.uiState.TipScreen);
+            useAutofocus({selector:'input'});
         }
-        get tipAmountStr() {
-            return this.env.pos.format_currency(parse.float(this.orderUiState.inputTipAmount || '0'));
+        gettipAmountStr(){
+            returnthis.env.pos.format_currency(parse.float(this.orderUiState.inputTipAmount||'0'));
         }
-        onBlur() {
-            this.state.isEditing = false;
+        onBlur(){
+            this.state.isEditing=false;
         }
-        onKeydown(event) {
-            if (event.key === 'Enter') {
-                this.state.isEditing = false;
+        onKeydown(event){
+            if(event.key==='Enter'){
+                this.state.isEditing=false;
             }
         }
-        editTip() {
-            this.state.isEditing = true;
+        editTip(){
+            this.state.isEditing=true;
         }
     }
-    TipCell.template = 'TipCell';
+    TipCell.template='TipCell';
 
     Registries.Component.add(TipCell);
 
-    return { TicketScreen, TipCell };
+    return{TicketScreen,TipCell};
 });

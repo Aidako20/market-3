@@ -1,30 +1,30 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.sl = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.sl=factory()));
+}(this,function(){'usestrict';
 
-    var sl = {
-        code: "sl",
-        week: {
-            dow: 1,
-            doy: 7 // The week that contains Jan 1st is the first week of the year.
+    varsl={
+        code:"sl",
+        week:{
+            dow:1,
+            doy:7//TheweekthatcontainsJan1stisthefirstweekoftheyear.
         },
-        buttonText: {
-            prev: "Prejšnji",
-            next: "Naslednji",
-            today: "Trenutni",
-            month: "Mesec",
-            week: "Teden",
-            day: "Dan",
-            list: "Dnevni red"
+        buttonText:{
+            prev:"Prejšnji",
+            next:"Naslednji",
+            today:"Trenutni",
+            month:"Mesec",
+            week:"Teden",
+            day:"Dan",
+            list:"Dnevnired"
         },
-        weekLabel: "Teden",
-        allDayText: "Ves dan",
-        eventLimitText: "več",
-        noEventsMessage: "Ni dogodkov za prikaz"
+        weekLabel:"Teden",
+        allDayText:"Vesdan",
+        eventLimitText:"več",
+        noEventsMessage:"Nidogodkovzaprikaz"
     };
 
-    return sl;
+    returnsl;
 
 }));

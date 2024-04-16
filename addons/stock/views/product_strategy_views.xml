@@ -1,100 +1,100 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="stock_putaway_list" model="ir.ui.view">
-        <field name="name">stock.putaway.rule.tree</field>
-        <field name="model">stock.putaway.rule</field>
-        <field name="arch" type="xml">
-            <tree string="Putaway Rules" editable="bottom" sample='1'>
-                <field name="sequence" widget="handle"
-                       invisible="context.get('invisible_handle', False)"/>
-                <field name="product_id"
-                       attrs="{'readonly': [('category_id', '!=', False)], 'required': [('category_id', '=', False)]}"
-                       options="{'no_create': True, 'no_open': True}"
-                       readonly="context.get('single_product', False)"
+    <recordid="stock_putaway_list"model="ir.ui.view">
+        <fieldname="name">stock.putaway.rule.tree</field>
+        <fieldname="model">stock.putaway.rule</field>
+        <fieldname="arch"type="xml">
+            <treestring="PutawayRules"editable="bottom"sample='1'>
+                <fieldname="sequence"widget="handle"
+                       invisible="context.get('invisible_handle',False)"/>
+                <fieldname="product_id"
+                       attrs="{'readonly':[('category_id','!=',False)],'required':[('category_id','=',False)]}"
+                       options="{'no_create':True,'no_open':True}"
+                       readonly="context.get('single_product',False)"
                        force_save="1"/>
-                <field name="category_id"
-                       attrs="{'readonly': [('product_id', '!=', False)], 'required': [('product_id', '=', False)]}"
-                       options="{'no_create': True, 'no_open': True}"
-                       readonly="context.get('fixed_category', False)"
+                <fieldname="category_id"
+                       attrs="{'readonly':[('product_id','!=',False)],'required':[('product_id','=',False)]}"
+                       options="{'no_create':True,'no_open':True}"
+                       readonly="context.get('fixed_category',False)"
                        force_save="1"/>
-                <field name="location_in_id"
-                       options="{'no_create': True}"
-                       readonly="context.get('fixed_location', False)"/>
-                <field name="location_out_id" attrs="{'readonly': [('location_in_id', '=', False)]}"
-                       options="{'no_create': True}"/>
-                <field name="company_id" groups="stock.group_stock_multi_locations" force_save="1" readonly="context.get('fixed_location', False)" options="{'no_create': True}"/>
+                <fieldname="location_in_id"
+                       options="{'no_create':True}"
+                       readonly="context.get('fixed_location',False)"/>
+                <fieldname="location_out_id"attrs="{'readonly':[('location_in_id','=',False)]}"
+                       options="{'no_create':True}"/>
+                <fieldname="company_id"groups="stock.group_stock_multi_locations"force_save="1"readonly="context.get('fixed_location',False)"options="{'no_create':True}"/>
             </tree>
         </field>
     </record>
 
-    <record id="view_removal" model="ir.ui.view">
-        <field name="name">product.removal.form</field>
-        <field name="model">product.removal</field>
-        <field name="arch" type="xml">
-            <form string="Removal">
-                <group col="4">
-                    <field name="name"/>
-                    <field name="method"/>
+    <recordid="view_removal"model="ir.ui.view">
+        <fieldname="name">product.removal.form</field>
+        <fieldname="model">product.removal</field>
+        <fieldname="arch"type="xml">
+            <formstring="Removal">
+                <groupcol="4">
+                    <fieldname="name"/>
+                    <fieldname="method"/>
                 </group>
            </form>
         </field>
     </record>
 
-    <record id="action_putaway_tree" model="ir.actions.act_window">
-        <field name="name">Putaways Rules</field>
-        <field name="res_model">stock.putaway.rule</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="view_mode">tree</field>
-        <field name="view_id" ref="stock_putaway_list"/>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                No putaway rule found. Let's create one!
+    <recordid="action_putaway_tree"model="ir.actions.act_window">
+        <fieldname="name">PutawaysRules</field>
+        <fieldname="res_model">stock.putaway.rule</field>
+        <fieldname="type">ir.actions.act_window</field>
+        <fieldname="view_mode">tree</field>
+        <fieldname="view_id"ref="stock_putaway_list"/>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_smiling_face">
+                Noputawayrulefound.Let'screateone!
             </p><p>
-                Create new putaway rules to dispatch automatically specific products to their appropriate destination location upon receptions.
+                Createnewputawayrulestodispatchautomaticallyspecificproductstotheirappropriatedestinationlocationuponreceptions.
             </p>
         </field>
     </record>
 
-    <record id="view_putaway_search" model="ir.ui.view">
-        <field name="name">stock.putaway.rule.search</field>
-        <field name="model">stock.putaway.rule</field>
-        <field name="arch" type="xml">
-            <search string="Putaway Rules">
-                <field name="product_id"/>
-                <field name="category_id"/>
-                <field name="location_in_id"/>
-                <field name="location_out_id"/>
-                <group expand='0' string='Filters'>
-                    <filter name="filter_to_rules_on_product"
-                            string="Rules on Products"
-                            domain="[('product_id', '!=', False)]"/>
-                    <filter name="filter_to_rules_on_category"
-                            string="Rules on Categories"
-                            domain="[('category_id' ,'!=', False)]"/>
+    <recordid="view_putaway_search"model="ir.ui.view">
+        <fieldname="name">stock.putaway.rule.search</field>
+        <fieldname="model">stock.putaway.rule</field>
+        <fieldname="arch"type="xml">
+            <searchstring="PutawayRules">
+                <fieldname="product_id"/>
+                <fieldname="category_id"/>
+                <fieldname="location_in_id"/>
+                <fieldname="location_out_id"/>
+                <groupexpand='0'string='Filters'>
+                    <filtername="filter_to_rules_on_product"
+                            string="RulesonProducts"
+                            domain="[('product_id','!=',False)]"/>
+                    <filtername="filter_to_rules_on_category"
+                            string="RulesonCategories"
+                            domain="[('category_id','!=',False)]"/>
                 </group>
-                <group expand="0" string="Group By">
-                        <filter string="Location: When arrives to" name="location_in" context="{'group_by':'location_in_id'}"/>
-                        <filter string="Location: Store to" name="location_out" context="{'group_by':'location_out_id'}"/>
+                <groupexpand="0"string="GroupBy">
+                        <filterstring="Location:Whenarrivesto"name="location_in"context="{'group_by':'location_in_id'}"/>
+                        <filterstring="Location:Storeto"name="location_out"context="{'group_by':'location_out_id'}"/>
                     </group>
             </search>
         </field>
     </record>
 
-    <record model="ir.actions.act_window" id="category_open_putaway"> <!-- Putaway rules from category -->
-        <field name="name">Putaway Rules</field>
-        <field name="res_model">stock.putaway.rule</field>
-        <field name="context">{
-            'search_default_category_id': [active_id],
-            'fixed_category': True,
+    <recordmodel="ir.actions.act_window"id="category_open_putaway"><!--Putawayrulesfromcategory-->
+        <fieldname="name">PutawayRules</field>
+        <fieldname="res_model">stock.putaway.rule</field>
+        <fieldname="context">{
+            'search_default_category_id':[active_id],
+            'fixed_category':True,
         }</field>
     </record>
-    <record model="ir.actions.act_window" id="location_open_putaway"> <!-- Putaway rules from location -->
-        <field name="name">Putaway Rules</field>
-        <field name="res_model">stock.putaway.rule</field>
-        <field name="context">{'fixed_location': True}</field>
-        <field name="domain">['|', ('location_out_id', '=', active_id), ('location_in_id', '=', active_id)]</field>
+    <recordmodel="ir.actions.act_window"id="location_open_putaway"><!--Putawayrulesfromlocation-->
+        <fieldname="name">PutawayRules</field>
+        <fieldname="res_model">stock.putaway.rule</field>
+        <fieldname="context">{'fixed_location':True}</field>
+        <fieldname="domain">['|',('location_out_id','=',active_id),('location_in_id','=',active_id)]</field>
     </record>
 
-    <menuitem id="menu_putaway" name="Putaway Rules" parent="stock.menu_warehouse_config"
-        action="action_putaway_tree" sequence="5" groups="stock.group_stock_multi_locations"/>
+    <menuitemid="menu_putaway"name="PutawayRules"parent="stock.menu_warehouse_config"
+        action="action_putaway_tree"sequence="5"groups="stock.group_stock_multi_locations"/>
 </flectra>

@@ -1,315 +1,315 @@
-flectra.define('pos_restaurant.FloorScreen', function (require) {
-    'use strict';
+flectra.define('pos_restaurant.FloorScreen',function(require){
+    'usestrict';
 
-    const { debounce } = owl.utils;
-    const PosComponent = require('point_of_sale.PosComponent');
-    const { useState, useRef } = owl.hooks;
-    const { useListener } = require('web.custom_hooks');
-    const Registries = require('point_of_sale.Registries');
+    const{debounce}=owl.utils;
+    constPosComponent=require('point_of_sale.PosComponent');
+    const{useState,useRef}=owl.hooks;
+    const{useListener}=require('web.custom_hooks');
+    constRegistries=require('point_of_sale.Registries');
 
-    class FloorScreen extends PosComponent {
+    classFloorScreenextendsPosComponent{
         /**
-         * @param {Object} props
-         * @param {Object} props.floor
+         *@param{Object}props
+         *@param{Object}props.floor
          */
-        constructor() {
+        constructor(){
             super(...arguments);
-            this._setTableColor = debounce(this._setTableColor, 70);
-            this._setFloorColor = debounce(this._setFloorColor, 70);
-            useListener('select-table', this._onSelectTable);
-            useListener('deselect-table', this._onDeselectTable);
-            useListener('save-table', this._onSaveTable);
-            useListener('create-table', this._createTable);
-            useListener('duplicate-table', this._duplicateTable);
-            useListener('rename-table', this._renameTable);
-            useListener('change-seats-num', this._changeSeatsNum);
-            useListener('change-shape', this._changeShape);
-            useListener('set-table-color', this._setTableColor);
-            useListener('set-floor-color', this._setFloorColor);
-            useListener('delete-table', this._deleteTable);
-            const floor = this.props.floor ? this.props.floor : this.env.pos.floors[0];
-            this.state = useState({
-                selectedFloorId: floor.id,
-                selectedTableId: null,
-                isEditMode: false,
-                floorBackground: floor.background_color,
-                floorMapScrollTop: 0,
+            this._setTableColor=debounce(this._setTableColor,70);
+            this._setFloorColor=debounce(this._setFloorColor,70);
+            useListener('select-table',this._onSelectTable);
+            useListener('deselect-table',this._onDeselectTable);
+            useListener('save-table',this._onSaveTable);
+            useListener('create-table',this._createTable);
+            useListener('duplicate-table',this._duplicateTable);
+            useListener('rename-table',this._renameTable);
+            useListener('change-seats-num',this._changeSeatsNum);
+            useListener('change-shape',this._changeShape);
+            useListener('set-table-color',this._setTableColor);
+            useListener('set-floor-color',this._setFloorColor);
+            useListener('delete-table',this._deleteTable);
+            constfloor=this.props.floor?this.props.floor:this.env.pos.floors[0];
+            this.state=useState({
+                selectedFloorId:floor.id,
+                selectedTableId:null,
+                isEditMode:false,
+                floorBackground:floor.background_color,
+                floorMapScrollTop:0,
             });
-            this.floorMapRef = useRef('floor-map-ref');
+            this.floorMapRef=useRef('floor-map-ref');
         }
-        patched() {
-            this.floorMapRef.el.style.background = this.state.floorBackground;
-            this.state.floorMapScrollTop = this.floorMapRef.el.getBoundingClientRect().top;
+        patched(){
+            this.floorMapRef.el.style.background=this.state.floorBackground;
+            this.state.floorMapScrollTop=this.floorMapRef.el.getBoundingClientRect().top;
         }
-        mounted() {
-            if (this.env.pos.table) {
+        mounted(){
+            if(this.env.pos.table){
                 this.env.pos.set_table(null);
             }
-            this.floorMapRef.el.style.background = this.state.floorBackground;
-            this.state.floorMapScrollTop = this.floorMapRef.el.getBoundingClientRect().top;
-            // call _tableLongpolling once then set interval of 5sec.
+            this.floorMapRef.el.style.background=this.state.floorBackground;
+            this.state.floorMapScrollTop=this.floorMapRef.el.getBoundingClientRect().top;
+            //call_tableLongpollingoncethensetintervalof5sec.
             this._tableLongpolling();
-            this.tableLongpolling = setInterval(this._tableLongpolling.bind(this), 5000);
+            this.tableLongpolling=setInterval(this._tableLongpolling.bind(this),5000);
         }
-        willUnmount() {
+        willUnmount(){
             clearInterval(this.tableLongpolling);
         }
-        get activeFloor() {
-            return this.env.pos.floors_by_id[this.state.selectedFloorId];
+        getactiveFloor(){
+            returnthis.env.pos.floors_by_id[this.state.selectedFloorId];
         }
-        get activeTables() {
-            return this.activeFloor.tables;
+        getactiveTables(){
+            returnthis.activeFloor.tables;
         }
-        get isFloorEmpty() {
-            return this.activeTables.length === 0;
+        getisFloorEmpty(){
+            returnthis.activeTables.length===0;
         }
-        get selectedTable() {
-            return this.state.selectedTableId !== null
-                ? this.env.pos.tables_by_id[this.state.selectedTableId]
-                : false;
+        getselectedTable(){
+            returnthis.state.selectedTableId!==null
+                ?this.env.pos.tables_by_id[this.state.selectedTableId]
+                :false;
         }
-        selectFloor(floor) {
-            this.state.selectedFloorId = floor.id;
-            this.state.floorBackground = this.activeFloor.background_color;
-            this.state.isEditMode = false;
-            this.state.selectedTableId = null;
+        selectFloor(floor){
+            this.state.selectedFloorId=floor.id;
+            this.state.floorBackground=this.activeFloor.background_color;
+            this.state.isEditMode=false;
+            this.state.selectedTableId=null;
         }
-        toggleEditMode() {
-            this.state.isEditMode = !this.state.isEditMode;
-            this.state.selectedTableId = null;
+        toggleEditMode(){
+            this.state.isEditMode=!this.state.isEditMode;
+            this.state.selectedTableId=null;
         }
-        async _createTable() {
-            const newTable = await this._createTableHelper();
-            if (newTable) {
-                this.state.selectedTableId = newTable.id;
+        async_createTable(){
+            constnewTable=awaitthis._createTableHelper();
+            if(newTable){
+                this.state.selectedTableId=newTable.id;
             }
         }
-        async _duplicateTable() {
-            if (!this.selectedTable) return;
-            const newTable = await this._createTableHelper(this.selectedTable);
-            if (newTable) {
-                this.state.selectedTableId = newTable.id;
+        async_duplicateTable(){
+            if(!this.selectedTable)return;
+            constnewTable=awaitthis._createTableHelper(this.selectedTable);
+            if(newTable){
+                this.state.selectedTableId=newTable.id;
             }
         }
-        async _changeSeatsNum() {
-            const selectedTable = this.selectedTable
-            if (!selectedTable) return;
-            const { confirmed, payload: inputNumber } = await this.showPopup('NumberPopup', {
-                startingValue: selectedTable.seats,
-                cheap: true,
-                title: this.env._t('Number of Seats ?'),
+        async_changeSeatsNum(){
+            constselectedTable=this.selectedTable
+            if(!selectedTable)return;
+            const{confirmed,payload:inputNumber}=awaitthis.showPopup('NumberPopup',{
+                startingValue:selectedTable.seats,
+                cheap:true,
+                title:this.env._t('NumberofSeats?'),
             });
-            if (!confirmed) return;
-            const newSeatsNum = parseInt(inputNumber, 10) || selectedTable.seats;
-            if (newSeatsNum !== selectedTable.seats) {
-                selectedTable.seats = newSeatsNum;
-                await this._save(selectedTable);
+            if(!confirmed)return;
+            constnewSeatsNum=parseInt(inputNumber,10)||selectedTable.seats;
+            if(newSeatsNum!==selectedTable.seats){
+                selectedTable.seats=newSeatsNum;
+                awaitthis._save(selectedTable);
             }
         }
-        async _changeShape() {
-            if (!this.selectedTable) return;
-            this.selectedTable.shape = this.selectedTable.shape === 'square' ? 'round' : 'square';
+        async_changeShape(){
+            if(!this.selectedTable)return;
+            this.selectedTable.shape=this.selectedTable.shape==='square'?'round':'square';
             this.render();
-            await this._save(this.selectedTable);
+            awaitthis._save(this.selectedTable);
         }
-        async _renameTable() {
-            const selectedTable = this.selectedTable;
-            if (!selectedTable) return;
-            const { confirmed, payload: newName } = await this.showPopup('TextInputPopup', {
-                startingValue: selectedTable.name,
-                title: this.env._t('Table Name ?'),
+        async_renameTable(){
+            constselectedTable=this.selectedTable;
+            if(!selectedTable)return;
+            const{confirmed,payload:newName}=awaitthis.showPopup('TextInputPopup',{
+                startingValue:selectedTable.name,
+                title:this.env._t('TableName?'),
             });
-            if (!confirmed) return;
-            if (newName !== selectedTable.name) {
-                selectedTable.name = newName;
-                await this._save(selectedTable);
+            if(!confirmed)return;
+            if(newName!==selectedTable.name){
+                selectedTable.name=newName;
+                awaitthis._save(selectedTable);
             }
         }
-        async _setTableColor({ detail: color }) {
-            this.selectedTable.color = color;
+        async_setTableColor({detail:color}){
+            this.selectedTable.color=color;
             this.render();
-            await this._save(this.selectedTable);
+            awaitthis._save(this.selectedTable);
         }
-        async _setFloorColor({ detail: color }) {
-            this.state.floorBackground = color;
-            this.activeFloor.background_color = color;
-            try {
-                await this.rpc({
-                    model: 'restaurant.floor',
-                    method: 'write',
-                    args: [[this.activeFloor.id], { background_color: color }],
+        async_setFloorColor({detail:color}){
+            this.state.floorBackground=color;
+            this.activeFloor.background_color=color;
+            try{
+                awaitthis.rpc({
+                    model:'restaurant.floor',
+                    method:'write',
+                    args:[[this.activeFloor.id],{background_color:color}],
                 });
-            } catch (error) {
-                if (error.message.code < 0) {
-                    await this.showPopup('OfflineErrorPopup', {
-                        title: this.env._t('Offline'),
-                        body: this.env._t('Unable to change background color'),
+            }catch(error){
+                if(error.message.code<0){
+                    awaitthis.showPopup('OfflineErrorPopup',{
+                        title:this.env._t('Offline'),
+                        body:this.env._t('Unabletochangebackgroundcolor'),
                     });
-                } else {
-                    throw error;
+                }else{
+                    throwerror;
                 }
             }
         }
-        async _deleteTable() {
-            if (!this.selectedTable) return;
-            const { confirmed } = await this.showPopup('ConfirmPopup', {
-                title: this.env._t('Are you sure ?'),
-                body: this.env._t('Removing a table cannot be undone'),
+        async_deleteTable(){
+            if(!this.selectedTable)return;
+            const{confirmed}=awaitthis.showPopup('ConfirmPopup',{
+                title:this.env._t('Areyousure?'),
+                body:this.env._t('Removingatablecannotbeundone'),
             });
-            if (!confirmed) return;
-            try {
-                const originalSelectedTableId = this.state.selectedTableId;
-                await this.rpc({
-                    model: 'restaurant.table',
-                    method: 'create_from_ui',
-                    args: [{ active: false, id: originalSelectedTableId }],
+            if(!confirmed)return;
+            try{
+                constoriginalSelectedTableId=this.state.selectedTableId;
+                awaitthis.rpc({
+                    model:'restaurant.table',
+                    method:'create_from_ui',
+                    args:[{active:false,id:originalSelectedTableId}],
                 });
-                this.activeFloor.tables = this.activeTables.filter(
-                    (table) => table.id !== originalSelectedTableId
+                this.activeFloor.tables=this.activeTables.filter(
+                    (table)=>table.id!==originalSelectedTableId
                 );
-                // Value of an object can change inside async function call.
-                //   Which means that in this code block, the value of `state.selectedTableId`
-                //   before the await call can be different after the finishing the await call.
-                // Since we wanted to disable the selected table after deletion, we should be
-                //   setting the selectedTableId to null. However, we only do this if nothing
-                //   else is selected during the rpc call.
-                if (this.state.selectedTableId === originalSelectedTableId) {
-                    this.state.selectedTableId = null;
+                //Valueofanobjectcanchangeinsideasyncfunctioncall.
+                //  Whichmeansthatinthiscodeblock,thevalueof`state.selectedTableId`
+                //  beforetheawaitcallcanbedifferentafterthefinishingtheawaitcall.
+                //Sincewewantedtodisabletheselectedtableafterdeletion,weshouldbe
+                //  settingtheselectedTableIdtonull.However,weonlydothisifnothing
+                //  elseisselectedduringtherpccall.
+                if(this.state.selectedTableId===originalSelectedTableId){
+                    this.state.selectedTableId=null;
                 }
-            } catch (error) {
-                if (error.message.code < 0) {
-                    await this.showPopup('OfflineErrorPopup', {
-                        title: this.env._t('Offline'),
-                        body: this.env._t('Unable to delete table'),
+            }catch(error){
+                if(error.message.code<0){
+                    awaitthis.showPopup('OfflineErrorPopup',{
+                        title:this.env._t('Offline'),
+                        body:this.env._t('Unabletodeletetable'),
                     });
-                } else {
-                    throw error;
+                }else{
+                    throwerror;
                 }
             }
         }
-        _onSelectTable(event) {
-            const table = event.detail;
-            if (this.state.isEditMode) {
-                this.state.selectedTableId = table.id;
-            } else {
+        _onSelectTable(event){
+            consttable=event.detail;
+            if(this.state.isEditMode){
+                this.state.selectedTableId=table.id;
+            }else{
                 this.env.pos.set_table(table);
             }
         }
-        _onDeselectTable() {
-            this.state.selectedTableId = null;
+        _onDeselectTable(){
+            this.state.selectedTableId=null;
         }
-        async _createTableHelper(copyTable) {
-            let newTable;
-            if (copyTable) {
-                newTable = Object.assign({}, copyTable);
-                newTable.position_h += 10;
-                newTable.position_v += 10;
-            } else {
-                newTable = {
-                    position_v: 100,
-                    position_h: 100,
-                    width: 75,
-                    height: 75,
-                    shape: 'square',
-                    seats: 1,
+        async_createTableHelper(copyTable){
+            letnewTable;
+            if(copyTable){
+                newTable=Object.assign({},copyTable);
+                newTable.position_h+=10;
+                newTable.position_v+=10;
+            }else{
+                newTable={
+                    position_v:100,
+                    position_h:100,
+                    width:75,
+                    height:75,
+                    shape:'square',
+                    seats:1,
                 };
             }
-            newTable.name = this._getNewTableName(newTable.name);
-            delete newTable.id;
-            newTable.floor_id = [this.activeFloor.id, ''];
-            newTable.floor = this.activeFloor;
-            try {
-                await this._save(newTable);
+            newTable.name=this._getNewTableName(newTable.name);
+            deletenewTable.id;
+            newTable.floor_id=[this.activeFloor.id,''];
+            newTable.floor=this.activeFloor;
+            try{
+                awaitthis._save(newTable);
                 this.activeTables.push(newTable);
-                return newTable;
-            } catch (error) {
-                if (error.message.code < 0) {
-                    await this.showPopup('ErrorPopup', {
-                        title: this.env._t('Offline'),
-                        body: this.env._t('Unable to create table because you are offline.'),
+                returnnewTable;
+            }catch(error){
+                if(error.message.code<0){
+                    awaitthis.showPopup('ErrorPopup',{
+                        title:this.env._t('Offline'),
+                        body:this.env._t('Unabletocreatetablebecauseyouareoffline.'),
                     });
                     return;
-                } else {
-                    throw error;
+                }else{
+                    throwerror;
                 }
             }
         }
-        _getNewTableName(name) {
-            if (name) {
-                const num = Number((name.match(/\d+/g) || [])[0] || 0);
-                const str = name.replace(/\d+/g, '');
-                const n = { num: num, str: str };
-                n.num += 1;
-                this._lastName = n;
-            } else if (this._lastName) {
-                this._lastName.num += 1;
-            } else {
-                this._lastName = { num: 1, str: 'T' };
+        _getNewTableName(name){
+            if(name){
+                constnum=Number((name.match(/\d+/g)||[])[0]||0);
+                conststr=name.replace(/\d+/g,'');
+                constn={num:num,str:str};
+                n.num+=1;
+                this._lastName=n;
+            }elseif(this._lastName){
+                this._lastName.num+=1;
+            }else{
+                this._lastName={num:1,str:'T'};
             }
-            return '' + this._lastName.str + this._lastName.num;
+            return''+this._lastName.str+this._lastName.num;
         }
-        async _save(table) {
-            const fields = this.env.pos.models.find((model) => model.model === 'restaurant.table')
+        async_save(table){
+            constfields=this.env.pos.models.find((model)=>model.model==='restaurant.table')
                 .fields;
-            const serializeTable = {};
-            for (let field of fields) {
-                if (typeof table[field] !== 'undefined') {
-                    serializeTable[field] = table[field];
+            constserializeTable={};
+            for(letfieldoffields){
+                if(typeoftable[field]!=='undefined'){
+                    serializeTable[field]=table[field];
                 }
             }
-            serializeTable.id = table.id;
-            const tableId = await this.rpc({
-                model: 'restaurant.table',
-                method: 'create_from_ui',
-                args: [serializeTable],
+            serializeTable.id=table.id;
+            consttableId=awaitthis.rpc({
+                model:'restaurant.table',
+                method:'create_from_ui',
+                args:[serializeTable],
             });
-            table.id = tableId;
-            this.env.pos.tables_by_id[tableId] = table;
+            table.id=tableId;
+            this.env.pos.tables_by_id[tableId]=table;
         }
-        async _onSaveTable(event) {
-            const table = event.detail;
-            await this._save(table);
+        async_onSaveTable(event){
+            consttable=event.detail;
+            awaitthis._save(table);
         }
-        async _tableLongpolling() {
-            if (this.state.isEditMode) {
+        async_tableLongpolling(){
+            if(this.state.isEditMode){
                 return;
             }
-            try {
-                const result = await this.rpc({
-                    model: 'pos.config',
-                    method: 'get_tables_order_count',
-                    args: [this.env.pos.config.id],
+            try{
+                constresult=awaitthis.rpc({
+                    model:'pos.config',
+                    method:'get_tables_order_count',
+                    args:[this.env.pos.config.id],
                 });
-                result.forEach((table) => {
-                    const table_obj = this.env.pos.tables_by_id[table.id];
-                    const unsynced_orders = this.env.pos
+                result.forEach((table)=>{
+                    consttable_obj=this.env.pos.tables_by_id[table.id];
+                    constunsynced_orders=this.env.pos
                         .get_table_orders(table_obj)
                         .filter(
-                            (o) =>
-                                o.server_id === undefined &&
-                                (o.orderlines.length !== 0 || o.paymentlines.length !== 0) &&
-                                // do not count the orders that are already finalized
+                            (o)=>
+                                o.server_id===undefined&&
+                                (o.orderlines.length!==0||o.paymentlines.length!==0)&&
+                                //donotcounttheordersthatarealreadyfinalized
                                 !o.finalized
                         ).length;
-                    table_obj.order_count = table.orders + unsynced_orders;
+                    table_obj.order_count=table.orders+unsynced_orders;
                 });
                 this.render();
-            } catch (error) {
-                if (error.message.code < 0) {
-                    await this.showPopup('OfflineErrorPopup', {
-                        title: 'Offline',
-                        body: 'Unable to get orders count',
+            }catch(error){
+                if(error.message.code<0){
+                    awaitthis.showPopup('OfflineErrorPopup',{
+                        title:'Offline',
+                        body:'Unabletogetorderscount',
                     });
-                } else {
-                    throw error;
+                }else{
+                    throwerror;
                 }
             }
         }
     }
-    FloorScreen.template = 'FloorScreen';
-    FloorScreen.hideOrderSelector = true;
+    FloorScreen.template='FloorScreen';
+    FloorScreen.hideOrderSelector=true;
 
     Registries.Component.add(FloorScreen);
 
-    return FloorScreen;
+    returnFloorScreen;
 });

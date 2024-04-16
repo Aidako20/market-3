@@ -1,54 +1,54 @@
-flectra.define('im_livechat.ImLivechatChannelFormController', function (require) {
-'use strict';
+flectra.define('im_livechat.ImLivechatChannelFormController',function(require){
+'usestrict';
 
-const FormController = require('web.FormController');
+constFormController=require('web.FormController');
 
-const ImLivechatChannelFormController = FormController.extend({
-    events: Object.assign({}, FormController.prototype.events, {
-        'click .o_im_livechat_channel_form_button_colors_reset_button': '_onClickLivechatButtonColorsResetButton',
-        'click .o_im_livechat_channel_form_chat_window_colors_reset_button': '_onClickLivechatChatWindowColorsResetButton',
+constImLivechatChannelFormController=FormController.extend({
+    events:Object.assign({},FormController.prototype.events,{
+        'click.o_im_livechat_channel_form_button_colors_reset_button':'_onClickLivechatButtonColorsResetButton',
+        'click.o_im_livechat_channel_form_chat_window_colors_reset_button':'_onClickLivechatChatWindowColorsResetButton',
     }),
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {Object} colorValues
+     *@private
+     *@param{Object}colorValues
      */
-    async _updateColors(colorValues) {
-        for (const name in colorValues) {
-            this.$(`[name="${name}"] .o_field_color`).css('background-color', colorValues[name]);
+    async_updateColors(colorValues){
+        for(constnameincolorValues){
+            this.$(`[name="${name}"].o_field_color`).css('background-color',colorValues[name]);
         }
-        const result = await this.model.notifyChanges(this.handle, colorValues);
-        this._updateRendererState(this.model.get(this.handle), { fieldNames: result });
+        constresult=awaitthis.model.notifyChanges(this.handle,colorValues);
+        this._updateRendererState(this.model.get(this.handle),{fieldNames:result});
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    async _onClickLivechatButtonColorsResetButton() {
-        await this._updateColors({
-            button_background_color: "#878787",
-            button_text_color: "#FFFFFF",
+    async_onClickLivechatButtonColorsResetButton(){
+        awaitthis._updateColors({
+            button_background_color:"#878787",
+            button_text_color:"#FFFFFF",
         });
     },
     /**
-     * @private
+     *@private
      */
-    async _onClickLivechatChatWindowColorsResetButton() {
-        await this._updateColors({
-            header_background_color: "#009EFB",
-            title_color: "#FFFFFF",
+    async_onClickLivechatChatWindowColorsResetButton(){
+        awaitthis._updateColors({
+            header_background_color:"#009EFB",
+            title_color:"#FFFFFF",
         });
     },
 });
 
-return ImLivechatChannelFormController;
+returnImLivechatChannelFormController;
 
 });

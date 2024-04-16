@@ -1,100 +1,100 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import http
-from flectra.exceptions import AccessError
-from flectra.http import request
+fromflectraimporthttp
+fromflectra.exceptionsimportAccessError
+fromflectra.httpimportrequest
 
 
-class HrOrgChartController(http.Controller):
-    _managers_level = 5  # FP request
+classHrOrgChartController(http.Controller):
+    _managers_level=5 #FPrequest
 
-    def _check_employee(self, employee_id, **kw):
-        if not employee_id:  # to check
-            return None
-        employee_id = int(employee_id)
+    def_check_employee(self,employee_id,**kw):
+        ifnotemployee_id: #tocheck
+            returnNone
+        employee_id=int(employee_id)
 
-        if 'allowed_company_ids' in request.env.context:
-            cids = request.env.context['allowed_company_ids']
+        if'allowed_company_ids'inrequest.env.context:
+            cids=request.env.context['allowed_company_ids']
         else:
-            cids = [request.env.company.id]
+            cids=[request.env.company.id]
 
-        Employee = request.env['hr.employee.public'].with_context(allowed_company_ids=cids)
-        # check and raise
-        if not Employee.check_access_rights('read', raise_exception=False):
-            return None
+        Employee=request.env['hr.employee.public'].with_context(allowed_company_ids=cids)
+        #checkandraise
+        ifnotEmployee.check_access_rights('read',raise_exception=False):
+            returnNone
         try:
             Employee.browse(employee_id).check_access_rule('read')
-        except AccessError:
-            return None
+        exceptAccessError:
+            returnNone
         else:
-            return Employee.browse(employee_id)
+            returnEmployee.browse(employee_id)
 
-    def _prepare_employee_data(self, employee):
-        job = employee.sudo().job_id
-        return dict(
+    def_prepare_employee_data(self,employee):
+        job=employee.sudo().job_id
+        returndict(
             id=employee.id,
             name=employee.name,
-            link='/mail/view?model=%s&res_id=%s' % ('hr.employee.public', employee.id,),
+            link='/mail/view?model=%s&res_id=%s'%('hr.employee.public',employee.id,),
             job_id=job.id,
-            job_name=job.name or '',
-            job_title=employee.job_title or '',
-            direct_sub_count=len(employee.child_ids - employee),
+            job_name=job.nameor'',
+            job_title=employee.job_titleor'',
+            direct_sub_count=len(employee.child_ids-employee),
             indirect_sub_count=employee.child_all_count,
         )
 
-    @http.route('/hr/get_redirect_model', type='json', auth='user')
-    def get_redirect_model(self):
-        if request.env['hr.employee'].check_access_rights('read', raise_exception=False):
-            return 'hr.employee'
-        return 'hr.employee.public'
+    @http.route('/hr/get_redirect_model',type='json',auth='user')
+    defget_redirect_model(self):
+        ifrequest.env['hr.employee'].check_access_rights('read',raise_exception=False):
+            return'hr.employee'
+        return'hr.employee.public'
 
-    @http.route('/hr/get_org_chart', type='json', auth='user')
-    def get_org_chart(self, employee_id, **kw):
+    @http.route('/hr/get_org_chart',type='json',auth='user')
+    defget_org_chart(self,employee_id,**kw):
 
-        employee = self._check_employee(employee_id, **kw)
-        if not employee:  # to check
-            return {
-                'managers': [],
-                'children': [],
+        employee=self._check_employee(employee_id,**kw)
+        ifnotemployee: #tocheck
+            return{
+                'managers':[],
+                'children':[],
             }
 
-        # compute employee data for org chart
-        ancestors, current = request.env['hr.employee.public'].sudo(), employee.sudo()
-        while current.parent_id and len(ancestors) < self._managers_level+1 and current != current.parent_id:
-            ancestors += current.parent_id
-            current = current.parent_id
+        #computeemployeedatafororgchart
+        ancestors,current=request.env['hr.employee.public'].sudo(),employee.sudo()
+        whilecurrent.parent_idandlen(ancestors)<self._managers_level+1andcurrent!=current.parent_id:
+            ancestors+=current.parent_id
+            current=current.parent_id
 
-        values = dict(
+        values=dict(
             self=self._prepare_employee_data(employee),
             managers=[
                 self._prepare_employee_data(ancestor)
-                for idx, ancestor in enumerate(ancestors)
-                if idx < self._managers_level
+                foridx,ancestorinenumerate(ancestors)
+                ifidx<self._managers_level
             ],
-            managers_more=len(ancestors) > self._managers_level,
-            children=[self._prepare_employee_data(child) for child in employee.child_ids if child != employee],
+            managers_more=len(ancestors)>self._managers_level,
+            children=[self._prepare_employee_data(child)forchildinemployee.child_idsifchild!=employee],
         )
         values['managers'].reverse()
-        return values
+        returnvalues
 
-    @http.route('/hr/get_subordinates', type='json', auth='user')
-    def get_subordinates(self, employee_id, subordinates_type=None, **kw):
+    @http.route('/hr/get_subordinates',type='json',auth='user')
+    defget_subordinates(self,employee_id,subordinates_type=None,**kw):
         """
-        Get employee subordinates.
-        Possible values for 'subordinates_type':
-            - 'indirect'
-            - 'direct'
+        Getemployeesubordinates.
+        Possiblevaluesfor'subordinates_type':
+            -'indirect'
+            -'direct'
         """
-        employee = self._check_employee(employee_id, **kw)
-        if not employee:  # to check
-            return {}
+        employee=self._check_employee(employee_id,**kw)
+        ifnotemployee: #tocheck
+            return{}
 
-        if subordinates_type == 'direct':
-            res = (employee.child_ids - employee).ids
-        elif subordinates_type == 'indirect':
-            res = (employee.subordinate_ids - employee.child_ids).ids
+        ifsubordinates_type=='direct':
+            res=(employee.child_ids-employee).ids
+        elifsubordinates_type=='indirect':
+            res=(employee.subordinate_ids-employee.child_ids).ids
         else:
-            res = employee.subordinate_ids.ids
+            res=employee.subordinate_ids.ids
 
-        return res
+        returnres

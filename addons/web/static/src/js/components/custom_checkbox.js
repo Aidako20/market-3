@@ -1,58 +1,58 @@
-flectra.define('web.CustomCheckbox', function (require) {
-    "use strict";
+flectra.define('web.CustomCheckbox',function(require){
+    "usestrict";
 
-    const utils = require('web.utils');
+    constutils=require('web.utils');
 
-    const { Component } = owl;
+    const{Component}=owl;
 
     /**
-     * Custom checkbox
-     * 
-     * Component that can be used in templates to render the custom checkbox of Flectra.
-     * 
-     * <CustomCheckbox
-     *     value="boolean"
-     *     disabled="boolean"
-     *     text="'Change the label text'"
-     *     t-on-change="_onValueChange"
-     *     />
-     * 
-     * @extends Component
+     *Customcheckbox
+     *
+     *ComponentthatcanbeusedintemplatestorenderthecustomcheckboxofFlectra.
+     *
+     *<CustomCheckbox
+     *    value="boolean"
+     *    disabled="boolean"
+     *    text="'Changethelabeltext'"
+     *    t-on-change="_onValueChange"
+     *    />
+     *
+     *@extendsComponent
      */
-    class CustomCheckbox extends Component {
+    classCustomCheckboxextendsComponent{
         /**
-         * @param {Object} [props]
-         * @param {string | number | null} [props.id]
-         * @param {boolean} [props.value=false]
-         * @param {boolean} [props.disabled=false]
-         * @param {string} [props.text]
+         *@param{Object}[props]
+         *@param{string|number|null}[props.id]
+         *@param{boolean}[props.value=false]
+         *@param{boolean}[props.disabled=false]
+         *@param{string}[props.text]
          */
-        constructor() {
+        constructor(){
             super(...arguments);
-            this._id = `checkbox-comp-${utils.generateID()}`;
+            this._id=`checkbox-comp-${utils.generateID()}`;
         }
     }
 
-    CustomCheckbox.props = {
-        id: {
-            type: [String, Number],
-            optional: 1,
+    CustomCheckbox.props={
+        id:{
+            type:[String,Number],
+            optional:1,
         },
-        disabled: {
-            type: Boolean,
-            optional: 1,
+        disabled:{
+            type:Boolean,
+            optional:1,
         },
-        value: {
-            type: Boolean,
-            optional: 1,
+        value:{
+            type:Boolean,
+            optional:1,
         },
-        text: {
-            type: String,
-            optional: 1,
+        text:{
+            type:String,
+            optional:1,
         },
     };
 
-    CustomCheckbox.template = 'web.CustomCheckbox';
+    CustomCheckbox.template='web.CustomCheckbox';
 
-    return CustomCheckbox;
+    returnCustomCheckbox;
 });

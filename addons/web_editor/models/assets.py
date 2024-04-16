@@ -1,272 +1,272 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import base64
-import os
-import re
-import uuid
+importbase64
+importos
+importre
+importuuid
 
-from lxml import etree
+fromlxmlimportetree
 
-from flectra import models
-from flectra.tools import misc
-from flectra.addons.base.models.assetsbundle import EXTENSIONS
+fromflectraimportmodels
+fromflectra.toolsimportmisc
+fromflectra.addons.base.models.assetsbundleimportEXTENSIONS
 
-_match_asset_file_url_regex = re.compile("^/(\w+)/(.+?)(\.custom\.(.+))?\.(\w+)$")
+_match_asset_file_url_regex=re.compile("^/(\w+)/(.+?)(\.custom\.(.+))?\.(\w+)$")
 
 
-class Assets(models.AbstractModel):
-    _name = 'web_editor.assets'
-    _description = 'Assets Utils'
+classAssets(models.AbstractModel):
+    _name='web_editor.assets'
+    _description='AssetsUtils'
 
-    def get_all_custom_attachments(self, urls):
+    defget_all_custom_attachments(self,urls):
         """
-        Fetch all the ir.attachment records related to given URLs.
+        Fetchalltheir.attachmentrecordsrelatedtogivenURLs.
 
         Params:
-            urls (str[]): list of urls
+            urls(str[]):listofurls
 
         Returns:
-            ir.attachment(): attachment records related to the given URLs.
+            ir.attachment():attachmentrecordsrelatedtothegivenURLs.
         """
-        return self._get_custom_attachment(urls, op='in')
+        returnself._get_custom_attachment(urls,op='in')
 
-    def get_asset_content(self, url, url_info=None, custom_attachments=None):
+    defget_asset_content(self,url,url_info=None,custom_attachments=None):
         """
-        Fetch the content of an asset (scss / js) file. That content is either
-        the one of the related file on the disk or the one of the corresponding
-        custom ir.attachment record.
+        Fetchthecontentofanasset(scss/js)file.Thatcontentiseither
+        theoneoftherelatedfileonthediskortheoneofthecorresponding
+        customir.attachmentrecord.
 
         Params:
-            url (str): the URL of the asset (scss / js) file/ir.attachment
+            url(str):theURLoftheasset(scss/js)file/ir.attachment
 
-            url_info (dict, optional):
-                the related url info (see get_asset_info) (allows to optimize
-                some code which already have the info and do not want this
-                function to re-get it)
+            url_info(dict,optional):
+                therelatedurlinfo(seeget_asset_info)(allowstooptimize
+                somecodewhichalreadyhavetheinfoanddonotwantthis
+                functiontore-getit)
 
-            custom_attachments (ir.attachment(), optional):
-                the related custom ir.attachment records the function might need
-                to search into (allows to optimize some code which already have
-                that info and do not want this function to re-get it)
+            custom_attachments(ir.attachment(),optional):
+                therelatedcustomir.attachmentrecordsthefunctionmightneed
+                tosearchinto(allowstooptimizesomecodewhichalreadyhave
+                thatinfoanddonotwantthisfunctiontore-getit)
 
         Returns:
-            utf-8 encoded content of the asset (scss / js)
+            utf-8encodedcontentoftheasset(scss/js)
         """
-        if url_info is None:
-            url_info = self.get_asset_info(url)
+        ifurl_infoisNone:
+            url_info=self.get_asset_info(url)
 
-        if url_info["customized"]:
-            # If the file is already customized, the content is found in the
-            # corresponding attachment
-            attachment = None
-            if custom_attachments is None:
-                attachment = self._get_custom_attachment(url)
+        ifurl_info["customized"]:
+            #Ifthefileisalreadycustomized,thecontentisfoundinthe
+            #correspondingattachment
+            attachment=None
+            ifcustom_attachmentsisNone:
+                attachment=self._get_custom_attachment(url)
             else:
-                attachment = custom_attachments.filtered(lambda r: r.url == url)
-            return attachment and base64.b64decode(attachment.datas) or False
+                attachment=custom_attachments.filtered(lambdar:r.url==url)
+            returnattachmentandbase64.b64decode(attachment.datas)orFalse
 
-        # If the file is not yet customized, the content is found by reading
-        # the local file
-        with misc.file_open(url.strip('/'), 'rb', filter_ext=EXTENSIONS) as f:
-            return f.read()
+        #Ifthefileisnotyetcustomized,thecontentisfoundbyreading
+        #thelocalfile
+        withmisc.file_open(url.strip('/'),'rb',filter_ext=EXTENSIONS)asf:
+            returnf.read()
 
-    def get_asset_info(self, url):
+    defget_asset_info(self,url):
         """
-        Return information about an asset (scss / js) file/ir.attachment just by
-        looking at its URL.
+        Returninformationaboutanasset(scss/js)file/ir.attachmentjustby
+        lookingatitsURL.
 
         Params:
-            url (str): the url of the asset (scss / js) file/ir.attachment
+            url(str):theurloftheasset(scss/js)file/ir.attachment
 
         Returns:
             dict:
-                module (str): the original asset's related app
+                module(str):theoriginalasset'srelatedapp
 
-                resource_path (str):
-                    the relative path to the original asset from the related app
+                resource_path(str):
+                    therelativepathtotheoriginalassetfromtherelatedapp
 
-                customized (bool): whether the asset is a customized one or not
+                customized(bool):whethertheassetisacustomizedoneornot
 
-                bundle (str):
-                    the name of the bundle the asset customizes (False if this
-                    is not a customized asset)
+                bundle(str):
+                    thenameofthebundletheassetcustomizes(Falseifthis
+                    isnotacustomizedasset)
         """
-        m = _match_asset_file_url_regex.match(url)
-        if not m:
-            return False
-        return {
-            'module': m.group(1),
-            'resource_path': "%s.%s" % (m.group(2), m.group(5)),
-            'customized': bool(m.group(3)),
-            'bundle': m.group(4) or False
+        m=_match_asset_file_url_regex.match(url)
+        ifnotm:
+            returnFalse
+        return{
+            'module':m.group(1),
+            'resource_path':"%s.%s"%(m.group(2),m.group(5)),
+            'customized':bool(m.group(3)),
+            'bundle':m.group(4)orFalse
         }
 
-    def make_custom_asset_file_url(self, url, bundle_xmlid):
+    defmake_custom_asset_file_url(self,url,bundle_xmlid):
         """
-        Return the customized version of an asset URL, that is the URL the asset
-        would have if it was customized.
+        ReturnthecustomizedversionofanassetURL,thatistheURLtheasset
+        wouldhaveifitwascustomized.
 
         Params:
-            url (str): the original asset's url
-            bundle_xmlid (str): the name of the bundle the asset would customize
+            url(str):theoriginalasset'surl
+            bundle_xmlid(str):thenameofthebundletheassetwouldcustomize
 
         Returns:
-            str: the URL the given asset would have if it was customized in the
-                 given bundle
+            str:theURLthegivenassetwouldhaveifitwascustomizedinthe
+                 givenbundle
         """
-        parts = url.rsplit(".", 1)
-        return "%s.custom.%s.%s" % (parts[0], bundle_xmlid, parts[1])
+        parts=url.rsplit(".",1)
+        return"%s.custom.%s.%s"%(parts[0],bundle_xmlid,parts[1])
 
-    def reset_asset(self, url, bundle_xmlid):
+    defreset_asset(self,url,bundle_xmlid):
         """
-        Delete the potential customizations made to a given (original) asset.
+        Deletethepotentialcustomizationsmadetoagiven(original)asset.
 
         Params:
-            url (str): the URL of the original asset (scss / js) file
+            url(str):theURLoftheoriginalasset(scss/js)file
 
-            bundle_xmlid (str):
-                the name of the bundle in which the customizations to delete
-                were made
+            bundle_xmlid(str):
+                thenameofthebundleinwhichthecustomizationstodelete
+                weremade
         """
-        custom_url = self.make_custom_asset_file_url(url, bundle_xmlid)
+        custom_url=self.make_custom_asset_file_url(url,bundle_xmlid)
 
-        # Simply delete the attachement which contains the modified scss/js file
-        # and the xpath view which links it
+        #Simplydeletetheattachementwhichcontainsthemodifiedscss/jsfile
+        #andthexpathviewwhichlinksit
         self._get_custom_attachment(custom_url).unlink()
         self._get_custom_view(custom_url).unlink()
 
-    def save_asset(self, url, bundle_xmlid, content, file_type):
+    defsave_asset(self,url,bundle_xmlid,content,file_type):
         """
-        Customize the content of a given asset (scss / js).
+        Customizethecontentofagivenasset(scss/js).
 
         Params:
-            url (src):
-                the URL of the original asset to customize (whether or not the
-                asset was already customized)
+            url(src):
+                theURLoftheoriginalassettocustomize(whetherornotthe
+                assetwasalreadycustomized)
 
-            bundle_xmlid (src):
-                the name of the bundle in which the customizations will take
+            bundle_xmlid(src):
+                thenameofthebundleinwhichthecustomizationswilltake
                 effect
 
-            content (src): the new content of the asset (scss / js)
+            content(src):thenewcontentoftheasset(scss/js)
 
-            file_type (src):
-                either 'scss' or 'js' according to the file being customized
+            file_type(src):
+                either'scss'or'js'accordingtothefilebeingcustomized
         """
-        custom_url = self.make_custom_asset_file_url(url, bundle_xmlid)
-        datas = base64.b64encode((content or "\n").encode("utf-8"))
+        custom_url=self.make_custom_asset_file_url(url,bundle_xmlid)
+        datas=base64.b64encode((contentor"\n").encode("utf-8"))
 
-        # Check if the file to save had already been modified
-        custom_attachment = self._get_custom_attachment(custom_url)
-        if custom_attachment:
-            # If it was already modified, simply override the corresponding
-            # attachment content
-            custom_attachment.write({"datas": datas})
+        #Checkifthefiletosavehadalreadybeenmodified
+        custom_attachment=self._get_custom_attachment(custom_url)
+        ifcustom_attachment:
+            #Ifitwasalreadymodified,simplyoverridethecorresponding
+            #attachmentcontent
+            custom_attachment.write({"datas":datas})
         else:
-            # If not, create a new attachment to copy the original scss/js file
-            # content, with its modifications
-            new_attach = {
-                'name': url.split("/")[-1],
-                'type': "binary",
-                'mimetype': (file_type == 'js' and 'text/javascript' or 'text/scss'),
-                'datas': datas,
-                'url': custom_url,
+            #Ifnot,createanewattachmenttocopytheoriginalscss/jsfile
+            #content,withitsmodifications
+            new_attach={
+                'name':url.split("/")[-1],
+                'type':"binary",
+                'mimetype':(file_type=='js'and'text/javascript'or'text/scss'),
+                'datas':datas,
+                'url':custom_url,
             }
             new_attach.update(self._save_asset_attachment_hook())
             self.env["ir.attachment"].create(new_attach)
 
-            # Create a view to extend the template which adds the original file
-            # to link the new modified version instead
-            file_type_info = {
-                'tag': 'link' if file_type == 'scss' else 'script',
-                'attribute': 'href' if file_type == 'scss' else 'src',
+            #Createaviewtoextendthetemplatewhichaddstheoriginalfile
+            #tolinkthenewmodifiedversioninstead
+            file_type_info={
+                'tag':'link'iffile_type=='scss'else'script',
+                'attribute':'href'iffile_type=='scss'else'src',
             }
 
-            def views_linking_url(view):
+            defviews_linking_url(view):
                 """
-                Returns whether the view arch has some html tag linked to
-                the url. (note: searching for the URL string is not enough as it
-                could appear in a comment or an xpath expression.)
+                Returnswhethertheviewarchhassomehtmltaglinkedto
+                theurl.(note:searchingfortheURLstringisnotenoughasit
+                couldappearinacommentoranxpathexpression.)
                 """
-                tree = etree.XML(view.arch)
-                return bool(tree.xpath("//%%(tag)s[@%%(attribute)s='%(url)s']" % {
-                    'url': url,
-                } % file_type_info))
+                tree=etree.XML(view.arch)
+                returnbool(tree.xpath("//%%(tag)s[@%%(attribute)s='%(url)s']"%{
+                    'url':url,
+                }%file_type_info))
 
-            IrUiView = self.env["ir.ui.view"]
-            view_to_xpath = IrUiView.get_related_views(bundle_xmlid, bundles=True).filtered(views_linking_url)
-            new_view = {
-                'name': custom_url,
-                'key': 'web_editor.%s_%s' % (file_type, str(uuid.uuid4())[:6]),
-                'mode': "extension",
-                'inherit_id': view_to_xpath.id,
-                'arch': """
-                    <data inherit_id="%(inherit_xml_id)s" name="%(name)s">
-                        <xpath expr="//%%(tag)s[@%%(attribute)s='%(url_to_replace)s']" position="attributes">
-                            <attribute name="%%(attribute)s">%(new_url)s</attribute>
+            IrUiView=self.env["ir.ui.view"]
+            view_to_xpath=IrUiView.get_related_views(bundle_xmlid,bundles=True).filtered(views_linking_url)
+            new_view={
+                'name':custom_url,
+                'key':'web_editor.%s_%s'%(file_type,str(uuid.uuid4())[:6]),
+                'mode':"extension",
+                'inherit_id':view_to_xpath.id,
+                'arch':"""
+                    <datainherit_id="%(inherit_xml_id)s"name="%(name)s">
+                        <xpathexpr="//%%(tag)s[@%%(attribute)s='%(url_to_replace)s']"position="attributes">
+                            <attributename="%%(attribute)s">%(new_url)s</attribute>
                         </xpath>
                     </data>
-                """ % {
-                    'inherit_xml_id': view_to_xpath.xml_id,
-                    'name': custom_url,
-                    'url_to_replace': url,
-                    'new_url': custom_url,
-                } % file_type_info
+                """%{
+                    'inherit_xml_id':view_to_xpath.xml_id,
+                    'name':custom_url,
+                    'url_to_replace':url,
+                    'new_url':custom_url,
+                }%file_type_info
             }
             new_view.update(self._save_asset_view_hook())
             IrUiView.create(new_view)
 
         self.env["ir.qweb"].clear_caches()
 
-    def _get_custom_attachment(self, custom_url, op='='):
+    def_get_custom_attachment(self,custom_url,op='='):
         """
-        Fetch the ir.attachment record related to the given customized asset.
+        Fetchtheir.attachmentrecordrelatedtothegivencustomizedasset.
 
         Params:
-            custom_url (str): the URL of the customized asset
-            op (str, default: '='): the operator to use to search the records
+            custom_url(str):theURLofthecustomizedasset
+            op(str,default:'='):theoperatortousetosearchtherecords
 
         Returns:
             ir.attachment()
         """
-        assert op in ('in', '='), 'Invalid operator'
-        return self.env["ir.attachment"].search([("url", op, custom_url)])
+        assertopin('in','='),'Invalidoperator'
+        returnself.env["ir.attachment"].search([("url",op,custom_url)])
 
-    def _get_custom_view(self, custom_url, op='='):
+    def_get_custom_view(self,custom_url,op='='):
         """
-        Fetch the ir.ui.view record related to the given customized asset (the
-        inheriting view which replace the original asset by the customized one).
+        Fetchtheir.ui.viewrecordrelatedtothegivencustomizedasset(the
+        inheritingviewwhichreplacetheoriginalassetbythecustomizedone).
 
         Params:
-            custom_url (str): the URL of the customized asset
-            op (str, default: '='): the operator to use to search the records
+            custom_url(str):theURLofthecustomizedasset
+            op(str,default:'='):theoperatortousetosearchtherecords
 
         Returns:
             ir.ui.view()
         """
-        assert op in ('='), 'Invalid operator'
-        return self.env["ir.ui.view"].search([("name", op, custom_url)])
+        assertopin('='),'Invalidoperator'
+        returnself.env["ir.ui.view"].search([("name",op,custom_url)])
 
-    def _save_asset_attachment_hook(self):
+    def_save_asset_attachment_hook(self):
         """
-        Returns the additional values to use to write the DB on customized
-        attachment creation.
+        ReturnstheadditionalvaluestousetowritetheDBoncustomized
+        attachmentcreation.
 
         Returns:
             dict
         """
-        return {}
+        return{}
 
-    def _save_asset_view_hook(self):
+    def_save_asset_view_hook(self):
         """
-        Returns the additional values to use to write the DB on customized
-        asset's related view creation.
+        ReturnstheadditionalvaluestousetowritetheDBoncustomized
+        asset'srelatedviewcreation.
 
         Returns:
             dict
         """
-        return {}
+        return{}
 
-    def _get_public_asset_xmlids(self):
-        return ["web_editor.compiled_assets_wysiwyg"]
+    def_get_public_asset_xmlids(self):
+        return["web_editor.compiled_assets_wysiwyg"]

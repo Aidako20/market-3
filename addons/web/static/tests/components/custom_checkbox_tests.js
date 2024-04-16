@@ -1,54 +1,54 @@
-flectra.define('web.custom_checkbox_tests', function (require) {
-    "use strict";
+flectra.define('web.custom_checkbox_tests',function(require){
+    "usestrict";
 
-    const CustomCheckbox = require('web.CustomCheckbox');
-    const testUtils = require('web.test_utils');
+    constCustomCheckbox=require('web.CustomCheckbox');
+    consttestUtils=require('web.test_utils');
 
-    const { createComponent, dom: testUtilsDom } = testUtils;
+    const{createComponent,dom:testUtilsDom}=testUtils;
 
-    QUnit.module('Components', {}, function () {
+    QUnit.module('Components',{},function(){
 
         QUnit.module('CustomCheckbox');
 
-        QUnit.test('test checkbox: default values', async function(assert) {
+        QUnit.test('testcheckbox:defaultvalues',asyncfunction(assert){
             assert.expect(6);
 
-            const checkbox = await createComponent(CustomCheckbox, {});
+            constcheckbox=awaitcreateComponent(CustomCheckbox,{});
 
-            assert.containsOnce(checkbox.el, 'input');
-            assert.containsNone(checkbox.el, 'input:disabled');
-            assert.containsOnce(checkbox.el, 'label');
+            assert.containsOnce(checkbox.el,'input');
+            assert.containsNone(checkbox.el,'input:disabled');
+            assert.containsOnce(checkbox.el,'label');
 
-            const input = checkbox.el.querySelector('input');
-            assert.notOk(input.checked, 'checkbox should be unchecked');
+            constinput=checkbox.el.querySelector('input');
+            assert.notOk(input.checked,'checkboxshouldbeunchecked');
             assert.ok(input.id.startsWith('checkbox-comp-'));
 
-            await testUtilsDom.click(checkbox.el.querySelector('label'));
-            assert.ok(input.checked, 'checkbox should be checked');
+            awaittestUtilsDom.click(checkbox.el.querySelector('label'));
+            assert.ok(input.checked,'checkboxshouldbechecked');
 
             checkbox.destroy();
         });
 
-        QUnit.test('test checkbox: custom values', async function(assert) {
+        QUnit.test('testcheckbox:customvalues',asyncfunction(assert){
             assert.expect(6);
 
-            const checkbox = await createComponent(CustomCheckbox, {
-                props: {
-                    id: 'my-custom-checkbox',
-                    disabled: true,
-                    value: true,
-                    text: 'checkbox',
+            constcheckbox=awaitcreateComponent(CustomCheckbox,{
+                props:{
+                    id:'my-custom-checkbox',
+                    disabled:true,
+                    value:true,
+                    text:'checkbox',
                 }
             });
 
-            assert.containsOnce(checkbox.el, 'input');
-            assert.containsOnce(checkbox.el, 'input:disabled');
-            assert.containsOnce(checkbox.el, 'label');
+            assert.containsOnce(checkbox.el,'input');
+            assert.containsOnce(checkbox.el,'input:disabled');
+            assert.containsOnce(checkbox.el,'label');
 
-            const input = checkbox.el.querySelector('input');
-            assert.ok(input.checked, 'checkbox should be checked');
-            assert.strictEqual(input.id, 'my-custom-checkbox');
-            assert.ok(input.checked, 'checkbox should be checked');
+            constinput=checkbox.el.querySelector('input');
+            assert.ok(input.checked,'checkboxshouldbechecked');
+            assert.strictEqual(input.id,'my-custom-checkbox');
+            assert.ok(input.checked,'checkboxshouldbechecked');
 
             checkbox.destroy();
         });

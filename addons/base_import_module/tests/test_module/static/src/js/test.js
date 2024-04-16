@@ -1,1 +1,1 @@
-console.log('test_module javascript');
+console.log('test_modulejavascript');

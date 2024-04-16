@@ -1,213 +1,213 @@
-flectra.define('web.AbstractRenderer', function (require) {
-"use strict";
+flectra.define('web.AbstractRenderer',function(require){
+"usestrict";
 
 /**
- * The renderer should not handle pagination, data loading, or coordination
- * with the control panel. It is only concerned with rendering.
+ *Therenderershouldnothandlepagination,dataloading,orcoordination
+ *withthecontrolpanel.Itisonlyconcernedwithrendering.
  *
  */
 
-var mvc = require('web.mvc');
+varmvc=require('web.mvc');
 
-// Renderers may display sample data when there is no real data to display. In
-// this case the data is displayed with opacity and can't be clicked. Moreover,
-// we also want to prevent the user from accessing DOM elements with TAB
-// navigation. This is the list of elements we won't allow to focus.
-const FOCUSABLE_ELEMENTS = [
-    // focusable by default
-    'a', 'button', 'input', 'select', 'textarea',
-    // manually set
+//Renderersmaydisplaysampledatawhenthereisnorealdatatodisplay.In
+//thiscasethedataisdisplayedwithopacityandcan'tbeclicked.Moreover,
+//wealsowanttopreventtheuserfromaccessingDOMelementswithTAB
+//navigation.Thisisthelistofelementswewon'tallowtofocus.
+constFOCUSABLE_ELEMENTS=[
+    //focusablebydefault
+    'a','button','input','select','textarea',
+    //manuallyset
     '[tabindex="0"]'
-].map((sel) => `:scope ${sel}`).join(', ');
+].map((sel)=>`:scope${sel}`).join(',');
 
 /**
- * @class AbstractRenderer
+ *@classAbstractRenderer
  */
-return mvc.Renderer.extend({
-    // Defines the elements suppressed when in demo data. This must be a list
-    // of DOM selectors matching view elements that will:
-    // 1. receive the 'o_sample_data_disabled' class (greyd out & no user events)
-    // 2. have themselves and any of their focusable children removed from the
-    //    tab navigation
-    sampleDataTargets: [],
+returnmvc.Renderer.extend({
+    //Definestheelementssuppressedwhenindemodata.Thismustbealist
+    //ofDOMselectorsmatchingviewelementsthatwill:
+    //1.receivethe'o_sample_data_disabled'class(greydout&nouserevents)
+    //2.havethemselvesandanyoftheirfocusablechildrenremovedfromthe
+    //   tabnavigation
+    sampleDataTargets:[],
 
     /**
-     * @override
-     * @param {string} [params.noContentHelp]
+     *@override
+     *@param{string}[params.noContentHelp]
      */
-    init: function (parent, state, params) {
-        this._super.apply(this, arguments);
-        this.arch = params.arch;
-        this.noContentHelp = params.noContentHelp;
-        this.withSearchPanel = params.withSearchPanel;
+    init:function(parent,state,params){
+        this._super.apply(this,arguments);
+        this.arch=params.arch;
+        this.noContentHelp=params.noContentHelp;
+        this.withSearchPanel=params.withSearchPanel;
     },
     /**
-     * The rendering is asynchronous. The start
-     * method simply makes sure that we render the view.
+     *Therenderingisasynchronous.Thestart
+     *methodsimplymakessurethatwerendertheview.
      *
-     * @returns {Promise}
+     *@returns{Promise}
      */
-    async start() {
+    asyncstart(){
         this.$el.addClass(this.arch.attrs.class);
-        if (this.withSearchPanel) {
+        if(this.withSearchPanel){
             this.$el.addClass('o_renderer_with_searchpanel');
         }
-        await Promise.all([this._render(), this._super()]);
+        awaitPromise.all([this._render(),this._super()]);
     },
     /**
-     * Called each time the renderer is attached into the DOM.
+     *CalledeachtimetherendererisattachedintotheDOM.
      */
-    on_attach_callback: function () {},
+    on_attach_callback:function(){},
     /**
-     * Called each time the renderer is detached from the DOM.
+     *CalledeachtimetherendererisdetachedfromtheDOM.
      */
-    on_detach_callback: function () {},
+    on_detach_callback:function(){},
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Returns any relevant state that the renderer might want to keep.
+     *Returnsanyrelevantstatethattherenderermightwanttokeep.
      *
-     * The idea is that a renderer can be destroyed, then be replaced by another
-     * one instantiated with the state from the model and the localState from
-     * the renderer, and the end result should be the same.
+     *Theideaisthatarenderercanbedestroyed,thenbereplacedbyanother
+     *oneinstantiatedwiththestatefromthemodelandthelocalStatefrom
+     *therenderer,andtheendresultshouldbethesame.
      *
-     * The kind of state that we expect the renderer to have is mostly DOM state
-     * such as the scroll position, the currently active tab page, ...
+     *ThekindofstatethatweexpecttherenderertohaveismostlyDOMstate
+     *suchasthescrollposition,thecurrentlyactivetabpage,...
      *
-     * This method is called before each updateState, by the controller.
+     *ThismethodiscalledbeforeeachupdateState,bythecontroller.
      *
-     * @see setLocalState
-     * @returns {any}
+     *@seesetLocalState
+     *@returns{any}
      */
-    getLocalState: function () {
+    getLocalState:function(){
     },
     /**
-     * Order to focus to be given to the content of the current view
+     *Ordertofocustobegiventothecontentofthecurrentview
      */
-    giveFocus: function () {
+    giveFocus:function(){
     },
     /**
-     * Resets state that renderer keeps, state may contains scroll position,
-     * the currently active tab page, ...
+     *Resetsstatethatrendererkeeps,statemaycontainsscrollposition,
+     *thecurrentlyactivetabpage,...
      *
-     * @see getLocalState
-     * @see setLocalState
+     *@seegetLocalState
+     *@seesetLocalState
      */
-    resetLocalState() {
+    resetLocalState(){
     },
     /**
-     * This is the reverse operation from getLocalState.  With this method, we
-     * expect the renderer to restore all DOM state, if it is relevant.
+     *ThisisthereverseoperationfromgetLocalState. Withthismethod,we
+     *expecttherenderertorestoreallDOMstate,ifitisrelevant.
      *
-     * This method is called after each updateState, by the controller.
+     *ThismethodiscalledaftereachupdateState,bythecontroller.
      *
-     * @see getLocalState
-     * @param {any} localState the result of a call to getLocalState
+     *@seegetLocalState
+     *@param{any}localStatetheresultofacalltogetLocalState
      */
-    setLocalState: function (localState) {
+    setLocalState:function(localState){
     },
     /**
-     * Updates the state of the view. It retriggers a full rerender, unless told
-     * otherwise (for optimization for example).
+     *Updatesthestateoftheview.Itretriggersafullrerender,unlesstold
+     *otherwise(foroptimizationforexample).
      *
-     * @param {any} state
-     * @param {Object} params
-     * @param {boolean} [params.noRender=false]
-     *        if true, the method only updates the state without rerendering
-     * @returns {Promise}
+     *@param{any}state
+     *@param{Object}params
+     *@param{boolean}[params.noRender=false]
+     *       iftrue,themethodonlyupdatesthestatewithoutrerendering
+     *@returns{Promise}
      */
-    async updateState(state, params) {
+    asyncupdateState(state,params){
         this._setState(state);
-        if (!params.noRender) {
-            await this._render();
+        if(!params.noRender){
+            awaitthis._render();
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Renders the widget. This method can be overriden to perform actions
-     * before or after the view has been rendered.
+     *Rendersthewidget.Thismethodcanbeoverridentoperformactions
+     *beforeoraftertheviewhasbeenrendered.
      *
-     * @private
-     * @returns {Promise}
+     *@private
+     *@returns{Promise}
      */
-    async _render() {
-        await this._renderView();
+    async_render(){
+        awaitthis._renderView();
         this._suppressFocusableElements();
     },
     /**
-     * @private
-     * @param {Object} context
+     *@private
+     *@param{Object}context
      */
-    _renderNoContentHelper: function (context) {
-        let templateName;
-        if (!context && this.noContentHelp) {
-            templateName = "web.ActionHelper";
-            context = { noContentHelp: this.noContentHelp };
-        } else {
-            templateName = "web.NoContentHelper";
+    _renderNoContentHelper:function(context){
+        lettemplateName;
+        if(!context&&this.noContentHelp){
+            templateName="web.ActionHelper";
+            context={noContentHelp:this.noContentHelp};
+        }else{
+            templateName="web.NoContentHelper";
         }
-        const template = document.createElement('template');
-        // FIXME: retrieve owl qweb instance via the env set on Component s.t.
-        // it also works in the tests (importing 'web.env' wouldn't). This
-        // won't be necessary as soon as this will be written in owl.
-        const owlQWeb = owl.Component.env.qweb;
-        template.innerHTML = owlQWeb.renderToString(templateName, context);
+        consttemplate=document.createElement('template');
+        //FIXME:retrieveowlqwebinstanceviatheenvsetonComponents.t.
+        //italsoworksinthetests(importing'web.env'wouldn't).This
+        //won'tbenecessaryassoonasthiswillbewritteninowl.
+        constowlQWeb=owl.Component.env.qweb;
+        template.innerHTML=owlQWeb.renderToString(templateName,context);
         this.el.append(template.content.firstChild);
     },
     /**
-     * Actual rendering. This method is meant to be overridden by concrete
-     * renderers.
+     *Actualrendering.Thismethodismeanttobeoverriddenbyconcrete
+     *renderers.
      *
-     * @abstract
-     * @private
-     * @returns {Promise}
+     *@abstract
+     *@private
+     *@returns{Promise}
      */
-    async _renderView() { },
+    async_renderView(){},
     /**
-     * Assigns a new state to the renderer if not false.
+     *Assignsanewstatetotherendererifnotfalse.
      *
-     * @private
-     * @param {any} [state=false]
+     *@private
+     *@param{any}[state=false]
      */
-    _setState(state = false) {
-        if (state !== false) {
-            this.state = state;
+    _setState(state=false){
+        if(state!==false){
+            this.state=state;
         }
     },
     /**
-     * Suppresses 'tabindex' property on any focusable element located inside
-     * root elements defined in the `this.sampleDataTargets` object and assigns
-     * the 'o_sample_data_disabled' class to these root elements.
+     *Suppresses'tabindex'propertyonanyfocusableelementlocatedinside
+     *rootelementsdefinedinthe`this.sampleDataTargets`objectandassigns
+     *the'o_sample_data_disabled'classtotheserootelements.
      *
-     * @private
-     * @see sampleDataTargets
+     *@private
+     *@seesampleDataTargets
      */
-    _suppressFocusableElements() {
-        if (!this.state.isSample || this.isEmbedded) {
+    _suppressFocusableElements(){
+        if(!this.state.isSample||this.isEmbedded){
             return;
         }
-        const rootEls = [];
-        for (const selector of this.sampleDataTargets) {
-            rootEls.push(...this.el.querySelectorAll(`:scope ${selector}`));
+        constrootEls=[];
+        for(constselectorofthis.sampleDataTargets){
+            rootEls.push(...this.el.querySelectorAll(`:scope${selector}`));
         }
-        const focusableEls = new Set(rootEls);
-        for (const rootEl of rootEls) {
+        constfocusableEls=newSet(rootEls);
+        for(constrootElofrootEls){
             rootEl.classList.add('o_sample_data_disabled');
-            for (const focusableEl of rootEl.querySelectorAll(FOCUSABLE_ELEMENTS)) {
+            for(constfocusableElofrootEl.querySelectorAll(FOCUSABLE_ELEMENTS)){
                 focusableEls.add(focusableEl);
             }
         }
-        for (const focusableEl of focusableEls) {
-            focusableEl.setAttribute('tabindex', -1);
-            if (focusableEl.classList.contains('dropdown-item')) {
-                // Tells Bootstrap to ignore the dropdown item in keynav
+        for(constfocusableEloffocusableEls){
+            focusableEl.setAttribute('tabindex',-1);
+            if(focusableEl.classList.contains('dropdown-item')){
+                //TellsBootstraptoignorethedropdowniteminkeynav
                 focusableEl.classList.add('disabled');
             }
         }

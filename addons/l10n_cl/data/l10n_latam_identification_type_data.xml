@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-    <data noupdate="False">
-        <record model='l10n_latam.identification.type' id='it_RUT'>
-            <field name='name'>RUT</field>
-            <field name='description'>RUT</field>
-            <field name='sequence'>11</field>
-            <field name='is_vat' eval='True'/>
-            <field name='country_id' ref="base.cl"/>
+    <datanoupdate="False">
+        <recordmodel='l10n_latam.identification.type'id='it_RUT'>
+            <fieldname='name'>RUT</field>
+            <fieldname='description'>RUT</field>
+            <fieldname='sequence'>11</field>
+            <fieldname='is_vat'eval='True'/>
+            <fieldname='country_id'ref="base.cl"/>
         </record>
-        <record model='l10n_latam.identification.type' id='it_RUN'>
-            <field name='name'>RUN</field>
-            <field name='description'>Cédula</field>
-            <field name='sequence'>12</field>
-            <field name='country_id' ref="base.cl"/>
+        <recordmodel='l10n_latam.identification.type'id='it_RUN'>
+            <fieldname='name'>RUN</field>
+            <fieldname='description'>Cédula</field>
+            <fieldname='sequence'>12</field>
+            <fieldname='country_id'ref="base.cl"/>
         </record>
-        <record model='l10n_latam.identification.type' id='it_DNI'>
-            <field name='name'>DNI</field>
-            <field name='description'>DNI Extranjero</field>
-            <field name='sequence'>13</field>
-            <field name='country_id' ref="base.cl"/>
+        <recordmodel='l10n_latam.identification.type'id='it_DNI'>
+            <fieldname='name'>DNI</field>
+            <fieldname='description'>DNIExtranjero</field>
+            <fieldname='sequence'>13</field>
+            <fieldname='country_id'ref="base.cl"/>
         </record>
     </data>
 </flectra>

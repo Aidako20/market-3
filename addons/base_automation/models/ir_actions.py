@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ServerAction(models.Model):
-    _inherit = "ir.actions.server"
+classServerAction(models.Model):
+    _inherit="ir.actions.server"
 
-    usage = fields.Selection(selection_add=[
-        ('base_automation', 'Automated Action')
-    ], ondelete={'base_automation': 'cascade'})
+    usage=fields.Selection(selection_add=[
+        ('base_automation','AutomatedAction')
+    ],ondelete={'base_automation':'cascade'})

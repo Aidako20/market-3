@@ -1,156 +1,156 @@
-flectra.define('website_slides.tour.slide.course.member', function (require) {
-'use strict';
+flectra.define('website_slides.tour.slide.course.member',function(require){
+'usestrict';
 
-var tour = require('web_tour.tour');
+vartour=require('web_tour.tour');
 
 /**
- * Global use case:
- * an user (either employee, website publisher or portal) joins a public
+ *Globalusecase:
+ *anuser(eitheremployee,websitepublisherorportal)joinsapublic
     course;
- * he has access to the full course content when he's a member of the
+ *hehasaccesstothefullcoursecontentwhenhe'samemberofthe
     course;
- * he uses fullscreen player to complete the course;
- * he rates the course;
+ *heusesfullscreenplayertocompletethecourse;
+ *heratesthecourse;
  */
-tour.register('course_member', {
-    url: '/slides',
-    test: true
-}, [
-// eLearning: go on free course and join it
+tour.register('course_member',{
+    url:'/slides',
+    test:true
+},[
+//eLearning:goonfreecourseandjoinit
 {
-    trigger: 'a:contains("Basics of Gardening - Test")'
-}, {
-    trigger: 'a:contains("Join Course")'
-}, {
-    trigger: '.o_wslides_js_course_join:contains("You\'re enrolled")',
-    run: function () {} // check membership
-}, {
-    trigger: 'a:contains("Gardening: The Know-How")',
+    trigger:'a:contains("BasicsofGardening-Test")'
+},{
+    trigger:'a:contains("JoinCourse")'
+},{
+    trigger:'.o_wslides_js_course_join:contains("You\'reenrolled")',
+    run:function(){}//checkmembership
+},{
+    trigger:'a:contains("Gardening:TheKnow-How")',
 },
-// eLearning: follow course by cliking on first lesson and going to fullscreen player
+//eLearning:followcoursebyclikingonfirstlessonandgoingtofullscreenplayer
 {
-    trigger: '.o_wslides_fs_sidebar_list_item div:contains("Home Gardening")'
+    trigger:'.o_wslides_fs_sidebar_list_itemdiv:contains("HomeGardening")'
 },
-// eLearning: share the first slide
+//eLearning:sharethefirstslide
 {
-    trigger: '.o_wslides_fs_share'
-}, {
-    trigger: '.o_wslides_js_share_email input[type="email"]',
-    run: 'text friend@example.com'
-}, {
-    trigger: '.o_wslides_js_share_email button',
-}, {
-    trigger: '.o_wslides_js_share_email:contains("Thank you")',
-    run: function () {}  // check email has been sent
-}, {
-    trigger: '.modal-footer button:contains("Cancel")',
+    trigger:'.o_wslides_fs_share'
+},{
+    trigger:'.o_wslides_js_share_emailinput[type="email"]',
+    run:'textfriend@example.com'
+},{
+    trigger:'.o_wslides_js_share_emailbutton',
+},{
+    trigger:'.o_wslides_js_share_email:contains("Thankyou")',
+    run:function(){} //checkemailhasbeensent
+},{
+    trigger:'.modal-footerbutton:contains("Cancel")',
 },
-// eLeaning: course completion
+//eLeaning:coursecompletion
 {
-    trigger: '.o_wslides_fs_sidebar_header',
-    run: function () {
-        // check navigation with arrow keys
-        var event = jQuery.Event("keydown");
-        event.key = "ArrowLeft";
-        // go back once
+    trigger:'.o_wslides_fs_sidebar_header',
+    run:function(){
+        //checknavigationwitharrowkeys
+        varevent=jQuery.Event("keydown");
+        event.key="ArrowLeft";
+        //gobackonce
         $(document).trigger(event);
-        // check that it selected the previous tab
-        if ($('.o_wslides_fs_sidebar_list_item.active:contains("Gardening: The Know-How")').length === 0) {
+        //checkthatitselectedtheprevioustab
+        if($('.o_wslides_fs_sidebar_list_item.active:contains("Gardening:TheKnow-How")').length===0){
             return;
         }
-        // getting here means that navigation worked
+        //gettingheremeansthatnavigationworked
         $('.o_wslides_fs_sidebar_header').addClass('navigation-success-1');
     }
-}, {
-    trigger: '.o_wslides_fs_sidebar_header.navigation-success-1',
-    extra_trigger: '.o_wslides_progress_percentage:contains("40")',
-    run: function () {
-        // check navigation with arrow keys
-        var event = jQuery.Event("keydown");
-        event.key = "ArrowRight";
+},{
+    trigger:'.o_wslides_fs_sidebar_header.navigation-success-1',
+    extra_trigger:'.o_wslides_progress_percentage:contains("40")',
+    run:function(){
+        //checknavigationwitharrowkeys
+        varevent=jQuery.Event("keydown");
+        event.key="ArrowRight";
         $(document).trigger(event);
-        // check that it selected the next/next tab
-        if ($('.o_wslides_fs_sidebar_list_item.active:contains("Home Gardening")').length === 0) {
+        //checkthatitselectedthenext/nexttab
+        if($('.o_wslides_fs_sidebar_list_item.active:contains("HomeGardening")').length===0){
             return;
         }
-        // getting here means that navigation worked
+        //gettingheremeansthatnavigationworked
         $('.o_wslides_fs_sidebar_header').addClass('navigation-success-2');
     }
-}, {
-    trigger: '.o_wslides_progress_percentage:contains("40")',
-    run: function () {} // check progression
-}, {
-    trigger: '.o_wslides_fs_sidebar_header.navigation-success-2',
-    extra_trigger: '.o_wslides_progress_percentage:contains("40")',
-    run: function () {
-        // check navigation with arrow keys
-        var event = jQuery.Event("keydown");
-        event.key = "ArrowRight";
-        setTimeout(function () {
+},{
+    trigger:'.o_wslides_progress_percentage:contains("40")',
+    run:function(){}//checkprogression
+},{
+    trigger:'.o_wslides_fs_sidebar_header.navigation-success-2',
+    extra_trigger:'.o_wslides_progress_percentage:contains("40")',
+    run:function(){
+        //checknavigationwitharrowkeys
+        varevent=jQuery.Event("keydown");
+        event.key="ArrowRight";
+        setTimeout(function(){
             $(document).trigger(event);
-            // check that it selected the next/next tab
-            if ($('.o_wslides_fs_sidebar_list_item.active:contains("Mighty Carrots")').length === 0) {
+            //checkthatitselectedthenext/nexttab
+            if($('.o_wslides_fs_sidebar_list_item.active:contains("MightyCarrots")').length===0){
                 return;
             }
-            // getting here means that navigation worked
+            //gettingheremeansthatnavigationworked
             $('.o_wslides_fs_sidebar_header').addClass('navigation-success-3');
-        }, 300);
+        },300);
     }
-}, {
-    trigger: '.o_wslides_progress_percentage:contains("60")',
-    run: function () {} // check progression
-}, {
-    trigger: '.o_wslides_fs_sidebar_header.navigation-success-3',
-    extra_trigger: '.o_wslides_progress_percentage:contains("60")',
-    run: function () {} // check that previous step succeeded
-}, {
-    trigger: '.o_wslides_fs_sidebar_list_item div:contains("How to Grow and Harvest The Best Strawberries | Basics")'
-}, {
-    trigger: '.o_wslides_fs_sidebar_section_slides li:contains("How to Grow and Harvest The Best Strawberries | Basics") .o_wslides_slide_completed',
-    run: function () {} // check that video slide is marked as 'done'
-}, {
-    trigger: '.o_wslides_progress_percentage:contains("80")',
-    run: function () {} // check progression
+},{
+    trigger:'.o_wslides_progress_percentage:contains("60")',
+    run:function(){}//checkprogression
+},{
+    trigger:'.o_wslides_fs_sidebar_header.navigation-success-3',
+    extra_trigger:'.o_wslides_progress_percentage:contains("60")',
+    run:function(){}//checkthatpreviousstepsucceeded
+},{
+    trigger:'.o_wslides_fs_sidebar_list_itemdiv:contains("HowtoGrowandHarvestTheBestStrawberries|Basics")'
+},{
+    trigger:'.o_wslides_fs_sidebar_section_slidesli:contains("HowtoGrowandHarvestTheBestStrawberries|Basics").o_wslides_slide_completed',
+    run:function(){}//checkthatvideoslideismarkedas'done'
+},{
+    trigger:'.o_wslides_progress_percentage:contains("80")',
+    run:function(){}//checkprogression
 },
-// eLearning: last slide is a quiz, complete it
+//eLearning:lastslideisaquiz,completeit
 {
-    trigger: '.o_wslides_fs_sidebar_list_item div:contains("Test your knowledge")'
-}, {
-    trigger: '.o_wslides_js_lesson_quiz_question:first .list-group a:first'
-}, {
-    trigger: '.o_wslides_js_lesson_quiz_question:last .list-group a:first'
-}, {
-    trigger: '.o_wslides_js_lesson_quiz_submit'
-}, {
-    trigger: 'a:contains("End course")'
+    trigger:'.o_wslides_fs_sidebar_list_itemdiv:contains("Testyourknowledge")'
+},{
+    trigger:'.o_wslides_js_lesson_quiz_question:first.list-groupa:first'
+},{
+    trigger:'.o_wslides_js_lesson_quiz_question:last.list-groupa:first'
+},{
+    trigger:'.o_wslides_js_lesson_quiz_submit'
+},{
+    trigger:'a:contains("Endcourse")'
 },
-// eLearning: ending course redirect to /slides, course is completed now
+//eLearning:endingcourseredirectto/slides,courseiscompletednow
 {
-    trigger: 'div:contains("Basics of Gardening") span:contains("Completed")',
-    run: function () {} // check that the course is marked as completed
+    trigger:'div:contains("BasicsofGardening")span:contains("Completed")',
+    run:function(){}//checkthatthecourseismarkedascompleted
 },
-// eLearning: go back on course and rate it (new rate or update it, both should work)
+//eLearning:gobackoncourseandrateit(newrateorupdateit,bothshouldwork)
 {
-    trigger: 'a:contains("Basics of Gardening")'
-}, {
-    trigger: 'button[data-target="#ratingpopupcomposer"]'
-}, {
-    trigger: 'form.o_portal_chatter_composer_form i.fa:eq(4)',
-    extra_trigger: 'div.modal_shown',
-    run: 'click',
-    in_modal: false,
-}, {
-    trigger: 'form.o_portal_chatter_composer_form textarea',
-    run: 'text This is a great course. Top !',
-    in_modal: false,
-}, {
-    trigger: 'button.o_portal_chatter_composer_btn',
-    in_modal: false,
-}, {
-    trigger: 'a[id="review-tab"]'
-}, {
-    trigger: '.o_portal_chatter_message:contains("This is a great course. Top !")',
-    run: function () {}, // check review is correctly added
+    trigger:'a:contains("BasicsofGardening")'
+},{
+    trigger:'button[data-target="#ratingpopupcomposer"]'
+},{
+    trigger:'form.o_portal_chatter_composer_formi.fa:eq(4)',
+    extra_trigger:'div.modal_shown',
+    run:'click',
+    in_modal:false,
+},{
+    trigger:'form.o_portal_chatter_composer_formtextarea',
+    run:'textThisisagreatcourse.Top!',
+    in_modal:false,
+},{
+    trigger:'button.o_portal_chatter_composer_btn',
+    in_modal:false,
+},{
+    trigger:'a[id="review-tab"]'
+},{
+    trigger:'.o_portal_chatter_message:contains("Thisisagreatcourse.Top!")',
+    run:function(){},//checkreviewiscorrectlyadded
 }
 ]);
 

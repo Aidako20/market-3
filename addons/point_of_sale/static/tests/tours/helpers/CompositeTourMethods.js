@@ -1,15 +1,15 @@
-flectra.define('point_of_sale.tour.CompositeTourMethods', function (require) {
-    'use strict';
+flectra.define('point_of_sale.tour.CompositeTourMethods',function(require){
+    'usestrict';
 
-    const { ProductScreen } = require('point_of_sale.tour.ProductScreenTourMethods');
-    const { ReceiptScreen } = require('point_of_sale.tour.ReceiptScreenTourMethods');
-    const { PaymentScreen } = require('point_of_sale.tour.PaymentScreenTourMethods');
-    const { ClientListScreen } = require('point_of_sale.tour.ClientListScreenTourMethods');
+    const{ProductScreen}=require('point_of_sale.tour.ProductScreenTourMethods');
+    const{ReceiptScreen}=require('point_of_sale.tour.ReceiptScreenTourMethods');
+    const{PaymentScreen}=require('point_of_sale.tour.PaymentScreenTourMethods');
+    const{ClientListScreen}=require('point_of_sale.tour.ClientListScreenTourMethods');
 
-    function makeFullOrder({ orderlist, customer, payment, ntimes = 1 }) {
-        for (let i = 0; i < ntimes; i++) {
+    functionmakeFullOrder({orderlist,customer,payment,ntimes=1}){
+        for(leti=0;i<ntimes;i++){
             ProductScreen.exec.addMultiOrderlines(...orderlist);
-            if (customer) {
+            if(customer){
                 ProductScreen.do.clickCustomerButton();
                 ClientListScreen.exec.setClient(customer);
             }
@@ -19,5 +19,5 @@ flectra.define('point_of_sale.tour.CompositeTourMethods', function (require) {
         }
     }
 
-    return { makeFullOrder };
+    return{makeFullOrder};
 });

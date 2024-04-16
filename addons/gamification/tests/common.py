@@ -1,19 +1,19 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.addons.base.tests.common import HttpCaseWithUserDemo, TransactionCaseWithUserDemo
+fromflectra.addons.base.tests.commonimportHttpCaseWithUserDemo,TransactionCaseWithUserDemo
 
 
-class HttpCaseGamification(HttpCaseWithUserDemo):
+classHttpCaseGamification(HttpCaseWithUserDemo):
 
-    def setUp(self):
+    defsetUp(self):
         super().setUp()
-        if not self.user_demo.karma:
-            self.user_demo.karma = 2500
+        ifnotself.user_demo.karma:
+            self.user_demo.karma=2500
 
 
-class TransactionCaseGamification(TransactionCaseWithUserDemo):
+classTransactionCaseGamification(TransactionCaseWithUserDemo):
 
-    def setUp(self):
+    defsetUp(self):
         super().setUp()
-        if not self.user_demo.karma:
-            self.user_demo.karma = 2500
+        ifnotself.user_demo.karma:
+            self.user_demo.karma=2500

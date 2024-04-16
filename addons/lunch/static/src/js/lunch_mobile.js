@@ -1,74 +1,74 @@
-flectra.define('lunch.LunchMobile', function (require) {
-"use strict";
+flectra.define('lunch.LunchMobile',function(require){
+"usestrict";
 
-var config = require('web.config');
-var LunchWidget = require('lunch.LunchWidget');
-var LunchKanbanController = require('lunch.LunchKanbanController');
-var LunchListController = require('lunch.LunchListController');
+varconfig=require('web.config');
+varLunchWidget=require('lunch.LunchWidget');
+varLunchKanbanController=require('lunch.LunchKanbanController');
+varLunchListController=require('lunch.LunchListController');
 
-if (!config.device.isMobile) {
+if(!config.device.isMobile){
     return;
 }
 
 LunchWidget.include({
-    template: "LunchWidgetMobile",
+    template:"LunchWidgetMobile",
 
     /**
-     * Override to set the toggle state allowing initially open it.
+     *Overridetosetthetogglestateallowinginitiallyopenit.
      *
-     * @override
+     *@override
      */
-    init: function (parent, params) {
-        this._super.apply(this, arguments);
-        this.keepOpen = params.keepOpen || undefined;
+    init:function(parent,params){
+        this._super.apply(this,arguments);
+        this.keepOpen=params.keepOpen||undefined;
     },
 });
 
-var mobileFunctions = {
+varmobileFunctions={
     /**
-     * @override
+     *@override
      */
-    init: function () {
-        this._super.apply(this, arguments);
-        this.openWidget = false;
+    init:function(){
+        this._super.apply(this,arguments);
+        this.openWidget=false;
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Override to add the widget's toggle state to its data.
+     *Overridetoaddthewidget'stogglestatetoitsdata.
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _renderLunchWidget: function () {
-        this.widgetData.keepOpen = this.openWidget;
-        this.openWidget = false;
-        return this._super.apply(this, arguments);
+    _renderLunchWidget:function(){
+        this.widgetData.keepOpen=this.openWidget;
+        this.openWidget=false;
+        returnthis._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onAddProduct: function () {
-        this.openWidget = true;
-        this._super.apply(this, arguments);
+    _onAddProduct:function(){
+        this.openWidget=true;
+        this._super.apply(this,arguments);
     },
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onRemoveProduct: function () {
-        this.openWidget = true;
-        this._super.apply(this, arguments);
+    _onRemoveProduct:function(){
+        this.openWidget=true;
+        this._super.apply(this,arguments);
     },
 };
 

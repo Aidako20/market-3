@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-import flectra
+importflectra
 
-def migrate(cr, version):
-    registry = flectra.registry(cr.dbname)
-    from flectra.addons.account.models.chart_template import migrate_set_tags_and_taxes_updatable
-    migrate_set_tags_and_taxes_updatable(cr, registry, 'l10n_in')
+defmigrate(cr,version):
+    registry=flectra.registry(cr.dbname)
+    fromflectra.addons.account.models.chart_templateimportmigrate_set_tags_and_taxes_updatable
+    migrate_set_tags_and_taxes_updatable(cr,registry,'l10n_in')

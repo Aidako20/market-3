@@ -1,138 +1,138 @@
-flectra.define('website.s_dynamic_snippet_options', function (require) {
-'use strict';
+flectra.define('website.s_dynamic_snippet_options',function(require){
+'usestrict';
 
-const options = require('web_editor.snippets.options');
+constoptions=require('web_editor.snippets.options');
 
-const dynamicSnippetOptions = options.Class.extend({
+constdynamicSnippetOptions=options.Class.extend({
 
     /**
      *
-     * @override
+     *@override
      */
-    init: function () {
-        this._super.apply(this, arguments);
-        this.dynamicFilters = {};
-        this.dynamicFilterTemplates = {};
+    init:function(){
+        this._super.apply(this,arguments);
+        this.dynamicFilters={};
+        this.dynamicFilterTemplates={};
     },
     /**
      *
-     * @override
+     *@override
      */
-    onBuilt: function () {
-        // TODO Remove in master.
-        this.$target[0].dataset['snippet'] = 's_dynamic_snippet';
+    onBuilt:function(){
+        //TODORemoveinmaster.
+        this.$target[0].dataset['snippet']='s_dynamic_snippet';
         this._setOptionsDefaultValues();
     },
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    selectDataAttribute: function (previewMode, widgetValue, params) {
-        this._super.apply(this, arguments);
-        if (params.attributeName === 'filterId' && previewMode === false) {
-            this.$target.get(0).dataset.numberOfRecords = this.dynamicFilters[parseInt(widgetValue)].limit;
+    selectDataAttribute:function(previewMode,widgetValue,params){
+        this._super.apply(this,arguments);
+        if(params.attributeName==='filterId'&&previewMode===false){
+            this.$target.get(0).dataset.numberOfRecords=this.dynamicFilters[parseInt(widgetValue)].limit;
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Fetches dynamic filters.
-     * @private
-     * @returns {Promise}
+     *Fetchesdynamicfilters.
+     *@private
+     *@returns{Promise}
      */
-    _fetchDynamicFilters: function () {
-		return this._rpc({route: '/website/snippet/options_filters'});
+    _fetchDynamicFilters:function(){
+		returnthis._rpc({route:'/website/snippet/options_filters'});
     },
     /**
-     * Fetch dynamic filters templates.
-     * @private
-     * @returns {Promise}
+     *Fetchdynamicfilterstemplates.
+     *@private
+     *@returns{Promise}
      */
-    _fetchDynamicFilterTemplates: function () {
-        return this._rpc({route: '/website/snippet/filter_templates'});
+    _fetchDynamicFilterTemplates:function(){
+        returnthis._rpc({route:'/website/snippet/filter_templates'});
     },
     /**
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _renderCustomXML: async function (uiFragment) {
-        await this._renderDynamicFiltersSelector(uiFragment);
-        await this._renderDynamicFilterTemplatesSelector(uiFragment);
+    _renderCustomXML:asyncfunction(uiFragment){
+        awaitthis._renderDynamicFiltersSelector(uiFragment);
+        awaitthis._renderDynamicFilterTemplatesSelector(uiFragment);
     },
     /**
-     * Renders the dynamic filter option selector content into the provided uiFragment.
-     * @param {HTMLElement} uiFragment
-     * @private
+     *RendersthedynamicfilteroptionselectorcontentintotheprovideduiFragment.
+     *@param{HTMLElement}uiFragment
+     *@private
      */
-    _renderDynamicFiltersSelector: async function (uiFragment) {
-        const dynamicFilters = await this._fetchDynamicFilters();
-        for (let index in dynamicFilters) {
-            this.dynamicFilters[dynamicFilters[index].id] = dynamicFilters[index];
+    _renderDynamicFiltersSelector:asyncfunction(uiFragment){
+        constdynamicFilters=awaitthis._fetchDynamicFilters();
+        for(letindexindynamicFilters){
+            this.dynamicFilters[dynamicFilters[index].id]=dynamicFilters[index];
         }
-        const filtersSelectorEl = uiFragment.querySelector('[data-name="filter_opt"]');
-        return this._renderSelectUserValueWidgetButtons(filtersSelectorEl, this.dynamicFilters);
+        constfiltersSelectorEl=uiFragment.querySelector('[data-name="filter_opt"]');
+        returnthis._renderSelectUserValueWidgetButtons(filtersSelectorEl,this.dynamicFilters);
     },
     /**
-     * Renders we-buttons into a SelectUserValueWidget element according to provided data.
-     * @param {HTMLElement} selectUserValueWidgetElement the SelectUserValueWidget buttons
-     *   have to be created into.
-     * @param {JSON} data
-     * @private
+     *Renderswe-buttonsintoaSelectUserValueWidgetelementaccordingtoprovideddata.
+     *@param{HTMLElement}selectUserValueWidgetElementtheSelectUserValueWidgetbuttons
+     *  havetobecreatedinto.
+     *@param{JSON}data
+     *@private
      */
-    _renderSelectUserValueWidgetButtons: async function (selectUserValueWidgetElement, data) {
-        for (let id in data) {
-            const button = document.createElement('we-button');
-            button.dataset.selectDataAttribute = id;
-            button.innerHTML = data[id].name;
+    _renderSelectUserValueWidgetButtons:asyncfunction(selectUserValueWidgetElement,data){
+        for(letidindata){
+            constbutton=document.createElement('we-button');
+            button.dataset.selectDataAttribute=id;
+            button.innerHTML=data[id].name;
             selectUserValueWidgetElement.appendChild(button);
         }
     },
     /**
-     * Renders the template option selector content into the provided uiFragment.
-     * @param {HTMLElement} uiFragment
-     * @private
+     *RendersthetemplateoptionselectorcontentintotheprovideduiFragment.
+     *@param{HTMLElement}uiFragment
+     *@private
      */
-    _renderDynamicFilterTemplatesSelector: async function (uiFragment) {
-        const dynamicFilterTemplates = await this._fetchDynamicFilterTemplates();
-        for (let index in dynamicFilterTemplates) {
-            this.dynamicFilterTemplates[dynamicFilterTemplates[index].key] = dynamicFilterTemplates[index];
+    _renderDynamicFilterTemplatesSelector:asyncfunction(uiFragment){
+        constdynamicFilterTemplates=awaitthis._fetchDynamicFilterTemplates();
+        for(letindexindynamicFilterTemplates){
+            this.dynamicFilterTemplates[dynamicFilterTemplates[index].key]=dynamicFilterTemplates[index];
         }
-        const templatesSelectorEl = uiFragment.querySelector('[data-name="template_opt"]');
-        return this._renderSelectUserValueWidgetButtons(templatesSelectorEl, this.dynamicFilterTemplates);
+        consttemplatesSelectorEl=uiFragment.querySelector('[data-name="template_opt"]');
+        returnthis._renderSelectUserValueWidgetButtons(templatesSelectorEl,this.dynamicFilterTemplates);
     },
     /**
-     * Sets default options values.
-     * Method to be overridden in child components in order to set additional
-     * options default values.
-     * @private
+     *Setsdefaultoptionsvalues.
+     *Methodtobeoverriddeninchildcomponentsinordertosetadditional
+     *optionsdefaultvalues.
+     *@private
      */
-    _setOptionsDefaultValues: function () {
-        this._setOptionValue('numberOfElements', 4);
-        this._setOptionValue('numberOfElementsSmallDevices', 1);
+    _setOptionsDefaultValues:function(){
+        this._setOptionValue('numberOfElements',4);
+        this._setOptionValue('numberOfElementsSmallDevices',1);
     },
     /**
-     * Sets the option value.
-     * @param optionName
-     * @param value
-     * @private
+     *Setstheoptionvalue.
+     *@paramoptionName
+     *@paramvalue
+     *@private
      */
-    _setOptionValue: function (optionName, value) {
-        if (this.$target.get(0).dataset[optionName] === undefined) {
-            this.$target.get(0).dataset[optionName] = value;
+    _setOptionValue:function(optionName,value){
+        if(this.$target.get(0).dataset[optionName]===undefined){
+            this.$target.get(0).dataset[optionName]=value;
         }
     },
 });
 
-options.registry.dynamic_snippet = dynamicSnippetOptions;
+options.registry.dynamic_snippet=dynamicSnippetOptions;
 
-return dynamicSnippetOptions;
+returndynamicSnippetOptions;
 });

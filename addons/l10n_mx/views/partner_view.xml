@@ -1,12 +1,12 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xmlversion='1.0'encoding='UTF-8'?>
 <flectra>
-    <record model="ir.ui.view" id="view_res_partner_inherit_l10n_mx_edi_bank">
-        <field name="name">view.res.partner.inherit.l10n_mx_edi_bank</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="account.view_partner_property_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='bank_ids']//field[@name='acc_number']" position="after">
-                <field name="l10n_mx_edi_clabe"/>
+    <recordmodel="ir.ui.view"id="view_res_partner_inherit_l10n_mx_edi_bank">
+        <fieldname="name">view.res.partner.inherit.l10n_mx_edi_bank</field>
+        <fieldname="model">res.partner</field>
+        <fieldname="inherit_id"ref="account.view_partner_property_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='bank_ids']//field[@name='acc_number']"position="after">
+                <fieldname="l10n_mx_edi_clabe"/>
             </xpath>
         </field>
     </record>

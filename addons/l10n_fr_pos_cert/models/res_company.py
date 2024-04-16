@@ -1,97 +1,97 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import models, api, fields, _
-from flectra.exceptions import UserError
-from datetime import datetime
-from flectra.fields import Datetime, Date
-from flectra.tools.misc import format_date
-import pytz
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportmodels,api,fields,_
+fromflectra.exceptionsimportUserError
+fromdatetimeimportdatetime
+fromflectra.fieldsimportDatetime,Date
+fromflectra.tools.miscimportformat_date
+importpytz
 
 
-def ctx_tz(record, field):
-    res_lang = None
-    ctx = record._context
-    tz_name = pytz.timezone(ctx.get('tz') or record.env.user.tz)
-    timestamp = Datetime.from_string(record[field])
-    if ctx.get('lang'):
-        res_lang = record.env['res.lang']._lang_get(ctx['lang'])
-    if res_lang:
-        timestamp = pytz.utc.localize(timestamp, is_dst=False)
-        return datetime.strftime(timestamp.astimezone(tz_name), res_lang.date_format + ' ' + res_lang.time_format)
-    return Datetime.context_timestamp(record, timestamp)
+defctx_tz(record,field):
+    res_lang=None
+    ctx=record._context
+    tz_name=pytz.timezone(ctx.get('tz')orrecord.env.user.tz)
+    timestamp=Datetime.from_string(record[field])
+    ifctx.get('lang'):
+        res_lang=record.env['res.lang']._lang_get(ctx['lang'])
+    ifres_lang:
+        timestamp=pytz.utc.localize(timestamp,is_dst=False)
+        returndatetime.strftime(timestamp.astimezone(tz_name),res_lang.date_format+''+res_lang.time_format)
+    returnDatetime.context_timestamp(record,timestamp)
 
 
-class ResCompany(models.Model):
-    _inherit = 'res.company'
+classResCompany(models.Model):
+    _inherit='res.company'
 
-    l10n_fr_pos_cert_sequence_id = fields.Many2one('ir.sequence')
+    l10n_fr_pos_cert_sequence_id=fields.Many2one('ir.sequence')
 
     @api.model
-    def create(self, vals):
-        company = super(ResCompany, self).create(vals)
-        #when creating a new french company, create the securisation sequence as well
-        if company._is_accounting_unalterable():
-            sequence_fields = ['l10n_fr_pos_cert_sequence_id']
+    defcreate(self,vals):
+        company=super(ResCompany,self).create(vals)
+        #whencreatinganewfrenchcompany,createthesecurisationsequenceaswell
+        ifcompany._is_accounting_unalterable():
+            sequence_fields=['l10n_fr_pos_cert_sequence_id']
             company._create_secure_sequence(sequence_fields)
-        return company
+        returncompany
 
-    def write(self, vals):
-        res = super(ResCompany, self).write(vals)
-        #if country changed to fr, create the securisation sequence
-        for company in self:
-            if company._is_accounting_unalterable():
-                sequence_fields = ['l10n_fr_pos_cert_sequence_id']
+    defwrite(self,vals):
+        res=super(ResCompany,self).write(vals)
+        #ifcountrychangedtofr,createthesecurisationsequence
+        forcompanyinself:
+            ifcompany._is_accounting_unalterable():
+                sequence_fields=['l10n_fr_pos_cert_sequence_id']
                 company._create_secure_sequence(sequence_fields)
-        return res
+        returnres
 
-    def _action_check_pos_hash_integrity(self):
-        return self.env.ref('l10n_fr_pos_cert.action_report_pos_hash_integrity').report_action(self.id)
+    def_action_check_pos_hash_integrity(self):
+        returnself.env.ref('l10n_fr_pos_cert.action_report_pos_hash_integrity').report_action(self.id)
 
-    def _check_pos_hash_integrity(self):
-        """Checks that all posted or invoiced pos orders have still the same data as when they were posted
-        and raises an error with the result.
+    def_check_pos_hash_integrity(self):
+        """Checksthatallpostedorinvoicedposordershavestillthesamedataaswhentheywereposted
+        andraisesanerrorwiththeresult.
         """
-        def build_order_info(order):
-            entry_reference = _('(Receipt ref.: %s)')
-            order_reference_string = order.pos_reference and entry_reference % order.pos_reference or ''
-            return [ctx_tz(order, 'date_order'), order.l10n_fr_hash, order.name, order_reference_string, ctx_tz(order, 'write_date')]
+        defbuild_order_info(order):
+            entry_reference=_('(Receiptref.:%s)')
+            order_reference_string=order.pos_referenceandentry_reference%order.pos_referenceor''
+            return[ctx_tz(order,'date_order'),order.l10n_fr_hash,order.name,order_reference_string,ctx_tz(order,'write_date')]
 
-        msg_alert = ''
-        report_dict = {}
-        if self._is_accounting_unalterable():
-            orders = self.env['pos.order'].search([('state', 'in', ['paid', 'done', 'invoiced']), ('company_id', '=', self.id),
-                                    ('l10n_fr_secure_sequence_number', '!=', 0)], order="l10n_fr_secure_sequence_number ASC")
+        msg_alert=''
+        report_dict={}
+        ifself._is_accounting_unalterable():
+            orders=self.env['pos.order'].search([('state','in',['paid','done','invoiced']),('company_id','=',self.id),
+                                    ('l10n_fr_secure_sequence_number','!=',0)],order="l10n_fr_secure_sequence_numberASC")
 
-            if not orders:
-                msg_alert = (_('There isn\'t any order flagged for data inalterability yet for the company %s. This mechanism only runs for point of sale orders generated after the installation of the module France - Certification CGI 286 I-3 bis. - POS', self.env.company.name))
-                raise UserError(msg_alert)
+            ifnotorders:
+                msg_alert=(_('Thereisn\'tanyorderflaggedfordatainalterabilityyetforthecompany%s.ThismechanismonlyrunsforpointofsaleordersgeneratedaftertheinstallationofthemoduleFrance-CertificationCGI286I-3bis.-POS',self.env.company.name))
+                raiseUserError(msg_alert)
 
-            previous_hash = u''
-            corrupted_orders = []
-            for order in orders:
-                if order.l10n_fr_hash != order._compute_hash(previous_hash=previous_hash):
+            previous_hash=u''
+            corrupted_orders=[]
+            fororderinorders:
+                iforder.l10n_fr_hash!=order._compute_hash(previous_hash=previous_hash):
                     corrupted_orders.append(order.name)
-                    msg_alert = (_('Corrupted data on point of sale order with id %s.', order.id))
-                previous_hash = order.l10n_fr_hash
+                    msg_alert=(_('Corrupteddataonpointofsaleorderwithid%s.',order.id))
+                previous_hash=order.l10n_fr_hash
 
-            orders_sorted_date = orders.sorted(lambda o: o.date_order)
-            start_order_info = build_order_info(orders_sorted_date[0])
-            end_order_info = build_order_info(orders_sorted_date[-1])
+            orders_sorted_date=orders.sorted(lambdao:o.date_order)
+            start_order_info=build_order_info(orders_sorted_date[0])
+            end_order_info=build_order_info(orders_sorted_date[-1])
 
             report_dict.update({
-                'first_order_name': start_order_info[2],
-                'first_order_hash': start_order_info[1],
-                'first_order_date': start_order_info[0],
-                'last_order_name': end_order_info[2],
-                'last_order_hash': end_order_info[1],
-                'last_order_date': end_order_info[0],
+                'first_order_name':start_order_info[2],
+                'first_order_hash':start_order_info[1],
+                'first_order_date':start_order_info[0],
+                'last_order_name':end_order_info[2],
+                'last_order_hash':end_order_info[1],
+                'last_order_date':end_order_info[0],
             })
-            corrupted_orders = ', '.join([o for o in corrupted_orders])
-            return {
-                'result': report_dict or 'None',
-                'msg_alert': msg_alert or 'None',
-                'printing_date': format_date(self.env,  Date.to_string( Date.today())),
-                'corrupted_orders': corrupted_orders or 'None'
+            corrupted_orders=','.join([oforoincorrupted_orders])
+            return{
+                'result':report_dictor'None',
+                'msg_alert':msg_alertor'None',
+                'printing_date':format_date(self.env, Date.to_string(Date.today())),
+                'corrupted_orders':corrupted_ordersor'None'
             }
         else:
-            raise UserError(_('Accounting is not unalterable for the company %s. This mechanism is designed for companies where accounting is unalterable.') % self.env.company.name)
+            raiseUserError(_('Accountingisnotunalterableforthecompany%s.Thismechanismisdesignedforcompanieswhereaccountingisunalterable.')%self.env.company.name)

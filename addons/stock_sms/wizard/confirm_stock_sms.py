@@ -1,31 +1,31 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ConfirmStockSms(models.TransientModel):
-    _name = 'confirm.stock.sms'
-    _description = 'Confirm Stock SMS'
+classConfirmStockSms(models.TransientModel):
+    _name='confirm.stock.sms'
+    _description='ConfirmStockSMS'
 
-    pick_ids = fields.Many2many('stock.picking', 'stock_picking_sms_rel')
+    pick_ids=fields.Many2many('stock.picking','stock_picking_sms_rel')
 
-    def send_sms(self):
+    defsend_sms(self):
         self.ensure_one()
-        for company in self.pick_ids.company_id:
-            if not company.has_received_warning_stock_sms:
-                company.sudo().write({'has_received_warning_stock_sms': True})
-        pickings_to_validate = self.env['stock.picking'].browse(self.env.context.get('button_validate_picking_ids'))
-        return pickings_to_validate.button_validate()
+        forcompanyinself.pick_ids.company_id:
+            ifnotcompany.has_received_warning_stock_sms:
+                company.sudo().write({'has_received_warning_stock_sms':True})
+        pickings_to_validate=self.env['stock.picking'].browse(self.env.context.get('button_validate_picking_ids'))
+        returnpickings_to_validate.button_validate()
 
-    def dont_send_sms(self):
+    defdont_send_sms(self):
         self.ensure_one()
-        for company in self.pick_ids.company_id:
-            if not company.has_received_warning_stock_sms:
+        forcompanyinself.pick_ids.company_id:
+            ifnotcompany.has_received_warning_stock_sms:
                 company.sudo().write({
-                    'has_received_warning_stock_sms': True,
-                    'stock_move_sms_validation': False,
+                    'has_received_warning_stock_sms':True,
+                    'stock_move_sms_validation':False,
                 })
-        pickings_to_validate = self.env['stock.picking'].browse(self.env.context.get('button_validate_picking_ids'))
-        return pickings_to_validate.button_validate()
+        pickings_to_validate=self.env['stock.picking'].browse(self.env.context.get('button_validate_picking_ids'))
+        returnpickings_to_validate.button_validate()
 

@@ -1,51 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <!-- add VAT, codice fiscal and tax system for main company -->
-        <record id="l10n_it.demo_company_it" model="res.company">
-            <field name="vat">IT01654010345</field>
-            <field name="street">Test Street</field>
-            <field name="city">Prova</field>
-            <field name="zip">12345</field>
-            <field name="l10n_it_codice_fiscale">01654010345</field>
-            <field name="l10n_it_tax_system">RF01</field>
-            <field name="zip">12345</field>
+    <datanoupdate="1">
+        <!--addVAT,codicefiscalandtaxsystemformaincompany-->
+        <recordid="l10n_it.demo_company_it"model="res.company">
+            <fieldname="vat">IT01654010345</field>
+            <fieldname="street">TestStreet</field>
+            <fieldname="city">Prova</field>
+            <fieldname="zip">12345</field>
+            <fieldname="l10n_it_codice_fiscale">01654010345</field>
+            <fieldname="l10n_it_tax_system">RF01</field>
+            <fieldname="zip">12345</field>
         </record>
 
-        <record id="l10n_it.partner_demo_company_it" model="res.partner">
-            <field name="l10n_it_pa_index">0803HR0</field>
+        <recordid="l10n_it.partner_demo_company_it"model="res.partner">
+            <fieldname="l10n_it_pa_index">0803HR0</field>
         </record>
 
-        <record id="partner_demo_it" model="res.partner">
-            <field name="name">Palazzo dell'Arte</field>
-            <field name="vat">IT00000010215</field>
-            <field name="street">Piazza Marconi 5</field>
-            <field name="city">Cremona</field>
-            <field name="country_id" ref="base.it"/>
-            <field name="state_id" ref="base.state_it_cr"/>
-            <field name="zip">26000</field>
-            <field name="email">info@partner.itexample.com</field>
-            <field name="website">www.itexample.com</field>
+        <recordid="partner_demo_it"model="res.partner">
+            <fieldname="name">Palazzodell'Arte</field>
+            <fieldname="vat">IT00000010215</field>
+            <fieldname="street">PiazzaMarconi5</field>
+            <fieldname="city">Cremona</field>
+            <fieldname="country_id"ref="base.it"/>
+            <fieldname="state_id"ref="base.state_it_cr"/>
+            <fieldname="zip">26000</field>
+            <fieldname="email">info@partner.itexample.com</field>
+            <fieldname="website">www.itexample.com</field>
         </record>
 
-    <record id="demo_l10n_it_edi_bank" model="res.partner.bank">
-        <field name="acc_type">iban</field>
-        <field name="acc_number">BE71096123456769</field>
-        <field name="bank_id" ref="base.bank_bnp"/>
-        <field name="partner_id" ref="l10n_it.partner_demo_company_it"/>
-        <field name="company_id" ref="l10n_it.demo_company_it"/>
+    <recordid="demo_l10n_it_edi_bank"model="res.partner.bank">
+        <fieldname="acc_type">iban</field>
+        <fieldname="acc_number">BE71096123456769</field>
+        <fieldname="bank_id"ref="base.bank_bnp"/>
+        <fieldname="partner_id"ref="l10n_it.partner_demo_company_it"/>
+        <fieldname="company_id"ref="l10n_it.demo_company_it"/>
     </record>
 
-    <record id="demo_l10n_it_edi_partner_a" model="res.partner">
-      <field name="name">Biscotti Oslenghi</field>
-      <field name="company_type">company</field>
-      <field name="country_id" ref="base.it"/>
-      <field name="street">1234 Strada del Caffè</field>
-      <field name="city">Milano</field>
-      <field name="zip">20100</field>
-      <field name="vat">IT06289781004</field>
-      <field name="l10n_it_codice_fiscale">06289781004</field>
-      <field name="l10n_it_pa_index">N8MIMM9</field>
+    <recordid="demo_l10n_it_edi_partner_a"model="res.partner">
+      <fieldname="name">BiscottiOslenghi</field>
+      <fieldname="company_type">company</field>
+      <fieldname="country_id"ref="base.it"/>
+      <fieldname="street">1234StradadelCaffè</field>
+      <fieldname="city">Milano</field>
+      <fieldname="zip">20100</field>
+      <fieldname="vat">IT06289781004</field>
+      <fieldname="l10n_it_codice_fiscale">06289781004</field>
+      <fieldname="l10n_it_pa_index">N8MIMM9</field>
     </record>
     </data>
 </flectra>

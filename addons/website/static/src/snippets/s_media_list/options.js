@@ -1,50 +1,50 @@
-flectra.define('website.s_media_list_options', function (require) {
-'use strict';
+flectra.define('website.s_media_list_options',function(require){
+'usestrict';
 
-const options = require('web_editor.snippets.options');
+constoptions=require('web_editor.snippets.options');
 
-options.registry.MediaItemLayout = options.Class.extend({
+options.registry.MediaItemLayout=options.Class.extend({
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * Change the media item layout.
+     *Changethemediaitemlayout.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    layout: function (previewMode, widgetValue, params) {
-        const $image = this.$target.find('.s_media_list_img_wrapper');
-        const $content = this.$target.find('.s_media_list_body');
+    layout:function(previewMode,widgetValue,params){
+        const$image=this.$target.find('.s_media_list_img_wrapper');
+        const$content=this.$target.find('.s_media_list_body');
 
-        for (const possibleValue of params.possibleValues) {
+        for(constpossibleValueofparams.possibleValues){
             $image.removeClass(`col-lg-${possibleValue}`);
-            $content.removeClass(`col-lg-${12 - possibleValue}`);
+            $content.removeClass(`col-lg-${12-possibleValue}`);
         }
         $image.addClass(`col-lg-${widgetValue}`);
-        $content.addClass(`col-lg-${12 - widgetValue}`);
+        $content.addClass(`col-lg-${12-widgetValue}`);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _computeWidgetState(methodName, params) {
-        switch (methodName) {
-            case 'layout': {
-                const $image = this.$target.find('.s_media_list_img_wrapper');
-                for (const possibleValue of params.possibleValues) {
-                    if ($image.hasClass(`col-lg-${possibleValue}`)) {
-                        return possibleValue;
+    _computeWidgetState(methodName,params){
+        switch(methodName){
+            case'layout':{
+                const$image=this.$target.find('.s_media_list_img_wrapper');
+                for(constpossibleValueofparams.possibleValues){
+                    if($image.hasClass(`col-lg-${possibleValue}`)){
+                        returnpossibleValue;
                     }
                 }
             }
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 });
 });

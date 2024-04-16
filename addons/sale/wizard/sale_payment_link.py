@@ -1,41 +1,41 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from werkzeug import urls
+fromwerkzeugimporturls
 
-from flectra import api, models
+fromflectraimportapi,models
 
 
-class SalePaymentLink(models.TransientModel):
-    _inherit = "payment.link.wizard"
-    _description = "Generate Sales Payment Link"
+classSalePaymentLink(models.TransientModel):
+    _inherit="payment.link.wizard"
+    _description="GenerateSalesPaymentLink"
 
     @api.model
-    def default_get(self, fields):
-        res = super(SalePaymentLink, self).default_get(fields)
-        if res['res_id'] and res['res_model'] == 'sale.order':
-            record = self.env[res['res_model']].browse(res['res_id'])
+    defdefault_get(self,fields):
+        res=super(SalePaymentLink,self).default_get(fields)
+        ifres['res_id']andres['res_model']=='sale.order':
+            record=self.env[res['res_model']].browse(res['res_id'])
             res.update({
-                'description': record.name,
-                'amount': record.amount_total - sum(record.invoice_ids.filtered(lambda x: x.state != 'cancel').mapped('amount_total')),
-                'currency_id': record.currency_id.id,
-                'partner_id': record.partner_id.id,
-                'amount_max': record.amount_total
+                'description':record.name,
+                'amount':record.amount_total-sum(record.invoice_ids.filtered(lambdax:x.state!='cancel').mapped('amount_total')),
+                'currency_id':record.currency_id.id,
+                'partner_id':record.partner_id.id,
+                'amount_max':record.amount_total
             })
-        return res
+        returnres
 
-    def _generate_link(self):
-        """ Override of the base method to add the order_id in the link. """
-        for payment_link in self:
-            # only add order_id for SOs,
-            # otherwise the controller might try to link it with an unrelated record
-            # NOTE: company_id is not necessary here, we have it in order_id
-            # however, should parsing of the id fail in the controller, let's include
-            # it anyway
-            if payment_link.res_model == 'sale.order':
-                record = self.env[payment_link.res_model].browse(payment_link.res_id)
-                payment_link.link = ('%s/website_payment/pay?reference=%s&amount=%s&currency_id=%s'
-                                    '&partner_id=%s&order_id=%s&company_id=%s&access_token=%s') % (
+    def_generate_link(self):
+        """Overrideofthebasemethodtoaddtheorder_idinthelink."""
+        forpayment_linkinself:
+            #onlyaddorder_idforSOs,
+            #otherwisethecontrollermighttrytolinkitwithanunrelatedrecord
+            #NOTE:company_idisnotnecessaryhere,wehaveitinorder_id
+            #however,shouldparsingoftheidfailinthecontroller,let'sinclude
+            #itanyway
+            ifpayment_link.res_model=='sale.order':
+                record=self.env[payment_link.res_model].browse(payment_link.res_id)
+                payment_link.link=('%s/website_payment/pay?reference=%s&amount=%s&currency_id=%s'
+                                    '&partner_id=%s&order_id=%s&company_id=%s&access_token=%s')%(
                                         record.get_base_url(),
                                         urls.url_quote_plus(payment_link.description),
                                         payment_link.amount,
@@ -46,4 +46,4 @@ class SalePaymentLink(models.TransientModel):
                                         payment_link.access_token
                                     )
             else:
-                super(SalePaymentLink, payment_link)._generate_link()
+                super(SalePaymentLink,payment_link)._generate_link()

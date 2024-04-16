@@ -1,49 +1,49 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <templates>
 
-    <t t-name="product.report_pricelist_qty">
+    <tt-name="product.report_pricelist_qty">
         <span>
-            <div class="input-group">
-                <input type="number" name="qty_to_add" class="o_input o_product_qty form-control text-right" value="1" min="1"/>
-                <div class="input-group-append">
-                    <button class="btn btn-secondary o_add_qty text-right form-control" type="submit" title="Add a quantity">
-                        <i class="fa fa-plus"/>
+            <divclass="input-group">
+                <inputtype="number"name="qty_to_add"class="o_inputo_product_qtyform-controltext-right"value="1"min="1"/>
+                <divclass="input-group-append">
+                    <buttonclass="btnbtn-secondaryo_add_qtytext-rightform-control"type="submit"title="Addaquantity">
+                        <iclass="fafa-plus"/>
                     </button>
                 </div>
             </div>
-            <span class="o_badges">
-                <t t-set="quantities" t-value="widget.quantities"/>
-                <t t-call="product.report_pricelist_qty_badges"/>
+            <spanclass="o_badges">
+                <tt-set="quantities"t-value="widget.quantities"/>
+                <tt-call="product.report_pricelist_qty_badges"/>
             </span>
         </span>
     </t>
 
-    <t t-name="product.report_pricelist_search">
-        <form class="form-inline ml-4 o_pricelist_report_form">
-            <div class="form-group">
-                <label class="font-weight-bold">Pricelist:</label>
-                <div class="row">
-                    <div class="col mr-4">
-                        <span class="o_pricelist"/>
+    <tt-name="product.report_pricelist_search">
+        <formclass="form-inlineml-4o_pricelist_report_form">
+            <divclass="form-group">
+                <labelclass="font-weight-bold">Pricelist:</label>
+                <divclass="row">
+                    <divclass="colmr-4">
+                        <spanclass="o_pricelist"/>
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="font-weight-bold" for="qty_to_add">Quantities:</label>
-                <div class="row">
-                    <div class="col">
-                        <span class="o_product_qty"/>
+            <divclass="form-group">
+                <labelclass="font-weight-bold"for="qty_to_add">Quantities:</label>
+                <divclass="row">
+                    <divclass="col">
+                        <spanclass="o_product_qty"/>
                     </div>
                 </div>
             </div>
         </form>
     </t>
 
-    <t t-name="product.report_pricelist_qty_badges">
-        <t t-foreach="quantities" t-as="qty">
-            <span class="badge badge-pill border" t-att-data-qty="qty">
-                <t t-esc="qty"/>
-                <i class="fa fa-close o_remove_qty" title="Remove quantity"/>
+    <tt-name="product.report_pricelist_qty_badges">
+        <tt-foreach="quantities"t-as="qty">
+            <spanclass="badgebadge-pillborder"t-att-data-qty="qty">
+                <tt-esc="qty"/>
+                <iclass="fafa-closeo_remove_qty"title="Removequantity"/>
             </span>
         </t>
     </t>

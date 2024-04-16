@@ -1,32 +1,32 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.vi = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.vi=factory()));
+}(this,function(){'usestrict';
 
-    var vi = {
-        code: "vi",
-        week: {
-            dow: 1,
-            doy: 4 // The week that contains Jan 4th is the first week of the year.
+    varvi={
+        code:"vi",
+        week:{
+            dow:1,
+            doy:4//TheweekthatcontainsJan4thisthefirstweekoftheyear.
         },
-        buttonText: {
-            prev: "Trước",
-            next: "Tiếp",
-            today: "Hôm nay",
-            month: "Tháng",
-            week: "Tuần",
-            day: "Ngày",
-            list: "Lịch biểu"
+        buttonText:{
+            prev:"Trước",
+            next:"Tiếp",
+            today:"Hômnay",
+            month:"Tháng",
+            week:"Tuần",
+            day:"Ngày",
+            list:"Lịchbiểu"
         },
-        weekLabel: "Tu",
-        allDayText: "Cả ngày",
-        eventLimitText: function (n) {
-            return "+ thêm " + n;
+        weekLabel:"Tu",
+        allDayText:"Cảngày",
+        eventLimitText:function(n){
+            return"+thêm"+n;
         },
-        noEventsMessage: "Không có sự kiện để hiển thị"
+        noEventsMessage:"Khôngcósựkiệnđểhiểnthị"
     };
 
-    return vi;
+    returnvi;
 
 }));

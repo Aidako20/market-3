@@ -1,44 +1,44 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-        <!-- External page : thanks message -->
-        <template id="rating_external_page_view" name="Rating Page Done">
-            <t t-call="web.frontend_layout">
-                <div class="container pt-5">
-                    <div class="text-center mt-5 pt-5">
-                        <h3 class="d-inline">Thank you, we appreciate your feedback!</h3>
+        <!--Externalpage:thanksmessage-->
+        <templateid="rating_external_page_view"name="RatingPageDone">
+            <tt-call="web.frontend_layout">
+                <divclass="containerpt-5">
+                    <divclass="text-centermt-5pt-5">
+                        <h3class="d-inline">Thankyou,weappreciateyourfeedback!</h3>
                     </div>
-                    <div class="text-center">
-                        <a role="button" t-att-href="web_base_url" class="btn btn-primary my-5">Go back to the Homepage</a>
+                    <divclass="text-center">
+                        <arole="button"t-att-href="web_base_url"class="btnbtn-primarymy-5">GobacktotheHomepage</a>
                     </div>
                 </div>
             </t>
         </template>
 
-        <!-- External page: rate and submit feedback -->
-        <template id="rating_external_page_submit" name="Rating Page Submit">
-            <t t-call="web.frontend_layout">
-                <div class="container card mb-5 mt-4 o_rating_page_submit">
-                    <div class="card-body">
-                        <div class="row text-center justify-content-center">
-                            <h1 class="col-12 mt-5">Thank you for rating our services!</h1>
-                            <form t-attf-action="/rate/#{token}/submit_feedback" method="post">
-                                <div class="btn-group btn-group-toggle row" data-toggle="buttons">
-                                    <t t-foreach="rate_names" t-as="rate_name">
-                                        <label t-attf-class="col-xs-12 btn o_rating_label shadow-none {{rate == rate_name and 'active' or ''}}">
-                                            <input type="radio" name="rate" t-attf-id="rate_{{rate_name}}" t-att-value="rate_name" t-att-checked="rate == rate_name"/>
-                                            <a class="o_rating" href="#">
-                                                <img t-attf-src='/rating/static/src/img/rating_#{rate_name}.png' t-att-alt="rate_name_value" t-att-title="rate_name_value"/>
+        <!--Externalpage:rateandsubmitfeedback-->
+        <templateid="rating_external_page_submit"name="RatingPageSubmit">
+            <tt-call="web.frontend_layout">
+                <divclass="containercardmb-5mt-4o_rating_page_submit">
+                    <divclass="card-body">
+                        <divclass="rowtext-centerjustify-content-center">
+                            <h1class="col-12mt-5">Thankyouforratingourservices!</h1>
+                            <formt-attf-action="/rate/#{token}/submit_feedback"method="post">
+                                <divclass="btn-groupbtn-group-togglerow"data-toggle="buttons">
+                                    <tt-foreach="rate_names"t-as="rate_name">
+                                        <labelt-attf-class="col-xs-12btno_rating_labelshadow-none{{rate==rate_nameand'active'or''}}">
+                                            <inputtype="radio"name="rate"t-attf-id="rate_{{rate_name}}"t-att-value="rate_name"t-att-checked="rate==rate_name"/>
+                                            <aclass="o_rating"href="#">
+                                                <imgt-attf-src='/rating/static/src/img/rating_#{rate_name}.png't-att-alt="rate_name_value"t-att-title="rate_name_value"/>
                                             </a>
                                         </label>
                                     </t>
                                 </div>
-                                <div class="clearfix"></div>
-                                <p class="mt-5">
-                                    Feel free to write a feedback on your experience:
+                                <divclass="clearfix"></div>
+                                <pclass="mt-5">
+                                    Feelfreetowriteafeedbackonyourexperience:
                                 </p>
-                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                                <textarea class="form-control" name="feedback" rows="8" t-att-value="rating.feedback"></textarea>
-                                <button type="submit" class="btn btn-primary" style="margin-top:8px;">Send Feedback</button>
+                                <inputtype="hidden"name="csrf_token"t-att-value="request.csrf_token()"/>
+                                <textareaclass="form-control"name="feedback"rows="8"t-att-value="rating.feedback"></textarea>
+                                <buttontype="submit"class="btnbtn-primary"style="margin-top:8px;">SendFeedback</button>
                             </form>
                         </div>
                     </div>

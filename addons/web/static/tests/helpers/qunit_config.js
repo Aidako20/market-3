@@ -1,251 +1,251 @@
-(function() {
-"use strict";
+(function(){
+"usestrict";
 
 /**
- * QUnit Config
+ *QUnitConfig
  *
- * The Flectra javascript test framework is based on QUnit (http://qunitjs.com/).
- * This file is necessary to setup Qunit and to prepare its interactions with
- * Flectra.  It has to be loaded before any tests are defined.
+ *TheFlectrajavascripttestframeworkisbasedonQUnit(http://qunitjs.com/).
+ *ThisfileisnecessarytosetupQunitandtoprepareitsinteractionswith
+ *Flectra. Ithastobeloadedbeforeanytestsaredefined.
  *
- * Note that it is not an Flectra module, because we want this code to be executed
- * as soon as possible, not whenever the Flectra module system feels like it.
+ *NotethatitisnotanFlectramodule,becausewewantthiscodetobeexecuted
+ *assoonaspossible,notwhenevertheFlectramodulesystemfeelslikeit.
  */
 
 
 /**
- * This configuration variable is not strictly necessary, but it ensures more
- * safety for asynchronous tests.  With it, each test has to explicitely tell
- * QUnit how many assertion it expects, otherwise the test will fail.
+ *Thisconfigurationvariableisnotstrictlynecessary,butitensuresmore
+ *safetyforasynchronoustests. Withit,eachtesthastoexplicitelytell
+ *QUnithowmanyassertionitexpects,otherwisethetestwillfail.
  */
-QUnit.config.requireExpects = true;
+QUnit.config.requireExpects=true;
 
 /**
- * not important in normal mode, but in debug=assets, the files are loaded
- * asynchroneously, which can lead to various issues with QUnit... Notice that
- * this is done outside of flectra modules, otherwise the setting would not take
- * effect on time.
+ *notimportantinnormalmode,butindebug=assets,thefilesareloaded
+ *asynchroneously,whichcanleadtovariousissueswithQUnit...Noticethat
+ *thisisdoneoutsideofflectramodules,otherwisethesettingwouldnottake
+ *effectontime.
  */
-QUnit.config.autostart = false;
+QUnit.config.autostart=false;
 
 /**
- * A test timeout of 1 min, before an async test is considered failed.
+ *Atesttimeoutof1min,beforeanasynctestisconsideredfailed.
  */
-QUnit.config.testTimeout = 1 * 60 * 1000;
+QUnit.config.testTimeout=1*60*1000;
 
 /**
- * Hide passed tests by default in the QUnit page
+ *HidepassedtestsbydefaultintheQUnitpage
  */
-QUnit.config.hidepassed = (window.location.href.match(/[?&]testId=/) === null);
+QUnit.config.hidepassed=(window.location.href.match(/[?&]testId=/)===null);
 
-var sortButtonAppended = false;
+varsortButtonAppended=false;
 
 /**
- * If we want to log several errors, we have to log all of them at once, as
- * browser_js is closed as soon as an error is logged.
+ *Ifwewanttologseveralerrors,wehavetologallofthematonce,as
+ *browser_jsisclosedassoonasanerrorislogged.
  */
-const errorMessages = [];
+consterrorMessages=[];
 /**
- * List of elements tolerated in the body after a test. The property "keep"
- * prevents the element from being removed (typically: qunit suite elements).
+ *Listofelementstoleratedinthebodyafteratest.Theproperty"keep"
+ *preventstheelementfrombeingremoved(typically:qunitsuiteelements).
  */
-const validElements = [
-    // always in the body:
-    { tagName: 'DIV', attr: 'id', value: 'qunit', keep: true },
-    { tagName: 'DIV', attr: 'id', value: 'qunit-fixture', keep: true },
-    // shouldn't be in the body after a test but are tolerated:
-    { tagName: 'SCRIPT', attr: 'id', value: '' },
-    { tagName: 'DIV', attr: 'className', value: 'o_notification_manager' },
-    { tagName: 'DIV', attr: 'className', value: 'tooltip fade bs-tooltip-auto' },
-    { tagName: 'DIV', attr: 'className', value: 'tooltip fade bs-tooltip-auto show' },
-    { tagName: 'SPAN', attr: 'className', value: 'select2-hidden-accessible' },
-    // Due to a Document Kanban bug (already present in 12.0)
-    { tagName: 'DIV', attr: 'className', value: 'ui-helper-hidden-accessible' },
-    { tagName: 'UL', attr: 'className', value: 'ui-menu ui-widget ui-widget-content ui-autocomplete ui-front' },
+constvalidElements=[
+    //alwaysinthebody:
+    {tagName:'DIV',attr:'id',value:'qunit',keep:true},
+    {tagName:'DIV',attr:'id',value:'qunit-fixture',keep:true},
+    //shouldn'tbeinthebodyafteratestbutaretolerated:
+    {tagName:'SCRIPT',attr:'id',value:''},
+    {tagName:'DIV',attr:'className',value:'o_notification_manager'},
+    {tagName:'DIV',attr:'className',value:'tooltipfadebs-tooltip-auto'},
+    {tagName:'DIV',attr:'className',value:'tooltipfadebs-tooltip-autoshow'},
+    {tagName:'SPAN',attr:'className',value:'select2-hidden-accessible'},
+    //DuetoaDocumentKanbanbug(alreadypresentin12.0)
+    {tagName:'DIV',attr:'className',value:'ui-helper-hidden-accessible'},
+    {tagName:'UL',attr:'className',value:'ui-menuui-widgetui-widget-contentui-autocompleteui-front'},
 ];
 
 /**
- * Waits for the module system to end processing the JS modules, so that we can
- * make the suite fail if some modules couldn't be loaded (e.g. because of a
- * missing dependency).
+ *WaitsforthemodulesystemtoendprocessingtheJSmodules,sothatwecan
+ *makethesuitefailifsomemodulescouldn'tbeloaded(e.g.becauseofa
+ *missingdependency).
  *
- * @returns {Promise<boolean>}
+ *@returns{Promise<boolean>}
  */
-async function checkModules() {
-    // do not mark the suite as successful already, as we still need to ensure
-    // that all modules have been correctly loaded
+asyncfunctioncheckModules(){
+    //donotmarkthesuiteassuccessfulalready,aswestillneedtoensure
+    //thatallmoduleshavebeencorrectlyloaded
     $('#qunit-banner').removeClass('qunit-pass');
-    const $modulesAlert = $('<div>')
-        .addClass('alert alert-info')
-        .text('Waiting for modules check...');
+    const$modulesAlert=$('<div>')
+        .addClass('alertalert-info')
+        .text('Waitingformodulescheck...');
     $modulesAlert.appendTo('#qunit');
 
-    // wait for the module system to end processing the JS modules
-    await flectra.__DEBUG__.didLogInfo;
+    //waitforthemodulesystemtoendprocessingtheJSmodules
+    awaitflectra.__DEBUG__.didLogInfo;
 
-    const info = flectra.__DEBUG__.jsModules;
-    if (info.missing.length || info.failed.length) {
+    constinfo=flectra.__DEBUG__.jsModules;
+    if(info.missing.length||info.failed.length){
         $('#qunit-banner').addClass('qunit-fail');
-        $modulesAlert.toggleClass('alert-info alert-danger');
-        const failingModules = info.missing.concat(info.failed);
-        const error = `Some modules couldn't be started: ${failingModules.join(', ')}.`;
+        $modulesAlert.toggleClass('alert-infoalert-danger');
+        constfailingModules=info.missing.concat(info.failed);
+        consterror=`Somemodulescouldn'tbestarted:${failingModules.join(',')}.`;
         $modulesAlert.text(error);
         errorMessages.unshift(error);
-        return false;
-    } else {
-        $modulesAlert.toggleClass('alert-info alert-success');
-        $modulesAlert.text('All modules have been correctly loaded.');
+        returnfalse;
+    }else{
+        $modulesAlert.toggleClass('alert-infoalert-success');
+        $modulesAlert.text('Allmoduleshavebeencorrectlyloaded.');
         $('#qunit-banner').addClass('qunit-pass');
-        return true;
+        returntrue;
     }
 }
 
 /**
- * This is the way the testing framework knows that tests passed or failed. It
- * only look in the phantomJS console and check if there is a ok or an error.
+ *Thisisthewaythetestingframeworkknowsthattestspassedorfailed.It
+ *onlylookinthephantomJSconsoleandcheckifthereisaokoranerror.
  *
- * Someday, we should devise a safer strategy...
+ *Someday,weshoulddeviseasaferstrategy...
  */
-QUnit.done(async function (result) {
-    const allModulesLoaded = await checkModules();
-    if (result.failed) {
-        errorMessages.push(`${result.failed} / ${result.total} tests failed.`);
+QUnit.done(asyncfunction(result){
+    constallModulesLoaded=awaitcheckModules();
+    if(result.failed){
+        errorMessages.push(`${result.failed}/${result.total}testsfailed.`);
     }
-    if (!result.failed && allModulesLoaded) {
-        console.log('test successful');
-    } else {
+    if(!result.failed&&allModulesLoaded){
+        console.log('testsuccessful');
+    }else{
         console.error(errorMessages.join('\n'));
     }
 
-    if (!sortButtonAppended) {
+    if(!sortButtonAppended){
         _addSortButton();
     }
 });
 
 /**
- * This logs various data in the console, which will be available in the log
- * .txt file generated by the runbot.
+ *Thislogsvariousdataintheconsole,whichwillbeavailableinthelog
+ *.txtfilegeneratedbytherunbot.
  */
-QUnit.log(function (result) {
-    if (!result.result) {
-        var info = `QUnit test failed "${result.module} > ${result.name}": ${result.message}`;
-        if (result.actual != null) {
-            info += `\nactual: ${result.actual}`
+QUnit.log(function(result){
+    if(!result.result){
+        varinfo=`QUnittestfailed"${result.module}>${result.name}":${result.message}`;
+        if(result.actual!=null){
+            info+=`\nactual:${result.actual}`
         }
-        if (result.expected != null) {
-            info += `\nexpected: ${result.expected}`;
+        if(result.expected!=null){
+            info+=`\nexpected:${result.expected}`;
         }
         errorMessages.push(info);
     }
 });
 
 /**
- * This is done mostly for the .txt log file generated by the runbot.
+ *Thisisdonemostlyforthe.txtlogfilegeneratedbytherunbot.
  */
-QUnit.moduleDone(function(result) {
-    if (!result.failed) {
-        console.log('"' + result.name + '"', "passed", result.total, "tests.");
-    } else {
-        console.log('"' + result.name + '"',
-                    "failed", result.failed,
-                    "tests out of", result.total, ".");
+QUnit.moduleDone(function(result){
+    if(!result.failed){
+        console.log('"'+result.name+'"',"passed",result.total,"tests.");
+    }else{
+        console.log('"'+result.name+'"',
+                    "failed",result.failed,
+                    "testsoutof",result.total,".");
     }
 
 });
 
 /**
- * After each test, we check that there is no leftover in the DOM. If there is
- * and the test hasn't already failed, trigger a failure
+ *Aftereachtest,wecheckthatthereisnoleftoverintheDOM.Ifthereis
+ *andthetesthasn'talreadyfailed,triggerafailure
  */
-QUnit.on('FlectraAfterTestHook', function (info) {
-    const failed = info.testReport.getStatus() === 'failed';
-    const toRemove = [];
-    // check for leftover elements in the body
-    for (const bodyChild of document.body.children) {
-        const tolerated = validElements.find((e) =>
-            e.tagName === bodyChild.tagName && bodyChild[e.attr] === e.value
+QUnit.on('FlectraAfterTestHook',function(info){
+    constfailed=info.testReport.getStatus()==='failed';
+    consttoRemove=[];
+    //checkforleftoverelementsinthebody
+    for(constbodyChildofdocument.body.children){
+        consttolerated=validElements.find((e)=>
+            e.tagName===bodyChild.tagName&&bodyChild[e.attr]===e.value
         );
-        if (!failed && !tolerated) {
-            QUnit.pushFailure(`Body still contains undesirable elements:\n${bodyChild.outerHTML}`);
+        if(!failed&&!tolerated){
+            QUnit.pushFailure(`Bodystillcontainsundesirableelements:\n${bodyChild.outerHTML}`);
         }
-        if (!tolerated || !tolerated.keep) {
+        if(!tolerated||!tolerated.keep){
             toRemove.push(bodyChild);
         }
     }
 
-    // check for leftovers in #qunit-fixture
-    const qunitFixture = document.getElementById('qunit-fixture');
-    if (qunitFixture.children.length) {
-        if (!failed) {
-            QUnit.pushFailure(`#qunit-fixture still contains elements:\n${qunitFixture.outerHTML}`);
+    //checkforleftoversin#qunit-fixture
+    constqunitFixture=document.getElementById('qunit-fixture');
+    if(qunitFixture.children.length){
+        if(!failed){
+            QUnit.pushFailure(`#qunit-fixturestillcontainselements:\n${qunitFixture.outerHTML}`);
         }
         toRemove.push(...qunitFixture.children);
     }
 
-    // remove unwanted elements if not in debug
-    if (!document.body.classList.contains('debug')) {
-        for (const el of toRemove) {
+    //removeunwantedelementsifnotindebug
+    if(!document.body.classList.contains('debug')){
+        for(consteloftoRemove){
             el.remove();
         }
     }
 });
 
 /**
- * Add a sort button on top of the QUnit result page, so we can see which tests
- * take the most time.
+ *AddasortbuttonontopoftheQUnitresultpage,sowecanseewhichtests
+ *takethemosttime.
  */
-function _addSortButton() {
-    sortButtonAppended = true;
-    var $sort = $('<label> sort by time (desc)</label>').css({float: 'right'});
+function_addSortButton(){
+    sortButtonAppended=true;
+    var$sort=$('<label>sortbytime(desc)</label>').css({float:'right'});
     $('h2#qunit-userAgent').append($sort);
-    $sort.click(function() {
-        var $ol = $('ol#qunit-tests');
-        var $results = $ol.children('li').get();
-        $results.sort(function (a, b) {
-            var timeA = Number($(a).find('span.runtime').first().text().split(" ")[0]);
-            var timeB = Number($(b).find('span.runtime').first().text().split(" ")[0]);
-            if (timeA < timeB) {
-                return 1;
-            } else if (timeA > timeB) {
-                return -1;
-            } else {
-                return 0;
+    $sort.click(function(){
+        var$ol=$('ol#qunit-tests');
+        var$results=$ol.children('li').get();
+        $results.sort(function(a,b){
+            vartimeA=Number($(a).find('span.runtime').first().text().split("")[0]);
+            vartimeB=Number($(b).find('span.runtime').first().text().split("")[0]);
+            if(timeA<timeB){
+                return1;
+            }elseif(timeA>timeB){
+                return-1;
+            }else{
+                return0;
             }
         });
-        $.each($results, function(idx, $itm) { $ol.append($itm); });
+        $.each($results,function(idx,$itm){$ol.append($itm);});
 
     });
 }
 
 /**
- * We add here a 'fail fast' feature: we often want to stop the test suite after
- * the first failed test.  This is also useful for the runbot test suites.
+ *Weaddherea'failfast'feature:weoftenwanttostopthetestsuiteafter
+ *thefirstfailedtest. Thisisalsousefulfortherunbottestsuites.
  */
 
 QUnit.config.urlConfig.push({
-  id: "failfast",
-  label: "Fail Fast",
-  tooltip: "Stop the test suite immediately after the first failed test."
+  id:"failfast",
+  label:"FailFast",
+  tooltip:"Stopthetestsuiteimmediatelyafterthefirstfailedtest."
 });
 
-QUnit.begin(function() {
-    if (QUnit.config.failfast) {
-        QUnit.testDone(function(details) {
-            if (details.failed > 0) {
-                QUnit.config.queue.length = 0;
+QUnit.begin(function(){
+    if(QUnit.config.failfast){
+        QUnit.testDone(function(details){
+            if(details.failed>0){
+                QUnit.config.queue.length=0;
             }
         });
     }
 });
 
 /**
- * FIXME: This sounds stupid, it feels stupid... but it fixes visibility check in folded <details> since Chromium 97+ 💩
- * Since https://bugs.chromium.org/p/chromium/issues/detail?id=1185950
- * See regression report https://bugs.chromium.org/p/chromium/issues/detail?id=1276028
+ *FIXME:Thissoundsstupid,itfeelsstupid...butitfixesvisibilitycheckinfolded<details>sinceChromium97+💩
+ *Sincehttps://bugs.chromium.org/p/chromium/issues/detail?id=1185950
+ *Seeregressionreporthttps://bugs.chromium.org/p/chromium/issues/detail?id=1276028
  */
-QUnit.begin(function () {
-    const el = document.createElement("style");
-    el.innerText = "details:not([open]) > :not(summary) { display: none; }";
+QUnit.begin(function(){
+    constel=document.createElement("style");
+    el.innerText="details:not([open])>:not(summary){display:none;}";
     document.head.appendChild(el);
 });
 

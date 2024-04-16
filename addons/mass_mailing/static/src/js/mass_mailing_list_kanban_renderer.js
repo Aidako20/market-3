@@ -1,16 +1,16 @@
-flectra.define('mass_mailing.ListKanbanRenderer', function (require) {
-"use strict";
+flectra.define('mass_mailing.ListKanbanRenderer',function(require){
+"usestrict";
 
-var MassMailingListKanbanRecord = require('mass_mailing.ListKanbanRecord');
+varMassMailingListKanbanRecord=require('mass_mailing.ListKanbanRecord');
 
-var KanbanRenderer = require('web.KanbanRenderer');
+varKanbanRenderer=require('web.KanbanRenderer');
 
-var MassMailingListKanbanRenderer = KanbanRenderer.extend({
-    config: _.extend({}, KanbanRenderer.prototype.config, {
-        KanbanRecord: MassMailingListKanbanRecord,
+varMassMailingListKanbanRenderer=KanbanRenderer.extend({
+    config:_.extend({},KanbanRenderer.prototype.config,{
+        KanbanRecord:MassMailingListKanbanRecord,
     })
 });
 
-return MassMailingListKanbanRenderer;
+returnMassMailingListKanbanRenderer;
 
 });

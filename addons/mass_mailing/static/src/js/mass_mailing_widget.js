@@ -1,109 +1,109 @@
-flectra.define('mass_mailing.FieldHtml', function (require) {
-'use strict';
+flectra.define('mass_mailing.FieldHtml',function(require){
+'usestrict';
 
-var config = require('web.config');
-var core = require('web.core');
-var FieldHtml = require('web_editor.field.html');
-var fieldRegistry = require('web.field_registry');
-var convertInline = require('web_editor.convertInline');
+varconfig=require('web.config');
+varcore=require('web.core');
+varFieldHtml=require('web_editor.field.html');
+varfieldRegistry=require('web.field_registry');
+varconvertInline=require('web_editor.convertInline');
 
-var _t = core._t;
+var_t=core._t;
 
 
-var MassMailingFieldHtml = FieldHtml.extend({
-    xmlDependencies: (FieldHtml.prototype.xmlDependencies || []).concat(["/mass_mailing/static/src/xml/mass_mailing.xml"]),
-    jsLibs: [
+varMassMailingFieldHtml=FieldHtml.extend({
+    xmlDependencies:(FieldHtml.prototype.xmlDependencies||[]).concat(["/mass_mailing/static/src/xml/mass_mailing.xml"]),
+    jsLibs:[
         '/mass_mailing/static/src/js/mass_mailing_link_dialog_fix.js',
     ],
 
-    custom_events: _.extend({}, FieldHtml.prototype.custom_events, {
-        snippets_loaded: '_onSnippetsLoaded',
+    custom_events:_.extend({},FieldHtml.prototype.custom_events,{
+        snippets_loaded:'_onSnippetsLoaded',
     }),
 
     /**
-     * @override
+     *@override
      */
-    init: function () {
-        this._super.apply(this, arguments);
-        if (!this.nodeOptions.snippets) {
-            this.nodeOptions.snippets = 'mass_mailing.email_designer_snippets';
+    init:function(){
+        this._super.apply(this,arguments);
+        if(!this.nodeOptions.snippets){
+            this.nodeOptions.snippets='mass_mailing.email_designer_snippets';
         }
 
-        // All the code related to this __extraAssetsForIframe variable is an
-        // ugly hack to restore mass mailing options in stable versions. The
-        // whole logic has to be refactored as soon as possible...
-        this.__extraAssetsForIframe = [{
-            jsLibs: ['/mass_mailing/static/src/js/mass_mailing_snippets.js'],
+        //Allthecoderelatedtothis__extraAssetsForIframevariableisan
+        //uglyhacktorestoremassmailingoptionsinstableversions.The
+        //wholelogichastoberefactoredassoonaspossible...
+        this.__extraAssetsForIframe=[{
+            jsLibs:['/mass_mailing/static/src/js/mass_mailing_snippets.js'],
         }];
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Commit the change in 'style-inline' on an other field nodeOptions:
+     *Committhechangein'style-inline'onanotherfieldnodeOptions:
      *
-     * - inline-field: fieldName to save the html value converted into inline code
+     *-inline-field:fieldNametosavethehtmlvalueconvertedintoinlinecode
      *
-     * @override
+     *@override
      */
-    commitChanges: function () {
-        var self = this;
-        if (config.isDebug() && this.mode === 'edit') {
-            var layoutInfo = $.summernote.core.dom.makeLayoutInfo(this.wysiwyg.$editor);
-            $.summernote.pluginEvents.codeview(undefined, undefined, layoutInfo, false);
+    commitChanges:function(){
+        varself=this;
+        if(config.isDebug()&&this.mode==='edit'){
+            varlayoutInfo=$.summernote.core.dom.makeLayoutInfo(this.wysiwyg.$editor);
+            $.summernote.pluginEvents.codeview(undefined,undefined,layoutInfo,false);
         }
-        if (this.mode === 'readonly' || !this.isRendered) {
-            return this._super();
+        if(this.mode==='readonly'||!this.isRendered){
+            returnthis._super();
         }
-        var fieldName = this.nodeOptions['inline-field'];
+        varfieldName=this.nodeOptions['inline-field'];
 
-        if (this.$content.find('.o_basic_theme').length) {
-            this.$content.find('*').css('font-family', '');
+        if(this.$content.find('.o_basic_theme').length){
+            this.$content.find('*').css('font-family','');
         }
 
-        var $editable = this.wysiwyg.getEditable();
+        var$editable=this.wysiwyg.getEditable();
 
-        return this.wysiwyg.saveModifiedImages(this.$content).then(function () {
-            return self.wysiwyg.save().then(function (result) {
-                self._isDirty = result.isDirty;
+        returnthis.wysiwyg.saveModifiedImages(this.$content).then(function(){
+            returnself.wysiwyg.save().then(function(result){
+                self._isDirty=result.isDirty;
 
                 convertInline.attachmentThumbnailToLinkImg($editable);
                 convertInline.fontToImg($editable);
                 convertInline.classToStyle($editable);
 
-                // fix outlook image rendering bug
-                _.each(['width', 'height'], function(attribute) {
-                    $editable.find('img[style*="width"], img[style*="height"]').attr(attribute, function(){
-                        return $(this)[attribute]();
-                    }).css(attribute, function(){
-                        return $(this).get(0).style[attribute] || 'auto';
+                //fixoutlookimagerenderingbug
+                _.each(['width','height'],function(attribute){
+                    $editable.find('img[style*="width"],img[style*="height"]').attr(attribute,function(){
+                        return$(this)[attribute]();
+                    }).css(attribute,function(){
+                        return$(this).get(0).style[attribute]||'auto';
                     });
                 });
 
-                self.trigger_up('field_changed', {
-                    dataPointID: self.dataPointID,
-                    changes: _.object([fieldName], [self._unWrap($editable.html())])
+                self.trigger_up('field_changed',{
+                    dataPointID:self.dataPointID,
+                    changes:_.object([fieldName],[self._unWrap($editable.html())])
                 });
                 self.wysiwyg.setValue(result.html);
 
-                if (self._isDirty && self.mode === 'edit') {
-                    return self._doAction();
+                if(self._isDirty&&self.mode==='edit'){
+                    returnself._doAction();
                 }
             });
         });
     },
     /**
-     * The html_frame widget is opened in an iFrame that has its URL encoded
-     * with all the key/values returned by this method.
+     *Thehtml_framewidgetisopenedinaniFramethathasitsURLencoded
+     *withallthekey/valuesreturnedbythismethod.
      *
-     * Some fields can get very long values and we want to omit them for the URL building.
+     *SomefieldscangetverylongvaluesandwewanttoomitthemfortheURLbuilding.
      *
-     * @override
+     *@override
      */
-    getDatarecord: function () {
-        return _.omit(this._super(), [
+    getDatarecord:function(){
+        return_.omit(this._super(),[
             'mailing_domain',
             'contact_list_ids',
             'body_html',
@@ -111,204 +111,204 @@ var MassMailingFieldHtml = FieldHtml.extend({
         ]);
     },
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Returns true if must force the user to choose a theme.
+     *Returnstrueifmustforcetheusertochooseatheme.
      *
-     * @private
-     * @returns {Boolean}
+     *@private
+     *@returns{Boolean}
      */
-    _checkIfMustForceThemeChoice: function () {
-        var firstChoice = this._editableAreaIsEmpty();
-        this.$content.closest('body').toggleClass("o_force_mail_theme_choice", firstChoice);
-        return firstChoice;
+    _checkIfMustForceThemeChoice:function(){
+        varfirstChoice=this._editableAreaIsEmpty();
+        this.$content.closest('body').toggleClass("o_force_mail_theme_choice",firstChoice);
+        returnfirstChoice;
     },
     /**
-     * Returns true if the editable area is empty.
+     *Returnstrueiftheeditableareaisempty.
      *
-     * @private
-     * @param {JQuery} [$layout]
-     * @returns {Boolean}
+     *@private
+     *@param{JQuery}[$layout]
+     *@returns{Boolean}
      */
-    _editableAreaIsEmpty: function ($layout) {
-        $layout = $layout || this.$content.find(".o_layout");
-        var $mailWrapper = $layout.children(".o_mail_wrapper");
-        var $mailWrapperContent = $mailWrapper.find('.o_mail_wrapper_td');
-        if (!$mailWrapperContent.length) { // compatibility
-            $mailWrapperContent = $mailWrapper;
+    _editableAreaIsEmpty:function($layout){
+        $layout=$layout||this.$content.find(".o_layout");
+        var$mailWrapper=$layout.children(".o_mail_wrapper");
+        var$mailWrapperContent=$mailWrapper.find('.o_mail_wrapper_td');
+        if(!$mailWrapperContent.length){//compatibility
+            $mailWrapperContent=$mailWrapper;
         }
-        var value;
-        if ($mailWrapperContent.length > 0) {
-            value = $mailWrapperContent.html();
-        } else if ($layout.length) {
-            value = $layout.html();
-        } else {
-            value = this.wysiwyg.getValue();
+        varvalue;
+        if($mailWrapperContent.length>0){
+            value=$mailWrapperContent.html();
+        }elseif($layout.length){
+            value=$layout.html();
+        }else{
+            value=this.wysiwyg.getValue();
         }
-        var blankEditable = "<p><br></p>";
-        return value === "" || value === blankEditable;
+        varblankEditable="<p><br></p>";
+        returnvalue===""||value===blankEditable;
     },
     /**
-     * @override
+     *@override
      */
-    _renderEdit: function () {
-        this._isFromInline = !!this.value;
-        if (!this.value) {
-            this.value = this.recordData[this.nodeOptions['inline-field']];
+    _renderEdit:function(){
+        this._isFromInline=!!this.value;
+        if(!this.value){
+            this.value=this.recordData[this.nodeOptions['inline-field']];
         }
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    _renderReadonly: function () {
-        this.value = this.recordData[this.nodeOptions['inline-field']];
-        return this._super.apply(this, arguments);
+    _renderReadonly:function(){
+        this.value=this.recordData[this.nodeOptions['inline-field']];
+        returnthis._super.apply(this,arguments);
     },
 
     /**
-     * @override
-     * @returns {JQuery}
+     *@override
+     *@returns{JQuery}
      */
-    _renderTranslateButton: function () {
-        var fieldName = this.nodeOptions['inline-field'];
-        if (_t.database.multi_lang && this.record.fields[fieldName].translate && this.res_id) {
-            return $('<button>', {
-                    type: 'button',
-                    'class': 'o_field_translate fa fa-globe btn btn-link',
+    _renderTranslateButton:function(){
+        varfieldName=this.nodeOptions['inline-field'];
+        if(_t.database.multi_lang&&this.record.fields[fieldName].translate&&this.res_id){
+            return$('<button>',{
+                    type:'button',
+                    'class':'o_field_translatefafa-globebtnbtn-link',
                 })
-                .on('click', this._onTranslate.bind(this));
+                .on('click',this._onTranslate.bind(this));
         }
-        return $();
+        return$();
     },
     /**
-     * Returns the selected theme, if any.
+     *Returnstheselectedtheme,ifany.
      *
-     * @private
-     * @param {Object} themesParams
-     * @returns {false|Object}
+     *@private
+     *@param{Object}themesParams
+     *@returns{false|Object}
      */
-    _getSelectedTheme: function (themesParams) {
-        var $layout = this.$content.find(".o_layout");
-        var selectedTheme = false;
-        if ($layout.length !== 0) {
-            _.each(themesParams, function (themeParams) {
-                if ($layout.hasClass(themeParams.className)) {
-                    selectedTheme = themeParams;
+    _getSelectedTheme:function(themesParams){
+        var$layout=this.$content.find(".o_layout");
+        varselectedTheme=false;
+        if($layout.length!==0){
+            _.each(themesParams,function(themeParams){
+                if($layout.hasClass(themeParams.className)){
+                    selectedTheme=themeParams;
                 }
             });
         }
-        return selectedTheme;
+        returnselectedTheme;
     },
     /**
-     * Swap the previous theme's default images with the new ones.
-     * (Redefine the `src` attribute of all images in a $container, depending on the theme parameters.)
+     *Swaptheprevioustheme'sdefaultimageswiththenewones.
+     *(Redefinethe`src`attributeofallimagesina$container,dependingonthethemeparameters.)
      *
-     * @private
-     * @param {Object} themeParams
-     * @param {JQuery} $container
+     *@private
+     *@param{Object}themeParams
+     *@param{JQuery}$container
      */
-    _switchImages: function (themeParams, $container) {
-        if (!themeParams) {
+    _switchImages:function(themeParams,$container){
+        if(!themeParams){
             return;
         }
-        $container.find("img").each(function () {
-            var $img = $(this);
-            var src = $img.attr("src");
+        $container.find("img").each(function(){
+            var$img=$(this);
+            varsrc=$img.attr("src");
 
-            var m = src.match(/^\/web\/image\/\w+\.s_default_image_(?:theme_[a-z]+_)?(.+)$/);
-            if (!m) {
-                m = src.match(/^\/\w+\/static\/src\/img\/(?:theme_[a-z]+\/)?s_default_image_(.+)\.[a-z]+$/);
+            varm=src.match(/^\/web\/image\/\w+\.s_default_image_(?:theme_[a-z]+_)?(.+)$/);
+            if(!m){
+                m=src.match(/^\/\w+\/static\/src\/img\/(?:theme_[a-z]+\/)?s_default_image_(.+)\.[a-z]+$/);
             }
-            if (!m) {
+            if(!m){
                 return;
             }
 
-            var file = m[1];
-            var img_info = themeParams.get_image_info(file);
+            varfile=m[1];
+            varimg_info=themeParams.get_image_info(file);
 
-            if (img_info.format) {
-                src = "/" + img_info.module + "/static/src/img/theme_" + themeParams.name + "/s_default_image_" + file + "." + img_info.format;
-            } else {
-                src = "/web/image/" + img_info.module + ".s_default_image_theme_" + themeParams.name + "_" + file;
+            if(img_info.format){
+                src="/"+img_info.module+"/static/src/img/theme_"+themeParams.name+"/s_default_image_"+file+"."+img_info.format;
+            }else{
+                src="/web/image/"+img_info.module+".s_default_image_theme_"+themeParams.name+"_"+file;
             }
 
-            $img.attr("src", src);
+            $img.attr("src",src);
         });
     },
     /**
-     * Switch themes or import first theme.
+     *Switchthemesorimportfirsttheme.
      *
-     * @private
-     * @param {Boolean} firstChoice true if this is the first chosen theme (going from no theme to a theme)
-     * @param {Object} themeParams
+     *@private
+     *@param{Boolean}firstChoicetrueifthisisthefirstchosentheme(goingfromnothemetoatheme)
+     *@param{Object}themeParams
      */
-    _switchThemes: function (firstChoice, themeParams) {
-        if (!themeParams || this.switchThemeLast === themeParams) {
+    _switchThemes:function(firstChoice,themeParams){
+        if(!themeParams||this.switchThemeLast===themeParams){
             return;
         }
-        this.switchThemeLast = themeParams;
+        this.switchThemeLast=themeParams;
 
         this.$content.closest('body').removeClass(this._allClasses).addClass(themeParams.className);
 
-        var $old_layout = this.$content.find('.o_layout');
+        var$old_layout=this.$content.find('.o_layout');
 
-        var $new_wrapper;
-        var $newWrapperContent;
-        if (themeParams.nowrap) {
-            $new_wrapper = $('<div/>', {
-                class: 'oe_structure'
+        var$new_wrapper;
+        var$newWrapperContent;
+        if(themeParams.nowrap){
+            $new_wrapper=$('<div/>',{
+                class:'oe_structure'
             });
-            $newWrapperContent = $new_wrapper;
-        } else {
-            // This wrapper structure is the only way to have a responsive
-            // and centered fixed-width content column on all mail clients
-            $new_wrapper = $('<table/>', {
-                class: 'o_mail_wrapper'
+            $newWrapperContent=$new_wrapper;
+        }else{
+            //Thiswrapperstructureistheonlywaytohavearesponsive
+            //andcenteredfixed-widthcontentcolumnonallmailclients
+            $new_wrapper=$('<table/>',{
+                class:'o_mail_wrapper'
             });
-            $newWrapperContent = $('<td/>', {
-                class: 'o_mail_no_options o_mail_wrapper_td oe_structure'
+            $newWrapperContent=$('<td/>',{
+                class:'o_mail_no_optionso_mail_wrapper_tdoe_structure'
             });
             $new_wrapper.append($('<tr/>').append(
-                $('<td/>', {
-                    class: 'o_mail_no_resize o_not_editable',
-                    contenteditable: 'false'
+                $('<td/>',{
+                    class:'o_mail_no_resizeo_not_editable',
+                    contenteditable:'false'
                 }),
                 $newWrapperContent,
-                $('<td/>', {
-                    class: 'o_mail_no_resize o_not_editable',
-                    contenteditable: 'false'
+                $('<td/>',{
+                    class:'o_mail_no_resizeo_not_editable',
+                    contenteditable:'false'
                 })
             ));
         }
-        var $newLayout = $('<div/>', {
-            class: 'o_layout ' + themeParams.className
+        var$newLayout=$('<div/>',{
+            class:'o_layout'+themeParams.className
         }).append($new_wrapper);
 
-        var $contents;
-        if (firstChoice) {
-            $contents = themeParams.template;
-        } else if ($old_layout.length) {
-            $contents = ($old_layout.hasClass('oe_structure') ? $old_layout : $old_layout.find('.oe_structure').first()).contents();
-        } else {
-            $contents = this.$content.find('.o_editable').contents();
+        var$contents;
+        if(firstChoice){
+            $contents=themeParams.template;
+        }elseif($old_layout.length){
+            $contents=($old_layout.hasClass('oe_structure')?$old_layout:$old_layout.find('.oe_structure').first()).contents();
+        }else{
+            $contents=this.$content.find('.o_editable').contents();
         }
 
         $newWrapperContent.append($contents);
-        this._switchImages(themeParams, $newWrapperContent);
+        this._switchImages(themeParams,$newWrapperContent);
         this.$content.find('.o_editable').empty().append($newLayout);
         $old_layout.remove();
 
-        if (firstChoice) {
+        if(firstChoice){
             $newWrapperContent.find('*').addBack()
                 .contents()
-                .filter(function () {
-                    return this.nodeType === 3 && this.textContent.match(/\S/);
+                .filter(function(){
+                    returnthis.nodeType===3&&this.textContent.match(/\S/);
                 }).parent().addClass('o_default_snippet_text');
 
-            if (themeParams.name == 'basic') {
+            if(themeParams.name=='basic'){
                 this.$content.focusIn();
             }
         }
@@ -316,217 +316,217 @@ var MassMailingFieldHtml = FieldHtml.extend({
     },
 
     //--------------------------------------------------------------------------
-    // Handler
+    //Handler
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _onLoadWysiwyg: function () {
-        if (this._isFromInline) {
+    _onLoadWysiwyg:function(){
+        if(this._isFromInline){
             this._fromInline();
         }
-        if (this.snippetsLoaded) {
+        if(this.snippetsLoaded){
             this._onSnippetsLoaded(this.snippetsLoaded);
         }
         this._super();
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onSnippetsLoaded: function (ev) {
-        var self = this;
-        if (!this.$content) {
-            this.snippetsLoaded = ev;
+    _onSnippetsLoaded:function(ev){
+        varself=this;
+        if(!this.$content){
+            this.snippetsLoaded=ev;
             return;
         }
-        var $snippetsSideBar = ev.data;
-        var $themes = $snippetsSideBar.find("#email_designer_themes").children();
-        var $snippets = $snippetsSideBar.find(".oe_snippet");
-        var $snippets_menu = $snippetsSideBar.find("#snippets_menu");
+        var$snippetsSideBar=ev.data;
+        var$themes=$snippetsSideBar.find("#email_designer_themes").children();
+        var$snippets=$snippetsSideBar.find(".oe_snippet");
+        var$snippets_menu=$snippetsSideBar.find("#snippets_menu");
 
-        for (const button of $snippets_menu.get(0).children) {
-            if (!button.hasAttribute('tabindex') && !button.hasAttribute('accesskey')) {
-                button.style.display = 'none';
+        for(constbuttonof$snippets_menu.get(0).children){
+            if(!button.hasAttribute('tabindex')&&!button.hasAttribute('accesskey')){
+                button.style.display='none';
             }
         }
 
-        if (config.device.isMobile) {
+        if(config.device.isMobile){
             $snippetsSideBar.hide();
-            this.$content.attr('style', 'padding-left: 0px !important');
+            this.$content.attr('style','padding-left:0px!important');
         }
 
-        if ($themes.length === 0) {
+        if($themes.length===0){
             return;
         }
 
         /**
-         * Initialize theme parameters.
+         *Initializethemeparameters.
          */
-        this._allClasses = "";
-        var themesParams = _.map($themes, function (theme) {
-            var $theme = $(theme);
-            var name = $theme.data("name");
-            var classname = "o_" + name + "_theme";
-            self._allClasses += " " + classname;
-            var imagesInfo = _.defaults($theme.data("imagesInfo") || {}, {
-                all: {}
+        this._allClasses="";
+        varthemesParams=_.map($themes,function(theme){
+            var$theme=$(theme);
+            varname=$theme.data("name");
+            varclassname="o_"+name+"_theme";
+            self._allClasses+=""+classname;
+            varimagesInfo=_.defaults($theme.data("imagesInfo")||{},{
+                all:{}
             });
-            _.each(imagesInfo, function (info) {
-                info = _.defaults(info, imagesInfo.all, {
-                    module: "mass_mailing",
-                    format: "jpg"
+            _.each(imagesInfo,function(info){
+                info=_.defaults(info,imagesInfo.all,{
+                    module:"mass_mailing",
+                    format:"jpg"
                 });
             });
-            return {
-                name: name,
-                className: classname || "",
-                img: $theme.data("img") || "",
-                template: $theme.html().trim(),
-                nowrap: !!$theme.data('nowrap'),
-                get_image_info: function (filename) {
-                    if (imagesInfo[filename]) {
-                        return imagesInfo[filename];
+            return{
+                name:name,
+                className:classname||"",
+                img:$theme.data("img")||"",
+                template:$theme.html().trim(),
+                nowrap:!!$theme.data('nowrap'),
+                get_image_info:function(filename){
+                    if(imagesInfo[filename]){
+                        returnimagesInfo[filename];
                     }
-                    return imagesInfo.all;
+                    returnimagesInfo.all;
                 }
             };
         });
         $themes.parent().remove();
 
         /**
-         * Create theme selection screen and check if it must be forced opened.
-         * Reforce it opened if the last snippet is removed.
+         *Createthemeselectionscreenandcheckifitmustbeforcedopened.
+         *Reforceitopenedifthelastsnippetisremoved.
          */
-        var $dropdown = $(core.qweb.render("mass_mailing.theme_selector", {
-            themes: themesParams
+        var$dropdown=$(core.qweb.render("mass_mailing.theme_selector",{
+            themes:themesParams
         })).dropdown();
 
-        var firstChoice = this._checkIfMustForceThemeChoice();
+        varfirstChoice=this._checkIfMustForceThemeChoice();
 
         /**
-         * Add proposition to install enterprise themes if not installed.
+         *Addpropositiontoinstallenterprisethemesifnotinstalled.
          */
-        var $mail_themes_upgrade = $dropdown.find(".o_mass_mailing_themes_upgrade");
-        $mail_themes_upgrade.on("click", function (e) {
+        var$mail_themes_upgrade=$dropdown.find(".o_mass_mailing_themes_upgrade");
+        $mail_themes_upgrade.on("click",function(e){
             e.stopImmediatePropagation();
             e.preventDefault();
             self.do_action("mass_mailing.action_mass_mailing_configuration");
         });
 
         /**
-         * Switch theme when a theme button is hovered. Confirm change if the theme button
-         * is pressed.
+         *Switchthemewhenathemebuttonishovered.Confirmchangeifthethemebutton
+         *ispressed.
          */
-        var selectedTheme = false;
-        $dropdown.on("mouseenter", ".dropdown-item", function (e) {
-            if (firstChoice) {
+        varselectedTheme=false;
+        $dropdown.on("mouseenter",".dropdown-item",function(e){
+            if(firstChoice){
                 return;
             }
             e.preventDefault();
-            var themeParams = themesParams[$(e.currentTarget).index()];
-            self._switchThemes(firstChoice, themeParams);
+            varthemeParams=themesParams[$(e.currentTarget).index()];
+            self._switchThemes(firstChoice,themeParams);
         });
-        $dropdown.on("mouseleave", ".dropdown-item", function (e) {
-            self._switchThemes(false, selectedTheme);
+        $dropdown.on("mouseleave",".dropdown-item",function(e){
+            self._switchThemes(false,selectedTheme);
         });
-        $dropdown.on("click", '[data-toggle="dropdown"]', function (e) {
-            var $menu = $dropdown.find('.dropdown-menu');
-            var isVisible = $menu.hasClass('show');
-            if (isVisible) {
+        $dropdown.on("click",'[data-toggle="dropdown"]',function(e){
+            var$menu=$dropdown.find('.dropdown-menu');
+            varisVisible=$menu.hasClass('show');
+            if(isVisible){
                 e.preventDefault();
                 e.stopImmediatePropagation();
                 $menu.removeClass('show');
             }
         });
 
-        $dropdown.on("click", ".dropdown-item", function (e) {
+        $dropdown.on("click",".dropdown-item",function(e){
             e.preventDefault();
             e.stopImmediatePropagation();
-            var themeParams = themesParams[$(e.currentTarget).index()];
-            if (firstChoice) {
-                self._switchThemes(firstChoice, themeParams);
+            varthemeParams=themesParams[$(e.currentTarget).index()];
+            if(firstChoice){
+                self._switchThemes(firstChoice,themeParams);
                 self.$content.closest('body').removeClass("o_force_mail_theme_choice");
-                firstChoice = false;
+                firstChoice=false;
 
-                if ($mail_themes_upgrade.length) {
+                if($mail_themes_upgrade.length){
                     $dropdown.remove();
                     $snippets_menu.empty();
                 }
             }
 
-            self._switchImages(themeParams, $snippets);
+            self._switchImages(themeParams,$snippets);
 
-            selectedTheme = themeParams;
+            selectedTheme=themeParams;
 
-            // Notify form view
+            //Notifyformview
             self.wysiwyg.getEditable().trigger('change');
             $dropdown.find('.dropdown-menu').removeClass('show');
             $dropdown.find('.dropdown-item.selected').removeClass('selected');
-            $dropdown.find('.dropdown-item:eq(' + themesParams.indexOf(selectedTheme) + ')').addClass('selected');
+            $dropdown.find('.dropdown-item:eq('+themesParams.indexOf(selectedTheme)+')').addClass('selected');
         });
 
-        // Prevent expansion of drop-down while clicking on empty area during theme selection
-        $dropdown.on("click", ".dropdown-menu", function (ev) {
+        //Preventexpansionofdrop-downwhileclickingonemptyareaduringthemeselection
+        $dropdown.on("click",".dropdown-menu",function(ev){
             ev.preventDefault();
             ev.stopPropagation();
         });
 
         /**
-         * If the user opens the theme selection screen, indicates which one is active and
-         * saves the information...
-         * ... then when the user closes check if the user confirmed its choice and restore
-         * previous state if this is not the case.
+         *Iftheuseropensthethemeselectionscreen,indicateswhichoneisactiveand
+         *savestheinformation...
+         *...thenwhentheuserclosescheckiftheuserconfirmeditschoiceandrestore
+         *previousstateifthisisnotthecase.
          */
-        $dropdown.on("shown.bs.dropdown", function () {
-            selectedTheme = self._getSelectedTheme(themesParams);
-            $dropdown.find(".dropdown-item").removeClass("selected").filter(function () {
-                return ($(this).has(".o_thumb[style=\"" + "background-image: url(" + (selectedTheme && selectedTheme.img) + "_small.png)" + "\"]").length > 0);
+        $dropdown.on("shown.bs.dropdown",function(){
+            selectedTheme=self._getSelectedTheme(themesParams);
+            $dropdown.find(".dropdown-item").removeClass("selected").filter(function(){
+                return($(this).has(".o_thumb[style=\""+"background-image:url("+(selectedTheme&&selectedTheme.img)+"_small.png)"+"\"]").length>0);
             }).addClass("selected");
         });
-        $dropdown.on("hidden.bs.dropdown", function () {
-            self._switchThemes(firstChoice, selectedTheme);
+        $dropdown.on("hidden.bs.dropdown",function(){
+            self._switchThemes(firstChoice,selectedTheme);
         });
 
         /**
-         * On page load, check the selected theme and force switching to it (body needs the
-         * theme style for its edition toolbar).
+         *Onpageload,checktheselectedthemeandforceswitchingtoit(bodyneedsthe
+         *themestyleforitseditiontoolbar).
          */
-        selectedTheme = this._getSelectedTheme(themesParams);
-        if (selectedTheme) {
+        selectedTheme=this._getSelectedTheme(themesParams);
+        if(selectedTheme){
             this.$content.closest('body').addClass(selectedTheme.className);
-            $dropdown.find('.dropdown-item:eq(' + themesParams.indexOf(selectedTheme) + ')').addClass('selected');
-            this._switchImages(selectedTheme, $snippets);
-        } else if (this.$content.find('.o_layout').length) {
+            $dropdown.find('.dropdown-item:eq('+themesParams.indexOf(selectedTheme)+')').addClass('selected');
+            this._switchImages(selectedTheme,$snippets);
+        }elseif(this.$content.find('.o_layout').length){
             themesParams.push({
-                name: 'o_mass_mailing_no_theme',
-                className: 'o_mass_mailing_no_theme',
-                img: "",
-                template: this.$content.find('.o_layout').addClass('o_mass_mailing_no_theme').clone().find('oe_structure').empty().end().html().trim(),
-                nowrap: true,
-                get_image_info: function () {}
+                name:'o_mass_mailing_no_theme',
+                className:'o_mass_mailing_no_theme',
+                img:"",
+                template:this.$content.find('.o_layout').addClass('o_mass_mailing_no_theme').clone().find('oe_structure').empty().end().html().trim(),
+                nowrap:true,
+                get_image_info:function(){}
             });
-            selectedTheme = this._getSelectedTheme(themesParams);
+            selectedTheme=this._getSelectedTheme(themesParams);
         }
 
         $dropdown.insertAfter($snippets_menu);
     },
     /**
-     * @override
-     * @param {MouseEvent} ev
+     *@override
+     *@param{MouseEvent}ev
      */
-    _onTranslate: function (ev) {
-        this.trigger_up('translate', {
-            fieldName: this.nodeOptions['inline-field'],
-            id: this.dataPointID,
-            isComingFromTranslationAlert: false,
+    _onTranslate:function(ev){
+        this.trigger_up('translate',{
+            fieldName:this.nodeOptions['inline-field'],
+            id:this.dataPointID,
+            isComingFromTranslationAlert:false,
         });
     },
 });
 
-fieldRegistry.add('mass_mailing_html', MassMailingFieldHtml);
+fieldRegistry.add('mass_mailing_html',MassMailingFieldHtml);
 
-return MassMailingFieldHtml;
+returnMassMailingFieldHtml;
 
 });

@@ -1,110 +1,110 @@
 /*!
-FullCalendar Moment Plugin v4.4.0
-Docs & License: https://fullcalendar.io/
-(c) 2019 Adam Shaw
+FullCalendarMomentPluginv4.4.0
+Docs&License:https://fullcalendar.io/
+(c)2019AdamShaw
 */
 
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('moment'), require('@fullcalendar/core')) :
-    typeof define === 'function' && define.amd ? define(['exports', 'moment', '@fullcalendar/core'], factory) :
-    (global = global || self, factory(global.FullCalendarMoment = {}, global.moment, global.FullCalendar));
-}(this, function (exports, momentNs, core) { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?factory(exports,require('moment'),require('@fullcalendar/core')):
+    typeofdefine==='function'&&define.amd?define(['exports','moment','@fullcalendar/core'],factory):
+    (global=global||self,factory(global.FullCalendarMoment={},global.moment,global.FullCalendar));
+}(this,function(exports,momentNs,core){'usestrict';
 
-    var moment = momentNs; // the directly callable function
-    function toMoment(date, calendar) {
-        if (!(calendar instanceof core.Calendar)) {
-            throw new Error('must supply a Calendar instance');
+    varmoment=momentNs;//thedirectlycallablefunction
+    functiontoMoment(date,calendar){
+        if(!(calendarinstanceofcore.Calendar)){
+            thrownewError('mustsupplyaCalendarinstance');
         }
-        return convertToMoment(date, calendar.dateEnv.timeZone, null, calendar.dateEnv.locale.codes[0]);
+        returnconvertToMoment(date,calendar.dateEnv.timeZone,null,calendar.dateEnv.locale.codes[0]);
     }
-    function toDuration(fcDuration) {
-        return moment.duration(fcDuration); // moment accepts all the props that fc.Duration already has!
+    functiontoDuration(fcDuration){
+        returnmoment.duration(fcDuration);//momentacceptsallthepropsthatfc.Durationalreadyhas!
     }
-    function formatWithCmdStr(cmdStr, arg) {
-        var cmd = parseCmdStr(cmdStr);
-        if (arg.end) {
-            var startMom = convertToMoment(arg.start.array, arg.timeZone, arg.start.timeZoneOffset, arg.localeCodes[0]);
-            var endMom = convertToMoment(arg.end.array, arg.timeZone, arg.end.timeZoneOffset, arg.localeCodes[0]);
-            return formatRange(cmd, createMomentFormatFunc(startMom), createMomentFormatFunc(endMom), arg.separator);
+    functionformatWithCmdStr(cmdStr,arg){
+        varcmd=parseCmdStr(cmdStr);
+        if(arg.end){
+            varstartMom=convertToMoment(arg.start.array,arg.timeZone,arg.start.timeZoneOffset,arg.localeCodes[0]);
+            varendMom=convertToMoment(arg.end.array,arg.timeZone,arg.end.timeZoneOffset,arg.localeCodes[0]);
+            returnformatRange(cmd,createMomentFormatFunc(startMom),createMomentFormatFunc(endMom),arg.separator);
         }
-        return convertToMoment(arg.date.array, arg.timeZone, arg.date.timeZoneOffset, arg.localeCodes[0]).format(cmd.whole); // TODO: test for this
+        returnconvertToMoment(arg.date.array,arg.timeZone,arg.date.timeZoneOffset,arg.localeCodes[0]).format(cmd.whole);//TODO:testforthis
     }
-    var main = core.createPlugin({
-        cmdFormatter: formatWithCmdStr
+    varmain=core.createPlugin({
+        cmdFormatter:formatWithCmdStr
     });
-    function createMomentFormatFunc(mom) {
-        return function (cmdStr) {
-            return cmdStr ? mom.format(cmdStr) : ''; // because calling with blank string results in ISO8601 :(
+    functioncreateMomentFormatFunc(mom){
+        returnfunction(cmdStr){
+            returncmdStr?mom.format(cmdStr):'';//becausecallingwithblankstringresultsinISO8601:(
         };
     }
-    function convertToMoment(input, timeZone, timeZoneOffset, locale) {
-        var mom;
-        if (timeZone === 'local') {
-            mom = moment(input);
+    functionconvertToMoment(input,timeZone,timeZoneOffset,locale){
+        varmom;
+        if(timeZone==='local'){
+            mom=moment(input);
         }
-        else if (timeZone === 'UTC') {
-            mom = moment.utc(input);
+        elseif(timeZone==='UTC'){
+            mom=moment.utc(input);
         }
-        else if (moment.tz) {
-            mom = moment.tz(input, timeZone);
+        elseif(moment.tz){
+            mom=moment.tz(input,timeZone);
         }
-        else {
-            mom = moment.utc(input);
-            if (timeZoneOffset != null) {
+        else{
+            mom=moment.utc(input);
+            if(timeZoneOffset!=null){
                 mom.utcOffset(timeZoneOffset);
             }
         }
         mom.locale(locale);
-        return mom;
+        returnmom;
     }
-    function parseCmdStr(cmdStr) {
-        var parts = cmdStr.match(/^(.*?)\{(.*)\}(.*)$/); // TODO: lookbehinds for escape characters
-        if (parts) {
-            var middle = parseCmdStr(parts[2]);
-            return {
-                head: parts[1],
-                middle: middle,
-                tail: parts[3],
-                whole: parts[1] + middle.whole + parts[3]
+    functionparseCmdStr(cmdStr){
+        varparts=cmdStr.match(/^(.*?)\{(.*)\}(.*)$/);//TODO:lookbehindsforescapecharacters
+        if(parts){
+            varmiddle=parseCmdStr(parts[2]);
+            return{
+                head:parts[1],
+                middle:middle,
+                tail:parts[3],
+                whole:parts[1]+middle.whole+parts[3]
             };
         }
-        else {
-            return {
-                head: null,
-                middle: null,
-                tail: null,
-                whole: cmdStr
+        else{
+            return{
+                head:null,
+                middle:null,
+                tail:null,
+                whole:cmdStr
             };
         }
     }
-    function formatRange(cmd, formatStart, formatEnd, separator) {
-        if (cmd.middle) {
-            var startHead = formatStart(cmd.head);
-            var startMiddle = formatRange(cmd.middle, formatStart, formatEnd, separator);
-            var startTail = formatStart(cmd.tail);
-            var endHead = formatEnd(cmd.head);
-            var endMiddle = formatRange(cmd.middle, formatStart, formatEnd, separator);
-            var endTail = formatEnd(cmd.tail);
-            if (startHead === endHead && startTail === endTail) {
-                return startHead +
-                    (startMiddle === endMiddle ? startMiddle : startMiddle + separator + endMiddle) +
+    functionformatRange(cmd,formatStart,formatEnd,separator){
+        if(cmd.middle){
+            varstartHead=formatStart(cmd.head);
+            varstartMiddle=formatRange(cmd.middle,formatStart,formatEnd,separator);
+            varstartTail=formatStart(cmd.tail);
+            varendHead=formatEnd(cmd.head);
+            varendMiddle=formatRange(cmd.middle,formatStart,formatEnd,separator);
+            varendTail=formatEnd(cmd.tail);
+            if(startHead===endHead&&startTail===endTail){
+                returnstartHead+
+                    (startMiddle===endMiddle?startMiddle:startMiddle+separator+endMiddle)+
                     startTail;
             }
         }
-        var startWhole = formatStart(cmd.whole);
-        var endWhole = formatEnd(cmd.whole);
-        if (startWhole === endWhole) {
-            return startWhole;
+        varstartWhole=formatStart(cmd.whole);
+        varendWhole=formatEnd(cmd.whole);
+        if(startWhole===endWhole){
+            returnstartWhole;
         }
-        else {
-            return startWhole + separator + endWhole;
+        else{
+            returnstartWhole+separator+endWhole;
         }
     }
 
-    exports.default = main;
-    exports.toDuration = toDuration;
-    exports.toMoment = toMoment;
+    exports.default=main;
+    exports.toDuration=toDuration;
+    exports.toMoment=toMoment;
 
-    Object.defineProperty(exports, '__esModule', { value: true });
+    Object.defineProperty(exports,'__esModule',{value:true});
 
 }));

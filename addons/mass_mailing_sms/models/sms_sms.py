@@ -1,44 +1,44 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import re
+importre
 
-from flectra import fields, models, tools
+fromflectraimportfields,models,tools
 
 
-class SmsSms(models.Model):
-    _inherit = ['sms.sms']
+classSmsSms(models.Model):
+    _inherit=['sms.sms']
 
-    mailing_id = fields.Many2one('mailing.mailing', string='Mass Mailing')
-    mailing_trace_ids = fields.One2many('mailing.trace', 'sms_sms_id', string='Statistics')
+    mailing_id=fields.Many2one('mailing.mailing',string='MassMailing')
+    mailing_trace_ids=fields.One2many('mailing.trace','sms_sms_id',string='Statistics')
 
-    def _update_body_short_links(self):
-        """ Override to tweak shortened URLs by adding statistics ids, allowing to
-        find customer back once clicked. """
-        shortened_schema = self.env['ir.config_parameter'].sudo().get_param('web.base.url') + '/r/'
-        res = dict.fromkeys(self.ids, False)
-        for sms in self:
-            if not sms.mailing_id or not sms.body:
-                res[sms.id] = sms.body
+    def_update_body_short_links(self):
+        """OverridetotweakshortenedURLsbyaddingstatisticsids,allowingto
+        findcustomerbackonceclicked."""
+        shortened_schema=self.env['ir.config_parameter'].sudo().get_param('web.base.url')+'/r/'
+        res=dict.fromkeys(self.ids,False)
+        forsmsinself:
+            ifnotsms.mailing_idornotsms.body:
+                res[sms.id]=sms.body
                 continue
 
-            body = sms.body
-            for url in re.findall(tools.TEXT_URL_REGEX, body):
-                if url.startswith(shortened_schema):
-                    body = body.replace(url, url + '/s/%s' % sms.id)
-            res[sms.id] = body
-        return res
+            body=sms.body
+            forurlinre.findall(tools.TEXT_URL_REGEX,body):
+                ifurl.startswith(shortened_schema):
+                    body=body.replace(url,url+'/s/%s'%sms.id)
+            res[sms.id]=body
+        returnres
 
-    def _postprocess_iap_sent_sms(self, iap_results, failure_reason=None, delete_all=False):
-        all_sms_ids = [item['res_id'] for item in iap_results]
-        if any(sms.mailing_id for sms in self.env['sms.sms'].sudo().browse(all_sms_ids)):
-            for state in self.IAP_TO_SMS_STATE.keys():
-                sms_ids = [item['res_id'] for item in iap_results if item['state'] == state]
-                traces = self.env['mailing.trace'].sudo().search([
-                    ('sms_sms_id_int', 'in', sms_ids)
+    def_postprocess_iap_sent_sms(self,iap_results,failure_reason=None,delete_all=False):
+        all_sms_ids=[item['res_id']foriteminiap_results]
+        ifany(sms.mailing_idforsmsinself.env['sms.sms'].sudo().browse(all_sms_ids)):
+            forstateinself.IAP_TO_SMS_STATE.keys():
+                sms_ids=[item['res_id']foriteminiap_resultsifitem['state']==state]
+                traces=self.env['mailing.trace'].sudo().search([
+                    ('sms_sms_id_int','in',sms_ids)
                 ])
-                if traces and state == 'success':
-                    traces.write({'sent': fields.Datetime.now(), 'exception': False})
-                elif traces:
+                iftracesandstate=='success':
+                    traces.write({'sent':fields.Datetime.now(),'exception':False})
+                eliftraces:
                     traces.set_failed(failure_type=self.IAP_TO_SMS_STATE[state])
-        return super(SmsSms, self)._postprocess_iap_sent_sms(iap_results, failure_reason=failure_reason, delete_all=delete_all)
+        returnsuper(SmsSms,self)._postprocess_iap_sent_sms(iap_results,failure_reason=failure_reason,delete_all=delete_all)

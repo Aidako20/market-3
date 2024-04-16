@@ -1,22 +1,22 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
-from flectra.exceptions import ValidationError
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportValidationError
 
 
-class MailingMailingScheduleDate(models.TransientModel):
-    _name = 'mailing.mailing.schedule.date'
-    _description = 'Mass Mailing Scheduling'
+classMailingMailingScheduleDate(models.TransientModel):
+    _name='mailing.mailing.schedule.date'
+    _description='MassMailingScheduling'
 
-    schedule_date = fields.Datetime(string='Scheduled for')
-    mass_mailing_id = fields.Many2one('mailing.mailing', required=True, ondelete='cascade')
+    schedule_date=fields.Datetime(string='Scheduledfor')
+    mass_mailing_id=fields.Many2one('mailing.mailing',required=True,ondelete='cascade')
 
     @api.constrains('schedule_date')
-    def _check_schedule_date(self):
-        for scheduler in self:
-            if scheduler.schedule_date < fields.Datetime.now():
-                raise ValidationError(_('Please select a date equal/or greater than the current date.'))
+    def_check_schedule_date(self):
+        forschedulerinself:
+            ifscheduler.schedule_date<fields.Datetime.now():
+                raiseValidationError(_('Pleaseselectadateequal/orgreaterthanthecurrentdate.'))
 
-    def set_schedule_date(self):
-        self.mass_mailing_id.write({'schedule_date': self.schedule_date, 'state': 'in_queue'})
+    defset_schedule_date(self):
+        self.mass_mailing_id.write({'schedule_date':self.schedule_date,'state':'in_queue'})

@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-    <record id="res_config_settings_view_form" model="ir.ui.view">
-        <field name="name">res.config.settings.view.form.inherit.purchase.requisition</field>
-        <field name="model">res.config.settings</field>
-        <field name="inherit_id" ref="purchase.res_config_settings_view_form_purchase"/>
-        <field name="arch" type="xml">
-            <div id="use_purchase_requisition" position="replace">
-                <div class="mt8">
-                    <button name="%(purchase_requisition.tender_type_action)d" icon="fa-arrow-right" type="action" string="Agreement Types" class="btn-link"/>
+    <recordid="res_config_settings_view_form"model="ir.ui.view">
+        <fieldname="name">res.config.settings.view.form.inherit.purchase.requisition</field>
+        <fieldname="model">res.config.settings</field>
+        <fieldname="inherit_id"ref="purchase.res_config_settings_view_form_purchase"/>
+        <fieldname="arch"type="xml">
+            <divid="use_purchase_requisition"position="replace">
+                <divclass="mt8">
+                    <buttonname="%(purchase_requisition.tender_type_action)d"icon="fa-arrow-right"type="action"string="AgreementTypes"class="btn-link"/>
                 </div>
             </div>
         </field>

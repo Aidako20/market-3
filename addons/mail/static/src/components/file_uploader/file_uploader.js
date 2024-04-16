@@ -1,70 +1,70 @@
-flectra.define('mail/static/src/components/file_uploader/file_uploader.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/file_uploader/file_uploader.js',function(require){
+'usestrict';
 
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
 
-const core = require('web.core');
+constcore=require('web.core');
 
-const { Component } = owl;
-const { useRef } = owl.hooks;
+const{Component}=owl;
+const{useRef}=owl.hooks;
 
-class FileUploader extends Component {
+classFileUploaderextendsComponent{
 
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
-        this._fileInputRef = useRef('fileInput');
-        this._fileUploadId = _.uniqueId('o_FileUploader_fileupload');
-        this._onAttachmentUploaded = this._onAttachmentUploaded.bind(this);
+        this._fileInputRef=useRef('fileInput');
+        this._fileUploadId=_.uniqueId('o_FileUploader_fileupload');
+        this._onAttachmentUploaded=this._onAttachmentUploaded.bind(this);
         useShouldUpdateBasedOnProps({
-            compareDepth: {
-                attachmentLocalIds: 1,
-                newAttachmentExtraData: 3,
+            compareDepth:{
+                attachmentLocalIds:1,
+                newAttachmentExtraData:3,
             },
         });
     }
 
-    mounted() {
-        $(window).on(this._fileUploadId, this._onAttachmentUploaded);
+    mounted(){
+        $(window).on(this._fileUploadId,this._onAttachmentUploaded);
     }
 
-    willUnmount() {
+    willUnmount(){
         $(window).off(this._fileUploadId);
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @param {FileList|Array} files
-     * @returns {Promise}
+     *@param{FileList|Array}files
+     *@returns{Promise}
      */
-    async uploadFiles(files) {
-        await this._unlinkExistingAttachments(files);
+    asyncuploadFiles(files){
+        awaitthis._unlinkExistingAttachments(files);
         this._createTemporaryAttachments(files);
-        await this._performUpload(files);
-        this._fileInputRef.el.value = '';
+        awaitthis._performUpload(files);
+        this._fileInputRef.el.value='';
     }
 
-    openBrowserFileUploader() {
+    openBrowserFileUploader(){
         this._fileInputRef.el.click();
     }
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @deprecated
-     * @private
-     * @param {Object} fileData
-     * @returns {mail.attachment}
+     *@deprecated
+     *@private
+     *@param{Object}fileData
+     *@returns{mail.attachment}
      */
-    _createAttachment(fileData) {
-        return this.env.models['mail.attachment'].create(Object.assign(
+    _createAttachment(fileData){
+        returnthis.env.models['mail.attachment'].create(Object.assign(
             {},
             fileData,
             this.props.newAttachmentExtraData
@@ -72,32 +72,32 @@ class FileUploader extends Component {
     }
 
     /**
-     * @private
-     * @param {File} file
-     * @returns {FormData}
+     *@private
+     *@param{File}file
+     *@returns{FormData}
      */
-    _createFormData(file) {
-        let formData = new window.FormData();
-        formData.append('callback', this._fileUploadId);
-        formData.append('csrf_token', core.csrf_token);
-        formData.append('id', this.props.uploadId);
-        formData.append('model', this.props.uploadModel);
-        formData.append('ufile', file, file.name);
-        return formData;
+    _createFormData(file){
+        letformData=newwindow.FormData();
+        formData.append('callback',this._fileUploadId);
+        formData.append('csrf_token',core.csrf_token);
+        formData.append('id',this.props.uploadId);
+        formData.append('model',this.props.uploadModel);
+        formData.append('ufile',file,file.name);
+        returnformData;
     }
 
     /**
-     * @private
-     * @param {FileList|Array} files
+     *@private
+     *@param{FileList|Array}files
      */
-    _createTemporaryAttachments(files) {
-        for (const file of files) {
+    _createTemporaryAttachments(files){
+        for(constfileoffiles){
             this.env.models['mail.attachment'].create(
                 Object.assign(
                     {
-                        filename: file.name,
-                        isTemporary: true,
-                        name: file.name
+                        filename:file.name,
+                        isTemporary:true,
+                        name:file.name
                     },
                     this.props.newAttachmentExtraData
                 ),
@@ -105,80 +105,80 @@ class FileUploader extends Component {
         }
     }
     /**
-     * @private
-     * @param {FileList|Array} files
-     * @returns {Promise}
+     *@private
+     *@param{FileList|Array}files
+     *@returns{Promise}
      */
-    async _performUpload(files) {
-        for (const file of files) {
-            const uploadingAttachment = this.env.models['mail.attachment'].find(attachment =>
-                attachment.isTemporary &&
-                attachment.filename === file.name
+    async_performUpload(files){
+        for(constfileoffiles){
+            constuploadingAttachment=this.env.models['mail.attachment'].find(attachment=>
+                attachment.isTemporary&&
+                attachment.filename===file.name
             );
-            if (!uploadingAttachment) {
-                // Uploading attachment no longer exists.
-                // This happens when an uploading attachment is being deleted by user.
+            if(!uploadingAttachment){
+                //Uploadingattachmentnolongerexists.
+                //Thishappenswhenanuploadingattachmentisbeingdeletedbyuser.
                 continue;
             }
-            try {
-                const response = await this.env.browser.fetch('/web/binary/upload_attachment', {
-                    method: 'POST',
-                    body: this._createFormData(file),
-                    signal: uploadingAttachment.uploadingAbortController.signal,
+            try{
+                constresponse=awaitthis.env.browser.fetch('/web/binary/upload_attachment',{
+                    method:'POST',
+                    body:this._createFormData(file),
+                    signal:uploadingAttachment.uploadingAbortController.signal,
                 });
-                let html = await response.text();
-                const template = document.createElement('template');
-                template.innerHTML = html.trim();
+                lethtml=awaitresponse.text();
+                consttemplate=document.createElement('template');
+                template.innerHTML=html.trim();
                 window.eval(template.content.firstChild.textContent);
-            } catch (e) {
-                if (e.name !== 'AbortError') {
-                    throw e;
+            }catch(e){
+                if(e.name!=='AbortError'){
+                    throwe;
                 }
             }
         }
     }
 
     /**
-     * @private
-     * @param {FileList|Array} files
-     * @returns {Promise}
+     *@private
+     *@param{FileList|Array}files
+     *@returns{Promise}
      */
-    async _unlinkExistingAttachments(files) {
-        for (const file of files) {
-            const attachment = this.props.attachmentLocalIds
-                .map(attachmentLocalId => this.env.models['mail.attachment'].get(attachmentLocalId))
-                .find(attachment => attachment.name === file.name && attachment.size === file.size);
-            // if the files already exits, delete the file before upload
-            if (attachment) {
+    async_unlinkExistingAttachments(files){
+        for(constfileoffiles){
+            constattachment=this.props.attachmentLocalIds
+                .map(attachmentLocalId=>this.env.models['mail.attachment'].get(attachmentLocalId))
+                .find(attachment=>attachment.name===file.name&&attachment.size===file.size);
+            //ifthefilesalreadyexits,deletethefilebeforeupload
+            if(attachment){
                 attachment.remove();
             }
         }
     }
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {jQuery.Event} ev
-     * @param {...Object} filesData
+     *@private
+     *@param{jQuery.Event}ev
+     *@param{...Object}filesData
      */
-    async _onAttachmentUploaded(ev, ...filesData) {
-        for (const fileData of filesData) {
-            const { error, filename, id, mimetype, name, size } = fileData;
-            if (error || !id) {
+    async_onAttachmentUploaded(ev,...filesData){
+        for(constfileDataoffilesData){
+            const{error,filename,id,mimetype,name,size}=fileData;
+            if(error||!id){
                 this.env.services['notification'].notify({
-                    type: 'danger',
-                    message: owl.utils.escape(error),
+                    type:'danger',
+                    message:owl.utils.escape(error),
                 });
                 return;
             }
-            // FIXME : needed to avoid problems on uploading
-            // Without this the useStore selector of component could be not called
-            // E.g. in attachment_box_tests.js
-            await new Promise(resolve => setTimeout(resolve));
-            const attachment = this.env.models['mail.attachment'].insert(
+            //FIXME:neededtoavoidproblemsonuploading
+            //WithoutthistheuseStoreselectorofcomponentcouldbenotcalled
+            //E.g.inattachment_box_tests.js
+            awaitnewPromise(resolve=>setTimeout(resolve));
+            constattachment=this.env.models['mail.attachment'].insert(
                 Object.assign(
                     {
                         filename,
@@ -190,44 +190,44 @@ class FileUploader extends Component {
                     this.props.newAttachmentExtraData
                 ),
             );
-            this.trigger('o-attachment-created', { attachment });
+            this.trigger('o-attachment-created',{attachment});
         }
     }
 
     /**
-     * Called when there are changes in the file input.
+     *Calledwhentherearechangesinthefileinput.
      *
-     * @private
-     * @param {Event} ev
-     * @param {EventTarget} ev.target
-     * @param {FileList|Array} ev.target.files
+     *@private
+     *@param{Event}ev
+     *@param{EventTarget}ev.target
+     *@param{FileList|Array}ev.target.files
      */
-    async _onChangeAttachment(ev) {
-        await this.uploadFiles(ev.target.files);
+    async_onChangeAttachment(ev){
+        awaitthis.uploadFiles(ev.target.files);
     }
 
 }
 
-Object.assign(FileUploader, {
-    defaultProps: {
-        uploadId: 0,
-        uploadModel: 'mail.compose.message'
+Object.assign(FileUploader,{
+    defaultProps:{
+        uploadId:0,
+        uploadModel:'mail.compose.message'
     },
-    props: {
-        attachmentLocalIds: {
-            type: Array,
-            element: String,
+    props:{
+        attachmentLocalIds:{
+            type:Array,
+            element:String,
         },
-        newAttachmentExtraData: {
-            type: Object,
-            optional: true,
+        newAttachmentExtraData:{
+            type:Object,
+            optional:true,
         },
-        uploadId: Number,
-        uploadModel: String,
+        uploadId:Number,
+        uploadModel:String,
     },
-    template: 'mail.FileUploader',
+    template:'mail.FileUploader',
 });
 
-return FileUploader;
+returnFileUploader;
 
 });

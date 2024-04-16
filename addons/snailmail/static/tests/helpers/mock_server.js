@@ -1,49 +1,49 @@
-flectra.define('snailmail/static/tests/helpers/mock_server.js', function (require) {
-"use strict";
+flectra.define('snailmail/static/tests/helpers/mock_server.js',function(require){
+"usestrict";
 
-const MockServer = require('web.MockServer');
+constMockServer=require('web.MockServer');
 
 MockServer.include({
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    async _performRpc(route, args) {
-        if (args.model === 'mail.message' && args.method === 'cancel_letter') {
-            const ids = args.args[0];
-            return this._mockMailMessageCancelLetter(ids);
+    async_performRpc(route,args){
+        if(args.model==='mail.message'&&args.method==='cancel_letter'){
+            constids=args.args[0];
+            returnthis._mockMailMessageCancelLetter(ids);
         }
-        if (args.model === 'mail.message' && args.method === 'send_letter') {
-            const ids = args.args[0];
-            return this._mockMailMessageSendLetter(ids);
+        if(args.model==='mail.message'&&args.method==='send_letter'){
+            constids=args.args[0];
+            returnthis._mockMailMessageSendLetter(ids);
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private Mocked Methods
+    //PrivateMockedMethods
     //--------------------------------------------------------------------------
 
     /**
-     * Simulates `cancel_letter` on `mail.message`.
+     *Simulates`cancel_letter`on`mail.message`.
      *
-     * @private
-     * @param {integer[]} ids
+     *@private
+     *@param{integer[]}ids
      */
-    _mockMailMessageCancelLetter(ids) {
-        // TODO implement this mock and improve related tests (task-2300496)
+    _mockMailMessageCancelLetter(ids){
+        //TODOimplementthismockandimproverelatedtests(task-2300496)
     },
     /**
-     * Simulates `send_letter` on `mail.message`.
+     *Simulates`send_letter`on`mail.message`.
      *
-     * @private
-     * @param {integer[]} ids
+     *@private
+     *@param{integer[]}ids
      */
-    _mockMailMessageSendLetter(ids) {
-        // TODO implement this mock and improve related tests (task-2300496)
+    _mockMailMessageSendLetter(ids){
+        //TODOimplementthismockandimproverelatedtests(task-2300496)
     },
 });
 

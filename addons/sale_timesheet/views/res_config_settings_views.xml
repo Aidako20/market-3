@@ -1,25 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
 
-    <record id="res_config_settings_view_form" model="ir.ui.view">
-        <field name="name">res.config.settings.view.form.inherit.sale.timesheet</field>
-        <field name="model">res.config.settings</field>
-        <field name="priority" eval="1"/>
-        <field name="inherit_id" ref="hr_timesheet.res_config_settings_view_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[@name='section_leaves']" position="before">
+    <recordid="res_config_settings_view_form"model="ir.ui.view">
+        <fieldname="name">res.config.settings.view.form.inherit.sale.timesheet</field>
+        <fieldname="model">res.config.settings</field>
+        <fieldname="priority"eval="1"/>
+        <fieldname="inherit_id"ref="hr_timesheet.res_config_settings_view_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//div[@name='section_leaves']"position="before">
                 <h2>Billing</h2>
-                <div name="timesheet_billing" class="row mt16 o_settings_container">
-                    <div class="col-12 col-lg-6 o_setting_box" id="time_billing_setting">
-                        <div class="o_setting_right_pane">
-                            <span class="o_form_label">Time Billing</span>
-                            <div class="text-muted">
-                                Sell services and invoice time spent
+                <divname="timesheet_billing"class="rowmt16o_settings_container">
+                    <divclass="col-12col-lg-6o_setting_box"id="time_billing_setting">
+                        <divclass="o_setting_right_pane">
+                            <spanclass="o_form_label">TimeBilling</span>
+                            <divclass="text-muted">
+                                Sellservicesandinvoicetimespent
                             </div>
-                            <div class="content-group" name="msg_module_sale_timesheet">
-                                <div class="mt8">
+                            <divclass="content-group"name="msg_module_sale_timesheet">
+                                <divclass="mt8">
                                     <div>
-                                        <button name="%(sale_timesheet.product_template_action_default_services)d" string="Configure your services" type="action" class="btn-link" icon="fa-arrow-right"/>
+                                        <buttonname="%(sale_timesheet.product_template_action_default_services)d"string="Configureyourservices"type="action"class="btn-link"icon="fa-arrow-right"/>
                                     </div>
                                 </div>
                             </div>

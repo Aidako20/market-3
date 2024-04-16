@@ -1,38 +1,38 @@
-<?xml version="1.0" encoding="utf-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="utf-8"?>
+<templatesid="template"xml:space="preserve">
     <!--=================-->
-    <!-- Base components -->
+    <!--Basecomponents-->
     <!--=================-->
 
-    <!-- Editor top bar which contains the summernote tools and save/discard buttons -->
-    <t t-name="web_editor.editorbar">
-        <div id="web_editor-toolbars"/>
+    <!--Editortopbarwhichcontainsthesummernotetoolsandsave/discardbuttons-->
+    <tt-name="web_editor.editorbar">
+        <divid="web_editor-toolbars"/>
     </t>
 
     <!--=================-->
-    <!-- Snippet options -->
+    <!--Snippetoptions-->
     <!--=================-->
 
-    <!-- Background position option overlay -->
-    <t t-name="web_editor.background_position_overlay">
-        <div class="o_we_background_position_overlay oe_overlay">
-            <div class="o_we_overlay_content position-absolute">
-                <div class="o_overlay_background"/>
-                <div class="o_we_overlay_buttons position-absolute d-flex m-1" style="top: 0">
-                    <button class="btn btn-primary mr-1 o_btn_apply">Apply</button>
-                    <button class="btn btn-danger o_btn_discard">Discard</button>
+    <!--Backgroundpositionoptionoverlay-->
+    <tt-name="web_editor.background_position_overlay">
+        <divclass="o_we_background_position_overlayoe_overlay">
+            <divclass="o_we_overlay_contentposition-absolute">
+                <divclass="o_overlay_background"/>
+                <divclass="o_we_overlay_buttonsposition-absoluted-flexm-1"style="top:0">
+                    <buttonclass="btnbtn-primarymr-1o_btn_apply">Apply</button>
+                    <buttonclass="btnbtn-dangero_btn_discard">Discard</button>
                 </div>
             </div>
         </div>
     </t>
-    <!-- Save Snippet Name option dialog -->
-    <t t-name="web_editor.dialog.save_snippet">
+    <!--SaveSnippetNameoptiondialog-->
+    <tt-name="web_editor.dialog.save_snippet">
         <div>
-            <div class="form-group form-row">
-                <label class="col-form-label col-md-3" for="snippetName">Name</label>
-                <div class="col-md-9">
-                    <input type="text"
-                           class="form-control o_we_snippet_name_input"
+            <divclass="form-groupform-row">
+                <labelclass="col-form-labelcol-md-3"for="snippetName">Name</label>
+                <divclass="col-md-9">
+                    <inputtype="text"
+                           class="form-controlo_we_snippet_name_input"
                            id="snippetName"
                            t-att-value="currentSnippetName"/>
                 </div>

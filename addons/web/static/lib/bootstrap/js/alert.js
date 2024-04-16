@@ -1,160 +1,160 @@
 /*!
-  * Bootstrap alert.js v4.3.1 (https://getbootstrap.com/)
-  * Copyright 2011-2019 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
-  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  *Bootstrapalert.jsv4.3.1(https://getbootstrap.com/)
+  *Copyright2011-2019TheBootstrapAuthors(https://github.com/twbs/bootstrap/graphs/contributors)
+  *LicensedunderMIT(https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery'), require('./util.js')) :
-  typeof define === 'function' && define.amd ? define(['jquery', './util.js'], factory) :
-  (global = global || self, global.Alert = factory(global.jQuery, global.Util));
-}(this, function ($, Util) { 'use strict';
+(function(global,factory){
+  typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory(require('jquery'),require('./util.js')):
+  typeofdefine==='function'&&define.amd?define(['jquery','./util.js'],factory):
+  (global=global||self,global.Alert=factory(global.jQuery,global.Util));
+}(this,function($,Util){'usestrict';
 
-  $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
-  Util = Util && Util.hasOwnProperty('default') ? Util['default'] : Util;
+  $=$&&$.hasOwnProperty('default')?$['default']:$;
+  Util=Util&&Util.hasOwnProperty('default')?Util['default']:Util;
 
-  function _defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
+  function_defineProperties(target,props){
+    for(vari=0;i<props.length;i++){
+      vardescriptor=props[i];
+      descriptor.enumerable=descriptor.enumerable||false;
+      descriptor.configurable=true;
+      if("value"indescriptor)descriptor.writable=true;
+      Object.defineProperty(target,descriptor.key,descriptor);
     }
   }
 
-  function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
-    return Constructor;
+  function_createClass(Constructor,protoProps,staticProps){
+    if(protoProps)_defineProperties(Constructor.prototype,protoProps);
+    if(staticProps)_defineProperties(Constructor,staticProps);
+    returnConstructor;
   }
 
   /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
+   *------------------------------------------------------------------------
+   *Constants
+   *------------------------------------------------------------------------
    */
 
-  var NAME = 'alert';
-  var VERSION = '4.3.1';
-  var DATA_KEY = 'bs.alert';
-  var EVENT_KEY = "." + DATA_KEY;
-  var DATA_API_KEY = '.data-api';
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
-  var Selector = {
-    DISMISS: '[data-dismiss="alert"]'
+  varNAME='alert';
+  varVERSION='4.3.1';
+  varDATA_KEY='bs.alert';
+  varEVENT_KEY="."+DATA_KEY;
+  varDATA_API_KEY='.data-api';
+  varJQUERY_NO_CONFLICT=$.fn[NAME];
+  varSelector={
+    DISMISS:'[data-dismiss="alert"]'
   };
-  var Event = {
-    CLOSE: "close" + EVENT_KEY,
-    CLOSED: "closed" + EVENT_KEY,
-    CLICK_DATA_API: "click" + EVENT_KEY + DATA_API_KEY
+  varEvent={
+    CLOSE:"close"+EVENT_KEY,
+    CLOSED:"closed"+EVENT_KEY,
+    CLICK_DATA_API:"click"+EVENT_KEY+DATA_API_KEY
   };
-  var ClassName = {
-    ALERT: 'alert',
-    FADE: 'fade',
-    SHOW: 'show'
+  varClassName={
+    ALERT:'alert',
+    FADE:'fade',
+    SHOW:'show'
     /**
-     * ------------------------------------------------------------------------
-     * Class Definition
-     * ------------------------------------------------------------------------
+     *------------------------------------------------------------------------
+     *ClassDefinition
+     *------------------------------------------------------------------------
      */
 
   };
 
-  var Alert =
+  varAlert=
   /*#__PURE__*/
-  function () {
-    function Alert(element) {
-      this._element = element;
-    } // Getters
+  function(){
+    functionAlert(element){
+      this._element=element;
+    }//Getters
 
 
-    var _proto = Alert.prototype;
+    var_proto=Alert.prototype;
 
-    // Public
-    _proto.close = function close(element) {
-      var rootElement = this._element;
+    //Public
+    _proto.close=functionclose(element){
+      varrootElement=this._element;
 
-      if (element) {
-        rootElement = this._getRootElement(element);
+      if(element){
+        rootElement=this._getRootElement(element);
       }
 
-      var customEvent = this._triggerCloseEvent(rootElement);
+      varcustomEvent=this._triggerCloseEvent(rootElement);
 
-      if (customEvent.isDefaultPrevented()) {
+      if(customEvent.isDefaultPrevented()){
         return;
       }
 
       this._removeElement(rootElement);
     };
 
-    _proto.dispose = function dispose() {
-      $.removeData(this._element, DATA_KEY);
-      this._element = null;
-    } // Private
+    _proto.dispose=functiondispose(){
+      $.removeData(this._element,DATA_KEY);
+      this._element=null;
+    }//Private
     ;
 
-    _proto._getRootElement = function _getRootElement(element) {
-      var selector = Util.getSelectorFromElement(element);
-      var parent = false;
+    _proto._getRootElement=function_getRootElement(element){
+      varselector=Util.getSelectorFromElement(element);
+      varparent=false;
 
-      if (selector) {
-        parent = document.querySelector(selector);
+      if(selector){
+        parent=document.querySelector(selector);
       }
 
-      if (!parent) {
-        parent = $(element).closest("." + ClassName.ALERT)[0];
+      if(!parent){
+        parent=$(element).closest("."+ClassName.ALERT)[0];
       }
 
-      return parent;
+      returnparent;
     };
 
-    _proto._triggerCloseEvent = function _triggerCloseEvent(element) {
-      var closeEvent = $.Event(Event.CLOSE);
+    _proto._triggerCloseEvent=function_triggerCloseEvent(element){
+      varcloseEvent=$.Event(Event.CLOSE);
       $(element).trigger(closeEvent);
-      return closeEvent;
+      returncloseEvent;
     };
 
-    _proto._removeElement = function _removeElement(element) {
-      var _this = this;
+    _proto._removeElement=function_removeElement(element){
+      var_this=this;
 
       $(element).removeClass(ClassName.SHOW);
 
-      if (!$(element).hasClass(ClassName.FADE)) {
+      if(!$(element).hasClass(ClassName.FADE)){
         this._destroyElement(element);
 
         return;
       }
 
-      var transitionDuration = Util.getTransitionDurationFromElement(element);
-      $(element).one(Util.TRANSITION_END, function (event) {
-        return _this._destroyElement(element, event);
+      vartransitionDuration=Util.getTransitionDurationFromElement(element);
+      $(element).one(Util.TRANSITION_END,function(event){
+        return_this._destroyElement(element,event);
       }).emulateTransitionEnd(transitionDuration);
     };
 
-    _proto._destroyElement = function _destroyElement(element) {
+    _proto._destroyElement=function_destroyElement(element){
       $(element).detach().trigger(Event.CLOSED).remove();
-    } // Static
+    }//Static
     ;
 
-    Alert._jQueryInterface = function _jQueryInterface(config) {
-      return this.each(function () {
-        var $element = $(this);
-        var data = $element.data(DATA_KEY);
+    Alert._jQueryInterface=function_jQueryInterface(config){
+      returnthis.each(function(){
+        var$element=$(this);
+        vardata=$element.data(DATA_KEY);
 
-        if (!data) {
-          data = new Alert(this);
-          $element.data(DATA_KEY, data);
+        if(!data){
+          data=newAlert(this);
+          $element.data(DATA_KEY,data);
         }
 
-        if (config === 'close') {
+        if(config==='close'){
           data[config](this);
         }
       });
     };
 
-    Alert._handleDismiss = function _handleDismiss(alertInstance) {
-      return function (event) {
-        if (event) {
+    Alert._handleDismiss=function_handleDismiss(alertInstance){
+      returnfunction(event){
+        if(event){
           event.preventDefault();
         }
 
@@ -162,37 +162,37 @@
       };
     };
 
-    _createClass(Alert, null, [{
-      key: "VERSION",
-      get: function get() {
-        return VERSION;
+    _createClass(Alert,null,[{
+      key:"VERSION",
+      get:functionget(){
+        returnVERSION;
       }
     }]);
 
-    return Alert;
+    returnAlert;
   }();
   /**
-   * ------------------------------------------------------------------------
-   * Data Api implementation
-   * ------------------------------------------------------------------------
+   *------------------------------------------------------------------------
+   *DataApiimplementation
+   *------------------------------------------------------------------------
    */
 
 
-  $(document).on(Event.CLICK_DATA_API, Selector.DISMISS, Alert._handleDismiss(new Alert()));
+  $(document).on(Event.CLICK_DATA_API,Selector.DISMISS,Alert._handleDismiss(newAlert()));
   /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
+   *------------------------------------------------------------------------
+   *jQuery
+   *------------------------------------------------------------------------
    */
 
-  $.fn[NAME] = Alert._jQueryInterface;
-  $.fn[NAME].Constructor = Alert;
+  $.fn[NAME]=Alert._jQueryInterface;
+  $.fn[NAME].Constructor=Alert;
 
-  $.fn[NAME].noConflict = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Alert._jQueryInterface;
+  $.fn[NAME].noConflict=function(){
+    $.fn[NAME]=JQUERY_NO_CONFLICT;
+    returnAlert._jQueryInterface;
   };
 
-  return Alert;
+  returnAlert;
 
 }));

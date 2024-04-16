@@ -1,14 +1,14 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-    <record id="event_track_view_form" model="ir.ui.view" >
-        <field name="name">event.track.view.form.inherit.event.track.quiz</field>
-        <field name="model">event.track</field>
-        <field name="inherit_id" ref="website_event_track.view_event_track_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//group[@name='event_track_cta_group']" position="after">
-                <group name="event_track_quiz_group">
-                    <field name="quiz_id"
-                        context="{'form_view_ref': 'website_event_track_quiz.event_quiz_view_form_from_track'}"/>
+    <recordid="event_track_view_form"model="ir.ui.view">
+        <fieldname="name">event.track.view.form.inherit.event.track.quiz</field>
+        <fieldname="model">event.track</field>
+        <fieldname="inherit_id"ref="website_event_track.view_event_track_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//group[@name='event_track_cta_group']"position="after">
+                <groupname="event_track_quiz_group">
+                    <fieldname="quiz_id"
+                        context="{'form_view_ref':'website_event_track_quiz.event_quiz_view_form_from_track'}"/>
                 </group>
             </xpath>
         </field>

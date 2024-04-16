@@ -1,164 +1,164 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra><data>
-    <!--page history-->
-    <record id="website_visitor_page_view_tree" model="ir.ui.view">
-        <field name="name">website.track.view.tree</field>
-        <field name="model">website.track</field>
-        <field name="arch" type="xml">
-            <tree string="Visitor Page Views History" create="0">
-                <field name="visitor_id"/>
-                <field name="page_id"/>
-                <field name="url"/>
-                <field name="visit_datetime"/>
+    <!--pagehistory-->
+    <recordid="website_visitor_page_view_tree"model="ir.ui.view">
+        <fieldname="name">website.track.view.tree</field>
+        <fieldname="model">website.track</field>
+        <fieldname="arch"type="xml">
+            <treestring="VisitorPageViewsHistory"create="0">
+                <fieldname="visitor_id"/>
+                <fieldname="page_id"/>
+                <fieldname="url"/>
+                <fieldname="visit_datetime"/>
             </tree>
         </field>
     </record>
 
-    <record id="website_visitor_page_view_graph" model="ir.ui.view">
-        <field name="name">website.track.view.graph</field>
-        <field name="model">website.track</field>
-        <field name="arch" type="xml">
-            <graph string="Visitor Page Views" sample="1">
-                <field name="url"/>
+    <recordid="website_visitor_page_view_graph"model="ir.ui.view">
+        <fieldname="name">website.track.view.graph</field>
+        <fieldname="model">website.track</field>
+        <fieldname="arch"type="xml">
+            <graphstring="VisitorPageViews"sample="1">
+                <fieldname="url"/>
             </graph>
         </field>
     </record>
 
-    <record id="website_visitor_page_view_search" model="ir.ui.view">
-        <field name="name">website.track.view.search</field>
-        <field name="model">website.track</field>
-        <field name="arch" type="xml">
-            <search string="Search Visitor">
-                <field name="visitor_id"/>
-                <field name="page_id"/>
-                <field name="url"/>
-                <field name="visit_datetime"/>
-                <filter string="Pages" name="type_page" domain="[('page_id', '!=', False)]"/>
-                <filter string="Urls &amp; Pages" name="type_url" domain="[('url', '!=', False)]"/>
-                <group string="Group By">
-                    <filter string="Visitor" name="group_by_visitor" domain="[]" context="{'group_by': 'visitor_id'}"/>
-                    <filter string="Page" name="group_by_page" domain="[]" context="{'group_by': 'page_id'}"/>
-                    <filter string="Url" name="group_by_url" domain="[]" context="{'group_by': 'url'}"/>
-                    <filter string="Date" name="group_by_date" domain="[]" context="{'group_by': 'visit_datetime'}"/>
+    <recordid="website_visitor_page_view_search"model="ir.ui.view">
+        <fieldname="name">website.track.view.search</field>
+        <fieldname="model">website.track</field>
+        <fieldname="arch"type="xml">
+            <searchstring="SearchVisitor">
+                <fieldname="visitor_id"/>
+                <fieldname="page_id"/>
+                <fieldname="url"/>
+                <fieldname="visit_datetime"/>
+                <filterstring="Pages"name="type_page"domain="[('page_id','!=',False)]"/>
+                <filterstring="Urls&amp;Pages"name="type_url"domain="[('url','!=',False)]"/>
+                <groupstring="GroupBy">
+                    <filterstring="Visitor"name="group_by_visitor"domain="[]"context="{'group_by':'visitor_id'}"/>
+                    <filterstring="Page"name="group_by_page"domain="[]"context="{'group_by':'page_id'}"/>
+                    <filterstring="Url"name="group_by_url"domain="[]"context="{'group_by':'url'}"/>
+                    <filterstring="Date"name="group_by_date"domain="[]"context="{'group_by':'visit_datetime'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <record id="website_visitor_page_action" model="ir.actions.act_window">
-        <field name="name">Page Views History</field>
-        <field name="res_model">website.track</field>
-        <field name="view_mode">tree</field>
-        <field name="view_ids" eval="[(5, 0, 0),
-            (0, 0, {'view_mode': 'tree', 'view_id': ref('website_visitor_page_view_tree')}),
-            (0, 0, {'view_mode': 'graph', 'view_id': ref('website_visitor_page_view_graph')}),
+    <recordid="website_visitor_page_action"model="ir.actions.act_window">
+        <fieldname="name">PageViewsHistory</field>
+        <fieldname="res_model">website.track</field>
+        <fieldname="view_mode">tree</field>
+        <fieldname="view_ids"eval="[(5,0,0),
+            (0,0,{'view_mode':'tree','view_id':ref('website_visitor_page_view_tree')}),
+            (0,0,{'view_mode':'graph','view_id':ref('website_visitor_page_view_graph')}),
         ]"/>
-        <field name="domain">[('visitor_id', '=', active_id), ('url', '!=', False)]</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_empty_folder">
-              No page views yet for this visitor
+        <fieldname="domain">[('visitor_id','=',active_id),('url','!=',False)]</field>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_empty_folder">
+              Nopageviewsyetforthisvisitor
             </p>
         </field>
     </record>
 
-    <!--Website visitor actions-->
-    <record id="website.visitor_partner_action" model="ir.actions.act_window">
-        <field name="name">Partners</field>
-        <field name="res_model">res.partner</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[('visitor_ids', 'in', [active_id])]</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_empty_folder">
-              No partner linked for this visitor
+    <!--Websitevisitoractions-->
+    <recordid="website.visitor_partner_action"model="ir.actions.act_window">
+        <fieldname="name">Partners</field>
+        <fieldname="res_model">res.partner</field>
+        <fieldname="view_mode">tree,form</field>
+        <fieldname="domain">[('visitor_ids','in',[active_id])]</field>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_empty_folder">
+              Nopartnerlinkedforthisvisitor
             </p>
         </field>
     </record>
 
-    <!-- website visitor views -->
-    <record id="website_visitor_view_kanban" model="ir.ui.view">
-        <field name="name">website.visitor.view.kanban</field>
-        <field name="model">website.visitor</field>
-        <field name="arch" type="xml">
-            <kanban class="o_wvisitor_kanban" sample="1">
-                <field name="id"/>
-                <field name="country_id"/>
-                <field name="country_flag"/>
-                <field name="email"/>
-                <field name="is_connected"/>
-                <field name="display_name"/>
-                <field name="last_visited_page_id"/>
-                <field name="page_ids"/>
-                <field name="partner_id"/>
-                <field name="partner_image"/>
+    <!--websitevisitorviews-->
+    <recordid="website_visitor_view_kanban"model="ir.ui.view">
+        <fieldname="name">website.visitor.view.kanban</field>
+        <fieldname="model">website.visitor</field>
+        <fieldname="arch"type="xml">
+            <kanbanclass="o_wvisitor_kanban"sample="1">
+                <fieldname="id"/>
+                <fieldname="country_id"/>
+                <fieldname="country_flag"/>
+                <fieldname="email"/>
+                <fieldname="is_connected"/>
+                <fieldname="display_name"/>
+                <fieldname="last_visited_page_id"/>
+                <fieldname="page_ids"/>
+                <fieldname="partner_id"/>
+                <fieldname="partner_image"/>
                 <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_global_click o_wvisitor_kanban_card">
-                            <!-- displayed in ungrouped mode -->
-                            <div class="o_kanban_detail_ungrouped row mx-0">
-                                <div class="o_wvisitor_kanban_image">
-                                     <img t-if="record.partner_image.raw_value"
-                                        t-att-src="kanban_image('res.partner', 'image_128', record.partner_id.raw_value)"
-                                        width="54px" height="54px" alt="Visitor"/>
-                                     <img t-else=""
+                    <tt-name="kanban-box">
+                        <divclass="oe_kanban_global_clicko_wvisitor_kanban_card">
+                            <!--displayedinungroupedmode-->
+                            <divclass="o_kanban_detail_ungroupedrowmx-0">
+                                <divclass="o_wvisitor_kanban_image">
+                                     <imgt-if="record.partner_image.raw_value"
+                                        t-att-src="kanban_image('res.partner','image_128',record.partner_id.raw_value)"
+                                        width="54px"height="54px"alt="Visitor"/>
+                                     <imgt-else=""
                                         t-attf-src="/base/static/img/avatar_grey.png"
-                                        width="54px" height="54px" alt="Visitor"/>
+                                        width="54px"height="54px"alt="Visitor"/>
                                 </div>
-                                <div class="col o_wvisitor_name">
+                                <divclass="colo_wvisitor_name">
                                     <div>
-                                        <b><field name="display_name"/></b>
-                                        <div class="float-right">
-                                            <span class="fa fa-circle text-success" t-if="record.is_connected.raw_value" aria-label="Online" title="Online"/>
-                                            <span class="fa fa-circle text-danger" t-else="" aria-label="Offline" title="Offline"/>
+                                        <b><fieldname="display_name"/></b>
+                                        <divclass="float-right">
+                                            <spanclass="fafa-circletext-success"t-if="record.is_connected.raw_value"aria-label="Online"title="Online"/>
+                                            <spanclass="fafa-circletext-danger"t-else=""aria-label="Offline"title="Offline"/>
                                         </div>
-                                        <!-- Double check is necessary for sample view (or error image are shown) -->
-                                        <div t-if="record.country_id.raw_value and record.country_flag.raw_value">
-                                            <img t-att-src="record.country_flag.raw_value"
-                                               class="o_country_flag" alt="Country"/>
+                                        <!--Doublecheckisnecessaryforsampleview(orerrorimageareshown)-->
+                                        <divt-if="record.country_id.raw_valueandrecord.country_flag.raw_value">
+                                            <imgt-att-src="record.country_flag.raw_value"
+                                               class="o_country_flag"alt="Country"/>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <b><field name="time_since_last_action"/></b>
-                                    <div>Last Action</div>
+                                <divclass="col">
+                                    <b><fieldname="time_since_last_action"/></b>
+                                    <div>LastAction</div>
                                 </div>
-                                <div class="col">
-                                    <b><field name="visit_count"/></b>
+                                <divclass="col">
+                                    <b><fieldname="visit_count"/></b>
                                     <div>Visits</div>
                                 </div>
-                                <div class="col">
-                                    <b><field name="last_visited_page_id"/></b>
-                                    <div>Last Page</div>
+                                <divclass="col">
+                                    <b><fieldname="last_visited_page_id"/></b>
+                                    <div>LastPage</div>
                                 </div>
-                                <div id="wvisitor_visited_page" class="col">
-                                    <b><field name="page_count"/></b>
-                                    <div>Visited Pages</div>
+                                <divid="wvisitor_visited_page"class="col">
+                                    <b><fieldname="page_count"/></b>
+                                    <div>VisitedPages</div>
                                 </div>
-                                <div class="col-3 w_visitor_kanban_actions_ungrouped">
-                                    <button name="action_send_mail" type="object"
-                                            class="btn btn-secondary border" attrs="{'invisible': [('email', '=', False)]}">
+                                <divclass="col-3w_visitor_kanban_actions_ungrouped">
+                                    <buttonname="action_send_mail"type="object"
+                                            class="btnbtn-secondaryborder"attrs="{'invisible':[('email','=',False)]}">
                                             Email
                                     </button>
                                 </div>
                             </div>
-                            <!-- displayed in grouped mode -->
-                            <div class="oe_kanban_details">
-                                <div class="float-right">
-                                    <span class="fa fa-circle text-success" t-if="record.is_connected.raw_value" aria-label="Online" title="Online"/>
-                                    <span class="fa fa-circle text-danger" t-else="" aria-label="Offline" title="Offline"/>
+                            <!--displayedingroupedmode-->
+                            <divclass="oe_kanban_details">
+                                <divclass="float-right">
+                                    <spanclass="fafa-circletext-success"t-if="record.is_connected.raw_value"aria-label="Online"title="Online"/>
+                                    <spanclass="fafa-circletext-danger"t-else=""aria-label="Offline"title="Offline"/>
                                 </div>
                                 <strong>
-                                    <img t-if="record.country_id.raw_value"
+                                    <imgt-if="record.country_id.raw_value"
                                        t-att-src="record.country_flag.raw_value"
-                                       class="o_country_flag" alt="Country"/>
-                                    <field name="display_name"/>
+                                       class="o_country_flag"alt="Country"/>
+                                    <fieldname="display_name"/>
                                 </strong>
-                                <div class="mb-2">Active <field name="time_since_last_action"/></div>
-                                <div>Last Page<span class="float-right font-weight-bold"><field name="last_visited_page_id"/></span></div>
-                                <div>Visits<span class="float-right font-weight-bold"><field name="visit_count"/></span></div>
-                                <div id="o_page_count">Visited Pages<span class="float-right font-weight-bold"><field name="page_count"/></span></div>
-                                <div class="w_visitor_kanban_actions">
-                                    <button name="action_send_mail" type="object"
-                                            class="btn btn-secondary" attrs="{'invisible': [('email', '=', False)]}">
+                                <divclass="mb-2">Active<fieldname="time_since_last_action"/></div>
+                                <div>LastPage<spanclass="float-rightfont-weight-bold"><fieldname="last_visited_page_id"/></span></div>
+                                <div>Visits<spanclass="float-rightfont-weight-bold"><fieldname="visit_count"/></span></div>
+                                <divid="o_page_count">VisitedPages<spanclass="float-rightfont-weight-bold"><fieldname="page_count"/></span></div>
+                                <divclass="w_visitor_kanban_actions">
+                                    <buttonname="action_send_mail"type="object"
+                                            class="btnbtn-secondary"attrs="{'invisible':[('email','=',False)]}">
                                             Email
                                     </button>
                                 </div>
@@ -170,54 +170,54 @@
         </field>
     </record>
 
-    <record id="website_visitor_view_form" model="ir.ui.view">
-        <field name="name">website.visitor.view.form</field>
-        <field name="model">website.visitor</field>
-        <field name="arch" type="xml">
-            <form string="Website Visitor">
+    <recordid="website_visitor_view_form"model="ir.ui.view">
+        <fieldname="name">website.visitor.view.form</field>
+        <fieldname="model">website.visitor</field>
+        <fieldname="arch"type="xml">
+            <formstring="WebsiteVisitor">
                 <header>
-                    <button name="action_send_mail" type="object" class="btn btn-primary"
-                            attrs="{'invisible': [('email', '=', False)]}" string="Send Email"/>
+                    <buttonname="action_send_mail"type="object"class="btnbtn-primary"
+                            attrs="{'invisible':[('email','=',False)]}"string="SendEmail"/>
                 </header>
                 <sheet>
-                    <div class="oe_button_box" name="button_box">
-                        <button class="oe_stat_button o_stat_button_info" attrs="{'invisible': [('is_connected', '=', False)]}">
-                            <i class="fa fa-fw o_button_icon fa-circle text-success"/>
+                    <divclass="oe_button_box"name="button_box">
+                        <buttonclass="oe_stat_buttono_stat_button_info"attrs="{'invisible':[('is_connected','=',False)]}">
+                            <iclass="fafa-fwo_button_iconfa-circletext-success"/>
                             <span>Connected</span>
                         </button>
-                        <button class="oe_stat_button o_stat_button_info" attrs="{'invisible': [('is_connected', '=', True)]}">
-                            <i class="fa fa-fw o_button_icon fa-circle text-danger"/>
+                        <buttonclass="oe_stat_buttono_stat_button_info"attrs="{'invisible':[('is_connected','=',True)]}">
+                            <iclass="fafa-fwo_button_iconfa-circletext-danger"/>
                             <span>Offline</span>
                         </button>
-                        <button id="w_visitor_visit_counter" class="oe_stat_button o_stat_button_info" icon="fa-globe">
-                            <field name="visit_count" widget="statinfo" string="Visits"/>
+                        <buttonid="w_visitor_visit_counter"class="oe_stat_buttono_stat_button_info"icon="fa-globe">
+                            <fieldname="visit_count"widget="statinfo"string="Visits"/>
                         </button>
-                        <button name="%(website.website_visitor_page_action)d" type="action"
+                        <buttonname="%(website.website_visitor_page_action)d"type="action"
                                 class="oe_stat_button"
                                 icon="fa-tags">
-                            <field name="visitor_page_count" widget="statinfo" string="Page views"/>
+                            <fieldname="visitor_page_count"widget="statinfo"string="Pageviews"/>
                         </button>
                     </div>
-                    <div class="float-right" attrs="{'invisible': [('country_id', '=', False)]}">
-                        <field name="country_flag" widget="image_url" options='{"size": [32, 32]}'/>
+                    <divclass="float-right"attrs="{'invisible':[('country_id','=',False)]}">
+                        <fieldname="country_flag"widget="image_url"options='{"size":[32,32]}'/>
                     </div>
-                    <div class="oe_title">
-                        <h1><field name="display_name"/></h1>
+                    <divclass="oe_title">
+                        <h1><fieldname="display_name"/></h1>
                     </div>
-                    <group id="general_info">
-                        <group string="Visitor Information">
-                            <field name="active" invisible="1"/>
-                            <field name="is_connected" invisible="1"/>
-                            <field name="partner_id"/>
-                            <field name="email"/>
-                            <field name="mobile" class="o_force_ltr"/>
-                            <field name="country_id" attrs="{'invisible': [('country_id', '=', False)]}"/>
-                            <field name="lang_id"/>
+                    <groupid="general_info">
+                        <groupstring="VisitorInformation">
+                            <fieldname="active"invisible="1"/>
+                            <fieldname="is_connected"invisible="1"/>
+                            <fieldname="partner_id"/>
+                            <fieldname="email"/>
+                            <fieldname="mobile"class="o_force_ltr"/>
+                            <fieldname="country_id"attrs="{'invisible':[('country_id','=',False)]}"/>
+                            <fieldname="lang_id"/>
                         </group>
-                        <group id="visits" string="Visits">
-                            <field name="create_date"/>
-                            <field name="last_connection_datetime"/>
-                            <field name="page_ids" widget="many2many_tags"/>
+                        <groupid="visits"string="Visits">
+                            <fieldname="create_date"/>
+                            <fieldname="last_connection_datetime"/>
+                            <fieldname="page_ids"widget="many2many_tags"/>
                         </group>
                     </group>
                 </sheet>
@@ -225,124 +225,124 @@
         </field>
     </record>
 
-    <record id="website_visitor_view_tree" model="ir.ui.view">
-        <field name="name">website.visitor.view.tree</field>
-        <field name="model">website.visitor</field>
-        <field name="arch" type="xml">
-            <tree string="Web Visitors" decoration-success="is_connected" decoration-danger="not is_connected" sample="1">
-                <field name="country_flag" widget="image_url" options='{"size": [20, 20]}' nolabel="1"/>
-                <field name="display_name"/>
-                <field name="create_date"/>
-                <field name="last_connection_datetime"/>
-                <field name="lang_id"/>
-                <field name="visit_count"/>
-                <field name="page_ids" widget="many2many_tags"/>
-                <field name="is_connected" invisible="1"/>
-                <field name="email" invisible="1"/>
-                <button string="Send Email" name="action_send_mail" type="object"
-                    icon="fa-comment" attrs="{'invisible': [('email', '=', False)]}"/>
+    <recordid="website_visitor_view_tree"model="ir.ui.view">
+        <fieldname="name">website.visitor.view.tree</field>
+        <fieldname="model">website.visitor</field>
+        <fieldname="arch"type="xml">
+            <treestring="WebVisitors"decoration-success="is_connected"decoration-danger="notis_connected"sample="1">
+                <fieldname="country_flag"widget="image_url"options='{"size":[20,20]}'nolabel="1"/>
+                <fieldname="display_name"/>
+                <fieldname="create_date"/>
+                <fieldname="last_connection_datetime"/>
+                <fieldname="lang_id"/>
+                <fieldname="visit_count"/>
+                <fieldname="page_ids"widget="many2many_tags"/>
+                <fieldname="is_connected"invisible="1"/>
+                <fieldname="email"invisible="1"/>
+                <buttonstring="SendEmail"name="action_send_mail"type="object"
+                    icon="fa-comment"attrs="{'invisible':[('email','=',False)]}"/>
             </tree>
         </field>
     </record>
 
-    <record id="website_visitor_view_search" model="ir.ui.view">
-        <field name="name">website.visitor.view.search</field>
-        <field name="model">website.visitor</field>
-        <field name="arch" type="xml">
-            <search string="Search Visitor">
-                <field name="name"/>
-                <field name="lang_id"/>
-                <field name="country_id"/>
-                <field name="visit_count"/>
-                <field name="page_ids"/>
-                <filter string="Visitors" name="type_visitor" domain="[('partner_id', '=', False)]"/>
-                <filter string="Customers" name="type_customer" domain="[('partner_id', '!=', False)]"/>
+    <recordid="website_visitor_view_search"model="ir.ui.view">
+        <fieldname="name">website.visitor.view.search</field>
+        <fieldname="model">website.visitor</field>
+        <fieldname="arch"type="xml">
+            <searchstring="SearchVisitor">
+                <fieldname="name"/>
+                <fieldname="lang_id"/>
+                <fieldname="country_id"/>
+                <fieldname="visit_count"/>
+                <fieldname="page_ids"/>
+                <filterstring="Visitors"name="type_visitor"domain="[('partner_id','=',False)]"/>
+                <filterstring="Customers"name="type_customer"domain="[('partner_id','!=',False)]"/>
                 <separator/>
-                <filter string="Archived" name="is_archived" domain="[('active', '=', False)]"/>
+                <filterstring="Archived"name="is_archived"domain="[('active','=',False)]"/>
                 <separator/>
-                <filter string="Is Connected" name="is_connected" domain="[('last_connection_datetime', '&gt;', datetime.datetime.now() - datetime.timedelta(minutes=5))]"/>
-                <filter name="filter_create_date" date="create_date"/>
-                <group string="Group By">
-                    <filter string="Country" name="group_by_country" context="{'group_by': 'country_id'}"/>
-                    <filter string="Language" name="group_by_lang" context="{'group_by': 'lang_id'}"/>
+                <filterstring="IsConnected"name="is_connected"domain="[('last_connection_datetime','&gt;',datetime.datetime.now()-datetime.timedelta(minutes=5))]"/>
+                <filtername="filter_create_date"date="create_date"/>
+                <groupstring="GroupBy">
+                    <filterstring="Country"name="group_by_country"context="{'group_by':'country_id'}"/>
+                    <filterstring="Language"name="group_by_lang"context="{'group_by':'lang_id'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <record id="website_visitor_view_graph" model="ir.ui.view">
-        <field name="name">website.visitor.view.graph</field>
-        <field name="model">website.visitor</field>
-        <field name="arch" type="xml">
-            <graph string="Visitors" sample="1">
-                <field name="create_date" type="row"/>
-                <field name="visit_count"/>
+    <recordid="website_visitor_view_graph"model="ir.ui.view">
+        <fieldname="name">website.visitor.view.graph</field>
+        <fieldname="model">website.visitor</field>
+        <fieldname="arch"type="xml">
+            <graphstring="Visitors"sample="1">
+                <fieldname="create_date"type="row"/>
+                <fieldname="visit_count"/>
             </graph>
         </field>
     </record>
 
-    <record id="website_visitors_action" model="ir.actions.act_window">
-        <field name="name">Visitors</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">website.visitor</field>
-        <field name="view_mode">kanban,tree,form,graph</field>
-        <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">
-            Wait for visitors to come to your website to see their history.
+    <recordid="website_visitors_action"model="ir.actions.act_window">
+        <fieldname="name">Visitors</field>
+        <fieldname="type">ir.actions.act_window</field>
+        <fieldname="res_model">website.visitor</field>
+        <fieldname="view_mode">kanban,tree,form,graph</field>
+        <fieldname="help"type="html">
+          <pclass="o_view_nocontent_smiling_face">
+            Waitforvisitorstocometoyourwebsitetoseetheirhistory.
           </p>
         </field>
     </record>
 
-    <record id="website_visitor_track_view_tree" model="ir.ui.view">
-        <field name="name">website.track.view.tree</field>
-        <field name="model">website.track</field>
-        <field name="arch" type="xml">
-            <tree string="Visitor Views History" create="0" edit="0" sample="1">
-                <field name="visitor_id"/>
-                <field name="page_id"/>
-                <field name="url"/>
-                <field name="visit_datetime"/>
+    <recordid="website_visitor_track_view_tree"model="ir.ui.view">
+        <fieldname="name">website.track.view.tree</field>
+        <fieldname="model">website.track</field>
+        <fieldname="arch"type="xml">
+            <treestring="VisitorViewsHistory"create="0"edit="0"sample="1">
+                <fieldname="visitor_id"/>
+                <fieldname="page_id"/>
+                <fieldname="url"/>
+                <fieldname="visit_datetime"/>
             </tree>
         </field>
     </record>
 
-    <record id="website_visitor_track_view_graph" model="ir.ui.view">
-        <field name="name">website.track.view.graph</field>
-        <field name="model">website.track</field>
-        <field name="arch" type="xml">
-            <graph string="Visitor Views" sample="1">
-                <field name="url"/>
+    <recordid="website_visitor_track_view_graph"model="ir.ui.view">
+        <fieldname="name">website.track.view.graph</field>
+        <fieldname="model">website.track</field>
+        <fieldname="arch"type="xml">
+            <graphstring="VisitorViews"sample="1">
+                <fieldname="url"/>
             </graph>
         </field>
     </record>
 
-    <record id="website_visitor_view_action" model="ir.actions.act_window">
-        <field name="name">Views</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">website.track</field>
-        <field name="view_mode">tree</field>
-        <field name="context">{'search_default_type_url': 1, 'create': False, 'edit': False, 'copy': False}</field>
-        <field name="view_ids" eval="[(5, 0, 0),
-            (0, 0, {'view_mode': 'tree', 'view_id': ref('website_visitor_track_view_tree')}),
-            (0, 0, {'view_mode': 'graph', 'view_id': ref('website_visitor_track_view_graph')}),
+    <recordid="website_visitor_view_action"model="ir.actions.act_window">
+        <fieldname="name">Views</field>
+        <fieldname="type">ir.actions.act_window</field>
+        <fieldname="res_model">website.track</field>
+        <fieldname="view_mode">tree</field>
+        <fieldname="context">{'search_default_type_url':1,'create':False,'edit':False,'copy':False}</field>
+        <fieldname="view_ids"eval="[(5,0,0),
+            (0,0,{'view_mode':'tree','view_id':ref('website_visitor_track_view_tree')}),
+            (0,0,{'view_mode':'graph','view_id':ref('website_visitor_track_view_graph')}),
         ]"/>
-        <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">
-            Wait for visitors to come to your website to see the pages they viewed.
+        <fieldname="help"type="html">
+          <pclass="o_view_nocontent_smiling_face">
+            Waitforvisitorstocometoyourwebsitetoseethepagestheyviewed.
           </p>
         </field>
     </record>
 
-    <menuitem id="website_visitor_menu"
+    <menuitemid="website_visitor_menu"
         name="Visitors"
         sequence="80"
         parent="website.menu_website_configuration"/>
 
-    <menuitem id="menu_visitor_sub_menu" name="Visitors"
+    <menuitemid="menu_visitor_sub_menu"name="Visitors"
         sequence="1"
         parent="website_visitor_menu"
         action="website.website_visitors_action"/>
-    <menuitem id="menu_visitor_view_menu" name="Views"
+    <menuitemid="menu_visitor_view_menu"name="Views"
         sequence="2"
         parent="website_visitor_menu"
         action="website.website_visitor_view_action"/>

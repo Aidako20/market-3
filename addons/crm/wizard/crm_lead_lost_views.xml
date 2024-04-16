@@ -1,27 +1,27 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-        <record id="crm_lead_lost_view_form" model="ir.ui.view">
-            <field name="name">crm.lead.lost.form</field>
-            <field name="model">crm.lead.lost</field>
-            <field name="arch" type="xml">
-                <form string="Lost Reason">
-                    <group class="oe_title">
-                        <field name="lost_reason_id" options="{'no_create_edit': True}" />
+        <recordid="crm_lead_lost_view_form"model="ir.ui.view">
+            <fieldname="name">crm.lead.lost.form</field>
+            <fieldname="model">crm.lead.lost</field>
+            <fieldname="arch"type="xml">
+                <formstring="LostReason">
+                    <groupclass="oe_title">
+                        <fieldname="lost_reason_id"options="{'no_create_edit':True}"/>
                     </group>
                     <footer>
-                        <button name="action_lost_reason_apply" string="Submit" type="object" class="btn-primary"/>
-                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                        <buttonname="action_lost_reason_apply"string="Submit"type="object"class="btn-primary"/>
+                        <buttonstring="Cancel"class="btn-secondary"special="cancel"/>
                     </footer>
                 </form>
             </field>
         </record>
 
-        <record id="crm_lead_lost_action" model="ir.actions.act_window">
-            <field name="name">Lost Reason</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">crm.lead.lost</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="crm_lead_lost_view_form"/>
-            <field name="target">new</field>
+        <recordid="crm_lead_lost_action"model="ir.actions.act_window">
+            <fieldname="name">LostReason</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">crm.lead.lost</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="view_id"ref="crm_lead_lost_view_form"/>
+            <fieldname="target">new</field>
         </record>
 </flectra>

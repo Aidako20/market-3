@@ -1,102 +1,102 @@
-<?xml version="1.0" encoding="utf-8"?>
-<templates id="template" xml:space="preserve">
-    <t t-name="web_editor.snippet_overlay">
-        <div class="oe_overlay">
-            <div class="o_handles">
-                <!-- Visible overlay borders + allow to resize when not readonly -->
-                <div class="o_handle n readonly"/>
-                <div class="o_handle e readonly"/>
-                <div class="o_handle w readonly"/>
-                <div class="o_handle s readonly"/>
+<?xmlversion="1.0"encoding="utf-8"?>
+<templatesid="template"xml:space="preserve">
+    <tt-name="web_editor.snippet_overlay">
+        <divclass="oe_overlay">
+            <divclass="o_handles">
+                <!--Visibleoverlayborders+allowtoresizewhennotreadonly-->
+                <divclass="o_handlenreadonly"/>
+                <divclass="o_handleereadonly"/>
+                <divclass="o_handlewreadonly"/>
+                <divclass="o_handlesreadonly"/>
 
-                <div class="o_overlay_options_wrap">
-                    <!-- Overlay move specific section -->
-                    <div class="o_overlay_move_options">
-                        <!-- Button-like handle to drag and drop -->
-                        <div class="o_move_handle"/>
+                <divclass="o_overlay_options_wrap">
+                    <!--Overlaymovespecificsection-->
+                    <divclass="o_overlay_move_options">
+                        <!--Button-likehandletodraganddrop-->
+                        <divclass="o_move_handle"/>
                     </div>
-                    <button type="button" class="oe_snippet_remove fa fa-trash"/>
+                    <buttontype="button"class="oe_snippet_removefafa-trash"/>
                 </div>
             </div>
         </div>
     </t>
-    <t t-name="web_editor.customize_block_options_section">
+    <tt-name="web_editor.customize_block_options_section">
         <we-customizeblock-options>
             <we-title>
-                <span t-esc="name"/>
+                <spant-esc="name"/>
                 <we-top-button-group>
-                    <we-button class="fa fa-fw fa-clone oe_snippet_clone o_we_link o_we_hover_success"
-                                title="Duplicate Container"
-                                aria-label="Duplicate Container"/>
-                    <we-button class="fa fa-fw fa-trash oe_snippet_remove o_we_link o_we_hover_danger"
-                                title="Remove Block"
-                                aria-label="Remove Block"/>
+                    <we-buttonclass="fafa-fwfa-cloneoe_snippet_cloneo_we_linko_we_hover_success"
+                                title="DuplicateContainer"
+                                aria-label="DuplicateContainer"/>
+                    <we-buttonclass="fafa-fwfa-trashoe_snippet_removeo_we_linko_we_hover_danger"
+                                title="RemoveBlock"
+                                aria-label="RemoveBlock"/>
                 </we-top-button-group>
             </we-title>
         </we-customizeblock-options>
     </t>
-    <t t-name="web_editor.outdated_block_message">
+    <tt-name="web_editor.outdated_block_message">
         <we-alert>
-            <we-title>This block is outdated</we-title>
-            <span>To make changes, drop this block and use the new options in the last version.</span>
+            <we-title>Thisblockisoutdated</we-title>
+            <span>Tomakechanges,dropthisblockandusethenewoptionsinthelastversion.</span>
         </we-alert>
     </t>
 
-    <!-- options -->
-    <div t-name="web_editor.snippet.option.colorpicker" class="colorpicker">
-        <div class="o_we_colorpicker_switch_panel d-flex justify-content-end px-2">
-            <t t-if="widget.withCombinations">
-                <button type="button" tabindex="1" class="o_we_colorpicker_switch_pane_btn active" data-target="color-combinations">
+    <!--options-->
+    <divt-name="web_editor.snippet.option.colorpicker"class="colorpicker">
+        <divclass="o_we_colorpicker_switch_paneld-flexjustify-content-endpx-2">
+            <tt-if="widget.withCombinations">
+                <buttontype="button"tabindex="1"class="o_we_colorpicker_switch_pane_btnactive"data-target="color-combinations">
                     <span>Combinations</span>
                 </button>
-                <button type="button" tabindex="2" t-attf-class="o_we_colorpicker_switch_pane_btn #{widget.withCombinations ? '' : 'active'}" data-target="theme-colors">
+                <buttontype="button"tabindex="2"t-attf-class="o_we_colorpicker_switch_pane_btn#{widget.withCombinations?'':'active'}"data-target="theme-colors">
                     <span>Custom</span>
                 </button>
             </t>
-            <button t-if="widget.resetButton" type="button" class="my-1 ml-auto o_we_color_btn o_colorpicker_reset">
-                <t t-if="widget.withCombinations">None</t>
-                <t t-else="">Reset</t>
+            <buttont-if="widget.resetButton"type="button"class="my-1ml-autoo_we_color_btno_colorpicker_reset">
+                <tt-if="widget.withCombinations">None</t>
+                <tt-else="">Reset</t>
             </button>
         </div>
-        <div t-attf-class="o_colorpicker_sections #{widget.withCombinations ? '' : 'd-none'} pt-2 px-2 pb-3 bg-black-25" data-color-tab="color-combinations">
-            <!-- List all Presets -->
-            <t t-foreach="5" t-as="i">
-                <t t-call="web_editor.colorpalette.combination.btn">
-                    <t t-set="number" t-value="i + 1"/>
+        <divt-attf-class="o_colorpicker_sections#{widget.withCombinations?'':'d-none'}pt-2px-2pb-3bg-black-25"data-color-tab="color-combinations">
+            <!--ListallPresets-->
+            <tt-foreach="5"t-as="i">
+                <tt-call="web_editor.colorpalette.combination.btn">
+                    <tt-set="number"t-value="i+1"/>
                 </t>
             </t>
         </div>
-        <div t-attf-class="o_colorpicker_sections #{widget.withCombinations ? 'd-none' : ''} py-3 px-2 bg-black-25" data-color-tab="theme-colors"/>
+        <divt-attf-class="o_colorpicker_sections#{widget.withCombinations?'d-none':''}py-3px-2bg-black-25"data-color-tab="theme-colors"/>
     </div>
-    <t t-name="web_editor.colorpalette.combination.btn">
-        <button type="button" class="o_we_color_btn o_we_color_combination_btn"
-                t-att-data-color="number" t-attf-title="Preset #{number}">
-            <t t-call="web_editor.color.combination.preview"/>
+    <tt-name="web_editor.colorpalette.combination.btn">
+        <buttontype="button"class="o_we_color_btno_we_color_combination_btn"
+                t-att-data-color="number"t-attf-title="Preset#{number}">
+            <tt-call="web_editor.color.combination.preview"/>
         </button>
     </t>
-    <t t-name="web_editor.color.combination.preview">
-        <div class="o_we_cc_preview_wrapper d-flex justify-content-between">
-            <h1 class="o_we_color_combination_btn_title">Title</h1>
-            <p class="o_we_color_combination_btn_text flex-grow-1">Text</p>
-            <span class="o_we_color_combination_btn_btn btn btn-sm btn-primary o_btn_preview mr-1"><small>Button</small></span>
-            <span class="o_we_color_combination_btn_btn btn btn-sm btn-secondary o_btn_preview"><small>Button</small></span>
+    <tt-name="web_editor.color.combination.preview">
+        <divclass="o_we_cc_preview_wrapperd-flexjustify-content-between">
+            <h1class="o_we_color_combination_btn_title">Title</h1>
+            <pclass="o_we_color_combination_btn_textflex-grow-1">Text</p>
+            <spanclass="o_we_color_combination_btn_btnbtnbtn-smbtn-primaryo_btn_previewmr-1"><small>Button</small></span>
+            <spanclass="o_we_color_combination_btn_btnbtnbtn-smbtn-secondaryo_btn_preview"><small>Button</small></span>
         </div>
     </t>
 
-    <t t-name="web_editor.many2one.button">
-        <div class="btn-group">
-            <a role="button" href="#" class="btn btn-secondary dropdown-toggle d-none" data-toggle="dropdown" data-hover="dropdown" title="Search Contact" aria-label="Search Contact">
-                <i class="fa fa-search"></i>
+    <tt-name="web_editor.many2one.button">
+        <divclass="btn-group">
+            <arole="button"href="#"class="btnbtn-secondarydropdown-toggled-none"data-toggle="dropdown"data-hover="dropdown"title="SearchContact"aria-label="SearchContact">
+                <iclass="fafa-search"></i>
             </a>
-            <ul class="dropdown-menu contact_menu d-block list-group list-group-flush mx-1" role="menu">
-                <li class="px-1"><a role="menuitem" class="dropdown-item pl-1 pr-2"><i class="fa fa-search"></i><input href="#" type="email" placeholder="Search" class="ml-2" autocomplete="off"/></a></li>
+            <ulclass="dropdown-menucontact_menud-blocklist-grouplist-group-flushmx-1"role="menu">
+                <liclass="px-1"><arole="menuitem"class="dropdown-itempl-1pr-2"><iclass="fafa-search"></i><inputhref="#"type="email"placeholder="Search"class="ml-2"autocomplete="off"/></a></li>
             </ul>
         </div>
     </t>
 
-    <t t-name="web_editor.many2one.search">
-        <t t-foreach="contacts" t-as="item">
-            <li class="list-group-item px-2"><a role="menuitem" href="#" t-att-data-id="item.id" t-att-data-name="item.display_name"><t t-esc="item.display_name"/> <t t-if="item.city or item.country_id"><small class="text-muted">(<t t-esc="item.city"/> <t t-esc="item.country_id and item.country_id[1]"/>)</small></t></a></li>
+    <tt-name="web_editor.many2one.search">
+        <tt-foreach="contacts"t-as="item">
+            <liclass="list-group-itempx-2"><arole="menuitem"href="#"t-att-data-id="item.id"t-att-data-name="item.display_name"><tt-esc="item.display_name"/><tt-if="item.cityoritem.country_id"><smallclass="text-muted">(<tt-esc="item.city"/><tt-esc="item.country_idanditem.country_id[1]"/>)</small></t></a></li>
         </t>
     </t>
 </templates>

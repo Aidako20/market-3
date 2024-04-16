@@ -1,49 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="event_track_tag_category_1" model="event.track.tag.category">
-        <field name="name">Audience</field>
-        <field name="sequence">10</field>
+    <recordid="event_track_tag_category_1"model="event.track.tag.category">
+        <fieldname="name">Audience</field>
+        <fieldname="sequence">10</field>
     </record>
-    <record id="event_track_tag_category_2" model="event.track.tag.category">
-        <field name="name">Format</field>
-        <field name="sequence">20</field>
+    <recordid="event_track_tag_category_2"model="event.track.tag.category">
+        <fieldname="name">Format</field>
+        <fieldname="sequence">20</field>
     </record>
 
-    <record id="event_track_tag1" model="event.track.tag">
-        <field name="name">Consumers</field>
-        <field name="color">1</field>
-        <field name="category_id" ref="event_track_tag_category_1"/>
-        <field name="sequence">1</field>
+    <recordid="event_track_tag1"model="event.track.tag">
+        <fieldname="name">Consumers</field>
+        <fieldname="color">1</field>
+        <fieldname="category_id"ref="event_track_tag_category_1"/>
+        <fieldname="sequence">1</field>
     </record>
-    <record id="event_track_tag2" model="event.track.tag">
-        <field name="name">Sales</field>
-        <field name="color">2</field>
-        <field name="category_id" ref="event_track_tag_category_1"/>
-        <field name="sequence">2</field>
+    <recordid="event_track_tag2"model="event.track.tag">
+        <fieldname="name">Sales</field>
+        <fieldname="color">2</field>
+        <fieldname="category_id"ref="event_track_tag_category_1"/>
+        <fieldname="sequence">2</field>
     </record>
-    <record id="event_track_tag3" model="event.track.tag">
-        <field name="name">Research</field>
-        <field name="color">3</field>
-        <field name="category_id" ref="event_track_tag_category_1"/>
-        <field name="sequence">3</field>
+    <recordid="event_track_tag3"model="event.track.tag">
+        <fieldname="name">Research</field>
+        <fieldname="color">3</field>
+        <fieldname="category_id"ref="event_track_tag_category_1"/>
+        <fieldname="sequence">3</field>
     </record>
-    <record id="event_track_tag11" model="event.track.tag">
-        <field name="name">Lightning Talks</field>
-        <field name="color">4</field>
-        <field name="category_id" ref="event_track_tag_category_2"/>
-        <field name="sequence">11</field>
+    <recordid="event_track_tag11"model="event.track.tag">
+        <fieldname="name">LightningTalks</field>
+        <fieldname="color">4</field>
+        <fieldname="category_id"ref="event_track_tag_category_2"/>
+        <fieldname="sequence">11</field>
     </record>
-    <record id="event_track_tag12" model="event.track.tag">
-        <field name="name">Round Table</field>
-        <field name="color">5</field>
-        <field name="category_id" ref="event_track_tag_category_2"/>
-        <field name="sequence">12</field>
+    <recordid="event_track_tag12"model="event.track.tag">
+        <fieldname="name">RoundTable</field>
+        <fieldname="color">5</field>
+        <fieldname="category_id"ref="event_track_tag_category_2"/>
+        <fieldname="sequence">12</field>
     </record>
-    <record id="event_track_tag13" model="event.track.tag">
-        <field name="name">Keynote</field>
-        <field name="color">6</field>
-        <field name="category_id" ref="event_track_tag_category_2"/>
-        <field name="sequence">13</field>
+    <recordid="event_track_tag13"model="event.track.tag">
+        <fieldname="name">Keynote</field>
+        <fieldname="color">6</field>
+        <fieldname="category_id"ref="event_track_tag_category_2"/>
+        <fieldname="sequence">13</field>
     </record>
 
 </flectra>

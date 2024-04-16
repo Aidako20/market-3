@@ -1,19 +1,19 @@
-<?xml version="1.0" ?>
+<?xmlversion="1.0"?>
 <flectra>
 
-        <record id="print_pre_numbered_checks_view" model="ir.ui.view">
-            <field name="name">Print Pre-numbered Checks</field>
-            <field name="model">print.prenumbered.checks</field>
-            <field name="arch" type="xml">
-                <form string="Print Pre-numbered Checks">
-                    <p>Please enter the number of the first pre-printed check that you are about to print on.</p>
-                    <p>This will allow to save on payments the number of the corresponding check.</p>
+        <recordid="print_pre_numbered_checks_view"model="ir.ui.view">
+            <fieldname="name">PrintPre-numberedChecks</field>
+            <fieldname="model">print.prenumbered.checks</field>
+            <fieldname="arch"type="xml">
+                <formstring="PrintPre-numberedChecks">
+                    <p>Pleaseenterthenumberofthefirstpre-printedcheckthatyouareabouttoprinton.</p>
+                    <p>Thiswillallowtosaveonpaymentsthenumberofthecorrespondingcheck.</p>
                     <group>
-                        <field name="next_check_number"/>
+                        <fieldname="next_check_number"/>
                     </group>
                     <footer>
-                        <button name="print_checks" string="Print" type="object" class="oe_highlight"/>
-                        <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                        <buttonname="print_checks"string="Print"type="object"class="oe_highlight"/>
+                        <buttonstring="Cancel"class="btnbtn-secondary"special="cancel"/>
                     </footer>
                 </form>
             </field>

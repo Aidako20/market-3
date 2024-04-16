@@ -1,22 +1,22 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models, _
+fromflectraimportapi,models,_
 
 
-class ResCompany(models.Model):
-    _inherit = "res.company"
+classResCompany(models.Model):
+    _inherit="res.company"
 
     @api.model
-    def create(self, vals):
-        new_company = super(ResCompany, self).create(vals)
-        ProductPricelist = self.env['product.pricelist']
-        pricelist = ProductPricelist.search([('currency_id', '=', new_company.currency_id.id), ('company_id', '=', False)], limit=1)
-        if not pricelist:
-            params = {'currency': new_company.currency_id.name}
-            pricelist = ProductPricelist.create({
-                'name': _("Default %(currency)s pricelist") %  params,
-                'currency_id': new_company.currency_id.id,
+    defcreate(self,vals):
+        new_company=super(ResCompany,self).create(vals)
+        ProductPricelist=self.env['product.pricelist']
+        pricelist=ProductPricelist.search([('currency_id','=',new_company.currency_id.id),('company_id','=',False)],limit=1)
+        ifnotpricelist:
+            params={'currency':new_company.currency_id.name}
+            pricelist=ProductPricelist.create({
+                'name':_("Default%(currency)spricelist")% params,
+                'currency_id':new_company.currency_id.id,
             })
         self.env['ir.property']._set_default(
             'property_product_pricelist',
@@ -24,35 +24,35 @@ class ResCompany(models.Model):
             pricelist,
             new_company,
         )
-        return new_company
+        returnnew_company
 
-    def write(self, values):
-        # When we modify the currency of the company, we reflect the change on the list0 pricelist, if
-        # that pricelist is not used by another company. Otherwise, we create a new pricelist for the
-        # given currency.
-        ProductPricelist = self.env['product.pricelist']
-        currency_id = values.get('currency_id')
-        main_pricelist = self.env.ref('product.list0', False)
-        if currency_id and main_pricelist:
-            nb_companies = self.search_count([])
-            for company in self:
-                existing_pricelist = ProductPricelist.search(
-                    [('company_id', 'in', (False, company.id)),
-                     ('currency_id', 'in', (currency_id, company.currency_id.id))])
-                if existing_pricelist and any(currency_id == x.currency_id.id for x in existing_pricelist):
+    defwrite(self,values):
+        #Whenwemodifythecurrencyofthecompany,wereflectthechangeonthelist0pricelist,if
+        #thatpricelistisnotusedbyanothercompany.Otherwise,wecreateanewpricelistforthe
+        #givencurrency.
+        ProductPricelist=self.env['product.pricelist']
+        currency_id=values.get('currency_id')
+        main_pricelist=self.env.ref('product.list0',False)
+        ifcurrency_idandmain_pricelist:
+            nb_companies=self.search_count([])
+            forcompanyinself:
+                existing_pricelist=ProductPricelist.search(
+                    [('company_id','in',(False,company.id)),
+                     ('currency_id','in',(currency_id,company.currency_id.id))])
+                ifexisting_pricelistandany(currency_id==x.currency_id.idforxinexisting_pricelist):
                     continue
-                if currency_id == company.currency_id.id:
+                ifcurrency_id==company.currency_id.id:
                     continue
-                currency_match = main_pricelist.currency_id == company.currency_id
-                company_match = (main_pricelist.company_id == company or
-                                 (main_pricelist.company_id.id is False and nb_companies == 1))
-                if currency_match and company_match:
-                    main_pricelist.write({'currency_id': currency_id})
+                currency_match=main_pricelist.currency_id==company.currency_id
+                company_match=(main_pricelist.company_id==companyor
+                                 (main_pricelist.company_id.idisFalseandnb_companies==1))
+                ifcurrency_matchandcompany_match:
+                    main_pricelist.write({'currency_id':currency_id})
                 else:
-                    params = {'currency': self.env['res.currency'].browse(currency_id).name}
-                    pricelist = ProductPricelist.create({
-                        'name': _("Default %(currency)s pricelist") %  params,
-                        'currency_id': currency_id,
+                    params={'currency':self.env['res.currency'].browse(currency_id).name}
+                    pricelist=ProductPricelist.create({
+                        'name':_("Default%(currency)spricelist")% params,
+                        'currency_id':currency_id,
                     })
                     self.env['ir.property']._set_default(
                         'property_product_pricelist',
@@ -60,4 +60,4 @@ class ResCompany(models.Model):
                         pricelist,
                         company,
                     )
-        return super(ResCompany, self).write(values)
+        returnsuper(ResCompany,self).write(values)

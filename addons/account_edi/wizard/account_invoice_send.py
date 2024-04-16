@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
-from flectra.exceptions import UserError
-import base64
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportUserError
+importbase64
 
 
-class AccountInvoiceSend(models.TransientModel):
-    _inherit = 'account.invoice.send'
-    _description = 'Account Invoice Send'
+classAccountInvoiceSend(models.TransientModel):
+    _inherit='account.invoice.send'
+    _description='AccountInvoiceSend'
 
-    edi_format_ids = fields.Many2many(related='invoice_ids.journal_id.edi_format_ids', string="Electronic invoicing")
+    edi_format_ids=fields.Many2many(related='invoice_ids.journal_id.edi_format_ids',string="Electronicinvoicing")

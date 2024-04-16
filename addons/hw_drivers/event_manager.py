@@ -1,56 +1,56 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import json
-from threading import Event
-import time
+importjson
+fromthreadingimportEvent
+importtime
 
-from flectra.http import request
+fromflectra.httpimportrequest
 
-class EventManager(object):
-    def __init__(self):
-        self.events = []
-        self.sessions = {}
+classEventManager(object):
+    def__init__(self):
+        self.events=[]
+        self.sessions={}
 
-    def _delete_expired_sessions(self, max_time=70):
+    def_delete_expired_sessions(self,max_time=70):
         '''
-        Clears sessions that are no longer called.
+        Clearssessionsthatarenolongercalled.
 
-        :param max_time: time a session can stay unused before being deleted
+        :parammax_time:timeasessioncanstayunusedbeforebeingdeleted
         '''
-        now = time.time()
-        expired_sessions = [
+        now=time.time()
+        expired_sessions=[
             session
-            for session in self.sessions
-            if now - self.sessions[session]['time_request'] > max_time
+            forsessioninself.sessions
+            ifnow-self.sessions[session]['time_request']>max_time
         ]
-        for session in expired_sessions:
-            del self.sessions[session]
+        forsessioninexpired_sessions:
+            delself.sessions[session]
 
-    def add_request(self, listener):
-        self.session = {
-            'session_id': listener['session_id'],
-            'devices': listener['devices'],
-            'event': Event(),
-            'result': {},
-            'time_request': time.time(),
+    defadd_request(self,listener):
+        self.session={
+            'session_id':listener['session_id'],
+            'devices':listener['devices'],
+            'event':Event(),
+            'result':{},
+            'time_request':time.time(),
         }
         self._delete_expired_sessions()
-        self.sessions[listener['session_id']] = self.session
-        return self.sessions[listener['session_id']]
+        self.sessions[listener['session_id']]=self.session
+        returnself.sessions[listener['session_id']]
 
-    def device_changed(self, device):
-        event = {
+    defdevice_changed(self,device):
+        event={
             **device.data,
-            'device_identifier': device.device_identifier,
-            'time': time.time(),
-            'request_data': json.loads(request.params['data']) if request and 'data' in request.params else None,
+            'device_identifier':device.device_identifier,
+            'time':time.time(),
+            'request_data':json.loads(request.params['data'])ifrequestand'data'inrequest.paramselseNone,
         }
         self.events.append(event)
-        for session in self.sessions:
-            if device.device_identifier in self.sessions[session]['devices'] and not self.sessions[session]['event'].isSet():
-                self.sessions[session]['result'] = event
+        forsessioninself.sessions:
+            ifdevice.device_identifierinself.sessions[session]['devices']andnotself.sessions[session]['event'].isSet():
+                self.sessions[session]['result']=event
                 self.sessions[session]['event'].set()
 
 
-event_manager = EventManager()
+event_manager=EventManager()

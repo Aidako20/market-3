@@ -1,29 +1,29 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import logging
+importlogging
 
-from flectra import models
+fromflectraimportmodels
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
 
-class Mailing(models.Model):
-    _inherit = 'mailing.mailing'
+classMailing(models.Model):
+    _inherit='mailing.mailing'
 
-    def _get_opt_out_list_sms(self):
-        """Returns a set of emails opted-out in target model"""
+    def_get_opt_out_list_sms(self):
+        """Returnsasetofemailsopted-outintargetmodel"""
         self.ensure_one()
-        if self.mailing_model_real in ('mail.test.sms.bl.optout',
+        ifself.mailing_model_realin('mail.test.sms.bl.optout',
                                        'mail.test.sms.partner',
                                        'mail.test.sms.partner.2many'):
-            res_ids = self._get_recipients()
-            opt_out_contacts = set(self.env[self.mailing_model_real].search([
-                ('id', 'in', res_ids),
-                ('opt_out', '=', True)
+            res_ids=self._get_recipients()
+            opt_out_contacts=set(self.env[self.mailing_model_real].search([
+                ('id','in',res_ids),
+                ('opt_out','=',True)
             ]).ids)
             _logger.info(
-                "Mass-mailing %s targets %s, optout: %s emails",
-                self, self.mailing_model_real, len(opt_out_contacts))
-            return opt_out_contacts
-        return super(Mailing, self)._get_opt_out_list_sms()
+                "Mass-mailing%stargets%s,optout:%semails",
+                self,self.mailing_model_real,len(opt_out_contacts))
+            returnopt_out_contacts
+        returnsuper(Mailing,self)._get_opt_out_list_sms()

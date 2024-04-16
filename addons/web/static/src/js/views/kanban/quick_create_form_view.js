@@ -1,123 +1,123 @@
-flectra.define('web.QuickCreateFormView', function (require) {
-"use strict";
+flectra.define('web.QuickCreateFormView',function(require){
+"usestrict";
 
 /**
- * This file defines the QuickCreateFormView, an extension of the FormView that
- * is used by the RecordQuickCreate in Kanban views.
+ *ThisfiledefinestheQuickCreateFormView,anextensionoftheFormViewthat
+ *isusedbytheRecordQuickCreateinKanbanviews.
  */
 
-var BasicModel = require('web.BasicModel');
-var FormController = require('web.FormController');
-var FormRenderer = require('web.FormRenderer');
-var FormView = require('web.FormView');
-const { qweb } = require("web.core");
+varBasicModel=require('web.BasicModel');
+varFormController=require('web.FormController');
+varFormRenderer=require('web.FormRenderer');
+varFormView=require('web.FormView');
+const{qweb}=require("web.core");
 
-var QuickCreateFormRenderer = FormRenderer.extend({
+varQuickCreateFormRenderer=FormRenderer.extend({
     /**
-     * @override
+     *@override
      */
-    start: async function () {
-        await this._super.apply(this, arguments);
+    start:asyncfunction(){
+        awaitthis._super.apply(this,arguments);
         this.$el.addClass('o_xxs_form_view');
         this.$el.removeClass('o_xxl_form_view');
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Override to do nothing so that the renderer won't resize on window resize
+     *Overridetodonothingsothattherendererwon'tresizeonwindowresize
      *
-     * @override
+     *@override
      */
-    _applyFormSizeClass() {},
+    _applyFormSizeClass(){},
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
-     * @param {FlectraEvent} ev
+     *@override
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onNavigationMove: function (ev) {
-        var direction = ev.data.direction;
-        if (direction === 'cancel' || direction === 'next_line') {
+    _onNavigationMove:function(ev){
+        vardirection=ev.data.direction;
+        if(direction==='cancel'||direction==='next_line'){
             ev.stopPropagation();
-            this.trigger_up(direction === 'cancel' ? 'cancel' : 'add');
-        } else {
-            this._super.apply(this, arguments);
+            this.trigger_up(direction==='cancel'?'cancel':'add');
+        }else{
+            this._super.apply(this,arguments);
         }
     },
 });
 
-var QuickCreateFormModel = BasicModel.extend({
+varQuickCreateFormModel=BasicModel.extend({
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @returns {Object} the changes of the given resource (server commands for
-     *   x2manys)
+     *@returns{Object}thechangesofthegivenresource(servercommandsfor
+     *  x2manys)
      */
-    getChanges: function (localID) {
-        var record = this.localData[localID];
-        return this._generateChanges(record, {changesOnly: false});
+    getChanges:function(localID){
+        varrecord=this.localData[localID];
+        returnthis._generateChanges(record,{changesOnly:false});
     },
 });
 
-var QuickCreateFormController = FormController.extend({
+varQuickCreateFormController=FormController.extend({
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Asks all field widgets to notify the environment with their current value
-     * (useful for instance for input fields that still have the focus and that
-     * could have not notified the environment of their changes yet).
-     * Synchronizes with the controller's mutex in case there would already be
-     * pending changes being applied.
+     *Asksallfieldwidgetstonotifytheenvironmentwiththeircurrentvalue
+     *(usefulforinstanceforinputfieldsthatstillhavethefocusandthat
+     *couldhavenotnotifiedtheenvironmentoftheirchangesyet).
+     *Synchronizeswiththecontroller'smutexincasetherewouldalreadybe
+     *pendingchangesbeingapplied.
      *
-     * @return {Promise}
+     *@return{Promise}
      */
-    commitChanges: function () {
-        var mutexDef = this.mutex.getUnlockedDef();
-        return Promise.all([mutexDef, this.renderer.commitChanges(this.handle)]);
+    commitChanges:function(){
+        varmutexDef=this.mutex.getUnlockedDef();
+        returnPromise.all([mutexDef,this.renderer.commitChanges(this.handle)]);
     },
     /**
-     * @returns {Object} the changes done on the current record
+     *@returns{Object}thechangesdoneonthecurrentrecord
      */
-    getChanges: function () {
-        return this.model.getChanges(this.handle);
+    getChanges:function(){
+        returnthis.model.getChanges(this.handle);
     },
 
     /**
-     * @override
+     *@override
      */
-    renderButtons($node) {
-        this.$buttons = $(qweb.render('KanbanView.RecordQuickCreate.buttons'));
-        if ($node) {
+    renderButtons($node){
+        this.$buttons=$(qweb.render('KanbanView.RecordQuickCreate.buttons'));
+        if($node){
             this.$buttons.appendTo($node);
         }
     },
 
     /**
-     * @override
+     *@override
      */
-    updateButtons() {/* No need to update the buttons */},
+    updateButtons(){/*Noneedtoupdatethebuttons*/},
 });
 
-var QuickCreateFormView = FormView.extend({
-    withControlPanel: false,
-    config: _.extend({}, FormView.prototype.config, {
-        Model: QuickCreateFormModel,
-        Renderer: QuickCreateFormRenderer,
-        Controller: QuickCreateFormController,
+varQuickCreateFormView=FormView.extend({
+    withControlPanel:false,
+    config:_.extend({},FormView.prototype.config,{
+        Model:QuickCreateFormModel,
+        Renderer:QuickCreateFormRenderer,
+        Controller:QuickCreateFormController,
     }),
 });
 
-return QuickCreateFormView;
+returnQuickCreateFormView;
 
 });

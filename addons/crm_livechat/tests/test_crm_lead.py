@@ -1,94 +1,94 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.addons.crm.tests.common import TestCrmCommon
-from flectra.addons.mail.tests.common import mail_new_test_user
-from flectra.tests.common import users
+fromflectra.addons.crm.tests.commonimportTestCrmCommon
+fromflectra.addons.mail.tests.commonimportmail_new_test_user
+fromflectra.tests.commonimportusers
 
 
-class TestLivechatLead(TestCrmCommon):
+classTestLivechatLead(TestCrmCommon):
 
     @classmethod
-    def setUpClass(cls):
-        super(TestLivechatLead, cls).setUpClass()
+    defsetUpClass(cls):
+        super(TestLivechatLead,cls).setUpClass()
 
-        cls.user_anonymous = mail_new_test_user(
-            cls.env, login='user_anonymous',
-            name='Anonymous Website', email=False,
+        cls.user_anonymous=mail_new_test_user(
+            cls.env,login='user_anonymous',
+            name='AnonymousWebsite',email=False,
             company_id=cls.company_main.id,
             notification_type='inbox',
             groups='base.group_public',
         )
-        cls.user_portal = mail_new_test_user(
-            cls.env, login='user_portal',
-            name='Paulette Portal', email='user_portal@test.example.com',
+        cls.user_portal=mail_new_test_user(
+            cls.env,login='user_portal',
+            name='PaulettePortal',email='user_portal@test.example.com',
             company_id=cls.company_main.id,
             notification_type='inbox',
             groups='base.group_portal',
         )
 
     @users('user_sales_leads')
-    def test_crm_lead_creation_guest(self):
-        """ Test customer set on lead: not if public, guest if not public """
-        # public: should not be set as customer
-        channel = self.env['mail.channel'].create({
-            'name': 'Chat with Visitor',
-            'channel_partner_ids': [(4, self.user_anonymous.partner_id.id)]
+    deftest_crm_lead_creation_guest(self):
+        """Testcustomersetonlead:notifpublic,guestifnotpublic"""
+        #public:shouldnotbesetascustomer
+        channel=self.env['mail.channel'].create({
+            'name':'ChatwithVisitor',
+            'channel_partner_ids':[(4,self.user_anonymous.partner_id.id)]
         })
-        lead = channel._convert_visitor_to_lead(self.env.user.partner_id, channel.channel_last_seen_partner_ids, '/lead TestLead command')
+        lead=channel._convert_visitor_to_lead(self.env.user.partner_id,channel.channel_last_seen_partner_ids,'/leadTestLeadcommand')
 
         self.assertEqual(
             channel.channel_last_seen_partner_ids.partner_id,
-            self.user_sales_leads.partner_id | self.user_anonymous.partner_id
+            self.user_sales_leads.partner_id|self.user_anonymous.partner_id
         )
-        self.assertEqual(lead.name, 'TestLead command')
-        self.assertEqual(lead.partner_id, self.env['res.partner'])
+        self.assertEqual(lead.name,'TestLeadcommand')
+        self.assertEqual(lead.partner_id,self.env['res.partner'])
 
-        # public user: should not be set as customer
-        # 'base.public_user' is archived by default
+        #publicuser:shouldnotbesetascustomer
+        #'base.public_user'isarchivedbydefault
         self.assertFalse(self.env.ref('base.public_user').active)
 
-        channel = self.env['mail.channel'].create({
-            'name': 'Chat with Visitor',
-            'channel_partner_ids': [(4, self.env.ref('base.public_partner').id)]
+        channel=self.env['mail.channel'].create({
+            'name':'ChatwithVisitor',
+            'channel_partner_ids':[(4,self.env.ref('base.public_partner').id)]
         })
-        lead = channel._convert_visitor_to_lead(self.env.user.partner_id, channel.channel_last_seen_partner_ids, '/lead TestLead command')
+        lead=channel._convert_visitor_to_lead(self.env.user.partner_id,channel.channel_last_seen_partner_ids,'/leadTestLeadcommand')
 
         self.assertEqual(
             channel.channel_last_seen_partner_ids.partner_id,
-            self.user_sales_leads.partner_id | self.env.ref('base.public_partner')
+            self.user_sales_leads.partner_id|self.env.ref('base.public_partner')
         )
-        self.assertEqual(lead.name, 'TestLead command')
-        self.assertEqual(lead.partner_id, self.env['res.partner'])
+        self.assertEqual(lead.name,'TestLeadcommand')
+        self.assertEqual(lead.partner_id,self.env['res.partner'])
 
-        # public + someone else: no customer (as he was anonymous)
+        #public+someoneelse:nocustomer(ashewasanonymous)
         channel.write({
-            'channel_partner_ids': [(4, self.user_sales_manager.partner_id.id)]
+            'channel_partner_ids':[(4,self.user_sales_manager.partner_id.id)]
         })
-        lead = channel._convert_visitor_to_lead(self.env.user.partner_id, channel.channel_last_seen_partner_ids, '/lead TestLead command')
-        self.assertEqual(lead.partner_id, self.env['res.partner'])
+        lead=channel._convert_visitor_to_lead(self.env.user.partner_id,channel.channel_last_seen_partner_ids,'/leadTestLeadcommand')
+        self.assertEqual(lead.partner_id,self.env['res.partner'])
 
-        # portal: should be set as customer
-        channel = self.env['mail.channel'].create({
-            'name': 'Chat with Visitor',
-            'channel_partner_ids': [(4, self.user_portal.partner_id.id)]
+        #portal:shouldbesetascustomer
+        channel=self.env['mail.channel'].create({
+            'name':'ChatwithVisitor',
+            'channel_partner_ids':[(4,self.user_portal.partner_id.id)]
         })
-        lead = channel._convert_visitor_to_lead(self.env.user.partner_id, channel.channel_last_seen_partner_ids, '/lead TestLead command')
+        lead=channel._convert_visitor_to_lead(self.env.user.partner_id,channel.channel_last_seen_partner_ids,'/leadTestLeadcommand')
 
         self.assertEqual(
             channel.channel_last_seen_partner_ids.partner_id,
-            self.user_sales_leads.partner_id | self.user_portal.partner_id
+            self.user_sales_leads.partner_id|self.user_portal.partner_id
         )
-        self.assertEqual(lead.partner_id, self.user_portal.partner_id)
+        self.assertEqual(lead.partner_id,self.user_portal.partner_id)
 
-        # another operator invited: internal user should not be customer if portal is present
+        #anotheroperatorinvited:internalusershouldnotbecustomerifportalispresent
         channel.write({
-            'channel_partner_ids': [(4, self.user_sales_manager.partner_id.id)]
+            'channel_partner_ids':[(4,self.user_sales_manager.partner_id.id)]
         })
-        lead = channel._convert_visitor_to_lead(self.env.user.partner_id, channel.channel_last_seen_partner_ids, '/lead TestLead command')
+        lead=channel._convert_visitor_to_lead(self.env.user.partner_id,channel.channel_last_seen_partner_ids,'/leadTestLeadcommand')
 
         self.assertEqual(
             channel.channel_last_seen_partner_ids.partner_id,
-            self.user_sales_leads.partner_id | self.user_portal.partner_id | self.user_sales_manager.partner_id
+            self.user_sales_leads.partner_id|self.user_portal.partner_id|self.user_sales_manager.partner_id
         )
-        self.assertEqual(lead.partner_id, self.user_portal.partner_id)
+        self.assertEqual(lead.partner_id,self.user_portal.partner_id)

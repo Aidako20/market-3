@@ -1,162 +1,162 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
-    <t t-name="slide.slide.quiz">
-        <div class="o_wslides_fs_quiz_container o_wslides_wrap h-100 w-100 overflow-auto pb-5">
-            <div class="container">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
+    <tt-name="slide.slide.quiz">
+        <divclass="o_wslides_fs_quiz_containero_wslides_wraph-100w-100overflow-autopb-5">
+            <divclass="container">
 
-                <div t-foreach="widget.quiz.questions" t-as="question"
-                     t-attf-class="o_wslides_js_lesson_quiz_question mt-3 mb-4 #{widget.slide.completed ? 'completed-disabled' : ''}"
-                     t-att-data-question-id="question.id" t-att-data-title="question.question">
-                    <div class="h4">
-                        <small class="text-muted"><span t-esc="question_index+1"/>. </small> <span t-esc="question.question"/>
+                <divt-foreach="widget.quiz.questions"t-as="question"
+                     t-attf-class="o_wslides_js_lesson_quiz_questionmt-3mb-4#{widget.slide.completed?'completed-disabled':''}"
+                     t-att-data-question-id="question.id"t-att-data-title="question.question">
+                    <divclass="h4">
+                        <smallclass="text-muted"><spant-esc="question_index+1"/>.</small><spant-esc="question.question"/>
                     </div>
-                    <div class="list-group">
-                        <t t-foreach="question.answer_ids" t-as="answer">
-                            <a t-att-data-answer-id="answer.id" href="#"
+                    <divclass="list-group">
+                        <tt-foreach="question.answer_ids"t-as="answer">
+                            <at-att-data-answer-id="answer.id"href="#"
                                 t-att-data-text="answer.text_value"
-                                t-attf-class="o_wslides_quiz_answer list-group-item d-flex align-items-center list-group-item-action #{widget.slide.completed  &amp;&amp; answer.is_correct ? 'list-group-item-success' : '' }">
+                                t-attf-class="o_wslides_quiz_answerlist-group-itemd-flexalign-items-centerlist-group-item-action#{widget.slide.completed &amp;&amp;answer.is_correct?'list-group-item-success':''}">
 
-                                <label class="my-0 d-flex align-items-center justify-content-center mr-2">
-                                    <input type="radio"
+                                <labelclass="my-0d-flexalign-items-centerjustify-content-centermr-2">
+                                    <inputtype="radio"
                                         t-att-name="question.id"
                                         t-att-value="answer.id"
                                         class="d-none"/>
-                                    <i t-att-class="'fa fa-circle text-400' + (!(widget.slide.completed &amp;&amp; answer.is_correct) ? '' : ' d-none')"></i>
-                                    <i class="fa fa-times-circle text-danger d-none"></i>
-                                    <i t-att-class="'fa fa-check-circle text-success' + (widget.slide.completed &amp;&amp; answer.is_correct ? '' :  ' d-none')"></i>
+                                    <it-att-class="'fafa-circletext-400'+(!(widget.slide.completed&amp;&amp;answer.is_correct)?'':'d-none')"></i>
+                                    <iclass="fafa-times-circletext-dangerd-none"></i>
+                                    <it-att-class="'fafa-check-circletext-success'+(widget.slide.completed&amp;&amp;answer.is_correct?'': 'd-none')"></i>
                                 </label>
-                                <span t-esc="answer.text_value"/>
+                                <spant-esc="answer.text_value"/>
                             </a>
                         </t>
-                        <div class="o_wslides_quiz_answer_info list-group-item list-group-item-info d-none">
-                            <i class="fa fa-info-circle"/>
-                            <span class="o_wslides_quiz_answer_comment"/>
+                        <divclass="o_wslides_quiz_answer_infolist-group-itemlist-group-item-infod-none">
+                            <iclass="fafa-info-circle"/>
+                            <spanclass="o_wslides_quiz_answer_comment"/>
                         </div>
                     </div>
                 </div>
-                <div t-if="!widget.slide.completed" class="o_wslides_js_lesson_quiz_validation border-top pt-3"/>
-                <div t-else="" class="row">
-                    <div class="o_wslides_js_lesson_quiz_validation col py-2 bg-100 mb-2 border-bottom"/>
+                <divt-if="!widget.slide.completed"class="o_wslides_js_lesson_quiz_validationborder-toppt-3"/>
+                <divt-else=""class="row">
+                    <divclass="o_wslides_js_lesson_quiz_validationcolpy-2bg-100mb-2border-bottom"/>
                 </div>
             </div>
         </div>
     </t>
 
-    <t t-name="slide.slide.quiz.validation">
-        <div id="validation">
-            <div t-if="!widget.isMember">
-                <div class="o_wslides_join_course alert alert-info d-flex align-items-center justify-content-between">
-                    <div t-if="widget.channel.channelEnroll == 'invite'">
-                        <b>This course is private.
-                            <span t-if="widget.publicUser">
+    <tt-name="slide.slide.quiz.validation">
+        <divid="validation">
+            <divt-if="!widget.isMember">
+                <divclass="o_wslides_join_coursealertalert-infod-flexalign-items-centerjustify-content-between">
+                    <divt-if="widget.channel.channelEnroll=='invite'">
+                        <b>Thiscourseisprivate.
+                            <spant-if="widget.publicUser">
                                 Please
-                                <a t-att-href="'/web/login?redirect=' + widget.redirectURL" class="font-weight-bold">
-                                    sign in
+                                <at-att-href="'/web/login?redirect='+widget.redirectURL"class="font-weight-bold">
+                                    signin
                                 </a>
-                                to enroll.
+                                toenroll.
                             </span>
-                            <a t-else="" href="#" class="font-weight-bold o_wslides_js_channel_enroll"
+                            <at-else=""href="#"class="font-weight-boldo_wslides_js_channel_enroll"
                                t-att-data-channel-id="widget.channel.channelId">
-                                <span t-if="widget.channel.channelRequestedAccess" class="text-success">
-                                    Responsible already contacted.
+                                <spant-if="widget.channel.channelRequestedAccess"class="text-success">
+                                    Responsiblealreadycontacted.
                                 </span>
-                                <span t-else="">
-                                    Contact the responsible to enroll.
+                                <spant-else="">
+                                    Contacttheresponsibletoenroll.
                                 </span>
                             </a>
                         </b>
-                        <span class="my-0 h4">
-                            <span title="Succeed and gain karma" aria-label="Succeed and gain karma" class="badge badge-pill badge-warning text-white font-weight-bold ml-3 px-2 py-1">
-                                + <t t-esc="widget.quiz.quizKarmaGain"/> XP
+                        <spanclass="my-0h4">
+                            <spantitle="Succeedandgainkarma"aria-label="Succeedandgainkarma"class="badgebadge-pillbadge-warningtext-whitefont-weight-boldml-3px-2py-1">
+                                +<tt-esc="widget.quiz.quizKarmaGain"/>XP
                             </span>
                         </span>
                     </div>
-                    <div t-else="" class="w-100">
-                        <b class="h5 mb-0 o_wslides_quiz_join_course_message">
-                            <span t-if="widget.channel.channelEnroll == 'public'">
-                                <t t-if="widget.publicUser">
-                                    Sign in and join the course to verify your answers!
+                    <divt-else=""class="w-100">
+                        <bclass="h5mb-0o_wslides_quiz_join_course_message">
+                            <spant-if="widget.channel.channelEnroll=='public'">
+                                <tt-if="widget.publicUser">
+                                    Signinandjointhecoursetoverifyyouranswers!
                                 </t>
-                                <t t-else="">
-                                    Join the course to take the quiz and verify your answers!
+                                <tt-else="">
+                                    Jointhecoursetotakethequizandverifyyouranswers!
                                 </t>
                             </span>
                         </b>
-                        <span class="my-0 h4">
-                            <span title="Succeed and gain karma" aria-label="Succeed and gain karma" class="badge badge-pill badge-warning text-white font-weight-bold ml-3 px-2 py-1">
-                                + <t t-esc="widget.quiz.quizKarmaGain"/> XP
+                        <spanclass="my-0h4">
+                            <spantitle="Succeedandgainkarma"aria-label="Succeedandgainkarma"class="badgebadge-pillbadge-warningtext-whitefont-weight-boldml-3px-2py-1">
+                                +<tt-esc="widget.quiz.quizKarmaGain"/>XP
                             </span>
                         </span>
-                        <div class="o_wslides_join_course_widget float-right"/>
+                        <divclass="o_wslides_join_course_widgetfloat-right"/>
                     </div>
                 </div>
-                <span t-if="widget.publicUser &amp;&amp; widget.channel.signupAllowed" class="d-block mt-2">
-                    <span>Don't have an account ?</span>
-                    <a class="font-weight-bold" t-att-href="'/web/signup?redirect=' + widget.redirectURL">Sign Up !</a>
+                <spant-if="widget.publicUser&amp;&amp;widget.channel.signupAllowed"class="d-blockmt-2">
+                    <span>Don'thaveanaccount?</span>
+                    <aclass="font-weight-bold"t-att-href="'/web/signup?redirect='+widget.redirectURL">SignUp!</a>
                 </span>
             </div>
-            <div t-else="" class="d-md-flex align-items-center justify-content-between">
-                <div t-att-class="'d-flex align-items-center' + (widget.slide.completed ? ' alert alert-success my-0 py-1 px-3' : '')">
-                    <button t-if="! widget.slide.completed" role="button" title="Check answers" aria-label="Check answers"
-                        class="btn btn-primary text-uppercase font-weight-bold o_wslides_js_lesson_quiz_submit">Check your answers</button>
-                    <b t-else="" class="my-0 h5">Done !</b>
-                    <span class="my-0 h5" style="line-height: 1">
-                        <span role="button" title="Succeed and gain karma" aria-label="Succeed and gain karma" class="badge badge-pill badge-warning text-white font-weight-bold ml-3 px-2">
-                            + <t t-if="!widget.slide.completed" t-esc="widget.quiz.quizKarmaGain"/><t t-else="" t-esc="widget.quiz.quizKarmaWon"/> XP
+            <divt-else=""class="d-md-flexalign-items-centerjustify-content-between">
+                <divt-att-class="'d-flexalign-items-center'+(widget.slide.completed?'alertalert-successmy-0py-1px-3':'')">
+                    <buttont-if="!widget.slide.completed"role="button"title="Checkanswers"aria-label="Checkanswers"
+                        class="btnbtn-primarytext-uppercasefont-weight-boldo_wslides_js_lesson_quiz_submit">Checkyouranswers</button>
+                    <bt-else=""class="my-0h5">Done!</b>
+                    <spanclass="my-0h5"style="line-height:1">
+                        <spanrole="button"title="Succeedandgainkarma"aria-label="Succeedandgainkarma"class="badgebadge-pillbadge-warningtext-whitefont-weight-boldml-3px-2">
+                            +<tt-if="!widget.slide.completed"t-esc="widget.quiz.quizKarmaGain"/><tt-else=""t-esc="widget.quiz.quizKarmaWon"/>XP
                         </span>
                     </span>
                 </div>
-                <div class="ml-auto mt-3 mt-md-0">
-                    <button t-if="widget.quiz.quizAttemptsCount > 0 &amp;&amp; widget.slide.channelCanUpload" class="btn btn-light border o_wslides_js_lesson_quiz_reset">
+                <divclass="ml-automt-3mt-md-0">
+                    <buttont-if="widget.quiz.quizAttemptsCount>0&amp;&amp;widget.slide.channelCanUpload"class="btnbtn-lightbordero_wslides_js_lesson_quiz_reset">
                         Reset
                     </button>
-                    <button t-if="widget.slide.completed &amp;&amp; widget.slide.hasNext" class="btn btn-primary o_wslides_quiz_continue">
-                        Continue <i class="fa fa-chevron-right ml-1"/>
+                    <buttont-if="widget.slide.completed&amp;&amp;widget.slide.hasNext"class="btnbtn-primaryo_wslides_quiz_continue">
+                        Continue<iclass="fafa-chevron-rightml-1"/>
                     </button>
                 </div>
             </div>
         </div>
     </t>
 
-    <t t-name="slide.slide.quiz.finish">
+    <tt-name="slide.slide.quiz.finish">
         <div>
-            <button type="button" class="o_wslides_quiz_modal_close_btn close position-absolute" data-dismiss="modal" aria-label="Close">&#215;</button>
-            <div class="o_wslides_gradient d-none d-md-flex flex-shrink-0">
-                <img class="o_wslides_quiz_modal_hero" src="/website_slides/static/src/img/quiz_modal_success.svg" alt=""/>
+            <buttontype="button"class="o_wslides_quiz_modal_close_btncloseposition-absolute"data-dismiss="modal"aria-label="Close">&#215;</button>
+            <divclass="o_wslides_gradientd-noned-md-flexflex-shrink-0">
+                <imgclass="o_wslides_quiz_modal_hero"src="/website_slides/static/src/img/quiz_modal_success.svg"alt=""/>
             </div>
-            <div class="d-flex flex-column flex-grow-1 justify-content-between pl-md-5 p-3 overflow-auto">
+            <divclass="d-flexflex-columnflex-grow-1justify-content-betweenpl-md-5p-3overflow-auto">
                 <div>
-                    <h1 class="o_wslides_quiz_modal_title mt-3 display-4 font-weight-bold">Amazing!</h1>
-                    <div class="pb-3">
-                        <h4 class="o_wslides_quiz_modal_xp_gained pb-2 d-flex fade">You gained <span class="badge badge-pill badge-success text-white font-weight-bold ml-2 mr-1"><t t-esc="widget.quiz.quizKarmaWon"/> XP</span> !</h4>
-                        <div class="mt-5 mb-4">
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" t-att-aria-valuenow="widget.quiz.rankProgress.previous_rank.progress" aria-valuemin="0" aria-valuemax="100"
-                                    t-attf-style="width: #{widget.quiz.rankProgress.previous_rank.progress}%"/>
-                                <div class="progress-bar-tooltip" data-toggle="tooltip" data-placement="top" t-att-title="widget.quiz.rankProgress.new_rank.karma" />
+                    <h1class="o_wslides_quiz_modal_titlemt-3display-4font-weight-bold">Amazing!</h1>
+                    <divclass="pb-3">
+                        <h4class="o_wslides_quiz_modal_xp_gainedpb-2d-flexfade">Yougained<spanclass="badgebadge-pillbadge-successtext-whitefont-weight-boldml-2mr-1"><tt-esc="widget.quiz.quizKarmaWon"/>XP</span>!</h4>
+                        <divclass="mt-5mb-4">
+                            <divclass="progress">
+                                <divclass="progress-bar"role="progressbar"t-att-aria-valuenow="widget.quiz.rankProgress.previous_rank.progress"aria-valuemin="0"aria-valuemax="100"
+                                    t-attf-style="width:#{widget.quiz.rankProgress.previous_rank.progress}%"/>
+                                <divclass="progress-bar-tooltip"data-toggle="tooltip"data-placement="top"t-att-title="widget.quiz.rankProgress.new_rank.karma"/>
                             </div>
-                            <small class="float-left text-primary font-weight-bold o_wslides_quiz_modal_rank_lower_bound">
-                                <t t-esc="widget.quiz.rankProgress.previous_rank.lower_bound"/>
+                            <smallclass="float-lefttext-primaryfont-weight-boldo_wslides_quiz_modal_rank_lower_bound">
+                                <tt-esc="widget.quiz.rankProgress.previous_rank.lower_bound"/>
                             </small>
-                            <small t-if="widget.quiz.rankProgress.previous_rank.upper_bound" class="float-right font-weight-bold o_wslides_quiz_modal_rank_upper_bound">
-                                <t t-esc="widget.quiz.rankProgress.previous_rank.upper_bound"/>
+                            <smallt-if="widget.quiz.rankProgress.previous_rank.upper_bound"class="float-rightfont-weight-boldo_wslides_quiz_modal_rank_upper_bound">
+                                <tt-esc="widget.quiz.rankProgress.previous_rank.upper_bound"/>
                             </small>
                         </div>
                     </div>
-                    <div class="pb-3 o_wslides_quiz_modal_rank_motivational">
-                        <t t-set="showLastRankDescription" t-value="widget.quiz.rankProgress.last_rank &amp;&amp; !widget.quiz.rankProgress.level_up" />
-                        <t t-raw="showLastRankDescription ? widget.quiz.rankProgress.description : widget.quiz.rankProgress.previous_rank.motivational" />
+                    <divclass="pb-3o_wslides_quiz_modal_rank_motivational">
+                        <tt-set="showLastRankDescription"t-value="widget.quiz.rankProgress.last_rank&amp;&amp;!widget.quiz.rankProgress.level_up"/>
+                        <tt-raw="showLastRankDescription?widget.quiz.rankProgress.description:widget.quiz.rankProgress.previous_rank.motivational"/>
                     </div>
                 </div>
-                <div class="o_wslides_quiz_modal_dismiss align-self-end d-none">
-                    <t t-if="widget.quiz.rankProgress.level_up">
-                        <a type="button" target="_blank" t-attf-href="/profile/user/#{widget.userId}" class="btn btn-light border">Check Profile</a>
+                <divclass="o_wslides_quiz_modal_dismissalign-self-endd-none">
+                    <tt-if="widget.quiz.rankProgress.level_up">
+                        <atype="button"target="_blank"t-attf-href="/profile/user/#{widget.userId}"class="btnbtn-lightborder">CheckProfile</a>
                     </t>
-                    <t t-if="widget.hasNext">
-                        <button type="button" class="btn btn-light border o_wslides_quiz_modal_btn">Next <i class="fa fa-chevron-right"/></button>
+                    <tt-if="widget.hasNext">
+                        <buttontype="button"class="btnbtn-lightbordero_wslides_quiz_modal_btn">Next<iclass="fafa-chevron-right"/></button>
                     </t>
-                    <t t-else="">
-                        <a type="button" href="/slides" class="btn btn-light border">End course</a>
+                    <tt-else="">
+                        <atype="button"href="/slides"class="btnbtn-lightborder">Endcourse</a>
                     </t>
                 </div>
             </div>

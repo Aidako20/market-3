@@ -1,42 +1,42 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
-
-
-class LinkTracker(models.Model):
-    _inherit = "link.tracker"
-
-    mass_mailing_id = fields.Many2one('mailing.mailing', string='Mass Mailing')
+fromflectraimportapi,fields,models
 
 
-class LinkTrackerClick(models.Model):
-    _inherit = "link.tracker.click"
+classLinkTracker(models.Model):
+    _inherit="link.tracker"
 
-    mailing_trace_id = fields.Many2one('mailing.trace', string='Mail Statistics')
-    mass_mailing_id = fields.Many2one('mailing.mailing', string='Mass Mailing')
+    mass_mailing_id=fields.Many2one('mailing.mailing',string='MassMailing')
 
-    def _prepare_click_values_from_route(self, **route_values):
-        click_values = super(LinkTrackerClick, self)._prepare_click_values_from_route(**route_values)
 
-        if click_values.get('mailing_trace_id'):
-            trace_sudo = self.env['mailing.trace'].sudo().browse(route_values['mailing_trace_id']).exists()
-            if not trace_sudo:
-                click_values['mailing_trace_id'] = False
+classLinkTrackerClick(models.Model):
+    _inherit="link.tracker.click"
+
+    mailing_trace_id=fields.Many2one('mailing.trace',string='MailStatistics')
+    mass_mailing_id=fields.Many2one('mailing.mailing',string='MassMailing')
+
+    def_prepare_click_values_from_route(self,**route_values):
+        click_values=super(LinkTrackerClick,self)._prepare_click_values_from_route(**route_values)
+
+        ifclick_values.get('mailing_trace_id'):
+            trace_sudo=self.env['mailing.trace'].sudo().browse(route_values['mailing_trace_id']).exists()
+            ifnottrace_sudo:
+                click_values['mailing_trace_id']=False
             else:
-                if not click_values.get('campaign_id'):
-                    click_values['campaign_id'] = trace_sudo.campaign_id.id
-                if not click_values.get('mass_mailing_id'):
-                    click_values['mass_mailing_id'] = trace_sudo.mass_mailing_id.id
+                ifnotclick_values.get('campaign_id'):
+                    click_values['campaign_id']=trace_sudo.campaign_id.id
+                ifnotclick_values.get('mass_mailing_id'):
+                    click_values['mass_mailing_id']=trace_sudo.mass_mailing_id.id
 
-        return click_values
+        returnclick_values
 
     @api.model
-    def add_click(self, code, **route_values):
-        click = super(LinkTrackerClick, self).add_click(code, **route_values)
+    defadd_click(self,code,**route_values):
+        click=super(LinkTrackerClick,self).add_click(code,**route_values)
 
-        if click and click.mailing_trace_id:
+        ifclickandclick.mailing_trace_id:
             click.mailing_trace_id.set_opened()
             click.mailing_trace_id.set_clicked()
 
-        return click
+        returnclick

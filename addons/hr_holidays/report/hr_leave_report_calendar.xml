@@ -1,38 +1,38 @@
-<?xml version='1.0' encoding='UTF-8' ?>
+<?xmlversion='1.0'encoding='UTF-8'?>
 <flectra>
-    <record id="action_hr_holidays_dashboard" model="ir.actions.act_window">
-        <field name="name">All Time Off</field>
-        <field name="res_model">hr.leave.report.calendar</field>
-        <field name="view_mode">calendar</field>
-        <!-- YTI : Ecrabouille explicitely those fields, as this is deployed on 
-                   a stable release. -->
-        <field name="view_id"/>
-        <field name="search_view_id"/>
-        <field name="domain">[('employee_id.active','=',True)]</field>
-        <field name="context">{'hide_employee_name': 1}</field>
+    <recordid="action_hr_holidays_dashboard"model="ir.actions.act_window">
+        <fieldname="name">AllTimeOff</field>
+        <fieldname="res_model">hr.leave.report.calendar</field>
+        <fieldname="view_mode">calendar</field>
+        <!--YTI:Ecrabouilleexplicitelythosefields,asthisisdeployedon
+                   astablerelease.-->
+        <fieldname="view_id"/>
+        <fieldname="search_view_id"/>
+        <fieldname="domain">[('employee_id.active','=',True)]</field>
+        <fieldname="context">{'hide_employee_name':1}</field>
     </record>
 
-    <record id="hr_leave_report_calendar_view" model="ir.ui.view">
-        <field name="name">hr.leave.report.calendar.view</field>
-        <field name="model">hr.leave.report.calendar</field>
-        <field name="arch" type="xml">
-            <calendar string="Time Off" date_start="start_datetime" date_stop="stop_datetime" mode="month" quick_add="False" color="employee_id" event_open_popup="True" js_class="time_off_calendar_all" show_unusual_days="True">
-                <field name="name"/>
-                <field name="employee_id" filters="1" invisible="1"/>
+    <recordid="hr_leave_report_calendar_view"model="ir.ui.view">
+        <fieldname="name">hr.leave.report.calendar.view</field>
+        <fieldname="model">hr.leave.report.calendar</field>
+        <fieldname="arch"type="xml">
+            <calendarstring="TimeOff"date_start="start_datetime"date_stop="stop_datetime"mode="month"quick_add="False"color="employee_id"event_open_popup="True"js_class="time_off_calendar_all"show_unusual_days="True">
+                <fieldname="name"/>
+                <fieldname="employee_id"filters="1"invisible="1"/>
             </calendar>
         </field>
     </record>
 
-    <record id="hr_leave_report_calendar_view_form" model="ir.ui.view">
-        <field name="name">hr.leave.report.calendar.view.form</field>
-        <field name="model">hr.leave.report.calendar</field>
-        <field name="arch" type="xml">
-            <form string="Time Off">
+    <recordid="hr_leave_report_calendar_view_form"model="ir.ui.view">
+        <fieldname="name">hr.leave.report.calendar.view.form</field>
+        <fieldname="model">hr.leave.report.calendar</field>
+        <fieldname="arch"type="xml">
+            <formstring="TimeOff">
                 <group>
-                    <field name="name"/>
-                    <field name="start_datetime"/>
-                    <field name="stop_datetime"/>
-                    <field name="employee_id" />
+                    <fieldname="name"/>
+                    <fieldname="start_datetime"/>
+                    <fieldname="stop_datetime"/>
+                    <fieldname="employee_id"/>
                 </group>
             </form>
         </field>

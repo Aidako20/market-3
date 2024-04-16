@@ -1,97 +1,97 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-    <data noupdate="1">
-        <!--default alias for leads-->
-        <record id="mail_alias_lead_info" model="mail.alias">
-            <field name="alias_name"></field>
-            <field name="alias_model_id" ref="model_crm_lead"/>
-            <field name="alias_user_id" ref="base.user_admin"/>
-            <field name="alias_parent_model_id" ref="model_crm_team"/>
+    <datanoupdate="1">
+        <!--defaultaliasforleads-->
+        <recordid="mail_alias_lead_info"model="mail.alias">
+            <fieldname="alias_name"></field>
+            <fieldname="alias_model_id"ref="model_crm_lead"/>
+            <fieldname="alias_user_id"ref="base.user_admin"/>
+            <fieldname="alias_parent_model_id"ref="model_crm_team"/>
         </record>
 
-        <!-- CRM-related subtypes for messaging / Chatter -->
-        <record id="mt_lead_create" model="mail.message.subtype">
-            <field name="name">Opportunity Created</field>
-            <field name="hidden" eval="True"/>
-            <field name="res_model">crm.lead</field>
-            <field name="default" eval="False"/>
-            <field name="description">Lead/Opportunity created</field>
+        <!--CRM-relatedsubtypesformessaging/Chatter-->
+        <recordid="mt_lead_create"model="mail.message.subtype">
+            <fieldname="name">OpportunityCreated</field>
+            <fieldname="hidden"eval="True"/>
+            <fieldname="res_model">crm.lead</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="description">Lead/Opportunitycreated</field>
         </record>
-        <record id="mt_lead_stage" model="mail.message.subtype">
-            <field name="name">Stage Changed</field>
-            <field name="res_model">crm.lead</field>
-            <field name="default" eval="False"/>
-            <field name="description">Stage changed</field>
+        <recordid="mt_lead_stage"model="mail.message.subtype">
+            <fieldname="name">StageChanged</field>
+            <fieldname="res_model">crm.lead</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="description">Stagechanged</field>
         </record>
-        <record id="mt_lead_won" model="mail.message.subtype">
-            <field name="name">Opportunity Won</field>
-            <field name="res_model">crm.lead</field>
-            <field name="default" eval="False"/>
-            <field name="description">Opportunity won</field>
+        <recordid="mt_lead_won"model="mail.message.subtype">
+            <fieldname="name">OpportunityWon</field>
+            <fieldname="res_model">crm.lead</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="description">Opportunitywon</field>
         </record>
-        <record id="mt_lead_lost" model="mail.message.subtype">
-            <field name="name">Opportunity Lost</field>
-            <field name="res_model">crm.lead</field>
-            <field name="default" eval="False"/>
-            <field name="description">Opportunity lost</field>
+        <recordid="mt_lead_lost"model="mail.message.subtype">
+            <fieldname="name">OpportunityLost</field>
+            <fieldname="res_model">crm.lead</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="description">Opportunitylost</field>
         </record>
-        <record id="mt_lead_restored" model="mail.message.subtype">
-            <field name="name">Opportunity Restored</field>
-            <field name="res_model">crm.lead</field>
-            <field name="default" eval="False"/>
-            <field name="description">Opportunity restored</field>
+        <recordid="mt_lead_restored"model="mail.message.subtype">
+            <fieldname="name">OpportunityRestored</field>
+            <fieldname="res_model">crm.lead</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="description">Opportunityrestored</field>
         </record>
-        <!-- Salesteam-related subtypes for messaging / Chatter -->
-        <record id="mt_salesteam_lead" model="mail.message.subtype">
-            <field name="name">Opportunity Created</field>
-            <field name="sequence">10</field>
-            <field name="res_model">crm.team</field>
-            <field name="default" eval="True"/>
-            <field name="parent_id" ref="mt_lead_create"/>
-            <field name="relation_field">team_id</field>
+        <!--Salesteam-relatedsubtypesformessaging/Chatter-->
+        <recordid="mt_salesteam_lead"model="mail.message.subtype">
+            <fieldname="name">OpportunityCreated</field>
+            <fieldname="sequence">10</field>
+            <fieldname="res_model">crm.team</field>
+            <fieldname="default"eval="True"/>
+            <fieldname="parent_id"ref="mt_lead_create"/>
+            <fieldname="relation_field">team_id</field>
         </record>
-        <record id="mt_salesteam_lead_stage" model="mail.message.subtype">
-            <field name="name">Opportunity Stage Changed</field>
-            <field name="sequence">11</field>
-            <field name="res_model">crm.team</field>
-            <field name="parent_id" ref="mt_lead_stage"/>
-            <field name="relation_field">team_id</field>
+        <recordid="mt_salesteam_lead_stage"model="mail.message.subtype">
+            <fieldname="name">OpportunityStageChanged</field>
+            <fieldname="sequence">11</field>
+            <fieldname="res_model">crm.team</field>
+            <fieldname="parent_id"ref="mt_lead_stage"/>
+            <fieldname="relation_field">team_id</field>
         </record>
-        <record id="mt_salesteam_lead_won" model="mail.message.subtype">
-            <field name="name">Opportunity Won</field>
-            <field name="sequence">12</field>
-            <field name="res_model">crm.team</field>
-            <field name="parent_id" ref="mt_lead_won"/>
-            <field name="relation_field">team_id</field>
+        <recordid="mt_salesteam_lead_won"model="mail.message.subtype">
+            <fieldname="name">OpportunityWon</field>
+            <fieldname="sequence">12</field>
+            <fieldname="res_model">crm.team</field>
+            <fieldname="parent_id"ref="mt_lead_won"/>
+            <fieldname="relation_field">team_id</field>
         </record>
-        <record id="mt_salesteam_lead_lost" model="mail.message.subtype">
-            <field name="name">Opportunity Lost</field>
-            <field name="sequence">13</field>
-            <field name="res_model">crm.team</field>
-            <field name="default" eval="False"/>
-            <field name="parent_id" ref="mt_lead_lost"/>
-            <field name="relation_field">team_id</field>
+        <recordid="mt_salesteam_lead_lost"model="mail.message.subtype">
+            <fieldname="name">OpportunityLost</field>
+            <fieldname="sequence">13</field>
+            <fieldname="res_model">crm.team</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="parent_id"ref="mt_lead_lost"/>
+            <fieldname="relation_field">team_id</field>
         </record>
-        <record id="mt_salesteam_lead_restored" model="mail.message.subtype">
-            <field name="name">Opportunity Restored</field>
-            <field name="sequence">14</field>
-            <field name="res_model">crm.team</field>
-            <field name="default" eval="False"/>
-            <field name="parent_id" ref="mt_lead_restored"/>
-            <field name="relation_field">team_id</field>
+        <recordid="mt_salesteam_lead_restored"model="mail.message.subtype">
+            <fieldname="name">OpportunityRestored</field>
+            <fieldname="sequence">14</field>
+            <fieldname="res_model">crm.team</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="parent_id"ref="mt_lead_restored"/>
+            <fieldname="relation_field">team_id</field>
         </record>
 
-        <!--Definition of an email template with an empty body that will be used in opportunity mailing.
-            Used to give a basis for email recipients, name and to ease the definition of a further
-            elaborated template.  -->
-        <record id="email_template_opportunity_mail" model="mail.template">
-            <field name="name">Lead/Opportunity: Mass Mail</field>
-            <field name="model_id" ref="crm.model_crm_lead"/>
-            <field name="partner_to">${object.partner_id != False and object.partner_id.id}</field>
-            <field name="email_to">${(not object.partner_id and object.email_from)|safe}</field>
-            <field name="body_html"></field>
-            <field name="lang">${object.partner_id.lang}</field>
-            <field name="auto_delete" eval="True"/>
+        <!--Definitionofanemailtemplatewithanemptybodythatwillbeusedinopportunitymailing.
+            Usedtogiveabasisforemailrecipients,nameandtoeasethedefinitionofafurther
+            elaboratedtemplate. -->
+        <recordid="email_template_opportunity_mail"model="mail.template">
+            <fieldname="name">Lead/Opportunity:MassMail</field>
+            <fieldname="model_id"ref="crm.model_crm_lead"/>
+            <fieldname="partner_to">${object.partner_id!=Falseandobject.partner_id.id}</field>
+            <fieldname="email_to">${(notobject.partner_idandobject.email_from)|safe}</field>
+            <fieldname="body_html"></field>
+            <fieldname="lang">${object.partner_id.lang}</field>
+            <fieldname="auto_delete"eval="True"/>
         </record>
 
     </data>

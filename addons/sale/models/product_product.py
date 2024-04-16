@@ -1,81 +1,81 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from datetime import timedelta, time
-from flectra import api, fields, models, _
-from flectra.tools.float_utils import float_round
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromdatetimeimporttimedelta,time
+fromflectraimportapi,fields,models,_
+fromflectra.tools.float_utilsimportfloat_round
 
 
-class ProductProduct(models.Model):
-    _inherit = 'product.product'
+classProductProduct(models.Model):
+    _inherit='product.product'
 
-    sales_count = fields.Float(compute='_compute_sales_count', string='Sold')
+    sales_count=fields.Float(compute='_compute_sales_count',string='Sold')
 
-    def _compute_sales_count(self):
-        r = {}
-        self.sales_count = 0
-        if not self.user_has_groups('sales_team.group_sale_salesman'):
-            return r
-        date_from = fields.Datetime.to_string(fields.datetime.combine(fields.datetime.now() - timedelta(days=365),
+    def_compute_sales_count(self):
+        r={}
+        self.sales_count=0
+        ifnotself.user_has_groups('sales_team.group_sale_salesman'):
+            returnr
+        date_from=fields.Datetime.to_string(fields.datetime.combine(fields.datetime.now()-timedelta(days=365),
                                                                       time.min))
 
-        done_states = self.env['sale.report']._get_done_states()
+        done_states=self.env['sale.report']._get_done_states()
 
-        domain = [
-            ('state', 'in', done_states),
-            ('product_id', 'in', self.ids),
-            ('date', '>=', date_from),
+        domain=[
+            ('state','in',done_states),
+            ('product_id','in',self.ids),
+            ('date','>=',date_from),
         ]
-        for group in self.env['sale.report'].read_group(domain, ['product_id', 'product_uom_qty'], ['product_id']):
-            r[group['product_id'][0]] = group['product_uom_qty']
-        for product in self:
-            if not product.id:
-                product.sales_count = 0.0
+        forgroupinself.env['sale.report'].read_group(domain,['product_id','product_uom_qty'],['product_id']):
+            r[group['product_id'][0]]=group['product_uom_qty']
+        forproductinself:
+            ifnotproduct.id:
+                product.sales_count=0.0
                 continue
-            product.sales_count = float_round(r.get(product.id, 0), precision_rounding=product.uom_id.rounding)
-        return r
+            product.sales_count=float_round(r.get(product.id,0),precision_rounding=product.uom_id.rounding)
+        returnr
 
     @api.onchange('type')
-    def _onchange_type(self):
-        if self._origin and self.sales_count > 0:
-            return {'warning': {
-                'title': _("Warning"),
-                'message': _("You cannot change the product's type because it is already used in sales orders.")
+    def_onchange_type(self):
+        ifself._originandself.sales_count>0:
+            return{'warning':{
+                'title':_("Warning"),
+                'message':_("Youcannotchangetheproduct'stypebecauseitisalreadyusedinsalesorders.")
             }}
 
-    def action_view_sales(self):
-        action = self.env["ir.actions.actions"]._for_xml_id("sale.report_all_channels_sales_action")
-        action['domain'] = [('product_id', 'in', self.ids)]
-        action['context'] = {
-            'pivot_measures': ['product_uom_qty'],
-            'active_id': self._context.get('active_id'),
-            'search_default_Sales': 1,
-            'active_model': 'sale.report',
-            'search_default_filter_order_date': 1,
+    defaction_view_sales(self):
+        action=self.env["ir.actions.actions"]._for_xml_id("sale.report_all_channels_sales_action")
+        action['domain']=[('product_id','in',self.ids)]
+        action['context']={
+            'pivot_measures':['product_uom_qty'],
+            'active_id':self._context.get('active_id'),
+            'search_default_Sales':1,
+            'active_model':'sale.report',
+            'search_default_filter_order_date':1,
         }
-        return action
+        returnaction
 
-    def _get_invoice_policy(self):
-        return self.invoice_policy
+    def_get_invoice_policy(self):
+        returnself.invoice_policy
 
-    def _get_combination_info_variant(self, add_qty=1, pricelist=False, parent_combination=False):
-        """Return the variant info based on its combination.
-        See `_get_combination_info` for more information.
+    def_get_combination_info_variant(self,add_qty=1,pricelist=False,parent_combination=False):
+        """Returnthevariantinfobasedonitscombination.
+        See`_get_combination_info`formoreinformation.
         """
         self.ensure_one()
-        return self.product_tmpl_id._get_combination_info(self.product_template_attribute_value_ids, self.id, add_qty, pricelist, parent_combination)
+        returnself.product_tmpl_id._get_combination_info(self.product_template_attribute_value_ids,self.id,add_qty,pricelist,parent_combination)
 
-    def _filter_to_unlink(self):
-        domain = [('product_id', 'in', self.ids)]
-        lines = self.env['sale.order.line'].read_group(domain, ['product_id'], ['product_id'])
-        linked_product_ids = [group['product_id'][0] for group in lines]
-        return super(ProductProduct, self - self.browse(linked_product_ids))._filter_to_unlink()
+    def_filter_to_unlink(self):
+        domain=[('product_id','in',self.ids)]
+        lines=self.env['sale.order.line'].read_group(domain,['product_id'],['product_id'])
+        linked_product_ids=[group['product_id'][0]forgroupinlines]
+        returnsuper(ProductProduct,self-self.browse(linked_product_ids))._filter_to_unlink()
 
 
-class ProductAttributeCustomValue(models.Model):
-    _inherit = "product.attribute.custom.value"
+classProductAttributeCustomValue(models.Model):
+    _inherit="product.attribute.custom.value"
 
-    sale_order_line_id = fields.Many2one('sale.order.line', string="Sales Order Line", required=True, ondelete='cascade')
+    sale_order_line_id=fields.Many2one('sale.order.line',string="SalesOrderLine",required=True,ondelete='cascade')
 
-    _sql_constraints = [
-        ('sol_custom_value_unique', 'unique(custom_product_template_attribute_value_id, sale_order_line_id)', "Only one Custom Value is allowed per Attribute Value per Sales Order Line.")
+    _sql_constraints=[
+        ('sol_custom_value_unique','unique(custom_product_template_attribute_value_id,sale_order_line_id)',"OnlyoneCustomValueisallowedperAttributeValueperSalesOrderLine.")
     ]

@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, fields
+fromflectraimportmodels,fields
 
 
-class ProductTemplate(models.Model):
-    _inherit = 'product.template'
+classProductTemplate(models.Model):
+    _inherit='product.template'
 
-    hs_code = fields.Char(
-        string="HS Code",
-        help="Standardized code for international shipping and goods declaration. At the moment, only used for the FedEx shipping provider.",
+    hs_code=fields.Char(
+        string="HSCode",
+        help="Standardizedcodeforinternationalshippingandgoodsdeclaration.Atthemoment,onlyusedfortheFedExshippingprovider.",
     )

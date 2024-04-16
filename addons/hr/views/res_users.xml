@@ -1,184 +1,184 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
 
-        <!-- Inherit the preference view to remove title, image and footer -->
-        <!-- This view is meant to be included in the employee profile view -->
-        <!-- It ensures that if the 'normal' Preferences view is changed, it's
-            also reflected in the employee's profile -->
-        <record id="res_users_view_form_simple_modif" model="ir.ui.view">
-            <field name="name">res.users.preferences.form.simplified.inherit</field>
-            <field name="model">res.users</field>
-            <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
-            <field name="mode">primary</field>
-            <field name="arch" type="xml">
-                <xpath expr="//footer[not(ancestor::field)]" position="attributes">
-                    <attribute name="invisible">1</attribute>
+        <!--Inheritthepreferenceviewtoremovetitle,imageandfooter-->
+        <!--Thisviewismeanttobeincludedintheemployeeprofileview-->
+        <!--Itensuresthatifthe'normal'Preferencesviewischanged,it's
+            alsoreflectedintheemployee'sprofile-->
+        <recordid="res_users_view_form_simple_modif"model="ir.ui.view">
+            <fieldname="name">res.users.preferences.form.simplified.inherit</field>
+            <fieldname="model">res.users</field>
+            <fieldname="inherit_id"ref="base.view_users_form_simple_modif"/>
+            <fieldname="mode">primary</field>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//footer[not(ancestor::field)]"position="attributes">
+                    <attributename="invisible">1</attribute>
                 </xpath>
-                <h1 position="replace"/>
-                <xpath expr="//field[@name='image_1920']" position="replace"/>
-                <xpath expr="//field[@name='company_id']" position="attributes">
-                    <attribute name="invisible">1</attribute>
+                <h1position="replace"/>
+                <xpathexpr="//field[@name='image_1920']"position="replace"/>
+                <xpathexpr="//field[@name='company_id']"position="attributes">
+                    <attributename="invisible">1</attribute>
                 </xpath>
             </field>
         </record>
 
-        <record id="view_users_form_simple_modif_resource" model="ir.ui.view">
-            <field name="name">res.users.preferences.form.resource</field>
-            <field name="model">res.users</field>
-            <field name="inherit_id" ref="base.view_users_form_simple_modif" />
-            <field name="arch" type="xml">
-                <field name="tz" position="attributes">
-                    <attribute name="required">1</attribute>
+        <recordid="view_users_form_simple_modif_resource"model="ir.ui.view">
+            <fieldname="name">res.users.preferences.form.resource</field>
+            <fieldname="model">res.users</field>
+            <fieldname="inherit_id"ref="base.view_users_form_simple_modif"/>
+            <fieldname="arch"type="xml">
+                <fieldname="tz"position="attributes">
+                    <attributename="required">1</attribute>
                 </field>
             </field>
         </record>
 
-        <record id="res_users_view_form_profile" model="ir.ui.view">
-            <field name="name">res.users.preferences.form.inherit</field>
-            <field name="model">res.users</field>
-            <field name="inherit_id" ref="res_users_view_form_simple_modif"/>
-            <field name="arch" type="xml">
-                <form position="attributes">
-                    <attribute name="create">false</attribute>
-                    <attribute name="delete">false</attribute>
-                    <attribute name="js_class">hr_employee_profile_form</attribute>
+        <recordid="res_users_view_form_profile"model="ir.ui.view">
+            <fieldname="name">res.users.preferences.form.inherit</field>
+            <fieldname="model">res.users</field>
+            <fieldname="inherit_id"ref="res_users_view_form_simple_modif"/>
+            <fieldname="arch"type="xml">
+                <formposition="attributes">
+                    <attributename="create">false</attribute>
+                    <attributename="delete">false</attribute>
+                    <attributename="js_class">hr_employee_profile_form</attribute>
                 </form>
-                <notebook position="replace">
-                        <field name="hr_presence_state" invisible="1"/>
+                <notebookposition="replace">
+                        <fieldname="hr_presence_state"invisible="1"/>
                         <header>
                         </header>
                         <sheet>$0</sheet>
                 </notebook>
-                <notebook position="before">
-                    <div class="oe_button_box" name="button_box">
+                <notebookposition="before">
+                    <divclass="oe_button_box"name="button_box">
                         <button
                             id="hr_presence_button"
                             class="oe_stat_button"
                             disabled="1"
-                            invisible="context.get('from_my_profile', False)"
-                            attrs="{'invisible': [('hr_presence_state', '=', 'absent')]}">
-                            <div role="img" class="fa fa-fw fa-circle text-success o_button_icon" attrs="{'invisible': [('hr_presence_state', '!=', 'present')]}" aria-label="Available" title="Available"/>
-                            <div role="img" class="fa fa-fw fa-circle text-warning o_button_icon" attrs="{'invisible': [('hr_presence_state', '!=', 'to_define')]}" aria-label="Away" title="Away"/>
-                            <div role="img" class="fa fa-fw fa-circle text-danger o_button_icon" attrs="{'invisible': [('hr_presence_state', '!=', 'absent')]}" aria-label="Not available" title="Not available"/>
+                            invisible="context.get('from_my_profile',False)"
+                            attrs="{'invisible':[('hr_presence_state','=','absent')]}">
+                            <divrole="img"class="fafa-fwfa-circletext-successo_button_icon"attrs="{'invisible':[('hr_presence_state','!=','present')]}"aria-label="Available"title="Available"/>
+                            <divrole="img"class="fafa-fwfa-circletext-warningo_button_icon"attrs="{'invisible':[('hr_presence_state','!=','to_define')]}"aria-label="Away"title="Away"/>
+                            <divrole="img"class="fafa-fwfa-circletext-dangero_button_icon"attrs="{'invisible':[('hr_presence_state','!=','absent')]}"aria-label="Notavailable"title="Notavailable"/>
 
-                            <div class="o_stat_info" attrs="{'invisible': [('hr_presence_state', '=', 'present')]}">
-                                <span class="o_stat_text">
-                                    Not Connected
+                            <divclass="o_stat_info"attrs="{'invisible':[('hr_presence_state','=','present')]}">
+                                <spanclass="o_stat_text">
+                                    NotConnected
                                 </span>
                             </div>
-                            <div class="o_stat_info" attrs="{'invisible': [('hr_presence_state', '!=', 'present')]}">
-                                <span class="o_stat_value" attrs="{'invisible': [('last_activity_time', '=', False)]}">
-                                    <field name="last_activity_time"/>
+                            <divclass="o_stat_info"attrs="{'invisible':[('hr_presence_state','!=','present')]}">
+                                <spanclass="o_stat_value"attrs="{'invisible':[('last_activity_time','=',False)]}">
+                                    <fieldname="last_activity_time"/>
                                 </span>
-                                <span class="o_stat_value" attrs="{'invisible': [('last_activity_time', '!=', False)]}">
-                                    <field name="last_activity"/>
+                                <spanclass="o_stat_value"attrs="{'invisible':[('last_activity_time','!=',False)]}">
+                                    <fieldname="last_activity"/>
                                 </span>
-                                <span class="o_stat_text">Connected Since</span>
+                                <spanclass="o_stat_text">ConnectedSince</span>
                             </div>
                         </button>
                     </div>
-                    <field name="image_1920" widget='image' class="oe_avatar" options='{"zoom": true, "preview_image":"image_128"}'/>
-                    <div class="oe_title">
+                    <fieldname="image_1920"widget='image'class="oe_avatar"options='{"zoom":true,"preview_image":"image_128"}'/>
+                    <divclass="oe_title">
                         <h1>
-                            <field name="name" placeholder="Employee's Name" required="True" readonly="context.get('from_my_profile', False)"/>
+                            <fieldname="name"placeholder="Employee'sName"required="True"readonly="context.get('from_my_profile',False)"/>
                         </h1>
                     </div>
-                    <div class="row">
-                        <h2 class="col-6">
-                            <field name="job_title" placeholder="Job Position" attrs="{'readonly': [('can_edit', '=', False)]}"/>
+                    <divclass="row">
+                        <h2class="col-6">
+                            <fieldname="job_title"placeholder="JobPosition"attrs="{'readonly':[('can_edit','=',False)]}"/>
                         </h2>
                     </div>
                     <group>
                         <group>
-                            <field name="can_edit" invisible="1"/>
-                            <field name="mobile_phone" widget="phone" attrs="{'readonly': [('can_edit', '=', False)]}" options="{'enable_sms': false}"/>
-                            <field name="work_phone" widget="phone" attrs="{'readonly': [('can_edit', '=', False)]}" options="{'enable_sms': false}"/>
+                            <fieldname="can_edit"invisible="1"/>
+                            <fieldname="mobile_phone"widget="phone"attrs="{'readonly':[('can_edit','=',False)]}"options="{'enable_sms':false}"/>
+                            <fieldname="work_phone"widget="phone"attrs="{'readonly':[('can_edit','=',False)]}"options="{'enable_sms':false}"/>
                         </group>
                         <group>
-                            <field name="work_email" widget="email" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                            <field name="work_location" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                            <field name="company_id" invisible="1"/>
+                            <fieldname="work_email"widget="email"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                            <fieldname="work_location"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                            <fieldname="company_id"invisible="1"/>
                         </group>
                         <group>
-                            <field name="employee_parent_id" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                            <field name="coach_id" attrs="{'readonly': [('can_edit', '=', False)]}"/>
+                            <fieldname="employee_parent_id"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                            <fieldname="coach_id"attrs="{'readonly':[('can_edit','=',False)]}"/>
                         </group>
                     </group>
                 </notebook>
-                <notebook position="inside">
-                    <page name="public" string="Work Information">
-                        <div id="o_work_employee_container"> <!-- These two div are used to position org_chart -->
-                            <div id="o_work_employee_main">
-                                <group string="Location">
-                                    <field name="department_id" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                                    <field name="address_id"
-                                        context="{'show_address': 1}"
-                                        options='{"always_reload": True, "highlight_first_line": True}'
-                                        attrs="{'readonly': [('can_edit', '=', False)]}"/>
+                <notebookposition="inside">
+                    <pagename="public"string="WorkInformation">
+                        <divid="o_work_employee_container"><!--Thesetwodivareusedtopositionorg_chart-->
+                            <divid="o_work_employee_main">
+                                <groupstring="Location">
+                                    <fieldname="department_id"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                                    <fieldname="address_id"
+                                        context="{'show_address':1}"
+                                        options='{"always_reload":True,"highlight_first_line":True}'
+                                        attrs="{'readonly':[('can_edit','=',False)]}"/>
                                 </group>
-                                <group name="managers" string="Approvers" class="hide-group-if-empty">
-                                    <!-- overridden in other modules -->
+                                <groupname="managers"string="Approvers"class="hide-group-if-empty">
+                                    <!--overriddeninothermodules-->
                                 </group>
                             </div>
                         </div>
                     </page>
-                    <page name="personal_information" string="Private Information">
+                    <pagename="personal_information"string="PrivateInformation">
                         <group>
-                            <group string="Contact Information">
-                                <field name="employee_ids" invisible="1"/>
-                                <field name="address_home_id"
+                            <groupstring="ContactInformation">
+                                <fieldname="employee_ids"invisible="1"/>
+                                <fieldname="address_home_id"
                                     context="{
-                                        'show_address': 1,
-                                        'default_employee_ids': employee_ids,
-                                        'default_type': 'private',
-                                        'form_view_ref': 'base.res_partner_view_form_private'}"
-                                    options='{"always_reload": True, "highlight_first_line": True}'
-                                    attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                                <field name="private_email" string="Email" attrs="{'readonly': [('can_edit', '=', False)], 'invisible': [('address_home_id', '=', False)]}"/>
-                                <field name="employee_phone" string="Phone" class="o_force_ltr" attrs="{'readonly': [('can_edit', '=', False)], 'invisible': [('address_home_id', '=', False)]}" options="{'enable_sms': false}"/>
-                                <field name="employee_bank_account_id" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                                <field name="km_home_work" attrs="{'readonly': [('can_edit', '=', False)]}"/>
+                                        'show_address':1,
+                                        'default_employee_ids':employee_ids,
+                                        'default_type':'private',
+                                        'form_view_ref':'base.res_partner_view_form_private'}"
+                                    options='{"always_reload":True,"highlight_first_line":True}'
+                                    attrs="{'readonly':[('can_edit','=',False)]}"/>
+                                <fieldname="private_email"string="Email"attrs="{'readonly':[('can_edit','=',False)],'invisible':[('address_home_id','=',False)]}"/>
+                                <fieldname="employee_phone"string="Phone"class="o_force_ltr"attrs="{'readonly':[('can_edit','=',False)],'invisible':[('address_home_id','=',False)]}"options="{'enable_sms':false}"/>
+                                <fieldname="employee_bank_account_id"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                                <fieldname="km_home_work"attrs="{'readonly':[('can_edit','=',False)]}"/>
                             </group>
-                            <group string="Citizenship">
-                                <field name="employee_country_id" options='{"no_open": True, "no_create": True}' attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                                <field name="identification_id" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                                <field name="passport_id" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                                <field name="gender" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                                <field name="birthday" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                                <field name="place_of_birth" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                                <field name="country_of_birth" attrs="{'readonly': [('can_edit', '=', False)]}"/>
+                            <groupstring="Citizenship">
+                                <fieldname="employee_country_id"options='{"no_open":True,"no_create":True}'attrs="{'readonly':[('can_edit','=',False)]}"/>
+                                <fieldname="identification_id"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                                <fieldname="passport_id"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                                <fieldname="gender"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                                <fieldname="birthday"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                                <fieldname="place_of_birth"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                                <fieldname="country_of_birth"attrs="{'readonly':[('can_edit','=',False)]}"/>
                             </group>
-                            <group string="Marital Status">
-                                <field name="marital" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                                <field name="spouse_complete_name" attrs="{'invisible': [('marital', 'not in', ['married', 'cohabitant'])], 'readonly': [('can_edit', '=', False)]}"/>
-                                <field name="spouse_birthdate" attrs="{'invisible': [('marital', 'not in', ['married', 'cohabitant'])], 'readonly': [('can_edit', '=', False)]}"/>
+                            <groupstring="MaritalStatus">
+                                <fieldname="marital"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                                <fieldname="spouse_complete_name"attrs="{'invisible':[('marital','notin',['married','cohabitant'])],'readonly':[('can_edit','=',False)]}"/>
+                                <fieldname="spouse_birthdate"attrs="{'invisible':[('marital','notin',['married','cohabitant'])],'readonly':[('can_edit','=',False)]}"/>
                             </group>
-                            <group string="Education">
-                                <field name="certificate" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                                <field name="study_field" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                                <field name="study_school" attrs="{'readonly': [('can_edit', '=', False)]}"/>
+                            <groupstring="Education">
+                                <fieldname="certificate"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                                <fieldname="study_field"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                                <fieldname="study_school"attrs="{'readonly':[('can_edit','=',False)]}"/>
                             </group>
-                            <group string="Dependant">
-                                <field name="children" attrs="{'readonly': [('can_edit', '=', False)]}"/>
+                            <groupstring="Dependant">
+                                <fieldname="children"attrs="{'readonly':[('can_edit','=',False)]}"/>
                             </group>
-                            <group string="Emergency">
-                                <field name="emergency_contact" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                                <field name="emergency_phone" widget="phone" attrs="{'readonly': [('can_edit', '=', False)]}" options="{'enable_sms': false}"/>
+                            <groupstring="Emergency">
+                                <fieldname="emergency_contact"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                                <fieldname="emergency_phone"widget="phone"attrs="{'readonly':[('can_edit','=',False)]}"options="{'enable_sms':false}"/>
                             </group>
-                            <group string="Work Permit" name="work_permit">
-                                <field name="visa_no" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                                <field name="permit_no" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                                <field name="visa_expire" attrs="{'readonly': [('can_edit', '=', False)]}"/>
+                            <groupstring="WorkPermit"name="work_permit">
+                                <fieldname="visa_no"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                                <fieldname="permit_no"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                                <fieldname="visa_expire"attrs="{'readonly':[('can_edit','=',False)]}"/>
                             </group>
                         </group>
                     </page>
-                     <page name="hr_settings" string="HR Settings">
+                     <pagename="hr_settings"string="HRSettings">
                         <group>
-                            <group string='Status' name="active_group" invisible="1"></group>
-                            <group string="Attendance" name="identification_group">
-                                <field name="pin" attrs="{'readonly': [('can_edit', '=', False)]}"/>
-                                <field name="barcode" attrs="{'readonly': [('can_edit', '=', False)]}"/>
+                            <groupstring='Status'name="active_group"invisible="1"></group>
+                            <groupstring="Attendance"name="identification_group">
+                                <fieldname="pin"attrs="{'readonly':[('can_edit','=',False)]}"/>
+                                <fieldname="barcode"attrs="{'readonly':[('can_edit','=',False)]}"/>
                             </group>
                         </group>
                     </page>
@@ -186,44 +186,44 @@
             </field>
         </record>
 
-        <record id="res_users_action_my" model="ir.actions.act_window">
-            <field name="name">Change my Preferences</field>
-            <field name="res_model">res.users</field>
-            <field name="view_mode">form</field>
-            <field name="context">{'from_my_profile': True}</field>
-            <field name="view_id" ref="hr.res_users_view_form_profile"/>
+        <recordid="res_users_action_my"model="ir.actions.act_window">
+            <fieldname="name">ChangemyPreferences</field>
+            <fieldname="res_model">res.users</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="context">{'from_my_profile':True}</field>
+            <fieldname="view_id"ref="hr.res_users_view_form_profile"/>
         </record>
 
-        <record id="hr_employee_action_from_user" model="ir.actions.act_window">
-            <field name="name">Employees</field>
-            <field name="res_model">hr.employee</field>
-            <field name="view_mode">kanban,tree,form</field>
-            <field name="domain">[('user_id', '=', active_id)]</field>
+        <recordid="hr_employee_action_from_user"model="ir.actions.act_window">
+            <fieldname="name">Employees</field>
+            <fieldname="res_model">hr.employee</field>
+            <fieldname="view_mode">kanban,tree,form</field>
+            <fieldname="domain">[('user_id','=',active_id)]</field>
         </record>
 
-        <record id="res_users_view_form" model="ir.ui.view">
-            <field name="name">res.users.form.inherit</field>
-            <field name="model">res.users</field>
-            <field name="inherit_id" ref="base.view_users_form"/>
-            <field name="arch" type="xml">
+        <recordid="res_users_view_form"model="ir.ui.view">
+            <fieldname="name">res.users.form.inherit</field>
+            <fieldname="model">res.users</field>
+            <fieldname="inherit_id"ref="base.view_users_form"/>
+            <fieldname="arch"type="xml">
 
-                <xpath expr="//header" position="inside">
-                    <field name="share" invisible="1"/>
-                    <field name="employee_ids" invisible="1"/>
-                    <field name="employee_id" invisible="1"/>
-                    <button string="Create employee"
-                            type="object" name="action_create_employee"
-                            attrs="{'invisible': ['|', '|', ('id', '=', False), ('share', '=', True), ('employee_id', '!=', False)]}"/>
-                            <!-- share is not correctly recomputed because it depends on fields of reified view => invisible before saving (id=False) -->
+                <xpathexpr="//header"position="inside">
+                    <fieldname="share"invisible="1"/>
+                    <fieldname="employee_ids"invisible="1"/>
+                    <fieldname="employee_id"invisible="1"/>
+                    <buttonstring="Createemployee"
+                            type="object"name="action_create_employee"
+                            attrs="{'invisible':['|','|',('id','=',False),('share','=',True),('employee_id','!=',False)]}"/>
+                            <!--shareisnotcorrectlyrecomputedbecauseitdependsonfieldsofreifiedview=>invisiblebeforesaving(id=False)-->
                 </xpath>
-                <xpath expr="//div[@name='button_box']" position="inside">
-                    <button name="%(hr_employee_action_from_user)d"
+                <xpathexpr="//div[@name='button_box']"position="inside">
+                    <buttonname="%(hr_employee_action_from_user)d"
                         class="oe_stat_button"
                         icon="fa-users"
-                        attrs="{'invisible': [('employee_count', '=', 0)]}"
-                        context="{'active_test': False}"
+                        attrs="{'invisible':[('employee_count','=',0)]}"
+                        context="{'active_test':False}"
                         type="action">
-                        <field name="employee_count" widget="statinfo" string="Employee(s)"/>
+                        <fieldname="employee_count"widget="statinfo"string="Employee(s)"/>
                     </button>
                 </xpath>
             </field>

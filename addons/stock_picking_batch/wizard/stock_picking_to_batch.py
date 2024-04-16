@@ -1,31 +1,31 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, _
-from flectra.exceptions import UserError
+fromflectraimportfields,models,_
+fromflectra.exceptionsimportUserError
 
 
-class StockPickingToBatch(models.TransientModel):
-    _name = 'stock.picking.to.batch'
-    _description = 'Batch Transfer Lines'
+classStockPickingToBatch(models.TransientModel):
+    _name='stock.picking.to.batch'
+    _description='BatchTransferLines'
 
-    batch_id = fields.Many2one('stock.picking.batch', string='Batch Transfer', domain="[('state', '=', 'draft')]")
-    mode = fields.Selection([('existing', 'an existing batch transfer'), ('new', 'a new batch transfer')], default='existing')
-    user_id = fields.Many2one('res.users', string='Responsible', help='Person responsible for this batch transfer')
+    batch_id=fields.Many2one('stock.picking.batch',string='BatchTransfer',domain="[('state','=','draft')]")
+    mode=fields.Selection([('existing','anexistingbatchtransfer'),('new','anewbatchtransfer')],default='existing')
+    user_id=fields.Many2one('res.users',string='Responsible',help='Personresponsibleforthisbatchtransfer')
 
-    def attach_pickings(self):
+    defattach_pickings(self):
         self.ensure_one()
-        pickings = self.env['stock.picking'].browse(self.env.context.get('active_ids'))
-        if self.mode == 'new':
-            company = pickings.company_id
-            if len(company) > 1:
-                raise UserError(_("The selected pickings should belong to an unique company."))
-            batch = self.env['stock.picking.batch'].create({
-                'user_id': self.user_id.id,
-                'company_id': company.id,
-                'picking_type_id': pickings[0].picking_type_id.id,
+        pickings=self.env['stock.picking'].browse(self.env.context.get('active_ids'))
+        ifself.mode=='new':
+            company=pickings.company_id
+            iflen(company)>1:
+                raiseUserError(_("Theselectedpickingsshouldbelongtoanuniquecompany."))
+            batch=self.env['stock.picking.batch'].create({
+                'user_id':self.user_id.id,
+                'company_id':company.id,
+                'picking_type_id':pickings[0].picking_type_id.id,
             })
         else:
-            batch = self.batch_id
+            batch=self.batch_id
 
-        pickings.write({'batch_id': batch.id})
+        pickings.write({'batch_id':batch.id})

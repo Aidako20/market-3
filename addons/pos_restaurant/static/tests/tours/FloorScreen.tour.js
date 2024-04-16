@@ -1,29 +1,29 @@
-flectra.define('pos_restaurant.tour.FloorScreen', function (require) {
-    'use strict';
+flectra.define('pos_restaurant.tour.FloorScreen',function(require){
+    'usestrict';
 
-    const { Chrome } = require('pos_restaurant.tour.ChromeTourMethods');
-    const { FloorScreen } = require('pos_restaurant.tour.FloorScreenTourMethods');
-    const { TextInputPopup } = require('pos_restaurant.tour.TextInputPopupTourMethods');
-    const { NumberPopup } = require('point_of_sale.tour.NumberPopupTourMethods');
-    const { ProductScreen } = require('pos_restaurant.tour.ProductScreenTourMethods');
-    const { getSteps, startSteps } = require('point_of_sale.tour.utils');
-    var Tour = require('web_tour.tour');
+    const{Chrome}=require('pos_restaurant.tour.ChromeTourMethods');
+    const{FloorScreen}=require('pos_restaurant.tour.FloorScreenTourMethods');
+    const{TextInputPopup}=require('pos_restaurant.tour.TextInputPopupTourMethods');
+    const{NumberPopup}=require('point_of_sale.tour.NumberPopupTourMethods');
+    const{ProductScreen}=require('pos_restaurant.tour.ProductScreenTourMethods');
+    const{getSteps,startSteps}=require('point_of_sale.tour.utils');
+    varTour=require('web_tour.tour');
 
-    // signal to start generating steps
-    // when finished, steps can be taken from getSteps
+    //signaltostartgeneratingsteps
+    //whenfinished,stepscanbetakenfromgetSteps
     startSteps();
 
-    // check floors if they contain their corresponding tables
-    FloorScreen.check.selectedFloorIs('Main Floor');
+    //checkfloorsiftheycontaintheircorrespondingtables
+    FloorScreen.check.selectedFloorIs('MainFloor');
     FloorScreen.check.hasTable('T2');
     FloorScreen.check.hasTable('T4');
     FloorScreen.check.hasTable('T5');
-    FloorScreen.do.clickFloor('Second Floor');
+    FloorScreen.do.clickFloor('SecondFloor');
     FloorScreen.check.hasTable('T3');
     FloorScreen.check.hasTable('T1');
 
-    // clicking table in active mode does not open product screen
-    // instead, table is selected
+    //clickingtableinactivemodedoesnotopenproductscreen
+    //instead,tableisselected
     FloorScreen.do.clickEdit();
     FloorScreen.check.editModeIsActive(true);
     FloorScreen.do.clickTable('T3');
@@ -31,13 +31,13 @@ flectra.define('pos_restaurant.tour.FloorScreen', function (require) {
     FloorScreen.do.clickTable('T1');
     FloorScreen.check.selectedTableIs('T1');
 
-    // switching floor in edit mode deactivates edit mode
-    FloorScreen.do.clickFloor('Main Floor');
+    //switchingfloorineditmodedeactivateseditmode
+    FloorScreen.do.clickFloor('MainFloor');
     FloorScreen.check.editModeIsActive(false);
     FloorScreen.do.clickEdit();
     FloorScreen.check.editModeIsActive(true);
 
-    // test add table
+    //testaddtable
     FloorScreen.do.clickAddTable();
     FloorScreen.check.selectedTableIs('T1');
     FloorScreen.do.clickRename();
@@ -46,9 +46,9 @@ flectra.define('pos_restaurant.tour.FloorScreen', function (require) {
     TextInputPopup.do.clickConfirm();
     FloorScreen.check.selectedTableIs('T100');
 
-    // test duplicate table
+    //testduplicatetable
     FloorScreen.do.clickDuplicate();
-    // new table is already named T101
+    //newtableisalreadynamedT101
     FloorScreen.check.selectedTableIs('T101');
     FloorScreen.do.clickRename();
     TextInputPopup.check.isShown();
@@ -56,21 +56,21 @@ flectra.define('pos_restaurant.tour.FloorScreen', function (require) {
     TextInputPopup.do.clickConfirm();
     FloorScreen.check.selectedTableIs('T1111');
 
-    // switch floor, switch back and check if
-    // the new tables are still there
-    FloorScreen.do.clickFloor('Second Floor');
+    //switchfloor,switchbackandcheckif
+    //thenewtablesarestillthere
+    FloorScreen.do.clickFloor('SecondFloor');
     FloorScreen.check.editModeIsActive(false);
     FloorScreen.check.hasTable('T3');
     FloorScreen.check.hasTable('T1');
 
-    FloorScreen.do.clickFloor('Main Floor');
+    FloorScreen.do.clickFloor('MainFloor');
     FloorScreen.check.hasTable('T2');
     FloorScreen.check.hasTable('T4');
     FloorScreen.check.hasTable('T5');
     FloorScreen.check.hasTable('T100');
     FloorScreen.check.hasTable('T1111');
 
-    // test delete table
+    //testdeletetable
     FloorScreen.do.clickEdit();
     FloorScreen.check.editModeIsActive(true);
     FloorScreen.do.clickTable('T2');
@@ -78,32 +78,32 @@ flectra.define('pos_restaurant.tour.FloorScreen', function (require) {
     FloorScreen.do.clickTrash();
     Chrome.do.confirmPopup();
 
-    // change number of seats
+    //changenumberofseats
     FloorScreen.do.clickTable('T4');
     FloorScreen.check.selectedTableIs('T4');
     FloorScreen.do.clickSeats();
-    NumberPopup.do.pressNumpad('Backspace 9');
+    NumberPopup.do.pressNumpad('Backspace9');
     NumberPopup.check.inputShownIs('9');
     NumberPopup.do.clickConfirm();
-    FloorScreen.check.tableSeatIs('T4', '9');
+    FloorScreen.check.tableSeatIs('T4','9');
 
-    // change shape
+    //changeshape
     FloorScreen.do.changeShapeTo('round');
 
-    // Opening product screen in main floor should go back to main floor
+    //Openingproductscreeninmainfloorshouldgobacktomainfloor
     FloorScreen.do.clickEdit();
     FloorScreen.check.editModeIsActive(false);
     FloorScreen.check.tableIsNotSelected('T4');
     FloorScreen.do.clickTable('T4');
     ProductScreen.check.isShown();
-    Chrome.check.backToFloorTextIs('Main Floor', 'T4');
+    Chrome.check.backToFloorTextIs('MainFloor','T4');
     Chrome.do.backToFloor();
 
-    // Opening product screen in second floor should go back to second floor
-    FloorScreen.do.clickFloor('Second Floor');
+    //Openingproductscreeninsecondfloorshouldgobacktosecondfloor
+    FloorScreen.do.clickFloor('SecondFloor');
     FloorScreen.check.hasTable('T3');
     FloorScreen.do.clickTable('T3');
-    Chrome.check.backToFloorTextIs('Second Floor', 'T3');
+    Chrome.check.backToFloorTextIs('SecondFloor','T3');
 
-    Tour.register('FloorScreenTour', { test: true, url: '/pos/ui' }, getSteps());
+    Tour.register('FloorScreenTour',{test:true,url:'/pos/ui'},getSteps());
 });

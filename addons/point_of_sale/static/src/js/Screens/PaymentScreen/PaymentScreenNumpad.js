@@ -1,18 +1,18 @@
-flectra.define('point_of_sale.PaymentScreenNumpad', function(require) {
-    'use strict';
+flectra.define('point_of_sale.PaymentScreenNumpad',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
 
-    class PaymentScreenNumpad extends PosComponent {
-        constructor() {
+    classPaymentScreenNumpadextendsPosComponent{
+        constructor(){
             super(...arguments);
-            this.decimalPoint = this.env._t.database.parameters.decimal_point;
+            this.decimalPoint=this.env._t.database.parameters.decimal_point;
         }
     }
-    PaymentScreenNumpad.template = 'PaymentScreenNumpad';
+    PaymentScreenNumpad.template='PaymentScreenNumpad';
 
     Registries.Component.add(PaymentScreenNumpad);
 
-    return PaymentScreenNumpad;
+    returnPaymentScreenNumpad;
 });

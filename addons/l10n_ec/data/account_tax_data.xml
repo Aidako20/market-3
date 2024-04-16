@@ -1,410 +1,410 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="salevat1" model="account.tax.template">
-        <field name="chart_template_id" ref="ec_chart_template"/>
-        <field name="name">Sale IVA Cobrado (12%)(12.0%)</field>
-        <field name="description">IVA Cobrado 12%</field>
-        <field name="amount">12</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_iva_12"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="salevat1"model="account.tax.template">
+        <fieldname="chart_template_id"ref="ec_chart_template"/>
+        <fieldname="name">SaleIVACobrado(12%)(12.0%)</field>
+        <fieldname="description">IVACobrado12%</field>
+        <fieldname="amount">12</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_iva_12"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210401'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210401'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210401'),
-            }),
-        ]"/>
-    </record>
-
-    <record id="salevat2" model="account.tax.template">
-        <field name="chart_template_id" ref="ec_chart_template"/>
-        <field name="name">Sale IVA Pagado (12%)(12.0%)</field>
-        <field name="description">IVA Pagado 12%</field>
-        <field name="amount">12</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_iva_12"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210401'),
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210401'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210401'),
             }),
         ]"/>
     </record>
 
-    <record id="saleret1" model="account.tax.template">
-        <field name="chart_template_id" ref="ec_chart_template"/>
-        <field name="name">Sale Retencion (8%)(8.0%)</field>
-        <field name="description">Retencion 8%</field>
-        <field name="amount">-8.0</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_ret_8"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="salevat2"model="account.tax.template">
+        <fieldname="chart_template_id"ref="ec_chart_template"/>
+        <fieldname="name">SaleIVAPagado(12%)(12.0%)</field>
+        <fieldname="description">IVAPagado12%</field>
+        <fieldname="amount">12</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_iva_12"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210403'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210401'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210403'),
-            }),
-        ]"/>
-    </record>
-
-    <record id="saleret2" model="account.tax.template">
-        <field name="chart_template_id" ref="ec_chart_template"/>
-        <field name="name">Sale Retencion (30%)(30.0%)</field>
-        <field name="description">Retencion 30%</field>
-        <field name="amount">-30.0</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_ret_30"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210403'),
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210403'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210401'),
             }),
         ]"/>
     </record>
 
-    <record id="saleret3" model="account.tax.template">
-        <field name="chart_template_id" ref="ec_chart_template"/>
-        <field name="name">Sale Retencion (70%)(70.0%)</field>
-        <field name="description">Retencion 70%</field>
-        <field name="amount">-70.0</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_ret_70"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="saleret1"model="account.tax.template">
+        <fieldname="chart_template_id"ref="ec_chart_template"/>
+        <fieldname="name">SaleRetencion(8%)(8.0%)</field>
+        <fieldname="description">Retencion8%</field>
+        <fieldname="amount">-8.0</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_ret_8"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210403'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210403'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210403'),
-            }),
-        ]"/>
-    </record>
-
-    <record id="saleret4" model="account.tax.template">
-        <field name="chart_template_id" ref="ec_chart_template"/>
-        <field name="name">Sale Retencion (100%)(100.0%)</field>
-        <field name="description">Retencion 100%</field>
-        <field name="amount">-100.0</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_ret_100"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210403'),
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210403'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210403'),
             }),
         ]"/>
     </record>
 
-    <record id="purchasevat1" model="account.tax.template">
-        <field name="chart_template_id" ref="ec_chart_template"/>
-        <field name="name">Purchase IVA Cobrado (12%)(12.0%)</field>
-        <field name="description">IVA Cobrado 12%</field>
-        <field name="amount">12</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_iva_12"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="saleret2"model="account.tax.template">
+        <fieldname="chart_template_id"ref="ec_chart_template"/>
+        <fieldname="name">SaleRetencion(30%)(30.0%)</field>
+        <fieldname="description">Retencion30%</field>
+        <fieldname="amount">-30.0</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_ret_30"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210401'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210403'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210401'),
-            }),
-        ]"/>
-    </record>
-
-    <record id="purchasevat2" model="account.tax.template">
-        <field name="chart_template_id" ref="ec_chart_template"/>
-        <field name="name">Purchase IVA Pagado (12%)(12.0%)</field>
-        <field name="description">IVA Pagado 12%</field>
-        <field name="amount">12</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_iva_12"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210401'),
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210401'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210403'),
             }),
         ]"/>
     </record>
 
-    <record id="purchaseret1" model="account.tax.template">
-        <field name="chart_template_id" ref="ec_chart_template"/>
-        <field name="name">Purchase Retencion (8%)(8.0%)</field>
-        <field name="description">Retencion 8%</field>
-        <field name="amount">-8.0</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_ret_8"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="saleret3"model="account.tax.template">
+        <fieldname="chart_template_id"ref="ec_chart_template"/>
+        <fieldname="name">SaleRetencion(70%)(70.0%)</field>
+        <fieldname="description">Retencion70%</field>
+        <fieldname="amount">-70.0</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_ret_70"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210403'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210403'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210403'),
-            }),
-        ]"/>
-    </record>
-
-    <record id="purchaseret2" model="account.tax.template">
-        <field name="chart_template_id" ref="ec_chart_template"/>
-        <field name="name">Purchase Retencion (30%)(30.0%)</field>
-        <field name="description">Retencion 30%</field>
-        <field name="amount">-30.0</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_ret_30"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210403'),
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210403'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210403'),
             }),
         ]"/>
     </record>
 
-    <record id="purchaseret3" model="account.tax.template">
-        <field name="chart_template_id" ref="ec_chart_template"/>
-        <field name="name">Purchase Retencion (70%)(70.0%)</field>
-        <field name="description">Retencion 70%</field>
-        <field name="amount">-70.0</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_ret_70"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="saleret4"model="account.tax.template">
+        <fieldname="chart_template_id"ref="ec_chart_template"/>
+        <fieldname="name">SaleRetencion(100%)(100.0%)</field>
+        <fieldname="description">Retencion100%</field>
+        <fieldname="amount">-100.0</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_ret_100"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210403'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210403'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210403'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210403'),
             }),
         ]"/>
     </record>
 
-    <record id="purchaseret4" model="account.tax.template">
-        <field name="chart_template_id" ref="ec_chart_template"/>
-        <field name="name">Purchase Retencion (100%)(100.0%)</field>
-        <field name="description">Retencion 100%</field>
-        <field name="amount">-100.0</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_ret_100"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="purchasevat1"model="account.tax.template">
+        <fieldname="chart_template_id"ref="ec_chart_template"/>
+        <fieldname="name">PurchaseIVACobrado(12%)(12.0%)</field>
+        <fieldname="description">IVACobrado12%</field>
+        <fieldname="amount">12</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_iva_12"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210403'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210401'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('210403'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210401'),
+            }),
+        ]"/>
+    </record>
+
+    <recordid="purchasevat2"model="account.tax.template">
+        <fieldname="chart_template_id"ref="ec_chart_template"/>
+        <fieldname="name">PurchaseIVAPagado(12%)(12.0%)</field>
+        <fieldname="description">IVAPagado12%</field>
+        <fieldname="amount">12</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_iva_12"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210401'),
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210401'),
+            }),
+        ]"/>
+    </record>
+
+    <recordid="purchaseret1"model="account.tax.template">
+        <fieldname="chart_template_id"ref="ec_chart_template"/>
+        <fieldname="name">PurchaseRetencion(8%)(8.0%)</field>
+        <fieldname="description">Retencion8%</field>
+        <fieldname="amount">-8.0</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_ret_8"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210403'),
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210403'),
+            }),
+        ]"/>
+    </record>
+
+    <recordid="purchaseret2"model="account.tax.template">
+        <fieldname="chart_template_id"ref="ec_chart_template"/>
+        <fieldname="name">PurchaseRetencion(30%)(30.0%)</field>
+        <fieldname="description">Retencion30%</field>
+        <fieldname="amount">-30.0</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_ret_30"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210403'),
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210403'),
+            }),
+        ]"/>
+    </record>
+
+    <recordid="purchaseret3"model="account.tax.template">
+        <fieldname="chart_template_id"ref="ec_chart_template"/>
+        <fieldname="name">PurchaseRetencion(70%)(70.0%)</field>
+        <fieldname="description">Retencion70%</field>
+        <fieldname="amount">-70.0</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_ret_70"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210403'),
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210403'),
+            }),
+        ]"/>
+    </record>
+
+    <recordid="purchaseret4"model="account.tax.template">
+        <fieldname="chart_template_id"ref="ec_chart_template"/>
+        <fieldname="name">PurchaseRetencion(100%)(100.0%)</field>
+        <fieldname="description">Retencion100%</field>
+        <fieldname="amount">-100.0</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_ret_100"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210403'),
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('210403'),
             }),
         ]"/>
     </record>

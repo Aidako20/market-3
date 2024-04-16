@@ -1,82 +1,82 @@
-flectra.define('mail/static/src/models/follower_subtype/follower_subtype.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/follower_subtype/follower_subtype.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr } = require('mail/static/src/model/model_field.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{attr}=require('mail/static/src/model/model_field.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class FollowerSubtype extends dependencies['mail.model'] {
+    classFollowerSubtypeextendsdependencies['mail.model']{
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * @static
-         * @param {Object} data
-         * @returns {Object}
+         *@static
+         *@param{Object}data
+         *@returns{Object}
          */
-        static convertData(data) {
-            const data2 = {};
-            if ('default' in data) {
-                data2.isDefault = data.default;
+        staticconvertData(data){
+            constdata2={};
+            if('default'indata){
+                data2.isDefault=data.default;
             }
-            if ('id' in data) {
-                data2.id = data.id;
+            if('id'indata){
+                data2.id=data.id;
             }
-            if ('internal' in data) {
-                data2.isInternal = data.internal;
+            if('internal'indata){
+                data2.isInternal=data.internal;
             }
-            if ('name' in data) {
-                data2.name = data.name;
+            if('name'indata){
+                data2.name=data.name;
             }
-            if ('parent_model' in data) {
-                data2.parentModel = data.parent_model;
+            if('parent_model'indata){
+                data2.parentModel=data.parent_model;
             }
-            if ('res_model' in data) {
-                data2.resModel = data.res_model;
+            if('res_model'indata){
+                data2.resModel=data.res_model;
             }
-            if ('sequence' in data) {
-                data2.sequence = data.sequence;
+            if('sequence'indata){
+                data2.sequence=data.sequence;
             }
-            return data2;
+            returndata2;
         }
 
         //----------------------------------------------------------------------
-        // Private
+        //Private
         //----------------------------------------------------------------------
 
         /**
-         * @override
+         *@override
          */
-        static _createRecordLocalId(data) {
-            return `${this.modelName}_${data.id}`;
+        static_createRecordLocalId(data){
+            return`${this.modelName}_${data.id}`;
         }
 
     }
 
-    FollowerSubtype.fields = {
-        id: attr(),
-        isDefault: attr({
-            default: false,
+    FollowerSubtype.fields={
+        id:attr(),
+        isDefault:attr({
+            default:false,
         }),
-        isInternal: attr({
-            default: false,
+        isInternal:attr({
+            default:false,
         }),
-        name: attr(),
-        // AKU FIXME: use relation instead
-        parentModel: attr(),
-        // AKU FIXME: use relation instead
-        resModel: attr(),
-        sequence: attr(),
+        name:attr(),
+        //AKUFIXME:userelationinstead
+        parentModel:attr(),
+        //AKUFIXME:userelationinstead
+        resModel:attr(),
+        sequence:attr(),
     };
 
-    FollowerSubtype.modelName = 'mail.follower_subtype';
+    FollowerSubtype.modelName='mail.follower_subtype';
 
-    return FollowerSubtype;
+    returnFollowerSubtype;
 }
 
-registerNewModel('mail.follower_subtype', factory);
+registerNewModel('mail.follower_subtype',factory);
 
 });

@@ -1,29 +1,29 @@
-flectra.define('point_of_sale.OrderDetails', function (require) {
-    'use strict';
+flectra.define('point_of_sale.OrderDetails',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
 
     /**
-     * @props {models.Order} order
+     *@props{models.Order}order
      */
-    class OrderDetails extends PosComponent {
-        get order() {
-            return this.props.order;
+    classOrderDetailsextendsPosComponent{
+        getorder(){
+            returnthis.props.order;
         }
-        get orderlines() {
-            return this.order ? this.order.orderlines.models : [];
+        getorderlines(){
+            returnthis.order?this.order.orderlines.models:[];
         }
-        get total() {
-            return this.env.pos.format_currency(this.order ? this.order.get_total_with_tax() : 0);
+        gettotal(){
+            returnthis.env.pos.format_currency(this.order?this.order.get_total_with_tax():0);
         }
-        get tax() {
-            return this.env.pos.format_currency(this.order ? this.order.get_total_tax() : 0)
+        gettax(){
+            returnthis.env.pos.format_currency(this.order?this.order.get_total_tax():0)
         }
     }
-    OrderDetails.template = 'OrderDetails';
+    OrderDetails.template='OrderDetails';
 
     Registries.Component.add(OrderDetails);
 
-    return OrderDetails;
+    returnOrderDetails;
 });

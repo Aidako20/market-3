@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="view_tree_account_edi_document" model="ir.ui.view">
-            <field name="name">Account.edi.document.tree</field>
-            <field name="model">account.edi.document</field>
-            <field name="arch" type="xml">
-                <tree create="false" delete="false" edit="false">
-                    <field name="edi_format_name" />
-                    <field name="error" />
+        <recordid="view_tree_account_edi_document"model="ir.ui.view">
+            <fieldname="name">Account.edi.document.tree</field>
+            <fieldname="model">account.edi.document</field>
+            <fieldname="arch"type="xml">
+                <treecreate="false"delete="false"edit="false">
+                    <fieldname="edi_format_name"/>
+                    <fieldname="error"/>
                 </tree>
             </field>
         </record>

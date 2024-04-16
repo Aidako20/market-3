@@ -1,1744 +1,1744 @@
-flectra.define('web.field_one_to_many_tests', function (require) {
-"use strict";
+flectra.define('web.field_one_to_many_tests',function(require){
+"usestrict";
 
-var AbstractField = require('web.AbstractField');
-var AbstractStorageService = require('web.AbstractStorageService');
-const ControlPanel = require('web.ControlPanel');
-const fieldRegistry = require('web.field_registry');
-var FormView = require('web.FormView');
-var KanbanRecord = require('web.KanbanRecord');
-var ListRenderer = require('web.ListRenderer');
-var NotificationService = require('web.NotificationService');
-var RamStorage = require('web.RamStorage');
-var relationalFields = require('web.relational_fields');
-var testUtils = require('web.test_utils');
-var fieldUtils = require('web.field_utils');
+varAbstractField=require('web.AbstractField');
+varAbstractStorageService=require('web.AbstractStorageService');
+constControlPanel=require('web.ControlPanel');
+constfieldRegistry=require('web.field_registry');
+varFormView=require('web.FormView');
+varKanbanRecord=require('web.KanbanRecord');
+varListRenderer=require('web.ListRenderer');
+varNotificationService=require('web.NotificationService');
+varRamStorage=require('web.RamStorage');
+varrelationalFields=require('web.relational_fields');
+vartestUtils=require('web.test_utils');
+varfieldUtils=require('web.field_utils');
 
-const AbstractFieldOwl = require('web.AbstractFieldOwl');
-const fieldRegistryOwl = require('web.field_registry_owl');
+constAbstractFieldOwl=require('web.AbstractFieldOwl');
+constfieldRegistryOwl=require('web.field_registry_owl');
 
-const cpHelpers = testUtils.controlPanel;
-var createView = testUtils.createView;
-const { FieldOne2Many } = relationalFields;
+constcpHelpers=testUtils.controlPanel;
+varcreateView=testUtils.createView;
+const{FieldOne2Many}=relationalFields;
 
-QUnit.module('fields', {}, function () {
+QUnit.module('fields',{},function(){
 
-    QUnit.module('relational_fields', {
-        beforeEach: function () {
-            this.data = {
-                partner: {
-                    fields: {
-                        display_name: { string: "Displayed name", type: "char" },
-                        foo: { string: "Foo", type: "char", default: "My little Foo Value" },
-                        bar: { string: "Bar", type: "boolean", default: true },
-                        int_field: { string: "int_field", type: "integer", sortable: true },
-                        qux: { string: "Qux", type: "float", digits: [16, 1] },
-                        p: { string: "one2many field", type: "one2many", relation: 'partner', relation_field: 'trululu' },
-                        turtles: { string: "one2many turtle field", type: "one2many", relation: 'turtle', relation_field: 'turtle_trululu' },
-                        trululu: { string: "Trululu", type: "many2one", relation: 'partner' },
-                        timmy: { string: "pokemon", type: "many2many", relation: 'partner_type' },
-                        product_id: { string: "Product", type: "many2one", relation: 'product' },
-                        color: {
-                            type: "selection",
-                            selection: [['red', "Red"], ['black', "Black"]],
-                            default: 'red',
-                            string: "Color",
+    QUnit.module('relational_fields',{
+        beforeEach:function(){
+            this.data={
+                partner:{
+                    fields:{
+                        display_name:{string:"Displayedname",type:"char"},
+                        foo:{string:"Foo",type:"char",default:"MylittleFooValue"},
+                        bar:{string:"Bar",type:"boolean",default:true},
+                        int_field:{string:"int_field",type:"integer",sortable:true},
+                        qux:{string:"Qux",type:"float",digits:[16,1]},
+                        p:{string:"one2manyfield",type:"one2many",relation:'partner',relation_field:'trululu'},
+                        turtles:{string:"one2manyturtlefield",type:"one2many",relation:'turtle',relation_field:'turtle_trululu'},
+                        trululu:{string:"Trululu",type:"many2one",relation:'partner'},
+                        timmy:{string:"pokemon",type:"many2many",relation:'partner_type'},
+                        product_id:{string:"Product",type:"many2one",relation:'product'},
+                        color:{
+                            type:"selection",
+                            selection:[['red',"Red"],['black',"Black"]],
+                            default:'red',
+                            string:"Color",
                         },
-                        date: { string: "Some Date", type: "date" },
-                        datetime: { string: "Datetime Field", type: 'datetime' },
-                        user_id: { string: "User", type: 'many2one', relation: 'user' },
-                        reference: {
-                            string: "Reference Field", type: 'reference', selection: [
-                                ["product", "Product"], ["partner_type", "Partner Type"], ["partner", "Partner"]]
+                        date:{string:"SomeDate",type:"date"},
+                        datetime:{string:"DatetimeField",type:'datetime'},
+                        user_id:{string:"User",type:'many2one',relation:'user'},
+                        reference:{
+                            string:"ReferenceField",type:'reference',selection:[
+                                ["product","Product"],["partner_type","PartnerType"],["partner","Partner"]]
                         },
                     },
-                    records: [{
-                        id: 1,
-                        display_name: "first record",
-                        bar: true,
-                        foo: "yop",
-                        int_field: 10,
-                        qux: 0.44,
-                        p: [],
-                        turtles: [2],
-                        timmy: [],
-                        trululu: 4,
-                        user_id: 17,
-                        reference: 'product,37',
-                    }, {
-                        id: 2,
-                        display_name: "second record",
-                        bar: true,
-                        foo: "blip",
-                        int_field: 9,
-                        qux: 13,
-                        p: [],
-                        timmy: [],
-                        trululu: 1,
-                        product_id: 37,
-                        date: "2017-01-25",
-                        datetime: "2016-12-12 10:55:05",
-                        user_id: 17,
-                    }, {
-                        id: 4,
-                        display_name: "aaa",
-                        bar: false,
+                    records:[{
+                        id:1,
+                        display_name:"firstrecord",
+                        bar:true,
+                        foo:"yop",
+                        int_field:10,
+                        qux:0.44,
+                        p:[],
+                        turtles:[2],
+                        timmy:[],
+                        trululu:4,
+                        user_id:17,
+                        reference:'product,37',
+                    },{
+                        id:2,
+                        display_name:"secondrecord",
+                        bar:true,
+                        foo:"blip",
+                        int_field:9,
+                        qux:13,
+                        p:[],
+                        timmy:[],
+                        trululu:1,
+                        product_id:37,
+                        date:"2017-01-25",
+                        datetime:"2016-12-1210:55:05",
+                        user_id:17,
+                    },{
+                        id:4,
+                        display_name:"aaa",
+                        bar:false,
                     }],
-                    onchanges: {},
+                    onchanges:{},
                 },
-                product: {
-                    fields: {
-                        name: { string: "Product Name", type: "char" }
+                product:{
+                    fields:{
+                        name:{string:"ProductName",type:"char"}
                     },
-                    records: [{
-                        id: 37,
-                        display_name: "xphone",
-                    }, {
-                        id: 41,
-                        display_name: "xpad",
+                    records:[{
+                        id:37,
+                        display_name:"xphone",
+                    },{
+                        id:41,
+                        display_name:"xpad",
                     }]
                 },
-                partner_type: {
-                    fields: {
-                        name: { string: "Partner Type", type: "char" },
-                        color: { string: "Color index", type: "integer" },
+                partner_type:{
+                    fields:{
+                        name:{string:"PartnerType",type:"char"},
+                        color:{string:"Colorindex",type:"integer"},
                     },
-                    records: [
-                        { id: 12, display_name: "gold", color: 2 },
-                        { id: 14, display_name: "silver", color: 5 },
+                    records:[
+                        {id:12,display_name:"gold",color:2},
+                        {id:14,display_name:"silver",color:5},
                     ]
                 },
-                turtle: {
-                    fields: {
-                        display_name: { string: "Displayed name", type: "char" },
-                        turtle_foo: { string: "Foo", type: "char" },
-                        turtle_bar: { string: "Bar", type: "boolean", default: true },
-                        turtle_int: { string: "int", type: "integer", sortable: true },
-                        turtle_qux: { string: "Qux", type: "float", digits: [16, 1], required: true, default: 1.5 },
-                        turtle_description: { string: "Description", type: "text" },
-                        turtle_trululu: { string: "Trululu", type: "many2one", relation: 'partner' },
-                        turtle_ref: {
-                            string: "Reference", type: 'reference', selection: [
-                                ["product", "Product"], ["partner", "Partner"]]
+                turtle:{
+                    fields:{
+                        display_name:{string:"Displayedname",type:"char"},
+                        turtle_foo:{string:"Foo",type:"char"},
+                        turtle_bar:{string:"Bar",type:"boolean",default:true},
+                        turtle_int:{string:"int",type:"integer",sortable:true},
+                        turtle_qux:{string:"Qux",type:"float",digits:[16,1],required:true,default:1.5},
+                        turtle_description:{string:"Description",type:"text"},
+                        turtle_trululu:{string:"Trululu",type:"many2one",relation:'partner'},
+                        turtle_ref:{
+                            string:"Reference",type:'reference',selection:[
+                                ["product","Product"],["partner","Partner"]]
                         },
-                        product_id: { string: "Product", type: "many2one", relation: 'product', required: true },
-                        partner_ids: { string: "Partner", type: "many2many", relation: 'partner' },
+                        product_id:{string:"Product",type:"many2one",relation:'product',required:true},
+                        partner_ids:{string:"Partner",type:"many2many",relation:'partner'},
                     },
-                    records: [{
-                        id: 1,
-                        display_name: "leonardo",
-                        turtle_bar: true,
-                        turtle_foo: "yop",
-                        partner_ids: [],
-                    }, {
-                        id: 2,
-                        display_name: "donatello",
-                        turtle_bar: true,
-                        turtle_foo: "blip",
-                        turtle_int: 9,
-                        partner_ids: [2, 4],
-                    }, {
-                        id: 3,
-                        display_name: "raphael",
-                        product_id: 37,
-                        turtle_bar: false,
-                        turtle_foo: "kawa",
-                        turtle_int: 21,
-                        turtle_qux: 9.8,
-                        partner_ids: [],
-                        turtle_ref: 'product,37',
+                    records:[{
+                        id:1,
+                        display_name:"leonardo",
+                        turtle_bar:true,
+                        turtle_foo:"yop",
+                        partner_ids:[],
+                    },{
+                        id:2,
+                        display_name:"donatello",
+                        turtle_bar:true,
+                        turtle_foo:"blip",
+                        turtle_int:9,
+                        partner_ids:[2,4],
+                    },{
+                        id:3,
+                        display_name:"raphael",
+                        product_id:37,
+                        turtle_bar:false,
+                        turtle_foo:"kawa",
+                        turtle_int:21,
+                        turtle_qux:9.8,
+                        partner_ids:[],
+                        turtle_ref:'product,37',
                     }],
-                    onchanges: {},
+                    onchanges:{},
                 },
-                user: {
-                    fields: {
-                        name: { string: "Name", type: "char" },
-                        partner_ids: { string: "one2many partners field", type: "one2many", relation: 'partner', relation_field: 'user_id' },
+                user:{
+                    fields:{
+                        name:{string:"Name",type:"char"},
+                        partner_ids:{string:"one2manypartnersfield",type:"one2many",relation:'partner',relation_field:'user_id'},
                     },
-                    records: [{
-                        id: 17,
-                        name: "Aline",
-                        partner_ids: [1, 2],
-                    }, {
-                        id: 19,
-                        name: "Christine",
+                    records:[{
+                        id:17,
+                        name:"Aline",
+                        partner_ids:[1,2],
+                    },{
+                        id:19,
+                        name:"Christine",
                     }]
                 },
             };
         }
-    }, function () {
+    },function(){
         QUnit.module('FieldOne2Many');
 
-        QUnit.test('New record with a o2m also with 2 new records, ordered, and resequenced', async function (assert) {
+        QUnit.test('Newrecordwithao2malsowith2newrecords,ordered,andresequenced',asyncfunction(assert){
             assert.expect(2);
 
-            // Needed to have two new records in a single stroke
-            this.data.partner.onchanges = {
-                foo: function (obj) {
-                    obj.p = [
+            //Neededtohavetwonewrecordsinasinglestroke
+            this.data.partner.onchanges={
+                foo:function(obj){
+                    obj.p=[
                         [5],
-                        [0, 0, { trululu: false }],
-                        [0, 0, { trululu: false }],
+                        [0,0,{trululu:false}],
+                        [0,0,{trululu:false}],
                     ];
                 }
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="foo" />' +
-                    '<field name="p">' +
-                    '<tree editable="bottom" default_order="int_field">' +
-                    '<field name="int_field" widget="handle"/>' +
-                    '<field name="trululu"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="p">'+
+                    '<treeeditable="bottom"default_order="int_field">'+
+                    '<fieldname="int_field"widget="handle"/>'+
+                    '<fieldname="trululu"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                viewOptions: {
-                    mode: 'create',
+                viewOptions:{
+                    mode:'create',
                 },
-                mockRPC: function (route, args) {
-                    assert.step(args.method + ' ' + args.model);
-                    return this._super(route, args);
+                mockRPC:function(route,args){
+                    assert.step(args.method+''+args.model);
+                    returnthis._super(route,args);
                 },
             });
 
-            // change the int_field through drag and drop
-            // that way, we'll trigger the sorting and the name_get
-            // of the lines of "p"
-            await testUtils.dom.dragAndDrop(
+            //changetheint_fieldthroughdraganddrop
+            //thatway,we'lltriggerthesortingandthename_get
+            //ofthelinesof"p"
+            awaittestUtils.dom.dragAndDrop(
                 form.$('.ui-sortable-handle').eq(1),
-                form.$('tbody tr').first(),
-                { position: 'top' }
+                form.$('tbodytr').first(),
+                {position:'top'}
             );
 
-            assert.verifySteps(['onchange partner']);
+            assert.verifySteps(['onchangepartner']);
 
             form.destroy();
         });
 
-        QUnit.test('O2M List with pager, decoration and default_order: add and cancel adding', async function (assert) {
+        QUnit.test('O2MListwithpager,decorationanddefault_order:addandcanceladding',asyncfunction(assert){
             assert.expect(3);
 
-            // The decoration on the list implies that its condition will be evaluated
-            // against the data of the field (actual records *displayed*)
-            // If one data is wrongly formed, it will crash
-            // This test adds then cancels a record in a paged, ordered, and decorated list
-            // That implies prefetching of records for sorting
-            // and evaluation of the decoration against *visible records*
+            //Thedecorationonthelistimpliesthatitsconditionwillbeevaluated
+            //againstthedataofthefield(actualrecords*displayed*)
+            //Ifonedataiswronglyformed,itwillcrash
+            //Thistestaddsthencancelsarecordinapaged,ordered,anddecoratedlist
+            //Thatimpliesprefetchingofrecordsforsorting
+            //andevaluationofthedecorationagainst*visiblerecords*
 
-            this.data.partner.records[0].p = [2, 4];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree editable="bottom" limit="1" decoration-muted="foo != False" default_order="display_name">' +
-                    '<field name="foo" invisible="1"/>' +
-                    '<field name="display_name" />' +
-                    '</tree>' +
-                    '</field>' +
+            this.data.partner.records[0].p=[2,4];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="bottom"limit="1"decoration-muted="foo!=False"default_order="display_name">'+
+                    '<fieldname="foo"invisible="1"/>'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list .o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list.o_field_x2many_list_row_adda'));
 
-            assert.containsN(form, '.o_field_x2many_list .o_data_row', 2,
-                'There should be 2 rows');
+            assert.containsN(form,'.o_field_x2many_list.o_data_row',2,
+                'Thereshouldbe2rows');
 
-            var $expectedSelectedRow = form.$('.o_field_x2many_list .o_data_row').eq(1);
-            var $actualSelectedRow = form.$('.o_selected_row');
-            assert.equal($actualSelectedRow[0], $expectedSelectedRow[0],
-                'The selected row should be the new one');
+            var$expectedSelectedRow=form.$('.o_field_x2many_list.o_data_row').eq(1);
+            var$actualSelectedRow=form.$('.o_selected_row');
+            assert.equal($actualSelectedRow[0],$expectedSelectedRow[0],
+                'Theselectedrowshouldbethenewone');
 
-            // Cancel Creation
-            await testUtils.fields.triggerKeydown($actualSelectedRow.find('input'), 'escape');
-            assert.containsOnce(form, '.o_field_x2many_list .o_data_row',
-                'There should be 1 row');
+            //CancelCreation
+            awaittestUtils.fields.triggerKeydown($actualSelectedRow.find('input'),'escape');
+            assert.containsOnce(form,'.o_field_x2many_list.o_data_row',
+                'Thereshouldbe1row');
 
             form.destroy();
         });
 
-        QUnit.test('O2M with parented m2o and domain on parent.m2o', async function (assert) {
+        QUnit.test('O2Mwithparentedm2oanddomainonparent.m2o',asyncfunction(assert){
             assert.expect(4);
 
-            /* records in an o2m can have a m2o pointing to themselves
-                * in that case, a domain evaluation on that field followed by name_search
-                * shouldn't send virtual_ids to the server
+            /*recordsinano2mcanhaveam2opointingtothemselves
+                *inthatcase,adomainevaluationonthatfieldfollowedbyname_search
+                *shouldn'tsendvirtual_idstotheserver
                 */
 
-            this.data.turtle.fields.parent_id = { string: "Parent", type: "many2one", relation: 'turtle' };
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree>' +
-                    '<field name="parent_id" />' +
-                    '</tree>' +
-                    '</field>' +
+            this.data.turtle.fields.parent_id={string:"Parent",type:"many2one",relation:'turtle'};
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<tree>'+
+                    '<fieldname="parent_id"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                archs: {
-                    'turtle,false,form': '<form><field name="parent_id" domain="[(\'id\', \'in\', parent.turtles)]"/></form>',
+                archs:{
+                    'turtle,false,form':'<form><fieldname="parent_id"domain="[(\'id\',\'in\',parent.turtles)]"/></form>',
                 },
-                mockRPC: function (route, args) {
-                    if (route === '/web/dataset/call_kw/turtle/name_search') {
-                        // We are going to pass twice here
-                        // First time, we really have nothing
-                        // Second time, a virtual_id has been created
-                        assert.deepEqual(args.kwargs.args, [['id', 'in', []]]);
+                mockRPC:function(route,args){
+                    if(route==='/web/dataset/call_kw/turtle/name_search'){
+                        //Wearegoingtopasstwicehere
+                        //Firsttime,wereallyhavenothing
+                        //Secondtime,avirtual_idhasbeencreated
+                        assert.deepEqual(args.kwargs.args,[['id','in',[]]]);
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list[name=turtles] .o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list[name=turtles].o_field_x2many_list_row_adda'));
 
-            await testUtils.fields.many2one.createAndEdit('parent_id');
+            awaittestUtils.fields.many2one.createAndEdit('parent_id');
 
-            var $modal = $('.modal-content');
+            var$modal=$('.modal-content');
 
-            await testUtils.dom.click($modal.eq(1).find('.modal-footer .btn-primary').eq(0));
-            await testUtils.dom.click($modal.eq(0).find('.modal-footer .btn-primary').eq(1));
+            awaittestUtils.dom.click($modal.eq(1).find('.modal-footer.btn-primary').eq(0));
+            awaittestUtils.dom.click($modal.eq(0).find('.modal-footer.btn-primary').eq(1));
 
-            assert.containsOnce(form, '.o_data_row',
-                'The main record should have the new record in its o2m');
+            assert.containsOnce(form,'.o_data_row',
+                'Themainrecordshouldhavethenewrecordinitso2m');
 
-            $modal = $('.modal-content');
-            await testUtils.dom.click($modal.find('.o_field_many2one input'));
+            $modal=$('.modal-content');
+            awaittestUtils.dom.click($modal.find('.o_field_many2oneinput'));
 
             form.destroy();
         });
 
-        QUnit.test('one2many list editable with cell readonly modifier', async function (assert) {
+        QUnit.test('one2manylisteditablewithcellreadonlymodifier',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.partner.records[0].p = [2];
-            this.data.partner.records[1].turtles = [1, 2];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtles" invisible="1"/>' +
-                    '<field name="foo" attrs="{&quot;readonly&quot; : [(&quot;turtles&quot;, &quot;!=&quot;, [])] }"/>' +
-                    '<field name="qux" attrs="{&quot;readonly&quot; : [(&quot;turtles&quot;, &quot;!=&quot;, [])] }"/>' +
-                    '</tree>' +
-                    '</field>' +
+            this.data.partner.records[0].p=[2];
+            this.data.partner.records[1].turtles=[1,2];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtles"invisible="1"/>'+
+                    '<fieldname="foo"attrs="{&quot;readonly&quot;:[(&quot;turtles&quot;,&quot;!=&quot;,[])]}"/>'+
+                    '<fieldname="qux"attrs="{&quot;readonly&quot;:[(&quot;turtles&quot;,&quot;!=&quot;,[])]}"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (route === '/web/dataset/call_kw/partner/write') {
-                        assert.deepEqual(args.args[1].p[1][2], { foo: 'ff', qux: 99 },
-                            'The right values should be written');
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(route==='/web/dataset/call_kw/partner/write'){
+                        assert.deepEqual(args.args[1].p[1][2],{foo:'ff',qux:99},
+                            'Therightvaluesshouldbewritten');
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 }
             });
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            var $targetInput = $('.o_selected_row .o_input[name=foo]');
-            assert.equal($targetInput[0], document.activeElement,
-                'The first input of the line should have the focus');
+            var$targetInput=$('.o_selected_row.o_input[name=foo]');
+            assert.equal($targetInput[0],document.activeElement,
+                'Thefirstinputofthelineshouldhavethefocus');
 
-            // Simulating hitting the 'f' key twice
-            await testUtils.fields.editInput($targetInput, 'f');
-            await testUtils.fields.editInput($targetInput, $targetInput.val() + 'f');
+            //Simulatinghittingthe'f'keytwice
+            awaittestUtils.fields.editInput($targetInput,'f');
+            awaittestUtils.fields.editInput($targetInput,$targetInput.val()+'f');
 
-            assert.equal($targetInput[0], document.activeElement,
-                'The first input of the line should still have the focus');
+            assert.equal($targetInput[0],document.activeElement,
+                'Thefirstinputofthelineshouldstillhavethefocus');
 
-            // Simulating a TAB key
-            await testUtils.fields.triggerKeydown($targetInput, 'tab');
+            //SimulatingaTABkey
+            awaittestUtils.fields.triggerKeydown($targetInput,'tab');
 
-            var $secondTarget = $('.o_selected_row .o_input[name=qux]');
+            var$secondTarget=$('.o_selected_row.o_input[name=qux]');
 
-            assert.equal($secondTarget[0], document.activeElement,
-                'The second input of the line should have the focus after the TAB press');
+            assert.equal($secondTarget[0],document.activeElement,
+                'ThesecondinputofthelineshouldhavethefocusaftertheTABpress');
 
 
-            await testUtils.fields.editInput($secondTarget, 9);
-            await testUtils.fields.editInput($secondTarget, $secondTarget.val() + 9);
+            awaittestUtils.fields.editInput($secondTarget,9);
+            awaittestUtils.fields.editInput($secondTarget,$secondTarget.val()+9);
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
 
             form.destroy();
         });
 
-        QUnit.test('one2many basic properties', async function (assert) {
+        QUnit.test('one2manybasicproperties',asyncfunction(assert){
             assert.expect(6);
 
-            this.data.partner.records[0].p = [2];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<notebook>' +
-                    '<page string="Partner page">' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<field name="foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</page>' +
-                    '</notebook>' +
-                    '</sheet>' +
+            this.data.partner.records[0].p=[2];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<notebook>'+
+                    '<pagestring="Partnerpage">'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</page>'+
+                    '</notebook>'+
+                    '</sheet>'+
                     '</form>',
-                res_id: 1,
-                intercepts: {
-                    load_filters: function (event) {
-                        throw new Error('Should not load filters');
+                res_id:1,
+                intercepts:{
+                    load_filters:function(event){
+                        thrownewError('Shouldnotloadfilters');
                     },
                 },
             });
 
 
-            assert.containsNone(form, 'td.o_list_record_selector',
-                "embedded one2many should not have a selector");
+            assert.containsNone(form,'td.o_list_record_selector',
+                "embeddedone2manyshouldnothaveaselector");
             assert.ok(!form.$('.o_field_x2many_list_row_add').length,
-                "embedded one2many should not be editable");
+                "embeddedone2manyshouldnotbeeditable");
             assert.ok(!form.$('td.o_list_record_remove').length,
-                "embedded one2many records should not have a remove icon");
+                "embeddedone2manyrecordsshouldnothavearemoveicon");
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
             assert.ok(form.$('.o_field_x2many_list_row_add').length,
-                "embedded one2many should now be editable");
+                "embeddedone2manyshouldnowbeeditable");
 
-            assert.hasAttrValue(form.$('.o_field_x2many_list_row_add'), 'colspan', "2",
-                "should have colspan 2 (one for field foo, one for being below remove icon)");
+            assert.hasAttrValue(form.$('.o_field_x2many_list_row_add'),'colspan',"2",
+                "shouldhavecolspan2(oneforfieldfoo,oneforbeingbelowremoveicon)");
 
             assert.ok(form.$('td.o_list_record_remove').length,
-                "embedded one2many records should have a remove icon");
+                "embeddedone2manyrecordsshouldhavearemoveicon");
             form.destroy();
         });
 
-        QUnit.test('transferring class attributes in one2many sub fields', async function (assert) {
+        QUnit.test('transferringclassattributesinone2manysubfields',asyncfunction(assert){
             assert.expect(3);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_foo" class="hey"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_foo"class="hey"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            assert.containsOnce(form, 'td.hey',
-                'should have a td with the desired class');
+            assert.containsOnce(form,'td.hey',
+                'shouldhaveatdwiththedesiredclass');
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            assert.containsOnce(form, 'td.hey',
-                'should have a td with the desired class');
+            assert.containsOnce(form,'td.hey',
+                'shouldhaveatdwiththedesiredclass');
 
-            await testUtils.dom.click(form.$('td.o_data_cell'));
+            awaittestUtils.dom.click(form.$('td.o_data_cell'));
 
-            assert.containsOnce(form, 'input[name="turtle_foo"].hey',
-                'should have an input with the desired class');
+            assert.containsOnce(form,'input[name="turtle_foo"].hey',
+                'shouldhaveaninputwiththedesiredclass');
 
             form.destroy();
         });
 
-        QUnit.test('one2many with date and datetime', async function (assert) {
+        QUnit.test('one2manywithdateanddatetime',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.records[0].p = [2];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<notebook>' +
-                    '<page string="Partner page">' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<field name="date"/>' +
-                    '<field name="datetime"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</page>' +
-                    '</notebook>' +
-                    '</sheet>' +
+            this.data.partner.records[0].p=[2];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<notebook>'+
+                    '<pagestring="Partnerpage">'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="date"/>'+
+                    '<fieldname="datetime"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</page>'+
+                    '</notebook>'+
+                    '</sheet>'+
                     '</form>',
-                res_id: 1,
-                session: {
-                    getTZOffset: function () {
-                        return 120;
+                res_id:1,
+                session:{
+                    getTZOffset:function(){
+                        return120;
                     },
                 },
             });
-            assert.strictEqual(form.$('td:eq(0)').text(), "01/25/2017",
-                "should have formatted the date");
-            assert.strictEqual(form.$('td:eq(1)').text(), "12/12/2016 12:55:05",
-                "should have formatted the datetime");
+            assert.strictEqual(form.$('td:eq(0)').text(),"01/25/2017",
+                "shouldhaveformattedthedate");
+            assert.strictEqual(form.$('td:eq(1)').text(),"12/12/201612:55:05",
+                "shouldhaveformattedthedatetime");
             form.destroy();
         });
 
-        QUnit.test('rendering with embedded one2many', async function (assert) {
+        QUnit.test('renderingwithembeddedone2many',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.records[0].p = [2];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<notebook>' +
-                    '<page string="P page">' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<field name="foo"/>' +
-                    '<field name="bar"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</page>' +
-                    '</notebook>' +
-                    '</sheet>' +
+            this.data.partner.records[0].p=[2];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<notebook>'+
+                    '<pagestring="Ppage">'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="bar"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</page>'+
+                    '</notebook>'+
+                    '</sheet>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            assert.strictEqual(form.$('th:contains(Foo)').length, 1,
-                "embedded one2many should have a column titled according to foo");
-            assert.strictEqual(form.$('td:contains(blip)').length, 1,
-                "embedded one2many should have a cell with relational value");
+            assert.strictEqual(form.$('th:contains(Foo)').length,1,
+                "embeddedone2manyshouldhaveacolumntitledaccordingtofoo");
+            assert.strictEqual(form.$('td:contains(blip)').length,1,
+                "embeddedone2manyshouldhaveacellwithrelationalvalue");
             form.destroy();
         });
 
-        QUnit.test('use the limit attribute in arch (in field o2m inline tree view)', async function (assert) {
+        QUnit.test('usethelimitattributeinarch(infieldo2minlinetreeview)',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.records[0].turtles = [1, 2, 3];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree limit="2">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            this.data.partner.records[0].turtles=[1,2,3];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treelimit="2">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.model === 'turtle') {
-                        assert.deepEqual(args.args[0], [1, 2],
-                            'should only load first 2 records');
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.model==='turtle'){
+                        assert.deepEqual(args.args[0],[1,2],
+                            'shouldonlyloadfirst2records');
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            assert.containsN(form, '.o_data_row', 2,
-                'should display 2 data rows');
+            assert.containsN(form,'.o_data_row',2,
+                'shoulddisplay2datarows');
             form.destroy();
         });
 
-        QUnit.test('use the limit attribute in arch (in field o2m non inline tree view)', async function (assert) {
+        QUnit.test('usethelimitattributeinarch(infieldo2mnoninlinetreeview)',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.records[0].turtles = [1, 2, 3];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles"/>' +
+            this.data.partner.records[0].turtles=[1,2,3];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles"/>'+
                     '</form>',
-                archs: {
-                    'turtle,false,list': '<tree limit="2"><field name="turtle_foo"/></tree>',
+                archs:{
+                    'turtle,false,list':'<treelimit="2"><fieldname="turtle_foo"/></tree>',
                 },
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.model === 'turtle' && args.method === 'read') {
-                        assert.deepEqual(args.args[0], [1, 2],
-                            'should only load first 2 records');
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.model==='turtle'&&args.method==='read'){
+                        assert.deepEqual(args.args[0],[1,2],
+                            'shouldonlyloadfirst2records');
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            assert.containsN(form, '.o_data_row', 2,
-                'should display 2 data rows');
+            assert.containsN(form,'.o_data_row',2,
+                'shoulddisplay2datarows');
             form.destroy();
         });
 
-        QUnit.test('one2many with default_order on view not inline', async function (assert) {
+        QUnit.test('one2manywithdefault_orderonviewnotinline',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.records[0].turtles = [1, 2, 3];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<notebook>' +
-                    '<page string="Turtles">' +
-                    '<field name="turtles"/>' +
-                    '</page>' +
-                    '</notebook>' +
-                    '</sheet>' +
+            this.data.partner.records[0].turtles=[1,2,3];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<notebook>'+
+                    '<pagestring="Turtles">'+
+                    '<fieldname="turtles"/>'+
+                    '</page>'+
+                    '</notebook>'+
+                    '</sheet>'+
                     '</form>',
-                archs: {
-                    'turtle,false,list': '<tree default_order="turtle_foo">' +
-                        '<field name="turtle_int"/>' +
-                        '<field name="turtle_foo"/>' +
+                archs:{
+                    'turtle,false,list':'<treedefault_order="turtle_foo">'+
+                        '<fieldname="turtle_int"/>'+
+                        '<fieldname="turtle_foo"/>'+
                         '</tree>',
                 },
-                res_id: 1,
+                res_id:1,
             });
-            assert.strictEqual(form.$('.o_field_one2many .o_list_view .o_data_row').text(), "9blip21kawa0yop",
-                "the default order should be correctly applied");
+            assert.strictEqual(form.$('.o_field_one2many.o_list_view.o_data_row').text(),"9blip21kawa0yop",
+                "thedefaultordershouldbecorrectlyapplied");
             form.destroy();
         });
 
-        QUnit.test('embedded one2many with widget', async function (assert) {
+        QUnit.test('embeddedone2manywithwidget',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.records[0].p = [2];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<notebook>' +
-                    '<page string="P page">' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<field name="int_field" widget="handle"/>' +
-                    '<field name="foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</page>' +
-                    '</notebook>' +
-                    '</sheet>' +
+            this.data.partner.records[0].p=[2];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<notebook>'+
+                    '<pagestring="Ppage">'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="int_field"widget="handle"/>'+
+                    '<fieldname="foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</page>'+
+                    '</notebook>'+
+                    '</sheet>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            assert.containsOnce(form, 'span.o_row_handle', "should have 1 handles");
+            assert.containsOnce(form,'span.o_row_handle',"shouldhave1handles");
             form.destroy();
         });
 
-        QUnit.test('embedded one2many with handle widget', async function (assert) {
+        QUnit.test('embeddedone2manywithhandlewidget',asyncfunction(assert){
             assert.expect(10);
 
-            var nbConfirmChange = 0;
-            testUtils.mock.patch(ListRenderer, {
-                confirmChange: function () {
+            varnbConfirmChange=0;
+            testUtils.mock.patch(ListRenderer,{
+                confirmChange:function(){
                     nbConfirmChange++;
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            this.data.partner.records[0].turtles = [1, 2, 3];
+            this.data.partner.records[0].turtles=[1,2,3];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<notebook>' +
-                    '<page string="P page">' +
-                    '<field name="turtles">' +
-                    '<tree default_order="turtle_int">' +
-                    '<field name="turtle_int" widget="handle"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</page>' +
-                    '</notebook>' +
-                    '</sheet>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<notebook>'+
+                    '<pagestring="Ppage">'+
+                    '<fieldname="turtles">'+
+                    '<treedefault_order="turtle_int">'+
+                    '<fieldname="turtle_int"widget="handle"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</page>'+
+                    '</notebook>'+
+                    '</sheet>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            testUtils.mock.intercept(form, "field_changed", function (event) {
+            testUtils.mock.intercept(form,"field_changed",function(event){
                 assert.step(event.data.changes.turtles.data.turtle_int.toString());
-            }, true);
+            },true);
 
-            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(), "yopblipkawa",
-                "should have the 3 rows in the correct order");
+            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(),"yopblipkawa",
+                "shouldhavethe3rowsinthecorrectorder");
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(), "yopblipkawa",
-                "should still have the 3 rows in the correct order");
-            assert.strictEqual(nbConfirmChange, 0, "should not have confirmed any change yet");
+            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(),"yopblipkawa",
+                "shouldstillhavethe3rowsinthecorrectorder");
+            assert.strictEqual(nbConfirmChange,0,"shouldnothaveconfirmedanychangeyet");
 
-            // Drag and drop the second line in first position
-            await testUtils.dom.dragAndDrop(
+            //Draganddropthesecondlineinfirstposition
+            awaittestUtils.dom.dragAndDrop(
                 form.$('.ui-sortable-handle').eq(1),
-                form.$('tbody tr').first(),
-                { position: 'top' }
+                form.$('tbodytr').first(),
+                {position:'top'}
             );
 
-            assert.strictEqual(nbConfirmChange, 1, "should have confirmed changes only once");
-            assert.verifySteps(["0", "1"],
-                "sequences values should be incremental starting from the previous minimum one");
+            assert.strictEqual(nbConfirmChange,1,"shouldhaveconfirmedchangesonlyonce");
+            assert.verifySteps(["0","1"],
+                "sequencesvaluesshouldbeincrementalstartingfromthepreviousminimumone");
 
-            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(), "blipyopkawa",
-                "should have the 3 rows in the new order");
+            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(),"blipyopkawa",
+                "shouldhavethe3rowsintheneworder");
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
 
-            assert.deepEqual(_.map(this.data.turtle.records, function (turtle) {
-                return _.pick(turtle, 'id', 'turtle_foo', 'turtle_int');
-            }), [
-                    { id: 1, turtle_foo: "yop", turtle_int: 1 },
-                    { id: 2, turtle_foo: "blip", turtle_int: 0 },
-                    { id: 3, turtle_foo: "kawa", turtle_int: 21 }
-                ], "should have save the changed sequence");
+            assert.deepEqual(_.map(this.data.turtle.records,function(turtle){
+                return_.pick(turtle,'id','turtle_foo','turtle_int');
+            }),[
+                    {id:1,turtle_foo:"yop",turtle_int:1},
+                    {id:2,turtle_foo:"blip",turtle_int:0},
+                    {id:3,turtle_foo:"kawa",turtle_int:21}
+                ],"shouldhavesavethechangedsequence");
 
-            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(), "blipyopkawa",
-                "should still have the 3 rows in the new order");
+            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(),"blipyopkawa",
+                "shouldstillhavethe3rowsintheneworder");
 
             testUtils.mock.unpatch(ListRenderer);
 
             form.destroy();
         });
 
-        QUnit.test('onchange for embedded one2many in a one2many with a second page', async function (assert) {
+        QUnit.test('onchangeforembeddedone2manyinaone2manywithasecondpage',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.turtle.fields.partner_ids.type = 'one2many';
-            this.data.turtle.records[0].partner_ids = [1];
-            // we need a second page, so we set two records and only display one per page
-            this.data.partner.records[0].turtles = [1, 2];
+            this.data.turtle.fields.partner_ids.type='one2many';
+            this.data.turtle.records[0].partner_ids=[1];
+            //weneedasecondpage,sowesettworecordsandonlydisplayoneperpage
+            this.data.partner.records[0].turtles=[1,2];
 
-            this.data.partner.onchanges = {
-                turtles: function (obj) {
-                    obj.turtles = [
+            this.data.partner.onchanges={
+                turtles:function(obj){
+                    obj.turtles=[
                         [5],
-                        [1, 1, {
-                            turtle_foo: "hop",
-                            partner_ids: [[5], [4, 1]],
+                        [1,1,{
+                            turtle_foo:"hop",
+                            partner_ids:[[5],[4,1]],
                         }],
-                        [1, 2, {
-                            turtle_foo: "blip",
-                            partner_ids: [[5], [4, 2], [4, 4]],
+                        [1,2,{
+                            turtle_foo:"blip",
+                            partner_ids:[[5],[4,2],[4,4]],
                         }],
                     ];
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom" limit="1">' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="partner_ids" widget="many2many_tags"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom"limit="1">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="partner_ids"widget="many2many_tags"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'write') {
-                        var expectedResultTurtles = [
-                            [1, 1, {
-                                turtle_foo: "hop",
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='write'){
+                        varexpectedResultTurtles=[
+                            [1,1,{
+                                turtle_foo:"hop",
                             }],
-                            [1, 2, {
-                                partner_ids: [[4, 2, false], [4, 4, false]],
-                                turtle_foo: "blip",
+                            [1,2,{
+                                partner_ids:[[4,2,false],[4,4,false]],
+                                turtle_foo:"blip",
                             }],
                         ];
-                        assert.deepEqual(args.args[1].turtles, expectedResultTurtles,
-                            "the right values should be written");
+                        assert.deepEqual(args.args[1].turtles,expectedResultTurtles,
+                            "therightvaluesshouldbewritten");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 }
             });
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_data_cell').eq(1));
-            var $cell = form.$('.o_selected_row .o_input[name=turtle_foo]');
-            await testUtils.fields.editSelect($cell, "hop");
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_data_cell').eq(1));
+            var$cell=form.$('.o_selected_row.o_input[name=turtle_foo]');
+            awaittestUtils.fields.editSelect($cell,"hop");
+            awaittestUtils.form.clickSave(form);
 
             form.destroy();
         });
 
-        QUnit.test('onchange for embedded one2many in a one2many updated by server', async function (assert) {
-            // here we test that after an onchange, the embedded one2many field has
-            // been updated by a new list of ids by the server response, to this new
-            // list should be correctly sent back at save time
+        QUnit.test('onchangeforembeddedone2manyinaone2manyupdatedbyserver',asyncfunction(assert){
+            //herewetestthatafteranonchange,theembeddedone2manyfieldhas
+            //beenupdatedbyanewlistofidsbytheserverresponse,tothisnew
+            //listshouldbecorrectlysentbackatsavetime
             assert.expect(3);
 
-            this.data.turtle.fields.partner_ids.type = 'one2many';
-            this.data.partner.records[0].turtles = [2];
-            this.data.turtle.records[1].partner_ids = [2];
+            this.data.turtle.fields.partner_ids.type='one2many';
+            this.data.partner.records[0].turtles=[2];
+            this.data.turtle.records[1].partner_ids=[2];
 
-            this.data.partner.onchanges = {
-                turtles: function (obj) {
-                    obj.turtles = [
+            this.data.partner.onchanges={
+                turtles:function(obj){
+                    obj.turtles=[
                         [5],
-                        [1, 2, {
-                            turtle_foo: "hop",
-                            partner_ids: [[5], [4, 2], [4, 4]],
+                        [1,2,{
+                            turtle_foo:"hop",
+                            partner_ids:[[5],[4,2],[4,4]],
                         }],
                     ];
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="partner_ids" widget="many2many_tags"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="partner_ids"widget="many2many_tags"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (route === '/web/dataset/call_kw/partner/write') {
-                        var expectedResultTurtles = [
-                            [1, 2, {
-                                partner_ids: [[4, 2, false], [4, 4, false]],
-                                turtle_foo: "hop",
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(route==='/web/dataset/call_kw/partner/write'){
+                        varexpectedResultTurtles=[
+                            [1,2,{
+                                partner_ids:[[4,2,false],[4,4,false]],
+                                turtle_foo:"hop",
                             }],
                         ];
-                        assert.deepEqual(args.args[1].turtles, expectedResultTurtles,
-                            'The right values should be written');
+                        assert.deepEqual(args.args[1].turtles,expectedResultTurtles,
+                            'Therightvaluesshouldbewritten');
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            assert.deepEqual(form.$('.o_data_cell.o_many2many_tags_cell').text().trim(), "second record",
-                "the partner_ids should be as specified at initialization");
+            assert.deepEqual(form.$('.o_data_cell.o_many2many_tags_cell').text().trim(),"secondrecord",
+                "thepartner_idsshouldbeasspecifiedatinitialization");
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_data_cell').eq(1));
-            var $cell = form.$('.o_selected_row .o_input[name=turtle_foo]');
-            await testUtils.fields.editSelect($cell, "hop");
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_data_cell').eq(1));
+            var$cell=form.$('.o_selected_row.o_input[name=turtle_foo]');
+            awaittestUtils.fields.editSelect($cell,"hop");
+            awaittestUtils.form.clickSave(form);
 
             assert.deepEqual(form.$('.o_data_cell.o_many2many_tags_cell').text().trim().split(/\s+/),
-                ["second", "record", "aaa"],
-                'The partner_ids should have been updated');
+                ["second","record","aaa"],
+                'Thepartner_idsshouldhavebeenupdated');
 
             form.destroy();
         });
 
-        QUnit.test('onchange for embedded one2many with handle widget', async function (assert) {
+        QUnit.test('onchangeforembeddedone2manywithhandlewidget',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.records[0].turtles = [1, 2, 3];
-            var partnerOnchange = 0;
-            this.data.partner.onchanges = {
-                turtles: function () {
+            this.data.partner.records[0].turtles=[1,2,3];
+            varpartnerOnchange=0;
+            this.data.partner.onchanges={
+                turtles:function(){
                     partnerOnchange++;
                 },
             };
-            var turtleOnchange = 0;
-            this.data.turtle.onchanges = {
-                turtle_int: function () {
+            varturtleOnchange=0;
+            this.data.turtle.onchanges={
+                turtle_int:function(){
                     turtleOnchange++;
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<notebook>' +
-                    '<page string="P page">' +
-                    '<field name="turtles">' +
-                    '<tree default_order="turtle_int">' +
-                    '<field name="turtle_int" widget="handle"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</page>' +
-                    '</notebook>' +
-                    '</sheet>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<notebook>'+
+                    '<pagestring="Ppage">'+
+                    '<fieldname="turtles">'+
+                    '<treedefault_order="turtle_int">'+
+                    '<fieldname="turtle_int"widget="handle"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</page>'+
+                    '</notebook>'+
+                    '</sheet>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            // Drag and drop the second line in first position
-            await testUtils.dom.dragAndDrop(
+            //Draganddropthesecondlineinfirstposition
+            awaittestUtils.dom.dragAndDrop(
                 form.$('.ui-sortable-handle').eq(1),
-                form.$('tbody tr').first(),
-                { position: 'top' }
+                form.$('tbodytr').first(),
+                {position:'top'}
             );
 
-            assert.strictEqual(turtleOnchange, 2, "should trigger one onchange per line updated");
-            assert.strictEqual(partnerOnchange, 1, "should trigger only one onchange on the parent");
+            assert.strictEqual(turtleOnchange,2,"shouldtriggeroneonchangeperlineupdated");
+            assert.strictEqual(partnerOnchange,1,"shouldtriggeronlyoneonchangeontheparent");
 
             form.destroy();
         });
 
-        QUnit.test('onchange for embedded one2many with handle widget using same sequence', async function (assert) {
+        QUnit.test('onchangeforembeddedone2manywithhandlewidgetusingsamesequence',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.turtle.records[0].turtle_int = 1;
-            this.data.turtle.records[1].turtle_int = 1;
-            this.data.turtle.records[2].turtle_int = 1;
-            this.data.partner.records[0].turtles = [1, 2, 3];
-            var turtleOnchange = 0;
-            this.data.turtle.onchanges = {
-                turtle_int: function () {
+            this.data.turtle.records[0].turtle_int=1;
+            this.data.turtle.records[1].turtle_int=1;
+            this.data.turtle.records[2].turtle_int=1;
+            this.data.partner.records[0].turtles=[1,2,3];
+            varturtleOnchange=0;
+            this.data.turtle.onchanges={
+                turtle_int:function(){
                     turtleOnchange++;
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<notebook>' +
-                    '<page string="P page">' +
-                    '<field name="turtles">' +
-                    '<tree default_order="turtle_int">' +
-                    '<field name="turtle_int" widget="handle"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</page>' +
-                    '</notebook>' +
-                    '</sheet>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<notebook>'+
+                    '<pagestring="Ppage">'+
+                    '<fieldname="turtles">'+
+                    '<treedefault_order="turtle_int">'+
+                    '<fieldname="turtle_int"widget="handle"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</page>'+
+                    '</notebook>'+
+                    '</sheet>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'write') {
-                        assert.deepEqual(args.args[1].turtles, [[1, 2, { "turtle_int": 1 }], [1, 1, { "turtle_int": 2 }], [1, 3, { "turtle_int": 3 }]],
-                            "should change all lines that have changed (the first one doesn't change because it has the same sequence)");
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='write'){
+                        assert.deepEqual(args.args[1].turtles,[[1,2,{"turtle_int":1}],[1,1,{"turtle_int":2}],[1,3,{"turtle_int":3}]],
+                            "shouldchangealllinesthathavechanged(thefirstonedoesn'tchangebecauseithasthesamesequence)");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
 
-            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(), "yopblipkawa",
-                "should have the 3 rows in the correct order");
+            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(),"yopblipkawa",
+                "shouldhavethe3rowsinthecorrectorder");
 
-            // Drag and drop the second line in first position
-            await testUtils.dom.dragAndDrop(
+            //Draganddropthesecondlineinfirstposition
+            awaittestUtils.dom.dragAndDrop(
                 form.$('.ui-sortable-handle').eq(1),
-                form.$('tbody tr').first(),
-                { position: 'top' }
+                form.$('tbodytr').first(),
+                {position:'top'}
             );
 
-            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(), "blipyopkawa",
-                "should still have the 3 rows in the correct order");
-            assert.strictEqual(turtleOnchange, 3, "should update all lines");
+            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(),"blipyopkawa",
+                "shouldstillhavethe3rowsinthecorrectorder");
+            assert.strictEqual(turtleOnchange,3,"shouldupdatealllines");
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
             form.destroy();
         });
 
-        QUnit.test('onchange (with command 5) for embedded one2many with handle widget', async function (assert) {
+        QUnit.test('onchange(withcommand5)forembeddedone2manywithhandlewidget',asyncfunction(assert){
             assert.expect(3);
 
-            var ids = [];
-            for (var i = 10; i < 50; i++) {
-                var id = 10 + i;
+            varids=[];
+            for(vari=10;i<50;i++){
+                varid=10+i;
                 ids.push(id);
                 this.data.turtle.records.push({
-                    id: id,
-                    turtle_int: 0,
-                    turtle_foo: "#" + id,
+                    id:id,
+                    turtle_int:0,
+                    turtle_foo:"#"+id,
                 });
             }
-            ids.push(1, 2, 3);
-            this.data.partner.records[0].turtles = ids;
-            this.data.partner.onchanges = {
-                turtles: function (obj) {
-                    obj.turtles = [[5]].concat(obj.turtles);
+            ids.push(1,2,3);
+            this.data.partner.records[0].turtles=ids;
+            this.data.partner.onchanges={
+                turtles:function(obj){
+                    obj.turtles=[[5]].concat(obj.turtles);
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<group>' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom" default_order="turtle_int">' +
-                    '<field name="turtle_int" widget="handle"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
-                    '</sheet>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<group>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom"default_order="turtle_int">'+
+                    '<fieldname="turtle_int"widget="handle"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
+                    '</sheet>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            await testUtils.dom.click(form.$('.o_field_widget[name=turtles] .o_pager_next'));
-            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(), "yopblipkawa",
-                "should have the 3 rows in the correct order");
+            awaittestUtils.dom.click(form.$('.o_field_widget[name=turtles].o_pager_next'));
+            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(),"yopblipkawa",
+                "shouldhavethe3rowsinthecorrectorder");
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_one2many .o_list_view tbody tr:first td:first'));
-            await testUtils.fields.editInput(form.$('.o_field_one2many .o_list_view tbody tr:first input:first'), 'blurp');
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_one2many.o_list_viewtbodytr:firsttd:first'));
+            awaittestUtils.fields.editInput(form.$('.o_field_one2many.o_list_viewtbodytr:firstinput:first'),'blurp');
 
-            // Drag and drop the third line in second position
-            await testUtils.dom.dragAndDrop(
+            //Draganddropthethirdlineinsecondposition
+            awaittestUtils.dom.dragAndDrop(
                 form.$('.ui-sortable-handle').eq(2),
-                form.$('.o_field_one2many tbody tr').eq(1),
-                { position: 'top' }
+                form.$('.o_field_one2manytbodytr').eq(1),
+                {position:'top'}
             );
 
-            assert.strictEqual(form.$('.o_data_cell').text(), "blurpkawablip", "should display to record in 'turtle_int' order");
+            assert.strictEqual(form.$('.o_data_cell').text(),"blurpkawablip","shoulddisplaytorecordin'turtle_int'order");
 
-            await testUtils.form.clickSave(form);
-            await testUtils.dom.click(form.$('.o_field_widget[name=turtles] .o_pager_next'));
+            awaittestUtils.form.clickSave(form);
+            awaittestUtils.dom.click(form.$('.o_field_widget[name=turtles].o_pager_next'));
 
-            assert.strictEqual(form.$('.o_data_cell:not(.o_handle_cell)').text(), "blurpkawablip",
-                "should display to record in 'turtle_int' order");
+            assert.strictEqual(form.$('.o_data_cell:not(.o_handle_cell)').text(),"blurpkawablip",
+                "shoulddisplaytorecordin'turtle_int'order");
 
             form.destroy();
         });
 
-        QUnit.test('onchange with modifiers for embedded one2many on the second page', async function (assert) {
+        QUnit.test('onchangewithmodifiersforembeddedone2manyonthesecondpage',asyncfunction(assert){
             assert.expect(7);
 
-            var data = this.data;
-            var ids = [];
-            for (var i = 10; i < 60; i++) {
-                var id = 10 + i;
+            vardata=this.data;
+            varids=[];
+            for(vari=10;i<60;i++){
+                varid=10+i;
                 ids.push(id);
                 data.turtle.records.push({
-                    id: id,
-                    turtle_int: 0,
-                    turtle_foo: "#" + id,
+                    id:id,
+                    turtle_int:0,
+                    turtle_foo:"#"+id,
                 });
             }
-            ids.push(1, 2, 3);
-            data.partner.records[0].turtles = ids;
-            data.partner.onchanges = {
-                turtles: function (obj) {
-                    // TODO: make this test more 'difficult'
-                    // For now, the server only returns UPDATE commands (no LINK TO)
-                    // even though it should do it (for performance reasons)
-                    // var turtles = obj.turtles.splice(0, 20);
+            ids.push(1,2,3);
+            data.partner.records[0].turtles=ids;
+            data.partner.onchanges={
+                turtles:function(obj){
+                    //TODO:makethistestmore'difficult'
+                    //Fornow,theserveronlyreturnsUPDATEcommands(noLINKTO)
+                    //eventhoughitshoulddoit(forperformancereasons)
+                    //varturtles=obj.turtles.splice(0,20);
 
-                    var turtles = [];
+                    varturtles=[];
                     turtles.unshift([5]);
-                    // create UPDATE commands for each records (this is the server
-                    // usual answer for onchange)
-                    for (var k in obj.turtles) {
-                        var change = obj.turtles[k];
-                        var record = _.findWhere(data.turtle.records, { id: change[1] });
-                        if (change[0] === 1) {
-                            _.extend(record, change[2]);
+                    //createUPDATEcommandsforeachrecords(thisistheserver
+                    //usualanswerforonchange)
+                    for(varkinobj.turtles){
+                        varchange=obj.turtles[k];
+                        varrecord=_.findWhere(data.turtle.records,{id:change[1]});
+                        if(change[0]===1){
+                            _.extend(record,change[2]);
                         }
-                        turtles.push([1, record.id, record]);
+                        turtles.push([1,record.id,record]);
                     }
-                    obj.turtles = turtles;
+                    obj.turtles=turtles;
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: data,
-                arch: '<form string="Partners">' +
-                        '<sheet>' +
-                            '<group>' +
-                                '<field name="turtles">' +
-                                    '<tree editable="bottom" default_order="turtle_int" limit="10">' +
-                                        '<field name="turtle_int" widget="handle"/>' +
-                                        '<field name="turtle_foo"/>' +
-                                        '<field name="turtle_qux" attrs="{\'readonly\': [(\'turtle_foo\', \'=\', False)]}"/>' +
-                                   '</tree>' +
-                                '</field>' +
-                            '</group>' +
-                        '</sheet>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:data,
+                arch:'<formstring="Partners">'+
+                        '<sheet>'+
+                            '<group>'+
+                                '<fieldname="turtles">'+
+                                    '<treeeditable="bottom"default_order="turtle_int"limit="10">'+
+                                        '<fieldname="turtle_int"widget="handle"/>'+
+                                        '<fieldname="turtle_foo"/>'+
+                                        '<fieldname="turtle_qux"attrs="{\'readonly\':[(\'turtle_foo\',\'=\',False)]}"/>'+
+                                   '</tree>'+
+                                '</field>'+
+                            '</group>'+
+                        '</sheet>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            assert.equal(form.$('.o_field_one2many .o_list_char').text(), "#20#21#22#23#24#25#26#27#28#29",
-                "should display the records in order");
+            assert.equal(form.$('.o_field_one2many.o_list_char').text(),"#20#21#22#23#24#25#26#27#28#29",
+                "shoulddisplaytherecordsinorder");
 
-            await testUtils.dom.click(form.$('.o_field_one2many .o_list_view tbody tr:first td:first'));
-            await testUtils.fields.editInput(form.$('.o_field_one2many .o_list_view tbody tr:first input:first'), 'blurp');
+            awaittestUtils.dom.click(form.$('.o_field_one2many.o_list_viewtbodytr:firsttd:first'));
+            awaittestUtils.fields.editInput(form.$('.o_field_one2many.o_list_viewtbodytr:firstinput:first'),'blurp');
 
-            // the domain fail if the widget does not use the allready loaded data.
-            await testUtils.form.clickDiscard(form);
+            //thedomainfailifthewidgetdoesnotusetheallreadyloadeddata.
+            awaittestUtils.form.clickDiscard(form);
 
-            assert.equal(form.$('.o_field_one2many .o_list_char').text(), "blurp#21#22#23#24#25#26#27#28#29",
-                "should display the records in order with the changes");
+            assert.equal(form.$('.o_field_one2many.o_list_char').text(),"blurp#21#22#23#24#25#26#27#28#29",
+                "shoulddisplaytherecordsinorderwiththechanges");
 
-            await testUtils.dom.click($('.modal .modal-footer button:first'));
+            awaittestUtils.dom.click($('.modal.modal-footerbutton:first'));
 
-            assert.equal(form.$('.o_field_one2many .o_list_char').text(), "#20#21#22#23#24#25#26#27#28#29",
-                "should cancel changes and display the records in order");
+            assert.equal(form.$('.o_field_one2many.o_list_char').text(),"#20#21#22#23#24#25#26#27#28#29",
+                "shouldcancelchangesanddisplaytherecordsinorder");
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            // Drag and drop the third line in second position
-            await testUtils.dom.dragAndDrop(
+            //Draganddropthethirdlineinsecondposition
+            awaittestUtils.dom.dragAndDrop(
                 form.$('.ui-sortable-handle').eq(2),
-                form.$('.o_field_one2many tbody tr').eq(1),
-                { position: 'top' }
+                form.$('.o_field_one2manytbodytr').eq(1),
+                {position:'top'}
             );
 
-            assert.equal(form.$('.o_field_one2many .o_list_char').text(), "#20#30#31#32#33#34#35#36#37#38",
-                "should display the records in order after resequence (display record with turtle_int=0)");
+            assert.equal(form.$('.o_field_one2many.o_list_char').text(),"#20#30#31#32#33#34#35#36#37#38",
+                "shoulddisplaytherecordsinorderafterresequence(displayrecordwithturtle_int=0)");
 
-            // Drag and drop the third line in second position
-            await testUtils.dom.dragAndDrop(
+            //Draganddropthethirdlineinsecondposition
+            awaittestUtils.dom.dragAndDrop(
                 form.$('.ui-sortable-handle').eq(2),
-                form.$('.o_field_one2many tbody tr').eq(1),
-                { position: 'top' }
+                form.$('.o_field_one2manytbodytr').eq(1),
+                {position:'top'}
             );
 
-            assert.equal(form.$('.o_field_one2many .o_list_char').text(), "#20#39#40#41#42#43#44#45#46#47",
-                "should display the records in order after resequence (display record with turtle_int=0)");
+            assert.equal(form.$('.o_field_one2many.o_list_char').text(),"#20#39#40#41#42#43#44#45#46#47",
+                "shoulddisplaytherecordsinorderafterresequence(displayrecordwithturtle_int=0)");
 
-            await testUtils.form.clickDiscard(form);
+            awaittestUtils.form.clickDiscard(form);
 
-            assert.equal(form.$('.o_field_one2many .o_list_char').text(), "#20#39#40#41#42#43#44#45#46#47",
-                "should display the records in order after resequence");
+            assert.equal(form.$('.o_field_one2many.o_list_char').text(),"#20#39#40#41#42#43#44#45#46#47",
+                "shoulddisplaytherecordsinorderafterresequence");
 
-            await testUtils.dom.click($('.modal .modal-footer button:first'));
+            awaittestUtils.dom.click($('.modal.modal-footerbutton:first'));
 
-            assert.equal(form.$('.o_field_one2many .o_list_char').text(), "#20#21#22#23#24#25#26#27#28#29",
-                "should cancel changes and display the records in order");
+            assert.equal(form.$('.o_field_one2many.o_list_char').text(),"#20#21#22#23#24#25#26#27#28#29",
+                "shouldcancelchangesanddisplaytherecordsinorder");
 
             form.destroy();
         });
 
-        QUnit.test('onchange followed by edition on the second page', async function (assert) {
+        QUnit.test('onchangefollowedbyeditiononthesecondpage',asyncfunction(assert){
             assert.expect(12);
 
-            var ids = [];
-            for (var i = 1; i < 85; i++) {
-                var id = 10 + i;
+            varids=[];
+            for(vari=1;i<85;i++){
+                varid=10+i;
                 ids.push(id);
                 this.data.turtle.records.push({
-                    id: id,
-                    turtle_int: id / 3 | 0,
-                    turtle_foo: "#" + i,
+                    id:id,
+                    turtle_int:id/3|0,
+                    turtle_foo:"#"+i,
                 });
             }
-            ids.splice(41, 0, 1, 2, 3);
-            this.data.partner.records[0].turtles = ids;
-            this.data.partner.onchanges = {
-                turtles: function (obj) {
-                    obj.turtles = [[5]].concat(obj.turtles);
+            ids.splice(41,0,1,2,3);
+            this.data.partner.records[0].turtles=ids;
+            this.data.partner.onchanges={
+                turtles:function(obj){
+                    obj.turtles=[[5]].concat(obj.turtles);
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<group>' +
-                    '<field name="turtles">' +
-                    '<tree editable="top" default_order="turtle_int">' +
-                    '<field name="turtle_int" widget="handle"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
-                    '</sheet>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<group>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top"default_order="turtle_int">'+
+                    '<fieldname="turtle_int"widget="handle"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
+                    '</sheet>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_widget[name=turtles] .o_pager_next'));
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_widget[name=turtles].o_pager_next'));
 
-            await testUtils.dom.click(form.$('.o_field_one2many .o_list_view tbody tr:eq(1) td:first'));
-            await testUtils.fields.editInput(form.$('.o_field_one2many .o_list_view tbody tr:eq(1) input:first'), 'value 1');
-            await testUtils.dom.click(form.$('.o_field_one2many .o_list_view tbody tr:eq(2) td:first'));
-            await testUtils.fields.editInput(form.$('.o_field_one2many .o_list_view tbody tr:eq(2) input:first'), 'value 2');
+            awaittestUtils.dom.click(form.$('.o_field_one2many.o_list_viewtbodytr:eq(1)td:first'));
+            awaittestUtils.fields.editInput(form.$('.o_field_one2many.o_list_viewtbodytr:eq(1)input:first'),'value1');
+            awaittestUtils.dom.click(form.$('.o_field_one2many.o_list_viewtbodytr:eq(2)td:first'));
+            awaittestUtils.fields.editInput(form.$('.o_field_one2many.o_list_viewtbodytr:eq(2)input:first'),'value2');
 
-            assert.containsN(form, '.o_data_row', 40, "should display 40 records");
-            assert.strictEqual(form.$('.o_data_row:has(.o_data_cell:contains(#39))').index(), 0, "should display '#39' at the first line");
+            assert.containsN(form,'.o_data_row',40,"shoulddisplay40records");
+            assert.strictEqual(form.$('.o_data_row:has(.o_data_cell:contains(#39))').index(),0,"shoulddisplay'#39'atthefirstline");
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.containsN(form, '.o_data_row', 40, "should display 39 records and the create line");
-            assert.containsOnce(form, '.o_data_row:first .o_field_char', "should display the create line in first position");
-            assert.strictEqual(form.$('.o_data_row:first .o_field_char').val(), "", "should an empty input");
-            assert.strictEqual(form.$('.o_data_row:has(.o_data_cell:contains(#39))').index(), 1, "should display '#39' at the second line");
+            assert.containsN(form,'.o_data_row',40,"shoulddisplay39recordsandthecreateline");
+            assert.containsOnce(form,'.o_data_row:first.o_field_char',"shoulddisplaythecreatelineinfirstposition");
+            assert.strictEqual(form.$('.o_data_row:first.o_field_char').val(),"","shouldanemptyinput");
+            assert.strictEqual(form.$('.o_data_row:has(.o_data_cell:contains(#39))').index(),1,"shoulddisplay'#39'atthesecondline");
 
-            await testUtils.fields.editInput(form.$('.o_data_row input:first'), 'value 3');
+            awaittestUtils.fields.editInput(form.$('.o_data_rowinput:first'),'value3');
 
-            assert.containsOnce(form, '.o_data_row:first .o_field_char', "should display the create line in first position after onchange");
-            assert.strictEqual(form.$('.o_data_row:has(.o_data_cell:contains(#39))').index(), 1, "should display '#39' at the second line after onchange");
+            assert.containsOnce(form,'.o_data_row:first.o_field_char',"shoulddisplaythecreatelineinfirstpositionafteronchange");
+            assert.strictEqual(form.$('.o_data_row:has(.o_data_cell:contains(#39))').index(),1,"shoulddisplay'#39'atthesecondlineafteronchange");
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.containsN(form, '.o_data_row', 40, "should display 39 records and the create line");
-            assert.containsOnce(form, '.o_data_row:first .o_field_char', "should display the create line in first position");
-            assert.strictEqual(form.$('.o_data_row:has(.o_data_cell:contains(value 3))').index(), 1, "should display the created line at the second position");
-            assert.strictEqual(form.$('.o_data_row:has(.o_data_cell:contains(#39))').index(), 2, "should display '#39' at the third line");
+            assert.containsN(form,'.o_data_row',40,"shoulddisplay39recordsandthecreateline");
+            assert.containsOnce(form,'.o_data_row:first.o_field_char',"shoulddisplaythecreatelineinfirstposition");
+            assert.strictEqual(form.$('.o_data_row:has(.o_data_cell:contains(value3))').index(),1,"shoulddisplaythecreatedlineatthesecondposition");
+            assert.strictEqual(form.$('.o_data_row:has(.o_data_cell:contains(#39))').index(),2,"shoulddisplay'#39'atthethirdline");
 
             form.destroy();
         });
 
-        QUnit.test('onchange followed by edition on the second page (part 2)', async function (assert) {
+        QUnit.test('onchangefollowedbyeditiononthesecondpage(part2)',asyncfunction(assert){
             assert.expect(8);
 
-            var ids = [];
-            for (var i = 1; i < 85; i++) {
-                var id = 10 + i;
+            varids=[];
+            for(vari=1;i<85;i++){
+                varid=10+i;
                 ids.push(id);
                 this.data.turtle.records.push({
-                    id: id,
-                    turtle_int: id / 3 | 0,
-                    turtle_foo: "#" + i,
+                    id:id,
+                    turtle_int:id/3|0,
+                    turtle_foo:"#"+i,
                 });
             }
-            ids.splice(41, 0, 1, 2, 3);
-            this.data.partner.records[0].turtles = ids;
-            this.data.partner.onchanges = {
-                turtles: function (obj) {
-                    obj.turtles = [[5]].concat(obj.turtles);
+            ids.splice(41,0,1,2,3);
+            this.data.partner.records[0].turtles=ids;
+            this.data.partner.onchanges={
+                turtles:function(obj){
+                    obj.turtles=[[5]].concat(obj.turtles);
                 },
             };
 
-            // bottom order
+            //bottomorder
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<group>' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom" default_order="turtle_int">' +
-                    '<field name="turtle_int" widget="handle"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
-                    '</sheet>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<group>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom"default_order="turtle_int">'+
+                    '<fieldname="turtle_int"widget="handle"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
+                    '</sheet>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_widget[name=turtles] .o_pager_next'));
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_widget[name=turtles].o_pager_next'));
 
-            await testUtils.dom.click(form.$('.o_field_one2many .o_list_view tbody tr:eq(1) td:first'));
-            await testUtils.fields.editInput(form.$('.o_field_one2many .o_list_view tbody tr:eq(1) input:first'), 'value 1');
-            await testUtils.dom.click(form.$('.o_field_one2many .o_list_view tbody tr:eq(2) td:first'));
-            await testUtils.fields.editInput(form.$('.o_field_one2many .o_list_view tbody tr:eq(2) input:first'), 'value 2');
+            awaittestUtils.dom.click(form.$('.o_field_one2many.o_list_viewtbodytr:eq(1)td:first'));
+            awaittestUtils.fields.editInput(form.$('.o_field_one2many.o_list_viewtbodytr:eq(1)input:first'),'value1');
+            awaittestUtils.dom.click(form.$('.o_field_one2many.o_list_viewtbodytr:eq(2)td:first'));
+            awaittestUtils.fields.editInput(form.$('.o_field_one2many.o_list_viewtbodytr:eq(2)input:first'),'value2');
 
-            assert.containsN(form, '.o_data_row', 40, "should display 40 records");
-            assert.strictEqual(form.$('.o_data_row:has(.o_data_cell:contains(#77))').index(), 39, "should display '#77' at the last line");
+            assert.containsN(form,'.o_data_row',40,"shoulddisplay40records");
+            assert.strictEqual(form.$('.o_data_row:has(.o_data_cell:contains(#77))').index(),39,"shoulddisplay'#77'atthelastline");
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.containsN(form, '.o_data_row', 41, "should display 41 records and the create line");
-            assert.strictEqual(form.$('.o_data_row:has(.o_data_cell:contains(#76))').index(), 38, "should display '#76' at the penultimate line");
-            assert.strictEqual(form.$('.o_data_row:has(.o_field_char)').index(), 40, "should display the create line at the last position");
+            assert.containsN(form,'.o_data_row',41,"shoulddisplay41recordsandthecreateline");
+            assert.strictEqual(form.$('.o_data_row:has(.o_data_cell:contains(#76))').index(),38,"shoulddisplay'#76'atthepenultimateline");
+            assert.strictEqual(form.$('.o_data_row:has(.o_field_char)').index(),40,"shoulddisplaythecreatelineatthelastposition");
 
-            await testUtils.fields.editInput(form.$('.o_data_row input:first'), 'value 3');
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.fields.editInput(form.$('.o_data_rowinput:first'),'value3');
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.containsN(form, '.o_data_row', 42, "should display 42 records and the create line");
-            assert.strictEqual(form.$('.o_data_row:has(.o_data_cell:contains(#76))').index(), 38, "should display '#76' at the penultimate line");
-            assert.strictEqual(form.$('.o_data_row:has(.o_field_char)').index(), 41, "should display the create line at the last position");
+            assert.containsN(form,'.o_data_row',42,"shoulddisplay42recordsandthecreateline");
+            assert.strictEqual(form.$('.o_data_row:has(.o_data_cell:contains(#76))').index(),38,"shoulddisplay'#76'atthepenultimateline");
+            assert.strictEqual(form.$('.o_data_row:has(.o_field_char)').index(),41,"shoulddisplaythecreatelineatthelastposition");
 
             form.destroy();
         });
 
-        QUnit.test('onchange returning a command 6 for an x2many', async function (assert) {
+        QUnit.test('onchangereturningacommand6foranx2many',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.onchanges = {
-                foo: function (obj) {
-                    obj.turtles = [[6, false, [1, 2, 3]]];
+            this.data.partner.onchanges={
+                foo:function(obj){
+                    obj.turtles=[[6,false,[1,2,3]]];
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                    '<field name="foo"/>' +
-                    '<field name="turtles">' +
-                    '<tree>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="turtles">'+
+                    '<tree>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            assert.containsOnce(form, '.o_data_row',
-                "there should be one record in the relation");
+            assert.containsOnce(form,'.o_data_row',
+                "thereshouldbeonerecordintherelation");
 
-            // change the value of foo to trigger the onchange
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=foo]'), 'some value');
+            //changethevalueoffoototriggertheonchange
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=foo]'),'somevalue');
 
-            assert.containsN(form, '.o_data_row', 3,
-                "there should be three records in the relation");
+            assert.containsN(form,'.o_data_row',3,
+                "thereshouldbethreerecordsintherelation");
 
             form.destroy();
         });
 
-        QUnit.test('x2many fields inside x2manys are fetched after an onchange', async function (assert) {
+        QUnit.test('x2manyfieldsinsidex2manysarefetchedafteranonchange',asyncfunction(assert){
             assert.expect(6);
 
-            this.data.turtle.records[0].partner_ids = [1];
-            this.data.partner.onchanges = {
-                foo: function (obj) {
-                    obj.turtles = [[5], [4, 1], [4, 2], [4, 3]];
+            this.data.turtle.records[0].partner_ids=[1];
+            this.data.partner.onchanges={
+                foo:function(obj){
+                    obj.turtles=[[5],[4,1],[4,2],[4,3]];
                 },
             };
 
-            var checkRPC = false;
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                    '<sheet>' +
-                    '<group>' +
-                    '<field name="foo"/>' +
-                    '<field name="turtles">' +
-                    '<tree>' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="partner_ids" widget="many2many_tags"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
-                    '</sheet>' +
+            varcheckRPC=false;
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                    '<sheet>'+
+                    '<group>'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="turtles">'+
+                    '<tree>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="partner_ids"widget="many2many_tags"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
+                    '</sheet>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    if (checkRPC && args.method === 'read' && args.model === 'partner') {
-                        assert.deepEqual(args.args[1], ['display_name'],
-                            "should only read the display_name for the m2m tags");
-                        assert.deepEqual(args.args[0], [1],
-                            "should only read the display_name of the unknown record");
+                mockRPC:function(route,args){
+                    if(checkRPC&&args.method==='read'&&args.model==='partner'){
+                        assert.deepEqual(args.args[1],['display_name'],
+                            "shouldonlyreadthedisplay_nameforthem2mtags");
+                        assert.deepEqual(args.args[0],[1],
+                            "shouldonlyreadthedisplay_nameoftheunknownrecord");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            assert.containsOnce(form, '.o_data_row',
-                "there should be one record in the relation");
-            assert.strictEqual(form.$('.o_data_row .o_field_widget[name=partner_ids]').text().replace(/\s/g, ''),
-                'secondrecordaaa', "many2many_tags should be correctly displayed");
+            assert.containsOnce(form,'.o_data_row',
+                "thereshouldbeonerecordintherelation");
+            assert.strictEqual(form.$('.o_data_row.o_field_widget[name=partner_ids]').text().replace(/\s/g,''),
+                'secondrecordaaa',"many2many_tagsshouldbecorrectlydisplayed");
 
-            // change the value of foo to trigger the onchange
-            checkRPC = true; // enable flag to check read RPC for the m2m field
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=foo]'), 'some value');
+            //changethevalueoffoototriggertheonchange
+            checkRPC=true;//enableflagtocheckreadRPCforthem2mfield
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=foo]'),'somevalue');
 
-            assert.containsN(form, '.o_data_row', 3,
-                "there should be three records in the relation");
-            assert.strictEqual(form.$('.o_data_row:first .o_field_widget[name=partner_ids]').text().trim(),
-                'first record', "many2many_tags should be correctly displayed");
+            assert.containsN(form,'.o_data_row',3,
+                "thereshouldbethreerecordsintherelation");
+            assert.strictEqual(form.$('.o_data_row:first.o_field_widget[name=partner_ids]').text().trim(),
+                'firstrecord',"many2many_tagsshouldbecorrectlydisplayed");
 
             form.destroy();
         });
 
-        QUnit.test('reference fields inside x2manys are fetched after an onchange', async function (assert) {
+        QUnit.test('referencefieldsinsidex2manysarefetchedafteranonchange',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.turtle.records[1].turtle_ref = 'product,41';
-            this.data.partner.onchanges = {
-                foo: function (obj) {
-                    obj.turtles = [[5], [4, 1], [4, 2], [4, 3]];
+            this.data.turtle.records[1].turtle_ref='product,41';
+            this.data.partner.onchanges={
+                foo:function(obj){
+                    obj.turtles=[[5],[4,1],[4,2],[4,3]];
                 },
             };
 
-            var checkRPC = false;
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                    '<sheet>' +
-                    '<group>' +
-                    '<field name="foo"/>' +
-                    '<field name="turtles">' +
-                    '<tree>' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="turtle_ref" class="ref_field"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
-                    '</sheet>' +
+            varcheckRPC=false;
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                    '<sheet>'+
+                    '<group>'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="turtles">'+
+                    '<tree>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="turtle_ref"class="ref_field"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
+                    '</sheet>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    if (checkRPC && args.method === 'name_get') {
-                        assert.deepEqual(args.args[0], [37],
-                            "should only fetch the name_get of the unknown record");
+                mockRPC:function(route,args){
+                    if(checkRPC&&args.method==='name_get'){
+                        assert.deepEqual(args.args[0],[37],
+                            "shouldonlyfetchthename_getoftheunknownrecord");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            assert.containsOnce(form, '.o_data_row',
-                "there should be one record in the relation");
-            assert.strictEqual(form.$('.ref_field').text().trim(), 'xpad',
-                "reference field should be correctly displayed");
+            assert.containsOnce(form,'.o_data_row',
+                "thereshouldbeonerecordintherelation");
+            assert.strictEqual(form.$('.ref_field').text().trim(),'xpad',
+                "referencefieldshouldbecorrectlydisplayed");
 
-            // change the value of foo to trigger the onchange
-            checkRPC = true; // enable flag to check read RPC for reference field
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=foo]'), 'some value');
+            //changethevalueoffoototriggertheonchange
+            checkRPC=true;//enableflagtocheckreadRPCforreferencefield
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=foo]'),'somevalue');
 
-            assert.containsN(form, '.o_data_row', 3,
-                "there should be three records in the relation");
-            assert.strictEqual(form.$('.ref_field').text().trim(), 'xpadxphone',
-                "reference fields should be correctly displayed");
+            assert.containsN(form,'.o_data_row',3,
+                "thereshouldbethreerecordsintherelation");
+            assert.strictEqual(form.$('.ref_field').text().trim(),'xpadxphone',
+                "referencefieldsshouldbecorrectlydisplayed");
 
             form.destroy();
         });
 
-        QUnit.test('onchange on one2many containing x2many in form view', async function (assert) {
+        QUnit.test('onchangeonone2manycontainingx2manyinformview',asyncfunction(assert){
             assert.expect(16);
 
-            this.data.partner.onchanges = {
-                foo: function (obj) {
-                    obj.turtles = [[0, false, { turtle_foo: 'new record' }]];
+            this.data.partner.onchanges={
+                foo:function(obj){
+                    obj.turtles=[[0,false,{turtle_foo:'newrecord'}]];
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                    '<field name="foo"/>' +
-                    '<field name="turtles">' +
-                    '<tree>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '<form>' +
-                    '<field name="partner_ids">' +
-                    '<tree editable="top">' +
-                    '<field name="foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</form>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="turtles">'+
+                    '<tree>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '<form>'+
+                    '<fieldname="partner_ids">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</form>'+
+                    '</field>'+
                     '</form>',
-                archs: {
-                    'partner,false,list': '<tree><field name="foo"/></tree>',
-                    'partner,false,search': '<search></search>',
+                archs:{
+                    'partner,false,list':'<tree><fieldname="foo"/></tree>',
+                    'partner,false,search':'<search></search>',
                 },
             });
 
 
-            assert.containsOnce(form, '.o_data_row',
-                "the onchange should have created one record in the relation");
+            assert.containsOnce(form,'.o_data_row',
+                "theonchangeshouldhavecreatedonerecordintherelation");
 
-            // open the created o2m record in a form view, and add a m2m subrecord
-            // in its relation
-            await testUtils.dom.click(form.$('.o_data_row'));
+            //openthecreatedo2mrecordinaformview,andaddam2msubrecord
+            //initsrelation
+            awaittestUtils.dom.click(form.$('.o_data_row'));
 
-            assert.strictEqual($('.modal').length, 1, "should have opened a dialog");
-            assert.strictEqual($('.modal .o_data_row').length, 0,
-                "there should be no record in the one2many in the dialog");
+            assert.strictEqual($('.modal').length,1,"shouldhaveopenedadialog");
+            assert.strictEqual($('.modal.o_data_row').length,0,
+                "thereshouldbenorecordintheone2manyinthedialog");
 
-            // add a many2many subrecord
-            await testUtils.dom.click($('.modal .o_field_x2many_list_row_add a'));
+            //addamany2manysubrecord
+            awaittestUtils.dom.click($('.modal.o_field_x2many_list_row_adda'));
 
-            assert.strictEqual($('.modal').length, 2,
-                "should have opened a second dialog");
+            assert.strictEqual($('.modal').length,2,
+                "shouldhaveopenedaseconddialog");
 
-            // select a many2many subrecord
-            await testUtils.dom.click($('.modal:nth(1) .o_list_view .o_data_cell:first'));
+            //selectamany2manysubrecord
+            awaittestUtils.dom.click($('.modal:nth(1).o_list_view.o_data_cell:first'));
 
-            assert.strictEqual($('.modal').length, 1,
-                "second dialog should be closed");
-            assert.strictEqual($('.modal .o_data_row').length, 1,
-                "there should be one record in the one2many in the dialog");
-            assert.containsNone($('.modal'), '.o_x2m_control_panel .o_pager',
-                'm2m pager should be hidden');
+            assert.strictEqual($('.modal').length,1,
+                "seconddialogshouldbeclosed");
+            assert.strictEqual($('.modal.o_data_row').length,1,
+                "thereshouldbeonerecordintheone2manyinthedialog");
+            assert.containsNone($('.modal'),'.o_x2m_control_panel.o_pager',
+                'm2mpagershouldbehidden');
 
-            // click on 'Save & Close'
-            await testUtils.dom.click($('.modal-footer .btn-primary:first'));
+            //clickon'Save&Close'
+            awaittestUtils.dom.click($('.modal-footer.btn-primary:first'));
 
-            assert.strictEqual($('.modal').length, 0, "dialog should be closed");
+            assert.strictEqual($('.modal').length,0,"dialogshouldbeclosed");
 
-            // reopen o2m record, and another m2m subrecord in its relation, but
-            // discard the changes
-            await testUtils.dom.click(form.$('.o_data_row'));
+            //reopeno2mrecord,andanotherm2msubrecordinitsrelation,but
+            //discardthechanges
+            awaittestUtils.dom.click(form.$('.o_data_row'));
 
-            assert.strictEqual($('.modal').length, 1, "should have opened a dialog");
-            assert.strictEqual($('.modal .o_data_row').length, 1,
-                "there should be one record in the one2many in the dialog");
+            assert.strictEqual($('.modal').length,1,"shouldhaveopenedadialog");
+            assert.strictEqual($('.modal.o_data_row').length,1,
+                "thereshouldbeonerecordintheone2manyinthedialog");
 
-            // add another m2m subrecord
-            await testUtils.dom.click($('.modal .o_field_x2many_list_row_add a'));
+            //addanotherm2msubrecord
+            awaittestUtils.dom.click($('.modal.o_field_x2many_list_row_adda'));
 
-            assert.strictEqual($('.modal').length, 2,
-                "should have opened a second dialog");
+            assert.strictEqual($('.modal').length,2,
+                "shouldhaveopenedaseconddialog");
 
-            await testUtils.dom.click($('.modal:nth(1) .o_list_view .o_data_cell:first'));
+            awaittestUtils.dom.click($('.modal:nth(1).o_list_view.o_data_cell:first'));
 
-            assert.strictEqual($('.modal').length, 1,
-                "second dialog should be closed");
-            assert.strictEqual($('.modal .o_data_row').length, 2,
-                "there should be two records in the one2many in the dialog");
+            assert.strictEqual($('.modal').length,1,
+                "seconddialogshouldbeclosed");
+            assert.strictEqual($('.modal.o_data_row').length,2,
+                "thereshouldbetworecordsintheone2manyinthedialog");
 
-            // click on 'Discard'
-            await testUtils.dom.click($('.modal-footer .btn-secondary'));
+            //clickon'Discard'
+            awaittestUtils.dom.click($('.modal-footer.btn-secondary'));
 
-            assert.strictEqual($('.modal').length, 0, "dialog should be closed");
+            assert.strictEqual($('.modal').length,0,"dialogshouldbeclosed");
 
-            // reopen o2m record to check that second changes have properly been discarded
-            await testUtils.dom.click(form.$('.o_data_row'));
+            //reopeno2mrecordtocheckthatsecondchangeshaveproperlybeendiscarded
+            awaittestUtils.dom.click(form.$('.o_data_row'));
 
-            assert.strictEqual($('.modal').length, 1, "should have opened a dialog");
-            assert.strictEqual($('.modal .o_data_row').length, 1,
-                "there should be one record in the one2many in the dialog");
+            assert.strictEqual($('.modal').length,1,"shouldhaveopenedadialog");
+            assert.strictEqual($('.modal.o_data_row').length,1,
+                "thereshouldbeonerecordintheone2manyinthedialog");
 
             form.destroy();
         });
 
-        QUnit.test('onchange on one2many with x2many in list (no widget) and form view (list)', async function (assert) {
+        QUnit.test('onchangeonone2manywithx2manyinlist(nowidget)andformview(list)',asyncfunction(assert){
             assert.expect(6);
 
-            this.data.turtle.fields.turtle_foo.default = "a default value";
-            this.data.partner.onchanges = {
-                foo: function (obj) {
-                  obj.p = [[0, false, { turtles: [[0, false, { turtle_foo: 'hello'}]] }]];
+            this.data.turtle.fields.turtle_foo.default="adefaultvalue";
+            this.data.partner.onchanges={
+                foo:function(obj){
+                  obj.p=[[0,false,{turtles:[[0,false,{turtle_foo:'hello'}]]}]];
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                    '<field name="foo"/>' +
-                        '<field name="p">' +
-                            '<tree>' +
-                                '<field name="turtles"/>' +
-                            '</tree>' +
-                            '<form>' +
-                                '<field name="turtles">' +
-                                    '<tree editable="top">' +
-                                        '<field name="turtle_foo"/>' +
-                                    '</tree>' +
-                                '</field>' +
-                            '</form>' +
-                        '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                    '<fieldname="foo"/>'+
+                        '<fieldname="p">'+
+                            '<tree>'+
+                                '<fieldname="turtles"/>'+
+                            '</tree>'+
+                            '<form>'+
+                                '<fieldname="turtles">'+
+                                    '<treeeditable="top">'+
+                                        '<fieldname="turtle_foo"/>'+
+                                    '</tree>'+
+                                '</field>'+
+                            '</form>'+
+                        '</field>'+
                     '</form>',
             });
 
 
-            assert.containsOnce(form, '.o_data_row',
-                "the onchange should have created one record in the relation");
+            assert.containsOnce(form,'.o_data_row',
+                "theonchangeshouldhavecreatedonerecordintherelation");
 
-            // open the created o2m record in a form view
-            await testUtils.dom.click(form.$('.o_data_row'));
+            //openthecreatedo2mrecordinaformview
+            awaittestUtils.dom.click(form.$('.o_data_row'));
 
-            assert.containsOnce(document.body, '.modal', "should have opened a dialog");
-            assert.containsOnce(document.body, '.modal .o_data_row');
-            assert.strictEqual($('.modal .o_data_row').text(), 'hello');
+            assert.containsOnce(document.body,'.modal',"shouldhaveopenedadialog");
+            assert.containsOnce(document.body,'.modal.o_data_row');
+            assert.strictEqual($('.modal.o_data_row').text(),'hello');
 
-            // add a one2many subrecord and check if the default value is correctly applied
-            await testUtils.dom.click($('.modal .o_field_x2many_list_row_add a'));
+            //addaone2manysubrecordandcheckifthedefaultvalueiscorrectlyapplied
+            awaittestUtils.dom.click($('.modal.o_field_x2many_list_row_adda'));
 
-            assert.containsN(document.body, '.modal .o_data_row', 2);
-            assert.strictEqual($('.modal .o_data_row:first .o_field_widget[name=turtle_foo]').val(),
-                'a default value');
+            assert.containsN(document.body,'.modal.o_data_row',2);
+            assert.strictEqual($('.modal.o_data_row:first.o_field_widget[name=turtle_foo]').val(),
+                'adefaultvalue');
 
             form.destroy();
         });
 
-        QUnit.test('onchange on one2many with x2many in list (many2many_tags) and form view (list)', async function (assert) {
+        QUnit.test('onchangeonone2manywithx2manyinlist(many2many_tags)andformview(list)',asyncfunction(assert){
             assert.expect(6);
 
-            this.data.turtle.fields.turtle_foo.default = "a default value";
-            this.data.partner.onchanges = {
-                foo: function (obj) {
-                  obj.p = [[0, false, { turtles: [[0, false, { turtle_foo: 'hello'}]] }]];
+            this.data.turtle.fields.turtle_foo.default="adefaultvalue";
+            this.data.partner.onchanges={
+                foo:function(obj){
+                  obj.p=[[0,false,{turtles:[[0,false,{turtle_foo:'hello'}]]}]];
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                    '<field name="foo"/>' +
-                        '<field name="p">' +
-                            '<tree>' +
-                                '<field name="turtles" widget="many2many_tags"/>' +
-                            '</tree>' +
-                            '<form>' +
-                                '<field name="turtles">' +
-                                    '<tree editable="top">' +
-                                        '<field name="turtle_foo"/>' +
-                                    '</tree>' +
-                                '</field>' +
-                            '</form>' +
-                        '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                    '<fieldname="foo"/>'+
+                        '<fieldname="p">'+
+                            '<tree>'+
+                                '<fieldname="turtles"widget="many2many_tags"/>'+
+                            '</tree>'+
+                            '<form>'+
+                                '<fieldname="turtles">'+
+                                    '<treeeditable="top">'+
+                                        '<fieldname="turtle_foo"/>'+
+                                    '</tree>'+
+                                '</field>'+
+                            '</form>'+
+                        '</field>'+
                     '</form>',
             });
 
 
-            assert.containsOnce(form, '.o_data_row',
-                "the onchange should have created one record in the relation");
+            assert.containsOnce(form,'.o_data_row',
+                "theonchangeshouldhavecreatedonerecordintherelation");
 
-            // open the created o2m record in a form view
-            await testUtils.dom.click(form.$('.o_data_row'));
+            //openthecreatedo2mrecordinaformview
+            awaittestUtils.dom.click(form.$('.o_data_row'));
 
-            assert.containsOnce(document.body, '.modal', "should have opened a dialog");
-            assert.containsOnce(document.body, '.modal .o_data_row');
-            assert.strictEqual($('.modal .o_data_row').text(), 'hello');
+            assert.containsOnce(document.body,'.modal',"shouldhaveopenedadialog");
+            assert.containsOnce(document.body,'.modal.o_data_row');
+            assert.strictEqual($('.modal.o_data_row').text(),'hello');
 
-            // add a one2many subrecord and check if the default value is correctly applied
-            await testUtils.dom.click($('.modal .o_field_x2many_list_row_add a'));
+            //addaone2manysubrecordandcheckifthedefaultvalueiscorrectlyapplied
+            awaittestUtils.dom.click($('.modal.o_field_x2many_list_row_adda'));
 
-            assert.containsN(document.body, '.modal .o_data_row', 2);
-            assert.strictEqual($('.modal .o_data_row:first .o_field_widget[name=turtle_foo]').val(),
-                'a default value');
+            assert.containsN(document.body,'.modal.o_data_row',2);
+            assert.strictEqual($('.modal.o_data_row:first.o_field_widget[name=turtle_foo]').val(),
+                'adefaultvalue');
 
             form.destroy();
         });
 
-        QUnit.test('embedded one2many with handle widget with minimum setValue calls', async function (assert) {
-            var done = assert.async();
+        QUnit.test('embeddedone2manywithhandlewidgetwithminimumsetValuecalls',asyncfunction(assert){
+            vardone=assert.async();
             assert.expect(20);
 
 
-            this.data.turtle.records[0].turtle_int = 6;
+            this.data.turtle.records[0].turtle_int=6;
             this.data.turtle.records.push({
-                id: 4,
-                turtle_int: 20,
-                turtle_foo: "a1",
-            }, {
-                    id: 5,
-                    turtle_int: 9,
-                    turtle_foo: "a2",
-                }, {
-                    id: 6,
-                    turtle_int: 2,
-                    turtle_foo: "a3",
-                }, {
-                    id: 7,
-                    turtle_int: 11,
-                    turtle_foo: "a4",
+                id:4,
+                turtle_int:20,
+                turtle_foo:"a1",
+            },{
+                    id:5,
+                    turtle_int:9,
+                    turtle_foo:"a2",
+                },{
+                    id:6,
+                    turtle_int:2,
+                    turtle_foo:"a3",
+                },{
+                    id:7,
+                    turtle_int:11,
+                    turtle_foo:"a4",
                 });
-            this.data.partner.records[0].turtles = [1, 2, 3, 4, 5, 6, 7];
+            this.data.partner.records[0].turtles=[1,2,3,4,5,6,7];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<notebook>' +
-                    '<page string="P page">' +
-                    '<field name="turtles">' +
-                    '<tree default_order="turtle_int">' +
-                    '<field name="turtle_int" widget="handle"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</page>' +
-                    '</notebook>' +
-                    '</sheet>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<notebook>'+
+                    '<pagestring="Ppage">'+
+                    '<fieldname="turtles">'+
+                    '<treedefault_order="turtle_int">'+
+                    '<fieldname="turtle_int"widget="handle"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</page>'+
+                    '</notebook>'+
+                    '</sheet>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            testUtils.mock.intercept(form, "field_changed", function (event) {
+            testUtils.mock.intercept(form,"field_changed",function(event){
                 assert.step(String(form.model.get(event.data.changes.turtles.id).res_id));
-            }, true);
+            },true);
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            var positions = [
-                [6, 0, 'top', ['3', '6', '1', '2', '5', '7', '4']], // move the last to the first line
-                [5, 1, 'top', ['7', '6', '1', '2', '5']], // move the penultimate to the second line
-                [2, 5, 'bottom', ['1', '2', '5', '6']], // move the third to the penultimate line
+            varpositions=[
+                [6,0,'top',['3','6','1','2','5','7','4']],//movethelasttothefirstline
+                [5,1,'top',['7','6','1','2','5']],//movethepenultimatetothesecondline
+                [2,5,'bottom',['1','2','5','6']],//movethethirdtothepenultimateline
             ];
-            async function dragAndDrop() {
-                var pos = positions.shift();
+            asyncfunctiondragAndDrop(){
+                varpos=positions.shift();
 
-                await testUtils.dom.dragAndDrop(
+                awaittestUtils.dom.dragAndDrop(
                     form.$('.ui-sortable-handle').eq(pos[0]),
-                    form.$('tbody tr').eq(pos[1]),
-                    { position: pos[2] }
+                    form.$('tbodytr').eq(pos[1]),
+                    {position:pos[2]}
                 );
 
                 assert.verifySteps(pos[3],
-                    "sequences values should be apply from the begin index to the drop index");
+                    "sequencesvaluesshouldbeapplyfromthebeginindextothedropindex");
 
-                if (positions.length) {
+                if(positions.length){
 
-                    setTimeout(dragAndDrop, 10);
+                    setTimeout(dragAndDrop,10);
 
-                } else {
+                }else{
 
-                    assert.deepEqual(_.pluck(form.model.get(form.handle).data.turtles.data, 'data'), [
-                        { id: 3, turtle_foo: "kawa", turtle_int: 2 },
-                        { id: 7, turtle_foo: "a4", turtle_int: 3 },
-                        { id: 1, turtle_foo: "yop", turtle_int: 4 },
-                        { id: 2, turtle_foo: "blip", turtle_int: 5 },
-                        { id: 5, turtle_foo: "a2", turtle_int: 6 },
-                        { id: 6, turtle_foo: "a3", turtle_int: 7 },
-                        { id: 4, turtle_foo: "a1", turtle_int: 8 }
-                    ], "sequences must be apply correctly");
+                    assert.deepEqual(_.pluck(form.model.get(form.handle).data.turtles.data,'data'),[
+                        {id:3,turtle_foo:"kawa",turtle_int:2},
+                        {id:7,turtle_foo:"a4",turtle_int:3},
+                        {id:1,turtle_foo:"yop",turtle_int:4},
+                        {id:2,turtle_foo:"blip",turtle_int:5},
+                        {id:5,turtle_foo:"a2",turtle_int:6},
+                        {id:6,turtle_foo:"a3",turtle_int:7},
+                        {id:4,turtle_foo:"a1",turtle_int:8}
+                    ],"sequencesmustbeapplycorrectly");
 
                     form.destroy();
                     done();
@@ -1748,3862 +1748,3862 @@ QUnit.module('fields', {}, function () {
             dragAndDrop();
         });
 
-        QUnit.test('embedded one2many (editable list) with handle widget', async function (assert) {
+        QUnit.test('embeddedone2many(editablelist)withhandlewidget',asyncfunction(assert){
             assert.expect(8);
 
-            this.data.partner.records[0].p = [1, 2, 4];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<notebook>' +
-                    '<page string="P page">' +
-                    '<field name="p">' +
-                    '<tree editable="top">' +
-                    '<field name="int_field" widget="handle"/>' +
-                    '<field name="foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</page>' +
-                    '</notebook>' +
-                    '</sheet>' +
+            this.data.partner.records[0].p=[1,2,4];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<notebook>'+
+                    '<pagestring="Ppage">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="int_field"widget="handle"/>'+
+                    '<fieldname="foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</page>'+
+                    '</notebook>'+
+                    '</sheet>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            testUtils.mock.intercept(form, "field_changed", function (event) {
+            testUtils.mock.intercept(form,"field_changed",function(event){
                 assert.step(event.data.changes.p.data.int_field.toString());
-            }, true);
+            },true);
 
-            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(), "My little Foo Valueblipyop",
-                "should have the 3 rows in the correct order");
+            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(),"MylittleFooValueblipyop",
+                "shouldhavethe3rowsinthecorrectorder");
 
-            await testUtils.form.clickEdit(form);
-            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(), "My little Foo Valueblipyop",
-                "should still have the 3 rows in the correct order");
+            awaittestUtils.form.clickEdit(form);
+            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(),"MylittleFooValueblipyop",
+                "shouldstillhavethe3rowsinthecorrectorder");
 
-            // Drag and drop the second line in first position
-            await testUtils.dom.dragAndDrop(
+            //Draganddropthesecondlineinfirstposition
+            awaittestUtils.dom.dragAndDrop(
                 form.$('.ui-sortable-handle').eq(1),
-                form.$('tbody tr').first(),
-                { position: 'top' }
+                form.$('tbodytr').first(),
+                {position:'top'}
             );
 
-            assert.verifySteps(["0", "1"],
-                "sequences values should be incremental starting from the previous minimum one");
+            assert.verifySteps(["0","1"],
+                "sequencesvaluesshouldbeincrementalstartingfromthepreviousminimumone");
 
-            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(), "blipMy little Foo Valueyop",
-                "should have the 3 rows in the new order");
+            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(),"blipMylittleFooValueyop",
+                "shouldhavethe3rowsintheneworder");
 
-            await testUtils.dom.click(form.$('tbody tr:first td:first'));
+            awaittestUtils.dom.click(form.$('tbodytr:firsttd:first'));
 
-            assert.strictEqual(form.$('tbody tr:first td.o_data_cell:not(.o_handle_cell) input').val(), "blip",
-                "should edit the correct row");
+            assert.strictEqual(form.$('tbodytr:firsttd.o_data_cell:not(.o_handle_cell)input').val(),"blip",
+                "shouldeditthecorrectrow");
 
-            await testUtils.form.clickSave(form);
-            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(), "blipMy little Foo Valueyop",
-                "should still have the 3 rows in the new order");
+            awaittestUtils.form.clickSave(form);
+            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(),"blipMylittleFooValueyop",
+                "shouldstillhavethe3rowsintheneworder");
 
             form.destroy();
         });
 
-        QUnit.test('one2many field when using the pager', async function (assert) {
+        QUnit.test('one2manyfieldwhenusingthepager',asyncfunction(assert){
             assert.expect(13);
 
-            var ids = [];
-            for (var i = 0; i < 45; i++) {
-                var id = 10 + i;
+            varids=[];
+            for(vari=0;i<45;i++){
+                varid=10+i;
                 ids.push(id);
                 this.data.partner.records.push({
-                    id: id,
-                    display_name: "relational record " + id,
+                    id:id,
+                    display_name:"relationalrecord"+id,
                 });
             }
-            this.data.partner.records[0].p = ids.slice(0, 42);
-            this.data.partner.records[1].p = ids.slice(42);
+            this.data.partner.records[0].p=ids.slice(0,42);
+            this.data.partner.records[1].p=ids.slice(42);
 
-            var count = 0;
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<kanban>' +
-                    '<field name="display_name"/>' +
-                    '<templates>' +
-                    '<t t-name="kanban-box">' +
-                    '<div><t t-esc="record.display_name"/></div>' +
-                    '</t>' +
-                    '</templates>' +
-                    '</kanban>' +
-                    '</field>' +
+            varcount=0;
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<kanban>'+
+                    '<fieldname="display_name"/>'+
+                    '<templates>'+
+                    '<tt-name="kanban-box">'+
+                    '<div><tt-esc="record.display_name"/></div>'+
+                    '</t>'+
+                    '</templates>'+
+                    '</kanban>'+
+                    '</field>'+
                     '</form>',
-                viewOptions: {
-                    ids: [1, 2],
-                    index: 0,
+                viewOptions:{
+                    ids:[1,2],
+                    index:0,
                 },
-                mockRPC: function () {
+                mockRPC:function(){
                     count++;
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                res_id: 1,
+                res_id:1,
             });
 
-            // we are on record 1, which has 90 related record (first 40 should be
-            // displayed), 2 RPCs (read) should have been done, one on the main record
-            // and one for the O2M
-            assert.strictEqual(count, 2, 'two RPCs should have been done');
-            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length, 40,
-                'one2many kanban should contain 40 cards for record 1');
+            //weareonrecord1,whichhas90relatedrecord(first40shouldbe
+            //displayed),2RPCs(read)shouldhavebeendone,oneonthemainrecord
+            //andonefortheO2M
+            assert.strictEqual(count,2,'twoRPCsshouldhavebeendone');
+            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length,40,
+                'one2manykanbanshouldcontain40cardsforrecord1');
 
-            // move to record 2, which has 3 related records (and shouldn't contain the
-            // related records of record 1 anymore). Two additional RPCs should have
-            // been done
-            await cpHelpers.pagerNext(form);
-            assert.strictEqual(count, 4, 'two RPCs should have been done');
-            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length, 3,
-                'one2many kanban should contain 3 cards for record 2');
+            //movetorecord2,whichhas3relatedrecords(andshouldn'tcontainthe
+            //relatedrecordsofrecord1anymore).TwoadditionalRPCsshouldhave
+            //beendone
+            awaitcpHelpers.pagerNext(form);
+            assert.strictEqual(count,4,'twoRPCsshouldhavebeendone');
+            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length,3,
+                'one2manykanbanshouldcontain3cardsforrecord2');
 
-            // move back to record 1, which should contain again its first 40 related
-            // records
-            await cpHelpers.pagerPrevious(form);
-            assert.strictEqual(count, 6, 'two RPCs should have been done');
-            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length, 40,
-                'one2many kanban should contain 40 cards for record 1');
+            //movebacktorecord1,whichshouldcontainagainitsfirst40related
+            //records
+            awaitcpHelpers.pagerPrevious(form);
+            assert.strictEqual(count,6,'twoRPCsshouldhavebeendone');
+            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length,40,
+                'one2manykanbanshouldcontain40cardsforrecord1');
 
-            // move to the second page of the o2m: 1 RPC should have been done to fetch
-            // the 2 subrecords of page 2, and those records should now be displayed
-            await testUtils.dom.click(form.$('.o_x2m_control_panel .o_pager_next'));
-            assert.strictEqual(count, 7, 'one RPC should have been done');
-            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length, 2,
-                'one2many kanban should contain 2 cards for record 1 at page 2');
+            //movetothesecondpageoftheo2m:1RPCshouldhavebeendonetofetch
+            //the2subrecordsofpage2,andthoserecordsshouldnowbedisplayed
+            awaittestUtils.dom.click(form.$('.o_x2m_control_panel.o_pager_next'));
+            assert.strictEqual(count,7,'oneRPCshouldhavebeendone');
+            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length,2,
+                'one2manykanbanshouldcontain2cardsforrecord1atpage2');
 
-            // move to record 2 again and check that everything is correctly updated
-            await cpHelpers.pagerNext(form);
-            assert.strictEqual(count, 9, 'two RPCs should have been done');
-            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length, 3,
-                'one2many kanban should contain 3 cards for record 2');
+            //movetorecord2againandcheckthateverythingiscorrectlyupdated
+            awaitcpHelpers.pagerNext(form);
+            assert.strictEqual(count,9,'twoRPCsshouldhavebeendone');
+            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length,3,
+                'one2manykanbanshouldcontain3cardsforrecord2');
 
-            // move back to record 1 and move to page 2 again: all data should have
-            // been correctly reloaded
-            await cpHelpers.pagerPrevious(form);
-            assert.strictEqual(count, 11, 'two RPCs should have been done');
-            await testUtils.dom.click(form.$('.o_x2m_control_panel .o_pager_next'));
-            assert.strictEqual(count, 12, 'one RPC should have been done');
-            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length, 2,
-                'one2many kanban should contain 2 cards for record 1 at page 2');
+            //movebacktorecord1andmovetopage2again:alldatashouldhave
+            //beencorrectlyreloaded
+            awaitcpHelpers.pagerPrevious(form);
+            assert.strictEqual(count,11,'twoRPCsshouldhavebeendone');
+            awaittestUtils.dom.click(form.$('.o_x2m_control_panel.o_pager_next'));
+            assert.strictEqual(count,12,'oneRPCshouldhavebeendone');
+            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length,2,
+                'one2manykanbanshouldcontain2cardsforrecord1atpage2');
             form.destroy();
         });
 
-        QUnit.test('edition of one2many field with pager', async function (assert) {
+        QUnit.test('editionofone2manyfieldwithpager',asyncfunction(assert){
             assert.expect(31);
 
-            var ids = [];
-            for (var i = 0; i < 45; i++) {
-                var id = 10 + i;
+            varids=[];
+            for(vari=0;i<45;i++){
+                varid=10+i;
                 ids.push(id);
                 this.data.partner.records.push({
-                    id: id,
-                    display_name: "relational record " + id,
+                    id:id,
+                    display_name:"relationalrecord"+id,
                 });
             }
-            this.data.partner.records[0].p = ids;
+            this.data.partner.records[0].p=ids;
 
-            var saveCount = 0;
-            var checkRead = false;
-            var readIDs;
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<kanban>' +
-                    '<field name="display_name"/>' +
-                    '<templates>' +
-                    '<t t-name="kanban-box">' +
-                    '<div class="oe_kanban_global_click">' +
-                    '<a t-if="!read_only_mode" type="delete" class="fa fa-times float-right delete_icon"/>' +
-                    '<span><t t-esc="record.display_name.value"/></span>' +
-                    '</div>' +
-                    '</t>' +
-                    '</templates>' +
-                    '</kanban>' +
-                    '</field>' +
+            varsaveCount=0;
+            varcheckRead=false;
+            varreadIDs;
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<kanban>'+
+                    '<fieldname="display_name"/>'+
+                    '<templates>'+
+                    '<tt-name="kanban-box">'+
+                    '<divclass="oe_kanban_global_click">'+
+                    '<at-if="!read_only_mode"type="delete"class="fafa-timesfloat-rightdelete_icon"/>'+
+                    '<span><tt-esc="record.display_name.value"/></span>'+
+                    '</div>'+
+                    '</t>'+
+                    '</templates>'+
+                    '</kanban>'+
+                    '</field>'+
                     '</form>',
-                archs: {
-                    'partner,false,form': '<form><field name="display_name"/></form>',
+                archs:{
+                    'partner,false,form':'<form><fieldname="display_name"/></form>',
                 },
-                mockRPC: function (route, args) {
-                    if (args.method === 'read' && checkRead) {
-                        readIDs = args.args[0];
-                        checkRead = false;
+                mockRPC:function(route,args){
+                    if(args.method==='read'&&checkRead){
+                        readIDs=args.args[0];
+                        checkRead=false;
                     }
-                    if (args.method === 'write') {
+                    if(args.method==='write'){
                         saveCount++;
-                        var nbCommands = args.args[1].p.length;
-                        var nbLinkCommands = _.filter(args.args[1].p, function (command) {
-                            return command[0] === 4;
+                        varnbCommands=args.args[1].p.length;
+                        varnbLinkCommands=_.filter(args.args[1].p,function(command){
+                            returncommand[0]===4;
                         }).length;
-                        switch (saveCount) {
-                            case 1:
-                                assert.strictEqual(nbCommands, 46,
-                                    "should send 46 commands (one for each record)");
-                                assert.strictEqual(nbLinkCommands, 45,
-                                    "should send a LINK_TO command for each existing record");
-                                assert.deepEqual(args.args[1].p[45], [0, args.args[1].p[45][1], {
-                                    display_name: 'new record',
-                                }], "should sent a CREATE command for the new record");
+                        switch(saveCount){
+                            case1:
+                                assert.strictEqual(nbCommands,46,
+                                    "shouldsend46commands(oneforeachrecord)");
+                                assert.strictEqual(nbLinkCommands,45,
+                                    "shouldsendaLINK_TOcommandforeachexistingrecord");
+                                assert.deepEqual(args.args[1].p[45],[0,args.args[1].p[45][1],{
+                                    display_name:'newrecord',
+                                }],"shouldsentaCREATEcommandforthenewrecord");
                                 break;
-                            case 2:
-                                assert.strictEqual(nbCommands, 46,
-                                    "should send 46 commands");
-                                assert.strictEqual(nbLinkCommands, 45,
-                                    "should send a LINK_TO command for each existing record");
-                                assert.deepEqual(args.args[1].p[45], [2, 10, false],
-                                    "should sent a DELETE command for the deleted record");
+                            case2:
+                                assert.strictEqual(nbCommands,46,
+                                    "shouldsend46commands");
+                                assert.strictEqual(nbLinkCommands,45,
+                                    "shouldsendaLINK_TOcommandforeachexistingrecord");
+                                assert.deepEqual(args.args[1].p[45],[2,10,false],
+                                    "shouldsentaDELETEcommandforthedeletedrecord");
                                 break;
-                            case 3:
-                                assert.strictEqual(nbCommands, 47,
-                                    "should send 47 commands");
-                                assert.strictEqual(nbLinkCommands, 43,
-                                    "should send a LINK_TO command for each existing record");
+                            case3:
+                                assert.strictEqual(nbCommands,47,
+                                    "shouldsend47commands");
+                                assert.strictEqual(nbLinkCommands,43,
+                                    "shouldsendaLINK_TOcommandforeachexistingrecord");
                                 assert.deepEqual(args.args[1].p[43],
-                                    [0, args.args[1].p[43][1], { display_name: 'new record page 1' }],
-                                    "should sent correct CREATE command");
+                                    [0,args.args[1].p[43][1],{display_name:'newrecordpage1'}],
+                                    "shouldsentcorrectCREATEcommand");
                                 assert.deepEqual(args.args[1].p[44],
-                                    [0, args.args[1].p[44][1], { display_name: 'new record page 2' }],
-                                    "should sent correct CREATE command");
+                                    [0,args.args[1].p[44][1],{display_name:'newrecordpage2'}],
+                                    "shouldsentcorrectCREATEcommand");
                                 assert.deepEqual(args.args[1].p[45],
-                                    [2, 11, false],
-                                    "should sent correct DELETE command");
+                                    [2,11,false],
+                                    "shouldsentcorrectDELETEcommand");
                                 assert.deepEqual(args.args[1].p[46],
-                                    [2, 52, false],
-                                    "should sent correct DELETE command");
+                                    [2,52,false],
+                                    "shouldsentcorrectDELETEcommand");
                                 break;
                         }
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                res_id: 1,
+                res_id:1,
             });
 
-            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length, 40,
-                'there should be 40 records on page 1');
-            assert.strictEqual(form.$('.o_x2m_control_panel .o_pager_counter').text().trim(),
-                '1-40 / 45', "pager range should be correct");
+            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length,40,
+                'thereshouldbe40recordsonpage1');
+            assert.strictEqual(form.$('.o_x2m_control_panel.o_pager_counter').text().trim(),
+                '1-40/45',"pagerrangeshouldbecorrect");
 
-            // add a record on page one
-            checkRead = true;
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o-kanban-button-new'));
-            await testUtils.fields.editInput($('.modal input'), 'new record');
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary:first'));
-            // checks
-            assert.strictEqual(readIDs, undefined, "should not have read any record");
-            assert.strictEqual(form.$('span:contains(new record)').length, 0,
-                "new record should be on page 2");
-            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length, 40,
-                'there should be 40 records on page 1');
-            assert.strictEqual(form.$('.o_x2m_control_panel .o_pager_counter').text().trim(),
-                '1-40 / 46', "pager range should be correct");
-            assert.strictEqual(form.$('.o_kanban_record:first span:contains(new record)').length,
-                0, 'new record should not be on page 1');
-            // save
-            await testUtils.form.clickSave(form);
+            //addarecordonpageone
+            checkRead=true;
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o-kanban-button-new'));
+            awaittestUtils.fields.editInput($('.modalinput'),'newrecord');
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary:first'));
+            //checks
+            assert.strictEqual(readIDs,undefined,"shouldnothavereadanyrecord");
+            assert.strictEqual(form.$('span:contains(newrecord)').length,0,
+                "newrecordshouldbeonpage2");
+            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length,40,
+                'thereshouldbe40recordsonpage1');
+            assert.strictEqual(form.$('.o_x2m_control_panel.o_pager_counter').text().trim(),
+                '1-40/46',"pagerrangeshouldbecorrect");
+            assert.strictEqual(form.$('.o_kanban_record:firstspan:contains(newrecord)').length,
+                0,'newrecordshouldnotbeonpage1');
+            //save
+            awaittestUtils.form.clickSave(form);
 
-            // delete a record on page one
-            checkRead = true;
-            await testUtils.form.clickEdit(form);
-            assert.strictEqual(form.$('.o_kanban_record:first span:contains(relational record 10)').length,
-                1, 'first record should be the one with id 10 (next checks rely on that)');
-            await testUtils.dom.click(form.$('.delete_icon:first'));
-            // checks
-            assert.deepEqual(readIDs, [50],
-                "should have read a record (to display 40 records on page 1)");
-            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length, 40,
-                'there should be 40 records on page 1');
-            assert.strictEqual(form.$('.o_x2m_control_panel .o_pager_counter').text().trim(),
-                '1-40 / 45', "pager range should be correct");
-            // save
-            await testUtils.form.clickSave(form);
+            //deletearecordonpageone
+            checkRead=true;
+            awaittestUtils.form.clickEdit(form);
+            assert.strictEqual(form.$('.o_kanban_record:firstspan:contains(relationalrecord10)').length,
+                1,'firstrecordshouldbetheonewithid10(nextchecksrelyonthat)');
+            awaittestUtils.dom.click(form.$('.delete_icon:first'));
+            //checks
+            assert.deepEqual(readIDs,[50],
+                "shouldhavereadarecord(todisplay40recordsonpage1)");
+            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length,40,
+                'thereshouldbe40recordsonpage1');
+            assert.strictEqual(form.$('.o_x2m_control_panel.o_pager_counter').text().trim(),
+                '1-40/45',"pagerrangeshouldbecorrect");
+            //save
+            awaittestUtils.form.clickSave(form);
 
-            // add and delete records in both pages
-            await testUtils.form.clickEdit(form);
-            checkRead = true;
-            readIDs = undefined;
-            // add and delete a record in page 1
-            await testUtils.dom.click(form.$('.o-kanban-button-new'));
-            await testUtils.fields.editInput($('.modal input'), 'new record page 1');
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary:first'));
-            assert.strictEqual(form.$('.o_kanban_record:first span:contains(relational record 11)').length,
-                1, 'first record should be the one with id 11 (next checks rely on that)');
-            await testUtils.dom.click(form.$('.delete_icon:first'));
-            assert.deepEqual(readIDs, [51],
-                "should have read a record (to display 40 records on page 1)");
-            // add and delete a record in page 2
-            await testUtils.dom.click(form.$('.o_x2m_control_panel .o_pager_next'));
-            assert.strictEqual(form.$('.o_kanban_record:first span:contains(relational record 52)').length,
-                1, 'first record should be the one with id 52 (next checks rely on that)');
-            checkRead = true;
-            readIDs = undefined;
-            await testUtils.dom.click(form.$('.delete_icon:first'));
-            await testUtils.dom.click(form.$('.o-kanban-button-new'));
-            await testUtils.fields.editInput($('.modal input'), 'new record page 2');
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary:first'));
-            assert.strictEqual(readIDs, undefined, "should not have read any record");
-            // checks
-            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length, 5,
-                'there should be 5 records on page 2');
-            assert.strictEqual(form.$('.o_x2m_control_panel .o_pager_counter').text().trim(),
-                '41-45 / 45', "pager range should be correct");
-            assert.strictEqual(form.$('.o_kanban_record span:contains(new record page 1)').length,
-                1, 'new records should be on page 2');
-            assert.strictEqual(form.$('.o_kanban_record span:contains(new record page 2)').length,
-                1, 'new records should be on page 2');
-            // save
-            await testUtils.form.clickSave(form);
+            //addanddeleterecordsinbothpages
+            awaittestUtils.form.clickEdit(form);
+            checkRead=true;
+            readIDs=undefined;
+            //addanddeletearecordinpage1
+            awaittestUtils.dom.click(form.$('.o-kanban-button-new'));
+            awaittestUtils.fields.editInput($('.modalinput'),'newrecordpage1');
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary:first'));
+            assert.strictEqual(form.$('.o_kanban_record:firstspan:contains(relationalrecord11)').length,
+                1,'firstrecordshouldbetheonewithid11(nextchecksrelyonthat)');
+            awaittestUtils.dom.click(form.$('.delete_icon:first'));
+            assert.deepEqual(readIDs,[51],
+                "shouldhavereadarecord(todisplay40recordsonpage1)");
+            //addanddeletearecordinpage2
+            awaittestUtils.dom.click(form.$('.o_x2m_control_panel.o_pager_next'));
+            assert.strictEqual(form.$('.o_kanban_record:firstspan:contains(relationalrecord52)').length,
+                1,'firstrecordshouldbetheonewithid52(nextchecksrelyonthat)');
+            checkRead=true;
+            readIDs=undefined;
+            awaittestUtils.dom.click(form.$('.delete_icon:first'));
+            awaittestUtils.dom.click(form.$('.o-kanban-button-new'));
+            awaittestUtils.fields.editInput($('.modalinput'),'newrecordpage2');
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary:first'));
+            assert.strictEqual(readIDs,undefined,"shouldnothavereadanyrecord");
+            //checks
+            assert.strictEqual(form.$('.o_kanban_record:not(".o_kanban_ghost")').length,5,
+                'thereshouldbe5recordsonpage2');
+            assert.strictEqual(form.$('.o_x2m_control_panel.o_pager_counter').text().trim(),
+                '41-45/45',"pagerrangeshouldbecorrect");
+            assert.strictEqual(form.$('.o_kanban_recordspan:contains(newrecordpage1)').length,
+                1,'newrecordsshouldbeonpage2');
+            assert.strictEqual(form.$('.o_kanban_recordspan:contains(newrecordpage2)').length,
+                1,'newrecordsshouldbeonpage2');
+            //save
+            awaittestUtils.form.clickSave(form);
 
             form.destroy();
         });
 
-        QUnit.test('edition of one2many field, with onchange and not inline sub view', async function (assert) {
+        QUnit.test('editionofone2manyfield,withonchangeandnotinlinesubview',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.turtle.onchanges.turtle_int = function (obj) {
-                obj.turtle_foo = String(obj.turtle_int);
+            this.data.turtle.onchanges.turtle_int=function(obj){
+                obj.turtle_foo=String(obj.turtle_int);
             };
-            this.data.partner.onchanges.turtles = function () { };
+            this.data.partner.onchanges.turtles=function(){};
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles"/>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles"/>'+
                     '</form>',
-                archs: {
-                    'turtle,false,list': '<tree><field name="turtle_foo"/></tree>',
-                    'turtle,false,form': '<form><group><field name="turtle_foo"/><field name="turtle_int"/></group></form>',
+                archs:{
+                    'turtle,false,list':'<tree><fieldname="turtle_foo"/></tree>',
+                    'turtle,false,form':'<form><group><fieldname="turtle_foo"/><fieldname="turtle_int"/></group></form>',
                 },
-                mockRPC: function () {
-                    return this._super.apply(this, arguments);
+                mockRPC:function(){
+                    returnthis._super.apply(this,arguments);
                 },
-                res_id: 1,
+                res_id:1,
             });
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput($('input[name="turtle_int"]'), '5');
-            await testUtils.dom.click($('.modal-footer button.btn-primary').first());
-            assert.strictEqual(form.$('tbody tr:eq(1) td.o_data_cell').text(), '5',
-                'should display 5 in the foo field');
-            await testUtils.dom.click(form.$('tbody tr:eq(1) td.o_data_cell'));
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput($('input[name="turtle_int"]'),'5');
+            awaittestUtils.dom.click($('.modal-footerbutton.btn-primary').first());
+            assert.strictEqual(form.$('tbodytr:eq(1)td.o_data_cell').text(),'5',
+                'shoulddisplay5inthefoofield');
+            awaittestUtils.dom.click(form.$('tbodytr:eq(1)td.o_data_cell'));
 
-            await testUtils.fields.editInput($('input[name="turtle_int"]'), '3');
-            await testUtils.dom.click($('.modal-footer button.btn-primary').first());
-            assert.strictEqual(form.$('tbody tr:eq(1) td.o_data_cell').text(), '3',
-                'should now display 3 in the foo field');
+            awaittestUtils.fields.editInput($('input[name="turtle_int"]'),'3');
+            awaittestUtils.dom.click($('.modal-footerbutton.btn-primary').first());
+            assert.strictEqual(form.$('tbodytr:eq(1)td.o_data_cell').text(),'3',
+                'shouldnowdisplay3inthefoofield');
             form.destroy();
         });
 
-        QUnit.test('sorting one2many fields', async function (assert) {
+        QUnit.test('sortingone2manyfields',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.partner.fields.foo.sortable = true;
-            this.data.partner.records.push({ id: 23, foo: "abc" });
-            this.data.partner.records.push({ id: 24, foo: "xyz" });
-            this.data.partner.records.push({ id: 25, foo: "def" });
-            this.data.partner.records[0].p = [23, 24, 25];
+            this.data.partner.fields.foo.sortable=true;
+            this.data.partner.records.push({id:23,foo:"abc"});
+            this.data.partner.records.push({id:24,foo:"xyz"});
+            this.data.partner.records.push({id:25,foo:"def"});
+            this.data.partner.records[0].p=[23,24,25];
 
-            var rpcCount = 0;
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<field name="foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varrpcCount=0;
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function () {
+                res_id:1,
+                mockRPC:function(){
                     rpcCount++;
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            rpcCount = 0;
-            assert.ok(form.$('table tbody tr:eq(2) td:contains(def)').length,
-                "the 3rd record is the one with 'def' value");
-            form.renderer._render = function () {
-                throw "should not render the whole form";
+            rpcCount=0;
+            assert.ok(form.$('tabletbodytr:eq(2)td:contains(def)').length,
+                "the3rdrecordistheonewith'def'value");
+            form.renderer._render=function(){
+                throw"shouldnotrenderthewholeform";
             };
 
-            await testUtils.dom.click(form.$('table thead th:contains(Foo)'));
-            assert.strictEqual(rpcCount, 0,
-                'sort should be in memory, no extra RPCs should have been done');
-            assert.ok(form.$('table tbody tr:eq(2) td:contains(xyz)').length,
-                "the 3rd record is the one with 'xyz' value");
+            awaittestUtils.dom.click(form.$('tabletheadth:contains(Foo)'));
+            assert.strictEqual(rpcCount,0,
+                'sortshouldbeinmemory,noextraRPCsshouldhavebeendone');
+            assert.ok(form.$('tabletbodytr:eq(2)td:contains(xyz)').length,
+                "the3rdrecordistheonewith'xyz'value");
 
-            await testUtils.dom.click(form.$('table thead th:contains(Foo)'));
-            assert.ok(form.$('table tbody tr:eq(2) td:contains(abc)').length,
-                "the 3rd record is the one with 'abc' value");
+            awaittestUtils.dom.click(form.$('tabletheadth:contains(Foo)'));
+            assert.ok(form.$('tabletbodytr:eq(2)td:contains(abc)').length,
+                "the3rdrecordistheonewith'abc'value");
 
             form.destroy();
         });
 
-        QUnit.test('one2many list field edition', async function (assert) {
+        QUnit.test('one2manylistfieldedition',asyncfunction(assert){
             assert.expect(6);
 
             this.data.partner.records.push({
-                id: 3,
-                display_name: "relational record 1",
+                id:3,
+                display_name:"relationalrecord1",
             });
-            this.data.partner.records[1].p = [3];
+            this.data.partner.records[1].p=[3];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree editable="top">' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 2,
+                res_id:2,
             });
 
-            // edit the first line of the o2m
-            assert.strictEqual(form.$('.o_field_one2many tbody td').first().text(), 'relational record 1',
-                "display name of first record in o2m list should be 'relational record 1'");
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_one2many tbody td').first());
-            assert.hasClass(form.$('.o_field_one2many tbody td').first().parent(),'o_selected_row',
-                "first row of o2m should be in edition");
-            await testUtils.fields.editInput(form.$('.o_field_one2many tbody td').first().find('input'), "new value");
-            assert.hasClass(form.$('.o_field_one2many tbody td').first().parent(),'o_selected_row',
-                "first row of o2m should still be in edition");
+            //editthefirstlineoftheo2m
+            assert.strictEqual(form.$('.o_field_one2manytbodytd').first().text(),'relationalrecord1',
+                "displaynameoffirstrecordino2mlistshouldbe'relationalrecord1'");
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_one2manytbodytd').first());
+            assert.hasClass(form.$('.o_field_one2manytbodytd').first().parent(),'o_selected_row',
+                "firstrowofo2mshouldbeinedition");
+            awaittestUtils.fields.editInput(form.$('.o_field_one2manytbodytd').first().find('input'),"newvalue");
+            assert.hasClass(form.$('.o_field_one2manytbodytd').first().parent(),'o_selected_row',
+                "firstrowofo2mshouldstillbeinedition");
 
-            // // leave o2m edition
-            await testUtils.dom.click(form.$el);
-            assert.doesNotHaveClass(form.$('.o_field_one2many tbody td').first().parent(), 'o_selected_row',
-                "first row of o2m should be readonly again");
+            ////leaveo2medition
+            awaittestUtils.dom.click(form.$el);
+            assert.doesNotHaveClass(form.$('.o_field_one2manytbodytd').first().parent(),'o_selected_row',
+                "firstrowofo2mshouldbereadonlyagain");
 
-            // discard changes
-            await testUtils.form.clickDiscard(form);
-            assert.strictEqual(form.$('.o_field_one2many tbody td').first().text(), 'new value',
-                "changes shouldn't have been discarded yet, waiting for user confirmation");
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary'));
-            assert.strictEqual(form.$('.o_field_one2many tbody td').first().text(), 'relational record 1',
-                "display name of first record in o2m list should be 'relational record 1'");
+            //discardchanges
+            awaittestUtils.form.clickDiscard(form);
+            assert.strictEqual(form.$('.o_field_one2manytbodytd').first().text(),'newvalue',
+                "changesshouldn'thavebeendiscardedyet,waitingforuserconfirmation");
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary'));
+            assert.strictEqual(form.$('.o_field_one2manytbodytd').first().text(),'relationalrecord1',
+                "displaynameoffirstrecordino2mlistshouldbe'relationalrecord1'");
 
-            // edit again and save
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_one2many tbody td').first());
-            await testUtils.fields.editInput(form.$('.o_field_one2many tbody td').first().find('input'), "new value");
-            await testUtils.dom.click(form.$el);
-            await testUtils.form.clickSave(form);
-            // FIXME: this next test doesn't pass as the save of updates of
-            // relational data is temporarily disabled
-            // assert.strictEqual(form.$('.o_field_one2many tbody td').first().text(), 'new value',
-            //     "display name of first record in o2m list should be 'new value'");
+            //editagainandsave
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_one2manytbodytd').first());
+            awaittestUtils.fields.editInput(form.$('.o_field_one2manytbodytd').first().find('input'),"newvalue");
+            awaittestUtils.dom.click(form.$el);
+            awaittestUtils.form.clickSave(form);
+            //FIXME:thisnexttestdoesn'tpassasthesaveofupdatesof
+            //relationaldataistemporarilydisabled
+            //assert.strictEqual(form.$('.o_field_one2manytbodytd').first().text(),'newvalue',
+            //    "displaynameoffirstrecordino2mlistshouldbe'newvalue'");
 
             form.destroy();
         });
 
-        QUnit.test('one2many list: create action disabled', async function (assert) {
+        QUnit.test('one2manylist:createactiondisabled',asyncfunction(assert){
             assert.expect(2);
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree create="0">' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treecreate="0">'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
             assert.ok(!form.$('.o_field_x2many_list_row_add').length,
-                '"Add an item" link should not be available in readonly');
+                '"Addanitem"linkshouldnotbeavailableinreadonly');
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
             assert.ok(!form.$('.o_field_x2many_list_row_add').length,
-                '"Add an item" link should not be available in readonly');
+                '"Addanitem"linkshouldnotbeavailableinreadonly');
             form.destroy();
         });
 
-        QUnit.test('one2many list: conditional create/delete actions', async function (assert) {
+        QUnit.test('one2manylist:conditionalcreate/deleteactions',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.partner.records[0].p = [2, 4];
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            this.data.partner.records[0].p=[2,4];
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="bar"/>
-                        <field name="p" options="{'create': [('bar', '=', True)], 'delete': [('bar', '=', True)]}">
+                        <fieldname="bar"/>
+                        <fieldname="p"options="{'create':[('bar','=',True)],'delete':[('bar','=',True)]}">
                             <tree>
-                                <field name="display_name"/>
+                                <fieldname="display_name"/>
                             </tree>
                         </field>
                     </form>`,
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            // bar is true -> create and delete action are available
-            assert.containsOnce(form, '.o_field_x2many_list_row_add',
-                '"Add an item" link should be available');
-            assert.hasClass(form.$('td.o_list_record_remove button').first(), 'fa fa-trash-o',
-                "should have trash bin icons");
+            //baristrue->createanddeleteactionareavailable
+            assert.containsOnce(form,'.o_field_x2many_list_row_add',
+                '"Addanitem"linkshouldbeavailable');
+            assert.hasClass(form.$('td.o_list_record_removebutton').first(),'fafa-trash-o',
+                "shouldhavetrashbinicons");
 
-            // set bar to false -> create and delete action are no longer available
-            await testUtils.dom.click(form.$('.o_field_widget[name="bar"] input').first());
+            //setbartofalse->createanddeleteactionarenolongeravailable
+            awaittestUtils.dom.click(form.$('.o_field_widget[name="bar"]input').first());
 
-            assert.containsNone(form, '.o_field_x2many_list_row_add',
-                '"Add an item" link should not be available if bar field is False');
-            assert.containsNone(form, 'td.o_list_record_remove button',
-                "should not have trash bin icons if bar field is False");
+            assert.containsNone(form,'.o_field_x2many_list_row_add',
+                '"Addanitem"linkshouldnotbeavailableifbarfieldisFalse');
+            assert.containsNone(form,'td.o_list_record_removebutton',
+                "shouldnothavetrashbiniconsifbarfieldisFalse");
 
             form.destroy();
         });
 
-        QUnit.test('one2many list: unlink two records', async function (assert) {
+        QUnit.test('one2manylist:unlinktworecords',asyncfunction(assert){
             assert.expect(8);
-            this.data.partner.records[0].p = [1, 2, 4];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p" widget="many2many">' +
-                    '<tree>' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '</field>' +
+            this.data.partner.records[0].p=[1,2,4];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p"widget="many2many">'+
+                    '<tree>'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (route === '/web/dataset/call_kw/partner/write') {
-                        var commands = args.args[1].p;
-                        assert.strictEqual(commands.length, 3,
-                            'should have generated three commands');
-                        assert.ok(commands[0][0] === 4 && commands[0][1] === 2,
-                            'should have generated the command 4 (LINK_TO) with id 4');
-                        assert.ok(commands[1][0] === 4 && commands[1][1] === 4,
-                            'should have generated the command 4 (LINK_TO) with id 4');
-                        assert.ok(commands[2][0] === 3 && commands[2][1] === 1,
-                            'should have generated the command 3 (UNLINK) with id 1');
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(route==='/web/dataset/call_kw/partner/write'){
+                        varcommands=args.args[1].p;
+                        assert.strictEqual(commands.length,3,
+                            'shouldhavegeneratedthreecommands');
+                        assert.ok(commands[0][0]===4&&commands[0][1]===2,
+                            'shouldhavegeneratedthecommand4(LINK_TO)withid4');
+                        assert.ok(commands[1][0]===4&&commands[1][1]===4,
+                            'shouldhavegeneratedthecommand4(LINK_TO)withid4');
+                        assert.ok(commands[2][0]===3&&commands[2][1]===1,
+                            'shouldhavegeneratedthecommand3(UNLINK)withid1');
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                archs: {
+                archs:{
                     'partner,false,form':
-                        '<form string="Partner"><field name="display_name"/></form>',
+                        '<formstring="Partner"><fieldname="display_name"/></form>',
                 },
             });
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            assert.containsN(form, 'td.o_list_record_remove button', 3,
-                "should have 3 remove buttons");
+            assert.containsN(form,'td.o_list_record_removebutton',3,
+                "shouldhave3removebuttons");
 
-            assert.hasClass(form.$('td.o_list_record_remove button').first(),'fa fa-times',
-                "should have X icons to remove (unlink) records");
+            assert.hasClass(form.$('td.o_list_record_removebutton').first(),'fafa-times',
+                "shouldhaveXiconstoremove(unlink)records");
 
-            await testUtils.dom.click(form.$('td.o_list_record_remove button').first());
+            awaittestUtils.dom.click(form.$('td.o_list_record_removebutton').first());
 
-            assert.containsN(form, 'td.o_list_record_remove button', 2,
-                "should have 2 remove buttons (a record is supposed to have been unlinked)");
+            assert.containsN(form,'td.o_list_record_removebutton',2,
+                "shouldhave2removebuttons(arecordissupposedtohavebeenunlinked)");
 
-            await testUtils.dom.click(form.$('tr.o_data_row').first());
-            assert.containsNone($('.modal .modal-footer .o_btn_remove'),
-                'there should not be a modal having Remove Button');
+            awaittestUtils.dom.click(form.$('tr.o_data_row').first());
+            assert.containsNone($('.modal.modal-footer.o_btn_remove'),
+                'thereshouldnotbeamodalhavingRemoveButton');
 
-            await testUtils.dom.click($('.modal .btn-secondary'))
-            await testUtils.form.clickSave(form);
+            awaittestUtils.dom.click($('.modal.btn-secondary'))
+            awaittestUtils.form.clickSave(form);
             form.destroy();
         });
 
-        QUnit.test('one2many list: deleting one records', async function (assert) {
+        QUnit.test('one2manylist:deletingonerecords',asyncfunction(assert){
             assert.expect(7);
-            this.data.partner.records[0].p = [1, 2, 4];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '</field>' +
+            this.data.partner.records[0].p=[1,2,4];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (route === '/web/dataset/call_kw/partner/write') {
-                        var commands = args.args[1].p;
-                        assert.strictEqual(commands.length, 3,
-                            'should have generated three commands');
-                        assert.ok(commands[0][0] === 4 && commands[0][1] === 2,
-                            'should have generated the command 4 (LINK_TO) with id 2');
-                        assert.ok(commands[1][0] === 4 && commands[1][1] === 4,
-                            'should have generated the command 2 (LINK_TO) with id 1');
-                        assert.ok(commands[2][0] === 2 && commands[2][1] === 1,
-                            'should have generated the command 2 (DELETE) with id 2');
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(route==='/web/dataset/call_kw/partner/write'){
+                        varcommands=args.args[1].p;
+                        assert.strictEqual(commands.length,3,
+                            'shouldhavegeneratedthreecommands');
+                        assert.ok(commands[0][0]===4&&commands[0][1]===2,
+                            'shouldhavegeneratedthecommand4(LINK_TO)withid2');
+                        assert.ok(commands[1][0]===4&&commands[1][1]===4,
+                            'shouldhavegeneratedthecommand2(LINK_TO)withid1');
+                        assert.ok(commands[2][0]===2&&commands[2][1]===1,
+                            'shouldhavegeneratedthecommand2(DELETE)withid2');
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                archs: {
+                archs:{
                     'partner,false,form':
-                        '<form string="Partner"><field name="display_name"/></form>',
+                        '<formstring="Partner"><fieldname="display_name"/></form>',
                 },
             });
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            assert.containsN(form, 'td.o_list_record_remove button', 3,
-                "should have 3 remove buttons");
+            assert.containsN(form,'td.o_list_record_removebutton',3,
+                "shouldhave3removebuttons");
 
-            assert.hasClass(form.$('td.o_list_record_remove button').first(),'fa fa-trash-o',
-                "should have trash bin icons to remove (delete) records");
+            assert.hasClass(form.$('td.o_list_record_removebutton').first(),'fafa-trash-o',
+                "shouldhavetrashbiniconstoremove(delete)records");
 
-            await testUtils.dom.click(form.$('td.o_list_record_remove button').first());
+            awaittestUtils.dom.click(form.$('td.o_list_record_removebutton').first());
 
-            assert.containsN(form, 'td.o_list_record_remove button', 2,
-                "should have 2 remove buttons");
+            assert.containsN(form,'td.o_list_record_removebutton',2,
+                "shouldhave2removebuttons");
 
-            // save and check that the correct command has been generated
-            await testUtils.form.clickSave(form);
+            //saveandcheckthatthecorrectcommandhasbeengenerated
+            awaittestUtils.form.clickSave(form);
 
-            // FIXME: it would be nice to test that the view is re-rendered correctly,
-            // but as the relational data isn't re-fetched, the rendering is ok even
-            // if the changes haven't been saved
+            //FIXME:itwouldbenicetotestthattheviewisre-renderedcorrectly,
+            //butastherelationaldataisn'tre-fetched,therenderingisokeven
+            //ifthechangeshaven'tbeensaved
             form.destroy();
         });
 
-        QUnit.test('one2many kanban: edition', async function (assert) {
+        QUnit.test('one2manykanban:edition',asyncfunction(assert){
             assert.expect(23);
 
-            this.data.partner.records[0].p = [2];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                        '<field name="p">' +
-                            '<kanban>' +
-                                // color will be in the kanban but not in the form
-                                '<field name="color"/>' +
-                                '<field name="display_name"/>' +
-                                '<templates>' +
-                                    '<t t-name="kanban-box">' +
-                                        '<div class="oe_kanban_global_click">' +
-                                            '<a t-if="!read_only_mode" type="delete" class="fa fa-times float-right delete_icon"/>' +
-                                            '<span><t t-esc="record.display_name.value"/></span>' +
-                                            '<span><t t-esc="record.color.value"/></span>' +
-                                        '</div>' +
-                                    '</t>' +
-                                '</templates>' +
-                            '</kanban>' +
-                            '<form string="Partners">' +
-                                '<field name="display_name"/>' +
-                                // foo will be in the form but not in the kanban
-                                '<field name="foo"/>' +
-                            '</form>' +
-                        '</field>' +
+            this.data.partner.records[0].p=[2];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                        '<fieldname="p">'+
+                            '<kanban>'+
+                                //colorwillbeinthekanbanbutnotintheform
+                                '<fieldname="color"/>'+
+                                '<fieldname="display_name"/>'+
+                                '<templates>'+
+                                    '<tt-name="kanban-box">'+
+                                        '<divclass="oe_kanban_global_click">'+
+                                            '<at-if="!read_only_mode"type="delete"class="fafa-timesfloat-rightdelete_icon"/>'+
+                                            '<span><tt-esc="record.display_name.value"/></span>'+
+                                            '<span><tt-esc="record.color.value"/></span>'+
+                                        '</div>'+
+                                    '</t>'+
+                                '</templates>'+
+                            '</kanban>'+
+                            '<formstring="Partners">'+
+                                '<fieldname="display_name"/>'+
+                                //foowillbeintheformbutnotinthekanban
+                                '<fieldname="foo"/>'+
+                            '</form>'+
+                        '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (route === '/web/dataset/call_kw/partner/write') {
-                        var commands = args.args[1].p;
-                        assert.strictEqual(commands.length, 2,
-                            'should have generated two commands');
-                        assert.strictEqual(commands[0][0], 0,
-                            'generated command should be ADD WITH VALUES');
-                        assert.strictEqual(commands[0][2].display_name, "new subrecord 3",
-                            'value of newly created subrecord should be "new subrecord 3"');
-                        assert.strictEqual(commands[1][0], 2,
-                            'generated command should be REMOVE AND DELETE');
-                        assert.strictEqual(commands[1][1], 2,
-                            'deleted record id should be 2');
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(route==='/web/dataset/call_kw/partner/write'){
+                        varcommands=args.args[1].p;
+                        assert.strictEqual(commands.length,2,
+                            'shouldhavegeneratedtwocommands');
+                        assert.strictEqual(commands[0][0],0,
+                            'generatedcommandshouldbeADDWITHVALUES');
+                        assert.strictEqual(commands[0][2].display_name,"newsubrecord3",
+                            'valueofnewlycreatedsubrecordshouldbe"newsubrecord3"');
+                        assert.strictEqual(commands[1][0],2,
+                            'generatedcommandshouldbeREMOVEANDDELETE');
+                        assert.strictEqual(commands[1][1],2,
+                            'deletedrecordidshouldbe2');
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            assert.ok(!form.$('.o_kanban_view .delete_icon').length,
-                'delete icon should not be visible in readonly');
-            assert.ok(!form.$('.o_field_one2many .o-kanban-button-new').length,
-                '"Create" button should not be visible in readonly');
+            assert.ok(!form.$('.o_kanban_view.delete_icon').length,
+                'deleteiconshouldnotbevisibleinreadonly');
+            assert.ok(!form.$('.o_field_one2many.o-kanban-button-new').length,
+                '"Create"buttonshouldnotbevisibleinreadonly');
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            assert.strictEqual(form.$('.o_kanban_record:not(.o_kanban_ghost)').length, 1,
-                'should contain 1 record');
-            assert.strictEqual(form.$('.o_kanban_record span:first').text(), 'second record',
-                'display_name of subrecord should be the one in DB');
-            assert.strictEqual(form.$('.o_kanban_record span:nth(1)').text(), 'Red',
-                'color of subrecord should be the one in DB');
-            assert.ok(form.$('.o_kanban_view .delete_icon').length,
-                'delete icon should be visible in edit');
-            assert.ok(form.$('.o_field_one2many .o-kanban-button-new').length,
-                '"Create" button should be visible in edit');
-            assert.hasClass(form.$('.o_field_one2many .o-kanban-button-new'),'btn-secondary',
-                "'Create' button should have className 'btn-secondary'");
-            assert.strictEqual(form.$('.o_field_one2many .o-kanban-button-new').text().trim(), "Add",
-                'Create button should have "Add" label');
+            assert.strictEqual(form.$('.o_kanban_record:not(.o_kanban_ghost)').length,1,
+                'shouldcontain1record');
+            assert.strictEqual(form.$('.o_kanban_recordspan:first').text(),'secondrecord',
+                'display_nameofsubrecordshouldbetheoneinDB');
+            assert.strictEqual(form.$('.o_kanban_recordspan:nth(1)').text(),'Red',
+                'colorofsubrecordshouldbetheoneinDB');
+            assert.ok(form.$('.o_kanban_view.delete_icon').length,
+                'deleteiconshouldbevisibleinedit');
+            assert.ok(form.$('.o_field_one2many.o-kanban-button-new').length,
+                '"Create"buttonshouldbevisibleinedit');
+            assert.hasClass(form.$('.o_field_one2many.o-kanban-button-new'),'btn-secondary',
+                "'Create'buttonshouldhaveclassName'btn-secondary'");
+            assert.strictEqual(form.$('.o_field_one2many.o-kanban-button-new').text().trim(),"Add",
+                'Createbuttonshouldhave"Add"label');
 
-            // edit existing subrecord
-            await testUtils.dom.click(form.$('.oe_kanban_global_click'));
+            //editexistingsubrecord
+            awaittestUtils.dom.click(form.$('.oe_kanban_global_click'));
 
-            await testUtils.fields.editInput($('.modal .o_form_view input').first(), 'new name');
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary'));
-            assert.strictEqual(form.$('.o_kanban_record span:first').text(), 'new name',
-                'value of subrecord should have been updated');
+            awaittestUtils.fields.editInput($('.modal.o_form_viewinput').first(),'newname');
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary'));
+            assert.strictEqual(form.$('.o_kanban_recordspan:first').text(),'newname',
+                'valueofsubrecordshouldhavebeenupdated');
 
-            // create a new subrecord
-            await testUtils.dom.click(form.$('.o-kanban-button-new'));
-            await testUtils.fields.editInput($('.modal .o_form_view input').first(), 'new subrecord 1');
-            await testUtils.dom.clickFirst($('.modal .modal-footer .btn-primary'));
-            assert.strictEqual(form.$('.o_kanban_record:not(.o_kanban_ghost)').length, 2,
-                'should contain 2 records');
-            assert.strictEqual(form.$('.o_kanban_record:nth(1) span').text(), 'new subrecord 1Red',
-                'value of newly created subrecord should be "new subrecord 1"');
+            //createanewsubrecord
+            awaittestUtils.dom.click(form.$('.o-kanban-button-new'));
+            awaittestUtils.fields.editInput($('.modal.o_form_viewinput').first(),'newsubrecord1');
+            awaittestUtils.dom.clickFirst($('.modal.modal-footer.btn-primary'));
+            assert.strictEqual(form.$('.o_kanban_record:not(.o_kanban_ghost)').length,2,
+                'shouldcontain2records');
+            assert.strictEqual(form.$('.o_kanban_record:nth(1)span').text(),'newsubrecord1Red',
+                'valueofnewlycreatedsubrecordshouldbe"newsubrecord1"');
 
-            // create two new subrecords
-            await testUtils.dom.click(form.$('.o-kanban-button-new'));
-            await testUtils.fields.editInput($('.modal .o_form_view input').first(), 'new subrecord 2');
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary:nth(1)'));
-            await testUtils.fields.editInput($('.modal .o_form_view input').first(), 'new subrecord 3');
-            await testUtils.dom.clickFirst($('.modal .modal-footer .btn-primary'));
-            assert.strictEqual(form.$('.o_kanban_record:not(.o_kanban_ghost)').length, 4,
-                'should contain 4 records');
+            //createtwonewsubrecords
+            awaittestUtils.dom.click(form.$('.o-kanban-button-new'));
+            awaittestUtils.fields.editInput($('.modal.o_form_viewinput').first(),'newsubrecord2');
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary:nth(1)'));
+            awaittestUtils.fields.editInput($('.modal.o_form_viewinput').first(),'newsubrecord3');
+            awaittestUtils.dom.clickFirst($('.modal.modal-footer.btn-primary'));
+            assert.strictEqual(form.$('.o_kanban_record:not(.o_kanban_ghost)').length,4,
+                'shouldcontain4records');
 
-            // delete subrecords
-            await testUtils.dom.click(form.$('.oe_kanban_global_click').first());
-            assert.strictEqual($('.modal .modal-footer .o_btn_remove').length, 1,
-                'There should be a modal having Remove Button');
-            await testUtils.dom.click($('.modal .modal-footer .o_btn_remove'));
-            assert.containsNone($('.o_modal'), "modal should have been closed");
-            assert.strictEqual(form.$('.o_kanban_record:not(.o_kanban_ghost)').length, 3,
-                'should contain 3 records');
-            await testUtils.dom.click(form.$('.o_kanban_view .delete_icon:first()'));
-            await testUtils.dom.click(form.$('.o_kanban_view .delete_icon:first()'));
-            assert.strictEqual(form.$('.o_kanban_record:not(.o_kanban_ghost)').length, 1,
-                'should contain 1 records');
-            assert.strictEqual(form.$('.o_kanban_record span:first').text(), 'new subrecord 3',
-                'the remaining subrecord should be "new subrecord 3"');
+            //deletesubrecords
+            awaittestUtils.dom.click(form.$('.oe_kanban_global_click').first());
+            assert.strictEqual($('.modal.modal-footer.o_btn_remove').length,1,
+                'ThereshouldbeamodalhavingRemoveButton');
+            awaittestUtils.dom.click($('.modal.modal-footer.o_btn_remove'));
+            assert.containsNone($('.o_modal'),"modalshouldhavebeenclosed");
+            assert.strictEqual(form.$('.o_kanban_record:not(.o_kanban_ghost)').length,3,
+                'shouldcontain3records');
+            awaittestUtils.dom.click(form.$('.o_kanban_view.delete_icon:first()'));
+            awaittestUtils.dom.click(form.$('.o_kanban_view.delete_icon:first()'));
+            assert.strictEqual(form.$('.o_kanban_record:not(.o_kanban_ghost)').length,1,
+                'shouldcontain1records');
+            assert.strictEqual(form.$('.o_kanban_recordspan:first').text(),'newsubrecord3',
+                'theremainingsubrecordshouldbe"newsubrecord3"');
 
-            // save and check that the correct command has been generated
-            await testUtils.form.clickSave(form);
+            //saveandcheckthatthecorrectcommandhasbeengenerated
+            awaittestUtils.form.clickSave(form);
             form.destroy();
         });
 
-        QUnit.test('one2many kanban (editable): properly handle create_text node option', async function (assert) {
+        QUnit.test('one2manykanban(editable):properlyhandlecreate_textnodeoption',asyncfunction(assert){
             assert.expect(1);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles" options="{\'create_text\': \'Add turtle\'}" mode="kanban">' +
-                    '<kanban>' +
-                    '<templates>' +
-                    '<t t-name="kanban-box">' +
-                    '<div class="oe_kanban_details">' +
-                    '<field name="display_name"/>' +
-                    '</div>' +
-                    '</t>' +
-                    '</templates>' +
-                    '</kanban>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles"options="{\'create_text\':\'Addturtle\'}"mode="kanban">'+
+                    '<kanban>'+
+                    '<templates>'+
+                    '<tt-name="kanban-box">'+
+                    '<divclass="oe_kanban_details">'+
+                    '<fieldname="display_name"/>'+
+                    '</div>'+
+                    '</t>'+
+                    '</templates>'+
+                    '</kanban>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            await testUtils.form.clickEdit(form);
-            assert.strictEqual(form.$('.o_field_one2many[name="turtles"] .o-kanban-button-new').text().trim(),
-                "Add turtle", "In O2M Kanban, Add button should have 'Add turtle' label");
+            awaittestUtils.form.clickEdit(form);
+            assert.strictEqual(form.$('.o_field_one2many[name="turtles"].o-kanban-button-new').text().trim(),
+                "Addturtle","InO2MKanban,Addbuttonshouldhave'Addturtle'label");
 
             form.destroy();
         });
 
-        QUnit.test('one2many kanban: create action disabled', async function (assert) {
+        QUnit.test('one2manykanban:createactiondisabled',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.partner.records[0].p = [4];
+            this.data.partner.records[0].p=[4];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<kanban create="0">' +
-                    '<field name="display_name"/>' +
-                    '<templates>' +
-                    '<t t-name="kanban-box">' +
-                    '<div class="oe_kanban_global_click">' +
-                    '<a t-if="!read_only_mode" type="delete" class="fa fa-times float-right delete_icon"/>' +
-                    '<span><t t-esc="record.display_name.value"/></span>' +
-                    '</div>' +
-                    '</t>' +
-                    '</templates>' +
-                    '</kanban>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<kanbancreate="0">'+
+                    '<fieldname="display_name"/>'+
+                    '<templates>'+
+                    '<tt-name="kanban-box">'+
+                    '<divclass="oe_kanban_global_click">'+
+                    '<at-if="!read_only_mode"type="delete"class="fafa-timesfloat-rightdelete_icon"/>'+
+                    '<span><tt-esc="record.display_name.value"/></span>'+
+                    '</div>'+
+                    '</t>'+
+                    '</templates>'+
+                    '</kanban>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
             assert.ok(!form.$('.o-kanban-button-new').length,
-                '"Add" button should not be available in readonly');
+                '"Add"buttonshouldnotbeavailableinreadonly');
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
             assert.ok(!form.$('.o-kanban-button-new').length,
-                '"Add" button should not be available in edit');
-            assert.ok(form.$('.o_kanban_view .delete_icon').length,
-                'delete icon should be visible in edit');
+                '"Add"buttonshouldnotbeavailableinedit');
+            assert.ok(form.$('.o_kanban_view.delete_icon').length,
+                'deleteiconshouldbevisibleinedit');
             form.destroy();
         });
 
-        QUnit.test('one2many kanban: conditional create/delete actions', async function (assert) {
+        QUnit.test('one2manykanban:conditionalcreate/deleteactions',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.partner.records[0].p = [2, 4];
+            this.data.partner.records[0].p=[2,4];
 
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="bar"/>
-                        <field name="p" options="{'create': [('bar', '=', True)], 'delete': [('bar', '=', True)]}">
+                        <fieldname="bar"/>
+                        <fieldname="p"options="{'create':[('bar','=',True)],'delete':[('bar','=',True)]}">
                             <kanban>
-                                <field name="display_name"/>
+                                <fieldname="display_name"/>
                                 <templates>
-                                    <t t-name="kanban-box">
-                                        <div class="oe_kanban_global_click">
-                                            <span><t t-esc="record.display_name.value"/></span>
+                                    <tt-name="kanban-box">
+                                        <divclass="oe_kanban_global_click">
+                                            <span><tt-esc="record.display_name.value"/></span>
                                         </div>
                                     </t>
                                 </templates>
                             </kanban>
                             <form>
-                                <field name="display_name"/>
-                                <field name="foo"/>
+                                <fieldname="display_name"/>
+                                <fieldname="foo"/>
                             </form>
                         </field>
                     </form>`,
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            // bar is initially true -> create and delete actions are available
-            assert.containsOnce(form, '.o-kanban-button-new', '"Add" button should be available');
+            //barisinitiallytrue->createanddeleteactionsareavailable
+            assert.containsOnce(form,'.o-kanban-button-new','"Add"buttonshouldbeavailable');
 
-            await testUtils.dom.click(form.$('.oe_kanban_global_click').first());
+            awaittestUtils.dom.click(form.$('.oe_kanban_global_click').first());
 
-            assert.containsOnce(document.body, '.modal .modal-footer .o_btn_remove',
-                'There should be a Remove Button inside modal');
+            assert.containsOnce(document.body,'.modal.modal-footer.o_btn_remove',
+                'ThereshouldbeaRemoveButtoninsidemodal');
 
-            await testUtils.dom.click($('.modal .modal-footer .o_form_button_cancel'));
+            awaittestUtils.dom.click($('.modal.modal-footer.o_form_button_cancel'));
 
-            // set bar false -> create and delete actions are no longer available
-            await testUtils.dom.click(form.$('.o_field_widget[name="bar"] input').first());
+            //setbarfalse->createanddeleteactionsarenolongeravailable
+            awaittestUtils.dom.click(form.$('.o_field_widget[name="bar"]input').first());
 
-            assert.containsNone(form, '.o-kanban-button-new',
-                '"Add" button should not be available as bar is False');
+            assert.containsNone(form,'.o-kanban-button-new',
+                '"Add"buttonshouldnotbeavailableasbarisFalse');
 
-            await testUtils.dom.click(form.$('.oe_kanban_global_click').first());
+            awaittestUtils.dom.click(form.$('.oe_kanban_global_click').first());
 
-            assert.containsNone(document.body, '.modal .modal-footer .o_btn_remove',
-                'There should not be a Remove Button as bar field is False');
+            assert.containsNone(document.body,'.modal.modal-footer.o_btn_remove',
+                'ThereshouldnotbeaRemoveButtonasbarfieldisFalse');
 
             form.destroy();
         });
 
-        QUnit.test('editable one2many list, pager is updated', async function (assert) {
+        QUnit.test('editableone2manylist,pagerisupdated',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.turtle.records.push({ id: 4, turtle_foo: 'stephen hawking' });
-            this.data.partner.records[0].turtles = [1, 2, 3, 4];
+            this.data.turtle.records.push({id:4,turtle_foo:'stephenhawking'});
+            this.data.partner.records[0].turtles=[1,2,3,4];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom" limit="3">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom"limit="3">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            // add a record, then click in form view to confirm it
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.dom.click(form.$el);
+            //addarecord,thenclickinformviewtoconfirmit
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.dom.click(form.$el);
 
-            assert.strictEqual(form.$('.o_field_widget[name=turtles] .o_pager').text().trim(), '1-4 / 5',
-                "pager should display the correct total");
+            assert.strictEqual(form.$('.o_field_widget[name=turtles].o_pager').text().trim(),'1-4/5',
+                "pagershoulddisplaythecorrecttotal");
             form.destroy();
         });
 
-        QUnit.test('one2many list (non editable): edition', async function (assert) {
+        QUnit.test('one2manylist(noneditable):edition',asyncfunction(assert){
             assert.expect(12);
 
-            var nbWrite = 0;
-            this.data.partner.records[0].p = [2, 4];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<field name="display_name"/><field name="qux"/>' +
-                    '</tree>' +
-                    '<form string="Partners">' +
-                    '<field name="display_name"/>' +
-                    '</form>' +
-                    '</field>' +
+            varnbWrite=0;
+            this.data.partner.records[0].p=[2,4];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="display_name"/><fieldname="qux"/>'+
+                    '</tree>'+
+                    '<formstring="Partners">'+
+                    '<fieldname="display_name"/>'+
+                    '</form>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'write') {
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='write'){
                         nbWrite++;
-                        assert.deepEqual(args.args[1], {
-                            p: [[1, 2, { display_name: 'new name' }], [2, 4, false]]
-                        }, "should have sent the correct commands");
+                        assert.deepEqual(args.args[1],{
+                            p:[[1,2,{display_name:'newname'}],[2,4,false]]
+                        },"shouldhavesentthecorrectcommands");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
             assert.ok(!form.$('.o_list_record_remove').length,
-                'remove icon should not be visible in readonly');
+                'removeiconshouldnotbevisibleinreadonly');
             assert.ok(!form.$('.o_field_x2many_list_row_add').length,
-                '"Add an item" should not be visible in readonly');
+                '"Addanitem"shouldnotbevisibleinreadonly');
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            assert.containsN(form, '.o_list_view td.o_list_number', 2,
-                'should contain 2 records');
-            assert.strictEqual(form.$('.o_list_view tbody td:first()').text(), 'second record',
-                'display_name of first subrecord should be the one in DB');
+            assert.containsN(form,'.o_list_viewtd.o_list_number',2,
+                'shouldcontain2records');
+            assert.strictEqual(form.$('.o_list_viewtbodytd:first()').text(),'secondrecord',
+                'display_nameoffirstsubrecordshouldbetheoneinDB');
             assert.ok(form.$('.o_list_record_remove').length,
-                'remove icon should be visible in edit');
+                'removeiconshouldbevisibleinedit');
             assert.ok(form.$('.o_field_x2many_list_row_add').length,
-                '"Add an item" should not visible in edit');
+                '"Addanitem"shouldnotvisibleinedit');
 
-            // edit existing subrecord
-            await testUtils.dom.click(form.$('.o_list_view tbody tr:first() td:eq(1)'));
+            //editexistingsubrecord
+            awaittestUtils.dom.click(form.$('.o_list_viewtbodytr:first()td:eq(1)'));
 
-            await testUtils.fields.editInput($('.modal .o_form_view input'), 'new name');
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary'));
-            assert.strictEqual(form.$('.o_list_view tbody td:first()').text(), 'new name',
-                'value of subrecord should have been updated');
-            assert.strictEqual(nbWrite, 0, "should not have write anything in DB");
+            awaittestUtils.fields.editInput($('.modal.o_form_viewinput'),'newname');
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary'));
+            assert.strictEqual(form.$('.o_list_viewtbodytd:first()').text(),'newname',
+                'valueofsubrecordshouldhavebeenupdated');
+            assert.strictEqual(nbWrite,0,"shouldnothavewriteanythinginDB");
 
-            // create new subrecords
-            // TODO when 'Add an item' will be implemented
+            //createnewsubrecords
+            //TODOwhen'Addanitem'willbeimplemented
 
-            // remove subrecords
-            await testUtils.dom.click(form.$('.o_list_record_remove:nth(1)'));
-            assert.containsOnce(form, '.o_list_view td.o_list_number',
-                'should contain 1 subrecord');
-            assert.strictEqual(form.$('.o_list_view tbody td:first()').text(), 'new name',
-                'the remaining subrecord should be "new name"');
+            //removesubrecords
+            awaittestUtils.dom.click(form.$('.o_list_record_remove:nth(1)'));
+            assert.containsOnce(form,'.o_list_viewtd.o_list_number',
+                'shouldcontain1subrecord');
+            assert.strictEqual(form.$('.o_list_viewtbodytd:first()').text(),'newname',
+                'theremainingsubrecordshouldbe"newname"');
 
-            await testUtils.form.clickSave(form); // save the record
-            assert.strictEqual(nbWrite, 1, "should have write the changes in DB");
+            awaittestUtils.form.clickSave(form);//savetherecord
+            assert.strictEqual(nbWrite,1,"shouldhavewritethechangesinDB");
 
             form.destroy();
         });
 
-        QUnit.test('one2many list (editable): edition', async function (assert) {
+        QUnit.test('one2manylist(editable):edition',asyncfunction(assert){
             assert.expect(7);
 
-            this.data.partner.records[0].p = [2, 4];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree editable="top">' +
-                    '<field name="display_name"/><field name="qux"/>' +
-                    '</tree>' +
-                    '<form string="Partners">' +
-                    '<field name="display_name"/>' +
-                    '</form>' +
-                    '</field>' +
+            this.data.partner.records[0].p=[2,4];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="display_name"/><fieldname="qux"/>'+
+                    '</tree>'+
+                    '<formstring="Partners">'+
+                    '<fieldname="display_name"/>'+
+                    '</form>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
             assert.ok(!form.$('.o_field_x2many_list_row_add').length,
-                '"Add an item" link should not be available in readonly');
+                '"Addanitem"linkshouldnotbeavailableinreadonly');
 
-            await testUtils.dom.click(form.$('.o_list_view tbody td:first()'));
-            assert.ok($('.modal .o_form_readonly').length,
-                'in readonly, clicking on a subrecord should open it in readonly in a dialog');
-            await testUtils.dom.click($('.modal .o_form_button_cancel'));
+            awaittestUtils.dom.click(form.$('.o_list_viewtbodytd:first()'));
+            assert.ok($('.modal.o_form_readonly').length,
+                'inreadonly,clickingonasubrecordshouldopenitinreadonlyinadialog');
+            awaittestUtils.dom.click($('.modal.o_form_button_cancel'));
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
             assert.ok(form.$('.o_field_x2many_list_row_add').length,
-                '"Add an item" link should be available in edit');
+                '"Addanitem"linkshouldbeavailableinedit');
 
-            // edit existing subrecord
-            await testUtils.dom.click(form.$('.o_list_view tbody td:first()'));
-            assert.strictEqual($('.modal').length, 0,
-                'in edit, clicking on a subrecord should not open a dialog');
-            assert.hasClass(form.$('.o_list_view tbody tr:first()'),'o_selected_row',
-                'first row should be in edition');
-            await testUtils.fields.editInput(form.$('.o_list_view input:first()'), 'new name');
+            //editexistingsubrecord
+            awaittestUtils.dom.click(form.$('.o_list_viewtbodytd:first()'));
+            assert.strictEqual($('.modal').length,0,
+                'inedit,clickingonasubrecordshouldnotopenadialog');
+            assert.hasClass(form.$('.o_list_viewtbodytr:first()'),'o_selected_row',
+                'firstrowshouldbeinedition');
+            awaittestUtils.fields.editInput(form.$('.o_list_viewinput:first()'),'newname');
 
-            await testUtils.dom.click(form.$('.o_list_view tbody tr:nth(1) td:first'));
-            assert.doesNotHaveClass(form.$('.o_list_view tbody tr:first'), 'o_selected_row',
-                'first row should not be in edition anymore');
-            assert.strictEqual(form.$('.o_list_view tbody td:first').text(), 'new name',
-                'value of subrecord should have been updated');
+            awaittestUtils.dom.click(form.$('.o_list_viewtbodytr:nth(1)td:first'));
+            assert.doesNotHaveClass(form.$('.o_list_viewtbodytr:first'),'o_selected_row',
+                'firstrowshouldnotbeineditionanymore');
+            assert.strictEqual(form.$('.o_list_viewtbodytd:first').text(),'newname',
+                'valueofsubrecordshouldhavebeenupdated');
 
-            // create new subrecords
-            // TODO when 'Add an item' will be implemented
+            //createnewsubrecords
+            //TODOwhen'Addanitem'willbeimplemented
             form.destroy();
         });
 
-        QUnit.test('one2many list (editable): edition, part 2', async function (assert) {
+        QUnit.test('one2manylist(editable):edition,part2',asyncfunction(assert){
             assert.expect(8);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree editable="top">' +
-                    '<field name="foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'write') {
-                        assert.strictEqual(args.args[1].p[0][0], 0,
-                            "should send a 0 command for field p");
-                        assert.strictEqual(args.args[1].p[1][0], 0,
-                            "should send a second 0 command for field p");
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='write'){
+                        assert.strictEqual(args.args[1].p[0][0],0,
+                            "shouldsenda0commandforfieldp");
+                        assert.strictEqual(args.args[1].p[1][0],0,
+                            "shouldsendasecond0commandforfieldp");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            // edit mode, then click on Add an item and enter a value
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('.o_selected_row > td input'), 'kartoffel');
+            //editmode,thenclickonAddanitemandenteravalue
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('.o_selected_row>tdinput'),'kartoffel');
 
-            // click again on Add an item
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            assert.strictEqual(form.$('td:contains(kartoffel)').length, 1,
-                "should have one td with the new value");
-            assert.containsOnce(form, '.o_selected_row > td input',
-                "should have one other new td");
-            assert.containsN(form, 'tr.o_data_row', 2, "should have 2 data rows");
+            //clickagainonAddanitem
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            assert.strictEqual(form.$('td:contains(kartoffel)').length,1,
+                "shouldhaveonetdwiththenewvalue");
+            assert.containsOnce(form,'.o_selected_row>tdinput',
+                "shouldhaveoneothernewtd");
+            assert.containsN(form,'tr.o_data_row',2,"shouldhave2datarows");
 
-            // enter another value and save
-            await testUtils.fields.editInput(form.$('.o_selected_row > td input'), 'gemuse');
-            await testUtils.form.clickSave(form);
-            assert.containsN(form, 'tr.o_data_row', 2, "should have 2 data rows");
-            assert.strictEqual(form.$('td:contains(kartoffel)').length, 1,
-                "should have one td with the new value");
-            assert.strictEqual(form.$('td:contains(gemuse)').length, 1,
-                "should have one td with the new value");
+            //enteranothervalueandsave
+            awaittestUtils.fields.editInput(form.$('.o_selected_row>tdinput'),'gemuse');
+            awaittestUtils.form.clickSave(form);
+            assert.containsN(form,'tr.o_data_row',2,"shouldhave2datarows");
+            assert.strictEqual(form.$('td:contains(kartoffel)').length,1,
+                "shouldhaveonetdwiththenewvalue");
+            assert.strictEqual(form.$('td:contains(gemuse)').length,1,
+                "shouldhaveonetdwiththenewvalue");
 
             form.destroy();
         });
 
-        QUnit.test('one2many list (editable): edition, part 3', async function (assert) {
+        QUnit.test('one2manylist(editable):edition,part3',asyncfunction(assert){
             assert.expect(3);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            // edit mode, then click on Add an item 2 times
-            assert.containsOnce(form, 'tr.o_data_row',
-                "should have 1 data rows");
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            assert.containsN(form, 'tr.o_data_row', 3,
-                "should have 3 data rows");
+            //editmode,thenclickonAddanitem2times
+            assert.containsOnce(form,'tr.o_data_row',
+                "shouldhave1datarows");
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            assert.containsN(form,'tr.o_data_row',3,
+                "shouldhave3datarows");
 
-            // cancel the edition
-            await testUtils.form.clickDiscard(form);
-            await testUtils.dom.click($('.modal-footer button.btn-primary').first());
-            assert.containsOnce(form, 'tr.o_data_row',
-                "should have 1 data rows");
+            //canceltheedition
+            awaittestUtils.form.clickDiscard(form);
+            awaittestUtils.dom.click($('.modal-footerbutton.btn-primary').first());
+            assert.containsOnce(form,'tr.o_data_row',
+                "shouldhave1datarows");
 
             form.destroy();
         });
 
-        QUnit.test('one2many list (editable): edition, part 4', async function (assert) {
+        QUnit.test('one2manylist(editable):edition,part4',asyncfunction(assert){
             assert.expect(3);
-            var i = 0;
+            vari=0;
 
-            this.data.turtle.onchanges = {
-                turtle_trululu: function (obj) {
-                    if (i) {
-                        obj.turtle_description = "Some Description";
+            this.data.turtle.onchanges={
+                turtle_trululu:function(obj){
+                    if(i){
+                        obj.turtle_description="SomeDescription";
                     }
                     i++;
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_trululu"/>' +
-                    '<field name="turtle_description"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_trululu"/>'+
+                    '<fieldname="turtle_description"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 2,
+                res_id:2,
             });
 
-            // edit mode, then click on Add an item
-            assert.containsNone(form, 'tr.o_data_row',
-                "should have 0 data rows");
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            assert.strictEqual(form.$('textarea').val(), "",
-                "field turtle_description should be empty");
+            //editmode,thenclickonAddanitem
+            assert.containsNone(form,'tr.o_data_row',
+                "shouldhave0datarows");
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            assert.strictEqual(form.$('textarea').val(),"",
+                "fieldturtle_descriptionshouldbeempty");
 
-            // add a value in the turtle_trululu field to trigger an onchange
-            await testUtils.fields.many2one.clickOpenDropdown('turtle_trululu');
-            await testUtils.fields.many2one.clickHighlightedItem('turtle_trululu');
-            assert.strictEqual(form.$('textarea').val(), "Some Description",
-                "field turtle_description should be set to the result of the onchange");
+            //addavalueintheturtle_trululufieldtotriggeranonchange
+            awaittestUtils.fields.many2one.clickOpenDropdown('turtle_trululu');
+            awaittestUtils.fields.many2one.clickHighlightedItem('turtle_trululu');
+            assert.strictEqual(form.$('textarea').val(),"SomeDescription",
+                "fieldturtle_descriptionshouldbesettotheresultoftheonchange");
             form.destroy();
         });
 
-        QUnit.test('one2many list (editable): discarding required empty data', async function (assert) {
+        QUnit.test('one2manylist(editable):discardingrequiredemptydata',asyncfunction(assert){
             assert.expect(7);
 
-            this.data.turtle.fields.turtle_foo.required = true;
-            delete this.data.turtle.fields.turtle_foo.default;
+            this.data.turtle.fields.turtle_foo.required=true;
+            deletethis.data.turtle.fields.turtle_foo.default;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 2,
-                mockRPC: function (route, args) {
-                    if (args.method) {
+                res_id:2,
+                mockRPC:function(route,args){
+                    if(args.method){
                         assert.step(args.method);
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            // edit mode, then click on Add an item, then click elsewhere
-            assert.containsNone(form, 'tr.o_data_row',
-                "should have 0 data rows");
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.dom.click(form.$('label.o_form_label').first());
-            assert.containsNone(form, 'tr.o_data_row',
-                "should still have 0 data rows");
+            //editmode,thenclickonAddanitem,thenclickelsewhere
+            assert.containsNone(form,'tr.o_data_row',
+                "shouldhave0datarows");
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.dom.click(form.$('label.o_form_label').first());
+            assert.containsNone(form,'tr.o_data_row',
+                "shouldstillhave0datarows");
 
-            // click on Add an item again, then click on save
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.form.clickSave(form);
-            assert.containsNone(form, 'tr.o_data_row',
-                "should still have 0 data rows");
+            //clickonAddanitemagain,thenclickonsave
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.form.clickSave(form);
+            assert.containsNone(form,'tr.o_data_row',
+                "shouldstillhave0datarows");
 
-            assert.verifySteps(['read', 'onchange', 'onchange']);
+            assert.verifySteps(['read','onchange','onchange']);
             form.destroy();
         });
 
-        QUnit.test('editable one2many list, adding line when only one page', async function (assert) {
+        QUnit.test('editableone2manylist,addinglinewhenonlyonepage',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.partner.records[0].turtles = [1, 2, 3];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom" limit="3">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            this.data.partner.records[0].turtles=[1,2,3];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom"limit="3">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            // add a record, to reach the page size limit
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            // the record currently being added should not count in the pager
-            assert.containsNone(form, '.o_field_widget[name=turtles] .o_pager');
+            //addarecord,toreachthepagesizelimit
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            //therecordcurrentlybeingaddedshouldnotcountinthepager
+            assert.containsNone(form,'.o_field_widget[name=turtles].o_pager');
 
-            // unselect the row
-            await testUtils.dom.click(form.$el);
-            assert.containsNone(form, '.o_selected_row');
-            assert.containsNone(form, '.o_field_widget[name=turtles] .o_pager');
+            //unselecttherow
+            awaittestUtils.dom.click(form.$el);
+            assert.containsNone(form,'.o_selected_row');
+            assert.containsNone(form,'.o_field_widget[name=turtles].o_pager');
 
-            await testUtils.form.clickSave(form);
-            assert.containsOnce(form, '.o_field_widget[name=turtles] .o_pager');
-            assert.strictEqual(form.$('.o_field_widget[name=turtles] .o_pager').text(), "1-3 / 4");
+            awaittestUtils.form.clickSave(form);
+            assert.containsOnce(form,'.o_field_widget[name=turtles].o_pager');
+            assert.strictEqual(form.$('.o_field_widget[name=turtles].o_pager').text(),"1-3/4");
 
             form.destroy();
         });
 
-        QUnit.test('editable one2many list, adding line, then discarding', async function (assert) {
+        QUnit.test('editableone2manylist,addingline,thendiscarding',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.turtle.records.push({ id: 4, turtle_foo: 'stephen hawking' });
-            this.data.partner.records[0].turtles = [1, 2, 3, 4];
+            this.data.turtle.records.push({id:4,turtle_foo:'stephenhawking'});
+            this.data.partner.records[0].turtles=[1,2,3,4];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom" limit="3">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom"limit="3">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            // add a record, then discard
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.form.clickDiscard(form);
+            //addarecord,thendiscard
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.form.clickDiscard(form);
 
-            // confirm the discard operation
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary'));
+            //confirmthediscardoperation
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary'));
 
-            assert.isVisible(form.$('.o_field_widget[name=turtles] .o_pager'));
-            assert.strictEqual(form.$('.o_field_widget[name=turtles] .o_pager').text().trim(), '1-3 / 4',
-                "pager should display correct values");
+            assert.isVisible(form.$('.o_field_widget[name=turtles].o_pager'));
+            assert.strictEqual(form.$('.o_field_widget[name=turtles].o_pager').text().trim(),'1-3/4',
+                "pagershoulddisplaycorrectvalues");
 
             form.destroy();
         });
 
-        QUnit.test('editable one2many list, required field and pager', async function (assert) {
+        QUnit.test('editableone2manylist,requiredfieldandpager',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.turtle.records.push({ id: 4, turtle_foo: 'stephen hawking' });
-            this.data.turtle.fields.turtle_foo.required = true;
-            this.data.partner.records[0].turtles = [1, 2, 3, 4];
+            this.data.turtle.records.push({id:4,turtle_foo:'stephenhawking'});
+            this.data.turtle.fields.turtle_foo.required=true;
+            this.data.partner.records[0].turtles=[1,2,3,4];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom" limit="3">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom"limit="3">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            // add a (empty) record
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            //adda(empty)record
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            // go on next page. The new record is not valid and should be discarded
-            await testUtils.dom.click(form.$('.o_field_widget[name=turtles] .o_pager_next'));
-            assert.containsOnce(form, 'tr.o_data_row');
+            //goonnextpage.Thenewrecordisnotvalidandshouldbediscarded
+            awaittestUtils.dom.click(form.$('.o_field_widget[name=turtles].o_pager_next'));
+            assert.containsOnce(form,'tr.o_data_row');
 
             form.destroy();
         });
 
-        QUnit.test('editable one2many list, required field, pager and confirm discard', async function (assert) {
+        QUnit.test('editableone2manylist,requiredfield,pagerandconfirmdiscard',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.turtle.records.push({ id: 4, turtle_foo: 'stephen hawking' });
-            this.data.turtle.fields.turtle_foo.required = true;
-            this.data.partner.records[0].turtles = [1, 2, 3, 4];
+            this.data.turtle.records.push({id:4,turtle_foo:'stephenhawking'});
+            this.data.turtle.fields.turtle_foo.required=true;
+            this.data.partner.records[0].turtles=[1,2,3,4];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom" limit="3">' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="turtle_int"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom"limit="3">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="turtle_int"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            // add a record with a dirty state, but not valid
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('input[name="turtle_int"]'), 4321);
+            //addarecordwithadirtystate,butnotvalid
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('input[name="turtle_int"]'),4321);
 
-            // go to next page. The new record is not valid, but dirty. we should
-            // see a confirm dialog
-            await testUtils.dom.click(form.$('.o_field_widget[name=turtles] .o_pager_next'));
+            //gotonextpage.Thenewrecordisnotvalid,butdirty.weshould
+            //seeaconfirmdialog
+            awaittestUtils.dom.click(form.$('.o_field_widget[name=turtles].o_pager_next'));
 
-            assert.strictEqual(form.$('.o_field_widget[name=turtles] .o_pager').text().trim(), '1-4 / 5',
-                "pager should still display the correct total");
+            assert.strictEqual(form.$('.o_field_widget[name=turtles].o_pager').text().trim(),'1-4/5',
+                "pagershouldstilldisplaythecorrecttotal");
 
-            // click on cancel
-            await testUtils.dom.click($('.modal .modal-footer .btn-secondary'));
+            //clickoncancel
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-secondary'));
 
-            assert.strictEqual(form.$('.o_field_widget[name=turtles] .o_pager').text().trim(), '1-4 / 5',
-                "pager should again display the correct total");
-            assert.containsOnce(form, '.o_field_one2many input.o_field_invalid',
-                "there should be an invalid input in the one2many");
+            assert.strictEqual(form.$('.o_field_widget[name=turtles].o_pager').text().trim(),'1-4/5',
+                "pagershouldagaindisplaythecorrecttotal");
+            assert.containsOnce(form,'.o_field_one2manyinput.o_field_invalid',
+                "thereshouldbeaninvalidinputintheone2many");
             form.destroy();
         });
 
-        QUnit.test('editable one2many list, adding, discarding, and pager', async function (assert) {
+        QUnit.test('editableone2manylist,adding,discarding,andpager',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.partner.records[0].turtles = [1];
+            this.data.partner.records[0].turtles=[1];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom" limit="3">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom"limit="3">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            // add 4 records (to have more records than the limit)
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            //add4records(tohavemorerecordsthanthelimit)
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.containsN(form, 'tr.o_data_row', 5);
-            assert.containsNone(form, '.o_field_widget[name=turtles] .o_pager');
+            assert.containsN(form,'tr.o_data_row',5);
+            assert.containsNone(form,'.o_field_widget[name=turtles].o_pager');
 
-            // discard
-            await testUtils.form.clickDiscard(form);
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary'));
+            //discard
+            awaittestUtils.form.clickDiscard(form);
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary'));
 
-            assert.containsOnce(form, 'tr.o_data_row');
-            assert.containsNone(form, '.o_field_widget[name=turtles] .o_pager');
+            assert.containsOnce(form,'tr.o_data_row');
+            assert.containsNone(form,'.o_field_widget[name=turtles].o_pager');
 
             form.destroy();
         });
 
-        QUnit.test('unselecting a line with missing required data', async function (assert) {
+        QUnit.test('unselectingalinewithmissingrequireddata',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.turtle.fields.turtle_foo.required = true;
-            delete this.data.turtle.fields.turtle_foo.default;
+            this.data.turtle.fields.turtle_foo.required=true;
+            deletethis.data.turtle.fields.turtle_foo.default;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="turtle_int"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="turtle_int"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 2,
+                res_id:2,
             });
 
-            // edit mode, then click on Add an item, then click elsewhere
-            assert.containsNone(form, 'tr.o_data_row',
-                "should have 0 data rows");
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            assert.containsOnce(form, 'tr.o_data_row',
-                "should have 1 data rows");
+            //editmode,thenclickonAddanitem,thenclickelsewhere
+            assert.containsNone(form,'tr.o_data_row',
+                "shouldhave0datarows");
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            assert.containsOnce(form,'tr.o_data_row',
+                "shouldhave1datarows");
 
-            // adding a value in the non required field, so it is dirty, but with
-            // a missing required field
-            await testUtils.fields.editInput(form.$('input[name="turtle_int"]'), '12345');
+            //addingavalueinthenonrequiredfield,soitisdirty,butwith
+            //amissingrequiredfield
+            awaittestUtils.fields.editInput(form.$('input[name="turtle_int"]'),'12345');
 
-            // click elsewhere,
-            await testUtils.dom.click(form.$('label.o_form_label'));
-            assert.strictEqual($('.modal').length, 1,
-                'a confirmation model should be opened');
+            //clickelsewhere,
+            awaittestUtils.dom.click(form.$('label.o_form_label'));
+            assert.strictEqual($('.modal').length,1,
+                'aconfirmationmodelshouldbeopened');
 
-            // click on cancel, the line should still be selected
-            await testUtils.dom.click($('.modal .modal-footer button.btn-secondary'));
-            assert.containsOnce(form, 'tr.o_data_row.o_selected_row',
-                "should still have 1 selected data row");
+            //clickoncancel,thelineshouldstillbeselected
+            awaittestUtils.dom.click($('.modal.modal-footerbutton.btn-secondary'));
+            assert.containsOnce(form,'tr.o_data_row.o_selected_row',
+                "shouldstillhave1selecteddatarow");
 
-            // click elsewhere, and click on ok (on the confirmation dialog)
-            await testUtils.dom.click(form.$('label.o_form_label'));
-            await testUtils.dom.click($('.modal .modal-footer button.btn-primary'));
-            assert.containsNone(form, 'tr.o_data_row',
-                "should have 0 data rows (invalid line has been discarded");
+            //clickelsewhere,andclickonok(ontheconfirmationdialog)
+            awaittestUtils.dom.click(form.$('label.o_form_label'));
+            awaittestUtils.dom.click($('.modal.modal-footerbutton.btn-primary'));
+            assert.containsNone(form,'tr.o_data_row',
+                "shouldhave0datarows(invalidlinehasbeendiscarded");
 
             form.destroy();
         });
 
-        QUnit.test('pressing enter in a o2m with a required empty field', async function (assert) {
+        QUnit.test('pressingenterinao2mwitharequiredemptyfield',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.turtle.fields.turtle_foo.required = true;
+            this.data.turtle.fields.turtle_foo.required=true;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 2,
-                mockRPC: function (route, args) {
+                res_id:2,
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            // edit mode, then click on Add an item, then press enter
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.triggerKeydown(form.$('input[name="turtle_foo"]'), 'enter');
-            assert.hasClass(form.$('input[name="turtle_foo"]'), 'o_field_invalid',
-                "input should be marked invalid");
-            assert.verifySteps(['read', 'onchange']);
+            //editmode,thenclickonAddanitem,thenpressenter
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.triggerKeydown(form.$('input[name="turtle_foo"]'),'enter');
+            assert.hasClass(form.$('input[name="turtle_foo"]'),'o_field_invalid',
+                "inputshouldbemarkedinvalid");
+            assert.verifySteps(['read','onchange']);
             form.destroy();
         });
 
-        QUnit.test('editing a o2m, with required field and onchange', async function (assert) {
+        QUnit.test('editingao2m,withrequiredfieldandonchange',asyncfunction(assert){
             assert.expect(11);
 
-            this.data.turtle.fields.turtle_foo.required = true;
-            delete this.data.turtle.fields.turtle_foo.default;
-            this.data.turtle.onchanges = {
-                turtle_foo: function (obj) {
-                    obj.turtle_int = obj.turtle_foo.length;
+            this.data.turtle.fields.turtle_foo.required=true;
+            deletethis.data.turtle.fields.turtle_foo.default;
+            this.data.turtle.onchanges={
+                turtle_foo:function(obj){
+                    obj.turtle_int=obj.turtle_foo.length;
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="turtle_int"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="turtle_int"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 2,
-                mockRPC: function (route, args) {
-                    if (args.method) {
+                res_id:2,
+                mockRPC:function(route,args){
+                    if(args.method){
                         assert.step(args.method);
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            // edit mode, then click on Add an item
-            assert.containsNone(form, 'tr.o_data_row',
-                "should have 0 data rows");
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            //editmode,thenclickonAddanitem
+            assert.containsNone(form,'tr.o_data_row',
+                "shouldhave0datarows");
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            // input some text in required turtle_foo field
-            await testUtils.fields.editInput(form.$('input[name="turtle_foo"]'), 'aubergine');
-            assert.strictEqual(form.$('input[name="turtle_int"]').val(), "9",
-                "onchange should have been triggered");
+            //inputsometextinrequiredturtle_foofield
+            awaittestUtils.fields.editInput(form.$('input[name="turtle_foo"]'),'aubergine');
+            assert.strictEqual(form.$('input[name="turtle_int"]').val(),"9",
+                "onchangeshouldhavebeentriggered");
 
-            // save and check everything is fine
-            await testUtils.form.clickSave(form);
-            assert.strictEqual(form.$('.o_data_row td:contains(aubergine)').length, 1,
-                "should have one row with turtle_foo value");
-            assert.strictEqual(form.$('.o_data_row td:contains(9)').length, 1,
-                "should have one row with turtle_int value");
+            //saveandcheckeverythingisfine
+            awaittestUtils.form.clickSave(form);
+            assert.strictEqual(form.$('.o_data_rowtd:contains(aubergine)').length,1,
+                "shouldhaveonerowwithturtle_foovalue");
+            assert.strictEqual(form.$('.o_data_rowtd:contains(9)').length,1,
+                "shouldhaveonerowwithturtle_intvalue");
 
-            assert.verifySteps(['read', 'onchange', 'onchange', 'write', 'read', 'read']);
+            assert.verifySteps(['read','onchange','onchange','write','read','read']);
             form.destroy();
         });
 
-        QUnit.test('editable o2m, pressing ESC discard current changes', async function (assert) {
+        QUnit.test('editableo2m,pressingESCdiscardcurrentchanges',asyncfunction(assert){
             assert.expect(5);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 2,
-                mockRPC: function (route, args) {
+                res_id:2,
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            assert.containsOnce(form, 'tr.o_data_row',
-                "there should be one data row");
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            assert.containsOnce(form,'tr.o_data_row',
+                "thereshouldbeonedatarow");
 
-            await testUtils.fields.triggerKeydown(form.$('input[name="turtle_foo"]'), 'escape');
-            assert.containsNone(form, 'tr.o_data_row',
-                "data row should have been discarded");
-            assert.verifySteps(['read', 'onchange']);
+            awaittestUtils.fields.triggerKeydown(form.$('input[name="turtle_foo"]'),'escape');
+            assert.containsNone(form,'tr.o_data_row',
+                "datarowshouldhavebeendiscarded");
+            assert.verifySteps(['read','onchange']);
             form.destroy();
         });
 
-        QUnit.test('editable o2m with required field, pressing ESC discard current changes', async function (assert) {
+        QUnit.test('editableo2mwithrequiredfield,pressingESCdiscardcurrentchanges',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.turtle.fields.turtle_foo.required = true;
+            this.data.turtle.fields.turtle_foo.required=true;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 2,
-                mockRPC: function (route, args) {
+                res_id:2,
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            assert.containsOnce(form, 'tr.o_data_row',
-                "there should be one data row");
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            assert.containsOnce(form,'tr.o_data_row',
+                "thereshouldbeonedatarow");
 
-            await testUtils.fields.triggerKeydown(form.$('input[name="turtle_foo"]'), 'escape');
-            assert.containsNone(form, 'tr.o_data_row',
-                "data row should have been discarded");
-            assert.verifySteps(['read', 'onchange']);
+            awaittestUtils.fields.triggerKeydown(form.$('input[name="turtle_foo"]'),'escape');
+            assert.containsNone(form,'tr.o_data_row',
+                "datarowshouldhavebeendiscarded");
+            assert.verifySteps(['read','onchange']);
             form.destroy();
         });
 
-        QUnit.test('pressing escape in editable o2m list in dialog', async function (assert) {
+        QUnit.test('pressingescapeineditableo2mlistindialog',asyncfunction(assert){
             assert.expect(3);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 1,
-                archs: {
-                    "partner,false,form": '<form>' +
-                        '<field name="p">' +
-                        '<tree editable="bottom">' +
-                        '<field name="display_name"/>' +
-                        '</tree>' +
-                        '</field>' +
+                res_id:1,
+                archs:{
+                    "partner,false,form":'<form>'+
+                        '<fieldname="p">'+
+                        '<treeeditable="bottom">'+
+                        '<fieldname="display_name"/>'+
+                        '</tree>'+
+                        '</field>'+
                         '</form>',
                 },
-                viewOptions: {
-                    mode: 'edit',
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.dom.click($('.modal .o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.dom.click($('.modal.o_field_x2many_list_row_adda'));
 
-            assert.strictEqual($('.modal .o_data_row.o_selected_row').length, 1,
-                "there should be a row in edition in the dialog");
+            assert.strictEqual($('.modal.o_data_row.o_selected_row').length,1,
+                "thereshouldbearowineditioninthedialog");
 
-            await testUtils.fields.triggerKeydown($('.modal .o_data_cell input'), 'escape');
+            awaittestUtils.fields.triggerKeydown($('.modal.o_data_cellinput'),'escape');
 
-            assert.strictEqual($('.modal').length, 1,
-                "dialog should still be open");
-            assert.strictEqual($('.modal .o_data_row').length, 0,
-                "the row should have been removed");
+            assert.strictEqual($('.modal').length,1,
+                "dialogshouldstillbeopen");
+            assert.strictEqual($('.modal.o_data_row').length,0,
+                "therowshouldhavebeenremoved");
 
             form.destroy();
         });
 
-        QUnit.test('editable o2m with onchange and required field: delete an invalid line', async function (assert) {
+        QUnit.test('editableo2mwithonchangeandrequiredfield:deleteaninvalidline',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.partner.onchanges = {
-                turtles: function () { },
+            this.data.partner.onchanges={
+                turtles:function(){},
             };
-            this.data.partner.records[0].turtles = [1];
-            this.data.turtle.records[0].product_id = 37;
+            this.data.partner.records[0].turtles=[1];
+            this.data.turtle.records[0].product_id=37;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="product_id"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="product_id"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
+                res_id:1,
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                viewOptions: {
-                    mode: 'edit',
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            await testUtils.dom.click(form.$('.o_data_cell:first'));
-            form.$('.o_field_widget[name="product_id"] input').val('').trigger('keyup');
-            assert.verifySteps(['read', 'read'], 'no onchange should be done as line is invalid');
-            await testUtils.dom.click(form.$('.o_list_record_remove'));
-            assert.verifySteps(['onchange'], 'onchange should have been done');
+            awaittestUtils.dom.click(form.$('.o_data_cell:first'));
+            form.$('.o_field_widget[name="product_id"]input').val('').trigger('keyup');
+            assert.verifySteps(['read','read'],'noonchangeshouldbedoneaslineisinvalid');
+            awaittestUtils.dom.click(form.$('.o_list_record_remove'));
+            assert.verifySteps(['onchange'],'onchangeshouldhavebeendone');
 
             form.destroy();
         });
 
-        QUnit.test('onchange in a one2many', async function (assert) {
+        QUnit.test('onchangeinaone2many',asyncfunction(assert){
             assert.expect(1);
 
             this.data.partner.records.push({
-                id: 3,
-                foo: "relational record 1",
+                id:3,
+                foo:"relationalrecord1",
             });
-            this.data.partner.records[1].p = [3];
-            this.data.partner.onchanges = { p: true };
+            this.data.partner.records[1].p=[3];
+            this.data.partner.onchanges={p:true};
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree editable="top">' +
-                    '<field name="foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 2,
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
-                        return Promise.resolve({
-                            value: {
-                                p: [
-                                    [5],                             // delete all
-                                    [0, 0, { foo: "from onchange" }],  // create new
+                res_id:2,
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
+                        returnPromise.resolve({
+                            value:{
+                                p:[
+                                    [5],                            //deleteall
+                                    [0,0,{foo:"fromonchange"}], //createnew
                                 ]
                             }
                         });
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_one2many tbody td').first());
-            await testUtils.fields.editInput(form.$('.o_field_one2many tbody td').first().find('input'), "new value");
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_one2manytbodytd').first());
+            awaittestUtils.fields.editInput(form.$('.o_field_one2manytbodytd').first().find('input'),"newvalue");
+            awaittestUtils.form.clickSave(form);
 
-            assert.strictEqual(form.$('.o_field_one2many tbody td').first().text(), 'from onchange',
-                "display name of first record in o2m list should be 'new value'");
+            assert.strictEqual(form.$('.o_field_one2manytbodytd').first().text(),'fromonchange',
+                "displaynameoffirstrecordino2mlistshouldbe'newvalue'");
             form.destroy();
         });
 
-        QUnit.test('one2many, default_get and onchange (basic)', async function (assert) {
+        QUnit.test('one2many,default_getandonchange(basic)',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.fields.p.default = [
-                [6, 0, []],                  // replace with zero ids
+            this.data.partner.fields.p.default=[
+                [6,0,[]],                 //replacewithzeroids
             ];
-            this.data.partner.onchanges = { p: true };
+            this.data.partner.onchanges={p:true};
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<field name="foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
-                        return Promise.resolve({
-                            value: {
-                                p: [
-                                    [5],                             // delete all
-                                    [0, 0, { foo: "from onchange" }],  // create new
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
+                        returnPromise.resolve({
+                            value:{
+                                p:[
+                                    [5],                            //deleteall
+                                    [0,0,{foo:"fromonchange"}], //createnew
                                 ]
                             }
                         });
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            assert.ok(form.$('td:contains(from onchange)').length,
-                "should have 'from onchange' value in one2many");
+            assert.ok(form.$('td:contains(fromonchange)').length,
+                "shouldhave'fromonchange'valueinone2many");
             form.destroy();
         });
 
-        QUnit.test('one2many and default_get (with date)', async function (assert) {
+        QUnit.test('one2manyanddefault_get(withdate)',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.fields.p.default = [
-                [0, false, { date: '2017-10-08', p: [] }],
+            this.data.partner.fields.p.default=[
+                [0,false,{date:'2017-10-08',p:[]}],
             ];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<field name="date"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="date"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
             });
 
-            assert.strictEqual(form.$('.o_data_cell').text(), '10/08/2017',
-                "should correctly display the date");
+            assert.strictEqual(form.$('.o_data_cell').text(),'10/08/2017',
+                "shouldcorrectlydisplaythedate");
 
             form.destroy();
         });
 
-        QUnit.test('one2many and onchange (with integer)', async function (assert) {
+        QUnit.test('one2manyandonchange(withinteger)',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.turtle.onchanges = {
-                turtle_int: function () { }
+            this.data.turtle.onchanges={
+                turtle_int:function(){}
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_int"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_int"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
+                res_id:1,
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            await testUtils.dom.click(form.$('td:contains(9)'));
-            await testUtils.fields.editInput(form.$('td input[name="turtle_int"]'), "3");
+            awaittestUtils.dom.click(form.$('td:contains(9)'));
+            awaittestUtils.fields.editInput(form.$('tdinput[name="turtle_int"]'),"3");
 
-            // the 'change' event is triggered on the input when we focus somewhere
-            // else, for example by clicking in the body.  However, if we try to
-            // programmatically click in the body, it does not trigger a change
-            // event, so we simply trigger it directly instead.
-            form.$('td input[name="turtle_int"]').trigger('change');
+            //the'change'eventistriggeredontheinputwhenwefocussomewhere
+            //else,forexamplebyclickinginthebody. However,ifwetryto
+            //programmaticallyclickinthebody,itdoesnottriggerachange
+            //event,sowesimplytriggeritdirectlyinstead.
+            form.$('tdinput[name="turtle_int"]').trigger('change');
 
-            assert.verifySteps(['read', 'read', 'onchange']);
+            assert.verifySteps(['read','read','onchange']);
             form.destroy();
         });
 
-        QUnit.test('one2many and onchange (with date)', async function (assert) {
+        QUnit.test('one2manyandonchange(withdate)',asyncfunction(assert){
             assert.expect(7);
 
-            this.data.partner.onchanges = {
-                date: function () { }
+            this.data.partner.onchanges={
+                date:function(){}
             };
-            this.data.partner.records[0].p = [2];
+            this.data.partner.records[0].p=[2];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree editable="bottom">' +
-                    '<field name="date"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="date"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
+                res_id:1,
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            await testUtils.dom.click(form.$('td:contains(01/25/2017)'));
-            await testUtils.dom.click(form.$('.o_datepicker_input'));
-            await testUtils.nextTick();
-            await testUtils.dom.click($('.bootstrap-datetimepicker-widget .picker-switch').first());
-            await testUtils.dom.click($('.bootstrap-datetimepicker-widget .picker-switch:eq(1)'));
-            await testUtils.dom.click($('.bootstrap-datetimepicker-widget .year:contains(2017)'));
-            await testUtils.dom.click($('.bootstrap-datetimepicker-widget .month').eq(1));
-            await testUtils.dom.click($('.day:contains(22)'));
-            await testUtils.form.clickSave(form);
+            awaittestUtils.dom.click(form.$('td:contains(01/25/2017)'));
+            awaittestUtils.dom.click(form.$('.o_datepicker_input'));
+            awaittestUtils.nextTick();
+            awaittestUtils.dom.click($('.bootstrap-datetimepicker-widget.picker-switch').first());
+            awaittestUtils.dom.click($('.bootstrap-datetimepicker-widget.picker-switch:eq(1)'));
+            awaittestUtils.dom.click($('.bootstrap-datetimepicker-widget.year:contains(2017)'));
+            awaittestUtils.dom.click($('.bootstrap-datetimepicker-widget.month').eq(1));
+            awaittestUtils.dom.click($('.day:contains(22)'));
+            awaittestUtils.form.clickSave(form);
 
-            assert.verifySteps(['read', 'read', 'onchange', 'write', 'read', 'read']);
+            assert.verifySteps(['read','read','onchange','write','read','read']);
             form.destroy();
         });
 
-        QUnit.test('one2many and onchange (with command DELETE_ALL)', async function (assert) {
+        QUnit.test('one2manyandonchange(withcommandDELETE_ALL)',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.partner.onchanges = {
-                foo: function (obj) {
-                    obj.p = [[5]];
+            this.data.partner.onchanges={
+                foo:function(obj){
+                    obj.p=[[5]];
                 },
-                p: function () { }, // dummy onchange on the o2m to execute _isX2ManyValid()
+                p:function(){},//dummyonchangeontheo2mtoexecute_isX2ManyValid()
             };
-            this.data.partner.records[0].p = [2];
+            this.data.partner.records[0].p=[2];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="foo"/>' +
-                    '<field name="p">' +
-                    '<tree editable="bottom">' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="p">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (method, args) {
-                    if (args.method === 'write') {
-                        assert.deepEqual(args.args[1].p, [
-                            [0, args.args[1].p[0][1], { display_name: 'z' }],
-                            [2, 2, false],
-                        ], "correct commands should be sent");
+                mockRPC:function(method,args){
+                    if(args.method==='write'){
+                        assert.deepEqual(args.args[1].p,[
+                            [0,args.args[1].p[0][1],{display_name:'z'}],
+                            [2,2,false],
+                        ],"correctcommandsshouldbesent");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            assert.containsOnce(form, '.o_data_row',
-                "o2m should contain one row");
+            assert.containsOnce(form,'.o_data_row',
+                "o2mshouldcontainonerow");
 
-            // empty o2m by triggering the onchange
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=foo]'), 'trigger onchange');
+            //emptyo2mbytriggeringtheonchange
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=foo]'),'triggeronchange');
 
-            assert.containsNone(form, '.o_data_row',
-                "rows of the o2m should have been deleted");
+            assert.containsNone(form,'.o_data_row',
+                "rowsoftheo2mshouldhavebeendeleted");
 
-            // add two new subrecords
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=display_name]'), 'x');
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=display_name]'), 'y');
+            //addtwonewsubrecords
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=display_name]'),'x');
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=display_name]'),'y');
 
-            assert.containsN(form, '.o_data_row', 2,
-                "o2m should contain two rows");
+            assert.containsN(form,'.o_data_row',2,
+                "o2mshouldcontaintworows");
 
-            // empty o2m by triggering the onchange
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=foo]'), 'trigger onchange again');
+            //emptyo2mbytriggeringtheonchange
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=foo]'),'triggeronchangeagain');
 
-            assert.containsNone(form, '.o_data_row',
-                "rows of the o2m should have been deleted");
+            assert.containsNone(form,'.o_data_row',
+                "rowsoftheo2mshouldhavebeendeleted");
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=display_name]'), 'z');
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=display_name]'),'z');
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
             form.destroy();
         });
 
-        QUnit.test('one2many and onchange only write modified field', async function (assert) {
+        QUnit.test('one2manyandonchangeonlywritemodifiedfield',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.onchanges = {
-                turtles: function (obj) {
-                    obj.turtles = [
-                        [5], // delete all
-                        [1, 3, { // the server returns all fields
-                            display_name: "coucou",
-                            product_id: [37, "xphone"],
-                            turtle_bar: false,
-                            turtle_foo: "has changed",
-                            turtle_int: 42,
-                            turtle_qux: 9.8,
-                            partner_ids: [],
-                            turtle_ref: 'product,37',
+            this.data.partner.onchanges={
+                turtles:function(obj){
+                    obj.turtles=[
+                        [5],//deleteall
+                        [1,3,{//theserverreturnsallfields
+                            display_name:"coucou",
+                            product_id:[37,"xphone"],
+                            turtle_bar:false,
+                            turtle_foo:"haschanged",
+                            turtle_int:42,
+                            turtle_qux:9.8,
+                            partner_ids:[],
+                            turtle_ref:'product,37',
                         }],
                     ];
                 },
             };
 
-            this.data.partner.records[0].turtles = [3];
+            this.data.partner.records[0].turtles=[3];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="foo"/>' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="display_name"/>' +
-                    '<field name="product_id"/>' +
-                    '<field name="turtle_bar"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="turtle_int"/>' +
-                    '<field name="turtle_qux"/>' +
-                    '<field name="turtle_ref"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="display_name"/>'+
+                    '<fieldname="product_id"/>'+
+                    '<fieldname="turtle_bar"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="turtle_int"/>'+
+                    '<fieldname="turtle_qux"/>'+
+                    '<fieldname="turtle_ref"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (method, args) {
-                    if (args.method === 'write') {
-                        assert.deepEqual(args.args[1].turtles, [
-                            [1, 3, { display_name: 'coucou', turtle_foo: 'has changed', turtle_int: 42 }],
-                        ], "correct commands should be sent (only send changed values)");
+                mockRPC:function(method,args){
+                    if(args.method==='write'){
+                        assert.deepEqual(args.args[1].turtles,[
+                            [1,3,{display_name:'coucou',turtle_foo:'haschanged',turtle_int:42}],
+                        ],"correctcommandsshouldbesent(onlysendchangedvalues)");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            assert.containsOnce(form, '.o_data_row',
-                "o2m should contain one row");
+            assert.containsOnce(form,'.o_data_row',
+                "o2mshouldcontainonerow");
 
-            await testUtils.dom.click(form.$('.o_field_one2many .o_list_view tbody tr:first td:first'));
-            await testUtils.fields.editInput(form.$('.o_field_one2many .o_list_view tbody tr:first input:first'), 'blurp');
+            awaittestUtils.dom.click(form.$('.o_field_one2many.o_list_viewtbodytr:firsttd:first'));
+            awaittestUtils.fields.editInput(form.$('.o_field_one2many.o_list_viewtbodytr:firstinput:first'),'blurp');
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
             form.destroy();
         });
 
-        QUnit.test('one2many with CREATE onchanges correctly refreshed', async function (assert) {
+        QUnit.test('one2manywithCREATEonchangescorrectlyrefreshed',asyncfunction(assert){
             assert.expect(5);
 
-            var delta = 0;
-            testUtils.mock.patch(AbstractField, {
-                init: function () {
+            vardelta=0;
+            testUtils.mock.patch(AbstractField,{
+                init:function(){
                     delta++;
-                    this._super.apply(this, arguments);
+                    this._super.apply(this,arguments);
                 },
-                destroy: function () {
+                destroy:function(){
                     delta--;
-                    this._super.apply(this, arguments);
+                    this._super.apply(this,arguments);
                 },
             });
 
-            var deactiveOnchange = true;
+            vardeactiveOnchange=true;
 
-            this.data.partner.records[0].turtles = [];
-            this.data.partner.onchanges = {
-                turtles: function (obj) {
-                    if (deactiveOnchange) { return; }
-                    // the onchange will either:
-                    //  - create a second line if there is only one line
-                    //  - edit the second line if there are two lines
-                    if (obj.turtles.length === 1) {
-                        obj.turtles = [
-                            [5], // delete all
-                            [0, obj.turtles[0][1], {
-                                display_name: "first",
-                                turtle_int: obj.turtles[0][2].turtle_int,
+            this.data.partner.records[0].turtles=[];
+            this.data.partner.onchanges={
+                turtles:function(obj){
+                    if(deactiveOnchange){return;}
+                    //theonchangewilleither:
+                    // -createasecondlineifthereisonlyoneline
+                    // -editthesecondlineiftherearetwolines
+                    if(obj.turtles.length===1){
+                        obj.turtles=[
+                            [5],//deleteall
+                            [0,obj.turtles[0][1],{
+                                display_name:"first",
+                                turtle_int:obj.turtles[0][2].turtle_int,
                             }],
-                            [0, 0, {
-                                display_name: "second",
-                                turtle_int: -obj.turtles[0][2].turtle_int,
+                            [0,0,{
+                                display_name:"second",
+                                turtle_int:-obj.turtles[0][2].turtle_int,
                             }],
                         ];
-                    } else if (obj.turtles.length === 2) {
-                        obj.turtles = [
-                            [5], // delete all
-                            [0, obj.turtles[0][1], {
-                                display_name: "first",
-                                turtle_int: obj.turtles[0][2].turtle_int,
+                    }elseif(obj.turtles.length===2){
+                        obj.turtles=[
+                            [5],//deleteall
+                            [0,obj.turtles[0][1],{
+                                display_name:"first",
+                                turtle_int:obj.turtles[0][2].turtle_int,
                             }],
-                            [0, obj.turtles[1][1], {
-                                display_name: "second",
-                                turtle_int: -obj.turtles[0][2].turtle_int,
+                            [0,obj.turtles[1][1],{
+                                display_name:"second",
+                                turtle_int:-obj.turtles[0][2].turtle_int,
                             }],
                         ];
                     }
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="foo"/>' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="display_name" widget="char"/>' +
-                    '<field name="turtle_int"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="display_name"widget="char"/>'+
+                    '<fieldname="turtle_int"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            assert.containsNone(form, '.o_data_row',
-                "o2m shouldn't contain any row");
+            assert.containsNone(form,'.o_data_row',
+                "o2mshouldn'tcontainanyrow");
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            // trigger the first onchange
-            deactiveOnchange = false;
-            await testUtils.fields.editInput(form.$('input[name="turtle_int"]'), '10');
-            // put the list back in non edit mode
-            await testUtils.dom.click(form.$('input[name="foo"]'));
-            assert.strictEqual(form.$('.o_data_row').text(), "first10second-10",
-                "should correctly refresh the records");
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            //triggerthefirstonchange
+            deactiveOnchange=false;
+            awaittestUtils.fields.editInput(form.$('input[name="turtle_int"]'),'10');
+            //putthelistbackinnoneditmode
+            awaittestUtils.dom.click(form.$('input[name="foo"]'));
+            assert.strictEqual(form.$('.o_data_row').text(),"first10second-10",
+                "shouldcorrectlyrefreshtherecords");
 
-            // trigger the second onchange
-            await testUtils.dom.click(form.$('.o_field_x2many_list tbody tr:first td:first'));
-            await testUtils.fields.editInput(form.$('input[name="turtle_int"]'), '20');
+            //triggerthesecondonchange
+            awaittestUtils.dom.click(form.$('.o_field_x2many_listtbodytr:firsttd:first'));
+            awaittestUtils.fields.editInput(form.$('input[name="turtle_int"]'),'20');
 
-            await testUtils.dom.click(form.$('input[name="foo"]'));
-            assert.strictEqual(form.$('.o_data_row').text(), "first20second-20",
-                "should correctly refresh the records");
+            awaittestUtils.dom.click(form.$('input[name="foo"]'));
+            assert.strictEqual(form.$('.o_data_row').text(),"first20second-20",
+                "shouldcorrectlyrefreshtherecords");
 
-            assert.containsN(form, '.o_field_widget', delta,
-                "all (non visible) field widgets should have been destroyed");
+            assert.containsN(form,'.o_field_widget',delta,
+                "all(nonvisible)fieldwidgetsshouldhavebeendestroyed");
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
 
-            assert.strictEqual(form.$('.o_data_row').text(), "first20second-20",
-                "should correctly refresh the records after save");
+            assert.strictEqual(form.$('.o_data_row').text(),"first20second-20",
+                "shouldcorrectlyrefreshtherecordsaftersave");
 
             form.destroy();
             testUtils.mock.unpatch(AbstractField);
         });
 
-        QUnit.test('editable one2many with sub widgets are rendered in readonly', async function (assert) {
+        QUnit.test('editableone2manywithsubwidgetsarerenderedinreadonly',asyncfunction(assert){
             assert.expect(2);
 
-            var editableWidgets = 0;
-            testUtils.mock.patch(AbstractField, {
-                init: function () {
-                    this._super.apply(this, arguments);
-                    if (this.mode === 'edit') {
+            vareditableWidgets=0;
+            testUtils.mock.patch(AbstractField,{
+                init:function(){
+                    this._super.apply(this,arguments);
+                    if(this.mode==='edit'){
                         editableWidgets++;
                     }
                 },
             });
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_foo" widget="char" attrs="{\'readonly\': [(\'turtle_int\', \'==\', 11111)]}"/>' +
-                    '<field name="turtle_int"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_foo"widget="char"attrs="{\'readonly\':[(\'turtle_int\',\'==\',11111)]}"/>'+
+                    '<fieldname="turtle_int"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            assert.strictEqual(editableWidgets, 1,
-                "o2m is only widget in edit mode");
-            await testUtils.dom.click(form.$('tbody td.o_field_x2many_list_row_add a'));
+            assert.strictEqual(editableWidgets,1,
+                "o2misonlywidgetineditmode");
+            awaittestUtils.dom.click(form.$('tbodytd.o_field_x2many_list_row_adda'));
 
-            assert.strictEqual(editableWidgets, 3,
-                "3 widgets currently in edit mode");
+            assert.strictEqual(editableWidgets,3,
+                "3widgetscurrentlyineditmode");
 
             form.destroy();
             testUtils.mock.unpatch(AbstractField);
         });
 
-        QUnit.test('one2many editable list with onchange keeps the order', async function (assert) {
+        QUnit.test('one2manyeditablelistwithonchangekeepstheorder',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.records[0].p = [1, 2, 4];
-            this.data.partner.onchanges = {
-                p: function () { },
+            this.data.partner.records[0].p=[1,2,4];
+            this.data.partner.onchanges={
+                p:function(){},
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree editable="bottom">' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            assert.strictEqual(form.$('.o_data_cell').text(), 'first recordsecond recordaaa',
-                "records should be display in the correct order");
+            assert.strictEqual(form.$('.o_data_cell').text(),'firstrecordsecondrecordaaa',
+                "recordsshouldbedisplayinthecorrectorder");
 
-            await testUtils.dom.click(form.$('.o_data_row:first .o_data_cell'));
-            await testUtils.fields.editInput(form.$('.o_selected_row .o_field_widget[name=display_name]'), 'new');
-            await testUtils.dom.click(form.$el);
+            awaittestUtils.dom.click(form.$('.o_data_row:first.o_data_cell'));
+            awaittestUtils.fields.editInput(form.$('.o_selected_row.o_field_widget[name=display_name]'),'new');
+            awaittestUtils.dom.click(form.$el);
 
-            assert.strictEqual(form.$('.o_data_cell').text(), 'newsecond recordaaa',
-                "records should be display in the correct order");
+            assert.strictEqual(form.$('.o_data_cell').text(),'newsecondrecordaaa',
+                "recordsshouldbedisplayinthecorrectorder");
 
             form.destroy();
         });
 
-        QUnit.test('one2many list (editable): readonly domain is evaluated', async function (assert) {
+        QUnit.test('one2manylist(editable):readonlydomainisevaluated',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.records[0].p = [2, 4];
-            this.data.partner.records[1].product_id = false;
-            this.data.partner.records[2].product_id = 37;
+            this.data.partner.records[0].p=[2,4];
+            this.data.partner.records[1].product_id=false;
+            this.data.partner.records[2].product_id=37;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree editable="top">' +
-                    '<field name="display_name" attrs=\'{"readonly": [["product_id", "=", false]]}\'/>' +
-                    '<field name="product_id"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="display_name"attrs=\'{"readonly":[["product_id","=",false]]}\'/>'+
+                    '<fieldname="product_id"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            assert.hasClass(form.$('.o_list_view tbody tr:eq(0) td:first'),'o_readonly_modifier',
-                "first record should have display_name in readonly mode");
+            assert.hasClass(form.$('.o_list_viewtbodytr:eq(0)td:first'),'o_readonly_modifier',
+                "firstrecordshouldhavedisplay_nameinreadonlymode");
 
-            assert.doesNotHaveClass(form.$('.o_list_view tbody tr:eq(1) td:first'), 'o_readonly_modifier',
-                "second record should not have display_name in readonly mode");
+            assert.doesNotHaveClass(form.$('.o_list_viewtbodytr:eq(1)td:first'),'o_readonly_modifier',
+                "secondrecordshouldnothavedisplay_nameinreadonlymode");
             form.destroy();
         });
 
-        QUnit.test('pager of one2many field in new record', async function (assert) {
+        QUnit.test('pagerofone2manyfieldinnewrecord',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.partner.records[0].p = [];
+            this.data.partner.records[0].p=[];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree editable="top">' +
-                        '<field name="foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="top">'+
+                        '<fieldname="foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
             });
 
-            assert.containsNone(form, '.o_x2m_control_panel .o_pager',
-                'o2m pager should be hidden');
+            assert.containsNone(form,'.o_x2m_control_panel.o_pager',
+                'o2mpagershouldbehidden');
 
-            // click to create a subrecord
-            await testUtils.dom.click(form.$('tbody td.o_field_x2many_list_row_add a'));
-            assert.containsOnce(form, 'tr.o_data_row');
+            //clicktocreateasubrecord
+            awaittestUtils.dom.click(form.$('tbodytd.o_field_x2many_list_row_adda'));
+            assert.containsOnce(form,'tr.o_data_row');
 
-            assert.containsNone(form, '.o_x2m_control_panel .o_pager',
-                'o2m pager should be hidden');
+            assert.containsNone(form,'.o_x2m_control_panel.o_pager',
+                'o2mpagershouldbehidden');
             form.destroy();
         });
 
-        QUnit.test('one2many list with a many2one', async function (assert) {
+        QUnit.test('one2manylistwithamany2one',asyncfunction(assert){
             assert.expect(5);
 
-            let checkOnchange = false;
-            this.data.partner.records[0].p = [2];
-            this.data.partner.records[1].product_id = 37;
-            this.data.partner.onchanges.p = function (obj) {
-                obj.p = [
-                    [5], // delete all
-                    [1, 2, { product_id: [37, "xphone"] }], // update existing record
-                    [0, 0, { product_id: [41, "xpad"] }]
+            letcheckOnchange=false;
+            this.data.partner.records[0].p=[2];
+            this.data.partner.records[1].product_id=37;
+            this.data.partner.onchanges.p=function(obj){
+                obj.p=[
+                    [5],//deleteall
+                    [1,2,{product_id:[37,"xphone"]}],//updateexistingrecord
+                    [0,0,{product_id:[41,"xpad"]}]
                 ];
                 //
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<field name="product_id"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="product_id"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                archs: {
+                res_id:1,
+                archs:{
                     'partner,false,form':
-                        '<form string="Partner"><field name="product_id"/></form>',
+                        '<formstring="Partner"><fieldname="product_id"/></form>',
                 },
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange' && checkOnchange) {
-                        assert.deepEqual(args.args[1].p, [[4, 2, false], [0, args.args[1].p[1][1], { product_id: 41 }]],
-                            "should trigger onchange with correct parameters");
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'&&checkOnchange){
+                        assert.deepEqual(args.args[1].p,[[4,2,false],[0,args.args[1].p[1][1],{product_id:41}]],
+                            "shouldtriggeronchangewithcorrectparameters");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            assert.strictEqual(form.$('tbody td:contains(xphone)').length, 1,
-                "should have properly fetched the many2one nameget");
-            assert.strictEqual(form.$('tbody td:contains(xpad)').length, 0,
-                "should not display 'xpad' anywhere");
+            assert.strictEqual(form.$('tbodytd:contains(xphone)').length,1,
+                "shouldhaveproperlyfetchedthemany2onenameget");
+            assert.strictEqual(form.$('tbodytd:contains(xpad)').length,0,
+                "shouldnotdisplay'xpad'anywhere");
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            await testUtils.dom.click(form.$('tbody td.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('tbodytd.o_field_x2many_list_row_adda'));
 
-            checkOnchange = true;
-            await testUtils.fields.many2one.clickOpenDropdown('product_id');
-            testUtils.fields.many2one.clickItem('product_id', 'xpad');
+            checkOnchange=true;
+            awaittestUtils.fields.many2one.clickOpenDropdown('product_id');
+            testUtils.fields.many2one.clickItem('product_id','xpad');
 
-            await testUtils.dom.click($('.modal .modal-footer button:eq(0)'));
+            awaittestUtils.dom.click($('.modal.modal-footerbutton:eq(0)'));
 
-            assert.strictEqual(form.$('tbody td:contains(xpad)').length, 1,
-                "should display 'xpad' on a td");
-            assert.strictEqual(form.$('tbody td:contains(xphone)').length, 1,
-                "should still display xphone");
+            assert.strictEqual(form.$('tbodytd:contains(xpad)').length,1,
+                "shoulddisplay'xpad'onatd");
+            assert.strictEqual(form.$('tbodytd:contains(xphone)').length,1,
+                "shouldstilldisplayxphone");
             form.destroy();
         });
 
-        QUnit.test('one2many list with inline form view', async function (assert) {
+        QUnit.test('one2manylistwithinlineformview',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.partner.records[0].p = [];
+            this.data.partner.records[0].p=[];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<form string="Partner">' +
-                    '<field name="product_id"/>' +
-                    '<field name="int_field"/>' +
-                    '</form>' +
-                    '<tree>' +
-                    '<field name="product_id"/>' +
-                    '<field name="foo"/>' +  // don't remove this, it is
-                    // useful to make sure the foo fieldwidget
-                    // does not crash because the foo field
-                    // is not in the form view
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<formstring="Partner">'+
+                    '<fieldname="product_id"/>'+
+                    '<fieldname="int_field"/>'+
+                    '</form>'+
+                    '<tree>'+
+                    '<fieldname="product_id"/>'+
+                    '<fieldname="foo"/>'+ //don'tremovethis,itis
+                    //usefultomakesurethefoofieldwidget
+                    //doesnotcrashbecausethefoofield
+                    //isnotintheformview
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'write') {
-                        assert.deepEqual(args.args[1].p, [[0, args.args[1].p[0][1], {
-                            foo: "My little Foo Value", int_field: 123, product_id: 41,
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='write'){
+                        assert.deepEqual(args.args[1].p,[[0,args.args[1].p[0][1],{
+                            foo:"MylittleFooValue",int_field:123,product_id:41,
                         }]]);
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            await testUtils.dom.click(form.$('tbody td.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('tbodytd.o_field_x2many_list_row_adda'));
 
-            // write in the many2one field, value = 37 (xphone)
-            await testUtils.fields.many2one.clickOpenDropdown('product_id');
-            await testUtils.fields.many2one.clickHighlightedItem('product_id');
+            //writeinthemany2onefield,value=37(xphone)
+            awaittestUtils.fields.many2one.clickOpenDropdown('product_id');
+            awaittestUtils.fields.many2one.clickHighlightedItem('product_id');
 
-            // write in the integer field
-            await testUtils.fields.editInput($('.modal .modal-body input.o_field_widget'), '123');
+            //writeintheintegerfield
+            awaittestUtils.fields.editInput($('.modal.modal-bodyinput.o_field_widget'),'123');
 
-            // save and close
-            await testUtils.dom.click($('.modal .modal-footer button:eq(0)'));
+            //saveandclose
+            awaittestUtils.dom.click($('.modal.modal-footerbutton:eq(0)'));
 
-            assert.strictEqual(form.$('tbody td:contains(xphone)').length, 1,
-                "should display 'xphone' in a td");
+            assert.strictEqual(form.$('tbodytd:contains(xphone)').length,1,
+                "shoulddisplay'xphone'inatd");
 
-            // reopen the record in form view
-            await testUtils.dom.click(form.$('tbody td:contains(xphone)'));
+            //reopentherecordinformview
+            awaittestUtils.dom.click(form.$('tbodytd:contains(xphone)'));
 
-            assert.strictEqual($('.modal .modal-body input').val(), "xphone",
-                "should display 'xphone' in an input");
+            assert.strictEqual($('.modal.modal-bodyinput').val(),"xphone",
+                "shoulddisplay'xphone'inaninput");
 
-            await testUtils.fields.editInput($('.modal .modal-body input.o_field_widget'), '456');
+            awaittestUtils.fields.editInput($('.modal.modal-bodyinput.o_field_widget'),'456');
 
-            // discard
-            await testUtils.dom.click($('.modal .modal-footer span:contains(Discard)'));
+            //discard
+            awaittestUtils.dom.click($('.modal.modal-footerspan:contains(Discard)'));
 
-            // reopen the record in form view
-            await testUtils.dom.click(form.$('tbody td:contains(xphone)'));
+            //reopentherecordinformview
+            awaittestUtils.dom.click(form.$('tbodytd:contains(xphone)'));
 
-            assert.strictEqual($('.modal .modal-body input.o_field_widget').val(), "123",
-                "should display 123 (previous change has been discarded)");
+            assert.strictEqual($('.modal.modal-bodyinput.o_field_widget').val(),"123",
+                "shoulddisplay123(previouschangehasbeendiscarded)");
 
-            // write in the many2one field, value = 41 (xpad)
-            await testUtils.fields.many2one.clickOpenDropdown('product_id');
-            testUtils.fields.many2one.clickItem('product_id', 'xpad');
+            //writeinthemany2onefield,value=41(xpad)
+            awaittestUtils.fields.many2one.clickOpenDropdown('product_id');
+            testUtils.fields.many2one.clickItem('product_id','xpad');
 
-            // save and close
-            await testUtils.dom.click($('.modal .modal-footer button:eq(0)'));
+            //saveandclose
+            awaittestUtils.dom.click($('.modal.modal-footerbutton:eq(0)'));
 
-            assert.strictEqual(form.$('tbody td:contains(xpad)').length, 1,
-                "should display 'xpad' in a td");
+            assert.strictEqual(form.$('tbodytd:contains(xpad)').length,1,
+                "shoulddisplay'xpad'inatd");
 
-            // save the record
-            await testUtils.form.clickSave(form);
+            //savetherecord
+            awaittestUtils.form.clickSave(form);
             form.destroy();
         });
 
-        QUnit.test('one2many list with inline form view with context with parent key', async function (assert) {
+        QUnit.test('one2manylistwithinlineformviewwithcontextwithparentkey',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.records[0].p = [2];
-            this.data.partner.records[0].product_id = 41;
-            this.data.partner.records[1].product_id = 37;
+            this.data.partner.records[0].p=[2];
+            this.data.partner.records[0].product_id=41;
+            this.data.partner.records[1].product_id=37;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="foo"/>' +
-                    '<field name="product_id"/>' +
-                    '<field name="p">' +
-                    '<form string="Partner">' +
-                    '<field name="product_id" context="{\'partner_foo\':parent.foo, \'lalala\': parent.product_id}"/>' +
-                    '</form>' +
-                    '<tree>' +
-                    '<field name="product_id"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="product_id"/>'+
+                    '<fieldname="p">'+
+                    '<formstring="Partner">'+
+                    '<fieldname="product_id"context="{\'partner_foo\':parent.foo,\'lalala\':parent.product_id}"/>'+
+                    '</form>'+
+                    '<tree>'+
+                    '<fieldname="product_id"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'name_search') {
-                        assert.strictEqual(args.kwargs.context.partner_foo, "yop",
-                            "should have correctly evaluated parent foo field");
-                        assert.strictEqual(args.kwargs.context.lalala, 41,
-                            "should have correctly evaluated parent product_id field");
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='name_search'){
+                        assert.strictEqual(args.kwargs.context.partner_foo,"yop",
+                            "shouldhavecorrectlyevaluatedparentfoofield");
+                        assert.strictEqual(args.kwargs.context.lalala,41,
+                            "shouldhavecorrectlyevaluatedparentproduct_idfield");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.form.clickEdit(form);
-            // open a modal
-            await testUtils.dom.click(form.$('tr.o_data_row:eq(0) td:contains(xphone)'));
+            awaittestUtils.form.clickEdit(form);
+            //openamodal
+            awaittestUtils.dom.click(form.$('tr.o_data_row:eq(0)td:contains(xphone)'));
 
-            // write in the many2one field
-            await testUtils.dom.click($('.modal .o_field_many2one input'));
+            //writeinthemany2onefield
+            awaittestUtils.dom.click($('.modal.o_field_many2oneinput'));
 
             form.destroy();
         });
 
-        QUnit.test('value of invisible x2many fields is correctly evaluated in context', async function (assert) {
+        QUnit.test('valueofinvisiblex2manyfieldsiscorrectlyevaluatedincontext',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.records[0].timmy = [12];
-            this.data.partner.records[0].p = [2, 3];
+            this.data.partner.records[0].timmy=[12];
+            this.data.partner.records[0].p=[2,3];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
                 arch:
-                    '<form string="Partners">' +
-                    '<field name="product_id" context="{\'p\': p, \'timmy\': timmy}"/>' +
-                    '<field name="p" invisible="1"/>' +
-                    '<field name="timmy" invisible="1"/>' +
+                    '<formstring="Partners">'+
+                    '<fieldname="product_id"context="{\'p\':p,\'timmy\':timmy}"/>'+
+                    '<fieldname="p"invisible="1"/>'+
+                    '<fieldname="timmy"invisible="1"/>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'name_search') {
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='name_search'){
                         assert.deepEqual(
-                            args.kwargs.context, {
-                                p: [[4, 2, false], [4, 3, false]],
-                                timmy: [[6, false, [12]]],
-                            }, 'values of x2manys should have been correctly evaluated in context');
+                            args.kwargs.context,{
+                                p:[[4,2,false],[4,3,false]],
+                                timmy:[[6,false,[12]]],
+                            },'valuesofx2manysshouldhavebeencorrectlyevaluatedincontext');
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_widget[name=product_id] input'));
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_widget[name=product_id]input'));
 
             form.destroy();
         });
 
-        QUnit.test('one2many list, editable, with many2one and with context with parent key', async function (assert) {
+        QUnit.test('one2manylist,editable,withmany2oneandwithcontextwithparentkey',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.records[0].p = [2];
-            this.data.partner.records[1].product_id = 37;
+            this.data.partner.records[0].p=[2];
+            this.data.partner.records[1].product_id=37;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="foo"/>' +
-                    '<field name="p">' +
-                    '<tree editable="bottom">' +
-                    '<field name="product_id" context="{\'partner_foo\':parent.foo}"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="p">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="product_id"context="{\'partner_foo\':parent.foo}"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'name_search') {
-                        assert.strictEqual(args.kwargs.context.partner_foo, "yop",
-                            "should have correctly evaluated parent foo field");
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='name_search'){
+                        assert.strictEqual(args.kwargs.context.partner_foo,"yop",
+                            "shouldhavecorrectlyevaluatedparentfoofield");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            await testUtils.dom.click(form.$('tr.o_data_row:eq(0) td:contains(xphone)'));
+            awaittestUtils.dom.click(form.$('tr.o_data_row:eq(0)td:contains(xphone)'));
 
-            // trigger a name search
-            await testUtils.dom.click(form.$('table td input'));
+            //triggeranamesearch
+            awaittestUtils.dom.click(form.$('tabletdinput'));
 
             form.destroy();
         });
 
-        QUnit.test('one2many list, editable, with a date in the context', async function (assert) {
+        QUnit.test('one2manylist,editable,withadateinthecontext',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.records[0].p = [2];
-            this.data.partner.records[1].product_id = 37;
+            this.data.partner.records[0].p=[2];
+            this.data.partner.records[1].product_id=37;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="date"/>' +
-                    '<field name="p" context="{\'date\':date}">' +
-                    '<tree editable="top">' +
-                    '<field name="date"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="date"/>'+
+                    '<fieldname="p"context="{\'date\':date}">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="date"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 2,
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
-                        assert.strictEqual(args.kwargs.context.date, '2017-01-25',
-                            "should have properly evaluated date key in context");
+                res_id:2,
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
+                        assert.strictEqual(args.kwargs.context.date,'2017-01-25',
+                            "shouldhaveproperlyevaluateddatekeyincontext");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
             form.destroy();
         });
 
-        QUnit.test('one2many field with context', async function (assert) {
+        QUnit.test('one2manyfieldwithcontext',asyncfunction(assert){
             assert.expect(2);
 
-            var counter = 0;
+            varcounter=0;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="turtles" context="{\'turtles\':turtles}">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="turtles"context="{\'turtles\':turtles}">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
-                        var expected = counter === 0 ?
-                            [[4, 2, false]] :
-                            [[4, 2, false], [0, args.kwargs.context.turtles[1][1], { turtle_foo: 'hammer' }]];
-                        assert.deepEqual(args.kwargs.context.turtles, expected,
-                            "should have properly evaluated turtles key in context");
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
+                        varexpected=counter===0?
+                            [[4,2,false]]:
+                            [[4,2,false],[0,args.kwargs.context.turtles[1][1],{turtle_foo:'hammer'}]];
+                        assert.deepEqual(args.kwargs.context.turtles,expected,
+                            "shouldhaveproperlyevaluatedturtleskeyincontext");
                         counter++;
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('input[name="turtle_foo"]'), 'hammer');
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('input[name="turtle_foo"]'),'hammer');
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
             form.destroy();
         });
 
-        QUnit.test('one2many list edition, some basic functionality', async function (assert) {
+        QUnit.test('one2manylistedition,somebasicfunctionality',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.partner.fields.foo.default = false;
+            this.data.partner.fields.foo.default=false;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree editable="top">' +
-                    '<field name="foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            await testUtils.dom.click(form.$('tbody td.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('tbodytd.o_field_x2many_list_row_adda'));
 
-            assert.containsOnce(form, 'td input.o_field_widget',
-                "should have created a row in edit mode");
+            assert.containsOnce(form,'tdinput.o_field_widget',
+                "shouldhavecreatedarowineditmode");
 
-            await testUtils.fields.editInput(form.$('td input.o_field_widget'), 'a');
+            awaittestUtils.fields.editInput(form.$('tdinput.o_field_widget'),'a');
 
-            assert.containsOnce(form, 'td input.o_field_widget',
-                "should not have unselected the row after edition");
+            assert.containsOnce(form,'tdinput.o_field_widget',
+                "shouldnothaveunselectedtherowafteredition");
 
-            await testUtils.fields.editInput(form.$('td input.o_field_widget'), 'abc');
-            await testUtils.form.clickSave(form);
+            awaittestUtils.fields.editInput(form.$('tdinput.o_field_widget'),'abc');
+            awaittestUtils.form.clickSave(form);
 
-            assert.strictEqual(form.$('td:contains(abc)').length, 1,
-                "should have a row with the correct value");
+            assert.strictEqual(form.$('td:contains(abc)').length,1,
+                "shouldhavearowwiththecorrectvalue");
             form.destroy();
         });
 
-        QUnit.test('one2many list, the context is properly evaluated and sent', async function (assert) {
+        QUnit.test('one2manylist,thecontextisproperlyevaluatedandsent',asyncfunction(assert){
             assert.expect(2);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="int_field"/>' +
-                    '<field name="p" context="{\'hello\': \'world\', \'abc\': int_field}">' +
-                    '<tree editable="top">' +
-                    '<field name="foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="int_field"/>'+
+                    '<fieldname="p"context="{\'hello\':\'world\',\'abc\':int_field}">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
-                        var context = args.kwargs.context;
-                        assert.strictEqual(context.hello, "world");
-                        assert.strictEqual(context.abc, 10);
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
+                        varcontext=args.kwargs.context;
+                        assert.strictEqual(context.hello,"world");
+                        assert.strictEqual(context.abc,10);
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('tbody td.o_field_x2many_list_row_add a'));
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('tbodytd.o_field_x2many_list_row_adda'));
             form.destroy();
         });
 
-        QUnit.test('one2many with many2many widget: create', async function (assert) {
+        QUnit.test('one2manywithmany2manywidget:create',asyncfunction(assert){
             assert.expect(10);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles" widget="many2many">' +
-                    '<tree>' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="turtle_qux"/>' +
-                    '<field name="turtle_int"/>' +
-                    '<field name="product_id"/>' +
-                    '</tree>' +
-                    '<form>' +
-                    '<group>' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="turtle_bar"/>' +
-                    '<field name="turtle_int"/>' +
-                    '<field name="product_id"/>' +
-                    '</group>' +
-                    '</form>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles"widget="many2many">'+
+                    '<tree>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="turtle_qux"/>'+
+                    '<fieldname="turtle_int"/>'+
+                    '<fieldname="product_id"/>'+
+                    '</tree>'+
+                    '<form>'+
+                    '<group>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="turtle_bar"/>'+
+                    '<fieldname="turtle_int"/>'+
+                    '<fieldname="product_id"/>'+
+                    '</group>'+
+                    '</form>'+
+                    '</field>'+
                     '</form>',
-                archs: {
-                    'turtle,false,list': '<tree><field name="display_name"/><field name="turtle_foo"/><field name="turtle_bar"/><field name="product_id"/></tree>',
-                    'turtle,false,search': '<search><field name="turtle_foo"/><field name="turtle_bar"/><field name="product_id"/></search>',
+                archs:{
+                    'turtle,false,list':'<tree><fieldname="display_name"/><fieldname="turtle_foo"/><fieldname="turtle_bar"/><fieldname="product_id"/></tree>',
+                    'turtle,false,search':'<search><fieldname="turtle_foo"/><fieldname="turtle_bar"/><fieldname="product_id"/></search>',
                 },
-                session: {},
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (route === '/web/dataset/call_kw/turtle/create') {
-                        assert.ok(args.args, "should write on the turtle record");
+                session:{},
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(route==='/web/dataset/call_kw/turtle/create'){
+                        assert.ok(args.args,"shouldwriteontheturtlerecord");
                     }
-                    if (route === '/web/dataset/call_kw/partner/write') {
-                        assert.strictEqual(args.args[0][0], 1, "should write on the partner record 1");
-                        assert.strictEqual(args.args[1].turtles[0][0], 6, "should send only a 'replace with' command");
+                    if(route==='/web/dataset/call_kw/partner/write'){
+                        assert.strictEqual(args.args[0][0],1,"shouldwriteonthepartnerrecord1");
+                        assert.strictEqual(args.args[1].turtles[0][0],6,"shouldsendonlya'replacewith'command");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.strictEqual($('.modal .o_data_row').length, 2,
-                "should have 2 records in the select view (the last one is not displayed because it is already selected)");
+            assert.strictEqual($('.modal.o_data_row').length,2,
+                "shouldhave2recordsintheselectview(thelastoneisnotdisplayedbecauseitisalreadyselected)");
 
-            await testUtils.dom.click($('.modal .o_data_row:first .o_list_record_selector input'));
-            await testUtils.dom.click($('.modal .o_select_button'));
-            await testUtils.dom.click($('.o_form_button_save'));
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click($('.modal.o_data_row:first.o_list_record_selectorinput'));
+            awaittestUtils.dom.click($('.modal.o_select_button'));
+            awaittestUtils.dom.click($('.o_form_button_save'));
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.strictEqual($('.modal .o_data_row').length, 1,
-                "should have 1 record in the select view");
+            assert.strictEqual($('.modal.o_data_row').length,1,
+                "shouldhave1recordintheselectview");
 
-            await testUtils.dom.click($('.modal-footer button:eq(1)'));
-            await testUtils.fields.editInput($('.modal input.o_field_widget[name="turtle_foo"]'), 'tototo');
-            await testUtils.fields.editInput($('.modal input.o_field_widget[name="turtle_int"]'), 50);
-            await testUtils.fields.many2one.clickOpenDropdown('product_id');
-            await testUtils.fields.many2one.clickHighlightedItem('product_id');
+            awaittestUtils.dom.click($('.modal-footerbutton:eq(1)'));
+            awaittestUtils.fields.editInput($('.modalinput.o_field_widget[name="turtle_foo"]'),'tototo');
+            awaittestUtils.fields.editInput($('.modalinput.o_field_widget[name="turtle_int"]'),50);
+            awaittestUtils.fields.many2one.clickOpenDropdown('product_id');
+            awaittestUtils.fields.many2one.clickHighlightedItem('product_id');
 
-            await testUtils.dom.click($('.modal-footer button:contains(&):first'));
+            awaittestUtils.dom.click($('.modal-footerbutton:contains(&):first'));
 
-            assert.strictEqual($('.modal').length, 0, "should close the modals");
+            assert.strictEqual($('.modal').length,0,"shouldclosethemodals");
 
-            assert.containsN(form, '.o_data_row', 3,
-                "should have 3 records in one2many list");
-            assert.strictEqual(form.$('.o_data_row').text(), "blip1.59yop1.50tototo1.550xphone",
-                "should display the record values in one2many list");
+            assert.containsN(form,'.o_data_row',3,
+                "shouldhave3recordsinone2manylist");
+            assert.strictEqual(form.$('.o_data_row').text(),"blip1.59yop1.50tototo1.550xphone",
+                "shoulddisplaytherecordvaluesinone2manylist");
 
-            await testUtils.dom.click($('.o_form_button_save'));
+            awaittestUtils.dom.click($('.o_form_button_save'));
 
             form.destroy();
         });
 
-        QUnit.test('one2many with many2many widget: edition', async function (assert) {
+        QUnit.test('one2manywithmany2manywidget:edition',asyncfunction(assert){
             assert.expect(7);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles" widget="many2many">' +
-                    '<tree>' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="turtle_qux"/>' +
-                    '<field name="turtle_int"/>' +
-                    '<field name="product_id"/>' +
-                    '</tree>' +
-                    '<form>' +
-                    '<group>' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="turtle_bar"/>' +
-                    '<field name="turtle_int"/>' +
-                    '<field name="turtle_trululu"/>' +
-                    '<field name="product_id"/>' +
-                    '</group>' +
-                    '</form>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles"widget="many2many">'+
+                    '<tree>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="turtle_qux"/>'+
+                    '<fieldname="turtle_int"/>'+
+                    '<fieldname="product_id"/>'+
+                    '</tree>'+
+                    '<form>'+
+                    '<group>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="turtle_bar"/>'+
+                    '<fieldname="turtle_int"/>'+
+                    '<fieldname="turtle_trululu"/>'+
+                    '<fieldname="product_id"/>'+
+                    '</group>'+
+                    '</form>'+
+                    '</field>'+
                     '</form>',
-                archs: {
-                    'turtle,false,list': '<tree><field name="display_name"/><field name="turtle_foo"/><field name="turtle_bar"/><field name="product_id"/></tree>',
-                    'turtle,false,search': '<search><field name="turtle_foo"/><field name="turtle_bar"/><field name="product_id"/></search>',
+                archs:{
+                    'turtle,false,list':'<tree><fieldname="display_name"/><fieldname="turtle_foo"/><fieldname="turtle_bar"/><fieldname="product_id"/></tree>',
+                    'turtle,false,search':'<search><fieldname="turtle_foo"/><fieldname="turtle_bar"/><fieldname="product_id"/></search>',
                 },
-                session: {},
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (route === '/web/dataset/call_kw/turtle/write') {
-                        assert.strictEqual(args.args[0].length, 1, "should write on the turtle record");
-                        assert.deepEqual(args.args[1], { "product_id": 37 }, "should write only the product_id on the turtle record");
+                session:{},
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(route==='/web/dataset/call_kw/turtle/write'){
+                        assert.strictEqual(args.args[0].length,1,"shouldwriteontheturtlerecord");
+                        assert.deepEqual(args.args[1],{"product_id":37},"shouldwriteonlytheproduct_idontheturtlerecord");
                     }
-                    if (route === '/web/dataset/call_kw/partner/write') {
-                        assert.strictEqual(args.args[0][0], 1, "should write on the partner record 1");
-                        assert.strictEqual(args.args[1].turtles[0][0], 6, "should send only a 'replace with' command");
+                    if(route==='/web/dataset/call_kw/partner/write'){
+                        assert.strictEqual(args.args[0][0],1,"shouldwriteonthepartnerrecord1");
+                        assert.strictEqual(args.args[1].turtles[0][0],6,"shouldsendonlya'replacewith'command");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.dom.click(form.$('.o_data_row:first'));
-            assert.strictEqual($('.modal .modal-title').first().text().trim(), 'Open: one2many turtle field',
-                "modal should use the python field string as title");
-            await testUtils.dom.click($('.modal .o_form_button_cancel'));
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_data_row:first'));
+            assert.strictEqual($('.modal.modal-title').first().text().trim(),'Open:one2manyturtlefield',
+                "modalshouldusethepythonfieldstringastitle");
+            awaittestUtils.dom.click($('.modal.o_form_button_cancel'));
+            awaittestUtils.form.clickEdit(form);
 
-            // edit the first one2many record
-            await testUtils.dom.click(form.$('.o_data_row:first'));
-            await testUtils.fields.many2one.clickOpenDropdown('product_id');
-            await testUtils.fields.many2one.clickHighlightedItem('product_id');
-            await testUtils.dom.click($('.modal-footer button:first'));
+            //editthefirstone2manyrecord
+            awaittestUtils.dom.click(form.$('.o_data_row:first'));
+            awaittestUtils.fields.many2one.clickOpenDropdown('product_id');
+            awaittestUtils.fields.many2one.clickHighlightedItem('product_id');
+            awaittestUtils.dom.click($('.modal-footerbutton:first'));
 
-            await testUtils.dom.click($('.o_form_button_save'));
+            awaittestUtils.dom.click($('.o_form_button_save'));
 
-            // add a one2many record
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.dom.click($('.modal .o_data_row:first .o_list_record_selector input'));
-            await testUtils.dom.click($('.modal .o_select_button'));
+            //addaone2manyrecord
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.dom.click($('.modal.o_data_row:first.o_list_record_selectorinput'));
+            awaittestUtils.dom.click($('.modal.o_select_button'));
 
-            // edit the second one2many record
-            await testUtils.dom.click(form.$('.o_data_row:eq(1)'));
-            await testUtils.fields.many2one.clickOpenDropdown('product_id');
-            await testUtils.fields.many2one.clickHighlightedItem('product_id');
-            await testUtils.dom.click($('.modal-footer button:first'));
+            //editthesecondone2manyrecord
+            awaittestUtils.dom.click(form.$('.o_data_row:eq(1)'));
+            awaittestUtils.fields.many2one.clickOpenDropdown('product_id');
+            awaittestUtils.fields.many2one.clickHighlightedItem('product_id');
+            awaittestUtils.dom.click($('.modal-footerbutton:first'));
 
-            await testUtils.dom.click($('.o_form_button_save'));
+            awaittestUtils.dom.click($('.o_form_button_save'));
 
             form.destroy();
         });
 
-        QUnit.test('new record, the context is properly evaluated and sent', async function (assert) {
+        QUnit.test('newrecord,thecontextisproperlyevaluatedandsent',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.fields.int_field.default = 17;
-            var n = 0;
+            this.data.partner.fields.int_field.default=17;
+            varn=0;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="int_field"/>' +
-                    '<field name="p" context="{\'hello\': \'world\', \'abc\': int_field}">' +
-                    '<tree editable="top">' +
-                    '<field name="foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="int_field"/>'+
+                    '<fieldname="p"context="{\'hello\':\'world\',\'abc\':int_field}">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
                         n++;
-                        if (n === 2) {
-                            var context = args.kwargs.context;
-                            assert.strictEqual(context.hello, "world");
-                            assert.strictEqual(context.abc, 17);
+                        if(n===2){
+                            varcontext=args.kwargs.context;
+                            assert.strictEqual(context.hello,"world");
+                            assert.strictEqual(context.abc,17);
                         }
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.dom.click(form.$('tbody td.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('tbodytd.o_field_x2many_list_row_adda'));
             form.destroy();
         });
 
-        QUnit.test('parent data is properly sent on an onchange rpc', async function (assert) {
+        QUnit.test('parentdataisproperlysentonanonchangerpc',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.onchanges = { bar: function () { } };
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="foo"/>' +
-                    '<field name="p">' +
-                    '<tree editable="top">' +
-                    '<field name="bar"/>' +
-                    '</tree>' +
-                    '</field>' +
+            this.data.partner.onchanges={bar:function(){}};
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="p">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="bar"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
-                        var fieldValues = args.args[1];
-                        assert.strictEqual(fieldValues.trululu.foo, "yop",
-                            "should have properly sent the parent foo value");
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
+                        varfieldValues=args.args[1];
+                        assert.strictEqual(fieldValues.trululu.foo,"yop",
+                            "shouldhaveproperlysenttheparentfoovalue");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('tbody td.o_field_x2many_list_row_add a'));
-            // use of owlCompatibilityNextTick because we have an x2many field with a boolean field
-            // (written in owl), so when we add a line, we sequentially render the list itself
-            // (including the boolean field), so we have to wait for the next animation frame, and
-            // then we render the control panel (also in owl), so we have to wait again for the
-            // next animation frame
-            await testUtils.owlCompatibilityNextTick();
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('tbodytd.o_field_x2many_list_row_adda'));
+            //useofowlCompatibilityNextTickbecausewehaveanx2manyfieldwithabooleanfield
+            //(writteninowl),sowhenweaddaline,wesequentiallyrenderthelistitself
+            //(includingthebooleanfield),sowehavetowaitforthenextanimationframe,and
+            //thenwerenderthecontrolpanel(alsoinowl),sowehavetowaitagainforthe
+            //nextanimationframe
+            awaittestUtils.owlCompatibilityNextTick();
             form.destroy();
         });
 
-        QUnit.test('parent data is properly sent on an onchange rpc (existing x2many record)', async function (assert) {
+        QUnit.test('parentdataisproperlysentonanonchangerpc(existingx2manyrecord)',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.partner.onchanges = {
-                display_name: function () {},
+            this.data.partner.onchanges={
+                display_name:function(){},
             };
-            this.data.partner.records[0].p = [1];
-            this.data.partner.records[0].turtles = [2];
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            this.data.partner.records[0].p=[1];
+            this.data.partner.records[0].turtles=[2];
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="foo"/>
-                        <field name="p">
-                            <tree editable="top">
-                                <field name="display_name"/>
-                                <field name="turtles" widget="many2many_tags"/>
+                        <fieldname="foo"/>
+                        <fieldname="p">
+                            <treeeditable="top">
+                                <fieldname="display_name"/>
+                                <fieldname="turtles"widget="many2many_tags"/>
                             </tree>
                         </field>
                     </form>`,
-                res_id: 1,
-                mockRPC(route, args) {
-                    if (args.method === 'onchange') {
-                        const fieldValues = args.args[1];
-                        assert.strictEqual(fieldValues.trululu.foo, "yop");
-                        // we only send fields that changed inside the reverse many2one
-                        assert.deepEqual(fieldValues.trululu.p, [
-                            [1, 1, { display_name: 'new val' }],
+                res_id:1,
+                mockRPC(route,args){
+                    if(args.method==='onchange'){
+                        constfieldValues=args.args[1];
+                        assert.strictEqual(fieldValues.trululu.foo,"yop");
+                        //weonlysendfieldsthatchangedinsidethereversemany2one
+                        assert.deepEqual(fieldValues.trululu.p,[
+                            [1,1,{display_name:'newval'}],
                         ]);
                     }
-                    return this._super(...arguments);
+                    returnthis._super(...arguments);
                 },
-                viewOptions: {
-                    mode: 'edit',
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            assert.containsOnce(form, '.o_data_row');
+            assert.containsOnce(form,'.o_data_row');
 
-            await testUtils.dom.click(form.$('.o_data_row .o_data_cell:first'));
+            awaittestUtils.dom.click(form.$('.o_data_row.o_data_cell:first'));
 
-            assert.containsOnce(form, '.o_data_row.o_selected_row');
-            await testUtils.fields.editInput(form.$('.o_selected_row .o_field_widget[name=display_name]'), "new val");
+            assert.containsOnce(form,'.o_data_row.o_selected_row');
+            awaittestUtils.fields.editInput(form.$('.o_selected_row.o_field_widget[name=display_name]'),"newval");
 
             form.destroy();
         });
 
-        QUnit.test('parent data is properly sent on an onchange rpc, new record', async function (assert) {
+        QUnit.test('parentdataisproperlysentonanonchangerpc,newrecord',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.turtle.onchanges = { turtle_bar: function () { } };
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="foo"/>' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_bar"/>' +
-                    '</tree>' +
-                    '</field>' +
+            this.data.turtle.onchanges={turtle_bar:function(){}};
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_bar"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    if (args.method === 'onchange' && args.model === 'turtle') {
-                        var fieldValues = args.args[1];
-                        assert.strictEqual(fieldValues.turtle_trululu.foo, "My little Foo Value",
-                            "should have properly sent the parent foo value");
+                    if(args.method==='onchange'&&args.model==='turtle'){
+                        varfieldValues=args.args[1];
+                        assert.strictEqual(fieldValues.turtle_trululu.foo,"MylittleFooValue",
+                            "shouldhaveproperlysenttheparentfoovalue");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
-            await testUtils.dom.click(form.$('tbody td.o_field_x2many_list_row_add a'));
-            // use of owlCompatibilityNextTick because we have an x2many field with a boolean field
-            // (written in owl), so when we add a line, we sequentially render the list itself
-            // (including the boolean field), so we have to wait for the next animation frame, and
-            // then we render the control panel (also in owl), so we have to wait again for the
-            // next animation frame
-            await testUtils.owlCompatibilityNextTick();
-            assert.verifySteps(['onchange', 'onchange']);
+            awaittestUtils.dom.click(form.$('tbodytd.o_field_x2many_list_row_adda'));
+            //useofowlCompatibilityNextTickbecausewehaveanx2manyfieldwithabooleanfield
+            //(writteninowl),sowhenweaddaline,wesequentiallyrenderthelistitself
+            //(includingthebooleanfield),sowehavetowaitforthenextanimationframe,and
+            //thenwerenderthecontrolpanel(alsoinowl),sowehavetowaitagainforthe
+            //nextanimationframe
+            awaittestUtils.owlCompatibilityNextTick();
+            assert.verifySteps(['onchange','onchange']);
             form.destroy();
         });
 
-        QUnit.test('id in one2many obtained in onchange is properly set', async function (assert) {
+        QUnit.test('idinone2manyobtainedinonchangeisproperlyset',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.onchanges.turtles = function (obj) {
-                obj.turtles = [
+            this.data.partner.onchanges.turtles=function(obj){
+                obj.turtles=[
                     [5],
-                    [1, 3, { turtle_foo: "kawa" }]
+                    [1,3,{turtle_foo:"kawa"}]
                 ];
             };
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree>' +
-                    '<field name="id"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<tree>'+
+                    '<fieldname="id"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
             });
 
-            assert.strictEqual(form.$('tr.o_data_row').text(), '3kawa',
-                "should have properly displayed id and foo field");
+            assert.strictEqual(form.$('tr.o_data_row').text(),'3kawa',
+                "shouldhaveproperlydisplayedidandfoofield");
             form.destroy();
         });
 
-        QUnit.test('id field in one2many in a new record', async function (assert) {
+        QUnit.test('idfieldinone2manyinanewrecord',asyncfunction(assert){
             assert.expect(1);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="id" invisible="1"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="id"invisible="1"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    if (args.method === 'create') {
-                        var virtualID = args.args[0].turtles[0][1];
+                mockRPC:function(route,args){
+                    if(args.method==='create'){
+                        varvirtualID=args.args[0].turtles[0][1];
                         assert.deepEqual(args.args[0].turtles,
-                            [[0, virtualID, { turtle_foo: "cat" }]],
-                            'should send proper commands');
+                            [[0,virtualID,{turtle_foo:"cat"}]],
+                            'shouldsendpropercommands');
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
-            await testUtils.dom.click(form.$('td.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('td input[name="turtle_foo"]'), 'cat');
-            await testUtils.form.clickSave(form);
+            awaittestUtils.dom.click(form.$('td.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('tdinput[name="turtle_foo"]'),'cat');
+            awaittestUtils.form.clickSave(form);
 
             form.destroy();
         });
 
-        QUnit.test('sub form view with a required field', async function (assert) {
+        QUnit.test('subformviewwitharequiredfield',asyncfunction(assert){
             assert.expect(2);
-            this.data.partner.fields.foo.required = true;
-            this.data.partner.fields.foo.default = null;
+            this.data.partner.fields.foo.required=true;
+            this.data.partner.fields.foo.default=null;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<form string="Partner">' +
-                    '<group><field name="foo"/></group>' +
-                    '</form>' +
-                    '<tree>' +
-                    '<field name="foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<formstring="Partner">'+
+                    '<group><fieldname="foo"/></group>'+
+                    '</form>'+
+                    '<tree>'+
+                    '<fieldname="foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('tbody td.o_field_x2many_list_row_add a'));
-            await testUtils.dom.click($('.modal-footer button.btn-primary').first());
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('tbodytd.o_field_x2many_list_row_adda'));
+            awaittestUtils.dom.click($('.modal-footerbutton.btn-primary').first());
 
-            assert.strictEqual($('.modal').length, 1, "should still have an open modal");
-            assert.strictEqual($('.modal tbody label.o_field_invalid').length, 1,
-                "should have displayed invalid fields");
+            assert.strictEqual($('.modal').length,1,"shouldstillhaveanopenmodal");
+            assert.strictEqual($('.modaltbodylabel.o_field_invalid').length,1,
+                "shouldhavedisplayedinvalidfields");
             form.destroy();
         });
 
-        QUnit.test('one2many list with action button', async function (assert) {
+        QUnit.test('one2manylistwithactionbutton',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.partner.records[0].p = [2];
+            this.data.partner.records[0].p=[2];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="int_field"/>' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<field name="foo"/>' +
-                    '<button name="method_name" type="object" icon="fa-plus"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="int_field"/>'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="foo"/>'+
+                    '<buttonname="method_name"type="object"icon="fa-plus"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                intercepts: {
-                    execute_action: function (event) {
-                        assert.deepEqual(event.data.env.currentID, 2,
-                            'should call with correct id');
-                        assert.strictEqual(event.data.env.model, 'partner',
-                            'should call with correct model');
-                        assert.strictEqual(event.data.action_data.name, 'method_name',
-                            "should call correct method");
-                        assert.strictEqual(event.data.action_data.type, 'object',
-                            'should have correct type');
+                res_id:1,
+                intercepts:{
+                    execute_action:function(event){
+                        assert.deepEqual(event.data.env.currentID,2,
+                            'shouldcallwithcorrectid');
+                        assert.strictEqual(event.data.env.model,'partner',
+                            'shouldcallwithcorrectmodel');
+                        assert.strictEqual(event.data.action_data.name,'method_name',
+                            "shouldcallcorrectmethod");
+                        assert.strictEqual(event.data.action_data.type,'object',
+                            'shouldhavecorrecttype');
                     },
                 },
             });
 
-            await testUtils.dom.click(form.$('.o_list_button button'));
+            awaittestUtils.dom.click(form.$('.o_list_buttonbutton'));
 
             form.destroy();
         });
 
-        QUnit.test('one2many kanban with action button', async function (assert) {
+        QUnit.test('one2manykanbanwithactionbutton',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.partner.records[0].p = [2];
+            this.data.partner.records[0].p=[2];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<kanban>' +
-                    '<field name="foo"/>' +
-                    '<templates>' +
-                    '<t t-name="kanban-box">' +
-                    '<div>' +
-                    '<span><t t-esc="record.foo.value"/></span>' +
-                    '<button name="method_name" type="object" class="fa fa-plus"/>' +
-                    '</div>' +
-                    '</t>' +
-                    '</templates>' +
-                    '</kanban>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<kanban>'+
+                    '<fieldname="foo"/>'+
+                    '<templates>'+
+                    '<tt-name="kanban-box">'+
+                    '<div>'+
+                    '<span><tt-esc="record.foo.value"/></span>'+
+                    '<buttonname="method_name"type="object"class="fafa-plus"/>'+
+                    '</div>'+
+                    '</t>'+
+                    '</templates>'+
+                    '</kanban>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                intercepts: {
-                    execute_action: function (event) {
-                        assert.deepEqual(event.data.env.currentID, 2,
-                            'should call with correct id');
-                        assert.strictEqual(event.data.env.model, 'partner',
-                            'should call with correct model');
-                        assert.strictEqual(event.data.action_data.name, 'method_name',
-                            "should call correct method");
-                        assert.strictEqual(event.data.action_data.type, 'object',
-                            'should have correct type');
+                res_id:1,
+                intercepts:{
+                    execute_action:function(event){
+                        assert.deepEqual(event.data.env.currentID,2,
+                            'shouldcallwithcorrectid');
+                        assert.strictEqual(event.data.env.model,'partner',
+                            'shouldcallwithcorrectmodel');
+                        assert.strictEqual(event.data.action_data.name,'method_name',
+                            "shouldcallcorrectmethod");
+                        assert.strictEqual(event.data.action_data.type,'object',
+                            'shouldhavecorrecttype');
                     },
                 },
             });
 
-            await testUtils.dom.click(form.$('.oe_kanban_action_button'));
+            awaittestUtils.dom.click(form.$('.oe_kanban_action_button'));
 
             form.destroy();
         });
 
-        QUnit.test('one2many kanban with edit type action and domain widget (widget using SpecialData)', async function (assert) {
+        QUnit.test('one2manykanbanwithedittypeactionanddomainwidget(widgetusingSpecialData)',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.turtle.fields.model_name = { string: "Domain Condition Model", type: "char" };
-            this.data.turtle.fields.condition = { string: "Domain Condition", type: "char" };
-            _.each(this.data.turtle.records, function (record) {
-                record.model_name = 'partner';
-                record.condition = '[]';
+            this.data.turtle.fields.model_name={string:"DomainConditionModel",type:"char"};
+            this.data.turtle.fields.condition={string:"DomainCondition",type:"char"};
+            _.each(this.data.turtle.records,function(record){
+                record.model_name='partner';
+                record.condition='[]';
             });
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="turtles" mode="kanban">' +
-                    '<kanban>' +
-                    '<templates>' +
-                    '<t t-name="kanban-box">' +
-                    '<div><field name="display_name"/></div>' +
-                    '<div><field name="turtle_foo"/></div>' +
-                    // field without Widget in the list
-                    '<div><field name="condition"/></div>' +
-                    '<div> <a type="edit"> Edit </a> </div>' +
-                    '</t>' +
-                    '</templates>' +
-                    '</kanban>' +
-                    '<form>' +
-                    '<field name="product_id" widget="statusbar"/>' +
-                    '<field name="model_name"/>' +
-                    // field with Widget requiring specialData in the form
-                    '<field name="condition" widget="domain" options="{\'model\': \'model_name\'}"/>' +
-                    '</form>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="turtles"mode="kanban">'+
+                    '<kanban>'+
+                    '<templates>'+
+                    '<tt-name="kanban-box">'+
+                    '<div><fieldname="display_name"/></div>'+
+                    '<div><fieldname="turtle_foo"/></div>'+
+                    //fieldwithoutWidgetinthelist
+                    '<div><fieldname="condition"/></div>'+
+                    '<div><atype="edit">Edit</a></div>'+
+                    '</t>'+
+                    '</templates>'+
+                    '</kanban>'+
+                    '<form>'+
+                    '<fieldname="product_id"widget="statusbar"/>'+
+                    '<fieldname="model_name"/>'+
+                    //fieldwithWidgetrequiringspecialDataintheform
+                    '<fieldname="condition"widget="domain"options="{\'model\':\'model_name\'}"/>'+
+                    '</form>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            await testUtils.dom.click(form.$('.oe_kanban_action:eq(0)'));
-            assert.strictEqual($('.o_domain_selector').length, 1, "should add domain selector widget");
+            awaittestUtils.dom.click(form.$('.oe_kanban_action:eq(0)'));
+            assert.strictEqual($('.o_domain_selector').length,1,"shouldadddomainselectorwidget");
             form.destroy();
         });
 
-        QUnit.test('one2many list with onchange and domain widget (widget using SpecialData)', async function (assert) {
+        QUnit.test('one2manylistwithonchangeanddomainwidget(widgetusingSpecialData)',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.turtle.fields.model_name = { string: "Domain Condition Model", type: "char" };
-            this.data.turtle.fields.condition = { string: "Domain Condition", type: "char" };
-            _.each(this.data.turtle.records, function (record) {
-                record.model_name = 'partner';
-                record.condition = '[]';
+            this.data.turtle.fields.model_name={string:"DomainConditionModel",type:"char"};
+            this.data.turtle.fields.condition={string:"DomainCondition",type:"char"};
+            _.each(this.data.turtle.records,function(record){
+                record.model_name='partner';
+                record.condition='[]';
             });
-            this.data.partner.onchanges = {
-                turtles: function (obj) {
-                    var virtualID = obj.turtles[1][1];
-                    obj.turtles = [
-                        [5], // delete all
-                        [0, virtualID, {
-                            display_name: "coucou",
-                            product_id: [37, "xphone"],
-                            turtle_bar: false,
-                            turtle_foo: "has changed",
-                            turtle_int: 42,
-                            turtle_qux: 9.8,
-                            partner_ids: [],
-                            turtle_ref: 'product,37',
-                            model_name: 'partner',
-                            condition: '[]',
+            this.data.partner.onchanges={
+                turtles:function(obj){
+                    varvirtualID=obj.turtles[1][1];
+                    obj.turtles=[
+                        [5],//deleteall
+                        [0,virtualID,{
+                            display_name:"coucou",
+                            product_id:[37,"xphone"],
+                            turtle_bar:false,
+                            turtle_foo:"haschanged",
+                            turtle_int:42,
+                            turtle_qux:9.8,
+                            partner_ids:[],
+                            turtle_ref:'product,37',
+                            model_name:'partner',
+                            condition:'[]',
                         }],
                     ];
                 },
             };
-            var nbFetchSpecialDomain = 0;
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="turtles" mode="tree">' +
-                    '<tree>' +
-                    '<field name="display_name"/>' +
-                    '<field name="turtle_foo"/>' +
-                    // field without Widget in the list
-                    '<field name="condition"/>' +
-                    '</tree>' +
-                    '<form>' +
-                    '<field name="model_name"/>' +
-                    // field with Widget requiring specialData in the form
-                    '<field name="condition" widget="domain" options="{\'model\': \'model_name\'}"/>' +
-                    '</form>' +
-                    '</field>' +
-                    '</group>' +
+            varnbFetchSpecialDomain=0;
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="turtles"mode="tree">'+
+                    '<tree>'+
+                    '<fieldname="display_name"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    //fieldwithoutWidgetinthelist
+                    '<fieldname="condition"/>'+
+                    '</tree>'+
+                    '<form>'+
+                    '<fieldname="model_name"/>'+
+                    //fieldwithWidgetrequiringspecialDataintheform
+                    '<fieldname="condition"widget="domain"options="{\'model\':\'model_name\'}"/>'+
+                    '</form>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
-                mockRPC: function (route) {
-                    if (route === '/web/dataset/call_kw/partner/search_count') {
+                mockRPC:function(route){
+                    if(route==='/web/dataset/call_kw/partner/search_count'){
                         nbFetchSpecialDomain++;
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 }
             });
 
-            await testUtils.dom.click(form.$('.o_field_one2many .o_field_x2many_list_row_add a'));
-            assert.strictEqual($('.modal').length, 1, "form view dialog should be opened");
-            await testUtils.fields.editInput($('.modal-body input[name="model_name"]'), 'partner');
-            await testUtils.dom.click($('.modal-footer button:first'));
+            awaittestUtils.dom.click(form.$('.o_field_one2many.o_field_x2many_list_row_adda'));
+            assert.strictEqual($('.modal').length,1,"formviewdialogshouldbeopened");
+            awaittestUtils.fields.editInput($('.modal-bodyinput[name="model_name"]'),'partner');
+            awaittestUtils.dom.click($('.modal-footerbutton:first'));
 
-            assert.strictEqual(form.$('.o_field_one2many tbody tr:first').text(), "coucouhas changed[]",
-                "the onchange should create one new record and remove the existing");
+            assert.strictEqual(form.$('.o_field_one2manytbodytr:first').text(),"coucouhaschanged[]",
+                "theonchangeshouldcreateonenewrecordandremovetheexisting");
 
-            await testUtils.dom.click(form.$('.o_field_one2many .o_list_view tbody tr:eq(0) td:first'));
+            awaittestUtils.dom.click(form.$('.o_field_one2many.o_list_viewtbodytr:eq(0)td:first'));
 
-            await testUtils.form.clickSave(form);
-            assert.strictEqual(nbFetchSpecialDomain, 1,
-                "should only fetch special domain once");
+            awaittestUtils.form.clickSave(form);
+            assert.strictEqual(nbFetchSpecialDomain,1,
+                "shouldonlyfetchspecialdomainonce");
             form.destroy();
         });
 
-        QUnit.test('one2many without inline tree arch', async function (assert) {
+        QUnit.test('one2manywithoutinlinetreearch',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.records[0].turtles = [2, 3];
+            this.data.partner.records[0].turtles=[2,3];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="p" widget="many2many_tags"/>' + // check if the view don not call load view (widget without useSubview)
-                    '<field name="turtles"/>' +
-                    '<field name="timmy" invisible="1"/>' + // check if the view don not call load view in invisible
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="p"widget="many2many_tags"/>'+//checkiftheviewdonnotcallloadview(widgetwithoutuseSubview)
+                    '<fieldname="turtles"/>'+
+                    '<fieldname="timmy"invisible="1"/>'+//checkiftheviewdonnotcallloadviewininvisible
+                    '</group>'+
                     '</form>',
-                res_id: 1,
-                archs: {
-                    "turtle,false,list": '<tree string="Turtles"><field name="turtle_bar"/><field name="display_name"/><field name="partner_ids"/></tree>',
+                res_id:1,
+                archs:{
+                    "turtle,false,list":'<treestring="Turtles"><fieldname="turtle_bar"/><fieldname="display_name"/><fieldname="partner_ids"/></tree>',
                 }
             });
 
-            assert.containsOnce(form, '.o_field_widget[name="turtles"] .o_list_view',
-                'should display one2many list view in the modal');
+            assert.containsOnce(form,'.o_field_widget[name="turtles"].o_list_view',
+                'shoulddisplayone2manylistviewinthemodal');
 
-            assert.containsN(form, '.o_data_row', 2,
-                'should display the 2 turtles');
+            assert.containsN(form,'.o_data_row',2,
+                'shoulddisplaythe2turtles');
 
             form.destroy();
         });
 
-        QUnit.test('many2one and many2many in one2many', async function (assert) {
+        QUnit.test('many2oneandmany2manyinone2many',asyncfunction(assert){
             assert.expect(11);
 
-            this.data.turtle.records[1].product_id = 37;
-            this.data.partner.records[0].turtles = [2, 3];
+            this.data.turtle.records[1].product_id=37;
+            this.data.partner.records[0].turtles=[2,3];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="int_field"/>' +
-                    '<field name="turtles">' +
-                    '<form string="Turtles">' +
-                    '<group>' +
-                    '<field name="product_id"/>' +
-                    '</group>' +
-                    '</form>' +
-                    '<tree editable="top">' +
-                    '<field name="display_name"/>' +
-                    '<field name="product_id"/>' +
-                    '<field name="partner_ids" widget="many2many_tags"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="int_field"/>'+
+                    '<fieldname="turtles">'+
+                    '<formstring="Turtles">'+
+                    '<group>'+
+                    '<fieldname="product_id"/>'+
+                    '</group>'+
+                    '</form>'+
+                    '<treeeditable="top">'+
+                    '<fieldname="display_name"/>'+
+                    '<fieldname="product_id"/>'+
+                    '<fieldname="partner_ids"widget="many2many_tags"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'write') {
-                        var commands = args.args[1].turtles;
-                        assert.strictEqual(commands.length, 2,
-                            "should have generated 2 commands");
-                        assert.deepEqual(commands[0], [1, 2, {
-                            partner_ids: [[6, false, [2, 1]]],
-                            product_id: 41,
-                        }], "generated commands should be correct");
-                        assert.deepEqual(commands[1], [4, 3, false],
-                            "generated commands should be correct");
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='write'){
+                        varcommands=args.args[1].turtles;
+                        assert.strictEqual(commands.length,2,
+                            "shouldhavegenerated2commands");
+                        assert.deepEqual(commands[0],[1,2,{
+                            partner_ids:[[6,false,[2,1]]],
+                            product_id:41,
+                        }],"generatedcommandsshouldbecorrect");
+                        assert.deepEqual(commands[1],[4,3,false],
+                            "generatedcommandsshouldbecorrect");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            assert.containsN(form, '.o_data_row', 2,
-                'should display the 2 turtles');
-            assert.strictEqual(form.$('.o_data_row:first td:nth(1)').text(), 'xphone',
-                "should correctly display the m2o");
-            assert.strictEqual(form.$('.o_data_row:first td:nth(2) .badge').length, 2,
-                "m2m should contain two tags");
-            assert.strictEqual(form.$('.o_data_row:first td:nth(2) .badge:first span').text(),
-                'second record', "m2m values should have been correctly fetched");
+            assert.containsN(form,'.o_data_row',2,
+                'shoulddisplaythe2turtles');
+            assert.strictEqual(form.$('.o_data_row:firsttd:nth(1)').text(),'xphone',
+                "shouldcorrectlydisplaythem2o");
+            assert.strictEqual(form.$('.o_data_row:firsttd:nth(2).badge').length,2,
+                "m2mshouldcontaintwotags");
+            assert.strictEqual(form.$('.o_data_row:firsttd:nth(2).badge:firstspan').text(),
+                'secondrecord',"m2mvaluesshouldhavebeencorrectlyfetched");
 
-            await testUtils.dom.click(form.$('.o_data_row:first'));
+            awaittestUtils.dom.click(form.$('.o_data_row:first'));
 
-            assert.strictEqual($('.modal .o_field_widget').text(), "xphone",
-                'should display the form view dialog with the many2one value');
-            await testUtils.dom.click($('.modal-footer button'));
+            assert.strictEqual($('.modal.o_field_widget').text(),"xphone",
+                'shoulddisplaytheformviewdialogwiththemany2onevalue');
+            awaittestUtils.dom.click($('.modal-footerbutton'));
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            // edit the m2m of first row
-            await testUtils.dom.click(form.$('.o_list_view tbody td:first()'));
-            // remove a tag
-            await testUtils.dom.click(form.$('.o_field_many2manytags .badge:contains(aaa) .o_delete'));
-            assert.strictEqual(form.$('.o_selected_row .o_field_many2manytags .o_badge_text:contains(aaa)').length, 0,
-                "tag should have been correctly removed");
-            // add a tag
-            await testUtils.fields.many2one.clickOpenDropdown('partner_ids');
-            await testUtils.fields.many2one.clickHighlightedItem('partner_ids');
-            assert.strictEqual(form.$('.o_selected_row .o_field_many2manytags .o_badge_text:contains(first record)').length, 1,
-                "tag should have been correctly added");
+            //editthem2moffirstrow
+            awaittestUtils.dom.click(form.$('.o_list_viewtbodytd:first()'));
+            //removeatag
+            awaittestUtils.dom.click(form.$('.o_field_many2manytags.badge:contains(aaa).o_delete'));
+            assert.strictEqual(form.$('.o_selected_row.o_field_many2manytags.o_badge_text:contains(aaa)').length,0,
+                "tagshouldhavebeencorrectlyremoved");
+            //addatag
+            awaittestUtils.fields.many2one.clickOpenDropdown('partner_ids');
+            awaittestUtils.fields.many2one.clickHighlightedItem('partner_ids');
+            assert.strictEqual(form.$('.o_selected_row.o_field_many2manytags.o_badge_text:contains(firstrecord)').length,1,
+                "tagshouldhavebeencorrectlyadded");
 
-            // edit the m2o of first row
-            await testUtils.fields.many2one.clickOpenDropdown('product_id');
-            await testUtils.fields.many2one.clickItem('product_id', 'xpad');
-            assert.strictEqual(form.$('.o_selected_row .o_field_many2one:first input').val(), 'xpad',
-                "m2o value should have been updated");
+            //editthem2ooffirstrow
+            awaittestUtils.fields.many2one.clickOpenDropdown('product_id');
+            awaittestUtils.fields.many2one.clickItem('product_id','xpad');
+            assert.strictEqual(form.$('.o_selected_row.o_field_many2one:firstinput').val(),'xpad',
+                "m2ovalueshouldhavebeenupdated");
 
-            // save (should correctly generate the commands)
-            await testUtils.form.clickSave(form);
+            //save(shouldcorrectlygeneratethecommands)
+            awaittestUtils.form.clickSave(form);
 
             form.destroy();
         });
 
-        QUnit.test('many2manytag in one2many, onchange, some modifiers, and more than one page', async function (assert) {
+        QUnit.test('many2manytaginone2many,onchange,somemodifiers,andmorethanonepage',asyncfunction(assert){
             assert.expect(9);
 
-            this.data.partner.records[0].turtles = [1, 2, 3];
+            this.data.partner.records[0].turtles=[1,2,3];
 
-            this.data.partner.onchanges.turtles = function () { };
+            this.data.partner.onchanges.turtles=function(){};
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="top" limit="2">' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="partner_ids" widget="many2many_tags" attrs="{\'readonly\': [(\'turtle_foo\', \'=\', \'a\')]}"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top"limit="2">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="partner_ids"widget="many2many_tags"attrs="{\'readonly\':[(\'turtle_foo\',\'=\',\'a\')]}"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                viewOptions: { mode: 'edit' },
-                mockRPC: function (route, args) {
+                res_id:1,
+                viewOptions:{mode:'edit'},
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
-            assert.containsN(form, '.o_data_row', 2,
-                'there should be only 2 rows displayed');
-            await testUtils.dom.clickFirst(form.$('.o_list_record_remove'));
-            await testUtils.dom.clickFirst(form.$('.o_list_record_remove'));
+            assert.containsN(form,'.o_data_row',2,
+                'thereshouldbeonly2rowsdisplayed');
+            awaittestUtils.dom.clickFirst(form.$('.o_list_record_remove'));
+            awaittestUtils.dom.clickFirst(form.$('.o_list_record_remove'));
 
-            assert.containsOnce(form, '.o_data_row',
-                'there should be just one remaining row');
+            assert.containsOnce(form,'.o_data_row',
+                'thereshouldbejustoneremainingrow');
 
             assert.verifySteps([
-                "read",  // initial read on partner
-                "read",  // initial read on turtle
-                "read",  // batched read on partner (field partner_ids)
-                "read",  // after first delete, read on turtle (to fetch 3rd record)
-                "onchange",  // after first delete, onchange on field turtles
-                "onchange"   // onchange after second delete
+                "read", //initialreadonpartner
+                "read", //initialreadonturtle
+                "read", //batchedreadonpartner(fieldpartner_ids)
+                "read", //afterfirstdelete,readonturtle(tofetch3rdrecord)
+                "onchange", //afterfirstdelete,onchangeonfieldturtles
+                "onchange"  //onchangeafterseconddelete
             ]);
 
             form.destroy();
         });
 
-        QUnit.test('onchange many2many in one2many list editable', async function (assert) {
+        QUnit.test('onchangemany2manyinone2manylisteditable',asyncfunction(assert){
             assert.expect(14);
 
             this.data.product.records.push({
-                id: 1,
-                display_name: "xenomorphe",
+                id:1,
+                display_name:"xenomorphe",
             });
 
-            this.data.turtle.onchanges = {
-                product_id: function (rec) {
-                    if (rec.product_id) {
-                        rec.partner_ids = [
+            this.data.turtle.onchanges={
+                product_id:function(rec){
+                    if(rec.product_id){
+                        rec.partner_ids=[
                             [5],
-                            [4, rec.product_id === 41 ? 1 : 2]
+                            [4,rec.product_id===41?1:2]
                         ];
                     }
                 },
             };
-            var partnerOnchange = function (rec) {
-                if (!rec.int_field || !rec.turtles.length) {
+            varpartnerOnchange=function(rec){
+                if(!rec.int_field||!rec.turtles.length){
                     return;
                 }
-                rec.turtles = [
+                rec.turtles=[
                     [5],
-                    [0, 0, {
-                        display_name: 'new line',
-                        product_id: [37, 'xphone'],
-                        partner_ids: [
+                    [0,0,{
+                        display_name:'newline',
+                        product_id:[37,'xphone'],
+                        partner_ids:[
                             [5],
-                            [4, 1]
+                            [4,1]
                         ]
                     }],
-                    [0, rec.turtles[0][1], {
-                        display_name: rec.turtles[0][2].display_name,
-                        product_id: [1, 'xenomorphe'],
-                        partner_ids: [
+                    [0,rec.turtles[0][1],{
+                        display_name:rec.turtles[0][2].display_name,
+                        product_id:[1,'xenomorphe'],
+                        partner_ids:[
                             [5],
-                            [4, 2]
+                            [4,2]
                         ]
                     }],
                 ];
             };
 
-            this.data.partner.onchanges = {
-                int_field: partnerOnchange,
-                turtles: partnerOnchange,
+            this.data.partner.onchanges={
+                int_field:partnerOnchange,
+                turtles:partnerOnchange,
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="int_field"/>' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="display_name"/>' +
-                    '<field name="product_id"/>' +
-                    '<field name="partner_ids" widget="many2many_tags"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="int_field"/>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="display_name"/>'+
+                    '<fieldname="product_id"/>'+
+                    '<fieldname="partner_ids"widget="many2many_tags"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
             });
 
-            // add new line (first, xpad)
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('input[name="display_name"]'), 'first');
-            await testUtils.dom.click(form.$('div[name="product_id"] input'));
-            // the onchange won't be generated
-            await testUtils.dom.click($('li.ui-menu-item a:contains(xpad)').trigger('mouseenter'));
+            //addnewline(first,xpad)
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('input[name="display_name"]'),'first');
+            awaittestUtils.dom.click(form.$('div[name="product_id"]input'));
+            //theonchangewon'tbegenerated
+            awaittestUtils.dom.click($('li.ui-menu-itema:contains(xpad)').trigger('mouseenter'));
 
-            assert.containsOnce(form, '.o_field_many2manytags.o_input',
-                'should display the line in editable mode');
-            assert.strictEqual(form.$('.o_field_many2one input').val(), "xpad",
-                'should display the product xpad');
-            assert.strictEqual(form.$('.o_field_many2manytags.o_input .o_badge_text').text(), "first record",
-                'should display the tag from the onchange');
+            assert.containsOnce(form,'.o_field_many2manytags.o_input',
+                'shoulddisplaythelineineditablemode');
+            assert.strictEqual(form.$('.o_field_many2oneinput').val(),"xpad",
+                'shoulddisplaytheproductxpad');
+            assert.strictEqual(form.$('.o_field_many2manytags.o_input.o_badge_text').text(),"firstrecord",
+                'shoulddisplaythetagfromtheonchange');
 
-            await testUtils.dom.click(form.$('input.o_field_integer[name="int_field"]'));
+            awaittestUtils.dom.click(form.$('input.o_field_integer[name="int_field"]'));
 
-            assert.strictEqual(form.$('.o_data_cell.o_required_modifier').text(), "xpad",
-                'should display the product xpad');
-            assert.strictEqual(form.$('.o_field_many2manytags:not(.o_input) .o_badge_text').text(), "first record",
-                'should display the tag in readonly');
+            assert.strictEqual(form.$('.o_data_cell.o_required_modifier').text(),"xpad",
+                'shoulddisplaytheproductxpad');
+            assert.strictEqual(form.$('.o_field_many2manytags:not(.o_input).o_badge_text').text(),"firstrecord",
+                'shoulddisplaythetaginreadonly');
 
-            // enable the many2many onchange and generate it
-            await testUtils.fields.editInput(form.$('input.o_field_integer[name="int_field"]'), '10');
+            //enablethemany2manyonchangeandgenerateit
+            awaittestUtils.fields.editInput(form.$('input.o_field_integer[name="int_field"]'),'10');
 
-            assert.strictEqual(form.$('.o_data_cell.o_required_modifier').text(), "xenomorphexphone",
-                'should display the product xphone and xenomorphe');
-            assert.strictEqual(form.$('.o_data_row').text().replace(/\s+/g, ' '), "firstxenomorphe second record new linexphone first record ",
-                'should display the name, one2many and many2many value');
+            assert.strictEqual(form.$('.o_data_cell.o_required_modifier').text(),"xenomorphexphone",
+                'shoulddisplaytheproductxphoneandxenomorphe');
+            assert.strictEqual(form.$('.o_data_row').text().replace(/\s+/g,''),"firstxenomorphesecondrecordnewlinexphonefirstrecord",
+                'shoulddisplaythename,one2manyandmany2manyvalue');
 
-            // disable the many2many onchange
-            await testUtils.fields.editInput(form.$('input.o_field_integer[name="int_field"]'), '0');
+            //disablethemany2manyonchange
+            awaittestUtils.fields.editInput(form.$('input.o_field_integer[name="int_field"]'),'0');
 
-            // remove and start over
-            await testUtils.dom.click(form.$('.o_list_record_remove:first button'));
-            await testUtils.dom.click(form.$('.o_list_record_remove:first button'));
+            //removeandstartover
+            awaittestUtils.dom.click(form.$('.o_list_record_remove:firstbutton'));
+            awaittestUtils.dom.click(form.$('.o_list_record_remove:firstbutton'));
 
-            // enable the many2many onchange
-            await testUtils.fields.editInput(form.$('input.o_field_integer[name="int_field"]'), '10');
+            //enablethemany2manyonchange
+            awaittestUtils.fields.editInput(form.$('input.o_field_integer[name="int_field"]'),'10');
 
-            // add new line (first, xenomorphe)
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('input[name="display_name"]'), 'first');
-            await testUtils.dom.click(form.$('div[name="product_id"] input'));
-            // generate the onchange
-            await testUtils.dom.click($('li.ui-menu-item a:contains(xenomorphe)').trigger('mouseenter'));
+            //addnewline(first,xenomorphe)
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('input[name="display_name"]'),'first');
+            awaittestUtils.dom.click(form.$('div[name="product_id"]input'));
+            //generatetheonchange
+            awaittestUtils.dom.click($('li.ui-menu-itema:contains(xenomorphe)').trigger('mouseenter'));
 
-            assert.containsOnce(form, '.o_field_many2manytags.o_input',
-                'should display the line in editable mode');
-            assert.strictEqual(form.$('.o_field_many2one input').val(), "xenomorphe",
-                'should display the product xenomorphe');
-            assert.strictEqual(form.$('.o_field_many2manytags.o_input .o_badge_text').text(), "second record",
-                'should display the tag from the onchange');
+            assert.containsOnce(form,'.o_field_many2manytags.o_input',
+                'shoulddisplaythelineineditablemode');
+            assert.strictEqual(form.$('.o_field_many2oneinput').val(),"xenomorphe",
+                'shoulddisplaytheproductxenomorphe');
+            assert.strictEqual(form.$('.o_field_many2manytags.o_input.o_badge_text').text(),"secondrecord",
+                'shoulddisplaythetagfromtheonchange');
 
-            // put list in readonly mode
-            await testUtils.dom.click(form.$('input.o_field_integer[name="int_field"]'));
+            //putlistinreadonlymode
+            awaittestUtils.dom.click(form.$('input.o_field_integer[name="int_field"]'));
 
-            assert.strictEqual(form.$('.o_data_cell.o_required_modifier').text(), "xenomorphexphone",
-                'should display the product xphone and xenomorphe');
-            assert.strictEqual(form.$('.o_field_many2manytags:not(.o_input) .o_badge_text').text(), "second recordfirst record",
-                'should display the tag in readonly (first record and second record)');
+            assert.strictEqual(form.$('.o_data_cell.o_required_modifier').text(),"xenomorphexphone",
+                'shoulddisplaytheproductxphoneandxenomorphe');
+            assert.strictEqual(form.$('.o_field_many2manytags:not(.o_input).o_badge_text').text(),"secondrecordfirstrecord",
+                'shoulddisplaythetaginreadonly(firstrecordandsecondrecord)');
 
-            await testUtils.fields.editInput(form.$('input.o_field_integer[name="int_field"]'), '10');
+            awaittestUtils.fields.editInput(form.$('input.o_field_integer[name="int_field"]'),'10');
 
-            assert.strictEqual(form.$('.o_data_row').text().replace(/\s+/g, ' '), "firstxenomorphe second record new linexphone first record ",
-                'should display the name, one2many and many2many value');
+            assert.strictEqual(form.$('.o_data_row').text().replace(/\s+/g,''),"firstxenomorphesecondrecordnewlinexphonefirstrecord",
+                'shoulddisplaythename,one2manyandmany2manyvalue');
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
 
-            assert.strictEqual(form.$('.o_data_row').text().replace(/\s+/g, ' '), "firstxenomorphe second record new linexphone first record ",
-                'should display the name, one2many and many2many value after save');
+            assert.strictEqual(form.$('.o_data_row').text().replace(/\s+/g,''),"firstxenomorphesecondrecordnewlinexphonefirstrecord",
+                'shoulddisplaythename,one2manyandmany2manyvalueaftersave');
 
             form.destroy();
         });
 
-        QUnit.test('load view for x2many in one2many', async function (assert) {
+        QUnit.test('loadviewforx2manyinone2many',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.turtle.records[1].product_id = 37;
-            this.data.partner.records[0].turtles = [2, 3];
-            this.data.partner.records[2].turtles = [1, 3];
+            this.data.turtle.records[1].product_id=37;
+            this.data.partner.records[0].turtles=[2,3];
+            this.data.partner.records[2].turtles=[1,3];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="int_field"/>' +
-                    '<field name="turtles">' +
-                    '<form string="Turtles">' +
-                    '<group>' +
-                    '<field name="product_id"/>' +
-                    '<field name="partner_ids"/>' +
-                    '</group>' +
-                    '</form>' +
-                    '<tree>' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="int_field"/>'+
+                    '<fieldname="turtles">'+
+                    '<formstring="Turtles">'+
+                    '<group>'+
+                    '<fieldname="product_id"/>'+
+                    '<fieldname="partner_ids"/>'+
+                    '</group>'+
+                    '</form>'+
+                    '<tree>'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 1,
-                archs: {
-                    "partner,false,list": '<tree string="Partners"><field name="display_name"/></tree>',
+                res_id:1,
+                archs:{
+                    "partner,false,list":'<treestring="Partners"><fieldname="display_name"/></tree>',
                 },
             });
 
-            assert.containsN(form, '.o_data_row', 2,
-                'should display the 2 turtles');
+            assert.containsN(form,'.o_data_row',2,
+                'shoulddisplaythe2turtles');
 
-            await testUtils.dom.click(form.$('.o_data_row:first'));
+            awaittestUtils.dom.click(form.$('.o_data_row:first'));
 
-            assert.strictEqual($('.modal .o_field_widget[name="partner_ids"] .o_list_view').length, 1,
-                'should display many2many list view in the modal');
+            assert.strictEqual($('.modal.o_field_widget[name="partner_ids"].o_list_view').length,1,
+                'shoulddisplaymany2manylistviewinthemodal');
 
             form.destroy();
         });
 
-        QUnit.test('one2many (who contains a one2many) with tree view and without form view', async function (assert) {
+        QUnit.test('one2many(whocontainsaone2many)withtreeviewandwithoutformview',asyncfunction(assert){
             assert.expect(1);
 
-            // avoid error in _postprocess
+            //avoiderrorin_postprocess
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="turtles">' +
-                    '<tree>' +
-                    '<field name="partner_ids"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="turtles">'+
+                    '<tree>'+
+                    '<fieldname="partner_ids"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 1,
-                archs: {
-                    "turtle,false,form": '<form string="Turtles"><field name="turtle_foo"/></form>',
+                res_id:1,
+                archs:{
+                    "turtle,false,form":'<formstring="Turtles"><fieldname="turtle_foo"/></form>',
                 },
             });
 
-            await testUtils.dom.click(form.$('.o_data_row:first'));
+            awaittestUtils.dom.click(form.$('.o_data_row:first'));
 
-            assert.strictEqual($('.modal .o_field_widget[name="turtle_foo"]').text(), 'blip',
-                'should open the modal and display the form field');
+            assert.strictEqual($('.modal.o_field_widget[name="turtle_foo"]').text(),'blip',
+                'shouldopenthemodalanddisplaytheformfield');
 
             form.destroy();
         });
 
-        QUnit.test('one2many with x2many in form view (but not in list view)', async function (assert) {
+        QUnit.test('one2manywithx2manyinformview(butnotinlistview)',asyncfunction(assert){
             assert.expect(1);
 
-            // avoid error when saving the edited related record (because the
-            // related x2m field is unknown in the inline list view)
-            // also ensure that the changes are correctly saved
+            //avoiderrorwhensavingtheeditedrelatedrecord(becausethe
+            //relatedx2mfieldisunknownintheinlinelistview)
+            //alsoensurethatthechangesarecorrectlysaved
 
-            this.data.turtle.fields.o2m = { string: "o2m", type: "one2many", relation: 'user' };
+            this.data.turtle.fields.o2m={string:"o2m",type:"one2many",relation:'user'};
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="turtles">' +
-                    '<tree>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="turtles">'+
+                    '<tree>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 1,
-                archs: {
-                    "turtle,false,form": '<form string="Turtles">' +
-                        '<field name="partner_ids" widget="many2many_tags"/>' +
+                res_id:1,
+                archs:{
+                    "turtle,false,form":'<formstring="Turtles">'+
+                        '<fieldname="partner_ids"widget="many2many_tags"/>'+
                         '</form>',
                 },
-                viewOptions: {
-                    mode: 'edit',
+                viewOptions:{
+                    mode:'edit',
                 },
-                mockRPC: function (route, args) {
-                    if (args.method === 'write') {
-                        assert.deepEqual(args.args[1].turtles, [[1, 2, {
-                            partner_ids: [[6, false, [2, 4, 1]]],
+                mockRPC:function(route,args){
+                    if(args.method==='write'){
+                        assert.deepEqual(args.args[1].turtles,[[1,2,{
+                            partner_ids:[[6,false,[2,4,1]]],
                         }]]);
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.dom.click(form.$('.o_data_row:first')); // edit first record
+            awaittestUtils.dom.click(form.$('.o_data_row:first'));//editfirstrecord
 
-            await testUtils.fields.many2one.clickOpenDropdown('partner_ids');
-            await testUtils.fields.many2one.clickHighlightedItem('partner_ids');
+            awaittestUtils.fields.many2one.clickOpenDropdown('partner_ids');
+            awaittestUtils.fields.many2one.clickHighlightedItem('partner_ids');
 
-            // add a many2many tag and save
-            await testUtils.dom.click($('.modal .o_field_many2manytags input'));
-            await testUtils.fields.editInput($('.modal .o_field_many2manytags input'), 'test');
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary')); // save
+            //addamany2manytagandsave
+            awaittestUtils.dom.click($('.modal.o_field_many2manytagsinput'));
+            awaittestUtils.fields.editInput($('.modal.o_field_many2manytagsinput'),'test');
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary'));//save
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
 
             form.destroy();
         });
 
-        QUnit.test('many2many list in a one2many opened by a many2one', async function (assert) {
+        QUnit.test('many2manylistinaone2manyopenedbyamany2one',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.turtle.records[1].turtle_trululu = 2;
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_trululu"/>' +
-                    '</tree>' +
-                    '</field>' +
+            this.data.turtle.records[1].turtle_trululu=2;
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_trululu"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                archs: {
-                    "partner,false,form": '<form string="P">' +
-                        '<field name="timmy"/>' +
+                res_id:1,
+                archs:{
+                    "partner,false,form":'<formstring="P">'+
+                        '<fieldname="timmy"/>'+
                         '</form>',
-                    "partner_type,false,list": '<tree editable="bottom">' +
-                        '<field name="display_name"/>' +
+                    "partner_type,false,list":'<treeeditable="bottom">'+
+                        '<fieldname="display_name"/>'+
                         '</tree>',
-                    "partner_type,false,search": '<search>' +
+                    "partner_type,false,search":'<search>'+
                         '</search>',
                 },
-                viewOptions: {
-                    mode: 'edit',
+                viewOptions:{
+                    mode:'edit',
                 },
-                mockRPC: function (route, args) {
-                    if (route === '/web/dataset/call_kw/partner/get_formview_id') {
-                        return Promise.resolve(false);
+                mockRPC:function(route,args){
+                    if(route==='/web/dataset/call_kw/partner/get_formview_id'){
+                        returnPromise.resolve(false);
                     }
-                    if (args.method === 'write') {
-                        assert.deepEqual(args.args[1].timmy, [[6, false, [12]]],
-                            'should properly write ids');
+                    if(args.method==='write'){
+                        assert.deepEqual(args.args[1].timmy,[[6,false,[12]]],
+                            'shouldproperlywriteids');
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            // edit the first partner in the one2many partner form view
-            await testUtils.dom.click(form.$('.o_data_row:first td.o_data_cell'));
-            // open form view for many2one
-            await testUtils.dom.click(form.$('.o_external_button'));
+            //editthefirstpartnerintheone2manypartnerformview
+            awaittestUtils.dom.click(form.$('.o_data_row:firsttd.o_data_cell'));
+            //openformviewformany2one
+            awaittestUtils.dom.click(form.$('.o_external_button'));
 
-            // click on add, to add a new partner in the m2m
-            await testUtils.dom.click($('.modal .o_field_x2many_list_row_add a'));
+            //clickonadd,toaddanewpartnerinthem2m
+            awaittestUtils.dom.click($('.modal.o_field_x2many_list_row_adda'));
 
-            // select the partner_type 'gold' (this closes the 2nd modal)
-            await testUtils.dom.click($('.modal td:contains(gold)'));
+            //selectthepartner_type'gold'(thisclosesthe2ndmodal)
+            awaittestUtils.dom.click($('.modaltd:contains(gold)'));
 
-            // confirm the changes in the modal
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary'));
+            //confirmthechangesinthemodal
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary'));
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
             form.destroy();
         });
 
-        QUnit.test('nested x2many default values', async function (assert) {
+        QUnit.test('nestedx2manydefaultvalues',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.partner.fields.turtles.default = [
-                [0, 0, { partner_ids: [[6, 0, [4]]] }],
-                [0, 0, { partner_ids: [[6, 0, [1]]] }],
+            this.data.partner.fields.turtles.default=[
+                [0,0,{partner_ids:[[6,0,[4]]]}],
+                [0,0,{partner_ids:[[6,0,[1]]]}],
             ];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="partner_ids" widget="many2many_tags"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="partner_ids"widget="many2many_tags"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
             });
 
-            assert.containsN(form, '.o_list_view .o_data_row', 2,
-                "one2many list should contain 2 rows");
-            assert.containsN(form, '.o_list_view .o_field_many2manytags[name="partner_ids"] .badge', 2,
-                "m2mtags should contain two tags");
-            assert.strictEqual(form.$('.o_list_view .o_field_many2manytags[name="partner_ids"] .o_badge_text').text(),
-                'aaafirst record', "tag names should have been correctly loaded");
+            assert.containsN(form,'.o_list_view.o_data_row',2,
+                "one2manylistshouldcontain2rows");
+            assert.containsN(form,'.o_list_view.o_field_many2manytags[name="partner_ids"].badge',2,
+                "m2mtagsshouldcontaintwotags");
+            assert.strictEqual(form.$('.o_list_view.o_field_many2manytags[name="partner_ids"].o_badge_text').text(),
+                'aaafirstrecord',"tagnamesshouldhavebeencorrectlyloaded");
 
             form.destroy();
         });
 
-        QUnit.test('nested x2many (inline form view) and onchanges', async function (assert) {
+        QUnit.test('nestedx2many(inlineformview)andonchanges',asyncfunction(assert){
             assert.expect(6);
 
-            this.data.partner.onchanges.bar = function (obj) {
-                if (!obj.bar) {
-                    obj.p = [[5], [0, 0, {
-                        turtles: [[0, 0, {
-                            turtle_foo: 'new turtle',
+            this.data.partner.onchanges.bar=function(obj){
+                if(!obj.bar){
+                    obj.p=[[5],[0,0,{
+                        turtles:[[0,0,{
+                            turtle_foo:'newturtle',
                         }]],
                     }]];
                 }
             };
 
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `<form>
-                        <field name="bar"/>
-                        <field name="p">
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`<form>
+                        <fieldname="bar"/>
+                        <fieldname="p">
                             <tree>
-                                <field name="turtles"/>
+                                <fieldname="turtles"/>
                             </tree>
                             <form>
-                                <field name="turtles">
+                                <fieldname="turtles">
                                     <tree>
-                                        <field name="turtle_foo"/>
+                                        <fieldname="turtle_foo"/>
                                     </tree>
                                 </field>
                             </form>
@@ -5611,328 +5611,328 @@ QUnit.module('fields', {}, function () {
                     </form>`,
             });
 
-            assert.containsNone(form, '.o_data_row');
+            assert.containsNone(form,'.o_data_row');
 
-            await testUtils.dom.click(form.$('.o_field_widget[name=bar] input'));
-            assert.containsOnce(form, '.o_data_row');
-            assert.strictEqual(form.$('.o_data_row').text(), '1 record');
+            awaittestUtils.dom.click(form.$('.o_field_widget[name=bar]input'));
+            assert.containsOnce(form,'.o_data_row');
+            assert.strictEqual(form.$('.o_data_row').text(),'1record');
 
-            await testUtils.dom.click(form.$('.o_data_row:first'));
+            awaittestUtils.dom.click(form.$('.o_data_row:first'));
 
-            assert.containsOnce(document.body, '.modal .o_form_view');
-            assert.containsOnce(document.body, '.modal .o_form_view .o_data_row');
-            assert.strictEqual($('.modal .o_form_view .o_data_row').text(), 'new turtle');
+            assert.containsOnce(document.body,'.modal.o_form_view');
+            assert.containsOnce(document.body,'.modal.o_form_view.o_data_row');
+            assert.strictEqual($('.modal.o_form_view.o_data_row').text(),'newturtle');
 
             form.destroy();
         });
 
-        QUnit.test('nested x2many (non inline form view) and onchanges', async function (assert) {
+        QUnit.test('nestedx2many(noninlineformview)andonchanges',asyncfunction(assert){
             assert.expect(6);
 
-            this.data.partner.onchanges.bar = function (obj) {
-                if (!obj.bar) {
-                    obj.p = [[5], [0, 0, {
-                        turtles: [[0, 0, {
-                            turtle_foo: 'new turtle',
+            this.data.partner.onchanges.bar=function(obj){
+                if(!obj.bar){
+                    obj.p=[[5],[0,0,{
+                        turtles:[[0,0,{
+                            turtle_foo:'newturtle',
                         }]],
                     }]];
                 }
             };
 
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="bar"/>
-                        <field name="p">
+                        <fieldname="bar"/>
+                        <fieldname="p">
                             <tree>
-                                <field name="turtles"/>
+                                <fieldname="turtles"/>
                             </tree>
                         </field>
                     </form>`,
-                archs: {
-                    'partner,false,form': `
+                archs:{
+                    'partner,false,form':`
                         <form>
-                            <field name="turtles">
+                            <fieldname="turtles">
                                 <tree>
-                                    <field name="turtle_foo"/>
+                                    <fieldname="turtle_foo"/>
                                 </tree>
                             </field>
                         </form>`,
                 },
             });
 
-            assert.containsNone(form, '.o_data_row');
+            assert.containsNone(form,'.o_data_row');
 
-            await testUtils.dom.click(form.$('.o_field_widget[name=bar] input'));
-            assert.containsOnce(form, '.o_data_row');
-            assert.strictEqual(form.$('.o_data_row').text(), '1 record');
+            awaittestUtils.dom.click(form.$('.o_field_widget[name=bar]input'));
+            assert.containsOnce(form,'.o_data_row');
+            assert.strictEqual(form.$('.o_data_row').text(),'1record');
 
-            await testUtils.dom.click(form.$('.o_data_row:first'));
+            awaittestUtils.dom.click(form.$('.o_data_row:first'));
 
-            assert.containsOnce(document.body, '.modal .o_form_view');
-            assert.containsOnce(document.body, '.modal .o_form_view .o_data_row');
-            assert.strictEqual($('.modal .o_form_view .o_data_row').text(), 'new turtle');
+            assert.containsOnce(document.body,'.modal.o_form_view');
+            assert.containsOnce(document.body,'.modal.o_form_view.o_data_row');
+            assert.strictEqual($('.modal.o_form_view.o_data_row').text(),'newturtle');
 
             form.destroy();
         });
 
-        QUnit.test('nested x2many (non inline views and no widget on inner x2many in list)', async function (assert) {
+        QUnit.test('nestedx2many(noninlineviewsandnowidgetoninnerx2manyinlist)',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.partner.records[0].p = [1];
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form><field name="p"/></form>',
-                archs: {
-                    'partner,false,list': '<tree><field name="turtles"/></tree>',
-                    'partner,false,form': '<form><field name="turtles" widget="many2many_tags"/></form>',
+            this.data.partner.records[0].p=[1];
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form><fieldname="p"/></form>',
+                archs:{
+                    'partner,false,list':'<tree><fieldname="turtles"/></tree>',
+                    'partner,false,form':'<form><fieldname="turtles"widget="many2many_tags"/></form>',
                 },
-                res_id: 1,
+                res_id:1,
             });
 
-            assert.containsOnce(form, '.o_data_row');
-            assert.strictEqual(form.$('.o_data_row').text(), '1 record');
+            assert.containsOnce(form,'.o_data_row');
+            assert.strictEqual(form.$('.o_data_row').text(),'1record');
 
-            await testUtils.dom.click(form.$('.o_data_row'));
+            awaittestUtils.dom.click(form.$('.o_data_row'));
 
-            assert.containsOnce(document.body, '.modal .o_form_view');
-            assert.containsOnce(document.body, '.modal .o_form_view .o_field_many2manytags .badge');
-            assert.strictEqual($('.modal .o_field_many2manytags').text().trim(), 'donatello');
+            assert.containsOnce(document.body,'.modal.o_form_view');
+            assert.containsOnce(document.body,'.modal.o_form_view.o_field_many2manytags.badge');
+            assert.strictEqual($('.modal.o_field_many2manytags').text().trim(),'donatello');
 
             form.destroy();
         });
 
-        QUnit.test('one2many (who contains display_name) with tree view and without form view', async function (assert) {
+        QUnit.test('one2many(whocontainsdisplay_name)withtreeviewandwithoutformview',asyncfunction(assert){
             assert.expect(1);
 
-            // avoid error in _fetchX2Manys
+            //avoiderrorin_fetchX2Manys
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="turtles">' +
-                    '<tree>' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="turtles">'+
+                    '<tree>'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 1,
-                archs: {
-                    "turtle,false,form": '<form string="Turtles"><field name="turtle_foo"/></form>',
+                res_id:1,
+                archs:{
+                    "turtle,false,form":'<formstring="Turtles"><fieldname="turtle_foo"/></form>',
                 },
             });
 
-            await testUtils.dom.click(form.$('.o_data_row:first'));
+            awaittestUtils.dom.click(form.$('.o_data_row:first'));
 
-            assert.strictEqual($('.modal .o_field_widget[name="turtle_foo"]').text(), 'blip',
-                'should open the modal and display the form field');
+            assert.strictEqual($('.modal.o_field_widget[name="turtle_foo"]').text(),'blip',
+                'shouldopenthemodalanddisplaytheformfield');
 
             form.destroy();
         });
 
-        QUnit.test('one2many field with virtual ids', async function (assert) {
+        QUnit.test('one2manyfieldwithvirtualids',asyncfunction(assert){
             assert.expect(11);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<group>' +
-                    '<notebook>' +
-                    '<page>' +
-                    '<field name="p" mode="kanban">' +
-                    '<kanban>' +
-                    '<templates>' +
-                    '<t t-name="kanban-box">' +
-                    '<div class="oe_kanban_details">' +
-                    '<div class="o_test_id">' +
-                    '<field name="id"/>' +
-                    '</div>' +
-                    '<div class="o_test_foo">' +
-                    '<field name="foo"/>' +
-                    '</div>' +
-                    '</div>' +
-                    '</t>' +
-                    '</templates>' +
-                    '</kanban>' +
-                    '</field>' +
-                    '</page>' +
-                    '</notebook>' +
-                    '</group>' +
-                    '</sheet>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<group>'+
+                    '<notebook>'+
+                    '<page>'+
+                    '<fieldname="p"mode="kanban">'+
+                    '<kanban>'+
+                    '<templates>'+
+                    '<tt-name="kanban-box">'+
+                    '<divclass="oe_kanban_details">'+
+                    '<divclass="o_test_id">'+
+                    '<fieldname="id"/>'+
+                    '</div>'+
+                    '<divclass="o_test_foo">'+
+                    '<fieldname="foo"/>'+
+                    '</div>'+
+                    '</div>'+
+                    '</t>'+
+                    '</templates>'+
+                    '</kanban>'+
+                    '</field>'+
+                    '</page>'+
+                    '</notebook>'+
+                    '</group>'+
+                    '</sheet>'+
                     '</form>',
-                archs: {
-                    'partner,false,form': '<form string="Associated partners">' +
-                        '<field name="foo"/>' +
+                archs:{
+                    'partner,false,form':'<formstring="Associatedpartners">'+
+                        '<fieldname="foo"/>'+
                         '</form>',
                 },
-                res_id: 4,
+                res_id:4,
             });
 
-            assert.containsOnce(form, '.o_field_widget .o_kanban_view',
-                "should have one inner kanban view for the one2many field");
-            assert.strictEqual(form.$('.o_field_widget .o_kanban_view .o_kanban_record:not(.o_kanban_ghost)').length, 0,
-                "should not have kanban records yet");
+            assert.containsOnce(form,'.o_field_widget.o_kanban_view',
+                "shouldhaveoneinnerkanbanviewfortheone2manyfield");
+            assert.strictEqual(form.$('.o_field_widget.o_kanban_view.o_kanban_record:not(.o_kanban_ghost)').length,0,
+                "shouldnothavekanbanrecordsyet");
 
-            // // switch to edit mode and create a new kanban record
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_widget .o-kanban-button-new'));
+            ////switchtoeditmodeandcreateanewkanbanrecord
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_widget.o-kanban-button-new'));
 
-            // save & close the modal
-            assert.strictEqual($('.modal-content input.o_field_widget').val(), 'My little Foo Value',
-                "should already have the default value for field foo");
-            await testUtils.dom.click($('.modal-content .btn-primary').first());
+            //save&closethemodal
+            assert.strictEqual($('.modal-contentinput.o_field_widget').val(),'MylittleFooValue',
+                "shouldalreadyhavethedefaultvalueforfieldfoo");
+            awaittestUtils.dom.click($('.modal-content.btn-primary').first());
 
-            assert.containsOnce(form, '.o_field_widget .o_kanban_view',
-                "should have one inner kanban view for the one2many field");
-            assert.strictEqual(form.$('.o_field_widget .o_kanban_view .o_kanban_record:not(.o_kanban_ghost)').length, 1,
-                "should now have one kanban record");
-            assert.strictEqual(form.$('.o_field_widget .o_kanban_view .o_kanban_record:not(.o_kanban_ghost) .o_test_id').text(),
-                '', "should not have a value for the id field");
-            assert.strictEqual(form.$('.o_field_widget .o_kanban_view .o_kanban_record:not(.o_kanban_ghost) .o_test_foo').text(),
-                'My little Foo Value', "should have a value for the foo field");
+            assert.containsOnce(form,'.o_field_widget.o_kanban_view',
+                "shouldhaveoneinnerkanbanviewfortheone2manyfield");
+            assert.strictEqual(form.$('.o_field_widget.o_kanban_view.o_kanban_record:not(.o_kanban_ghost)').length,1,
+                "shouldnowhaveonekanbanrecord");
+            assert.strictEqual(form.$('.o_field_widget.o_kanban_view.o_kanban_record:not(.o_kanban_ghost).o_test_id').text(),
+                '',"shouldnothaveavaluefortheidfield");
+            assert.strictEqual(form.$('.o_field_widget.o_kanban_view.o_kanban_record:not(.o_kanban_ghost).o_test_foo').text(),
+                'MylittleFooValue',"shouldhaveavalueforthefoofield");
 
-            // save the view to force a create of the new record in the one2many
-            await testUtils.form.clickSave(form);
-            assert.containsOnce(form, '.o_field_widget .o_kanban_view',
-                "should have one inner kanban view for the one2many field");
-            assert.strictEqual(form.$('.o_field_widget .o_kanban_view .o_kanban_record:not(.o_kanban_ghost)').length, 1,
-                "should now have one kanban record");
-            assert.notEqual(form.$('.o_field_widget .o_kanban_view .o_kanban_record:not(.o_kanban_ghost) .o_test_id').text(),
-                '', "should now have a value for the id field");
-            assert.strictEqual(form.$('.o_field_widget .o_kanban_view .o_kanban_record:not(.o_kanban_ghost) .o_test_foo').text(),
-                'My little Foo Value', "should still have a value for the foo field");
+            //savetheviewtoforceacreateofthenewrecordintheone2many
+            awaittestUtils.form.clickSave(form);
+            assert.containsOnce(form,'.o_field_widget.o_kanban_view',
+                "shouldhaveoneinnerkanbanviewfortheone2manyfield");
+            assert.strictEqual(form.$('.o_field_widget.o_kanban_view.o_kanban_record:not(.o_kanban_ghost)').length,1,
+                "shouldnowhaveonekanbanrecord");
+            assert.notEqual(form.$('.o_field_widget.o_kanban_view.o_kanban_record:not(.o_kanban_ghost).o_test_id').text(),
+                '',"shouldnowhaveavaluefortheidfield");
+            assert.strictEqual(form.$('.o_field_widget.o_kanban_view.o_kanban_record:not(.o_kanban_ghost).o_test_foo').text(),
+                'MylittleFooValue',"shouldstillhaveavalueforthefoofield");
 
             form.destroy();
         });
 
-        QUnit.test('one2many field with virtual ids with kanban button', async function (assert) {
+        QUnit.test('one2manyfieldwithvirtualidswithkanbanbutton',asyncfunction(assert){
             assert.expect(25);
 
-            testUtils.mock.patch(KanbanRecord, {
-                init: function () {
-                    this._super.apply(this, arguments);
-                    this._onKanbanActionClicked = this.__proto__._onKanbanActionClicked;
+            testUtils.mock.patch(KanbanRecord,{
+                init:function(){
+                    this._super.apply(this,arguments);
+                    this._onKanbanActionClicked=this.__proto__._onKanbanActionClicked;
                 },
             });
 
-            this.data.partner.records[0].p = [4];
+            this.data.partner.records[0].p=[4];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                    '<field name="p" mode="kanban">' +
-                    '<kanban>' +
-                        '<templates>' +
-                        '<field name="foo"/>' +
-                        '<t t-name="kanban-box">' +
-                            '<div>' +
-                                '<span><t t-esc="record.foo.value"/></span>' +
-                                '<button type="object" class="btn btn-link fa fa-shopping-cart" name="button_warn" string="button_warn" warn="warn" />' +
-                                '<button type="object" class="btn btn-link fa fa-shopping-cart" name="button_disabled" string="button_disabled" />' +
-                            '</div>' +
-                        '</t>' +
-                        '</templates>' +
-                    '</kanban>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                    '<fieldname="p"mode="kanban">'+
+                    '<kanban>'+
+                        '<templates>'+
+                        '<fieldname="foo"/>'+
+                        '<tt-name="kanban-box">'+
+                            '<div>'+
+                                '<span><tt-esc="record.foo.value"/></span>'+
+                                '<buttontype="object"class="btnbtn-linkfafa-shopping-cart"name="button_warn"string="button_warn"warn="warn"/>'+
+                                '<buttontype="object"class="btnbtn-linkfafa-shopping-cart"name="button_disabled"string="button_disabled"/>'+
+                            '</div>'+
+                        '</t>'+
+                        '</templates>'+
+                    '</kanban>'+
+                    '</field>'+
                 '</form>',
-                archs: {
-                    'partner,false,form': '<form><field name="foo"/></form>',
+                archs:{
+                    'partner,false,form':'<form><fieldname="foo"/></form>',
                 },
-                res_id: 1,
-                services: {
-                    notification: NotificationService.extend({
-                        notify: function (params) {
+                res_id:1,
+                services:{
+                    notification:NotificationService.extend({
+                        notify:function(params){
                             assert.step(params.type);
                         }
                     }),
                 },
-                intercepts: {
-                    execute_action: function (event) {
-                        assert.step(event.data.action_data.name + '_' + event.data.env.model + '_' + event.data.env.currentID);
+                intercepts:{
+                    execute_action:function(event){
+                        assert.step(event.data.action_data.name+'_'+event.data.env.model+'_'+event.data.env.currentID);
                         event.data.on_success();
                     },
                 },
             });
 
-            // 1. Define all css selector
-            var oKanbanView = '.o_field_widget .o_kanban_view';
-            var oKanbanRecordActive = oKanbanView + ' .o_kanban_record:not(.o_kanban_ghost)';
-            var oAllKanbanButton = oKanbanRecordActive + ' button[data-type="object"]';
-            var btn1 = oKanbanRecordActive + ':nth-child(1) button[data-type="object"]';
-            var btn2 = oKanbanRecordActive + ':nth-child(2) button[data-type="object"]';
-            var btn1Warn = btn1 + '[data-name="button_warn"]';
-            var btn1Disabled = btn1 + '[data-name="button_disabled"]';
-            var btn2Warn = btn2 + '[data-name="button_warn"]';
-            var btn2Disabled = btn2 + '[data-name="button_disabled"]';
+            //1.Defineallcssselector
+            varoKanbanView='.o_field_widget.o_kanban_view';
+            varoKanbanRecordActive=oKanbanView+'.o_kanban_record:not(.o_kanban_ghost)';
+            varoAllKanbanButton=oKanbanRecordActive+'button[data-type="object"]';
+            varbtn1=oKanbanRecordActive+':nth-child(1)button[data-type="object"]';
+            varbtn2=oKanbanRecordActive+':nth-child(2)button[data-type="object"]';
+            varbtn1Warn=btn1+'[data-name="button_warn"]';
+            varbtn1Disabled=btn1+'[data-name="button_disabled"]';
+            varbtn2Warn=btn2+'[data-name="button_warn"]';
+            varbtn2Disabled=btn2+'[data-name="button_disabled"]';
 
-            // check if we already have one kanban card
-            assert.containsOnce(form, oKanbanView, "should have one inner kanban view for the one2many field");
-            assert.containsOnce(form, oKanbanRecordActive, "should have one kanban records yet");
+            //checkifwealreadyhaveonekanbancard
+            assert.containsOnce(form,oKanbanView,"shouldhaveoneinnerkanbanviewfortheone2manyfield");
+            assert.containsOnce(form,oKanbanRecordActive,"shouldhaveonekanbanrecordsyet");
 
-            // we have 2 buttons
-            assert.containsN(form, oAllKanbanButton, 2, "should have 2 buttons type object");
+            //wehave2buttons
+            assert.containsN(form,oAllKanbanButton,2,"shouldhave2buttonstypeobject");
 
-            // disabled ?
-            assert.containsNone(form, oAllKanbanButton + '[disabled]', "should not have button type object disabled");
+            //disabled?
+            assert.containsNone(form,oAllKanbanButton+'[disabled]',"shouldnothavebuttontypeobjectdisabled");
 
-            // click on the button
-            await testUtils.dom.click(form.$(btn1Disabled));
-            await testUtils.dom.click(form.$(btn1Warn));
+            //clickonthebutton
+            awaittestUtils.dom.click(form.$(btn1Disabled));
+            awaittestUtils.dom.click(form.$(btn1Warn));
 
-            // switch to edit mode
-            await testUtils.form.clickEdit(form);
+            //switchtoeditmode
+            awaittestUtils.form.clickEdit(form);
 
-            // click on existing buttons
-            await testUtils.dom.click(form.$(btn1Disabled));
-            await testUtils.dom.click(form.$(btn1Warn));
+            //clickonexistingbuttons
+            awaittestUtils.dom.click(form.$(btn1Disabled));
+            awaittestUtils.dom.click(form.$(btn1Warn));
 
-            // create new kanban
-            await testUtils.dom.click(form.$('.o_field_widget .o-kanban-button-new'));
+            //createnewkanban
+            awaittestUtils.dom.click(form.$('.o_field_widget.o-kanban-button-new'));
 
-            // save & close the modal
-            assert.strictEqual($('.modal-content input.o_field_widget').val(), 'My little Foo Value',
-                "should already have the default value for field foo");
-            await testUtils.dom.click($('.modal-content .btn-primary').first());
+            //save&closethemodal
+            assert.strictEqual($('.modal-contentinput.o_field_widget').val(),'MylittleFooValue',
+                "shouldalreadyhavethedefaultvalueforfieldfoo");
+            awaittestUtils.dom.click($('.modal-content.btn-primary').first());
 
-            // check new item
-            assert.containsN(form, oAllKanbanButton, 4, "should have 4 buttons type object");
-            assert.containsN(form, btn1, 2, "should have 2 buttons type object in area 1");
-            assert.containsN(form, btn2, 2, "should have 2 buttons type object in area 2");
-            assert.containsOnce(form, oAllKanbanButton + '[disabled]',  "should have 1 button type object disabled");
+            //checknewitem
+            assert.containsN(form,oAllKanbanButton,4,"shouldhave4buttonstypeobject");
+            assert.containsN(form,btn1,2,"shouldhave2buttonstypeobjectinarea1");
+            assert.containsN(form,btn2,2,"shouldhave2buttonstypeobjectinarea2");
+            assert.containsOnce(form,oAllKanbanButton+'[disabled]', "shouldhave1buttontypeobjectdisabled");
 
-            assert.strictEqual(form.$(btn2Disabled).attr('disabled'), 'disabled', 'Should have a button type object disabled in area 2');
-            assert.strictEqual(form.$(btn2Warn).attr('disabled'), undefined, 'Should have a button type object not disabled in area 2');
-            assert.strictEqual(form.$(btn2Warn).attr('warn'), 'warn', 'Should have a button type object with warn attr in area 2');
+            assert.strictEqual(form.$(btn2Disabled).attr('disabled'),'disabled','Shouldhaveabuttontypeobjectdisabledinarea2');
+            assert.strictEqual(form.$(btn2Warn).attr('disabled'),undefined,'Shouldhaveabuttontypeobjectnotdisabledinarea2');
+            assert.strictEqual(form.$(btn2Warn).attr('warn'),'warn','Shouldhaveabuttontypeobjectwithwarnattrinarea2');
 
-            // click all buttons
-            await testUtils.dom.click(form.$(btn1Disabled));
-            await testUtils.dom.click(form.$(btn1Warn));
-            await testUtils.dom.click(form.$(btn2Warn));
+            //clickallbuttons
+            awaittestUtils.dom.click(form.$(btn1Disabled));
+            awaittestUtils.dom.click(form.$(btn1Warn));
+            awaittestUtils.dom.click(form.$(btn2Warn));
 
-            // save the form
-            await testUtils.form.clickSave(form);
+            //savetheform
+            awaittestUtils.form.clickSave(form);
 
-            assert.containsNone(form, oAllKanbanButton + '[disabled]', "should not have button type object disabled after save");
+            assert.containsNone(form,oAllKanbanButton+'[disabled]',"shouldnothavebuttontypeobjectdisabledaftersave");
 
-            // click all buttons
-            await testUtils.dom.click(form.$(btn1Disabled));
-            await testUtils.dom.click(form.$(btn1Warn));
-            await testUtils.dom.click(form.$(btn2Disabled));
-            await testUtils.dom.click(form.$(btn2Warn));
+            //clickallbuttons
+            awaittestUtils.dom.click(form.$(btn1Disabled));
+            awaittestUtils.dom.click(form.$(btn1Warn));
+            awaittestUtils.dom.click(form.$(btn2Disabled));
+            awaittestUtils.dom.click(form.$(btn2Warn));
 
             assert.verifySteps([
                 "button_disabled_partner_4",
@@ -5943,2369 +5943,2369 @@ QUnit.module('fields', {}, function () {
 
                 "button_disabled_partner_4",
                 "button_warn_partner_4",
-                "danger", // warn btn8
+                "danger",//warnbtn8
 
                 "button_disabled_partner_4",
                 "button_warn_partner_4",
                 "button_disabled_partner_5",
                 "button_warn_partner_5"
-            ], "should have triggered theses 11 clicks event");
+            ],"shouldhavetriggeredtheses11clicksevent");
 
             testUtils.mock.unpatch(KanbanRecord);
             form.destroy();
         });
 
-        QUnit.test('focusing fields in one2many list', async function (assert) {
+        QUnit.test('focusingfieldsinone2manylist',asyncfunction(assert){
             assert.expect(2);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="turtle_int"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
-                    '<field name="foo"/>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="turtle_int"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
+                    '<fieldname="foo"/>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            await testUtils.dom.click(form.$('.o_data_row:first td:first'));
-            assert.strictEqual(form.$('input[name="turtle_foo"]')[0], document.activeElement,
-                "turtle foo field should have focus");
+            awaittestUtils.dom.click(form.$('.o_data_row:firsttd:first'));
+            assert.strictEqual(form.$('input[name="turtle_foo"]')[0],document.activeElement,
+                "turtlefoofieldshouldhavefocus");
 
-            await testUtils.fields.triggerKeydown(form.$('input[name="turtle_foo"]'), 'tab');
-            assert.strictEqual(form.$('input[name="turtle_int"]')[0], document.activeElement,
-                "turtle int field should have focus");
+            awaittestUtils.fields.triggerKeydown(form.$('input[name="turtle_foo"]'),'tab');
+            assert.strictEqual(form.$('input[name="turtle_int"]')[0],document.activeElement,
+                "turtleintfieldshouldhavefocus");
             form.destroy();
         });
 
-        QUnit.test('one2many list editable = top', async function (assert) {
+        QUnit.test('one2manylisteditable=top',asyncfunction(assert){
             assert.expect(6);
 
-            this.data.turtle.fields.turtle_foo.default = "default foo turtle";
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            this.data.turtle.fields.turtle_foo.default="defaultfooturtle";
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'write') {
-                        var commands = args.args[1].turtles;
-                        assert.strictEqual(commands[0][0], 0,
-                            "first command is a create");
-                        assert.strictEqual(commands[1][0], 4,
-                            "second command is a link to");
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='write'){
+                        varcommands=args.args[1].turtles;
+                        assert.strictEqual(commands[0][0],0,
+                            "firstcommandisacreate");
+                        assert.strictEqual(commands[1][0],4,
+                            "secondcommandisalinkto");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            assert.containsOnce(form, '.o_data_row',
-                "should start with one data row");
+            assert.containsOnce(form,'.o_data_row',
+                "shouldstartwithonedatarow");
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.containsN(form, '.o_data_row', 2,
-                "should have 2 data rows");
-            assert.strictEqual(form.$('tr.o_data_row:first input').val(), 'default foo turtle',
-                "first row should be the new value");
+            assert.containsN(form,'.o_data_row',2,
+                "shouldhave2datarows");
+            assert.strictEqual(form.$('tr.o_data_row:firstinput').val(),'defaultfooturtle',
+                "firstrowshouldbethenewvalue");
             assert.hasClass(form.$('tr.o_data_row:first'),'o_selected_row',
-                "first row should be selected");
+                "firstrowshouldbeselected");
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
             form.destroy();
         });
 
-        QUnit.test('one2many list editable = bottom', async function (assert) {
+        QUnit.test('one2manylisteditable=bottom',asyncfunction(assert){
             assert.expect(6);
-            this.data.turtle.fields.turtle_foo.default = "default foo turtle";
+            this.data.turtle.fields.turtle_foo.default="defaultfooturtle";
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'write') {
-                        var commands = args.args[1].turtles;
-                        assert.strictEqual(commands[0][0], 4,
-                            "first command is a link to");
-                        assert.strictEqual(commands[1][0], 0,
-                            "second command is a create");
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='write'){
+                        varcommands=args.args[1].turtles;
+                        assert.strictEqual(commands[0][0],4,
+                            "firstcommandisalinkto");
+                        assert.strictEqual(commands[1][0],0,
+                            "secondcommandisacreate");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            assert.containsOnce(form, '.o_data_row',
-                "should start with one data row");
+            assert.containsOnce(form,'.o_data_row',
+                "shouldstartwithonedatarow");
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.containsN(form, '.o_data_row', 2,
-                "should have 2 data rows");
-            assert.strictEqual(form.$('tr.o_data_row:eq(1) input').val(), 'default foo turtle',
-                "second row should be the new value");
+            assert.containsN(form,'.o_data_row',2,
+                "shouldhave2datarows");
+            assert.strictEqual(form.$('tr.o_data_row:eq(1)input').val(),'defaultfooturtle',
+                "secondrowshouldbethenewvalue");
             assert.hasClass(form.$('tr.o_data_row:eq(1)'),'o_selected_row',
-                "second row should be selected");
+                "secondrowshouldbeselected");
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
             form.destroy();
         });
 
-        QUnit.test('one2many list edition, no "Remove" button in modal', async function (assert) {
+        QUnit.test('one2manylistedition,no"Remove"buttoninmodal',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.fields.foo.default = false;
+            this.data.partner.fields.foo.default=false;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                        '<field name="p">' +
-                            '<tree>' +
-                                '<field name="foo"/>' +
-                            '</tree>' +
-                            '<form string="Partners">' +
-                                '<field name="display_name"/>' +
-                            '</form>' +
-                        '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                        '<fieldname="p">'+
+                            '<tree>'+
+                                '<fieldname="foo"/>'+
+                            '</tree>'+
+                            '<formstring="Partners">'+
+                                '<fieldname="display_name"/>'+
+                            '</form>'+
+                        '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            await testUtils.dom.click(form.$('tbody td.o_field_x2many_list_row_add a'));
-            assert.containsOnce($(document), $('.modal'), 'there should be a modal opened');
-            assert.containsNone($('.modal .modal-footer .o_btn_remove'),
-            'modal should not contain a "Remove" button');
+            awaittestUtils.dom.click(form.$('tbodytd.o_field_x2many_list_row_adda'));
+            assert.containsOnce($(document),$('.modal'),'thereshouldbeamodalopened');
+            assert.containsNone($('.modal.modal-footer.o_btn_remove'),
+            'modalshouldnotcontaina"Remove"button');
 
-            // Discard a modal
-            await testUtils.dom.click($('.modal-footer .btn-secondary'));
+            //Discardamodal
+            awaittestUtils.dom.click($('.modal-footer.btn-secondary'));
 
-            await testUtils.form.clickDiscard(form);
+            awaittestUtils.form.clickDiscard(form);
             form.destroy();
         });
 
-        QUnit.test('x2many fields use their "mode" attribute', async function (assert) {
+        QUnit.test('x2manyfieldsusetheir"mode"attribute',asyncfunction(assert){
             assert.expect(1);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<group>' +
-                    '<field mode="kanban" name="turtles">' +
-                    '<tree>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '<kanban>' +
-                    '<templates>' +
-                    '<t t-name="kanban-box">' +
-                    '<div>' +
-                    '<field name="turtle_int"/>' +
-                    '</div>' +
-                    '</t>' +
-                    '</templates>' +
-                    '</kanban>' +
-                    '</field>' +
-                    '</group>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<group>'+
+                    '<fieldmode="kanban"name="turtles">'+
+                    '<tree>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '<kanban>'+
+                    '<templates>'+
+                    '<tt-name="kanban-box">'+
+                    '<div>'+
+                    '<fieldname="turtle_int"/>'+
+                    '</div>'+
+                    '</t>'+
+                    '</templates>'+
+                    '</kanban>'+
+                    '</field>'+
+                    '</group>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            assert.containsOnce(form, '.o_field_one2many .o_kanban_view',
-                "should have rendered a kanban view");
+            assert.containsOnce(form,'.o_field_one2many.o_kanban_view',
+                "shouldhaverenderedakanbanview");
 
             form.destroy();
         });
 
-        QUnit.test('one2many list editable, onchange and required field', async function (assert) {
+        QUnit.test('one2manylisteditable,onchangeandrequiredfield',asyncfunction(assert){
             assert.expect(8);
 
-            this.data.turtle.fields.turtle_foo.required = true;
-            this.data.partner.onchanges = {
-                turtles: function (obj) {
-                    obj.int_field = obj.turtles.length;
+            this.data.turtle.fields.turtle_foo.required=true;
+            this.data.partner.onchanges={
+                turtles:function(obj){
+                    obj.int_field=obj.turtles.length;
                 },
             };
-            this.data.partner.records[0].int_field = 0;
-            this.data.partner.records[0].turtles = [];
+            this.data.partner.records[0].int_field=0;
+            this.data.partner.records[0].turtles=[];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="int_field"/>' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_int"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="int_field"/>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_int"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                res_id: 1,
+                res_id:1,
             });
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(), "0",
-                "int_field should start with value 0");
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(), "0",
-                "int_field should still be 0 (no onchange should have been done yet");
+            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(),"0",
+                "int_fieldshouldstartwithvalue0");
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(),"0",
+                "int_fieldshouldstillbe0(noonchangeshouldhavebeendoneyet");
 
-            assert.verifySteps(['read', 'onchange']);
+            assert.verifySteps(['read','onchange']);
 
-            await testUtils.fields.editInput(form.$('.o_field_widget[name="turtle_foo"]'), "some text");
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name="turtle_foo"]'),"sometext");
             assert.verifySteps(['onchange']);
-            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(), "1",
-                "int_field should now be 1 (the onchange should have been done");
+            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(),"1",
+                "int_fieldshouldnowbe1(theonchangeshouldhavebeendone");
 
             form.destroy();
         });
 
-        QUnit.test('one2many list editable: trigger onchange when row is valid', async function (assert) {
-            // should omit require fields that aren't in the view as they (obviously)
-            // have no value, when checking the validity of required fields
-            // shouldn't consider numerical fields with value 0 as unset
+        QUnit.test('one2manylisteditable:triggeronchangewhenrowisvalid',asyncfunction(assert){
+            //shouldomitrequirefieldsthataren'tintheviewasthey(obviously)
+            //havenovalue,whencheckingthevalidityofrequiredfields
+            //shouldn'tconsidernumericalfieldswithvalue0asunset
             assert.expect(13);
 
-            this.data.turtle.fields.turtle_foo.required = true;
-            this.data.turtle.fields.turtle_qux.required = true; // required field not in the view
-            this.data.turtle.fields.turtle_bar.required = true; // required boolean field with no default
-            delete this.data.turtle.fields.turtle_bar.default;
-            this.data.turtle.fields.turtle_int.required = true; // required int field (default 0)
-            this.data.turtle.fields.turtle_int.default = 0;
-            this.data.turtle.fields.partner_ids.required = true; // required many2many
-            this.data.partner.onchanges = {
-                turtles: function (obj) {
-                    obj.int_field = obj.turtles.length;
+            this.data.turtle.fields.turtle_foo.required=true;
+            this.data.turtle.fields.turtle_qux.required=true;//requiredfieldnotintheview
+            this.data.turtle.fields.turtle_bar.required=true;//requiredbooleanfieldwithnodefault
+            deletethis.data.turtle.fields.turtle_bar.default;
+            this.data.turtle.fields.turtle_int.required=true;//requiredintfield(default0)
+            this.data.turtle.fields.turtle_int.default=0;
+            this.data.turtle.fields.partner_ids.required=true;//requiredmany2many
+            this.data.partner.onchanges={
+                turtles:function(obj){
+                    obj.int_field=obj.turtles.length;
                 },
             };
-            this.data.partner.records[0].int_field = 0;
-            this.data.partner.records[0].turtles = [];
+            this.data.partner.records[0].int_field=0;
+            this.data.partner.records[0].turtles=[];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="int_field"/>' +
-                    '<field name="turtles"/>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="int_field"/>'+
+                    '<fieldname="turtles"/>'+
                     '</form>',
-                mockRPC: function (route, args) {
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                archs: {
-                    'turtle,false,list': '<tree editable="top">' +
-                        '<field name="turtle_qux"/>' +
-                        '<field name="turtle_bar"/>' +
-                        '<field name="turtle_int"/>' +
-                        '<field name="turtle_foo"/>' +
-                        '<field name="partner_ids" widget="many2many_tags"/>' +
+                archs:{
+                    'turtle,false,list':'<treeeditable="top">'+
+                        '<fieldname="turtle_qux"/>'+
+                        '<fieldname="turtle_bar"/>'+
+                        '<fieldname="turtle_int"/>'+
+                        '<fieldname="turtle_foo"/>'+
+                        '<fieldname="partner_ids"widget="many2many_tags"/>'+
                         '</tree>',
                 },
-                res_id: 1,
+                res_id:1,
             });
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(), "0",
-                "int_field should start with value 0");
+            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(),"0",
+                "int_fieldshouldstartwithvalue0");
 
-            // add a new row (which is invalid at first)
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.owlCompatibilityNextTick();
-            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(), "0",
-                "int_field should still be 0 (no onchange should have been done yet)");
-            assert.verifySteps(['load_views', 'read', 'onchange']);
+            //addanewrow(whichisinvalidatfirst)
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.owlCompatibilityNextTick();
+            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(),"0",
+                "int_fieldshouldstillbe0(noonchangeshouldhavebeendoneyet)");
+            assert.verifySteps(['load_views','read','onchange']);
 
-            // fill turtle_foo field
-            await testUtils.fields.editInput(form.$('.o_field_widget[name="turtle_foo"]'), "some text");
-            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(), "0",
-                "int_field should still be 0 (no onchange should have been done yet)");
-            assert.verifySteps([], "no onchange should have been applied");
+            //fillturtle_foofield
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name="turtle_foo"]'),"sometext");
+            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(),"0",
+                "int_fieldshouldstillbe0(noonchangeshouldhavebeendoneyet)");
+            assert.verifySteps([],"noonchangeshouldhavebeenapplied");
 
-            // fill partner_ids field with a tag (all required fields will then be set)
-            await testUtils.fields.many2one.clickOpenDropdown('partner_ids');
-            await testUtils.fields.many2one.clickHighlightedItem('partner_ids');
-            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(), "1",
-                "int_field should now be 1 (the onchange should have been done");
-            assert.verifySteps(['name_search', 'read', 'onchange']);
+            //fillpartner_idsfieldwithatag(allrequiredfieldswillthenbeset)
+            awaittestUtils.fields.many2one.clickOpenDropdown('partner_ids');
+            awaittestUtils.fields.many2one.clickHighlightedItem('partner_ids');
+            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(),"1",
+                "int_fieldshouldnowbe1(theonchangeshouldhavebeendone");
+            assert.verifySteps(['name_search','read','onchange']);
 
             form.destroy();
         });
 
-        QUnit.test('one2many list editable: \'required\' modifiers is properly working', async function (assert) {
+        QUnit.test('one2manylisteditable:\'required\'modifiersisproperlyworking',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.partner.onchanges = {
-                turtles: function (obj) {
-                    obj.int_field = obj.turtles.length;
+            this.data.partner.onchanges={
+                turtles:function(obj){
+                    obj.int_field=obj.turtles.length;
                 },
             };
 
-            this.data.partner.records[0].turtles = [];
+            this.data.partner.records[0].turtles=[];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="int_field"/>' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_foo" required="1"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="int_field"/>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_foo"required="1"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(), "10",
-                "int_field should start with value 10");
+            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(),"10",
+                "int_fieldshouldstartwithvalue10");
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(), "10",
-                "int_field should still be 10 (no onchange, because line is not valid)");
+            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(),"10",
+                "int_fieldshouldstillbe10(noonchange,becauselineisnotvalid)");
 
-            // fill turtle_foo field
-            await testUtils.fields.editInput(form.$('.o_field_widget[name="turtle_foo"]'), "some text");
+            //fillturtle_foofield
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name="turtle_foo"]'),"sometext");
 
-            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(), "1",
-                "int_field should be 1 (onchange triggered, because line is now valid)");
+            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(),"1",
+                "int_fieldshouldbe1(onchangetriggered,becauselineisnowvalid)");
 
             form.destroy();
         });
 
-        QUnit.test('one2many list editable: \'required\' modifiers is properly working, part 2', async function (assert) {
+        QUnit.test('one2manylisteditable:\'required\'modifiersisproperlyworking,part2',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.partner.onchanges = {
-                turtles: function (obj) {
-                    obj.int_field = obj.turtles.length;
+            this.data.partner.onchanges={
+                turtles:function(obj){
+                    obj.int_field=obj.turtles.length;
                 },
             };
 
-            this.data.partner.records[0].turtles = [];
+            this.data.partner.records[0].turtles=[];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="int_field"/>' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_int"/>' +
-                    '<field name="turtle_foo" attrs=\'{"required": [["turtle_int", "=", 0]]}\'/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="int_field"/>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_int"/>'+
+                    '<fieldname="turtle_foo"attrs=\'{"required":[["turtle_int","=",0]]}\'/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(), "10",
-                "int_field should start with value 10");
+            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(),"10",
+                "int_fieldshouldstartwithvalue10");
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(), "10",
-                "int_field should still be 10 (no onchange, because line is not valid)");
+            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(),"10",
+                "int_fieldshouldstillbe10(noonchange,becauselineisnotvalid)");
 
-            // fill turtle_int field
-            await testUtils.fields.editInput(form.$('.o_field_widget[name="turtle_int"]'), "1");
+            //fillturtle_intfield
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name="turtle_int"]'),"1");
 
-            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(), "1",
-                "int_field should be 1 (onchange triggered, because line is now valid)");
+            assert.strictEqual(form.$('.o_field_widget[name="int_field"]').val(),"1",
+                "int_fieldshouldbe1(onchangetriggered,becauselineisnowvalid)");
 
             form.destroy();
         });
 
-        QUnit.test('one2many list editable: add new line before onchange returns', async function (assert) {
-            // If the user adds a new row (with a required field with onchange), selects
-            // a value for that field, then adds another row before the onchange returns,
-            // the editable list must wait for the onchange to return before trying to
-            // unselect the first row, otherwise it will be detected as invalid.
+        QUnit.test('one2manylisteditable:addnewlinebeforeonchangereturns',asyncfunction(assert){
+            //Iftheuseraddsanewrow(witharequiredfieldwithonchange),selects
+            //avalueforthatfield,thenaddsanotherrowbeforetheonchangereturns,
+            //theeditablelistmustwaitfortheonchangetoreturnbeforetryingto
+            //unselectthefirstrow,otherwiseitwillbedetectedasinvalid.
             assert.expect(7);
 
-            this.data.turtle.onchanges = {
-                turtle_trululu: function () { },
+            this.data.turtle.onchanges={
+                turtle_trululu:function(){},
             };
 
-            var prom;
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                        '<field name="turtles">' +
-                            '<tree editable="bottom">' +
-                                '<field name="turtle_trululu" required="1"/>' +
-                            '</tree>' +
-                        '</field>' +
+            varprom;
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                        '<fieldname="turtles">'+
+                            '<treeeditable="bottom">'+
+                                '<fieldname="turtle_trululu"required="1"/>'+
+                            '</tree>'+
+                        '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    var result = this._super.apply(this, arguments);
-                    if (args.method === 'onchange') {
-                        return Promise.resolve(prom).then(_.constant(result));
+                mockRPC:function(route,args){
+                    varresult=this._super.apply(this,arguments);
+                    if(args.method==='onchange'){
+                        returnPromise.resolve(prom).then(_.constant(result));
                     }
-                    return result;
+                    returnresult;
                 },
             });
 
-            // add a first line but hold the onchange back
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            prom = testUtils.makeTestPromise();
-            assert.containsOnce(form, '.o_data_row',
-                "should have created the first row immediately");
-            await testUtils.fields.many2one.clickOpenDropdown('turtle_trululu');
-            await testUtils.fields.many2one.clickHighlightedItem('turtle_trululu');
+            //addafirstlinebutholdtheonchangeback
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            prom=testUtils.makeTestPromise();
+            assert.containsOnce(form,'.o_data_row',
+                "shouldhavecreatedthefirstrowimmediately");
+            awaittestUtils.fields.many2one.clickOpenDropdown('turtle_trululu');
+            awaittestUtils.fields.many2one.clickHighlightedItem('turtle_trululu');
 
-            // try to add a second line and check that it is correctly waiting
-            // for the onchange to return
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            assert.strictEqual($('.modal').length, 0, "no modal should be displayed");
-            assert.strictEqual($('.o_field_invalid').length, 0,
-                "no field should be marked as invalid");
-            assert.containsOnce(form, '.o_data_row',
-                "should wait for the onchange to create the second row");
+            //trytoaddasecondlineandcheckthatitiscorrectlywaiting
+            //fortheonchangetoreturn
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            assert.strictEqual($('.modal').length,0,"nomodalshouldbedisplayed");
+            assert.strictEqual($('.o_field_invalid').length,0,
+                "nofieldshouldbemarkedasinvalid");
+            assert.containsOnce(form,'.o_data_row',
+                "shouldwaitfortheonchangetocreatethesecondrow");
             assert.hasClass(form.$('.o_data_row'),'o_selected_row',
-                "first row should still be in edition");
+                "firstrowshouldstillbeinedition");
 
-            // resolve the onchange promise
+            //resolvetheonchangepromise
             prom.resolve();
-            await testUtils.nextTick();
-            assert.containsN(form, '.o_data_row', 2,
-                "second row should now have been created");
-            assert.doesNotHaveClass(form.$('.o_data_row:first'), 'o_selected_row',
-                "first row should no more be in edition");
+            awaittestUtils.nextTick();
+            assert.containsN(form,'.o_data_row',2,
+                "secondrowshouldnowhavebeencreated");
+            assert.doesNotHaveClass(form.$('.o_data_row:first'),'o_selected_row',
+                "firstrowshouldnomorebeinedition");
 
             form.destroy();
         });
 
-        QUnit.test('editable list: multiple clicks on Add an item do not create invalid rows', async function (assert) {
+        QUnit.test('editablelist:multipleclicksonAddanitemdonotcreateinvalidrows',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.turtle.onchanges = {
-                turtle_trululu: function () { },
+            this.data.turtle.onchanges={
+                turtle_trululu:function(){},
             };
 
-            var prom;
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_trululu" required="1"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varprom;
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_trululu"required="1"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    var result = this._super.apply(this, arguments);
-                    if (args.method === 'onchange') {
-                        return Promise.resolve(prom).then(_.constant(result));
+                mockRPC:function(route,args){
+                    varresult=this._super.apply(this,arguments);
+                    if(args.method==='onchange'){
+                        returnPromise.resolve(prom).then(_.constant(result));
                     }
-                    return result;
+                    returnresult;
                 },
             });
-            prom = testUtils.makeTestPromise();
-            // click twice to add a new line
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            assert.containsNone(form, '.o_data_row',
-                "no row should have been created yet (waiting for the onchange)");
+            prom=testUtils.makeTestPromise();
+            //clicktwicetoaddanewline
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            assert.containsNone(form,'.o_data_row',
+                "norowshouldhavebeencreatedyet(waitingfortheonchange)");
 
-            // resolve the onchange promise
+            //resolvetheonchangepromise
             prom.resolve();
-            await testUtils.nextTick();
-            assert.containsOnce(form, '.o_data_row',
-                "only one row should have been created");
+            awaittestUtils.nextTick();
+            assert.containsOnce(form,'.o_data_row',
+                "onlyonerowshouldhavebeencreated");
             assert.hasClass(form.$('.o_data_row:first'),'o_selected_row',
-                "the created row should be in edition");
+                "thecreatedrowshouldbeinedition");
 
             form.destroy();
         });
 
-        QUnit.test('editable list: value reset by an onchange', async function (assert) {
-            // this test reproduces a subtle behavior that may occur in a form view:
-            // the user adds a record in a one2many field, and directly clicks on a
-            // datetime field of the form view which has an onchange, which totally
-            // overrides the value of the one2many (commands 5 and 0). The handler
-            // that switches the edited row to readonly is then called after the
-            // new value of the one2many field is applied (the one returned by the
-            // onchange), so the row that must go to readonly doesn't exist anymore.
+        QUnit.test('editablelist:valueresetbyanonchange',asyncfunction(assert){
+            //thistestreproducesasubtlebehaviorthatmayoccurinaformview:
+            //theuseraddsarecordinaone2manyfield,anddirectlyclicksona
+            //datetimefieldoftheformviewwhichhasanonchange,whichtotally
+            //overridesthevalueoftheone2many(commands5and0).Thehandler
+            //thatswitchestheeditedrowtoreadonlyisthencalledafterthe
+            //newvalueoftheone2manyfieldisapplied(theonereturnedbythe
+            //onchange),sotherowthatmustgotoreadonlydoesn'texistanymore.
             assert.expect(2);
 
-            this.data.partner.onchanges = {
-                datetime: function (obj) {
-                    obj.turtles = [[5], [0, 0, { display_name: 'new' }]];
+            this.data.partner.onchanges={
+                datetime:function(obj){
+                    obj.turtles=[[5],[0,0,{display_name:'new'}]];
                 },
             };
 
-            var prom;
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="datetime"/>' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varprom;
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="datetime"/>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    var result = this._super.apply(this, arguments);
-                    if (args.method === 'onchange') {
-                        return Promise.resolve(prom).then(_.constant(result));
+                mockRPC:function(route,args){
+                    varresult=this._super.apply(this,arguments);
+                    if(args.method==='onchange'){
+                        returnPromise.resolve(prom).then(_.constant(result));
                     }
-                    return result;
+                    returnresult;
                 },
             });
 
-            // trigger the two onchanges
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('.o_data_row .o_field_widget'), 'a name');
-            prom = testUtils.makeTestPromise();
-            await testUtils.dom.click(form.$('.o_datepicker_input'));
-            var dateTimeVal = fieldUtils.format.datetime(moment(), { timezone: false });
-            await testUtils.fields.editSelect(form.$('.o_datepicker_input'), dateTimeVal);
+            //triggerthetwoonchanges
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('.o_data_row.o_field_widget'),'aname');
+            prom=testUtils.makeTestPromise();
+            awaittestUtils.dom.click(form.$('.o_datepicker_input'));
+            vardateTimeVal=fieldUtils.format.datetime(moment(),{timezone:false});
+            awaittestUtils.fields.editSelect(form.$('.o_datepicker_input'),dateTimeVal);
 
-            // resolve the onchange promise
+            //resolvetheonchangepromise
             prom.resolve();
-            await testUtils.nextTick();
+            awaittestUtils.nextTick();
 
-            assert.containsOnce(form, '.o_data_row',
-                "should have one record in the o2m");
-            assert.strictEqual(form.$('.o_data_row .o_data_cell').text(), 'new',
-                "should be the record created by the onchange");
+            assert.containsOnce(form,'.o_data_row',
+                "shouldhaveonerecordintheo2m");
+            assert.strictEqual(form.$('.o_data_row.o_data_cell').text(),'new',
+                "shouldbetherecordcreatedbytheonchange");
 
             form.destroy();
         });
 
-        QUnit.test('editable list: onchange that returns a warning', async function (assert) {
+        QUnit.test('editablelist:onchangethatreturnsawarning',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.turtle.onchanges = {
-                display_name: function () { },
+            this.data.turtle.onchanges={
+                display_name:function(){},
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
                         assert.step(args.method);
-                        return Promise.resolve({
-                            value: {},
-                            warning: {
-                                title: "Warning",
-                                message: "You must first select a partner"
+                        returnPromise.resolve({
+                            value:{},
+                            warning:{
+                                title:"Warning",
+                                message:"Youmustfirstselectapartner"
                             },
                         });
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                viewOptions: {
-                    mode: 'edit',
+                viewOptions:{
+                    mode:'edit',
                 },
-                intercepts: {
-                    warning: function () {
+                intercepts:{
+                    warning:function(){
                         assert.step('warning');
                     },
                 },
             });
 
-            // add a line (this should trigger an onchange and a warning)
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            //addaline(thisshouldtriggeranonchangeandawarning)
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            // check if 'Add an item' still works (this should trigger an onchange
-            // and a warning again)
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            //checkif'Addanitem'stillworks(thisshouldtriggeranonchange
+            //andawarningagain)
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.verifySteps(['onchange', 'warning', 'onchange', 'warning']);
+            assert.verifySteps(['onchange','warning','onchange','warning']);
 
             form.destroy();
         });
 
-        QUnit.test('editable list: contexts are correctly sent', async function (assert) {
+        QUnit.test('editablelist:contextsarecorrectlysent',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.partner.records[0].timmy = [12];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                    '<field name="foo"/>' +
-                    '<field name="timmy" context="{\'key\': parent.foo}">' +
-                    '<tree editable="top">' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '</field>' +
+            this.data.partner.records[0].timmy=[12];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="timmy"context="{\'key\':parent.foo}">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    if (args.method === 'read' && args.model === 'partner') {
-                        assert.deepEqual(args.kwargs.context, {
-                            active_field: 2,
-                            bin_size: true,
-                            someKey: 'some value',
-                        }, "sent context should be correct");
+                mockRPC:function(route,args){
+                    if(args.method==='read'&&args.model==='partner'){
+                        assert.deepEqual(args.kwargs.context,{
+                            active_field:2,
+                            bin_size:true,
+                            someKey:'somevalue',
+                        },"sentcontextshouldbecorrect");
                     }
-                    if (args.method === 'read' && args.model === 'partner_type') {
-                        assert.deepEqual(args.kwargs.context, {
-                            key: 'yop',
-                            active_field: 2,
-                            someKey: 'some value',
-                        }, "sent context should be correct");
+                    if(args.method==='read'&&args.model==='partner_type'){
+                        assert.deepEqual(args.kwargs.context,{
+                            key:'yop',
+                            active_field:2,
+                            someKey:'somevalue',
+                        },"sentcontextshouldbecorrect");
                     }
-                    if (args.method === 'write') {
-                        assert.deepEqual(args.kwargs.context, {
-                            active_field: 2,
-                            someKey: 'some value',
-                        }, "sent context should be correct");
+                    if(args.method==='write'){
+                        assert.deepEqual(args.kwargs.context,{
+                            active_field:2,
+                            someKey:'somevalue',
+                        },"sentcontextshouldbecorrect");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                session: {
-                    user_context: { someKey: 'some value' },
+                session:{
+                    user_context:{someKey:'somevalue'},
                 },
-                viewOptions: {
-                    mode: 'edit',
-                    context: { active_field: 2 },
+                viewOptions:{
+                    mode:'edit',
+                    context:{active_field:2},
                 },
-                res_id: 1,
+                res_id:1,
             });
 
-            await testUtils.dom.click(form.$('.o_data_cell:first'));
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=display_name]'), 'abc');
-            await testUtils.form.clickSave(form);
+            awaittestUtils.dom.click(form.$('.o_data_cell:first'));
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=display_name]'),'abc');
+            awaittestUtils.form.clickSave(form);
 
             form.destroy();
         });
 
-        QUnit.test('resetting invisible one2manys', async function (assert) {
+        QUnit.test('resettinginvisibleone2manys',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.partner.records[0].turtles = [];
-            this.data.partner.onchanges.foo = function (obj) {
-                obj.turtles = [[5], [4, 1]];
+            this.data.partner.records[0].turtles=[];
+            this.data.partner.onchanges.foo=function(obj){
+                obj.turtles=[[5],[4,1]];
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                    '<field name="foo"/>' +
-                    '<field name="turtles" invisible="1"/>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="turtles"invisible="1"/>'+
                     '</form>',
-                viewOptions: {
-                    mode: 'edit',
+                viewOptions:{
+                    mode:'edit',
                 },
-                res_id: 1,
-                mockRPC: function (route, args) {
+                res_id:1,
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.fields.editInput(form.$('input[name="foo"]'), 'abcd');
-            assert.verifySteps(['read', 'onchange']);
+            awaittestUtils.fields.editInput(form.$('input[name="foo"]'),'abcd');
+            assert.verifySteps(['read','onchange']);
 
             form.destroy();
         });
 
-        QUnit.test('one2many: onchange that returns unknown field in list, but not in form', async function (assert) {
+        QUnit.test('one2many:onchangethatreturnsunknownfieldinlist,butnotinform',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.partner.onchanges = {
-                name: function () { },
+            this.data.partner.onchanges={
+                name:function(){},
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="name"/>' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '<form string="Partners">' +
-                    '<field name="display_name"/>' +
-                    '<field name="timmy" widget="many2many_tags"/>' +
-                    '</form>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="name"/>'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '<formstring="Partners">'+
+                    '<fieldname="display_name"/>'+
+                    '<fieldname="timmy"widget="many2many_tags"/>'+
+                    '</form>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
-                        return Promise.resolve({
-                            value: {
-                                p: [[5], [0, 0, { display_name: 'new', timmy: [[5], [4, 12]] }]],
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
+                        returnPromise.resolve({
+                            value:{
+                                p:[[5],[0,0,{display_name:'new',timmy:[[5],[4,12]]}]],
                             },
                         });
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            assert.containsOnce(form, '.o_data_row',
-                "the one2many should contain one row");
-            assert.containsNone(form, '.o_field_widget[name="timmy"]',
-                "timmy should not be displayed in the list view");
+            assert.containsOnce(form,'.o_data_row',
+                "theone2manyshouldcontainonerow");
+            assert.containsNone(form,'.o_field_widget[name="timmy"]',
+                "timmyshouldnotbedisplayedinthelistview");
 
-            await testUtils.dom.click(form.$('.o_data_row td:first'));
+            awaittestUtils.dom.click(form.$('.o_data_rowtd:first'));
 
-            assert.strictEqual($('.modal .o_field_many2manytags[name="timmy"]').length, 1,
-                "timmy should be displayed in the form view");
-            assert.strictEqual($('.modal .o_field_many2manytags[name="timmy"] .badge').length, 1,
-                "m2mtags should contain one tag");
-            assert.strictEqual($('.modal .o_field_many2manytags[name="timmy"] .o_badge_text').text(),
-                'gold', "tag name should have been correctly loaded");
+            assert.strictEqual($('.modal.o_field_many2manytags[name="timmy"]').length,1,
+                "timmyshouldbedisplayedintheformview");
+            assert.strictEqual($('.modal.o_field_many2manytags[name="timmy"].badge').length,1,
+                "m2mtagsshouldcontainonetag");
+            assert.strictEqual($('.modal.o_field_many2manytags[name="timmy"].o_badge_text').text(),
+                'gold',"tagnameshouldhavebeencorrectlyloaded");
 
             form.destroy();
         });
 
-        QUnit.test('multi level of nested x2manys, onchange and rawChanges', async function (assert) {
+        QUnit.test('multilevelofnestedx2manys,onchangeandrawChanges',asyncfunction(assert){
             assert.expect(8);
 
-            this.data.partner.records[0].p = [1];
-            this.data.partner.onchanges = {
-                name: function () { },
+            this.data.partner.records[0].p=[1];
+            this.data.partner.onchanges={
+                name:function(){},
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="name"/>
-                        <field name="p">
-                            <tree><field name="display_name"/></tree>
+                        <fieldname="name"/>
+                        <fieldname="p">
+                            <tree><fieldname="display_name"/></tree>
                             <form>
-                                <field name="display_name"/>
-                                <field name="p">
-                                    <tree><field name="display_name"/></tree>
-                                    <form><field name="display_name"/></form>
+                                <fieldname="display_name"/>
+                                <fieldname="p">
+                                    <tree><fieldname="display_name"/></tree>
+                                    <form><fieldname="display_name"/></form>
                                 </field>
                             </form>
                         </field>
                     </form>`,
-                mockRPC(route, args) {
-                    if (args.method === 'write') {
-                        assert.deepEqual(args.args[1].p[0][2], {
-                            p: [[1, 1, { display_name: 'new name' }]],
+                mockRPC(route,args){
+                    if(args.method==='write'){
+                        assert.deepEqual(args.args[1].p[0][2],{
+                            p:[[1,1,{display_name:'newname'}]],
                         });
                     }
-                    return this._super(...arguments);
+                    returnthis._super(...arguments);
                 },
-                res_id: 1,
+                res_id:1,
             });
 
-            assert.containsOnce(form, '.o_data_row', "the one2many should contain one row");
+            assert.containsOnce(form,'.o_data_row',"theone2manyshouldcontainonerow");
 
-            // open the o2m record in readonly first
-            await testUtils.dom.click(form.$('.o_data_row td:first'));
-            assert.containsOnce(document.body, ".modal .o_form_readonly");
-            await testUtils.dom.click($('.modal .modal-footer .o_form_button_cancel'));
+            //opentheo2mrecordinreadonlyfirst
+            awaittestUtils.dom.click(form.$('.o_data_rowtd:first'));
+            assert.containsOnce(document.body,".modal.o_form_readonly");
+            awaittestUtils.dom.click($('.modal.modal-footer.o_form_button_cancel'));
 
-            // switch to edit mode and open it again
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_data_row td:first'));
+            //switchtoeditmodeandopenitagain
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_data_rowtd:first'));
 
-            assert.containsOnce(document.body, ".modal .o_form_editable");
-            assert.containsOnce(document.body, '.modal .o_data_row', "the one2many should contain one row");
+            assert.containsOnce(document.body,".modal.o_form_editable");
+            assert.containsOnce(document.body,'.modal.o_data_row',"theone2manyshouldcontainonerow");
 
-            // open the o2m again, in the dialog
-            await testUtils.dom.click($('.modal .o_data_row td:first'));
+            //opentheo2magain,inthedialog
+            awaittestUtils.dom.click($('.modal.o_data_rowtd:first'));
 
-            assert.containsN(document.body, ".modal .o_form_editable", 2);
+            assert.containsN(document.body,".modal.o_form_editable",2);
 
-            // edit the name and click save modal that is on top
-            await testUtils.fields.editInput($('.modal:nth(1) .o_field_widget[name=display_name]'), 'new name');
-            await testUtils.dom.click($('.modal:nth(1) .modal-footer .btn-primary'));
+            //editthenameandclicksavemodalthatisontop
+            awaittestUtils.fields.editInput($('.modal:nth(1).o_field_widget[name=display_name]'),'newname');
+            awaittestUtils.dom.click($('.modal:nth(1).modal-footer.btn-primary'));
 
-            assert.containsOnce(document.body, ".modal .o_form_editable");
+            assert.containsOnce(document.body,".modal.o_form_editable");
 
-            // click save on the other modal
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary'));
+            //clicksaveontheothermodal
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary'));
 
-            assert.containsNone(document.body, ".modal");
+            assert.containsNone(document.body,".modal");
 
-            // save the main record
-            await testUtils.form.clickSave(form);
+            //savethemainrecord
+            awaittestUtils.form.clickSave(form);
 
             form.destroy();
         });
 
-        QUnit.test('onchange and required fields with override in arch', async function (assert) {
+        QUnit.test('onchangeandrequiredfieldswithoverrideinarch',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.partner.onchanges = {
-                turtles: function () { }
+            this.data.partner.onchanges={
+                turtles:function(){}
             };
-            this.data.turtle.fields.turtle_foo.required = true;
-            this.data.partner.records[0].turtles = [];
+            this.data.turtle.fields.turtle_foo.required=true;
+            this.data.partner.records[0].turtles=[];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_int"/>' +
-                    '<field name="turtle_foo" required="0"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_int"/>'+
+                    '<fieldname="turtle_foo"required="0"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
+                res_id:1,
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            // triggers an onchange on partner, because the new record is valid
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            //triggersanonchangeonpartner,becausethenewrecordisvalid
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.verifySteps(['read', 'onchange', 'onchange']);
+            assert.verifySteps(['read','onchange','onchange']);
             form.destroy();
         });
 
-        QUnit.test('onchange on a one2many containing a one2many', async function (assert) {
-            // the purpose of this test is to ensure that the onchange specs are
-            // correctly and recursively computed
+        QUnit.test('onchangeonaone2manycontainingaone2many',asyncfunction(assert){
+            //thepurposeofthistestistoensurethattheonchangespecsare
+            //correctlyandrecursivelycomputed
             assert.expect(1);
 
-            this.data.partner.onchanges = {
-                p: function () { }
+            this.data.partner.onchanges={
+                p:function(){}
             };
-            var checkOnchange = false;
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree><field name="display_name"/></tree>' +
-                    '<form>' +
-                    '<field name="display_name"/>' +
-                    '<field name="p">' +
-                    '<tree editable="bottom"><field name="display_name"/></tree>' +
-                    '</field>' +
-                    '</form>' +
-                    '</field>' +
+            varcheckOnchange=false;
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<tree><fieldname="display_name"/></tree>'+
+                    '<form>'+
+                    '<fieldname="display_name"/>'+
+                    '<fieldname="p">'+
+                    '<treeeditable="bottom"><fieldname="display_name"/></tree>'+
+                    '</field>'+
+                    '</form>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange' && checkOnchange) {
-                        assert.strictEqual(args.args[3]['p.p.display_name'], '',
-                            "onchange specs should be computed recursively");
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'&&checkOnchange){
+                        assert.strictEqual(args.args[3]['p.p.display_name'],'',
+                            "onchangespecsshouldbecomputedrecursively");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.dom.click($('.modal .o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput($('.modal .o_data_cell input'), 'new record');
-            checkOnchange = true;
-            await testUtils.dom.clickFirst($('.modal .modal-footer .btn-primary'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.dom.click($('.modal.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput($('.modal.o_data_cellinput'),'newrecord');
+            checkOnchange=true;
+            awaittestUtils.dom.clickFirst($('.modal.modal-footer.btn-primary'));
 
             form.destroy();
         });
 
-        QUnit.test('editing tabbed one2many (editable=bottom)', async function (assert) {
+        QUnit.test('editingtabbedone2many(editable=bottom)',asyncfunction(assert){
             assert.expect(12);
 
-            this.data.partner.records[0].turtles = [];
-            for (var i = 0; i < 42; i++) {
-                var id = 100 + i;
-                this.data.turtle.records.push({ id: id, turtle_foo: 'turtle' + (id - 99) });
+            this.data.partner.records[0].turtles=[];
+            for(vari=0;i<42;i++){
+                varid=100+i;
+                this.data.turtle.records.push({id:id,turtle_foo:'turtle'+(id-99)});
                 this.data.partner.records[0].turtles.push(id);
             }
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</sheet>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</sheet>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
+                res_id:1,
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    if (args.method === 'write') {
-                        assert.strictEqual(args.args[1].turtles[40][0], 0, 'should send a create command');
-                        assert.deepEqual(args.args[1].turtles[40][2], { turtle_foo: 'rainbow dash' });
+                    if(args.method==='write'){
+                        assert.strictEqual(args.args[1].turtles[40][0],0,'shouldsendacreatecommand');
+                        assert.deepEqual(args.args[1].turtles[40][2],{turtle_foo:'rainbowdash'});
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.containsN(form, 'tr.o_data_row', 41);
-            assert.hasClass(form.$('tr.o_data_row').last(), 'o_selected_row');
+            assert.containsN(form,'tr.o_data_row',41);
+            assert.hasClass(form.$('tr.o_data_row').last(),'o_selected_row');
 
-            await testUtils.fields.editInput(form.$('.o_data_row input[name="turtle_foo"]'), 'rainbow dash');
-            await testUtils.form.clickSave(form);
+            awaittestUtils.fields.editInput(form.$('.o_data_rowinput[name="turtle_foo"]'),'rainbowdash');
+            awaittestUtils.form.clickSave(form);
 
-            assert.containsN(form, 'tr.o_data_row', 40);
+            assert.containsN(form,'tr.o_data_row',40);
 
-            assert.verifySteps(['read', 'read', 'onchange', 'write', 'read', 'read']);
+            assert.verifySteps(['read','read','onchange','write','read','read']);
             form.destroy();
         });
 
-        QUnit.test('editing tabbed one2many (editable=bottom), again...', async function (assert) {
+        QUnit.test('editingtabbedone2many(editable=bottom),again...',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.records[0].turtles = [];
-            for (var i = 0; i < 9; i++) {
-                var id = 100 + i;
-                this.data.turtle.records.push({ id: id, turtle_foo: 'turtle' + (id - 99) });
+            this.data.partner.records[0].turtles=[];
+            for(vari=0;i<9;i++){
+                varid=100+i;
+                this.data.turtle.records.push({id:id,turtle_foo:'turtle'+(id-99)});
                 this.data.partner.records[0].turtles.push(id);
             }
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom" limit="3">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom"limit="3">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
 
-            await testUtils.form.clickEdit(form);
-            // add a new record page 1 (this increases the limit to 4)
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('.o_data_row input[name="turtle_foo"]'), 'rainbow dash');
-            await testUtils.dom.click(form.$('.o_x2m_control_panel .o_pager_next')); // page 2: 4 records
-            await testUtils.dom.click(form.$('.o_x2m_control_panel .o_pager_next')); // page 3: 2 records
+            awaittestUtils.form.clickEdit(form);
+            //addanewrecordpage1(thisincreasesthelimitto4)
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('.o_data_rowinput[name="turtle_foo"]'),'rainbowdash');
+            awaittestUtils.dom.click(form.$('.o_x2m_control_panel.o_pager_next'));//page2:4records
+            awaittestUtils.dom.click(form.$('.o_x2m_control_panel.o_pager_next'));//page3:2records
 
-            assert.containsN(form, 'tr.o_data_row', 2,
-                "should have 2 data rows on the current page");
+            assert.containsN(form,'tr.o_data_row',2,
+                "shouldhave2datarowsonthecurrentpage");
             form.destroy();
         });
 
-        QUnit.test('editing tabbed one2many (editable=top)', async function (assert) {
+        QUnit.test('editingtabbedone2many(editable=top)',asyncfunction(assert){
             assert.expect(15);
 
-            this.data.partner.records[0].turtles = [];
-            this.data.turtle.fields.turtle_foo.default = "default foo";
-            for (var i = 0; i < 42; i++) {
-                var id = 100 + i;
-                this.data.turtle.records.push({ id: id, turtle_foo: 'turtle' + (id - 99) });
+            this.data.partner.records[0].turtles=[];
+            this.data.turtle.fields.turtle_foo.default="defaultfoo";
+            for(vari=0;i<42;i++){
+                varid=100+i;
+                this.data.turtle.records.push({id:id,turtle_foo:'turtle'+(id-99)});
                 this.data.partner.records[0].turtles.push(id);
             }
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</sheet>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</sheet>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
+                res_id:1,
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    if (args.method === 'write') {
-                        assert.strictEqual(args.args[1].turtles[40][0], 0);
-                        assert.deepEqual(args.args[1].turtles[40][2], { turtle_foo: 'rainbow dash' });
+                    if(args.method==='write'){
+                        assert.strictEqual(args.args[1].turtles[40][0],0);
+                        assert.deepEqual(args.args[1].turtles[40][2],{turtle_foo:'rainbowdash'});
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
 
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_widget[name=turtles] .o_pager_next'));
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_widget[name=turtles].o_pager_next'));
 
-            assert.containsN(form, 'tr.o_data_row', 2);
+            assert.containsN(form,'tr.o_data_row',2);
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.containsN(form, 'tr.o_data_row', 3);
+            assert.containsN(form,'tr.o_data_row',3);
 
-            assert.hasClass(form.$('tr.o_data_row').first(), 'o_selected_row');
+            assert.hasClass(form.$('tr.o_data_row').first(),'o_selected_row');
 
-            assert.strictEqual(form.$('tr.o_data_row input').val(), 'default foo',
-                "selected input should have correct string");
+            assert.strictEqual(form.$('tr.o_data_rowinput').val(),'defaultfoo',
+                "selectedinputshouldhavecorrectstring");
 
-            await testUtils.fields.editInput(form.$('.o_data_row input[name="turtle_foo"]'), 'rainbow dash');
-            await testUtils.form.clickSave(form);
+            awaittestUtils.fields.editInput(form.$('.o_data_rowinput[name="turtle_foo"]'),'rainbowdash');
+            awaittestUtils.form.clickSave(form);
 
-            assert.containsN(form, 'tr.o_data_row', 40);
+            assert.containsN(form,'tr.o_data_row',40);
 
-            assert.verifySteps(['read', 'read', 'read', 'onchange', 'write', 'read', 'read']);
+            assert.verifySteps(['read','read','read','onchange','write','read','read']);
             form.destroy();
         });
 
-        QUnit.test('one2many field: change value before pending onchange returns', async function (assert) {
+        QUnit.test('one2manyfield:changevaluebeforependingonchangereturns',asyncfunction(assert){
             assert.expect(2);
 
-            var M2O_DELAY = relationalFields.FieldMany2One.prototype.AUTOCOMPLETE_DELAY;
-            relationalFields.FieldMany2One.prototype.AUTOCOMPLETE_DELAY = 0;
+            varM2O_DELAY=relationalFields.FieldMany2One.prototype.AUTOCOMPLETE_DELAY;
+            relationalFields.FieldMany2One.prototype.AUTOCOMPLETE_DELAY=0;
 
-            this.data.partner.onchanges = {
-                int_field: function () { }
+            this.data.partner.onchanges={
+                int_field:function(){}
             };
-            var prom;
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree editable="bottom">' +
-                    '<field name="int_field"/>' +
-                    '<field name="trululu"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varprom;
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="int_field"/>'+
+                    '<fieldname="trululu"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    var result = this._super.apply(this, arguments);
-                    if (args.method === 'onchange') {
-                        // delay the onchange RPC
-                        return Promise.resolve(prom).then(_.constant(result));
+                mockRPC:function(route,args){
+                    varresult=this._super.apply(this,arguments);
+                    if(args.method==='onchange'){
+                        //delaytheonchangeRPC
+                        returnPromise.resolve(prom).then(_.constant(result));
                     }
-                    return result;
+                    returnresult;
                 },
             });
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            prom = testUtils.makeTestPromise();
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=int_field]'), '44');
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            prom=testUtils.makeTestPromise();
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=int_field]'),'44');
 
-            var $dropdown = form.$('.o_field_many2one input').autocomplete('widget');
-            // set trululu before onchange
-            await testUtils.fields.editAndTrigger(form.$('.o_field_many2one input'),
-                'first', ['keydown', 'keyup']);
-            // complete the onchange
+            var$dropdown=form.$('.o_field_many2oneinput').autocomplete('widget');
+            //settrululubeforeonchange
+            awaittestUtils.fields.editAndTrigger(form.$('.o_field_many2oneinput'),
+                'first',['keydown','keyup']);
+            //completetheonchange
             prom.resolve();
-            assert.strictEqual(form.$('.o_field_many2one input').val(), 'first',
-                'should have kept the new value');
-            await testUtils.nextTick();
-            // check name_search result
-            assert.strictEqual($dropdown.find('li:not(.o_m2o_dropdown_option)').length, 1,
-                'autocomplete should contains 1 suggestion');
+            assert.strictEqual(form.$('.o_field_many2oneinput').val(),'first',
+                'shouldhavekeptthenewvalue');
+            awaittestUtils.nextTick();
+            //checkname_searchresult
+            assert.strictEqual($dropdown.find('li:not(.o_m2o_dropdown_option)').length,1,
+                'autocompleteshouldcontains1suggestion');
 
-            relationalFields.FieldMany2One.prototype.AUTOCOMPLETE_DELAY = M2O_DELAY;
+            relationalFields.FieldMany2One.prototype.AUTOCOMPLETE_DELAY=M2O_DELAY;
             form.destroy();
         });
 
-        QUnit.test('focus is correctly reset after an onchange in an x2many', async function (assert) {
+        QUnit.test('focusiscorrectlyresetafteranonchangeinanx2many',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.onchanges = {
-                int_field: function () { }
+            this.data.partner.onchanges={
+                int_field:function(){}
             };
-            var prom;
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree editable="bottom">' +
-                    '<field name="int_field"/>' +
-                    '<button string="hello"/>' +
-                    '<field name="qux"/>' +
-                    '<field name="trululu"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varprom;
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="int_field"/>'+
+                    '<buttonstring="hello"/>'+
+                    '<fieldname="qux"/>'+
+                    '<fieldname="trululu"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    var result = this._super.apply(this, arguments);
-                    if (args.method === 'onchange') {
-                        // delay the onchange RPC
-                        return Promise.resolve(prom).then(_.constant(result));
+                mockRPC:function(route,args){
+                    varresult=this._super.apply(this,arguments);
+                    if(args.method==='onchange'){
+                        //delaytheonchangeRPC
+                        returnPromise.resolve(prom).then(_.constant(result));
                     }
-                    return result;
+                    returnresult;
                 },
             });
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            prom = testUtils.makeTestPromise();
-            await testUtils.fields.editAndTrigger(form.$('.o_field_widget[name=int_field]'), '44',
-                ['input', { type: 'keydown', which: $.ui.keyCode.TAB }]);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            prom=testUtils.makeTestPromise();
+            awaittestUtils.fields.editAndTrigger(form.$('.o_field_widget[name=int_field]'),'44',
+                ['input',{type:'keydown',which:$.ui.keyCode.TAB}]);
             prom.resolve();
-            await testUtils.nextTick();
+            awaittestUtils.nextTick();
 
-            assert.strictEqual(document.activeElement, form.$('.o_field_widget[name=qux]')[0],
-                "qux field should have the focus");
+            assert.strictEqual(document.activeElement,form.$('.o_field_widget[name=qux]')[0],
+                "quxfieldshouldhavethefocus");
 
-            await testUtils.fields.many2one.clickOpenDropdown('trululu');
-            await testUtils.fields.many2one.clickHighlightedItem('trululu');
-            assert.strictEqual(form.$('.o_field_many2one input').val(), 'first record',
-                "the one2many field should have the expected value");
+            awaittestUtils.fields.many2one.clickOpenDropdown('trululu');
+            awaittestUtils.fields.many2one.clickHighlightedItem('trululu');
+            assert.strictEqual(form.$('.o_field_many2oneinput').val(),'firstrecord',
+                "theone2manyfieldshouldhavetheexpectedvalue");
 
             form.destroy();
         });
 
-        QUnit.test('checkbox in an x2many that triggers an onchange', async function (assert) {
+        QUnit.test('checkboxinanx2manythattriggersanonchange',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.onchanges = {
-                bar: function () { }
+            this.data.partner.onchanges={
+                bar:function(){}
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree editable="bottom">' +
-                    '<field name="bar"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="bar"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
             });
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            // use of owlCompatibilityNextTick because we have a boolean field (owl) inside the
-            // x2many, so an update of the x2many requires to wait for 2 animation frames: one
-            // for the list to be re-rendered (with the boolean field) and one for the control
-            // panel.
-            await testUtils.owlCompatibilityNextTick();
-            await testUtils.dom.click(form.$('.o_field_widget[name=bar] input'));
-            assert.notOk(form.$('.o_field_widget[name=bar] input').prop('checked'),
-                "the checkbox should be unticked");
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            //useofowlCompatibilityNextTickbecausewehaveabooleanfield(owl)insidethe
+            //x2many,soanupdateofthex2manyrequirestowaitfor2animationframes:one
+            //forthelisttobere-rendered(withthebooleanfield)andoneforthecontrol
+            //panel.
+            awaittestUtils.owlCompatibilityNextTick();
+            awaittestUtils.dom.click(form.$('.o_field_widget[name=bar]input'));
+            assert.notOk(form.$('.o_field_widget[name=bar]input').prop('checked'),
+                "thecheckboxshouldbeunticked");
 
             form.destroy();
         });
 
-        QUnit.test('one2many with default value: edit line to make it invalid', async function (assert) {
+        QUnit.test('one2manywithdefaultvalue:editlinetomakeitinvalid',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.partner.fields.p.default = [
-                [0, false, { foo: "coucou", int_field: 5, p: [] }],
+            this.data.partner.fields.p.default=[
+                [0,false,{foo:"coucou",int_field:5,p:[]}],
             ];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree editable="bottom">' +
-                    '<field name="foo"/>' +
-                    '<field name="int_field"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="int_field"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
             });
 
-            // edit the line and enter an invalid value for int_field
-            await testUtils.dom.click(form.$('.o_data_row .o_data_cell:nth(1)'));
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=int_field]'), 'e');
-            await testUtils.dom.click(form.$el);
+            //editthelineandenteraninvalidvalueforint_field
+            awaittestUtils.dom.click(form.$('.o_data_row.o_data_cell:nth(1)'));
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=int_field]'),'e');
+            awaittestUtils.dom.click(form.$el);
 
-            assert.containsOnce(form, '.o_data_row.o_selected_row',
-                "line should not have been removed and should still be in edition");
-            assert.strictEqual($('.modal').length, 1,
-                "a confirmation dialog should be opened");
+            assert.containsOnce(form,'.o_data_row.o_selected_row',
+                "lineshouldnothavebeenremovedandshouldstillbeinedition");
+            assert.strictEqual($('.modal').length,1,
+                "aconfirmationdialogshouldbeopened");
             assert.hasClass(form.$('.o_field_widget[name=int_field]'),'o_field_invalid',
-                "should indicate that int_field is invalid");
+                "shouldindicatethatint_fieldisinvalid");
 
             form.destroy();
         });
 
-        QUnit.test('default value for nested one2manys (coming from onchange)', async function (assert) {
+        QUnit.test('defaultvaluefornestedone2manys(comingfromonchange)',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.partner.onchanges.p = function (obj) {
-                obj.p = [
+            this.data.partner.onchanges.p=function(obj){
+                obj.p=[
                     [5],
-                    [0, 0, { turtles: [[5], [4, 1]] }], // link record 1 by default
+                    [0,0,{turtles:[[5],[4,1]]}],//linkrecord1bydefault
                 ];
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                    '<sheet>' +
-                    '<field name="p">' +
-                    '<tree><field name="turtles"/></tree>' +
-                    '</field>' +
-                    '</sheet>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                    '<sheet>'+
+                    '<fieldname="p">'+
+                    '<tree><fieldname="turtles"/></tree>'+
+                    '</field>'+
+                    '</sheet>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    if (args.method === 'create') {
-                        assert.strictEqual(args.args[0].p[0][0], 0,
-                            "should send a command 0 (CREATE) for p");
-                        assert.deepEqual(args.args[0].p[0][2], { turtles: [[4, 1, false]] },
-                            "should send the correct values");
+                mockRPC:function(route,args){
+                    if(args.method==='create'){
+                        assert.strictEqual(args.args[0].p[0][0],0,
+                            "shouldsendacommand0(CREATE)forp");
+                        assert.deepEqual(args.args[0].p[0][2],{turtles:[[4,1,false]]},
+                            "shouldsendthecorrectvalues");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            assert.strictEqual(form.$('.o_data_cell').text(), '1 record',
-                "should correctly display the value of the inner o2m");
+            assert.strictEqual(form.$('.o_data_cell').text(),'1record',
+                "shouldcorrectlydisplaythevalueoftheinnero2m");
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
 
             form.destroy();
         });
 
-        QUnit.test('display correct value after validation error', async function (assert) {
+        QUnit.test('displaycorrectvalueaftervalidationerror',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.partner.onchanges.turtles = function () { };
+            this.data.partner.onchanges.turtles=function(){};
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                    '<sheet>' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</sheet>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                    '<sheet>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</sheet>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
-                        if (args.args[1].turtles[0][2].turtle_foo === 'pinky') {
-                            // we simulate a validation error.  In the 'real' web client,
-                            // the server error will be used by the session to display
-                            // an error dialog.  From the point of view of the basic
-                            // model, the promise is just rejected.
-                            return Promise.reject();
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
+                        if(args.args[1].turtles[0][2].turtle_foo==='pinky'){
+                            //wesimulateavalidationerror. Inthe'real'webclient,
+                            //theservererrorwillbeusedbythesessiontodisplay
+                            //anerrordialog. Fromthepointofviewofthebasic
+                            //model,thepromiseisjustrejected.
+                            returnPromise.reject();
                         }
                     }
-                    if (args.method === 'write') {
-                        assert.deepEqual(args.args[1].turtles[0], [1, 2, { turtle_foo: 'foo' }],
-                            'should send the "good" value');
+                    if(args.method==='write'){
+                        assert.deepEqual(args.args[1].turtles[0],[1,2,{turtle_foo:'foo'}],
+                            'shouldsendthe"good"value');
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                viewOptions: { mode: 'edit' },
-                res_id: 1,
+                viewOptions:{mode:'edit'},
+                res_id:1,
             });
 
-            assert.strictEqual(form.$('.o_data_row .o_data_cell:nth(0)').text(), 'blip',
-                "initial text should be correct");
+            assert.strictEqual(form.$('.o_data_row.o_data_cell:nth(0)').text(),'blip',
+                "initialtextshouldbecorrect");
 
-            // click and edit value to 'foo', which will trigger onchange
-            await testUtils.dom.click(form.$('.o_data_row .o_data_cell:nth(0)'));
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=turtle_foo]'), 'foo');
-            await testUtils.dom.click(form.$el);
-            assert.strictEqual(form.$('.o_data_row .o_data_cell:nth(0)').text(), 'foo',
-                "field should have been changed to foo");
+            //clickandeditvalueto'foo',whichwilltriggeronchange
+            awaittestUtils.dom.click(form.$('.o_data_row.o_data_cell:nth(0)'));
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=turtle_foo]'),'foo');
+            awaittestUtils.dom.click(form.$el);
+            assert.strictEqual(form.$('.o_data_row.o_data_cell:nth(0)').text(),'foo',
+                "fieldshouldhavebeenchangedtofoo");
 
-            // click and edit value to 'pinky', which trigger a failed onchange
-            await testUtils.dom.click(form.$('.o_data_row .o_data_cell:nth(0)'));
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=turtle_foo]'), 'pinky');
-            await testUtils.dom.click(form.$el);
+            //clickandeditvalueto'pinky',whichtriggerafailedonchange
+            awaittestUtils.dom.click(form.$('.o_data_row.o_data_cell:nth(0)'));
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=turtle_foo]'),'pinky');
+            awaittestUtils.dom.click(form.$el);
 
-            assert.strictEqual(form.$('.o_data_row .o_data_cell:nth(0)').text(), 'foo',
-                "turtle_foo text should now be set back to foo");
+            assert.strictEqual(form.$('.o_data_row.o_data_cell:nth(0)').text(),'foo',
+                "turtle_footextshouldnowbesetbacktofoo");
 
-            // we make sure here that when we save, the values are the current
-            // values displayed in the field.
-            await testUtils.form.clickSave(form);
+            //wemakesureherethatwhenwesave,thevaluesarethecurrent
+            //valuesdisplayedinthefield.
+            awaittestUtils.form.clickSave(form);
 
             form.destroy();
         });
 
-        QUnit.test('propagate context to sub views without default_* keys', async function (assert) {
+        QUnit.test('propagatecontexttosubviewswithoutdefault_*keys',asyncfunction(assert){
             assert.expect(7);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                    '<sheet>' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</sheet>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                    '<sheet>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</sheet>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    assert.strictEqual(args.kwargs.context.flutter, 'shy',
-                        'view context key should be used for every rpcs');
-                    if (args.method === 'onchange') {
-                        if (args.model === 'partner') {
-                            assert.strictEqual(args.kwargs.context.default_flutter, 'why',
-                                "should have default_* values in context for form view RPCs");
-                        } else if (args.model === 'turtle') {
+                mockRPC:function(route,args){
+                    assert.strictEqual(args.kwargs.context.flutter,'shy',
+                        'viewcontextkeyshouldbeusedforeveryrpcs');
+                    if(args.method==='onchange'){
+                        if(args.model==='partner'){
+                            assert.strictEqual(args.kwargs.context.default_flutter,'why',
+                                "shouldhavedefault_*valuesincontextforformviewRPCs");
+                        }elseif(args.model==='turtle'){
                             assert.notOk(args.kwargs.context.default_flutter,
-                                "should not have default_* values in context for subview RPCs");
+                                "shouldnothavedefault_*valuesincontextforsubviewRPCs");
                         }
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                viewOptions: {
-                    context: {
-                        flutter: 'shy',
-                        default_flutter: 'why',
+                viewOptions:{
+                    context:{
+                        flutter:'shy',
+                        default_flutter:'why',
                     },
                 },
             });
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('input[name="turtle_foo"]'), 'pinky pie');
-            await testUtils.form.clickSave(form);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('input[name="turtle_foo"]'),'pinkypie');
+            awaittestUtils.form.clickSave(form);
 
             form.destroy();
         });
 
-        QUnit.test('nested one2manys with no widget in list and as invisible list in form', async function (assert) {
+        QUnit.test('nestedone2manyswithnowidgetinlistandasinvisiblelistinform',asyncfunction(assert){
             assert.expect(6);
 
-            this.data.partner.records[0].p = [1];
+            this.data.partner.records[0].p=[1];
 
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="p">
-                            <tree><field name="turtles"/></tree>
-                            <form><field name="turtles" invisible="1"/></form>
+                        <fieldname="p">
+                            <tree><fieldname="turtles"/></tree>
+                            <form><fieldname="turtles"invisible="1"/></form>
                         </field>
                     </form>`,
-                res_id: 1,
+                res_id:1,
             });
 
-            assert.containsOnce(form, '.o_data_row');
-            assert.strictEqual(form.$('.o_data_row .o_data_cell').text(), '1 record');
+            assert.containsOnce(form,'.o_data_row');
+            assert.strictEqual(form.$('.o_data_row.o_data_cell').text(),'1record');
 
-            await testUtils.dom.click(form.$('.o_data_row'));
+            awaittestUtils.dom.click(form.$('.o_data_row'));
 
-            assert.containsOnce(document.body, '.modal .o_form_view');
-            assert.containsNone(document.body, '.modal .o_form_view .o_field_one2many');
+            assert.containsOnce(document.body,'.modal.o_form_view');
+            assert.containsNone(document.body,'.modal.o_form_view.o_field_one2many');
 
-            // Test possible caching issues
-            await testUtils.dom.click($('.modal .o_form_button_cancel'));
-            await testUtils.dom.click(form.$('.o_data_row'));
+            //Testpossiblecachingissues
+            awaittestUtils.dom.click($('.modal.o_form_button_cancel'));
+            awaittestUtils.dom.click(form.$('.o_data_row'));
 
-            assert.containsOnce(document.body, '.modal .o_form_view');
-            assert.containsNone(document.body, '.modal .o_form_view .o_field_one2many');
+            assert.containsOnce(document.body,'.modal.o_form_view');
+            assert.containsNone(document.body,'.modal.o_form_view.o_field_one2many');
 
             form.destroy();
         });
 
-        QUnit.test('onchange on nested one2manys', async function (assert) {
+        QUnit.test('onchangeonnestedone2manys',asyncfunction(assert){
             assert.expect(6);
 
-            this.data.partner.onchanges.display_name = function (obj) {
-                if (obj.display_name) {
-                    obj.p = [
+            this.data.partner.onchanges.display_name=function(obj){
+                if(obj.display_name){
+                    obj.p=[
                         [5],
-                        [0, 0, {
-                            display_name: 'test',
-                            turtles: [[5], [0, 0, { display_name: 'test nested' }]],
+                        [0,0,{
+                            display_name:'test',
+                            turtles:[[5],[0,0,{display_name:'testnested'}]],
                         }],
                     ];
                 }
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                    '<sheet>' +
-                    '<field name="display_name"/>' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '<form>' +
-                    '<field name="turtles">' +
-                    '<tree><field name="display_name"/></tree>' +
-                    '</field>' +
-                    '</form>' +
-                    '</field>' +
-                    '</sheet>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                    '<sheet>'+
+                    '<fieldname="display_name"/>'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '<form>'+
+                    '<fieldname="turtles">'+
+                    '<tree><fieldname="display_name"/></tree>'+
+                    '</field>'+
+                    '</form>'+
+                    '</field>'+
+                    '</sheet>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    if (args.method === 'create') {
-                        assert.strictEqual(args.args[0].p[0][0], 0,
-                            "should send a command 0 (CREATE) for p");
-                        assert.strictEqual(args.args[0].p[0][2].display_name, 'test',
-                            "should send the correct values");
-                        assert.strictEqual(args.args[0].p[0][2].turtles[0][0], 0,
-                            "should send a command 0 (CREATE) for turtles");
-                        assert.deepEqual(args.args[0].p[0][2].turtles[0][2], { display_name: 'test nested' },
-                            "should send the correct values");
+                mockRPC:function(route,args){
+                    if(args.method==='create'){
+                        assert.strictEqual(args.args[0].p[0][0],0,
+                            "shouldsendacommand0(CREATE)forp");
+                        assert.strictEqual(args.args[0].p[0][2].display_name,'test',
+                            "shouldsendthecorrectvalues");
+                        assert.strictEqual(args.args[0].p[0][2].turtles[0][0],0,
+                            "shouldsendacommand0(CREATE)forturtles");
+                        assert.deepEqual(args.args[0].p[0][2].turtles[0][2],{display_name:'testnested'},
+                            "shouldsendthecorrectvalues");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=display_name]'), 'trigger onchange');
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=display_name]'),'triggeronchange');
 
-            assert.strictEqual(form.$('.o_data_cell').text(), 'test',
-                "should have added the new row to the one2many");
+            assert.strictEqual(form.$('.o_data_cell').text(),'test',
+                "shouldhaveaddedthenewrowtotheone2many");
 
-            // open the new subrecord to check the value of the nested o2m, and to
-            // ensure that it will be saved
-            await testUtils.dom.click(form.$('.o_data_cell:first'));
-            assert.strictEqual($('.modal .o_data_cell').text(), 'test nested',
-                "should have added the new row to the nested one2many");
-            await testUtils.dom.clickFirst($('.modal .modal-footer .btn-primary'));
+            //openthenewsubrecordtocheckthevalueofthenestedo2m,andto
+            //ensurethatitwillbesaved
+            awaittestUtils.dom.click(form.$('.o_data_cell:first'));
+            assert.strictEqual($('.modal.o_data_cell').text(),'testnested',
+                "shouldhaveaddedthenewrowtothenestedone2many");
+            awaittestUtils.dom.clickFirst($('.modal.modal-footer.btn-primary'));
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
 
             form.destroy();
         });
 
-        QUnit.test('one2many with multiple pages and sequence field', async function (assert) {
+        QUnit.test('one2manywithmultiplepagesandsequencefield',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.records[0].turtles = [3, 2, 1];
-            this.data.partner.onchanges.turtles = function () { };
+            this.data.partner.records[0].turtles=[3,2,1];
+            this.data.partner.onchanges.turtles=function(){};
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree limit="2">' +
-                    '<field name="turtle_int" widget="handle"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="partner_ids" invisible="1"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treelimit="2">'+
+                    '<fieldname="turtle_int"widget="handle"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="partner_ids"invisible="1"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
-                        return Promise.resolve({
-                            value: {
-                                turtles: [
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
+                        returnPromise.resolve({
+                            value:{
+                                turtles:[
                                     [5],
-                                    [1, 1, { turtle_foo: "from onchange", partner_ids: [[5]] }],
+                                    [1,1,{turtle_foo:"fromonchange",partner_ids:[[5]]}],
                                 ]
                             }
                         });
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
-                viewOptions: {
-                    mode: 'edit',
+                viewOptions:{
+                    mode:'edit',
                 },
             });
-            await testUtils.dom.click(form.$('.o_list_record_remove:first button'));
-            assert.strictEqual(form.$('.o_data_row').text(), 'from onchange',
-                'onchange has been properly applied');
+            awaittestUtils.dom.click(form.$('.o_list_record_remove:firstbutton'));
+            assert.strictEqual(form.$('.o_data_row').text(),'fromonchange',
+                'onchangehasbeenproperlyapplied');
             form.destroy();
         });
 
-        QUnit.test('one2many with multiple pages and sequence field, part2', async function (assert) {
+        QUnit.test('one2manywithmultiplepagesandsequencefield,part2',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.records[0].turtles = [3, 2, 1];
-            this.data.partner.onchanges.turtles = function () { };
+            this.data.partner.records[0].turtles=[3,2,1];
+            this.data.partner.onchanges.turtles=function(){};
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree limit="2">' +
-                    '<field name="turtle_int" widget="handle"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="partner_ids" invisible="1"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treelimit="2">'+
+                    '<fieldname="turtle_int"widget="handle"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="partner_ids"invisible="1"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
-                        return Promise.resolve({
-                            value: {
-                                turtles: [
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
+                        returnPromise.resolve({
+                            value:{
+                                turtles:[
                                     [5],
-                                    [1, 1, { turtle_foo: "from onchange id2", partner_ids: [[5]] }],
-                                    [1, 3, { turtle_foo: "from onchange id3", partner_ids: [[5]] }],
+                                    [1,1,{turtle_foo:"fromonchangeid2",partner_ids:[[5]]}],
+                                    [1,3,{turtle_foo:"fromonchangeid3",partner_ids:[[5]]}],
                                 ]
                             }
                         });
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
-                viewOptions: {
-                    mode: 'edit',
+                viewOptions:{
+                    mode:'edit',
                 },
             });
-            await testUtils.dom.click(form.$('.o_list_record_remove:first button'));
-            assert.strictEqual(form.$('.o_data_row').text(), 'from onchange id2from onchange id3',
-                'onchange has been properly applied');
+            awaittestUtils.dom.click(form.$('.o_list_record_remove:firstbutton'));
+            assert.strictEqual(form.$('.o_data_row').text(),'fromonchangeid2fromonchangeid3',
+                'onchangehasbeenproperlyapplied');
             form.destroy();
         });
 
-        QUnit.test('one2many with sequence field, override default_get, bottom when inline', async function (assert) {
+        QUnit.test('one2manywithsequencefield,overridedefault_get,bottomwheninline',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.records[0].turtles = [3, 2, 1];
+            this.data.partner.records[0].turtles=[3,2,1];
 
-            this.data.turtle.fields.turtle_int.default = 10;
+            this.data.turtle.fields.turtle_int.default=10;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_int" widget="handle"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_int"widget="handle"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            // starting condition
-            assert.strictEqual($('.o_data_cell').text(), "blipyopkawa");
+            //startingcondition
+            assert.strictEqual($('.o_data_cell').text(),"blipyopkawa");
 
-            // click add a new line
-            // save the record
-            // check line is at the correct place
+            //clickaddanewline
+            //savetherecord
+            //checklineisatthecorrectplace
 
-            var inputText = 'ninja';
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('.o_input[name="turtle_foo"]'), inputText);
-            await testUtils.form.clickSave(form);
+            varinputText='ninja';
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('.o_input[name="turtle_foo"]'),inputText);
+            awaittestUtils.form.clickSave(form);
 
-            assert.strictEqual($('.o_data_cell').text(), "blipyopkawa" + inputText);
+            assert.strictEqual($('.o_data_cell').text(),"blipyopkawa"+inputText);
             form.destroy();
         });
 
-        QUnit.test('one2many with sequence field, override default_get, top when inline', async function (assert) {
+        QUnit.test('one2manywithsequencefield,overridedefault_get,topwheninline',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.records[0].turtles = [3, 2, 1];
+            this.data.partner.records[0].turtles=[3,2,1];
 
-            this.data.turtle.fields.turtle_int.default = 10;
+            this.data.turtle.fields.turtle_int.default=10;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_int" widget="handle"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_int"widget="handle"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            // starting condition
-            assert.strictEqual($('.o_data_cell').text(), "blipyopkawa");
+            //startingcondition
+            assert.strictEqual($('.o_data_cell').text(),"blipyopkawa");
 
-            // click add a new line
-            // save the record
-            // check line is at the correct place
+            //clickaddanewline
+            //savetherecord
+            //checklineisatthecorrectplace
 
-            var inputText = 'ninja';
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('.o_input[name="turtle_foo"]'), inputText);
-            await testUtils.form.clickSave(form);
+            varinputText='ninja';
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('.o_input[name="turtle_foo"]'),inputText);
+            awaittestUtils.form.clickSave(form);
 
-            assert.strictEqual($('.o_data_cell').text(), inputText + "blipyopkawa");
+            assert.strictEqual($('.o_data_cell').text(),inputText+"blipyopkawa");
             form.destroy();
         });
 
-        QUnit.test('one2many with sequence field, override default_get, bottom when popup', async function (assert) {
+        QUnit.test('one2manywithsequencefield,overridedefault_get,bottomwhenpopup',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.partner.records[0].turtles = [3, 2, 1];
+            this.data.partner.records[0].turtles=[3,2,1];
 
-            this.data.turtle.fields.turtle_int.default = 10;
+            this.data.turtle.fields.turtle_int.default=10;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree>' +
-                    '<field name="turtle_int" widget="handle"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '<form>' +
-                    // NOTE: at some point we want to fix this in the framework so that an invisible field is not required.
-                    '<field name="turtle_int" invisible="1"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '</form>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<tree>'+
+                    '<fieldname="turtle_int"widget="handle"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '<form>'+
+                    //NOTE:atsomepointwewanttofixthisintheframeworksothataninvisiblefieldisnotrequired.
+                    '<fieldname="turtle_int"invisible="1"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</form>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            // starting condition
-            assert.strictEqual($('.o_data_cell').text(), "blipyopkawa");
+            //startingcondition
+            assert.strictEqual($('.o_data_cell').text(),"blipyopkawa");
 
-            // click add a new line
-            // save the record
-            // check line is at the correct place
+            //clickaddanewline
+            //savetherecord
+            //checklineisatthecorrectplace
 
-            var inputText = 'ninja';
-            await testUtils.dom.click($('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput($('.o_input[name="turtle_foo"]'), inputText);
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary:first'));
+            varinputText='ninja';
+            awaittestUtils.dom.click($('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput($('.o_input[name="turtle_foo"]'),inputText);
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary:first'));
 
-            assert.strictEqual($('.o_data_cell').text(), "blipyopkawa" + inputText);
+            assert.strictEqual($('.o_data_cell').text(),"blipyopkawa"+inputText);
 
-            await testUtils.dom.click($('.o_form_button_save'));
-            assert.strictEqual($('.o_data_cell').text(), "blipyopkawa" + inputText);
+            awaittestUtils.dom.click($('.o_form_button_save'));
+            assert.strictEqual($('.o_data_cell').text(),"blipyopkawa"+inputText);
             form.destroy();
         });
 
-        QUnit.test('one2many with sequence field, override default_get, not last page', async function (assert) {
+        QUnit.test('one2manywithsequencefield,overridedefault_get,notlastpage',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.records[0].turtles = [3, 2, 1];
+            this.data.partner.records[0].turtles=[3,2,1];
 
-            this.data.turtle.fields.turtle_int.default = 10;
+            this.data.turtle.fields.turtle_int.default=10;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree limit="2">' +
-                    '<field name="turtle_int" widget="handle"/>' +
-                    '</tree>' +
-                    '<form>' +
-                    '<field name="turtle_int"/>' +
-                    '</form>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treelimit="2">'+
+                    '<fieldname="turtle_int"widget="handle"/>'+
+                    '</tree>'+
+                    '<form>'+
+                    '<fieldname="turtle_int"/>'+
+                    '</form>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            // click add a new line
-            // check turtle_int for new is the current max of the page
-            await testUtils.dom.click($('.o_field_x2many_list_row_add a'));
-            assert.strictEqual($('.modal .o_input[name="turtle_int"]').val(), '10');
+            //clickaddanewline
+            //checkturtle_intfornewisthecurrentmaxofthepage
+            awaittestUtils.dom.click($('.o_field_x2many_list_row_adda'));
+            assert.strictEqual($('.modal.o_input[name="turtle_int"]').val(),'10');
             form.destroy();
         });
 
-        QUnit.test('one2many with sequence field, override default_get, last page', async function (assert) {
+        QUnit.test('one2manywithsequencefield,overridedefault_get,lastpage',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.records[0].turtles = [3, 2, 1];
+            this.data.partner.records[0].turtles=[3,2,1];
 
-            this.data.turtle.fields.turtle_int.default = 10;
+            this.data.turtle.fields.turtle_int.default=10;
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree limit="4">' +
-                    '<field name="turtle_int" widget="handle"/>' +
-                    '</tree>' +
-                    '<form>' +
-                    '<field name="turtle_int"/>' +
-                    '</form>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treelimit="4">'+
+                    '<fieldname="turtle_int"widget="handle"/>'+
+                    '</tree>'+
+                    '<form>'+
+                    '<fieldname="turtle_int"/>'+
+                    '</form>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            // click add a new line
-            // check turtle_int for new is the current max of the page +1
-            await testUtils.dom.click($('.o_field_x2many_list_row_add a'));
-            assert.strictEqual($('.modal .o_input[name="turtle_int"]').val(), '22');
+            //clickaddanewline
+            //checkturtle_intfornewisthecurrentmaxofthepage+1
+            awaittestUtils.dom.click($('.o_field_x2many_list_row_adda'));
+            assert.strictEqual($('.modal.o_input[name="turtle_int"]').val(),'22');
             form.destroy();
         });
 
-        QUnit.test('one2many with sequence field, fetch name_get from empty list, field text', async function (assert) {
-            // There was a bug where a RPC would fail because no route was set.
-            // The scenario is:
-            // - create a new parent model, which has a one2many
-            // - add at least 2 one2many lines which have:
-            //     - a handle field
-            //     - a many2one, which is not required, and we will leave it empty
-            // - reorder the lines with the handle
-            // -> This will call a resequence, which calls a name_get.
-            // -> With the bug that would fail, if it's ok the test will pass.
+        QUnit.test('one2manywithsequencefield,fetchname_getfromemptylist,fieldtext',asyncfunction(assert){
+            //TherewasabugwhereaRPCwouldfailbecausenoroutewasset.
+            //Thescenariois:
+            //-createanewparentmodel,whichhasaone2many
+            //-addatleast2one2manylineswhichhave:
+            //    -ahandlefield
+            //    -amany2one,whichisnotrequired,andwewillleaveitempty
+            //-reorderthelineswiththehandle
+            //->Thiswillcallaresequence,whichcallsaname_get.
+            //->Withthebugthatwouldfail,ifit'sokthetestwillpass.
 
-            // This test will also make sure lists with
-            // FieldText (turtle_description) can be reordered with a handle.
-            // More specifically this will trigger a reset on a FieldText
-            // while the field is not in editable mode.
+            //Thistestwillalsomakesurelistswith
+            //FieldText(turtle_description)canbereorderedwithahandle.
+            //MorespecificallythiswilltriggeraresetonaFieldText
+            //whilethefieldisnotineditablemode.
             assert.expect(4);
 
-            this.data.turtle.fields.turtle_int.default = 10;
-            this.data.turtle.fields.product_id.default = 37;
-            this.data.turtle.fields.not_required_product_id = {
-                string: "Product",
-                type: "many2one",
-                relation: 'product'
+            this.data.turtle.fields.turtle_int.default=10;
+            this.data.turtle.fields.product_id.default=37;
+            this.data.turtle.fields.not_required_product_id={
+                string:"Product",
+                type:"many2one",
+                relation:'product'
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_int" widget="handle"/>' +
-                    '<field name="turtle_foo"/>' +
-                    '<field name="not_required_product_id"/>' +
-                    '<field name="turtle_description" widget="text"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_int"widget="handle"/>'+
+                    '<fieldname="turtle_foo"/>'+
+                    '<fieldname="not_required_product_id"/>'+
+                    '<fieldname="turtle_description"widget="text"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                viewOptions: {
-                    mode: 'edit',
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            // starting condition
-            assert.strictEqual($('.o_data_cell:nth-child(2)').text(), "");
+            //startingcondition
+            assert.strictEqual($('.o_data_cell:nth-child(2)').text(),"");
 
-            var inputText1 = 'relax';
-            var inputText2 = 'max';
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('.o_input[name="turtle_foo"]'), inputText1);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('.o_input[name="turtle_foo"]'), inputText2);
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            varinputText1='relax';
+            varinputText2='max';
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('.o_input[name="turtle_foo"]'),inputText1);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('.o_input[name="turtle_foo"]'),inputText2);
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.strictEqual($('.o_data_cell:nth-child(2)').text(), inputText1 + inputText2);
+            assert.strictEqual($('.o_data_cell:nth-child(2)').text(),inputText1+inputText2);
 
-            var $handles = form.$('.ui-sortable-handle');
+            var$handles=form.$('.ui-sortable-handle');
 
-            assert.equal($handles.length, 3, 'There should be 3 sequence handlers');
+            assert.equal($handles.length,3,'Thereshouldbe3sequencehandlers');
 
-            await testUtils.dom.dragAndDrop($handles.eq(1),
-                form.$('tbody tr').first(),
-                { position: 'top' }
+            awaittestUtils.dom.dragAndDrop($handles.eq(1),
+                form.$('tbodytr').first(),
+                {position:'top'}
             );
 
-            assert.strictEqual($('.o_data_cell:nth-child(2)').text(), inputText2 + inputText1);
+            assert.strictEqual($('.o_data_cell:nth-child(2)').text(),inputText2+inputText1);
 
             form.destroy();
         });
 
-        QUnit.skip('one2many with several pages, onchange and default order', async function (assert) {
-            // This test reproduces a specific scenario where a one2many is displayed
-            // over several pages, and has a default order such that a record that
-            // would normally be on page 1 is actually on another page. Moreover,
-            // there is an onchange on that one2many which converts all commands 4
-            // (LINK_TO) into commands 1 (UPDATE), which is standard in the ORM.
-            // This test ensures that the record displayed on page 2 is never fully
-            // read.
+        QUnit.skip('one2manywithseveralpages,onchangeanddefaultorder',asyncfunction(assert){
+            //Thistestreproducesaspecificscenariowhereaone2manyisdisplayed
+            //overseveralpages,andhasadefaultordersuchthatarecordthat
+            //wouldnormallybeonpage1isactuallyonanotherpage.Moreover,
+            //thereisanonchangeonthatone2manywhichconvertsallcommands4
+            //(LINK_TO)intocommands1(UPDATE),whichisstandardintheORM.
+            //Thistestensuresthattherecorddisplayedonpage2isneverfully
+            //read.
             assert.expect(8);
 
-            var data = this.data;
-            data.partner.records[0].turtles = [1, 2, 3];
-            data.turtle.records[0].partner_ids = [1];
-            data.partner.onchanges = {
-                turtles: function (obj) {
-                    var res = _.map(obj.turtles, function (command) {
-                        if (command[0] === 1) { // already an UPDATE command: do nothing
-                            return command;
+            vardata=this.data;
+            data.partner.records[0].turtles=[1,2,3];
+            data.turtle.records[0].partner_ids=[1];
+            data.partner.onchanges={
+                turtles:function(obj){
+                    varres=_.map(obj.turtles,function(command){
+                        if(command[0]===1){//alreadyanUPDATEcommand:donothing
+                            returncommand;
                         }
-                        // convert LINK_TO commands to UPDATE commands
-                        var id = command[1];
-                        var record = _.findWhere(data.turtle.records, { id: id });
-                        return [1, id, _.pick(record, ['turtle_int', 'turtle_foo', 'partner_ids'])];
+                        //convertLINK_TOcommandstoUPDATEcommands
+                        varid=command[1];
+                        varrecord=_.findWhere(data.turtle.records,{id:id});
+                        return[1,id,_.pick(record,['turtle_int','turtle_foo','partner_ids'])];
                     });
-                    obj.turtles = [[5]].concat(res);
+                    obj.turtles=[[5]].concat(res);
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="top" limit="2" default_order="turtle_foo">' +
-                    '<field name="turtle_int"/>' +
-                    '<field name="turtle_foo" class="foo"/>' +
-                    '<field name="partner_ids" widget="many2many_tags"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top"limit="2"default_order="turtle_foo">'+
+                    '<fieldname="turtle_int"/>'+
+                    '<fieldname="turtle_foo"class="foo"/>'+
+                    '<fieldname="partner_ids"widget="many2many_tags"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    var ids = args.method === 'read' ? ' [' + args.args[0] + ']' : '';
-                    assert.step(args.method + ids);
-                    return this._super.apply(this, arguments);
+                mockRPC:function(route,args){
+                    varids=args.method==='read'?'['+args.args[0]+']':'';
+                    assert.step(args.method+ids);
+                    returnthis._super.apply(this,arguments);
                 },
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            assert.strictEqual(form.$('.o_data_cell.foo').text(), 'blipkawa',
-                "should display two records out of three, in the correct order");
+            assert.strictEqual(form.$('.o_data_cell.foo').text(),'blipkawa',
+                "shoulddisplaytworecordsoutofthree,inthecorrectorder");
 
-            // edit turtle_int field of first row
-            await testUtils.dom.click(form.$('.o_data_cell:first'));
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=turtle_int]'), 3);
-            await testUtils.dom.click(form.$el);
+            //editturtle_intfieldoffirstrow
+            awaittestUtils.dom.click(form.$('.o_data_cell:first'));
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=turtle_int]'),3);
+            awaittestUtils.dom.click(form.$el);
 
-            assert.strictEqual(form.$('.o_data_cell.foo').text(), 'blipkawa',
-                "should still display the same two records");
+            assert.strictEqual(form.$('.o_data_cell.foo').text(),'blipkawa',
+                "shouldstilldisplaythesametworecords");
 
             assert.verifySteps([
-                'read [1]', // main record
-                'read [1,2,3]', // one2many (turtle_foo, all records)
-                'read [2,3]', // one2many (all fields in view, records of first page)
-                'read [2,4]', // many2many inside one2many (partner_ids), first page only
+                'read[1]',//mainrecord
+                'read[1,2,3]',//one2many(turtle_foo,allrecords)
+                'read[2,3]',//one2many(allfieldsinview,recordsoffirstpage)
+                'read[2,4]',//many2manyinsideone2many(partner_ids),firstpageonly
                 'onchange',
-                'read [1]', // AAB FIXME 4 (draft fixing taskid-2323491):
-                            // this test's purpose is to assert that this rpc isn't
-                            // done, but yet it is. Actually, it wasn't before because mockOnChange
-                            // returned [1] as command list, instead of [[6, false, [1]]], so basically
-                            // this value was ignored. Now that mockOnChange properly works, the value
-                            // is taken into account but the basicmodel doesn't care it concerns a
-                            // record of the second page, and does the read. I don't think we
-                            // introduced a regression here, this test was simply wrong...
+                'read[1]',//AABFIXME4(draftfixingtaskid-2323491):
+                            //thistest'spurposeistoassertthatthisrpcisn't
+                            //done,butyetitis.Actually,itwasn'tbeforebecausemockOnChange
+                            //returned[1]ascommandlist,insteadof[[6,false,[1]]],sobasically
+                            //thisvaluewasignored.NowthatmockOnChangeproperlyworks,thevalue
+                            //istakenintoaccountbutthebasicmodeldoesn'tcareitconcernsa
+                            //recordofthesecondpage,anddoestheread.Idon'tthinkwe
+                            //introducedaregressionhere,thistestwassimplywrong...
             ]);
 
             form.destroy();
         });
 
-        QUnit.test('new record, with one2many with more default values than limit', async function (assert) {
+        QUnit.test('newrecord,withone2manywithmoredefaultvaluesthanlimit',asyncfunction(assert){
             assert.expect(2);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree limit="2">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treelimit="2">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                context: { default_turtles: [1, 2, 3] },
-                viewOptions: {
-                    mode: 'edit',
+                context:{default_turtles:[1,2,3]},
+                viewOptions:{
+                    mode:'edit',
                 },
             });
-            assert.strictEqual(form.$('.o_data_row').text(), 'yopblip',
-                'data has been properly loaded');
-            await testUtils.form.clickSave(form);
+            assert.strictEqual(form.$('.o_data_row').text(),'yopblip',
+                'datahasbeenproperlyloaded');
+            awaittestUtils.form.clickSave(form);
 
-            assert.strictEqual(form.$('.o_data_row').text(), 'yopblip',
-                'data has been properly saved');
+            assert.strictEqual(form.$('.o_data_row').text(),'yopblip',
+                'datahasbeenproperlysaved');
             form.destroy();
         });
 
-        QUnit.test('add a new line after limit is reached should behave nicely', async function (assert) {
+        QUnit.test('addanewlineafterlimitisreachedshouldbehavenicely',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.records[0].turtles = [1, 2, 3];
+            this.data.partner.records[0].turtles=[1,2,3];
 
-            this.data.partner.onchanges = {
-                turtles: function (obj) {
-                    obj.turtles = [
+            this.data.partner.onchanges={
+                turtles:function(obj){
+                    obj.turtles=[
                         [5],
-                        [1, 1, { turtle_foo: "yop" }],
-                        [1, 2, { turtle_foo: "blip" }],
-                        [1, 3, { turtle_foo: "kawa" }],
-                        [0, obj.turtles[3][2], { turtle_foo: "abc" }],
+                        [1,1,{turtle_foo:"yop"}],
+                        [1,2,{turtle_foo:"blip"}],
+                        [1,3,{turtle_foo:"kawa"}],
+                        [0,obj.turtles[3][2],{turtle_foo:"abc"}],
                     ];
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree limit="3" editable="bottom">' +
-                    '<field name="turtle_foo" required="1"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treelimit="3"editable="bottom">'+
+                    '<fieldname="turtle_foo"required="1"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            assert.containsN(form, '.o_data_row', 4, 'should have 4 data rows');
-            await testUtils.fields.editInput(form.$('.o_input[name="turtle_foo"]'), 'a');
-            assert.containsN(form, '.o_data_row', 4,
-                'should still have 4 data rows (the limit is increased to 4)');
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            assert.containsN(form,'.o_data_row',4,'shouldhave4datarows');
+            awaittestUtils.fields.editInput(form.$('.o_input[name="turtle_foo"]'),'a');
+            assert.containsN(form,'.o_data_row',4,
+                'shouldstillhave4datarows(thelimitisincreasedto4)');
 
             form.destroy();
         });
 
-        QUnit.test('onchange in a one2many with non inline view on an existing record', async function (assert) {
+        QUnit.test('onchangeinaone2manywithnoninlineviewonanexistingrecord',asyncfunction(assert){
             assert.expect(6);
 
-            this.data.partner.fields.sequence = { string: 'Sequence', type: 'integer' };
-            this.data.partner.records[0].sequence = 1;
-            this.data.partner.records[1].sequence = 2;
-            this.data.partner.onchanges = { sequence: function () { } };
+            this.data.partner.fields.sequence={string:'Sequence',type:'integer'};
+            this.data.partner.records[0].sequence=1;
+            this.data.partner.records[1].sequence=2;
+            this.data.partner.onchanges={sequence:function(){}};
 
-            this.data.partner_type.fields.partner_ids = { string: "Partner", type: "one2many", relation: 'partner' };
-            this.data.partner_type.records[0].partner_ids = [1, 2];
+            this.data.partner_type.fields.partner_ids={string:"Partner",type:"one2many",relation:'partner'};
+            this.data.partner_type.records[0].partner_ids=[1,2];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner_type',
-                data: this.data,
-                arch: '<form><field name="partner_ids"/></form>',
-                archs: {
-                    'partner,false,list': '<tree string="Vendors">' +
-                        '<field name="sequence" widget="handle"/>' +
-                        '<field name="display_name"/>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner_type',
+                data:this.data,
+                arch:'<form><fieldname="partner_ids"/></form>',
+                archs:{
+                    'partner,false,list':'<treestring="Vendors">'+
+                        '<fieldname="sequence"widget="handle"/>'+
+                        '<fieldname="display_name"/>'+
                         '</tree>',
                 },
-                res_id: 12,
-                mockRPC: function (route, args) {
+                res_id:12,
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                viewOptions: { mode: 'edit' },
+                viewOptions:{mode:'edit'},
             });
 
-            // swap 2 lines in the one2many
-            await testUtils.dom.dragAndDrop(form.$('.ui-sortable-handle:eq(1)'), form.$('tbody tr').first(),
-                { position: 'top' });
-            assert.verifySteps(['load_views', 'read', 'read', 'onchange', 'onchange']);
+            //swap2linesintheone2many
+            awaittestUtils.dom.dragAndDrop(form.$('.ui-sortable-handle:eq(1)'),form.$('tbodytr').first(),
+                {position:'top'});
+            assert.verifySteps(['load_views','read','read','onchange','onchange']);
             form.destroy();
         });
 
-        QUnit.test('onchange in a one2many with non inline view on a new record', async function (assert) {
+        QUnit.test('onchangeinaone2manywithnoninlineviewonanewrecord',asyncfunction(assert){
             assert.expect(6);
 
-            this.data.turtle.onchanges = {
-                display_name: function (obj) {
-                    if (obj.display_name) {
-                        obj.turtle_int = 44;
+            this.data.turtle.onchanges={
+                display_name:function(obj){
+                    if(obj.display_name){
+                        obj.turtle_int=44;
                     }
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form><field name="turtles"/></form>',
-                archs: {
-                    'turtle,false,list': '<tree editable="bottom">' +
-                        '<field name="display_name"/>' +
-                        '<field name="turtle_int"/>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form><fieldname="turtles"/></form>',
+                archs:{
+                    'turtle,false,list':'<treeeditable="bottom">'+
+                        '<fieldname="display_name"/>'+
+                        '<fieldname="turtle_int"/>'+
                         '</tree>',
                 },
-                mockRPC: function (route, args) {
-                    assert.step(args.method || route);
-                    return this._super.apply(this, arguments);
+                mockRPC:function(route,args){
+                    assert.step(args.method||route);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            // add a row and trigger the onchange
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('.o_data_row .o_field_widget[name=display_name]'), 'a name');
+            //addarowandtriggertheonchange
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('.o_data_row.o_field_widget[name=display_name]'),'aname');
 
-            assert.strictEqual(form.$('.o_data_row .o_field_widget[name=turtle_int]').val(), "44",
-                "should have triggered the onchange");
+            assert.strictEqual(form.$('.o_data_row.o_field_widget[name=turtle_int]').val(),"44",
+                "shouldhavetriggeredtheonchange");
 
             assert.verifySteps([
-                'load_views', // load sub list
-                'onchange', // main record
-                'onchange', // sub record
-                'onchange', // edition of display_name of sub record
+                'load_views',//loadsublist
+                'onchange',//mainrecord
+                'onchange',//subrecord
+                'onchange',//editionofdisplay_nameofsubrecord
             ]);
 
             form.destroy();
         });
 
-        QUnit.test('add a line, edit it and "Save & New"', async function (assert) {
+        QUnit.test('addaline,edititand"Save&New"',asyncfunction(assert){
             assert.expect(5);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree><field name="display_name"/></tree>' +
-                    '<form><field name="display_name"/></form>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<tree><fieldname="display_name"/></tree>'+
+                    '<form><fieldname="display_name"/></form>'+
+                    '</field>'+
                     '</form>',
             });
 
-            assert.containsNone(form, '.o_data_row',
-                "there should be no record in the relation");
+            assert.containsNone(form,'.o_data_row',
+                "thereshouldbenorecordintherelation");
 
-            // add a new record
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput($('.modal .o_field_widget'), 'new record');
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary:first'));
+            //addanewrecord
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput($('.modal.o_field_widget'),'newrecord');
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary:first'));
 
-            assert.strictEqual(form.$('.o_data_row .o_data_cell').text(), 'new record',
-                "should display the new record");
+            assert.strictEqual(form.$('.o_data_row.o_data_cell').text(),'newrecord',
+                "shoulddisplaythenewrecord");
 
-            // reopen freshly added record and edit it
-            await testUtils.dom.click(form.$('.o_data_row .o_data_cell'));
-            await testUtils.fields.editInput($('.modal .o_field_widget'), 'new record edited');
+            //reopenfreshlyaddedrecordandeditit
+            awaittestUtils.dom.click(form.$('.o_data_row.o_data_cell'));
+            awaittestUtils.fields.editInput($('.modal.o_field_widget'),'newrecordedited');
 
-            // save it, and choose to directly create another record
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary:nth(1)'));
+            //saveit,andchoosetodirectlycreateanotherrecord
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary:nth(1)'));
 
-            assert.strictEqual($('.modal').length, 1,
-                "the model should still be open");
-            assert.strictEqual($('.modal .o_field_widget').text(), '',
-                "should have cleared the input");
+            assert.strictEqual($('.modal').length,1,
+                "themodelshouldstillbeopen");
+            assert.strictEqual($('.modal.o_field_widget').text(),'',
+                "shouldhaveclearedtheinput");
 
-            await testUtils.fields.editInput($('.modal .o_field_widget'), 'another new record');
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary:first'));
+            awaittestUtils.fields.editInput($('.modal.o_field_widget'),'anothernewrecord');
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary:first'));
 
-            assert.strictEqual(form.$('.o_data_row .o_data_cell').text(),
-                'new record editedanother new record', "should display the two records");
+            assert.strictEqual(form.$('.o_data_row.o_data_cell').text(),
+                'newrecordeditedanothernewrecord',"shoulddisplaythetworecords");
 
             form.destroy();
         });
 
-        QUnit.test('o2m add a line custom control create editable', async function (assert) {
+        QUnit.test('o2maddalinecustomcontrolcreateeditable',asyncfunction(assert){
             assert.expect(5);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
                 arch:
-                    '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree editable="bottom">' +
-                    '<control>' +
-                    '<create string="Add food" context="" />' +
-                    '<create string="Add pizza" context="{\'default_display_name\': \'pizza\'}"/>' +
-                    '</control>' +
+                    '<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<treeeditable="bottom">'+
+                    '<control>'+
+                    '<createstring="Addfood"context=""/>'+
+                    '<createstring="Addpizza"context="{\'default_display_name\':\'pizza\'}"/>'+
+                    '</control>'+
 
-                    '<control>' +
-                    '<create string="Add pasta" context="{\'default_display_name\': \'pasta\'}"/>' +
-                    '</control>' +
+                    '<control>'+
+                    '<createstring="Addpasta"context="{\'default_display_name\':\'pasta\'}"/>'+
+                    '</control>'+
 
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '<form>' +
-                    '<field name="display_name"/>' +
-                    '</form>' +
-                    '</field>' +
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '<form>'+
+                    '<fieldname="display_name"/>'+
+                    '</form>'+
+                    '</field>'+
                     '</form>',
             });
 
-            // new controls correctly added
-            var $td = form.$('.o_field_x2many_list_row_add');
-            assert.strictEqual($td.length, 1);
-            assert.strictEqual($td.closest('tr').find('td').length, 1);
-            assert.strictEqual($td.text(), "Add foodAdd pizzaAdd pasta");
+            //newcontrolscorrectlyadded
+            var$td=form.$('.o_field_x2many_list_row_add');
+            assert.strictEqual($td.length,1);
+            assert.strictEqual($td.closest('tr').find('td').length,1);
+            assert.strictEqual($td.text(),"AddfoodAddpizzaAddpasta");
 
-            // click add food
-            // check it's empty
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a:eq(0)'));
-            assert.strictEqual($('.o_data_cell').text(), "");
+            //clickaddfood
+            //checkit'sempty
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda:eq(0)'));
+            assert.strictEqual($('.o_data_cell').text(),"");
 
-            // click add pizza
-            // save the modal
-            // check it's pizza
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a:eq(1)'));
-            // click add pasta
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a:eq(2)'));
-            await testUtils.form.clickSave(form);
-            assert.strictEqual($('.o_data_cell').text(), "pizzapasta");
+            //clickaddpizza
+            //savethemodal
+            //checkit'spizza
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda:eq(1)'));
+            //clickaddpasta
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda:eq(2)'));
+            awaittestUtils.form.clickSave(form);
+            assert.strictEqual($('.o_data_cell').text(),"pizzapasta");
 
             form.destroy();
         });
 
-        QUnit.test('o2m add a line custom control create non-editable', async function (assert) {
+        QUnit.test('o2maddalinecustomcontrolcreatenon-editable',asyncfunction(assert){
             assert.expect(6);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
                 arch:
-                    '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<control>' +
-                    '<create string="Add food" context="" />' +
-                    '<create string="Add pizza" context="{\'default_display_name\': \'pizza\'}" />' +
-                    '</control>' +
+                    '<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<control>'+
+                    '<createstring="Addfood"context=""/>'+
+                    '<createstring="Addpizza"context="{\'default_display_name\':\'pizza\'}"/>'+
+                    '</control>'+
 
-                    '<control>' +
-                    '<create string="Add pasta" context="{\'default_display_name\': \'pasta\'}" />' +
-                    '</control>' +
+                    '<control>'+
+                    '<createstring="Addpasta"context="{\'default_display_name\':\'pasta\'}"/>'+
+                    '</control>'+
 
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '<form>' +
-                    '<field name="display_name"/>' +
-                    '</form>' +
-                    '</field>' +
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '<form>'+
+                    '<fieldname="display_name"/>'+
+                    '</form>'+
+                    '</field>'+
                     '</form>',
             });
 
-            // new controls correctly added
-            var $td = form.$('.o_field_x2many_list_row_add');
-            assert.strictEqual($td.length, 1);
-            assert.strictEqual($td.closest('tr').find('td').length, 1);
-            assert.strictEqual($td.text(), "Add foodAdd pizzaAdd pasta");
+            //newcontrolscorrectlyadded
+            var$td=form.$('.o_field_x2many_list_row_add');
+            assert.strictEqual($td.length,1);
+            assert.strictEqual($td.closest('tr').find('td').length,1);
+            assert.strictEqual($td.text(),"AddfoodAddpizzaAddpasta");
 
-            // click add food
-            // check it's empty
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a:eq(0)'));
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary:first'));
-            assert.strictEqual($('.o_data_cell').text(), "");
+            //clickaddfood
+            //checkit'sempty
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda:eq(0)'));
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary:first'));
+            assert.strictEqual($('.o_data_cell').text(),"");
 
-            // click add pizza
-            // save the modal
-            // check it's pizza
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a:eq(1)'));
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary:first'));
-            assert.strictEqual($('.o_data_cell').text(), "pizza");
+            //clickaddpizza
+            //savethemodal
+            //checkit'spizza
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda:eq(1)'));
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary:first'));
+            assert.strictEqual($('.o_data_cell').text(),"pizza");
 
-            // click add pasta
-            // save the whole record
-            // check it's pizzapasta
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a:eq(2)'));
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary:first'));
-            assert.strictEqual($('.o_data_cell').text(), "pizzapasta");
+            //clickaddpasta
+            //savethewholerecord
+            //checkit'spizzapasta
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda:eq(2)'));
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary:first'));
+            assert.strictEqual($('.o_data_cell').text(),"pizzapasta");
 
             form.destroy();
         });
 
-        QUnit.test('o2m add a line custom control create align with handle', async function (assert) {
+        QUnit.test('o2maddalinecustomcontrolcreatealignwithhandle',asyncfunction(assert){
             assert.expect(3);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
                 arch:
-                    '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<field name="int_field" widget="handle"/>' +
-                    '</tree>' +
-                    '</field>' +
+                    '<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="int_field"widget="handle"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
             });
 
-            // controls correctly added, at one column offset when handle is present
-            var $tr = form.$('.o_field_x2many_list_row_add').closest('tr');
-            assert.strictEqual($tr.find('td').length, 2);
-            assert.strictEqual($tr.find('td:eq(0)').text(), "");
-            assert.strictEqual($tr.find('td:eq(1)').text(), "Add a line");
+            //controlscorrectlyadded,atonecolumnoffsetwhenhandleispresent
+            var$tr=form.$('.o_field_x2many_list_row_add').closest('tr');
+            assert.strictEqual($tr.find('td').length,2);
+            assert.strictEqual($tr.find('td:eq(0)').text(),"");
+            assert.strictEqual($tr.find('td:eq(1)').text(),"Addaline");
 
             form.destroy();
         });
 
-        QUnit.test('one2many form view with action button', async function (assert) {
-            // once the action button is clicked, the record is reloaded (via the
-            // on_close handler, executed because the python method does not return
-            // any action, or an ir.action.act_window_close) ; this test ensures that
-            // it reloads the fields of the opened view (i.e. the form in this case).
-            // See https://github.com/flectra/flectra/issues/24189
+        QUnit.test('one2manyformviewwithactionbutton',asyncfunction(assert){
+            //oncetheactionbuttonisclicked,therecordisreloaded(viathe
+            //on_closehandler,executedbecausethepythonmethoddoesnotreturn
+            //anyaction,oranir.action.act_window_close);thistestensuresthat
+            //itreloadsthefieldsoftheopenedview(i.e.theforminthiscase).
+            //Seehttps://github.com/flectra/flectra/issues/24189
             assert.expect(7);
 
-            var data = this.data;
-            data.partner.records[0].p = [2];
+            vardata=this.data;
+            data.partner.records[0].p=[2];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: data,
-                res_id: 1,
-                arch: '<form string="Partners">' +
-                    '<field name="p">' +
-                    '<tree><field name="display_name"/></tree>' +
-                    '<form>' +
-                    '<button type="action" string="Set Timmy"/>' +
-                    '<field name="timmy"/>' +
-                    '</form>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:data,
+                res_id:1,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<tree><fieldname="display_name"/></tree>'+
+                    '<form>'+
+                    '<buttontype="action"string="SetTimmy"/>'+
+                    '<fieldname="timmy"/>'+
+                    '</form>'+
+                    '</field>'+
                     '</form>',
-                archs: {
-                    'partner_type,false,list': '<tree><field name="display_name"/></tree>',
+                archs:{
+                    'partner_type,false,list':'<tree><fieldname="display_name"/></tree>',
                 },
-                intercepts: {
-                    execute_action: function (ev) {
-                        data.partner.records[1].display_name = 'new name';
-                        data.partner.records[1].timmy = [12];
+                intercepts:{
+                    execute_action:function(ev){
+                        data.partner.records[1].display_name='newname';
+                        data.partner.records[1].timmy=[12];
                         ev.data.on_closed();
                     },
                 },
-                viewOptions: {
-                    mode: 'edit',
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            assert.containsOnce(form, '.o_data_row',
-                "there should be one record in the one2many");
-            assert.strictEqual(form.$('.o_data_cell').text(), 'second record',
-                "initial display_name of o2m record should be correct");
+            assert.containsOnce(form,'.o_data_row',
+                "thereshouldbeonerecordintheone2many");
+            assert.strictEqual(form.$('.o_data_cell').text(),'secondrecord',
+                "initialdisplay_nameofo2mrecordshouldbecorrect");
 
-            // open one2many record in form view
-            await testUtils.dom.click(form.$('.o_data_cell:first'));
-            assert.strictEqual($('.modal .o_form_view').length, 1,
-                "should have opened the form view in a dialog");
-            assert.strictEqual($('.modal .o_form_view .o_data_row').length, 0,
-                "there should be no record in the many2many");
+            //openone2manyrecordinformview
+            awaittestUtils.dom.click(form.$('.o_data_cell:first'));
+            assert.strictEqual($('.modal.o_form_view').length,1,
+                "shouldhaveopenedtheformviewinadialog");
+            assert.strictEqual($('.modal.o_form_view.o_data_row').length,0,
+                "thereshouldbenorecordinthemany2many");
 
-            // click on the action button
-            await testUtils.dom.click($('.modal .o_form_view button'));
-            assert.strictEqual($('.modal .o_data_row').length, 1,
-                "fields in the o2m form view should have been read");
-            assert.strictEqual($('.modal .o_data_cell').text(), 'gold',
-                "many2many subrecord should have been fetched");
+            //clickontheactionbutton
+            awaittestUtils.dom.click($('.modal.o_form_viewbutton'));
+            assert.strictEqual($('.modal.o_data_row').length,1,
+                "fieldsintheo2mformviewshouldhavebeenread");
+            assert.strictEqual($('.modal.o_data_cell').text(),'gold',
+                "many2manysubrecordshouldhavebeenfetched");
 
-            // save the dialog
-            await testUtils.dom.click($('.modal .modal-footer .btn-primary'));
+            //savethedialog
+            awaittestUtils.dom.click($('.modal.modal-footer.btn-primary'));
 
-            assert.strictEqual(form.$('.o_data_cell').text(), 'new name',
-                "fields in the o2m list view should have been read as well");
+            assert.strictEqual(form.$('.o_data_cell').text(),'newname',
+                "fieldsintheo2mlistviewshouldhavebeenreadaswell");
 
             form.destroy();
         });
 
-        QUnit.test('onchange affecting inline unopened list view', async function (assert) {
-            // when we got onchange result for fields of record that were not
-            // already available because they were in a inline view not already
-            // opened, in a given configuration the change were applied ignoring
-            // existing data, thus a line of a one2many field inside a one2many
-            // field could be duplicated unexplectedly
+        QUnit.test('onchangeaffectinginlineunopenedlistview',asyncfunction(assert){
+            //whenwegotonchangeresultforfieldsofrecordthatwerenot
+            //alreadyavailablebecausetheywereinainlineviewnotalready
+            //opened,inagivenconfigurationthechangewereappliedignoring
+            //existingdata,thusalineofaone2manyfieldinsideaone2many
+            //fieldcouldbeduplicatedunexplectedly
             assert.expect(5);
 
-            var numUserOnchange = 0;
+            varnumUserOnchange=0;
 
-            this.data.user.onchanges = {
-                partner_ids: function (obj) {
-                    if (numUserOnchange === 0) {
-                        // simulate proper server onchange after save of modal with new record
-                        obj.partner_ids = [
+            this.data.user.onchanges={
+                partner_ids:function(obj){
+                    if(numUserOnchange===0){
+                        //simulateproperserveronchangeaftersaveofmodalwithnewrecord
+                        obj.partner_ids=[
                             [5],
-                            [1, 1, {
-                                display_name: 'first record',
-                                turtles: [
+                            [1,1,{
+                                display_name:'firstrecord',
+                                turtles:[
                                     [5],
-                                    [1, 2, { 'display_name': 'donatello' }],
+                                    [1,2,{'display_name':'donatello'}],
                                 ],
                             }],
-                            [1, 2, {
-                                display_name: 'second record',
-                                turtles: [
+                            [1,2,{
+                                display_name:'secondrecord',
+                                turtles:[
                                     [5],
                                     obj.partner_ids[1][2].turtles[0],
                                 ],
@@ -8316,1170 +8316,1170 @@ QUnit.module('fields', {}, function () {
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'user',
-                data: this.data,
-                arch: '<form><sheet><group>' +
-                    '<field name="partner_ids">' +
-                    '<form>' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</form>' +
-                    '<tree>' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'user',
+                data:this.data,
+                arch:'<form><sheet><group>'+
+                    '<fieldname="partner_ids">'+
+                    '<form>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</form>'+
+                    '<tree>'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</group></sheet></form>',
-                res_id: 17,
+                res_id:17,
             });
 
-            // add a turtle on second partner
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_data_row:eq(1)'));
-            await testUtils.dom.click($('.modal .o_field_x2many_list_row_add a'));
-            $('.modal input[name="display_name"]').val('michelangelo').change();
-            await testUtils.dom.click($('.modal .btn-primary'));
-            // open first partner so changes from previous action are applied
-            await testUtils.dom.click(form.$('.o_data_row:eq(0)'));
-            await testUtils.dom.click($('.modal .btn-primary'));
-            await testUtils.form.clickSave(form);
+            //addaturtleonsecondpartner
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_data_row:eq(1)'));
+            awaittestUtils.dom.click($('.modal.o_field_x2many_list_row_adda'));
+            $('.modalinput[name="display_name"]').val('michelangelo').change();
+            awaittestUtils.dom.click($('.modal.btn-primary'));
+            //openfirstpartnersochangesfrompreviousactionareapplied
+            awaittestUtils.dom.click(form.$('.o_data_row:eq(0)'));
+            awaittestUtils.dom.click($('.modal.btn-primary'));
+            awaittestUtils.form.clickSave(form);
 
-            assert.strictEqual(numUserOnchange, 2,
-                'there should 2 and only 2 onchange from closing the partner modal');
+            assert.strictEqual(numUserOnchange,2,
+                'thereshould2andonly2onchangefromclosingthepartnermodal');
 
-            await testUtils.dom.click(form.$('.o_data_row:eq(0)'));
-            assert.strictEqual($('.modal .o_data_row').length, 1,
-                'only 1 turtle for first partner');
-            assert.strictEqual($('.modal .o_data_row').text(), 'donatello',
-                'first partner turtle is donatello');
-            await testUtils.dom.click($('.modal .o_form_button_cancel'));
+            awaittestUtils.dom.click(form.$('.o_data_row:eq(0)'));
+            assert.strictEqual($('.modal.o_data_row').length,1,
+                'only1turtleforfirstpartner');
+            assert.strictEqual($('.modal.o_data_row').text(),'donatello',
+                'firstpartnerturtleisdonatello');
+            awaittestUtils.dom.click($('.modal.o_form_button_cancel'));
 
-            await testUtils.dom.click(form.$('.o_data_row:eq(1)'));
-            assert.strictEqual($('.modal .o_data_row').length, 1,
-                'only 1 turtle for second partner');
-            assert.strictEqual($('.modal .o_data_row').text(), 'michelangelo',
-                'second partner turtle is michelangelo');
-            await testUtils.dom.click($('.modal .o_form_button_cancel'));
+            awaittestUtils.dom.click(form.$('.o_data_row:eq(1)'));
+            assert.strictEqual($('.modal.o_data_row').length,1,
+                'only1turtleforsecondpartner');
+            assert.strictEqual($('.modal.o_data_row').text(),'michelangelo',
+                'secondpartnerturtleismichelangelo');
+            awaittestUtils.dom.click($('.modal.o_form_button_cancel'));
 
             form.destroy();
         });
 
-        QUnit.test('click on URL should not open the record', async function (assert) {
+        QUnit.test('clickonURLshouldnotopentherecord',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.records[0].turtles = [1];
+            this.data.partner.records[0].turtles=[1];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree>' +
-                    '<field name="display_name" widget="email"/>' +
-                    '<field name="turtle_foo" widget="url"/>' +
-                    '</tree>' +
-                    '<form></form>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<tree>'+
+                    '<fieldname="display_name"widget="email"/>'+
+                    '<fieldname="turtle_foo"widget="url"/>'+
+                    '</tree>'+
+                    '<form></form>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            await testUtils.dom.click(form.$('.o_email_cell a'));
-            assert.strictEqual($('.modal .o_form_view').length, 0,
-                'click should not open the modal');
+            awaittestUtils.dom.click(form.$('.o_email_cella'));
+            assert.strictEqual($('.modal.o_form_view').length,0,
+                'clickshouldnotopenthemodal');
 
-            await testUtils.dom.click(form.$('.o_url_cell a'));
-            assert.strictEqual($('.modal .o_form_view').length, 0,
-                'click should not open the modal');
+            awaittestUtils.dom.click(form.$('.o_url_cella'));
+            assert.strictEqual($('.modal.o_form_view').length,0,
+                'clickshouldnotopenthemodal');
             form.destroy();
         });
 
-        QUnit.test('create and edit on m2o in o2m, and press ESCAPE', async function (assert) {
+        QUnit.test('createandeditonm2oino2m,andpressESCAPE',asyncfunction(assert){
             assert.expect(4);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                    '<field name="turtles">' +
-                    '<tree editable="top">' +
-                    '<field name="turtle_trululu"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="top">'+
+                    '<fieldname="turtle_trululu"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                archs: {
-                    'partner,false,form': '<form><field name="display_name"/></form>',
+                archs:{
+                    'partner,false,form':'<form><fieldname="display_name"/></form>',
                 },
             });
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.containsOnce(form, '.o_selected_row',
-                "should have create a new row in edition");
+            assert.containsOnce(form,'.o_selected_row',
+                "shouldhavecreateanewrowinedition");
 
-            await testUtils.fields.many2one.createAndEdit('turtle_trululu', "ABC");
+            awaittestUtils.fields.many2one.createAndEdit('turtle_trululu',"ABC");
 
-            assert.strictEqual($('.modal .o_form_view').length, 1,
-                "should have opened a form view in a dialog");
+            assert.strictEqual($('.modal.o_form_view').length,1,
+                "shouldhaveopenedaformviewinadialog");
 
-            await testUtils.fields.triggerKeydown($('.modal .o_form_view .o_field_widget[name=display_name]'), 'escape');
+            awaittestUtils.fields.triggerKeydown($('.modal.o_form_view.o_field_widget[name=display_name]'),'escape');
 
-            assert.strictEqual($('.modal .o_form_view').length, 0,
-                "should have closed the dialog");
-            assert.containsOnce(form, '.o_selected_row',
-                "new row should still be present");
+            assert.strictEqual($('.modal.o_form_view').length,0,
+                "shouldhaveclosedthedialog");
+            assert.containsOnce(form,'.o_selected_row',
+                "newrowshouldstillbepresent");
 
             form.destroy();
         });
 
-        QUnit.test('one2many add a line should not crash if orderedResIDs is not set', async function (assert) {
-            // There is no assertion, the code will just crash before the bugfix.
+        QUnit.test('one2manyaddalineshouldnotcrashiforderedResIDsisnotset',asyncfunction(assert){
+            //Thereisnoassertion,thecodewilljustcrashbeforethebugfix.
             assert.expect(0);
 
-            this.data.partner.records[0].turtles = [];
+            this.data.partner.records[0].turtles=[];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<header>' +
-                    '<button name="post" type="object" string="Validate" class="oe_highlight"/>' +
-                    '</header>' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<header>'+
+                    '<buttonname="post"type="object"string="Validate"class="oe_highlight"/>'+
+                    '</header>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                viewOptions: {
-                    mode: 'edit',
+                viewOptions:{
+                    mode:'edit',
                 },
-                intercepts: {
-                    execute_action: function (event) {
+                intercepts:{
+                    execute_action:function(event){
                         event.data.on_fail();
                     },
                 },
             });
 
-            await testUtils.dom.click($('button[name="post"]'));
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click($('button[name="post"]'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
             form.destroy();
         });
 
-        QUnit.test('one2many shortcut tab should not crash when there is no input widget', async function (assert) {
+        QUnit.test('one2manyshortcuttabshouldnotcrashwhenthereisnoinputwidget',asyncfunction(assert){
             assert.expect(2);
 
-            // create a one2many view which has no input (only 1 textarea in this case)
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_foo" widget="text"/>' +
-                    '</tree>' +
-                    '</field>' +
+            //createaone2manyviewwhichhasnoinput(only1textareainthiscase)
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_foo"widget="text"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            // add a row, fill it, then trigger the tab shortcut
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('.o_input[name="turtle_foo"]'), 'ninja');
-            await testUtils.fields.triggerKeydown(form.$('.o_input[name="turtle_foo"]'), 'tab');
+            //addarow,fillit,thentriggerthetabshortcut
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('.o_input[name="turtle_foo"]'),'ninja');
+            awaittestUtils.fields.triggerKeydown(form.$('.o_input[name="turtle_foo"]'),'tab');
 
-            assert.strictEqual(form.$('.o_field_text').text(), 'blipninja',
-                'current line should be saved');
-            assert.containsOnce(form, 'textarea.o_field_text',
-                'new line should be created');
+            assert.strictEqual(form.$('.o_field_text').text(),'blipninja',
+                'currentlineshouldbesaved');
+            assert.containsOnce(form,'textarea.o_field_text',
+                'newlineshouldbecreated');
 
             form.destroy();
         });
 
-        QUnit.test('one2many with onchange, required field, shortcut enter', async function (assert) {
+        QUnit.test('one2manywithonchange,requiredfield,shortcutenter',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.turtle.onchanges = {
-                turtle_foo: function () { },
+            this.data.turtle.onchanges={
+                turtle_foo:function(){},
             };
 
-            var prom;
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_foo" required="1"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varprom;
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_foo"required="1"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    var result = this._super.apply(this, arguments);
-                    if (args.method === 'onchange') {
-                        return Promise.resolve(prom).then(_.constant(result));
+                mockRPC:function(route,args){
+                    varresult=this._super.apply(this,arguments);
+                    if(args.method==='onchange'){
+                        returnPromise.resolve(prom).then(_.constant(result));
                     }
-                    return result;
+                    returnresult;
                 },
-                // simulate what happens in the client:
-                // the new value isn't notified directly to the model
-                fieldDebounce: 5000,
+                //simulatewhathappensintheclient:
+                //thenewvalueisn'tnotifieddirectlytothemodel
+                fieldDebounce:5000,
             });
 
-            var value = "hello";
+            varvalue="hello";
 
-            // add a new line
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            //addanewline
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            // we want to add a delay to simulate an onchange
-            prom = testUtils.makeTestPromise();
+            //wewanttoaddadelaytosimulateanonchange
+            prom=testUtils.makeTestPromise();
 
-            // write something in the field
-            var $input = form.$('input[name="turtle_foo"]');
-            await testUtils.fields.editInput($input, value);
-            await testUtils.fields.triggerKeydown($input, 'enter');
+            //writesomethinginthefield
+            var$input=form.$('input[name="turtle_foo"]');
+            awaittestUtils.fields.editInput($input,value);
+            awaittestUtils.fields.triggerKeydown($input,'enter');
 
-            // check that nothing changed before the onchange finished
-            assert.strictEqual($input.val(), value, "input content shouldn't change");
-            assert.containsOnce(form, '.o_data_row',
-                "should still contain only one row");
+            //checkthatnothingchangedbeforetheonchangefinished
+            assert.strictEqual($input.val(),value,"inputcontentshouldn'tchange");
+            assert.containsOnce(form,'.o_data_row',
+                "shouldstillcontainonlyonerow");
 
-            // unlock onchange
+            //unlockonchange
             prom.resolve();
-            await testUtils.nextTick();
+            awaittestUtils.nextTick();
 
-            // check the current line is added with the correct content and a new line is editable
-            assert.strictEqual(form.$('td.o_data_cell').text(), value);
-            assert.strictEqual(form.$('input[name="turtle_foo"]').val(), '');
-            assert.containsN(form, '.o_data_row', 2,
-                "should now contain two rows");
+            //checkthecurrentlineisaddedwiththecorrectcontentandanewlineiseditable
+            assert.strictEqual(form.$('td.o_data_cell').text(),value);
+            assert.strictEqual(form.$('input[name="turtle_foo"]').val(),'');
+            assert.containsN(form,'.o_data_row',2,
+                "shouldnowcontaintworows");
 
             form.destroy();
         });
 
-        QUnit.test('no deadlock when leaving a one2many line with uncommitted changes', async function (assert) {
-            // Before unselecting a o2m line, field widgets are asked to commit their changes (new values
-            // that they wouldn't have sent to the model yet). This test is added alongside a bug fix
-            // ensuring that we don't end up in a deadlock when a widget actually has some changes to
-            // commit at that moment.
+        QUnit.test('nodeadlockwhenleavingaone2manylinewithuncommittedchanges',asyncfunction(assert){
+            //Beforeunselectingao2mline,fieldwidgetsareaskedtocommittheirchanges(newvalues
+            //thattheywouldn'thavesenttothemodelyet).Thistestisaddedalongsideabugfix
+            //ensuringthatwedon'tendupinadeadlockwhenawidgetactuallyhassomechangesto
+            //commitatthatmoment.
             assert.expect(9);
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                    '<field name="turtles">' +
-                    '<tree editable="bottom">' +
-                    '<field name="turtle_foo"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                    '<fieldname="turtles">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="turtle_foo"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                // we set a fieldDebounce to precisely mock the behavior of the webclient: changes are
-                // not sent to the model at keystrokes, but when the input is left
-                fieldDebounce: 5000,
+                //wesetafieldDebouncetopreciselymockthebehaviorofthewebclient:changesare
+                //notsenttothemodelatkeystrokes,butwhentheinputisleft
+                fieldDebounce:5000,
             });
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=turtles] input'), 'some foo value');
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=turtles]input'),'somefoovalue');
 
-            // click to add a second row to unselect the current one, then save
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            await testUtils.form.clickSave(form);
+            //clicktoaddasecondrowtounselectthecurrentone,thensave
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            awaittestUtils.form.clickSave(form);
 
-            assert.containsOnce(form, '.o_form_readonly',
-                "form view should be in readonly");
-            assert.strictEqual(form.$('.o_data_row').text(), 'some foo value',
-                "foo field should have correct value");
+            assert.containsOnce(form,'.o_form_readonly',
+                "formviewshouldbeinreadonly");
+            assert.strictEqual(form.$('.o_data_row').text(),'somefoovalue',
+                "foofieldshouldhavecorrectvalue");
             assert.verifySteps([
-                'onchange', // main record
-                'onchange', // line 1
-                'onchange', // line 2
+                'onchange',//mainrecord
+                'onchange',//line1
+                'onchange',//line2
                 'create',
-                'read', // main record
-                'read', // line 1
+                'read',//mainrecord
+                'read',//line1
             ]);
 
             form.destroy();
         });
 
-        QUnit.test('one2many with extra field from server not in form', async function (assert) {
+        QUnit.test('one2manywithextrafieldfromservernotinform',asyncfunction(assert){
             assert.expect(6);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<field name="p" >' +
-                    '<tree>' +
-                    '<field name="datetime"/>' +
-                    '<field name="display_name"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="datetime"/>'+
+                    '<fieldname="display_name"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                archs: {
-                    'partner,false,form': '<form>' +
-                        '<field name="display_name"/>' +
+                res_id:1,
+                archs:{
+                    'partner,false,form':'<form>'+
+                        '<fieldname="display_name"/>'+
                         '</form>'
                 },
-                mockRPC: function (route, args) {
-                    if (route === '/web/dataset/call_kw/partner/write') {
-                        args.args[1].p[0][2].datetime = '2018-04-05 12:00:00';
+                mockRPC:function(route,args){
+                    if(route==='/web/dataset/call_kw/partner/write'){
+                        args.args[1].p[0][2].datetime='2018-04-0512:00:00';
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 }
             });
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            var x2mList = form.$('.o_field_x2many_list[name=p]');
+            varx2mList=form.$('.o_field_x2many_list[name=p]');
 
-            // Add a record in the list
-            await testUtils.dom.click(x2mList.find('.o_field_x2many_list_row_add a'));
+            //Addarecordinthelist
+            awaittestUtils.dom.click(x2mList.find('.o_field_x2many_list_row_adda'));
 
-            var modal = $('.modal-lg');
+            varmodal=$('.modal-lg');
 
-            var nameInput = modal.find('input.o_input[name=display_name]');
-            await testUtils.fields.editInput(nameInput, 'michelangelo');
+            varnameInput=modal.find('input.o_input[name=display_name]');
+            awaittestUtils.fields.editInput(nameInput,'michelangelo');
 
-            // Save the record in the modal (though it is still virtual)
-            await testUtils.dom.click(modal.find('.btn-primary').first());
+            //Savetherecordinthemodal(thoughitisstillvirtual)
+            awaittestUtils.dom.click(modal.find('.btn-primary').first());
 
-            assert.equal(x2mList.find('.o_data_row').length, 1,
-                'There should be 1 records in the x2m list');
+            assert.equal(x2mList.find('.o_data_row').length,1,
+                'Thereshouldbe1recordsinthex2mlist');
 
-            var newlyAdded = x2mList.find('.o_data_row').eq(0);
+            varnewlyAdded=x2mList.find('.o_data_row').eq(0);
 
-            assert.equal(newlyAdded.find('.o_data_cell').first().text(), '',
-                'The create_date field should be empty');
-            assert.equal(newlyAdded.find('.o_data_cell').eq(1).text(), 'michelangelo',
-                'The display name field should have the right value');
+            assert.equal(newlyAdded.find('.o_data_cell').first().text(),'',
+                'Thecreate_datefieldshouldbeempty');
+            assert.equal(newlyAdded.find('.o_data_cell').eq(1).text(),'michelangelo',
+                'Thedisplaynamefieldshouldhavetherightvalue');
 
-            // Save the whole thing
-            await testUtils.form.clickSave(form);
+            //Savethewholething
+            awaittestUtils.form.clickSave(form);
 
-            x2mList = form.$('.o_field_x2many_list[name=p]');
+            x2mList=form.$('.o_field_x2many_list[name=p]');
 
-            // Redo asserts in RO mode after saving
-            assert.equal(x2mList.find('.o_data_row').length, 1,
-                'There should be 1 records in the x2m list');
+            //RedoassertsinROmodeaftersaving
+            assert.equal(x2mList.find('.o_data_row').length,1,
+                'Thereshouldbe1recordsinthex2mlist');
 
-            newlyAdded = x2mList.find('.o_data_row').eq(0);
+            newlyAdded=x2mList.find('.o_data_row').eq(0);
 
-            assert.equal(newlyAdded.find('.o_data_cell').first().text(), '04/05/2018 12:00:00',
-                'The create_date field should have the right value');
-            assert.equal(newlyAdded.find('.o_data_cell').eq(1).text(), 'michelangelo',
-                'The display name field should have the right value');
+            assert.equal(newlyAdded.find('.o_data_cell').first().text(),'04/05/201812:00:00',
+                'Thecreate_datefieldshouldhavetherightvalue');
+            assert.equal(newlyAdded.find('.o_data_cell').eq(1).text(),'michelangelo',
+                'Thedisplaynamefieldshouldhavetherightvalue');
 
             form.destroy();
         });
 
-        QUnit.test('one2many invisible depends on parent field', async function (assert) {
+        QUnit.test('one2manyinvisibledependsonparentfield',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.partner.records[0].p = [2];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<group>' +
-                    '<field name="product_id"/>' +
-                    '</group>' +
-                    '<notebook>' +
-                    '<page string="Partner page">' +
-                    '<field name="bar"/>' +
-                    '<field name="p">' +
-                    '<tree>' +
-                    '<field name="foo" attrs="{\'column_invisible\': [(\'parent.product_id\', \'!=\', False)]}"/>' +
-                    '<field name="bar" attrs="{\'column_invisible\': [(\'parent.bar\', \'=\', False)]}"/>' +
-                    '</tree>' +
-                    '</field>' +
-                    '</page>' +
-                    '</notebook>' +
-                    '</sheet>' +
+            this.data.partner.records[0].p=[2];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<group>'+
+                    '<fieldname="product_id"/>'+
+                    '</group>'+
+                    '<notebook>'+
+                    '<pagestring="Partnerpage">'+
+                    '<fieldname="bar"/>'+
+                    '<fieldname="p">'+
+                    '<tree>'+
+                    '<fieldname="foo"attrs="{\'column_invisible\':[(\'parent.product_id\',\'!=\',False)]}"/>'+
+                    '<fieldname="bar"attrs="{\'column_invisible\':[(\'parent.bar\',\'=\',False)]}"/>'+
+                    '</tree>'+
+                    '</field>'+
+                    '</page>'+
+                    '</notebook>'+
+                    '</sheet>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
-            assert.containsN(form, 'th', 2,
-                "should be 2 columns in the one2many");
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_many2one[name="product_id"] input'));
-            await testUtils.dom.click($('li.ui-menu-item a:contains(xpad)').trigger('mouseenter'));
-            await testUtils.owlCompatibilityNextTick();
-            assert.containsOnce(form, 'th:not(.o_list_record_remove_header)',
-                "should be 1 column when the product_id is set");
-            await testUtils.fields.editAndTrigger(form.$('.o_field_many2one[name="product_id"] input'),
-                '', 'keyup');
-            await testUtils.owlCompatibilityNextTick();
-            assert.containsN(form, 'th:not(.o_list_record_remove_header)', 2,
-                "should be 2 columns in the one2many when product_id is not set");
-            await testUtils.dom.click(form.$('.o_field_boolean[name="bar"] input'));
-            await testUtils.owlCompatibilityNextTick();
-            assert.containsOnce(form, 'th:not(.o_list_record_remove_header)',
-                "should be 1 column after the value change");
+            assert.containsN(form,'th',2,
+                "shouldbe2columnsintheone2many");
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_many2one[name="product_id"]input'));
+            awaittestUtils.dom.click($('li.ui-menu-itema:contains(xpad)').trigger('mouseenter'));
+            awaittestUtils.owlCompatibilityNextTick();
+            assert.containsOnce(form,'th:not(.o_list_record_remove_header)',
+                "shouldbe1columnwhentheproduct_idisset");
+            awaittestUtils.fields.editAndTrigger(form.$('.o_field_many2one[name="product_id"]input'),
+                '','keyup');
+            awaittestUtils.owlCompatibilityNextTick();
+            assert.containsN(form,'th:not(.o_list_record_remove_header)',2,
+                "shouldbe2columnsintheone2manywhenproduct_idisnotset");
+            awaittestUtils.dom.click(form.$('.o_field_boolean[name="bar"]input'));
+            awaittestUtils.owlCompatibilityNextTick();
+            assert.containsOnce(form,'th:not(.o_list_record_remove_header)',
+                "shouldbe1columnafterthevaluechange");
             form.destroy();
         });
 
-        QUnit.test('column_invisible attrs on a button in a one2many list', async function (assert) {
+        QUnit.test('column_invisibleattrsonabuttoninaone2manylist',asyncfunction(assert){
             assert.expect(6);
 
-            this.data.partner.records[0].p = [2];
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            this.data.partner.records[0].p=[2];
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="product_id"/>
-                        <field name="p">
+                        <fieldname="product_id"/>
+                        <fieldname="p">
                             <tree>
-                                <field name="foo"/>
-                                <button name="abc" string="Do it" class="some_button" attrs="{'column_invisible': [('parent.product_id', '=', False)]}"/>
+                                <fieldname="foo"/>
+                                <buttonname="abc"string="Doit"class="some_button"attrs="{'column_invisible':[('parent.product_id','=',False)]}"/>
                             </tree>
                         </field>
                     </form>`,
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            assert.strictEqual(form.$('.o_field_widget[name=product_id] input').val(), '');
-            assert.containsN(form, '.o_list_table th', 2); // foo + trash bin
-            assert.containsNone(form, '.some_button');
+            assert.strictEqual(form.$('.o_field_widget[name=product_id]input').val(),'');
+            assert.containsN(form,'.o_list_tableth',2);//foo+trashbin
+            assert.containsNone(form,'.some_button');
 
-            await testUtils.fields.many2one.clickOpenDropdown('product_id');
-            await testUtils.fields.many2one.clickHighlightedItem('product_id');
+            awaittestUtils.fields.many2one.clickOpenDropdown('product_id');
+            awaittestUtils.fields.many2one.clickHighlightedItem('product_id');
 
-            assert.strictEqual(form.$('.o_field_widget[name=product_id] input').val(), 'xphone');
-            assert.containsN(form, '.o_list_table th', 3); // foo + button + trash bin
-            assert.containsOnce(form, '.some_button');
+            assert.strictEqual(form.$('.o_field_widget[name=product_id]input').val(),'xphone');
+            assert.containsN(form,'.o_list_tableth',3);//foo+button+trashbin
+            assert.containsOnce(form,'.some_button');
 
             form.destroy();
         });
 
-        QUnit.test('column_invisible attrs on adjacent buttons', async function (assert) {
+        QUnit.test('column_invisibleattrsonadjacentbuttons',asyncfunction(assert){
             assert.expect(14);
 
-            this.data.partner.records[0].p = [2];
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            this.data.partner.records[0].p=[2];
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="product_id"/>
-                        <field name="trululu"/>
-                        <field name="p">
+                        <fieldname="product_id"/>
+                        <fieldname="trululu"/>
+                        <fieldname="p">
                             <tree>
-                                <button name="abc1" string="Do it 1" class="some_button1"/>
-                                <button name="abc2" string="Do it 2" class="some_button2" attrs="{'column_invisible': [('parent.product_id', '!=', False)]}"/>
-                                <field name="foo"/>
-                                <button name="abc3" string="Do it 3" class="some_button3" attrs="{'column_invisible': [('parent.product_id', '!=', False)]}"/>
-                                <button name="abc4" string="Do it 4" class="some_button4" attrs="{'column_invisible': [('parent.trululu', '!=', False)]}"/>
+                                <buttonname="abc1"string="Doit1"class="some_button1"/>
+                                <buttonname="abc2"string="Doit2"class="some_button2"attrs="{'column_invisible':[('parent.product_id','!=',False)]}"/>
+                                <fieldname="foo"/>
+                                <buttonname="abc3"string="Doit3"class="some_button3"attrs="{'column_invisible':[('parent.product_id','!=',False)]}"/>
+                                <buttonname="abc4"string="Doit4"class="some_button4"attrs="{'column_invisible':[('parent.trululu','!=',False)]}"/>
                             </tree>
                         </field>
                     </form>`,
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            assert.strictEqual(form.$('.o_field_widget[name=product_id] input').val(), '');
-            assert.strictEqual(form.$('.o_field_widget[name=trululu] input').val(), 'aaa');
-            assert.containsN(form, '.o_list_table th', 4); // button group 1 + foo + button group 2 + trash bin
-            assert.containsOnce(form, '.some_button1');
-            assert.containsOnce(form, '.some_button2');
-            assert.containsOnce(form, '.some_button3');
-            assert.containsNone(form, '.some_button4');
+            assert.strictEqual(form.$('.o_field_widget[name=product_id]input').val(),'');
+            assert.strictEqual(form.$('.o_field_widget[name=trululu]input').val(),'aaa');
+            assert.containsN(form,'.o_list_tableth',4);//buttongroup1+foo+buttongroup2+trashbin
+            assert.containsOnce(form,'.some_button1');
+            assert.containsOnce(form,'.some_button2');
+            assert.containsOnce(form,'.some_button3');
+            assert.containsNone(form,'.some_button4');
 
-            await testUtils.fields.many2one.clickOpenDropdown('product_id');
-            await testUtils.fields.many2one.clickHighlightedItem('product_id');
+            awaittestUtils.fields.many2one.clickOpenDropdown('product_id');
+            awaittestUtils.fields.many2one.clickHighlightedItem('product_id');
 
-            assert.strictEqual(form.$('.o_field_widget[name=product_id] input').val(), 'xphone');
-            assert.strictEqual(form.$('.o_field_widget[name=trululu] input').val(), 'aaa');
-            assert.containsN(form, '.o_list_table th', 3); // button group 1 + foo + trash bin
-            assert.containsOnce(form, '.some_button1');
-            assert.containsNone(form, '.some_button2');
-            assert.containsNone(form, '.some_button3');
-            assert.containsNone(form, '.some_button4');
+            assert.strictEqual(form.$('.o_field_widget[name=product_id]input').val(),'xphone');
+            assert.strictEqual(form.$('.o_field_widget[name=trululu]input').val(),'aaa');
+            assert.containsN(form,'.o_list_tableth',3);//buttongroup1+foo+trashbin
+            assert.containsOnce(form,'.some_button1');
+            assert.containsNone(form,'.some_button2');
+            assert.containsNone(form,'.some_button3');
+            assert.containsNone(form,'.some_button4');
 
             form.destroy();
         });
 
-        QUnit.test('one2many column visiblity depends on onchange of parent field', async function (assert) {
+        QUnit.test('one2manycolumnvisiblitydependsononchangeofparentfield',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.partner.records[0].p = [2];
-            this.data.partner.records[0].bar = false;
+            this.data.partner.records[0].p=[2];
+            this.data.partner.records[0].bar=false;
 
-            this.data.partner.onchanges.p = function (obj) {
-                // set bar to true when line is added
-                if (obj.p.length > 1 && obj.p[1][2].foo === 'New line') {
-                    obj.bar = true;
+            this.data.partner.onchanges.p=function(obj){
+                //setbartotruewhenlineisadded
+                if(obj.p.length>1&&obj.p[1][2].foo==='Newline'){
+                    obj.bar=true;
                 }
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                    '<field name="bar"/>' +
-                    '<field name="p">' +
-                    '<tree editable="bottom">' +
-                    '<field name="foo"/>' +
-                    '<field name="int_field" attrs="{\'column_invisible\': [(\'parent.bar\', \'=\', False)]}"/>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                    '<fieldname="bar"/>'+
+                    '<fieldname="p">'+
+                    '<treeeditable="bottom">'+
+                    '<fieldname="foo"/>'+
+                    '<fieldname="int_field"attrs="{\'column_invisible\':[(\'parent.bar\',\'=\',False)]}"/>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            // bar is false so there should be 1 column
-            assert.containsOnce(form, 'th',
-                "should be only 1 column ('foo') in the one2many");
-            assert.containsOnce(form, '.o_list_view .o_data_row', "should contain one row");
+            //barisfalsesothereshouldbe1column
+            assert.containsOnce(form,'th',
+                "shouldbeonly1column('foo')intheone2many");
+            assert.containsOnce(form,'.o_list_view.o_data_row',"shouldcontainonerow");
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            // add a new o2m record
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            form.$('.o_field_one2many input:first').focus();
-            await testUtils.fields.editInput(form.$('.o_field_one2many input:first'), 'New line');
-            await testUtils.dom.click(form.$el);
+            //addanewo2mrecord
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            form.$('.o_field_one2manyinput:first').focus();
+            awaittestUtils.fields.editInput(form.$('.o_field_one2manyinput:first'),'Newline');
+            awaittestUtils.dom.click(form.$el);
 
-            assert.containsN(form, 'th:not(.o_list_record_remove_header)', 2, "should be 2 columns('foo' + 'int_field')");
+            assert.containsN(form,'th:not(.o_list_record_remove_header)',2,"shouldbe2columns('foo'+'int_field')");
 
             form.destroy();
         });
 
-        QUnit.test('one2many column_invisible on view not inline', async function (assert) {
+        QUnit.test('one2manycolumn_invisibleonviewnotinline',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.partner.records[0].p = [2];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partners">' +
-                    '<sheet>' +
-                    '<group>' +
-                    '<field name="product_id"/>' +
-                    '</group>' +
-                    '<notebook>' +
-                    '<page string="Partner page">' +
-                    '<field name="bar"/>' +
-                    '<field name="p"/>' +
-                    '</page>' +
-                    '</notebook>' +
-                    '</sheet>' +
+            this.data.partner.records[0].p=[2];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partners">'+
+                    '<sheet>'+
+                    '<group>'+
+                    '<fieldname="product_id"/>'+
+                    '</group>'+
+                    '<notebook>'+
+                    '<pagestring="Partnerpage">'+
+                    '<fieldname="bar"/>'+
+                    '<fieldname="p"/>'+
+                    '</page>'+
+                    '</notebook>'+
+                    '</sheet>'+
                     '</form>',
-                res_id: 1,
-                archs: {
-                    'partner,false,list': '<tree>' +
-                        '<field name="foo" attrs="{\'column_invisible\': [(\'parent.product_id\', \'!=\', False)]}"/>' +
-                        '<field name="bar" attrs="{\'column_invisible\': [(\'parent.bar\', \'=\', False)]}"/>' +
+                res_id:1,
+                archs:{
+                    'partner,false,list':'<tree>'+
+                        '<fieldname="foo"attrs="{\'column_invisible\':[(\'parent.product_id\',\'!=\',False)]}"/>'+
+                        '<fieldname="bar"attrs="{\'column_invisible\':[(\'parent.bar\',\'=\',False)]}"/>'+
                         '</tree>',
                 },
             });
-            assert.containsN(form, 'th', 2,
-                "should be 2 columns in the one2many");
-            await testUtils.form.clickEdit(form);
-            await testUtils.dom.click(form.$('.o_field_many2one[name="product_id"] input'));
-            await testUtils.dom.click($('li.ui-menu-item a:contains(xpad)').trigger('mouseenter'));
-            await testUtils.owlCompatibilityNextTick();
-            assert.containsOnce(form, 'th:not(.o_list_record_remove_header)',
-                "should be 1 column when the product_id is set");
-            await testUtils.fields.editAndTrigger(form.$('.o_field_many2one[name="product_id"] input'),
-                '', 'keyup');
-            await testUtils.owlCompatibilityNextTick();
-            assert.containsN(form, 'th:not(.o_list_record_remove_header)', 2,
-                "should be 2 columns in the one2many when product_id is not set");
-            await testUtils.dom.click(form.$('.o_field_boolean[name="bar"] input'));
-            await testUtils.owlCompatibilityNextTick();
-            assert.containsOnce(form, 'th:not(.o_list_record_remove_header)',
-                "should be 1 column after the value change");
+            assert.containsN(form,'th',2,
+                "shouldbe2columnsintheone2many");
+            awaittestUtils.form.clickEdit(form);
+            awaittestUtils.dom.click(form.$('.o_field_many2one[name="product_id"]input'));
+            awaittestUtils.dom.click($('li.ui-menu-itema:contains(xpad)').trigger('mouseenter'));
+            awaittestUtils.owlCompatibilityNextTick();
+            assert.containsOnce(form,'th:not(.o_list_record_remove_header)',
+                "shouldbe1columnwhentheproduct_idisset");
+            awaittestUtils.fields.editAndTrigger(form.$('.o_field_many2one[name="product_id"]input'),
+                '','keyup');
+            awaittestUtils.owlCompatibilityNextTick();
+            assert.containsN(form,'th:not(.o_list_record_remove_header)',2,
+                "shouldbe2columnsintheone2manywhenproduct_idisnotset");
+            awaittestUtils.dom.click(form.$('.o_field_boolean[name="bar"]input'));
+            awaittestUtils.owlCompatibilityNextTick();
+            assert.containsOnce(form,'th:not(.o_list_record_remove_header)',
+                "shouldbe1columnafterthevaluechange");
             form.destroy();
         });
 
-        QUnit.test('field context is correctly passed to x2m subviews', async function (assert) {
+        QUnit.test('fieldcontextiscorrectlypassedtox2msubviews',asyncfunction(assert){
             assert.expect(2);
 
-             var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                        '<field name="turtles" context="{\'some_key\': 1}">' +
-                            '<kanban>' +
-                                '<templates>' +
-                                    '<t t-name="kanban-box">' +
-                                        '<div>' +
-                                            '<t t-if="context.some_key">' +
-                                                '<field name="turtle_foo"/>' +
-                                            '</t>' +
-                                        '</div>' +
-                                    '</t>' +
-                                '</templates>' +
-                            '</kanban>' +
-                        '</field>' +
+             varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                        '<fieldname="turtles"context="{\'some_key\':1}">'+
+                            '<kanban>'+
+                                '<templates>'+
+                                    '<tt-name="kanban-box">'+
+                                        '<div>'+
+                                            '<tt-if="context.some_key">'+
+                                                '<fieldname="turtle_foo"/>'+
+                                            '</t>'+
+                                        '</div>'+
+                                    '</t>'+
+                                '</templates>'+
+                            '</kanban>'+
+                        '</field>'+
                     '</form>',
-                res_id: 1,
+                res_id:1,
             });
 
-            assert.strictEqual(form.$('.o_kanban_record:not(.o_kanban_ghost)').length, 1,
-                "should have a record in the relation");
-            assert.strictEqual(form.$('.o_kanban_record span:contains(blip)').length, 1,
-                "condition in the kanban template should have been correctly evaluated");
+            assert.strictEqual(form.$('.o_kanban_record:not(.o_kanban_ghost)').length,1,
+                "shouldhavearecordintherelation");
+            assert.strictEqual(form.$('.o_kanban_recordspan:contains(blip)').length,1,
+                "conditioninthekanbantemplateshouldhavebeencorrectlyevaluated");
 
             form.destroy();
         });
 
-        QUnit.test('one2many kanban with widget handle', async function (assert) {
+        QUnit.test('one2manykanbanwithwidgethandle',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.partner.records[0].turtles = [1, 2, 3];
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                        '<field name="turtles">' +
-                            '<kanban>' +
-                                '<field name="turtle_int" widget="handle"/>' +
-                                '<templates>' +
-                                    '<t t-name="kanban-box">' +
-                                        '<div><field name="turtle_foo"/></div>' +
-                                    '</t>' +
-                                '</templates>' +
-                            '</kanban>' +
-                        '</field>' +
+            this.data.partner.records[0].turtles=[1,2,3];
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                        '<fieldname="turtles">'+
+                            '<kanban>'+
+                                '<fieldname="turtle_int"widget="handle"/>'+
+                                '<templates>'+
+                                    '<tt-name="kanban-box">'+
+                                        '<div><fieldname="turtle_foo"/></div>'+
+                                    '</t>'+
+                                '</templates>'+
+                            '</kanban>'+
+                        '</field>'+
                     '</form>',
-                mockRPC: function (route, args) {
-                    if (args.method === 'write') {
-                        assert.deepEqual(args.args[1], {
-                            turtles: [
-                                [1, 2, {turtle_int: 0}],
-                                [1, 3, {turtle_int: 1}],
-                                [1, 1, {turtle_int: 2}],
+                mockRPC:function(route,args){
+                    if(args.method==='write'){
+                        assert.deepEqual(args.args[1],{
+                            turtles:[
+                                [1,2,{turtle_int:0}],
+                                [1,3,{turtle_int:1}],
+                                [1,1,{turtle_int:2}],
                             ],
                         });
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                res_id: 1,
+                res_id:1,
             });
 
-            assert.strictEqual(form.$('.o_kanban_record:not(.o_kanban_ghost)').text(), 'yopblipkawa');
-            assert.doesNotHaveClass(form.$('.o_field_one2many .o_kanban_view'), 'ui-sortable');
+            assert.strictEqual(form.$('.o_kanban_record:not(.o_kanban_ghost)').text(),'yopblipkawa');
+            assert.doesNotHaveClass(form.$('.o_field_one2many.o_kanban_view'),'ui-sortable');
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            assert.hasClass(form.$('.o_field_one2many .o_kanban_view'), 'ui-sortable');
+            assert.hasClass(form.$('.o_field_one2many.o_kanban_view'),'ui-sortable');
 
-            var $record = form.$('.o_field_one2many[name=turtles] .o_kanban_view .o_kanban_record:first');
-            var $to = form.$('.o_field_one2many[name=turtles] .o_kanban_view .o_kanban_record:nth-child(3)');
-            await testUtils.dom.dragAndDrop($record, $to, {position: "bottom"});
+            var$record=form.$('.o_field_one2many[name=turtles].o_kanban_view.o_kanban_record:first');
+            var$to=form.$('.o_field_one2many[name=turtles].o_kanban_view.o_kanban_record:nth-child(3)');
+            awaittestUtils.dom.dragAndDrop($record,$to,{position:"bottom"});
 
-            assert.strictEqual(form.$('.o_kanban_record:not(.o_kanban_ghost)').text(), 'blipkawayop');
+            assert.strictEqual(form.$('.o_kanban_record:not(.o_kanban_ghost)').text(),'blipkawayop');
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
 
             form.destroy();
         });
 
-        QUnit.test('one2many editable list: edit and click on add a line', async function (assert) {
+        QUnit.test('one2manyeditablelist:editandclickonaddaline',asyncfunction(assert){
             assert.expect(9);
 
-            this.data.turtle.onchanges = {
-                turtle_int: function () {},
+            this.data.turtle.onchanges={
+                turtle_int:function(){},
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                        '<field name="turtles">' +
-                            '<tree editable="bottom"><field name="turtle_int"/></tree>' +
-                        '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                        '<fieldname="turtles">'+
+                            '<treeeditable="bottom"><fieldname="turtle_int"/></tree>'+
+                        '</field>'+
                     '</form>',
-                res_id: 1,
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
+                res_id:1,
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
                         assert.step('onchange');
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                // in this test, we want to to accurately mock what really happens, that is, input
-                // fields only trigger their changes on 'change' event, not on 'input'
-                fieldDebounce: 100000,
-                viewOptions: {
-                    mode: 'edit',
+                //inthistest,wewanttotoaccuratelymockwhatreallyhappens,thatis,input
+                //fieldsonlytriggertheirchangeson'change'event,noton'input'
+                fieldDebounce:100000,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            assert.containsOnce(form, '.o_data_row');
+            assert.containsOnce(form,'.o_data_row');
 
-            // edit first row
-            await testUtils.dom.click(form.$('.o_data_row:first .o_data_cell:first'));
-            assert.hasClass(form.$('.o_data_row:first'), 'o_selected_row');
-            await testUtils.fields.editInput(form.$('.o_selected_row input[name=turtle_int]'), '44');
+            //editfirstrow
+            awaittestUtils.dom.click(form.$('.o_data_row:first.o_data_cell:first'));
+            assert.hasClass(form.$('.o_data_row:first'),'o_selected_row');
+            awaittestUtils.fields.editInput(form.$('.o_selected_rowinput[name=turtle_int]'),'44');
 
             assert.verifySteps([]);
-            // simulate a long click on 'Add a line' (mousedown [delay] mouseup and click events)
-            var $addLine = form.$('.o_field_x2many_list_row_add a');
-            testUtils.dom.triggerEvents($addLine, 'mousedown');
-            // mousedown is supposed to trigger the change event on the edited input, but it doesn't
-            // in the test environment, for an unknown reason, so we trigger it manually to reproduce
-            // what really happens
-            testUtils.dom.triggerEvents(form.$('.o_selected_row input[name=turtle_int]'), 'change');
-            await testUtils.nextTick();
+            //simulatealongclickon'Addaline'(mousedown[delay]mouseupandclickevents)
+            var$addLine=form.$('.o_field_x2many_list_row_adda');
+            testUtils.dom.triggerEvents($addLine,'mousedown');
+            //mousedownissupposedtotriggerthechangeeventontheeditedinput,butitdoesn't
+            //inthetestenvironment,foranunknownreason,sowetriggeritmanuallytoreproduce
+            //whatreallyhappens
+            testUtils.dom.triggerEvents(form.$('.o_selected_rowinput[name=turtle_int]'),'change');
+            awaittestUtils.nextTick();
 
-            // release the click
-            await testUtils.dom.triggerEvents($addLine, ['mouseup', 'click']);
-            assert.verifySteps(['onchange', 'onchange']);
+            //releasetheclick
+            awaittestUtils.dom.triggerEvents($addLine,['mouseup','click']);
+            assert.verifySteps(['onchange','onchange']);
 
-            assert.containsN(form, '.o_data_row', 2);
-            assert.strictEqual(form.$('.o_data_row:first').text(), '44');
-            assert.hasClass(form.$('.o_data_row:nth(1)'), 'o_selected_row');
+            assert.containsN(form,'.o_data_row',2);
+            assert.strictEqual(form.$('.o_data_row:first').text(),'44');
+            assert.hasClass(form.$('.o_data_row:nth(1)'),'o_selected_row');
 
             form.destroy();
         });
 
-        QUnit.test('many2manys inside a one2many are fetched in batch after onchange', async function (assert) {
+        QUnit.test('many2manysinsideaone2manyarefetchedinbatchafteronchange',asyncfunction(assert){
             assert.expect(6);
 
-            this.data.partner.onchanges = {
-                turtles: function (obj) {
-                    obj.turtles = [
+            this.data.partner.onchanges={
+                turtles:function(obj){
+                    obj.turtles=[
                         [5],
-                        [1, 1, {
-                            turtle_foo: "leonardo",
-                            partner_ids: [[4, 2]],
+                        [1,1,{
+                            turtle_foo:"leonardo",
+                            partner_ids:[[4,2]],
                         }],
-                        [1, 2, {
-                            turtle_foo: "donatello",
-                            partner_ids: [[4, 2], [4, 4]],
+                        [1,2,{
+                            turtle_foo:"donatello",
+                            partner_ids:[[4,2],[4,4]],
                         }],
                     ];
                 },
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                            '<field name="turtles">' +
-                                '<tree editable="bottom">' +
-                                    '<field name="turtle_foo"/>' +
-                                    '<field name="partner_ids" widget="many2many_tags"/>' +
-                                '</tree>' +
-                            '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                            '<fieldname="turtles">'+
+                                '<treeeditable="bottom">'+
+                                    '<fieldname="turtle_foo"/>'+
+                                    '<fieldname="partner_ids"widget="many2many_tags"/>'+
+                                '</tree>'+
+                            '</field>'+
                         '</form>',
-                enableBasicModelBachedRPCs: true,
-                mockRPC: function (route, args) {
-                    assert.step(args.method || route);
-                    if (args.method === 'read') {
-                        assert.deepEqual(args.args[0], [2, 4],
-                            'should read the partner_ids once, batched');
+                enableBasicModelBachedRPCs:true,
+                mockRPC:function(route,args){
+                    assert.step(args.method||route);
+                    if(args.method==='read'){
+                        assert.deepEqual(args.args[0],[2,4],
+                            'shouldreadthepartner_idsonce,batched');
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            assert.containsN(form, '.o_data_row', 2);
-            assert.strictEqual(form.$('.o_field_widget[name="partner_ids"]').text().replace(/\s/g, ''),
+            assert.containsN(form,'.o_data_row',2);
+            assert.strictEqual(form.$('.o_field_widget[name="partner_ids"]').text().replace(/\s/g,''),
                 "secondrecordsecondrecordaaa");
 
-            assert.verifySteps(['onchange', 'read']);
+            assert.verifySteps(['onchange','read']);
 
             form.destroy();
         });
 
-        QUnit.test('two one2many fields with same relation and onchanges', async function (assert) {
-            // this test simulates the presence of two one2many fields with onchanges, such that
-            // changes to the first o2m are repercuted on the second one
+        QUnit.test('twoone2manyfieldswithsamerelationandonchanges',asyncfunction(assert){
+            //thistestsimulatesthepresenceoftwoone2manyfieldswithonchanges,suchthat
+            //changestothefirsto2marerepercutedonthesecondone
             assert.expect(6);
 
-            this.data.partner.fields.turtles2 = {
-                string: "Turtles 2",
-                type: "one2many",
-                relation: 'turtle',
-                relation_field: 'turtle_trululu',
+            this.data.partner.fields.turtles2={
+                string:"Turtles2",
+                type:"one2many",
+                relation:'turtle',
+                relation_field:'turtle_trululu',
             };
-            this.data.partner.onchanges = {
-                turtles: function (obj) {
-                    // when we add a line to turtles, add same line to turtles2
-                    if (obj.turtles.length) {
-                        obj.turtles = [[5]].concat(obj.turtles);
-                        obj.turtles2 = obj.turtles;
+            this.data.partner.onchanges={
+                turtles:function(obj){
+                    //whenweaddalinetoturtles,addsamelinetoturtles2
+                    if(obj.turtles.length){
+                        obj.turtles=[[5]].concat(obj.turtles);
+                        obj.turtles2=obj.turtles;
                     }
                 },
-                turtles2: function (obj) {
-                    // simulate an onchange on turtles2 as well
-                    if (obj.turtles2.length) {
-                        obj.turtles2 = [[5]].concat(obj.turtles2);
+                turtles2:function(obj){
+                    //simulateanonchangeonturtles2aswell
+                    if(obj.turtles2.length){
+                        obj.turtles2=[[5]].concat(obj.turtles2);
                     }
                 }
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                        '<field name="turtles">' +
-                            '<tree editable="bottom"><field name="name" required="1"/></tree>' +
-                        '</field>' +
-                        '<field name="turtles2">' +
-                            '<tree editable="bottom"><field name="name" required="1"/></tree>' +
-                        '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                        '<fieldname="turtles">'+
+                            '<treeeditable="bottom"><fieldname="name"required="1"/></tree>'+
+                        '</field>'+
+                        '<fieldname="turtles2">'+
+                            '<treeeditable="bottom"><fieldname="name"required="1"/></tree>'+
+                        '</field>'+
                     '</form>',
             });
 
-            // trigger first onchange by adding a line in turtles field (should add a line in turtles2)
-            await testUtils.dom.click(form.$('.o_field_widget[name="turtles"] .o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('.o_field_widget[name="turtles"] .o_field_widget[name="name"]'), 'ABC');
+            //triggerfirstonchangebyaddingalineinturtlesfield(shouldaddalineinturtles2)
+            awaittestUtils.dom.click(form.$('.o_field_widget[name="turtles"].o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name="turtles"].o_field_widget[name="name"]'),'ABC');
 
-            assert.containsOnce(form, '.o_field_widget[name="turtles"] .o_data_row',
-                'line of first o2m should have been created');
-            assert.containsOnce(form, '.o_field_widget[name="turtles2"] .o_data_row',
-                'line of second o2m should have been created');
+            assert.containsOnce(form,'.o_field_widget[name="turtles"].o_data_row',
+                'lineoffirsto2mshouldhavebeencreated');
+            assert.containsOnce(form,'.o_field_widget[name="turtles2"].o_data_row',
+                'lineofsecondo2mshouldhavebeencreated');
 
-            // add a line in turtles2
-            await testUtils.dom.click(form.$('.o_field_widget[name="turtles2"] .o_field_x2many_list_row_add a'));
-            await testUtils.fields.editInput(form.$('.o_field_widget[name="turtles2"] .o_field_widget[name="name"]'), 'DEF');
+            //addalineinturtles2
+            awaittestUtils.dom.click(form.$('.o_field_widget[name="turtles2"].o_field_x2many_list_row_adda'));
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name="turtles2"].o_field_widget[name="name"]'),'DEF');
 
-            assert.containsOnce(form, '.o_field_widget[name="turtles"] .o_data_row',
-                'we should still have 1 line in turtles');
-            assert.containsN(form, '.o_field_widget[name="turtles2"] .o_data_row', 2,
-                'we should have 2 lines in turtles2');
-            assert.hasClass(form.$('.o_field_widget[name="turtles2"] .o_data_row:nth(1)'), 'o_selected_row',
-                'second row should be in edition');
+            assert.containsOnce(form,'.o_field_widget[name="turtles"].o_data_row',
+                'weshouldstillhave1lineinturtles');
+            assert.containsN(form,'.o_field_widget[name="turtles2"].o_data_row',2,
+                'weshouldhave2linesinturtles2');
+            assert.hasClass(form.$('.o_field_widget[name="turtles2"].o_data_row:nth(1)'),'o_selected_row',
+                'secondrowshouldbeinedition');
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
 
-            assert.strictEqual(form.$('.o_field_widget[name="turtles2"] .o_data_row').text(), 'ABCDEF');
+            assert.strictEqual(form.$('.o_field_widget[name="turtles2"].o_data_row').text(),'ABCDEF');
 
             form.destroy();
         });
 
-        QUnit.test('column widths are kept when adding first record in o2m', async function (assert) {
+        QUnit.test('columnwidthsarekeptwhenaddingfirstrecordino2m',asyncfunction(assert){
             assert.expect(2);
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                            '<field name="p">' +
-                                '<tree editable="top">' +
-                                    '<field name="date"/>' +
-                                    '<field name="foo"/>' +
-                                '</tree>' +
-                            '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                            '<fieldname="p">'+
+                                '<treeeditable="top">'+
+                                    '<fieldname="date"/>'+
+                                    '<fieldname="foo"/>'+
+                                '</tree>'+
+                            '</field>'+
                         '</form>',
             });
 
-            var width = form.$('th[data-name="date"]')[0].offsetWidth;
+            varwidth=form.$('th[data-name="date"]')[0].offsetWidth;
 
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.containsOnce(form, '.o_data_row');
-            assert.strictEqual(form.$('th[data-name="date"]')[0].offsetWidth, width);
+            assert.containsOnce(form,'.o_data_row');
+            assert.strictEqual(form.$('th[data-name="date"]')[0].offsetWidth,width);
 
             form.destroy();
         });
 
-        QUnit.test('column widths are kept when editing a record in o2m', async function (assert) {
+        QUnit.test('columnwidthsarekeptwheneditingarecordino2m',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.records[0].p = [2];
+            this.data.partner.records[0].p=[2];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                            '<field name="p">' +
-                                '<tree editable="top">' +
-                                    '<field name="date"/>' +
-                                    '<field name="foo"/>' +
-                                '</tree>' +
-                            '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                            '<fieldname="p">'+
+                                '<treeeditable="top">'+
+                                    '<fieldname="date"/>'+
+                                    '<fieldname="foo"/>'+
+                                '</tree>'+
+                            '</field>'+
                         '</form>',
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            var width = form.$('th[data-name="date"]')[0].offsetWidth;
+            varwidth=form.$('th[data-name="date"]')[0].offsetWidth;
 
-            await testUtils.dom.click(form.$('.o_data_row .o_data_cell:first'));
+            awaittestUtils.dom.click(form.$('.o_data_row.o_data_cell:first'));
 
-            assert.strictEqual(form.$('th[data-name="date"]')[0].offsetWidth, width);
+            assert.strictEqual(form.$('th[data-name="date"]')[0].offsetWidth,width);
 
-            var longVal = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit, ' +
-                'justo nec tincidunt feugiat, mi justo suscipit libero, sit amet tempus ipsum ' +
-                'purus bibendum est.';
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=foo]'), longVal);
+            varlongVal='Loremipsumdolorsitamet,consecteturadipiscingelit.Sedblandit,'+
+                'justonectinciduntfeugiat,mijustosuscipitlibero,sitamettempusipsum'+
+                'purusbibendumest.';
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=foo]'),longVal);
 
-            assert.strictEqual(form.$('th[data-name="date"]')[0].offsetWidth, width);
+            assert.strictEqual(form.$('th[data-name="date"]')[0].offsetWidth,width);
 
             form.destroy();
         });
 
-        QUnit.test('column widths are kept when remove last record in o2m', async function (assert) {
+        QUnit.test('columnwidthsarekeptwhenremovelastrecordino2m',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.records[0].p = [2];
+            this.data.partner.records[0].p=[2];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                            '<field name="p">' +
-                                '<tree editable="top">' +
-                                    '<field name="date"/>' +
-                                    '<field name="foo"/>' +
-                                '</tree>' +
-                            '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                            '<fieldname="p">'+
+                                '<treeeditable="top">'+
+                                    '<fieldname="date"/>'+
+                                    '<fieldname="foo"/>'+
+                                '</tree>'+
+                            '</field>'+
                         '</form>',
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            var width = form.$('th[data-name="date"]')[0].offsetWidth;
+            varwidth=form.$('th[data-name="date"]')[0].offsetWidth;
 
-            await testUtils.dom.click(form.$('.o_data_row .o_list_record_remove'));
+            awaittestUtils.dom.click(form.$('.o_data_row.o_list_record_remove'));
 
-            assert.strictEqual(form.$('th[data-name="date"]')[0].offsetWidth, width);
+            assert.strictEqual(form.$('th[data-name="date"]')[0].offsetWidth,width);
 
             form.destroy();
         });
 
-        QUnit.test('column widths are correct after toggling optional fields', async function (assert) {
+        QUnit.test('columnwidthsarecorrectaftertogglingoptionalfields',asyncfunction(assert){
             assert.expect(2);
 
-            var RamStorageService = AbstractStorageService.extend({
-                storage: new RamStorage(),
+            varRamStorageService=AbstractStorageService.extend({
+                storage:newRamStorage(),
             });
 
-            this.data.partner.records[0].p = [2];
+            this.data.partner.records[0].p=[2];
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form>' +
-                            '<field name="p">' +
-                                '<tree editable="top">' +
-                                    '<field name="date" required="1"/>' + // we want the list to remain empty
-                                    '<field name="foo"/>' +
-                                    '<field name="int_field" optional="1"/>' +
-                                '</tree>' +
-                            '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<form>'+
+                            '<fieldname="p">'+
+                                '<treeeditable="top">'+
+                                    '<fieldname="date"required="1"/>'+//wewantthelisttoremainempty
+                                    '<fieldname="foo"/>'+
+                                    '<fieldname="int_field"optional="1"/>'+
+                                '</tree>'+
+                            '</field>'+
                         '</form>',
-                services: {
-                    local_storage: RamStorageService,
+                services:{
+                    local_storage:RamStorageService,
                 },
             });
 
-            // date fields have an hardcoded width, which apply when there is no
-            // record, and should be kept afterwards
-            let width = form.$('th[data-name="date"]')[0].offsetWidth;
+            //datefieldshaveanhardcodedwidth,whichapplywhenthereisno
+            //record,andshouldbekeptafterwards
+            letwidth=form.$('th[data-name="date"]')[0].offsetWidth;
 
-            // create a record to store the current widths, but discard it directly to keep
-            // the list empty (otherwise, the browser automatically computes the optimal widths)
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
+            //createarecordtostorethecurrentwidths,butdiscarditdirectlytokeep
+            //thelistempty(otherwise,thebrowserautomaticallycomputestheoptimalwidths)
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
 
-            assert.strictEqual(form.$('th[data-name="date"]')[0].offsetWidth, width);
+            assert.strictEqual(form.$('th[data-name="date"]')[0].offsetWidth,width);
 
-            await testUtils.dom.click(form.$('.o_optional_columns_dropdown_toggle'));
-            await testUtils.dom.click(form.$('div.o_optional_columns div.dropdown-item input'));
+            awaittestUtils.dom.click(form.$('.o_optional_columns_dropdown_toggle'));
+            awaittestUtils.dom.click(form.$('div.o_optional_columnsdiv.dropdown-iteminput'));
 
-            assert.strictEqual(form.$('th[data-name="date"]')[0].offsetWidth, width);
+            assert.strictEqual(form.$('th[data-name="date"]')[0].offsetWidth,width);
 
             form.destroy();
         });
 
-        QUnit.test('editable one2many list with oe_read_only button', async function (assert) {
+        QUnit.test('editableone2manylistwithoe_read_onlybutton',asyncfunction(assert){
             assert.expect(9);
 
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `<form>
-                        <field name="turtles">
-                            <tree editable="bottom">
-                                <field name="turtle_foo"/>
-                                <button name="do_it" type="object" class="oe_read_only"/>
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`<form>
+                        <fieldname="turtles">
+                            <treeeditable="bottom">
+                                <fieldname="turtle_foo"/>
+                                <buttonname="do_it"type="object"class="oe_read_only"/>
                             </tree>
                         </field>
                     </form>`,
-                res_id: 1,
+                res_id:1,
             });
 
-            assert.containsN(form, '.o_list_view thead th:visible', 2);
-            assert.containsN(form, '.o_list_view tbody .o_data_row td:visible', 2);
-            assert.containsN(form, '.o_list_view tfoot td:visible', 2);
-            assert.containsNone(form, '.o_list_record_remove_header');
+            assert.containsN(form,'.o_list_viewtheadth:visible',2);
+            assert.containsN(form,'.o_list_viewtbody.o_data_rowtd:visible',2);
+            assert.containsN(form,'.o_list_viewtfoottd:visible',2);
+            assert.containsNone(form,'.o_list_record_remove_header');
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            // should have two visible columns in edit: foo + trash
-            assert.hasClass(form.$('.o_form_view'), 'o_form_editable');
-            assert.containsN(form, '.o_list_view thead th:visible', 2);
-            assert.containsN(form, '.o_list_view tbody .o_data_row td:visible', 2);
-            assert.containsN(form, '.o_list_view tfoot td:visible', 2);
-            assert.containsOnce(form, '.o_list_record_remove_header');
+            //shouldhavetwovisiblecolumnsinedit:foo+trash
+            assert.hasClass(form.$('.o_form_view'),'o_form_editable');
+            assert.containsN(form,'.o_list_viewtheadth:visible',2);
+            assert.containsN(form,'.o_list_viewtbody.o_data_rowtd:visible',2);
+            assert.containsN(form,'.o_list_viewtfoottd:visible',2);
+            assert.containsOnce(form,'.o_list_record_remove_header');
 
             form.destroy();
         });
 
-        QUnit.test('one2many reset by onchange (of another field) while being edited', async function (assert) {
-            // In this test, we have a many2one and a one2many. The many2one has an onchange that
-            // updates the value of the one2many. We set a new value to the many2one (name_create)
-            // such that the onchange is delayed. During the name_create, we click to add a new row
-            // to the one2many. After a while, we unlock the name_create, which triggers the onchange
-            // and resets the one2many. At the end, we want the row to be in edition.
+        QUnit.test('one2manyresetbyonchange(ofanotherfield)whilebeingedited',asyncfunction(assert){
+            //Inthistest,wehaveamany2oneandaone2many.Themany2onehasanonchangethat
+            //updatesthevalueoftheone2many.Wesetanewvaluetothemany2one(name_create)
+            //suchthattheonchangeisdelayed.Duringthename_create,weclicktoaddanewrow
+            //totheone2many.Afterawhile,weunlockthename_create,whichtriggerstheonchange
+            //andresetstheone2many.Attheend,wewanttherowtobeinedition.
             assert.expect(3);
 
-            const prom = testUtils.makeTestPromise();
-            this.data.partner.onchanges = {
-                trululu: obj => {
-                    obj.p = [[5]].concat(obj.p);
+            constprom=testUtils.makeTestPromise();
+            this.data.partner.onchanges={
+                trululu:obj=>{
+                    obj.p=[[5]].concat(obj.p);
                 },
             };
 
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="trululu"/>
-                        <field name="p">
-                            <tree editable="top"><field name="product_id" required="1"/></tree>
+                        <fieldname="trululu"/>
+                        <fieldname="p">
+                            <treeeditable="top"><fieldname="product_id"required="1"/></tree>
                         </field>
                     </form>`,
-                mockRPC: function (route, args) {
-                    const result = this._super.apply(this, arguments);
-                    if (args.method === 'name_create') {
-                        return prom.then(() => result);
+                mockRPC:function(route,args){
+                    constresult=this._super.apply(this,arguments);
+                    if(args.method==='name_create'){
+                        returnprom.then(()=>result);
                     }
-                    return result;
+                    returnresult;
                 },
             });
 
-            // set a new value for trululu (will delay the onchange)
-            await testUtils.fields.many2one.searchAndClickItem('trululu', {search: 'new value'});
+            //setanewvaluefortrululu(willdelaytheonchange)
+            awaittestUtils.fields.many2one.searchAndClickItem('trululu',{search:'newvalue'});
 
-            // add a row in p
-            await testUtils.dom.click(form.$('.o_field_x2many_list_row_add a'));
-            assert.containsNone(form, '.o_data_row');
+            //addarowinp
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list_row_adda'));
+            assert.containsNone(form,'.o_data_row');
 
-            // resolve the name_create to trigger the onchange, and the reset of p
+            //resolvethename_createtotriggertheonchange,andtheresetofp
             prom.resolve();
-            await testUtils.nextTick();
-            // use of owlCompatibilityNextTick because we have two sequential updates of the
-            // fieldX2Many: one because of the onchange, and one because of the click on add a line.
-            // As an update requires an update of the ControlPanel, which is an Owl Component, and
-            // waits for it, we need to wait for two animation frames before seeing the new line in
-            // the DOM
-            await testUtils.owlCompatibilityNextTick();
-            assert.containsOnce(form, '.o_data_row');
-            assert.hasClass(form.$('.o_data_row'), 'o_selected_row');
+            awaittestUtils.nextTick();
+            //useofowlCompatibilityNextTickbecausewehavetwosequentialupdatesofthe
+            //fieldX2Many:onebecauseoftheonchange,andonebecauseoftheclickonaddaline.
+            //AsanupdaterequiresanupdateoftheControlPanel,whichisanOwlComponent,and
+            //waitsforit,weneedtowaitfortwoanimationframesbeforeseeingthenewlinein
+            //theDOM
+            awaittestUtils.owlCompatibilityNextTick();
+            assert.containsOnce(form,'.o_data_row');
+            assert.hasClass(form.$('.o_data_row'),'o_selected_row');
 
             form.destroy();
         });
 
-        QUnit.skip('one2many with many2many_tags in list and list in form with a limit', async function (assert) {
-            // This test is skipped for now, as it doesn't work, and it can't be fixed in the current
-            // architecture (without large changes). However, this is unlikely to happen as the default
-            // limit is 80, and it would be useless to display so many records with a many2many_tags
-            // widget. So it would be nice if we could make it work in the future, but it's no big
-            // deal for now.
+        QUnit.skip('one2manywithmany2many_tagsinlistandlistinformwithalimit',asyncfunction(assert){
+            //Thistestisskippedfornow,asitdoesn'twork,anditcan'tbefixedinthecurrent
+            //architecture(withoutlargechanges).However,thisisunlikelytohappenasthedefault
+            //limitis80,anditwouldbeuselesstodisplaysomanyrecordswithamany2many_tags
+            //widget.Soitwouldbeniceifwecouldmakeitworkinthefuture,butit'snobig
+            //dealfornow.
             assert.expect(6);
 
-            this.data.partner.records[0].p = [1];
-            this.data.partner.records[0].turtles = [1, 2, 3];
+            this.data.partner.records[0].p=[1];
+            this.data.partner.records[0].turtles=[1,2,3];
 
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="bar"/>
-                        <field name="p">
+                        <fieldname="bar"/>
+                        <fieldname="p">
                             <tree>
-                                <field name="turtles" widget="many2many_tags"/>
+                                <fieldname="turtles"widget="many2many_tags"/>
                             </tree>
                             <form>
-                                <field name="turtles">
-                                    <tree limit="2"><field name="display_name"/></tree>
+                                <fieldname="turtles">
+                                    <treelimit="2"><fieldname="display_name"/></tree>
                                 </field>
                             </form>
                         </field>
                     </form>`,
-                res_id: 1,
+                res_id:1,
             });
 
-            assert.containsOnce(form, '.o_field_widget[name=p] .o_data_row');
-            assert.containsN(form, '.o_data_row .o_field_many2manytags .badge', 3);
+            assert.containsOnce(form,'.o_field_widget[name=p].o_data_row');
+            assert.containsN(form,'.o_data_row.o_field_many2manytags.badge',3);
 
-            await testUtils.dom.click(form.$('.o_data_row'));
+            awaittestUtils.dom.click(form.$('.o_data_row'));
 
-            assert.containsOnce(document.body, '.modal .o_form_view');
-            assert.containsN(document.body, '.modal .o_field_widget[name=turtles] .o_data_row', 2);
-            assert.isVisible($('.modal .o_field_x2many_list .o_pager'));
-            assert.strictEqual($(".modal .o_field_x2many_list .o_pager").text().trim(), '1-2 / 3');
+            assert.containsOnce(document.body,'.modal.o_form_view');
+            assert.containsN(document.body,'.modal.o_field_widget[name=turtles].o_data_row',2);
+            assert.isVisible($('.modal.o_field_x2many_list.o_pager'));
+            assert.strictEqual($(".modal.o_field_x2many_list.o_pager").text().trim(),'1-2/3');
 
             form.destroy();
         });
 
-        QUnit.test('one2many with many2many_tags in list and list in form, and onchange', async function (assert) {
+        QUnit.test('one2manywithmany2many_tagsinlistandlistinform,andonchange',asyncfunction(assert){
             assert.expect(8);
 
-            this.data.partner.onchanges = {
-                bar: function (obj) {
-                    obj.p = [
+            this.data.partner.onchanges={
+                bar:function(obj){
+                    obj.p=[
                         [5],
-                        [0, 0, {
-                            turtles: [
+                        [0,0,{
+                            turtles:[
                                 [5],
-                                [0, 0, {
-                                    display_name: 'new turtle',
+                                [0,0,{
+                                    display_name:'newturtle',
                                 }]
                             ],
                         }]
@@ -9487,82 +9487,82 @@ QUnit.module('fields', {}, function () {
                 },
             };
 
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="bar"/>
-                        <field name="p">
+                        <fieldname="bar"/>
+                        <fieldname="p">
                             <tree>
-                                <field name="turtles" widget="many2many_tags"/>
+                                <fieldname="turtles"widget="many2many_tags"/>
                             </tree>
                             <form>
-                                <field name="turtles">
-                                    <tree editable="bottom"><field name="display_name"/></tree>
+                                <fieldname="turtles">
+                                    <treeeditable="bottom"><fieldname="display_name"/></tree>
                                 </field>
                             </form>
                         </field>
                     </form>`,
             });
 
-            assert.containsOnce(form, '.o_field_widget[name=p] .o_data_row');
-            assert.containsOnce(form, '.o_data_row .o_field_many2manytags .badge');
+            assert.containsOnce(form,'.o_field_widget[name=p].o_data_row');
+            assert.containsOnce(form,'.o_data_row.o_field_many2manytags.badge');
 
-            await testUtils.dom.click(form.$('.o_data_row'));
+            awaittestUtils.dom.click(form.$('.o_data_row'));
 
-            assert.containsOnce(document.body, '.modal .o_form_view');
-            assert.containsOnce(document.body, '.modal .o_field_widget[name=turtles] .o_data_row');
-            assert.strictEqual($('.modal .o_field_widget[name=turtles] .o_data_row').text(), 'new turtle');
+            assert.containsOnce(document.body,'.modal.o_form_view');
+            assert.containsOnce(document.body,'.modal.o_field_widget[name=turtles].o_data_row');
+            assert.strictEqual($('.modal.o_field_widget[name=turtles].o_data_row').text(),'newturtle');
 
-            await testUtils.dom.click($('.modal .o_field_x2many_list_row_add a'));
-            assert.containsN(document.body, '.modal .o_field_widget[name=turtles] .o_data_row', 2);
-            assert.strictEqual($('.modal .o_field_widget[name=turtles] .o_data_row:first').text(), 'new turtle');
-            assert.hasClass($('.modal .o_field_widget[name=turtles] .o_data_row:nth(1)'), 'o_selected_row');
+            awaittestUtils.dom.click($('.modal.o_field_x2many_list_row_adda'));
+            assert.containsN(document.body,'.modal.o_field_widget[name=turtles].o_data_row',2);
+            assert.strictEqual($('.modal.o_field_widget[name=turtles].o_data_row:first').text(),'newturtle');
+            assert.hasClass($('.modal.o_field_widget[name=turtles].o_data_row:nth(1)'),'o_selected_row');
 
             form.destroy();
         });
 
-        QUnit.test('one2many with many2many_tags in list and list in form, and onchange (2)', async function (assert) {
+        QUnit.test('one2manywithmany2many_tagsinlistandlistinform,andonchange(2)',asyncfunction(assert){
             assert.expect(7);
 
-            this.data.partner.onchanges = {
-                bar: function (obj) {
-                    obj.p = [
+            this.data.partner.onchanges={
+                bar:function(obj){
+                    obj.p=[
                         [5],
-                        [0, 0, {
-                            turtles: [
+                        [0,0,{
+                            turtles:[
                                 [5],
-                                [0, 0, {
-                                    display_name: 'new turtle',
+                                [0,0,{
+                                    display_name:'newturtle',
                                 }]
                             ],
                         }]
                     ];
                 },
             };
-            this.data.turtle.onchanges = {
-                turtle_foo: function (obj) {
-                    obj.display_name = obj.turtle_foo;
+            this.data.turtle.onchanges={
+                turtle_foo:function(obj){
+                    obj.display_name=obj.turtle_foo;
                 },
             };
 
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="bar"/>
-                        <field name="p">
+                        <fieldname="bar"/>
+                        <fieldname="p">
                             <tree>
-                                <field name="turtles" widget="many2many_tags"/>
+                                <fieldname="turtles"widget="many2many_tags"/>
                             </tree>
                             <form>
-                                <field name="turtles">
-                                    <tree editable="bottom">
-                                        <field name="turtle_foo" required="1"/>
+                                <fieldname="turtles">
+                                    <treeeditable="bottom">
+                                        <fieldname="turtle_foo"required="1"/>
                                     </tree>
                                 </field>
                             </form>
@@ -9570,505 +9570,505 @@ QUnit.module('fields', {}, function () {
                     </form>`,
             });
 
-            assert.containsOnce(form, '.o_field_widget[name=p] .o_data_row');
+            assert.containsOnce(form,'.o_field_widget[name=p].o_data_row');
 
-            await testUtils.dom.click(form.$('.o_data_row'));
+            awaittestUtils.dom.click(form.$('.o_data_row'));
 
-            assert.containsOnce(document.body, '.modal .o_form_view');
+            assert.containsOnce(document.body,'.modal.o_form_view');
 
-            await testUtils.dom.click($('.modal .o_field_x2many_list_row_add a'));
-            assert.containsN(document.body, '.modal .o_field_widget[name=turtles] .o_data_row', 2);
+            awaittestUtils.dom.click($('.modal.o_field_x2many_list_row_adda'));
+            assert.containsN(document.body,'.modal.o_field_widget[name=turtles].o_data_row',2);
 
-            await testUtils.fields.editInput($('.modal .o_selected_row input'), 'another one');
-            await testUtils.modal.clickButton('Save & Close');
+            awaittestUtils.fields.editInput($('.modal.o_selected_rowinput'),'anotherone');
+            awaittestUtils.modal.clickButton('Save&Close');
 
-            assert.containsNone(document.body, '.modal');
+            assert.containsNone(document.body,'.modal');
 
-            assert.containsOnce(form, '.o_field_widget[name=p] .o_data_row');
-            assert.containsN(form, '.o_data_row .o_field_many2manytags .badge', 2);
-            assert.strictEqual(form.$('.o_data_row .o_field_many2manytags .o_badge_text').text(),
-                'new turtleanother one');
+            assert.containsOnce(form,'.o_field_widget[name=p].o_data_row');
+            assert.containsN(form,'.o_data_row.o_field_many2manytags.badge',2);
+            assert.strictEqual(form.$('.o_data_row.o_field_many2manytags.o_badge_text').text(),
+                'newturtleanotherone');
 
             form.destroy();
         });
 
-        QUnit.test('one2many value returned by onchange with unknown fields', async function (assert) {
+        QUnit.test('one2manyvaluereturnedbyonchangewithunknownfields',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.partner.onchanges = {
-                bar: function (obj) {
-                    obj.p = [
+            this.data.partner.onchanges={
+                bar:function(obj){
+                    obj.p=[
                         [5],
-                        [0, 0, {
-                            bar: true,
-                            display_name: "coucou",
-                            trululu: [2, 'second record'],
-                            turtles: [[5], [0, 0, {turtle_int: 4}]],
+                        [0,0,{
+                            bar:true,
+                            display_name:"coucou",
+                            trululu:[2,'secondrecord'],
+                            turtles:[[5],[0,0,{turtle_int:4}]],
                         }]
                     ];
                 },
             };
 
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="bar"/>
-                        <field name="p" widget="many2many_tags"/>
+                        <fieldname="bar"/>
+                        <fieldname="p"widget="many2many_tags"/>
                     </form>`,
-                mockRPC(route, args) {
-                    if (args.method === 'create') {
-                        assert.deepEqual(args.args[0].p[0][2], {
-                            bar: true,
-                            display_name: "coucou",
-                            trululu: 2,
-                            turtles: [[5], [0, 0, {turtle_int: 4}]],
+                mockRPC(route,args){
+                    if(args.method==='create'){
+                        assert.deepEqual(args.args[0].p[0][2],{
+                            bar:true,
+                            display_name:"coucou",
+                            trululu:2,
+                            turtles:[[5],[0,0,{turtle_int:4}]],
                         });
                     }
-                    return this._super(...arguments);
+                    returnthis._super(...arguments);
                 },
             });
 
-            assert.containsOnce(form, '.o_field_many2manytags .badge');
-            assert.strictEqual(form.$('.o_field_many2manytags .o_badge_text').text(), 'coucou');
+            assert.containsOnce(form,'.o_field_many2manytags.badge');
+            assert.strictEqual(form.$('.o_field_many2manytags.o_badge_text').text(),'coucou');
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
 
             form.destroy();
         });
 
-        QUnit.test('mounted is called only once for x2many control panel', async function (assert) {
-            // This test could be removed as soon as the field widgets will be converted in owl.
-            // It comes with a fix for a bug that occurred because in some circonstances, 'mounted'
-            // is called twice for the x2many control panel.
-            // Specifically, this occurs when there is 'pad' widget in the form view, because this
-            // widget does a 'setValue' in its 'start', which thus resets the field x2many.
+        QUnit.test('mountediscalledonlyonceforx2manycontrolpanel',asyncfunction(assert){
+            //Thistestcouldberemovedassoonasthefieldwidgetswillbeconvertedinowl.
+            //Itcomeswithafixforabugthatoccurredbecauseinsomecirconstances,'mounted'
+            //iscalledtwiceforthex2manycontrolpanel.
+            //Specifically,thisoccurswhenthereis'pad'widgetintheformview,becausethis
+            //widgetdoesa'setValue'inits'start',whichthusresetsthefieldx2many.
             assert.expect(5);
 
-            const PadLikeWidget = fieldRegistry.get('char').extend({
-                start() {
-                    this._setValue("some value");
+            constPadLikeWidget=fieldRegistry.get('char').extend({
+                start(){
+                    this._setValue("somevalue");
                 }
             });
-            fieldRegistry.add('pad_like', PadLikeWidget);
+            fieldRegistry.add('pad_like',PadLikeWidget);
 
-            let resolveCP;
-            const prom = new Promise(r => {
-                resolveCP = r;
+            letresolveCP;
+            constprom=newPromise(r=>{
+                resolveCP=r;
             });
-            ControlPanel.patch('cp_patch_mock', T =>
-                class extends T {
-                    constructor() {
+            ControlPanel.patch('cp_patch_mock',T=>
+                classextendsT{
+                    constructor(){
                         super(...arguments);
-                        owl.hooks.onMounted(() => {
+                        owl.hooks.onMounted(()=>{
                             assert.step('mounted');
                         });
-                        owl.hooks.onWillUnmount(() => {
+                        owl.hooks.onWillUnmount(()=>{
                             assert.step('willUnmount');
                         });
                     }
-                    async update() {
-                        // the issue is a race condition, so we manually delay the update to turn it deterministic
-                        await prom;
+                    asyncupdate(){
+                        //theissueisaracecondition,sowemanuallydelaytheupdatetoturnitdeterministic
+                        awaitprom;
                         super.update(...arguments);
                     }
                 }
             );
 
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="foo" widget="pad_like"/>
-                        <field name="p">
-                            <tree><field name="display_name"/></tree>
+                        <fieldname="foo"widget="pad_like"/>
+                        <fieldname="p">
+                            <tree><fieldname="display_name"/></tree>
                         </field>
                     </form>`,
-                viewOptions: {
-                    withControlPanel: false, // s.t. there is only one CP: the one of the x2many
+                viewOptions:{
+                    withControlPanel:false,//s.t.thereisonlyoneCP:theoneofthex2many
                 },
             });
 
             assert.verifySteps(['mounted']);
 
             resolveCP();
-            await testUtils.nextTick();
+            awaittestUtils.nextTick();
 
             assert.verifySteps([]);
 
             ControlPanel.unpatch('cp_patch_mock');
-            delete fieldRegistry.map.pad_like;
+            deletefieldRegistry.map.pad_like;
             form.destroy();
 
             assert.verifySteps(["willUnmount"]);
         });
 
-        QUnit.test('one2many: internal state is updated after another field changes', async function (assert) {
-            // The FieldOne2Many is configured such that it is reset at any field change.
-            // The MatrixProductConfigurator feature relies on that, and requires that its
-            // internal state is correctly updated. This white-box test artificially checks that.
+        QUnit.test('one2many:internalstateisupdatedafteranotherfieldchanges',asyncfunction(assert){
+            //TheFieldOne2Manyisconfiguredsuchthatitisresetatanyfieldchange.
+            //TheMatrixProductConfiguratorfeaturereliesonthat,andrequiresthatits
+            //internalstateiscorrectlyupdated.Thiswhite-boxtestartificiallychecksthat.
             assert.expect(2);
 
-            let o2m;
-            testUtils.patch(FieldOne2Many, {
-                init() {
+            leto2m;
+            testUtils.patch(FieldOne2Many,{
+                init(){
                     this._super(...arguments);
-                    o2m = this;
+                    o2m=this;
                 },
             });
 
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="display_name"/>
-                        <field name="p">
-                            <tree><field name="display_name"/></tree>
+                        <fieldname="display_name"/>
+                        <fieldname="p">
+                            <tree><fieldname="display_name"/></tree>
                         </field>
                     </form>`,
             });
 
-            assert.strictEqual(o2m.recordData.display_name, false);
+            assert.strictEqual(o2m.recordData.display_name,false);
 
-            await testUtils.fields.editInput(form.$('.o_field_widget[name=display_name]'), 'val');
+            awaittestUtils.fields.editInput(form.$('.o_field_widget[name=display_name]'),'val');
 
-            assert.strictEqual(o2m.recordData.display_name, "val");
+            assert.strictEqual(o2m.recordData.display_name,"val");
 
             form.destroy();
             testUtils.unpatch(FieldOne2Many);
         });
 
-        QUnit.test('nested one2many, onchange, no command value', async function (assert) {
-            // This test ensures that we always send all values to onchange rpcs for nested
-            // one2manys, even if some field hasn't changed. In this particular test case,
-            // a first onchange returns a value for the inner one2many, and a second onchange
-            // removes it, thus restoring the field to its initial empty value. From this point,
-            // the nested one2many value must still be sent to onchange rpcs (on the main record),
-            // as it might be used to compute other fields (so the fact that the nested o2m is empty
-            // must be explicit).
+        QUnit.test('nestedone2many,onchange,nocommandvalue',asyncfunction(assert){
+            //Thistestensuresthatwealwayssendallvaluestoonchangerpcsfornested
+            //one2manys,evenifsomefieldhasn'tchanged.Inthisparticulartestcase,
+            //afirstonchangereturnsavaluefortheinnerone2many,andasecondonchange
+            //removesit,thusrestoringthefieldtoitsinitialemptyvalue.Fromthispoint,
+            //thenestedone2manyvaluemuststillbesenttoonchangerpcs(onthemainrecord),
+            //asitmightbeusedtocomputeotherfields(sothefactthatthenestedo2misempty
+            //mustbeexplicit).
             assert.expect(3);
 
-            this.data.turtle.fields.o2m = {
-                string: "o2m", type: "one2many", relation: 'partner', relation_field: 'trululu',
+            this.data.turtle.fields.o2m={
+                string:"o2m",type:"one2many",relation:'partner',relation_field:'trululu',
             };
-            this.data.turtle.fields.turtle_bar.default = true;
-            this.data.partner.onchanges.turtles = function (obj) {};
-            this.data.turtle.onchanges.turtle_bar = function (obj) {
-                if (obj.turtle_bar) {
-                    obj.o2m = [[5], [0, false, { display_name: "default" }]];
-                } else {
-                    obj.o2m = [[5]];
+            this.data.turtle.fields.turtle_bar.default=true;
+            this.data.partner.onchanges.turtles=function(obj){};
+            this.data.turtle.onchanges.turtle_bar=function(obj){
+                if(obj.turtle_bar){
+                    obj.o2m=[[5],[0,false,{display_name:"default"}]];
+                }else{
+                    obj.o2m=[[5]];
                 }
             };
 
-            let step = 1;
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `<form>
-                        <field name="turtles">
-                            <tree editable="bottom">
-                                <field name="o2m"/>
-                                <field name="turtle_bar"/>
+            letstep=1;
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`<form>
+                        <fieldname="turtles">
+                            <treeeditable="bottom">
+                                <fieldname="o2m"/>
+                                <fieldname="turtle_bar"/>
                             </tree>
                         </field>
                     </form>`,
-                async mockRPC(route, args) {
-                    if (step === 3 && args.method === 'onchange' && args.model === 'partner') {
-                        assert.deepEqual(args.args[1].turtles[0][2], {
-                            turtle_bar: false,
-                            o2m: [], // we must send a value for this field
+                asyncmockRPC(route,args){
+                    if(step===3&&args.method==='onchange'&&args.model==='partner'){
+                        assert.deepEqual(args.args[1].turtles[0][2],{
+                            turtle_bar:false,
+                            o2m:[],//wemustsendavalueforthisfield
                         });
                     }
-                    const result = await this._super(...arguments);
-                    if (args.model === 'turtle') {
-                        // sanity checks; this is what the onchanges on turtle must return
-                        if (step === 2) {
-                            assert.deepEqual(result.value, {
-                                o2m: [[5], [0, false, { display_name: "default" }]],
-                                turtle_bar: true,
+                    constresult=awaitthis._super(...arguments);
+                    if(args.model==='turtle'){
+                        //sanitychecks;thisiswhattheonchangesonturtlemustreturn
+                        if(step===2){
+                            assert.deepEqual(result.value,{
+                                o2m:[[5],[0,false,{display_name:"default"}]],
+                                turtle_bar:true,
                             });
                         }
-                        if (step === 3) {
-                            assert.deepEqual(result.value, {
-                                o2m: [[5]],
+                        if(step===3){
+                            assert.deepEqual(result.value,{
+                                o2m:[[5]],
                             });
                         }
                     }
-                    return result;
+                    returnresult;
                 },
             });
 
-            step = 2;
-            await testUtils.dom.click(form.$('.o_field_x2many_list .o_field_x2many_list_row_add a'));
-            // use of owlCompatibilityNextTick because we have an x2many field with a boolean field
-            // (written in owl), so when we add a line, we sequentially render the list itself
-            // (including the boolean field), so we have to wait for the next animation frame, and
-            // then we render the control panel (also in owl), so we have to wait again for the
-            // next animation frame
-            await testUtils.owlCompatibilityNextTick();
-            step = 3;
-            await testUtils.dom.click(form.$('.o_data_row .o_field_boolean input'));
+            step=2;
+            awaittestUtils.dom.click(form.$('.o_field_x2many_list.o_field_x2many_list_row_adda'));
+            //useofowlCompatibilityNextTickbecausewehaveanx2manyfieldwithabooleanfield
+            //(writteninowl),sowhenweaddaline,wesequentiallyrenderthelistitself
+            //(includingthebooleanfield),sowehavetowaitforthenextanimationframe,and
+            //thenwerenderthecontrolpanel(alsoinowl),sowehavetowaitagainforthe
+            //nextanimationframe
+            awaittestUtils.owlCompatibilityNextTick();
+            step=3;
+            awaittestUtils.dom.click(form.$('.o_data_row.o_field_booleaninput'));
 
             form.destroy();
         });
 
-        QUnit.test('update a one2many from a custom field widget', async function (assert) {
-            // In this test, we define a custom field widget to render/update a one2many
-            // field. For the update part, we ensure that updating primitive fields of a sub
-            // record works. There is no guarantee that updating a relational field on the sub
-            // record would work. Deleting a sub record works as well. However, creating sub
-            // records isn't supported. There are obviously a lot of limitations, but the code
-            // hasn't been designed to support all this. This test simply encodes what can be
-            // done, and this comment explains what can't (and won't be implemented in stable
-            // versions).
+        QUnit.test('updateaone2manyfromacustomfieldwidget',asyncfunction(assert){
+            //Inthistest,wedefineacustomfieldwidgettorender/updateaone2many
+            //field.Fortheupdatepart,weensurethatupdatingprimitivefieldsofasub
+            //recordworks.Thereisnoguaranteethatupdatingarelationalfieldonthesub
+            //recordwouldwork.Deletingasubrecordworksaswell.However,creatingsub
+            //recordsisn'tsupported.Thereareobviouslyalotoflimitations,butthecode
+            //hasn'tbeendesignedtosupportallthis.Thistestsimplyencodeswhatcanbe
+            //done,andthiscommentexplainswhatcan't(andwon'tbeimplementedinstable
+            //versions).
             assert.expect(3);
 
-            this.data.partner.records[0].p = [1, 2];
-            const MyRelationalField = AbstractField.extend({
-                events: {
-                    'click .update': '_onUpdate',
-                    'click .delete': '_onDelete',
+            this.data.partner.records[0].p=[1,2];
+            constMyRelationalField=AbstractField.extend({
+                events:{
+                    'click.update':'_onUpdate',
+                    'click.delete':'_onDelete',
                 },
-                async _render() {
-                    const records = await this._rpc({
-                        method: 'read',
-                        model: 'partner',
-                        args: [this.value.res_ids],
+                async_render(){
+                    constrecords=awaitthis._rpc({
+                        method:'read',
+                        model:'partner',
+                        args:[this.value.res_ids],
                     });
-                    this.$el.text(records.map(r => `${r.display_name}/${r.int_field}`).join(', '));
-                    this.$el.append($('<button class="update fa fa-edit">'));
-                    this.$el.append($('<button class="delete fa fa-trash">'));
+                    this.$el.text(records.map(r=>`${r.display_name}/${r.int_field}`).join(','));
+                    this.$el.append($('<buttonclass="updatefafa-edit">'));
+                    this.$el.append($('<buttonclass="deletefafa-trash">'));
                 },
-                _onUpdate() {
+                _onUpdate(){
                     this._setValue({
-                        operation: 'UPDATE',
-                        id: this.value.data[0].id,
-                        data: {
-                            display_name: 'new name',
-                            int_field: 44,
+                        operation:'UPDATE',
+                        id:this.value.data[0].id,
+                        data:{
+                            display_name:'newname',
+                            int_field:44,
                         },
                     });
                 },
-                _onDelete() {
+                _onDelete(){
                     this._setValue({
-                        operation: 'DELETE',
-                        ids: [this.value.data[0].id],
+                        operation:'DELETE',
+                        ids:[this.value.data[0].id],
                     });
                 },
             });
-            fieldRegistry.add('my_relational_field', MyRelationalField);
+            fieldRegistry.add('my_relational_field',MyRelationalField);
 
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="p" widget="my_relational_field"/>
+                        <fieldname="p"widget="my_relational_field"/>
                     </form>`,
-                res_id: 1,
+                res_id:1,
             });
 
-            assert.strictEqual(form.$('.o_field_widget[name=p]').text(), 'first record/10, second record/9');
+            assert.strictEqual(form.$('.o_field_widget[name=p]').text(),'firstrecord/10,secondrecord/9');
 
-            await testUtils.dom.click(form.$('button.update'));
+            awaittestUtils.dom.click(form.$('button.update'));
 
-            assert.strictEqual(form.$('.o_field_widget[name=p]').text(), 'new name/44, second record/9');
+            assert.strictEqual(form.$('.o_field_widget[name=p]').text(),'newname/44,secondrecord/9');
 
-            await testUtils.dom.click(form.$('button.delete'));
+            awaittestUtils.dom.click(form.$('button.delete'));
 
-            assert.strictEqual(form.$('.o_field_widget[name=p]').text(), 'second record/9');
+            assert.strictEqual(form.$('.o_field_widget[name=p]').text(),'secondrecord/9');
 
             form.destroy();
-            delete fieldRegistry.map.my_relational_field;
+            deletefieldRegistry.map.my_relational_field;
         });
 
-        QUnit.test('reordering embedded one2many with handle widget starting with same sequence', async function (assert) {
+        QUnit.test('reorderingembeddedone2manywithhandlewidgetstartingwithsamesequence',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.turtle = {
-                fields: {turtle_int: {string: "int", type: "integer", sortable: true}},
-                records: [
-                    {id: 1, turtle_int: 1},
-                    {id: 2, turtle_int: 1},
-                    {id: 3, turtle_int: 1},
-                    {id: 4, turtle_int: 2},
-                    {id: 5, turtle_int: 3},
-                    {id: 6, turtle_int: 4},
+            this.data.turtle={
+                fields:{turtle_int:{string:"int",type:"integer",sortable:true}},
+                records:[
+                    {id:1,turtle_int:1},
+                    {id:2,turtle_int:1},
+                    {id:3,turtle_int:1},
+                    {id:4,turtle_int:2},
+                    {id:5,turtle_int:3},
+                    {id:6,turtle_int:4},
                 ],
             };
-            this.data.partner.records[0].turtles = [1, 2, 3, 4, 5, 6];
+            this.data.partner.records[0].turtles=[1,2,3,4,5,6];
 
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
-                    <form string="Partners">
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
+                    <formstring="Partners">
                         <sheet>
                             <notebook>
-                                <page string="P page">
-                                    <field name="turtles">
-                                        <tree default_order="turtle_int">
-                                            <field name="turtle_int" widget="handle"/>
-                                            <field name="id"/>
+                                <pagestring="Ppage">
+                                    <fieldname="turtles">
+                                        <treedefault_order="turtle_int">
+                                            <fieldname="turtle_int"widget="handle"/>
+                                            <fieldname="id"/>
                                         </tree>
                                     </field>
                                 </page>
                             </notebook>
                         </sheet>
                     </form>`,
-                res_id: 1,
+                res_id:1,
             });
 
-            await testUtils.form.clickEdit(form);
+            awaittestUtils.form.clickEdit(form);
 
-            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(), "123456", "default should be sorted by id");
+            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(),"123456","defaultshouldbesortedbyid");
 
-            // Drag and drop the fourth line in first position
-            await testUtils.dom.dragAndDrop(
+            //Draganddropthefourthlineinfirstposition
+            awaittestUtils.dom.dragAndDrop(
                 form.$('.ui-sortable-handle').eq(3),
-                form.$('tbody tr').first(),
-                {position: 'top'}
+                form.$('tbodytr').first(),
+                {position:'top'}
             );
-            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(), "412356", "should still have the 6 rows in the correct order");
+            assert.strictEqual(form.$('td.o_data_cell:not(.o_handle_cell)').text(),"412356","shouldstillhavethe6rowsinthecorrectorder");
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
 
-            assert.deepEqual(_.map(this.data.turtle.records, function (turtle) {
-                return _.pick(turtle, 'id', 'turtle_int');
-            }), [
-                {id: 1, turtle_int: 2},
-                {id: 2, turtle_int: 3},
-                {id: 3, turtle_int: 4},
-                {id: 4, turtle_int: 1},
-                {id: 5, turtle_int: 5},
-                {id: 6, turtle_int: 6},
-            ], "should have saved the updated turtle_int sequence");
+            assert.deepEqual(_.map(this.data.turtle.records,function(turtle){
+                return_.pick(turtle,'id','turtle_int');
+            }),[
+                {id:1,turtle_int:2},
+                {id:2,turtle_int:3},
+                {id:3,turtle_int:4},
+                {id:4,turtle_int:1},
+                {id:5,turtle_int:5},
+                {id:6,turtle_int:6},
+            ],"shouldhavesavedtheupdatedturtle_intsequence");
 
             form.destroy();
         });
 
-        QUnit.test("add_record in an o2m with an OWL field: wait mounted before success", async function (assert) {
+        QUnit.test("add_recordinano2mwithanOWLfield:waitmountedbeforesuccess",asyncfunction(assert){
             assert.expect(7);
 
-            let testInst = 0;
-            class TestField extends AbstractFieldOwl {
-                setup() {
+            lettestInst=0;
+            classTestFieldextendsAbstractFieldOwl{
+                setup(){
                     super.setup();
-                    const ID = testInst++;
-                    owl.hooks.onMounted(() => {
-                        assert.step(`mounted ${ID}`);
+                    constID=testInst++;
+                    owl.hooks.onMounted(()=>{
+                        assert.step(`mounted${ID}`);
                     });
 
-                    owl.hooks.onWillUnmount(() => {
-                        assert.step(`willUnmount ${ID}`);
+                    owl.hooks.onWillUnmount(()=>{
+                        assert.step(`willUnmount${ID}`);
                     });
                 }
-                activate() {
-                    return true;
+                activate(){
+                    returntrue;
                 }
             }
 
-            TestField.template = owl.tags.xml`<span>test</span>`;
-            fieldRegistryOwl.add('test_field', TestField);
+            TestField.template=owl.tags.xml`<span>test</span>`;
+            fieldRegistryOwl.add('test_field',TestField);
 
-            const def = testUtils.makeTestPromise();
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                debug: 1,
-                data: this.data,
-                arch: `<form>
-                        <field name="p">
-                            <tree editable="bottom">
-                                <field name="name" widget="test_field"/>
+            constdef=testUtils.makeTestPromise();
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                debug:1,
+                data:this.data,
+                arch:`<form>
+                        <fieldname="p">
+                            <treeeditable="bottom">
+                                <fieldname="name"widget="test_field"/>
                             </tree>
                         </field>
                     </form>`,
-                viewOptions: {
-                    mode: 'edit',
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            const list = form.renderer.allFieldWidgets[form.handle][0];
+            constlist=form.renderer.allFieldWidgets[form.handle][0];
 
-            list.trigger_up('add_record', {
-                context: [{
-                    default_name: 'this is a test',
+            list.trigger_up('add_record',{
+                context:[{
+                    default_name:'thisisatest',
                 }],
-                allowWarning: true,
-                forceEditable: 'bottom',
-                onSuccess: function () {
+                allowWarning:true,
+                forceEditable:'bottom',
+                onSuccess:function(){
                     assert.step("onSuccess");
                     def.resolve();
                 }
             });
 
-            await testUtils.nextTick();
-            await def;
-            assert.verifySteps(["mounted 0", "willUnmount 0", "mounted 1", "onSuccess"]);
+            awaittestUtils.nextTick();
+            awaitdef;
+            assert.verifySteps(["mounted0","willUnmount0","mounted1","onSuccess"]);
             form.destroy();
-            assert.verifySteps(["willUnmount 1"]);
+            assert.verifySteps(["willUnmount1"]);
         });
 
-        QUnit.test('nested one2manys, multi page, onchange', async function (assert) {
+        QUnit.test('nestedone2manys,multipage,onchange',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.partner.records[2].int_field = 5;
-            this.data.partner.records[0].p = [2, 4]; // limit 1 -> record 4 will be on second page
-            this.data.partner.records[1].turtles = [1];
-            this.data.partner.records[2].turtles = [2];
-            this.data.turtle.records[0].turtle_int = 1;
-            this.data.turtle.records[1].turtle_int = 2;
+            this.data.partner.records[2].int_field=5;
+            this.data.partner.records[0].p=[2,4];//limit1->record4willbeonsecondpage
+            this.data.partner.records[1].turtles=[1];
+            this.data.partner.records[2].turtles=[2];
+            this.data.turtle.records[0].turtle_int=1;
+            this.data.turtle.records[1].turtle_int=2;
 
-            this.data.partner.onchanges.int_field = function (obj) {
+            this.data.partner.onchanges.int_field=function(obj){
                assert.step('onchange')
-               obj.p = [[5]]
-               obj.p.push([1, 2, { turtles: [[5], [1, 1, { turtle_int: obj.int_field }]] }]);
-               obj.p.push([1, 4, { turtles: [[5], [1, 2, { turtle_int: obj.int_field }]] }]);
+               obj.p=[[5]]
+               obj.p.push([1,2,{turtles:[[5],[1,1,{turtle_int:obj.int_field}]]}]);
+               obj.p.push([1,4,{turtles:[[5],[1,2,{turtle_int:obj.int_field}]]}]);
             };
 
-            var form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: '<form string="Partner">' +
-                    '<field name="int_field"/>' +
-                    '<field name="p">' +
-                    '<tree editable="bottom" limit="1" default_order="display_name">' +
-                        '<field name="display_name" />' +
-                        '<field name="int_field" />' +
-                        '<field name="turtles">' +
-                        '<tree editable="bottom">' +
-                            '<field name="turtle_int"/>' +
-                        '</tree>' +
-                        '</field>' +
-                    '</tree>' +
-                    '</field>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:'<formstring="Partner">'+
+                    '<fieldname="int_field"/>'+
+                    '<fieldname="p">'+
+                    '<treeeditable="bottom"limit="1"default_order="display_name">'+
+                        '<fieldname="display_name"/>'+
+                        '<fieldname="int_field"/>'+
+                        '<fieldname="turtles">'+
+                        '<treeeditable="bottom">'+
+                            '<fieldname="turtle_int"/>'+
+                        '</tree>'+
+                        '</field>'+
+                    '</tree>'+
+                    '</field>'+
                     '</form>',
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            await testUtils.fields.editInput(form.$('[name="int_field"]'), '5');
+            awaittestUtils.fields.editInput(form.$('[name="int_field"]'),'5');
             assert.verifySteps(['onchange'])
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
 
-            assert.strictEqual(this.data.partner.records[0].int_field, 5, 'Value should have been updated')
-            assert.strictEqual(this.data.turtle.records[1].turtle_int, 5, 'Shown data should have been updated');
-            assert.strictEqual(this.data.turtle.records[0].turtle_int, 5, 'Hidden data should have been updated');
+            assert.strictEqual(this.data.partner.records[0].int_field,5,'Valueshouldhavebeenupdated')
+            assert.strictEqual(this.data.turtle.records[1].turtle_int,5,'Showndatashouldhavebeenupdated');
+            assert.strictEqual(this.data.turtle.records[0].turtle_int,5,'Hiddendatashouldhavebeenupdated');
 
             form.destroy();
         });

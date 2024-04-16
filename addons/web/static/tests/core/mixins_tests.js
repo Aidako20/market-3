@@ -1,29 +1,29 @@
-flectra.define('web.mixins_tests', function (require) {
-"use strict";
+flectra.define('web.mixins_tests',function(require){
+"usestrict";
 
-var testUtils = require('web.test_utils');
-var Widget = require('web.Widget');
+vartestUtils=require('web.test_utils');
+varWidget=require('web.Widget');
 
-QUnit.module('core', {}, function () {
+QUnit.module('core',{},function(){
 
     QUnit.module('mixins');
 
-    QUnit.test('perform a do_action properly', function (assert) {
+    QUnit.test('performado_actionproperly',function(assert){
         assert.expect(3);
-        var done = assert.async();
+        vardone=assert.async();
 
-        var widget = new Widget();
+        varwidget=newWidget();
 
-        testUtils.mock.intercept(widget, 'do_action', function (event) {
-            assert.strictEqual(event.data.action, 'test.some_action_id',
-                "should have sent proper action name");
-            assert.deepEqual(event.data.options, {clear_breadcrumbs: true},
-                "should have sent proper options");
+        testUtils.mock.intercept(widget,'do_action',function(event){
+            assert.strictEqual(event.data.action,'test.some_action_id',
+                "shouldhavesentproperactionname");
+            assert.deepEqual(event.data.options,{clear_breadcrumbs:true},
+                "shouldhavesentproperoptions");
             event.data.on_success();
         });
 
-        widget.do_action('test.some_action_id', {clear_breadcrumbs: true}).then(function () {
-            assert.ok(true, 'deferred should have been resolved');
+        widget.do_action('test.some_action_id',{clear_breadcrumbs:true}).then(function(){
+            assert.ok(true,'deferredshouldhavebeenresolved');
             widget.destroy();
             done();
         });

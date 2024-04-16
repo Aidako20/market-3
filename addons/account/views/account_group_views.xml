@@ -1,47 +1,47 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
 
-        <record id="view_account_group_form" model="ir.ui.view">
-            <field name="name">account.group.form</field>
-            <field name="model">account.group</field>
-            <field name="arch" type="xml">
-                <form string="Account Group">
+        <recordid="view_account_group_form"model="ir.ui.view">
+            <fieldname="name">account.group.form</field>
+            <fieldname="model">account.group</field>
+            <fieldname="arch"type="xml">
+                <formstring="AccountGroup">
                 <sheet>
                     <group>
-                        <field name="name"/>
-                        <label for="code_prefix_start" string="Code Prefix"/>
+                        <fieldname="name"/>
+                        <labelfor="code_prefix_start"string="CodePrefix"/>
                         <div>
-                            From <field name="code_prefix_start" class="oe_inline"/> to <field name="code_prefix_end" class="oe_inline"/>
+                            From<fieldname="code_prefix_start"class="oe_inline"/>to<fieldname="code_prefix_end"class="oe_inline"/>
                         </div>
-                        <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                        <fieldname="company_id"options="{'no_create':True}"groups="base.group_multi_company"/>
                     </group>
                 </sheet>
                 </form>
             </field>
         </record>
 
-        <record id="view_account_group_search" model="ir.ui.view">
-            <field name="name">account.group.search</field>
-            <field name="model">account.group</field>
-            <field name="arch" type="xml">
-                <search string="Account groups">
-                    <field name="name"
-                           filter_domain="['|', ('code_prefix_start', '=like', str(self) + '%'), ('name', 'ilike', self)]"
-                           string="Account group"/>
+        <recordid="view_account_group_search"model="ir.ui.view">
+            <fieldname="name">account.group.search</field>
+            <fieldname="model">account.group</field>
+            <fieldname="arch"type="xml">
+                <searchstring="Accountgroups">
+                    <fieldname="name"
+                           filter_domain="['|',('code_prefix_start','=like',str(self)+'%'),('name','ilike',self)]"
+                           string="Accountgroup"/>
                 </search>
             </field>
         </record>
 
-        <record id="view_account_group_tree" model="ir.ui.view">
-            <field name="name">account.group.tree</field>
-            <field name="model">account.group</field>
-            <field name="arch" type="xml">
-                <tree string="Account Group">
-                    <field name="code_prefix_start"/>
-                    <field name="code_prefix_end"/>
-                    <field name="name"/>
-                    <field name="company_id" groups="base.group_multi_company"/>
+        <recordid="view_account_group_tree"model="ir.ui.view">
+            <fieldname="name">account.group.tree</field>
+            <fieldname="model">account.group</field>
+            <fieldname="arch"type="xml">
+                <treestring="AccountGroup">
+                    <fieldname="code_prefix_start"/>
+                    <fieldname="code_prefix_end"/>
+                    <fieldname="name"/>
+                    <fieldname="company_id"groups="base.group_multi_company"/>
                 </tree>
             </field>
         </record>

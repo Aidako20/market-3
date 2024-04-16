@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+classResConfigSettings(models.TransientModel):
+    _inherit='res.config.settings'
 
-    module_l10n_mx_edi = fields.Boolean('Mexican Electronic Invoicing')
+    module_l10n_mx_edi=fields.Boolean('MexicanElectronicInvoicing')

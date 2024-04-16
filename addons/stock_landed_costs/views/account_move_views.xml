@@ -1,32 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="account_view_move_form_inherited" model="ir.ui.view">
-        <field name="name">account.view.move.form.inherited</field>
-        <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_move_form"/>
-        <field name="groups_id" eval="[(4,ref('stock.group_stock_manager'))]"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[@name='button_box']" position="inside">
-                <field name="landed_costs_ids" invisible="1"/>
-                <button string="Landed Costs" type="object"
+    <recordid="account_view_move_form_inherited"model="ir.ui.view">
+        <fieldname="name">account.view.move.form.inherited</field>
+        <fieldname="model">account.move</field>
+        <fieldname="inherit_id"ref="account.view_move_form"/>
+        <fieldname="groups_id"eval="[(4,ref('stock.group_stock_manager'))]"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//div[@name='button_box']"position="inside">
+                <fieldname="landed_costs_ids"invisible="1"/>
+                <buttonstring="LandedCosts"type="object"
                     name="action_view_landed_costs"
-                    class="oe_stat_button" icon="fa-plus-square" groups="stock.group_stock_manager"
-                    attrs="{'invisible': [('landed_costs_ids', '=', [])]}" />
+                    class="oe_stat_button"icon="fa-plus-square"groups="stock.group_stock_manager"
+                    attrs="{'invisible':[('landed_costs_ids','=',[])]}"/>
             </xpath>
 
-            <field name="state" position="before">
-                <field name="landed_costs_visible" invisible="1"/>
-                <button name="button_create_landed_costs" class="oe_highlight" string="Create Landed Costs" type="object" groups="account.group_account_invoice" attrs="{'invisible': [('landed_costs_visible', '!=', True)]}"/>
+            <fieldname="state"position="before">
+                <fieldname="landed_costs_visible"invisible="1"/>
+                <buttonname="button_create_landed_costs"class="oe_highlight"string="CreateLandedCosts"type="object"groups="account.group_account_invoice"attrs="{'invisible':[('landed_costs_visible','!=',True)]}"/>
             </field>
 
-            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='name']" position="after">
-                <field name="product_type" invisible="1"/>
-                <field name="is_landed_costs_line" string="Landed Costs" attrs="{'readonly': [('product_type', '!=', 'service')], 'column_invisible': [('parent.move_type', '!=', 'in_invoice')]}" optional="show"/>
+            <xpathexpr="//field[@name='invoice_line_ids']/tree/field[@name='name']"position="after">
+                <fieldname="product_type"invisible="1"/>
+                <fieldname="is_landed_costs_line"string="LandedCosts"attrs="{'readonly':[('product_type','!=','service')],'column_invisible':[('parent.move_type','!=','in_invoice')]}"optional="show"/>
             </xpath>
 
-            <xpath expr="//field[@name='line_ids']/tree/field[@name='name']" position="after">
-                <field name="product_type" invisible="1"/>
-                <field name="is_landed_costs_line" invisible="1"/>
+            <xpathexpr="//field[@name='line_ids']/tree/field[@name='name']"position="after">
+                <fieldname="product_type"invisible="1"/>
+                <fieldname="is_landed_costs_line"invisible="1"/>
             </xpath>
         </field>
     </record>

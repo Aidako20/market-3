@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class Company(models.Model):
-    _inherit = "res.company"
+classCompany(models.Model):
+    _inherit="res.company"
 
-    social_twitter = fields.Char('Twitter Account')
-    social_facebook = fields.Char('Facebook Account')
-    social_github = fields.Char('GitHub Account')
-    social_linkedin = fields.Char('LinkedIn Account')
-    social_youtube = fields.Char('Youtube Account')
-    social_instagram = fields.Char('Instagram Account')
+    social_twitter=fields.Char('TwitterAccount')
+    social_facebook=fields.Char('FacebookAccount')
+    social_github=fields.Char('GitHubAccount')
+    social_linkedin=fields.Char('LinkedInAccount')
+    social_youtube=fields.Char('YoutubeAccount')
+    social_instagram=fields.Char('InstagramAccount')

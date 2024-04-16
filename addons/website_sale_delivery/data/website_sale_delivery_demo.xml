@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
+    <datanoupdate="1">
 
-        <record id="delivery.delivery_carrier" model="delivery.carrier">
-            <field name="is_published" eval="False" />
+        <recordid="delivery.delivery_carrier"model="delivery.carrier">
+            <fieldname="is_published"eval="False"/>
         </record>
 
-        <record id="delivery.normal_delivery_carrier" model="delivery.carrier">
-            <field name="is_published" eval="False" />
+        <recordid="delivery.normal_delivery_carrier"model="delivery.carrier">
+            <fieldname="is_published"eval="False"/>
         </record>
 
     </data>

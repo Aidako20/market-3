@@ -1,67 +1,67 @@
-flectra.define("website_event_track.website_event_pwa_widget", function (require) {
-    "use strict";
+flectra.define("website_event_track.website_event_pwa_widget",function(require){
+    "usestrict";
 
     /*
-     * The "deferredPrompt" Promise will resolve only if the "beforeinstallprompt" event
-     * has been triggered. It allows to register this listener as soon as possible
-     * to avoid missed-events (as the browser can trigger it very early in the page lifecycle).
+     *The"deferredPrompt"Promisewillresolveonlyifthe"beforeinstallprompt"event
+     *hasbeentriggered.Itallowstoregisterthislistenerassoonaspossible
+     *toavoidmissed-events(asthebrowsercantriggeritveryearlyinthepagelifecycle).
      */
-    var deferredPrompt = new Promise(function (resolve, reject) {
-        if (!("serviceWorker" in navigator)) {
-            return reject();
+    vardeferredPrompt=newPromise(function(resolve,reject){
+        if(!("serviceWorker"innavigator)){
+            returnreject();
         }
-        window.addEventListener("beforeinstallprompt", function (ev) {
+        window.addEventListener("beforeinstallprompt",function(ev){
             ev.preventDefault();
             resolve(ev);
         });
     });
 
-    var config = require("web.config");
-    var publicWidget = require("web.public.widget");
-    var utils = require("web.utils");
+    varconfig=require("web.config");
+    varpublicWidget=require("web.public.widget");
+    varutils=require("web.utils");
 
-    var PWAInstallBanner = publicWidget.Widget.extend({
-        xmlDependencies: ["/website_event_track/static/src/xml/website_event_pwa.xml"],
-        template: "pwa_install_banner",
-        events: {
-            "click .o_btn_install": "_onClickInstall",
-            "click .o_btn_close": "_onClickClose",
+    varPWAInstallBanner=publicWidget.Widget.extend({
+        xmlDependencies:["/website_event_track/static/src/xml/website_event_pwa.xml"],
+        template:"pwa_install_banner",
+        events:{
+            "click.o_btn_install":"_onClickInstall",
+            "click.o_btn_close":"_onClickClose",
         },
 
         /**
-         * @private
+         *@private
          */
-        _onClickClose: function () {
+        _onClickClose:function(){
             this.trigger_up("prompt_close_bar");
         },
 
         /**
-         * @private
+         *@private
          */
-        _onClickInstall: function () {
+        _onClickInstall:function(){
             this.trigger_up("prompt_install");
         },
     });
 
-    publicWidget.registry.WebsiteEventPWAWidget = publicWidget.Widget.extend({
-        selector: "#wrapwrap.event",
-        custom_events: {
-            prompt_install: "_onPromptInstall",
-            prompt_close_bar: "_onPromptCloseBar",
+    publicWidget.registry.WebsiteEventPWAWidget=publicWidget.Widget.extend({
+        selector:"#wrapwrap.event",
+        custom_events:{
+            prompt_install:"_onPromptInstall",
+            prompt_close_bar:"_onPromptCloseBar",
         },
 
         /**
          *
-         * @override
+         *@override
          */
-        start: function () {
-            var self = this;
-            return this._super.apply(this, arguments)
+        start:function(){
+            varself=this;
+            returnthis._super.apply(this,arguments)
                 .then(this._registerServiceWorker.bind(this))
-                .then(function () {
-                    // Don't wait for the prompt's Promise as it may never resolve.
-                    deferredPrompt.then(self._showInstallBanner.bind(self)).catch(function () {
-                        console.log("ServiceWorker not supported");
+                .then(function(){
+                    //Don'twaitfortheprompt'sPromiseasitmayneverresolve.
+                    deferredPrompt.then(self._showInstallBanner.bind(self)).catch(function(){
+                        console.log("ServiceWorkernotsupported");
                     });
                 })
                 .then(this._prefetch.bind(this));
@@ -69,144 +69,144 @@ flectra.define("website_event_track.website_event_pwa_widget", function (require
 
         /**
          *
-         * @override
+         *@override
          */
-        destroy: function () {
-            this._super.apply(this, arguments);
+        destroy:function(){
+            this._super.apply(this,arguments);
         },
 
         //--------------------------------------------------------------------------
-        // Private
+        //Private
         //--------------------------------------------------------------------------
 
         /**
-         * Returns the PWA's scope
+         *ReturnsthePWA'sscope
          *
-         * Note: this method performs a matching to handle URLs with the language prefix.
-         *       Typically this prefix is in the form of "en" or "en_US" but it can also be
-         *       any string using the customization options in the Website's settings.
-         * @private
-         * @returns {String}
+         *Note:thismethodperformsamatchingtohandleURLswiththelanguageprefix.
+         *      Typicallythisprefixisintheformof"en"or"en_US"butitcanalsobe
+         *      anystringusingthecustomizationoptionsintheWebsite'ssettings.
+         *@private
+         *@returns{String}
          */
-        _getScope: function () {
-            var matches = window.location.pathname.match(/^(\/(?:event|[^/]+\/event))\/?/);
-            if (matches && matches[1]) {
-                return matches[1];
+        _getScope:function(){
+            varmatches=window.location.pathname.match(/^(\/(?:event|[^/]+\/event))\/?/);
+            if(matches&&matches[1]){
+                returnmatches[1];
             }
-            return "/event";
+            return"/event";
         },
 
         /**
-         * @private
+         *@private
          */
-        _hideInstallBanner: function () {
-            this.installBanner ? this.installBanner.destroy() : undefined;
-            $(".o_livechat_button").css("bottom", "0");
+        _hideInstallBanner:function(){
+            this.installBanner?this.installBanner.destroy():undefined;
+            $(".o_livechat_button").css("bottom","0");
         },
 
         /**
-         * Parse the current page for first-level children pages and ask the ServiceWorker
-         * to already fetch them to populate the cache.
-         * @private
+         *Parsethecurrentpageforfirst-levelchildrenpagesandasktheServiceWorker
+         *toalreadyfetchthemtopopulatethecache.
+         *@private
          */
-        _prefetch: function () {
-            if (!("serviceWorker" in navigator)) {
+        _prefetch:function(){
+            if(!("serviceWorker"innavigator)){
                 return;
             }
-            var assetsUrls = Array.from(document.querySelectorAll('link[rel="stylesheet"], script[src]')).map(function (el) {
-                return el.href || el.src;
+            varassetsUrls=Array.from(document.querySelectorAll('link[rel="stylesheet"],script[src]')).map(function(el){
+                returnel.href||el.src;
             });
-            navigator.serviceWorker.ready.then(function (registration) {
+            navigator.serviceWorker.ready.then(function(registration){
                 registration.active.postMessage({
-                    action: "prefetch-assets",
-                    urls: assetsUrls,
+                    action:"prefetch-assets",
+                    urls:assetsUrls,
                 });
-            }).catch(function (error) {
-                console.error("Service worker ready failed, error:", error);
+            }).catch(function(error){
+                console.error("Serviceworkerreadyfailed,error:",error);
             });
-            var currentPageUrl = window.location.href;
-            var childrenPagesUrls = Array.from(document.querySelectorAll('a[href^="' + this._getScope() + '/"]')).map(function (el) {
-                return el.href;
+            varcurrentPageUrl=window.location.href;
+            varchildrenPagesUrls=Array.from(document.querySelectorAll('a[href^="'+this._getScope()+'/"]')).map(function(el){
+                returnel.href;
             });
-            navigator.serviceWorker.ready.then(function (registration) {
+            navigator.serviceWorker.ready.then(function(registration){
                 registration.active.postMessage({
-                    action: "prefetch-pages",
-                    urls: childrenPagesUrls.concat(currentPageUrl),
+                    action:"prefetch-pages",
+                    urls:childrenPagesUrls.concat(currentPageUrl),
                 });
-            }).catch(function (error) {
-                console.error("Service worker ready failed, error:", error);
+            }).catch(function(error){
+                console.error("Serviceworkerreadyfailed,error:",error);
             });
         },
 
         /**
          *
-         * @private
+         *@private
          */
-        _registerServiceWorker: function () {
-            if (!("serviceWorker" in navigator)) {
+        _registerServiceWorker:function(){
+            if(!("serviceWorker"innavigator)){
                 return;
             }
-            var scope = this._getScope();
-            return navigator.serviceWorker
-                .register(scope + "/service-worker.js", { scope: scope })
-                .catch(function (error) {
-                    console.error("Service worker registration failed, error:", error);
+            varscope=this._getScope();
+            returnnavigator.serviceWorker
+                .register(scope+"/service-worker.js",{scope:scope})
+                .catch(function(error){
+                    console.error("Serviceworkerregistrationfailed,error:",error);
                 });
         },
 
         /**
-         * @private
+         *@private
          */
-        _showInstallBanner: function () {
-            if (!config.device.isMobile) {
+        _showInstallBanner:function(){
+            if(!config.device.isMobile){
                 return;
             }
-            var self = this;
-            this.installBanner = new PWAInstallBanner(this);
-            this.installBanner.appendTo(this.$el).then(function () {
-                // If Livechat available, It should be placed above the PWA banner.
-                var height = self.$(".o_pwa_install_banner").outerHeight(true);
-                $(".o_livechat_button").css("bottom", height + "px");
+            varself=this;
+            this.installBanner=newPWAInstallBanner(this);
+            this.installBanner.appendTo(this.$el).then(function(){
+                //IfLivechatavailable,ItshouldbeplacedabovethePWAbanner.
+                varheight=self.$(".o_pwa_install_banner").outerHeight(true);
+                $(".o_livechat_button").css("bottom",height+"px");
             });
         },
 
         //--------------------------------------------------------------------------
-        // Handlers
+        //Handlers
         //--------------------------------------------------------------------------
 
         /**
-         * @private
-         * @param ev {Event}
+         *@private
+         *@paramev{Event}
          */
-        _onPromptCloseBar: function (ev) {
+        _onPromptCloseBar:function(ev){
             ev.stopPropagation();
             this._hideInstallBanner();
         },
         /**
-         * @private
-         * @param ev {Event}
+         *@private
+         *@paramev{Event}
          */
-        _onPromptInstall: function (ev) {
+        _onPromptInstall:function(ev){
             ev.stopPropagation();
             this._hideInstallBanner();
-            deferredPrompt.then(function (prompt) {
+            deferredPrompt.then(function(prompt){
                     prompt.prompt();
-                    prompt.userChoice.then(function (choiceResult) {
-                        if (choiceResult.outcome === "accepted") {
-                            console.log("User accepted the install prompt");
-                        } else {
-                            console.log("User dismissed the install prompt");
+                    prompt.userChoice.then(function(choiceResult){
+                        if(choiceResult.outcome==="accepted"){
+                            console.log("Useracceptedtheinstallprompt");
+                        }else{
+                            console.log("Userdismissedtheinstallprompt");
                         }
                     });
                 })
-                .catch(function () {
-                    console.log("ServiceWorker not supported");
+                .catch(function(){
+                    console.log("ServiceWorkernotsupported");
                 });
         },
     });
 
-    return {
-        PWAInstallBanner: PWAInstallBanner,
-        WebsiteEventPWAWidget: publicWidget.registry.WebsiteEventPWAWidget,
+    return{
+        PWAInstallBanner:PWAInstallBanner,
+        WebsiteEventPWAWidget:publicWidget.registry.WebsiteEventPWAWidget,
     };
 });

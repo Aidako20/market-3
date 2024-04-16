@@ -1,26 +1,26 @@
-flectra.define('web.test_utils_modal', function (require) {
-    "use strict";
+flectra.define('web.test_utils_modal',function(require){
+    "usestrict";
 
     /**
-     * Modal Test Utils
+     *ModalTestUtils
      *
-     * This module defines various utility functions to help test pivot views.
+     *Thismoduledefinesvariousutilityfunctionstohelptestpivotviews.
      *
-     * Note that all methods defined in this module are exported in the main
-     * testUtils file.
+     *Notethatallmethodsdefinedinthismoduleareexportedinthemain
+     *testUtilsfile.
      */
 
-    const { _t } = require('web.core');
-    const testUtilsDom = require('web.test_utils_dom');
+    const{_t}=require('web.core');
+    consttestUtilsDom=require('web.test_utils_dom');
 
     /**
-     * Click on a button in the footer of a modal (which contains a given string).
+     *Clickonabuttoninthefooterofamodal(whichcontainsagivenstring).
      *
-     * @param {string} text (in english: this method will perform the translation)
+     *@param{string}text(inenglish:thismethodwillperformthetranslation)
      */
-    function clickButton(text) {
-        return testUtilsDom.click($(`.modal-footer button:contains(${_t(text)})`));
+    functionclickButton(text){
+        returntestUtilsDom.click($(`.modal-footerbutton:contains(${_t(text)})`));
     }
 
-    return { clickButton };
+    return{clickButton};
 });

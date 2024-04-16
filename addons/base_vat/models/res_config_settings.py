@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+classResConfigSettings(models.TransientModel):
+    _inherit='res.config.settings'
 
-    vat_check_vies = fields.Boolean(related='company_id.vat_check_vies', readonly=False,
-        string='Verify VAT Numbers')
+    vat_check_vies=fields.Boolean(related='company_id.vat_check_vies',readonly=False,
+        string='VerifyVATNumbers')

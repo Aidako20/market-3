@@ -1,48 +1,48 @@
-flectra.define('website_livechat.editor', function (require) {
-'use strict';
+flectra.define('website_livechat.editor',function(require){
+'usestrict';
 
-var core = require('web.core');
-var wUtils = require('website.utils');
-var WebsiteNewMenu = require('website.newMenu');
+varcore=require('web.core');
+varwUtils=require('website.utils');
+varWebsiteNewMenu=require('website.newMenu');
 
-var _t = core._t;
+var_t=core._t;
 
 WebsiteNewMenu.include({
-    actions: _.extend({}, WebsiteNewMenu.prototype.actions || {}, {
-        new_channel: '_createNewChannel',
+    actions:_.extend({},WebsiteNewMenu.prototype.actions||{},{
+        new_channel:'_createNewChannel',
     }),
 
     //--------------------------------------------------------------------------
-    // Actions
+    //Actions
     //--------------------------------------------------------------------------
 
     /**
-     * Asks the user information about a new channel to create, then creates it
-     * and redirects the user to this new channel.
+     *Askstheuserinformationaboutanewchanneltocreate,thencreatesit
+     *andredirectstheusertothisnewchannel.
      *
-     * @private
-     * @returns {Promise} Unresolved if there is a redirection
+     *@private
+     *@returns{Promise}Unresolvedifthereisaredirection
      */
-    _createNewChannel: function () {
-        var self = this;
-        return wUtils.prompt({
-            window_title: _t("New Channel"),
-            input: _t("Name"),
-        }).then(function (result) {
-            var name = result.val;
-            if (!name) {
+    _createNewChannel:function(){
+        varself=this;
+        returnwUtils.prompt({
+            window_title:_t("NewChannel"),
+            input:_t("Name"),
+        }).then(function(result){
+            varname=result.val;
+            if(!name){
                 return;
             }
-            return self._rpc({
-                model: 'im_livechat.channel',
-                method: 'create_and_get_website_url',
-                args: [[]],
-                kwargs: {
-                    name: name,
+            returnself._rpc({
+                model:'im_livechat.channel',
+                method:'create_and_get_website_url',
+                args:[[]],
+                kwargs:{
+                    name:name,
                 },
-            }).then(function (url) {
-                window.location.href = url;
-                return new Promise(function () {});
+            }).then(function(url){
+                window.location.href=url;
+                returnnewPromise(function(){});
             });
         });
     },

@@ -1,157 +1,157 @@
-flectra.define('pos_restaurant.tour.FloorScreenTourMethods', function (require) {
-    'use strict';
+flectra.define('pos_restaurant.tour.FloorScreenTourMethods',function(require){
+    'usestrict';
 
-    const { createTourMethods } = require('point_of_sale.tour.utils');
+    const{createTourMethods}=require('point_of_sale.tour.utils');
 
-    class Do {
-        clickTable(name) {
-            return [
+    classDo{
+        clickTable(name){
+            return[
                 {
-                    content: `click table '${name}'`,
-                    trigger: `.floor-map .table .label:contains("${name}")`,
+                    content:`clicktable'${name}'`,
+                    trigger:`.floor-map.table.label:contains("${name}")`,
                 },
             ];
         }
-        clickFloor(name) {
-            return [
+        clickFloor(name){
+            return[
                 {
-                    content: `click '${name}' floor`,
-                    trigger: `.floor-selector .button-floor:contains("${name}")`,
+                    content:`click'${name}'floor`,
+                    trigger:`.floor-selector.button-floor:contains("${name}")`,
                 },
             ];
         }
-        clickEdit() {
-            return [
+        clickEdit(){
+            return[
                 {
-                    content: `click edit button`,
-                    trigger: `.floor-map .edit-button`,
+                    content:`clickeditbutton`,
+                    trigger:`.floor-map.edit-button`,
                 },
             ];
         }
-        clickAddTable() {
-            return [
+        clickAddTable(){
+            return[
                 {
-                    content: 'add table',
-                    trigger: `.floor-map .edit-button i[aria-label=Add]`,
+                    content:'addtable',
+                    trigger:`.floor-map.edit-buttoni[aria-label=Add]`,
                 },
             ];
         }
-        clickDuplicate() {
-            return [
+        clickDuplicate(){
+            return[
                 {
-                    content: 'duplicate table',
-                    trigger: `.floor-map .edit-button i[aria-label=Duplicate]`,
+                    content:'duplicatetable',
+                    trigger:`.floor-map.edit-buttoni[aria-label=Duplicate]`,
                 },
             ];
         }
-        clickRename() {
-            return [
+        clickRename(){
+            return[
                 {
-                    content: 'rename table',
-                    trigger: `.floor-map .edit-button i[aria-label=Rename]`,
+                    content:'renametable',
+                    trigger:`.floor-map.edit-buttoni[aria-label=Rename]`,
                 },
             ];
         }
-        clickSeats() {
-            return [
+        clickSeats(){
+            return[
                 {
-                    content: 'change number of seats',
-                    trigger: `.floor-map .edit-button i[aria-label=Seats]`,
+                    content:'changenumberofseats',
+                    trigger:`.floor-map.edit-buttoni[aria-label=Seats]`,
                 },
             ];
         }
-        clickTrash() {
-            return [
+        clickTrash(){
+            return[
                 {
-                    content: 'trash table',
-                    trigger: `.floor-map .edit-button.trash`,
+                    content:'trashtable',
+                    trigger:`.floor-map.edit-button.trash`,
                 },
             ];
         }
-        changeShapeTo(shape) {
-            return [
+        changeShapeTo(shape){
+            return[
                 {
-                    content: `change shape to '${shape}'`,
-                    trigger: `.edit-button .button-option${shape === 'round' ? '.square' : '.round'}`,
+                    content:`changeshapeto'${shape}'`,
+                    trigger:`.edit-button.button-option${shape==='round'?'.square':'.round'}`,
                 },
             ];
         }
     }
 
-    class Check {
-        selectedFloorIs(name) {
-            return [
+    classCheck{
+        selectedFloorIs(name){
+            return[
                 {
-                    content: `selected floor is '${name}'`,
-                    trigger: `.floor-selector .button-floor.active:contains("${name}")`,
-                    run: () => {},
+                    content:`selectedflooris'${name}'`,
+                    trigger:`.floor-selector.button-floor.active:contains("${name}")`,
+                    run:()=>{},
                 },
             ];
         }
-        selectedTableIs(name) {
-            return [
+        selectedTableIs(name){
+            return[
                 {
-                    content: `selected table is '${name}'`,
-                    trigger: `.floor-map .table.selected .label:contains("${name}")`,
-                    run: () => {},
+                    content:`selectedtableis'${name}'`,
+                    trigger:`.floor-map.table.selected.label:contains("${name}")`,
+                    run:()=>{},
                 },
             ];
         }
-        hasTable(name) {
-            return [
+        hasTable(name){
+            return[
                 {
-                    content: `selected floor has '${name}' table`,
-                    trigger: `.floor-map .tables .table .label:contains("${name}")`,
-                    run: () => {},
+                    content:`selectedfloorhas'${name}'table`,
+                    trigger:`.floor-map.tables.table.label:contains("${name}")`,
+                    run:()=>{},
                 },
             ];
         }
-        editModeIsActive(flag) {
-            return [
+        editModeIsActive(flag){
+            return[
                 {
-                    content: `check if edit mode is ${flag ? 'active' : 'inactive'}`,
-                    trigger: `.floor-map .edit-button${flag ? '.active' : ':not(:has(.active))'}`,
-                    run: () => {},
+                    content:`checkifeditmodeis${flag?'active':'inactive'}`,
+                    trigger:`.floor-map.edit-button${flag?'.active':':not(:has(.active))'}`,
+                    run:()=>{},
                 },
             ];
         }
-        tableSeatIs(table, val) {
-            return [
+        tableSeatIs(table,val){
+            return[
                 {
-                    content: `number of seats in table '${table}' is '${val}'`,
-                    trigger: `.floor-map .tables .table .label:contains("${table}") ~ .table-seats:contains("${val}")`,
-                    run: function () {},
+                    content:`numberofseatsintable'${table}'is'${val}'`,
+                    trigger:`.floor-map.tables.table.label:contains("${table}")~.table-seats:contains("${val}")`,
+                    run:function(){},
                 },
             ];
         }
-        orderCountSyncedInTableIs(table, count) {
-            return [
+        orderCountSyncedInTableIs(table,count){
+            return[
                 {
-                    trigger: `.floor-map .table .order-count:contains("${count}") ~ .label:contains("${table}")`,
-                    run: function () {},
+                    trigger:`.floor-map.table.order-count:contains("${count}")~.label:contains("${table}")`,
+                    run:function(){},
                 },
             ];
         }
-        isShown() {
-            return [
+        isShown(){
+            return[
                 {
-                    trigger: '.floor-map',
-                    run: function () {},
+                    trigger:'.floor-map',
+                    run:function(){},
                 },
             ];
         }
-        tableIsNotSelected(name) {
-            return [
+        tableIsNotSelected(name){
+            return[
                 {
-                    content: `table '${name}' is not selected`,
-                    trigger: `.floor-map .table:not(.selected) .label:contains("${name}")`,
-                    run: function () {},
+                    content:`table'${name}'isnotselected`,
+                    trigger:`.floor-map.table:not(.selected).label:contains("${name}")`,
+                    run:function(){},
                 },
             ];
         }
     }
 
-    class Execute {}
+    classExecute{}
 
-    return createTourMethods('FloorScreen', Do, Check, Execute);
+    returncreateTourMethods('FloorScreen',Do,Check,Execute);
 });

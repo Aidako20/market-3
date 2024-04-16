@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="OrderImportPopup" owl="1">
-        <div role="dialog" class="modal-dialog">
+    <tt-name="OrderImportPopup"owl="1">
+        <divrole="dialog"class="modal-dialog">
             <Draggable>
-                <div class="popup popup-import">
-                    <header class="title drag-handle">
-                        <span>Finished Importing Orders</span>
+                <divclass="popuppopup-import">
+                    <headerclass="titledrag-handle">
+                        <span>FinishedImportingOrders</span>
                     </header>
-                    <ul class="body">
-                        <li>Successfully imported <b><t t-esc="props.report.paid or 0" /></b> paid orders</li>
-                        <li>Successfully imported <b><t t-esc="props.report.unpaid or 0" /></b> unpaid orders</li>
-                        <t t-if="unpaidSkipped">
-                            <li><b><t t-esc="unpaidSkipped"/></b> unpaid orders could not be imported
+                    <ulclass="body">
+                        <li>Successfullyimported<b><tt-esc="props.report.paidor0"/></b>paidorders</li>
+                        <li>Successfullyimported<b><tt-esc="props.report.unpaidor0"/></b>unpaidorders</li>
+                        <tt-if="unpaidSkipped">
+                            <li><b><tt-esc="unpaidSkipped"/></b>unpaidorderscouldnotbeimported
                                 <ul>
-                                    <li><b><t t-esc="props.report.unpaid_skipped_existing or 0" /></b> were duplicates of existing orders</li>
-                                    <li><b><t t-esc="props.report.unpaid_skipped_session or 0" /></b> belong to another session:
-                                        <t t-if="props.report.unpaid_skipped_sessions">
+                                    <li><b><tt-esc="props.report.unpaid_skipped_existingor0"/></b>wereduplicatesofexistingorders</li>
+                                    <li><b><tt-esc="props.report.unpaid_skipped_sessionor0"/></b>belongtoanothersession:
+                                        <tt-if="props.report.unpaid_skipped_sessions">
                                             <ul>
-                                                <li>Session ids: <b><t t-esc="props.report.unpaid_skipped_sessions" /></b></li>
+                                                <li>Sessionids:<b><tt-esc="props.report.unpaid_skipped_sessions"/></b></li>
                                             </ul>
                                         </t>
                                     </li>
@@ -26,9 +26,9 @@
                             </li>
                         </t>
                     </ul>
-                    <footer class="footer">
-                        <div class="button cancel" t-on-click="cancel">
-                            <t t-esc="props.confirmText" />
+                    <footerclass="footer">
+                        <divclass="buttoncancel"t-on-click="cancel">
+                            <tt-esc="props.confirmText"/>
                         </div>
                     </footer>
                 </div>

@@ -1,101 +1,101 @@
-flectra.define("web.commonEnv", function (require) {
-    "use strict";
+flectra.define("web.commonEnv",function(require){
+    "usestrict";
 
     /**
-     * This file defines the common environment, which contains everything that
-     * is needed in the env for both the backend and the frontend (Flectra
-     * terminology). This module shouldn't be used as is. It should only be
-     * imported by the module defining the final env to use (in the frontend or
-     * in the backend). For instance, module 'web.env' imports it, adds stuff to
-     * it, and exports the final env that is used by the whole webclient
-     * application.
+     *Thisfiledefinesthecommonenvironment,whichcontainseverythingthat
+     *isneededintheenvforboththebackendandthefrontend(Flectra
+     *terminology).Thismoduleshouldn'tbeusedasis.Itshouldonlybe
+     *importedbythemoduledefiningthefinalenvtouse(inthefrontendor
+     *inthebackend).Forinstance,module'web.env'importsit,addsstuffto
+     *it,andexportsthefinalenvthatisusedbythewholewebclient
+     *application.
      *
-     * There should be as much dependencies as possible in the env object. This
-     * will allow an easier testing of components. See [1] for more information
-     * on environments.
+     *Thereshouldbeasmuchdependenciesaspossibleintheenvobject.This
+     *willallowaneasiertestingofcomponents.See[1]formoreinformation
+     *onenvironments.
      *
-     * [1] https://github.com/flectra/owl/blob/master/doc/reference/environment.md#content-of-an-environment
+     *[1]https://github.com/flectra/owl/blob/master/doc/reference/environment.md#content-of-an-environment
      */
 
-    const { jsonRpc } = require("web.ajax");
-    const { device, isDebug } = require("web.config");
-    const { bus } = require("web.core");
-    const rpc = require("web.rpc");
-    const session = require("web.session");
-    const { _t } = require("web.translation");
-    const utils = require("web.utils");
+    const{jsonRpc}=require("web.ajax");
+    const{device,isDebug}=require("web.config");
+    const{bus}=require("web.core");
+    constrpc=require("web.rpc");
+    constsession=require("web.session");
+    const{_t}=require("web.translation");
+    constutils=require("web.utils");
 
-    const browser = {
-        clearInterval: window.clearInterval.bind(window),
-        clearTimeout: window.clearTimeout.bind(window),
-        Date: window.Date,
-        fetch: (window.fetch || (() => { })).bind(window),
-        Notification: window.Notification,
-        requestAnimationFrame: window.requestAnimationFrame.bind(window),
-        setInterval: window.setInterval.bind(window),
-        setTimeout: window.setTimeout.bind(window),
+    constbrowser={
+        clearInterval:window.clearInterval.bind(window),
+        clearTimeout:window.clearTimeout.bind(window),
+        Date:window.Date,
+        fetch:(window.fetch||(()=>{})).bind(window),
+        Notification:window.Notification,
+        requestAnimationFrame:window.requestAnimationFrame.bind(window),
+        setInterval:window.setInterval.bind(window),
+        setTimeout:window.setTimeout.bind(window),
     };
-    Object.defineProperty(browser, 'innerHeight', {
-        get: () => window.innerHeight,
+    Object.defineProperty(browser,'innerHeight',{
+        get:()=>window.innerHeight,
     });
-    Object.defineProperty(browser, 'innerWidth', {
-        get: () => window.innerWidth,
+    Object.defineProperty(browser,'innerWidth',{
+        get:()=>window.innerWidth,
     });
 
-    // Build the basic env
-    const env = {
+    //Buildthebasicenv
+    constenv={
         _t,
         browser,
         bus,
         device,
         isDebug,
-        qweb: new owl.QWeb({ translateFn: _t }),
-        services: {
-            ajaxJsonRPC() {
-                return jsonRpc(...arguments);
+        qweb:newowl.QWeb({translateFn:_t}),
+        services:{
+            ajaxJsonRPC(){
+                returnjsonRpc(...arguments);
             },
-            getCookie() {
-                return utils.get_cookie(...arguments);
+            getCookie(){
+                returnutils.get_cookie(...arguments);
             },
-            httpRequest(route, params = {}, readMethod = 'json') {
-                const info = {
-                    method: params.method || 'POST',
+            httpRequest(route,params={},readMethod='json'){
+                constinfo={
+                    method:params.method||'POST',
                 };
-                if (params.method !== 'GET') {
-                    const formData = new FormData();
-                    for (const key in params) {
-                        if (key === 'method') {
+                if(params.method!=='GET'){
+                    constformData=newFormData();
+                    for(constkeyinparams){
+                        if(key==='method'){
                             continue;
                         }
-                        const value = params[key];
-                        if (Array.isArray(value) && value.length) {
-                            for (const val of value) {
-                                formData.append(key, val);
+                        constvalue=params[key];
+                        if(Array.isArray(value)&&value.length){
+                            for(constvalofvalue){
+                                formData.append(key,val);
                             }
-                        } else {
-                            formData.append(key, value);
+                        }else{
+                            formData.append(key,value);
                         }
                     }
-                    info.body = formData;
+                    info.body=formData;
                 }
-                return fetch(route, info).then(response => response[readMethod]());
+                returnfetch(route,info).then(response=>response[readMethod]());
             },
-            navigate(url, params) {
-                window.location = $.param.querystring(url, params);
+            navigate(url,params){
+                window.location=$.param.querystring(url,params);
             },
-            reloadPage() {
+            reloadPage(){
                 window.location.reload();
             },
-            rpc(params, options) {
-                const query = rpc.buildQuery(params);
-                return session.rpc(query.route, query.params, options);
+            rpc(params,options){
+                constquery=rpc.buildQuery(params);
+                returnsession.rpc(query.route,query.params,options);
             },
-            setCookie() {
+            setCookie(){
                 utils.set_cookie(...arguments);
             },
         },
         session,
     };
 
-    return env;
+    returnenv;
 });

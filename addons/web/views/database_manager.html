@@ -1,417 +1,417 @@
-<!DOCTYPE html>
+<!DOCTYPEhtml>
 <html>
     <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <metahttp-equiv="content-type"content="text/html;charset=utf-8">
         <title>Flectra</title>
-        <link rel="shortcut icon" href="/web/static/src/img/favicon.ico" type="image/x-icon">
+        <linkrel="shortcuticon"href="/web/static/src/img/favicon.ico"type="image/x-icon">
 
-        <link rel="stylesheet" href="/web/static/lib/fontawesome/css/font-awesome.css">
-        <link rel="stylesheet" href="/web/static/lib/bootstrap/css/bootstrap.css">
+        <linkrel="stylesheet"href="/web/static/lib/fontawesome/css/font-awesome.css">
+        <linkrel="stylesheet"href="/web/static/lib/bootstrap/css/bootstrap.css">
 
-        <script src="/web/static/lib/jquery/jquery.js" type="text/javascript"></script>
+        <scriptsrc="/web/static/lib/jquery/jquery.js"type="text/javascript"></script>
 
-        <script type="text/javascript" src="/web/static/lib/popper/popper.js"></script>
+        <scripttype="text/javascript"src="/web/static/lib/popper/popper.js"></script>
 
-        <script type="text/javascript" src="/web/static/lib/bootstrap/js/index.js"></script>
-        <script type="text/javascript" src="/web/static/lib/bootstrap/js/util.js"></script>
-        <script type="text/javascript" src="/web/static/lib/bootstrap/js/alert.js"></script>
-        <script type="text/javascript" src="/web/static/lib/bootstrap/js/button.js"></script>
-        <script type="text/javascript" src="/web/static/lib/bootstrap/js/carousel.js"></script>
-        <script type="text/javascript" src="/web/static/lib/bootstrap/js/collapse.js"></script>
-        <script type="text/javascript" src="/web/static/lib/bootstrap/js/dropdown.js"></script>
-        <script type="text/javascript" src="/web/static/lib/bootstrap/js/modal.js"></script>
-        <script type="text/javascript" src="/web/static/lib/bootstrap/js/tooltip.js"></script>
-        <script type="text/javascript" src="/web/static/lib/bootstrap/js/popover.js"></script>
-        <script type="text/javascript" src="/web/static/lib/bootstrap/js/scrollspy.js"></script>
-        <script type="text/javascript" src="/web/static/lib/bootstrap/js/tab.js"></script>
+        <scripttype="text/javascript"src="/web/static/lib/bootstrap/js/index.js"></script>
+        <scripttype="text/javascript"src="/web/static/lib/bootstrap/js/util.js"></script>
+        <scripttype="text/javascript"src="/web/static/lib/bootstrap/js/alert.js"></script>
+        <scripttype="text/javascript"src="/web/static/lib/bootstrap/js/button.js"></script>
+        <scripttype="text/javascript"src="/web/static/lib/bootstrap/js/carousel.js"></script>
+        <scripttype="text/javascript"src="/web/static/lib/bootstrap/js/collapse.js"></script>
+        <scripttype="text/javascript"src="/web/static/lib/bootstrap/js/dropdown.js"></script>
+        <scripttype="text/javascript"src="/web/static/lib/bootstrap/js/modal.js"></script>
+        <scripttype="text/javascript"src="/web/static/lib/bootstrap/js/tooltip.js"></script>
+        <scripttype="text/javascript"src="/web/static/lib/bootstrap/js/popover.js"></script>
+        <scripttype="text/javascript"src="/web/static/lib/bootstrap/js/scrollspy.js"></script>
+        <scripttype="text/javascript"src="/web/static/lib/bootstrap/js/tab.js"></script>
 
-        <script type="text/javascript">
-            $(function() {
-                // Little eye
-                $('body').on('mousedown', '.o_little_eye', function (ev) {
+        <scripttype="text/javascript">
+            $(function(){
+                //Littleeye
+                $('body').on('mousedown','.o_little_eye',function(ev){
                     $(ev.target).closest('.input-group').find('.form-control').prop("type",
-                        (i, old) => { return old === "text" ? "password" : "text"; }
+                        (i,old)=>{returnold==="text"?"password":"text";}
                     );
                 });
-                // db modal
-                $('body').on('click', '.o_database_action', function (ev) {
+                //dbmodal
+                $('body').on('click','.o_database_action',function(ev){
                     ev.preventDefault();
-                    var db = $(ev.currentTarget).data('db');
-                    var target = $(ev.currentTarget).data('target');
+                    vardb=$(ev.currentTarget).data('db');
+                    vartarget=$(ev.currentTarget).data('target');
                     $(target).find('input[name=name]').val(db);
                     $(target).modal();
                 });
-                // close modal on submit
-                $('.modal').on('submit', 'form', function (ev) {
-                    var form = $(this).closest('form')[0];
-                    if (form && form.checkValidity && !form.checkValidity()) {
+                //closemodalonsubmit
+                $('.modal').on('submit','form',function(ev){
+                    varform=$(this).closest('form')[0];
+                    if(form&&form.checkValidity&&!form.checkValidity()){
                         return;
                     }
-                    var modal = $(this).parentsUntil('body', '.modal');
-                    if (modal.hasClass('o_database_backup')) {
+                    varmodal=$(this).parentsUntil('body','.modal');
+                    if(modal.hasClass('o_database_backup')){
                         $(modal).modal('hide');
-                        if (!$('.alert-backup-long').length) {
-                            $('.list-group').before("<div class='alert alert-info alert-backup-long'>The backup may take some time before being ready</div>");
+                        if(!$('.alert-backup-long').length){
+                            $('.list-group').before("<divclass='alertalert-infoalert-backup-long'>Thebackupmaytakesometimebeforebeingready</div>");
                         }
                     }
                 });
 
-                // generate a random master password
-                // removed l1O0 to avoid confusions
-                var charset = "abcdefghijkmnpqrstuvwxyz23456789";
-                var password = "";
-                for (var i = 0, n = charset.length; i < 12; ++i) {
-                    password += charset.charAt(Math.floor(Math.random() * n));
-                    if (i === 3 || i === 7) {
-                        password += "-";
+                //generatearandommasterpassword
+                //removedl1O0toavoidconfusions
+                varcharset="abcdefghijkmnpqrstuvwxyz23456789";
+                varpassword="";
+                for(vari=0,n=charset.length;i<12;++i){
+                    password+=charset.charAt(Math.floor(Math.random()*n));
+                    if(i===3||i===7){
+                        password+="-";
                     }
                 }
-                var master_pwds = document.getElementsByClassName("generated_master_pwd");
-                for (var i=0, len=master_pwds.length|0; i<len; i=i+1|0) {
-                    master_pwds[i].innerText = password;
+                varmaster_pwds=document.getElementsByClassName("generated_master_pwd");
+                for(vari=0,len=master_pwds.length|0;i<len;i=i+1|0){
+                    master_pwds[i].innerText=password;
                 }
-                var master_pwd_inputs = document.getElementsByClassName("generated_master_pwd_input");
-                for (var i=0, len=master_pwd_inputs.length|0; i<len; i=i+1|0) {
-                    master_pwd_inputs[i].value = password;
-                    master_pwd_inputs[i].setAttribute('autocomplete', 'new-password');
+                varmaster_pwd_inputs=document.getElementsByClassName("generated_master_pwd_input");
+                for(vari=0,len=master_pwd_inputs.length|0;i<len;i=i+1|0){
+                    master_pwd_inputs[i].value=password;
+                    master_pwd_inputs[i].setAttribute('autocomplete','new-password');
                 }
             });
         </script>
     </head>
 
-    {% macro master_input(set_master_pwd=False) -%}
+    {%macromaster_input(set_master_pwd=False)-%}
 
-        {% set input_class = "form-control" %}
-        {% if insecure %}
-            {% if set_master_pwd %}
-                <input type="hidden" name="master_pwd" class="form-control" value="admin"/>
-            {% else %}
-                <div class="alert alert-warning">
-                    <p>Warning, your Flectra database manager is not protected. To secure it, we have generated the following master password for it:</p>
-                    <p style="text-align: center;"><strong class="generated_master_pwd"></strong></p>
-                    <p>You can change it below but be sure to remember it, it will be asked for future operations on databases.</p>
+        {%setinput_class="form-control"%}
+        {%ifinsecure%}
+            {%ifset_master_pwd%}
+                <inputtype="hidden"name="master_pwd"class="form-control"value="admin"/>
+            {%else%}
+                <divclass="alertalert-warning">
+                    <p>Warning,yourFlectradatabasemanagerisnotprotected.Tosecureit,wehavegeneratedthefollowingmasterpasswordforit:</p>
+                    <pstyle="text-align:center;"><strongclass="generated_master_pwd"></strong></p>
+                    <p>Youcanchangeitbelowbutbesuretorememberit,itwillbeaskedforfutureoperationsondatabases.</p>
                 </div>
-                {% set input_class = "form-control generated_master_pwd_input" %}
-            {% endif %}
-        {% endif %}
-        {% if not insecure or not set_master_pwd %}
-            <div class="form-group row">
-                <label for="master_pwd" class="col-md-4 col-form-label">Master Password</label>
-                <div class="col-md-8 input-group">
-                    <input name="master_pwd"
-                        class="{{ input_class}}"
+                {%setinput_class="form-controlgenerated_master_pwd_input"%}
+            {%endif%}
+        {%endif%}
+        {%ifnotinsecureornotset_master_pwd%}
+            <divclass="form-grouprow">
+                <labelfor="master_pwd"class="col-md-4col-form-label">MasterPassword</label>
+                <divclass="col-md-8input-group">
+                    <inputname="master_pwd"
+                        class="{{input_class}}"
                         required="required"
                         autofocus="autofocus"
                         type="password"
-                        autocomplete="current-password" />
-                    <div class="input-group-append">
-                        <span class="fa fa-eye o_little_eye input-group-text" aria-hidden="true" style="cursor: pointer;"></span>
+                        autocomplete="current-password"/>
+                    <divclass="input-group-append">
+                        <spanclass="fafa-eyeo_little_eyeinput-group-text"aria-hidden="true"style="cursor:pointer;"></span>
                     </div>
                 </div>
             </div>
-        {% endif %}
-    {%- endmacro %}
+        {%endif%}
+    {%-endmacro%}
 
-    {% macro create_form() -%}
-        {{ master_input() }}
-        <div class="form-group row">
-            <label for="name" class="col-md-4 col-form-label">Database Name</label>
-            <div class="col-md-8">
-                <input id="dbname" type="text" name="name" class="form-control" required="required" autocomplete="off" pattern="{{ pattern }}" title="Only alphanumerical characters, underscore, hyphen and dot are allowed"/>
+    {%macrocreate_form()-%}
+        {{master_input()}}
+        <divclass="form-grouprow">
+            <labelfor="name"class="col-md-4col-form-label">DatabaseName</label>
+            <divclass="col-md-8">
+                <inputid="dbname"type="text"name="name"class="form-control"required="required"autocomplete="off"pattern="{{pattern}}"title="Onlyalphanumericalcharacters,underscore,hyphenanddotareallowed"/>
             </div>
         </div>
-        <div class="form-group row">
-            <label for="login" class="col-md-4 col-form-label">Email</label>
-            <div class="col-md-8">
-                <input id="login" type="text" name="login" class="form-control" required="required" autocomplete="off"/>
+        <divclass="form-grouprow">
+            <labelfor="login"class="col-md-4col-form-label">Email</label>
+            <divclass="col-md-8">
+                <inputid="login"type="text"name="login"class="form-control"required="required"autocomplete="off"/>
             </div>
         </div>
-        <div class="form-group row">
-            <label for="password" class="col-md-4 col-form-label">Password</label>
-            <div class="col-md-8 input-group">
-                <input id="password" type="password" name="password" class="form-control" required="required" autocomplete="off"/>
-                <div class="input-group-append">
-                    <span class="fa fa-eye o_little_eye input-group-text" aria-hidden="true" style="cursor: pointer;"></span>
+        <divclass="form-grouprow">
+            <labelfor="password"class="col-md-4col-form-label">Password</label>
+            <divclass="col-md-8input-group">
+                <inputid="password"type="password"name="password"class="form-control"required="required"autocomplete="off"/>
+                <divclass="input-group-append">
+                    <spanclass="fafa-eyeo_little_eyeinput-group-text"aria-hidden="true"style="cursor:pointer;"></span>
                 </div>
             </div>
         </div>
-        <div class="form-group row">
-            <label for="phone" class="col-md-4 col-form-label">Phone number</label>
-            <div class="col-md-8 input-group">
-                <input id="phone" type="tel" name="phone" class="form-control" autocomplete="off"/>
+        <divclass="form-grouprow">
+            <labelfor="phone"class="col-md-4col-form-label">Phonenumber</label>
+            <divclass="col-md-8input-group">
+                <inputid="phone"type="tel"name="phone"class="form-control"autocomplete="off"/>
             </div>
         </div>
-        <div class="form-group row">
-            <label for="lang" class="col-md-4 col-form-label">Language</label>
-            <div class="col-md-8">
-                <select id="lang" name="lang" class="form-control" required="required" autocomplete="off">
-                    {% for lang in langs %}
-                        <option {% if lang[0] == "en_US" %}selected="selected" {% endif %}value="{{ lang[0] }}">{{ lang[1] }}</option>
-                    {% endfor %}
+        <divclass="form-grouprow">
+            <labelfor="lang"class="col-md-4col-form-label">Language</label>
+            <divclass="col-md-8">
+                <selectid="lang"name="lang"class="form-control"required="required"autocomplete="off">
+                    {%forlanginlangs%}
+                        <option{%iflang[0]=="en_US"%}selected="selected"{%endif%}value="{{lang[0]}}">{{lang[1]}}</option>
+                    {%endfor%}
                 </select>
             </div>
         </div>
-        <div class="form-group row">
-            <label for="country" class="col-md-4 col-form-label ">Country</label>
-            <div class="col-md-8">
-                <select id="country" name="country_code" class="form-control" autocomplete="off">
-                    <option value=""></option>
-                    {% for country in countries %}
-                        <option value="{{ country[0] }}">{{ country[1] }}</option>
-                    {% endfor %}
+        <divclass="form-grouprow">
+            <labelfor="country"class="col-md-4col-form-label">Country</label>
+            <divclass="col-md-8">
+                <selectid="country"name="country_code"class="form-control"autocomplete="off">
+                    <optionvalue=""></option>
+                    {%forcountryincountries%}
+                        <optionvalue="{{country[0]}}">{{country[1]}}</option>
+                    {%endfor%}
                 </select>
             </div>
         </div>
-        <div class="form-group row">
-            <label for="load_demo_checkbox" class="col-md-4 col-form-label">Demo data</label>
-            <div class="col-md-8">
-                <input type="checkbox" id="load_demo_checkbox" class="form-control-sm" name="demo" value="1">
+        <divclass="form-grouprow">
+            <labelfor="load_demo_checkbox"class="col-md-4col-form-label">Demodata</label>
+            <divclass="col-md-8">
+                <inputtype="checkbox"id="load_demo_checkbox"class="form-control-sm"name="demo"value="1">
             </div>
         </div>
-    {%- endmacro %}
+    {%-endmacro%}
 
     <body>
-        <div class="container">
-            <!-- Database List -->
-            <div class="row">
-                <div class="col-lg-6 offset-lg-3 o_database_list">
-                    <img src="/web/static/src/img/logo2.png" class="img-fluid d-block mx-auto"/>
-                    {% if not list_db %}
-                        <div class="alert alert-danger text-center">The database manager has been disabled by the administrator</div>
-                    {% elif insecure and databases %}
-                        <div class="alert alert-warning">
-                            Warning, your Flectra database manager is not protected.<br/>
-                            Please <a href="#" data-toggle="modal" data-target=".o_database_master">set a master password</a> to secure it.
+        <divclass="container">
+            <!--DatabaseList-->
+            <divclass="row">
+                <divclass="col-lg-6offset-lg-3o_database_list">
+                    <imgsrc="/web/static/src/img/logo2.png"class="img-fluidd-blockmx-auto"/>
+                    {%ifnotlist_db%}
+                        <divclass="alertalert-dangertext-center">Thedatabasemanagerhasbeendisabledbytheadministrator</div>
+                    {%elifinsecureanddatabases%}
+                        <divclass="alertalert-warning">
+                            Warning,yourFlectradatabasemanagerisnotprotected.<br/>
+                            Please<ahref="#"data-toggle="modal"data-target=".o_database_master">setamasterpassword</a>tosecureit.
                         </div>
-                    {% endif %}
-                    {% if error %}
-                        <div class="alert alert-danger">{{ error }}</div>
-                    {% endif %}
-                    {% if list_db and databases %}
-                        <div class="list-group">
-                            {% for db in databases %}
-                                <div class="list-group-item d-flex align-items-center">
-                                    <a href="/web?db={{ db }}" class="d-block flex-grow-1">
-                                        {% if db in incompatible_databases %}
-                                            <i class="icon fa fa-warning float-right text-warning" title="This database may not be compatible"></i>
-                                        {% endif %}
-                                        {{ db }}
+                    {%endif%}
+                    {%iferror%}
+                        <divclass="alertalert-danger">{{error}}</div>
+                    {%endif%}
+                    {%iflist_dbanddatabases%}
+                        <divclass="list-group">
+                            {%fordbindatabases%}
+                                <divclass="list-group-itemd-flexalign-items-center">
+                                    <ahref="/web?db={{db}}"class="d-blockflex-grow-1">
+                                        {%ifdbinincompatible_databases%}
+                                            <iclass="iconfafa-warningfloat-righttext-warning"title="Thisdatabasemaynotbecompatible"></i>
+                                        {%endif%}
+                                        {{db}}
                                     </a>
-                                    {% if manage %}
-                                        <div class="btn-group btn-group-sm float-right">
-                                            <button type="button" data-db="{{ db }}" data-target=".o_database_backup" class="o_database_action btn btn-primary">
-                                                <i class="fa fa-floppy-o fa-fw"></i> Backup
+                                    {%ifmanage%}
+                                        <divclass="btn-groupbtn-group-smfloat-right">
+                                            <buttontype="button"data-db="{{db}}"data-target=".o_database_backup"class="o_database_actionbtnbtn-primary">
+                                                <iclass="fafa-floppy-ofa-fw"></i>Backup
                                             </button>
-                                            <button type="button" data-db="{{ db }}" data-target=".o_database_duplicate" class="o_database_action btn btn-secondary">
-                                                <i class="fa fa-files-o fa-fw"></i> Duplicate
+                                            <buttontype="button"data-db="{{db}}"data-target=".o_database_duplicate"class="o_database_actionbtnbtn-secondary">
+                                                <iclass="fafa-files-ofa-fw"></i>Duplicate
                                             </button>
-                                            <button type="button" data-db="{{ db }}" data-target=".o_database_delete" class="o_database_action btn btn-danger">
-                                                <i class="fa fa-trash-o fa-fw"></i> Delete
+                                            <buttontype="button"data-db="{{db}}"data-target=".o_database_delete"class="o_database_actionbtnbtn-danger">
+                                                <iclass="fafa-trash-ofa-fw"></i>Delete
                                             </button>
                                         </div>
-                                    {% endif %}
+                                    {%endif%}
                                 </div>
-                            {% endfor %}
+                            {%endfor%}
                         </div>
-                        {% if manage %}
-                            <div class="d-flex mt-2">
-                                <button type="button" data-toggle="modal" data-target=".o_database_create" class="btn btn-primary flex-grow-1">Create Database</button>
-                                <button type="button" data-toggle="modal" data-target=".o_database_restore" class="btn btn-primary flex-grow-1 ml-2">Restore Database</button>
-                                <button type="button" data-toggle="modal" data-target=".o_database_master" class="btn btn-primary flex-grow-1 ml-2">Set Master Password</button>
+                        {%ifmanage%}
+                            <divclass="d-flexmt-2">
+                                <buttontype="button"data-toggle="modal"data-target=".o_database_create"class="btnbtn-primaryflex-grow-1">CreateDatabase</button>
+                                <buttontype="button"data-toggle="modal"data-target=".o_database_restore"class="btnbtn-primaryflex-grow-1ml-2">RestoreDatabase</button>
+                                <buttontype="button"data-toggle="modal"data-target=".o_database_master"class="btnbtn-primaryflex-grow-1ml-2">SetMasterPassword</button>
                             </div>
-                        {% else %}
-                            <div class="text-center mt-2">
-                                <a href="/web/database/manager">Manage databases</a>
+                        {%else%}
+                            <divclass="text-centermt-2">
+                                <ahref="/web/database/manager">Managedatabases</a>
                             </div>
-                        {% endif %}
-                    {% elif list_db %}
-                        <form role="form" action="/web/database/create" method="post">
-                            {{ create_form() }}
-                            <input type="submit" value="Create database" class="btn btn-primary float-left"/>
+                        {%endif%}
+                    {%eliflist_db%}
+                        <formrole="form"action="/web/database/create"method="post">
+                            {{create_form()}}
+                            <inputtype="submit"value="Createdatabase"class="btnbtn-primaryfloat-left"/>
                         </form>
-                        <a role="button" data-toggle="modal" data-target=".o_database_restore" class="btn btn-link">or restore a database</a>
-                    {% endif %}
+                        <arole="button"data-toggle="modal"data-target=".o_database_restore"class="btnbtn-link">orrestoreadatabase</a>
+                    {%endif%}
                 </div>
             </div>
         </div>
 
-        <!-- Create -->
-        <div class="modal fade o_database_create" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form role="form" action="/web/database/create" method="post">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Create Database</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <!--Create-->
+        <divclass="modalfadeo_database_create"role="dialog">
+            <divclass="modal-dialog">
+                <divclass="modal-content">
+                    <formrole="form"action="/web/database/create"method="post">
+                        <divclass="modal-header">
+                            <h4class="modal-title">CreateDatabase</h4>
+                            <buttontype="button"class="close"data-dismiss="modal"aria-label="Close"><spanaria-hidden="true">&times;</span></button>
                         </div>
-                        <div class="modal-body">
-                            {{ create_form() }}
-                            <small class="text-muted">
-                                To enhance your experience, some data may be sent to Flectra online services. See our <a href="https://www.flectrahq.com/privacy" target="_blank">Privacy Policy</a>.
+                        <divclass="modal-body">
+                            {{create_form()}}
+                            <smallclass="text-muted">
+                                Toenhanceyourexperience,somedatamaybesenttoFlectraonlineservices.Seeour<ahref="https://www.flectrahq.com/privacy"target="_blank">PrivacyPolicy</a>.
                             </small>
                         </div>
-                        <div class="modal-footer">
-                            <input type="submit" value="Continue" class="btn btn-primary float-right"/>
+                        <divclass="modal-footer">
+                            <inputtype="submit"value="Continue"class="btnbtn-primaryfloat-right"/>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Restore -->
-        <div class="modal fade o_database_restore" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Restore Database</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <!--Restore-->
+        <divclass="modalfadeo_database_restore"role="dialog">
+            <divclass="modal-dialog">
+                <divclass="modal-content">
+                    <divclass="modal-header">
+                        <h4class="modal-title">RestoreDatabase</h4>
+                        <buttontype="button"class="close"data-dismiss="modal"aria-label="Close"><spanaria-hidden="true">&times;</span></button>
                     </div>
-                    <form id="form_restore_db" role="form" action="/web/database/restore" method="post" enctype="multipart/form-data">
-                        <div class="modal-body">
-                            {{ master_input() }}
-                            <div class="form-group row">
-                                <label for="backup_file" class="col-md-4 col-form-label">File</label>
-                                <div class="col-md-8">
-                                    <input id="backup_file" type="file" name="backup_file" class="required"/>
+                    <formid="form_restore_db"role="form"action="/web/database/restore"method="post"enctype="multipart/form-data">
+                        <divclass="modal-body">
+                            {{master_input()}}
+                            <divclass="form-grouprow">
+                                <labelfor="backup_file"class="col-md-4col-form-label">File</label>
+                                <divclass="col-md-8">
+                                    <inputid="backup_file"type="file"name="backup_file"class="required"/>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="name" class="col-md-4 col-form-label">Database Name</label>
-                                <div class="col-md-8">
-                                    <input id="dbname_restore" type="text" name="name" class="form-control" required="required" pattern="{{ pattern }}" title="Only alphanumerical characters, underscore, hyphen and dot are allowed"/>
+                            <divclass="form-grouprow">
+                                <labelfor="name"class="col-md-4col-form-label">DatabaseName</label>
+                                <divclass="col-md-8">
+                                    <inputid="dbname_restore"type="text"name="name"class="form-control"required="required"pattern="{{pattern}}"title="Onlyalphanumericalcharacters,underscore,hyphenanddotareallowed"/>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="copy">This database might have been moved or copied.</label>
-                                <p class="form-text">
-                                    In order to avoid conflicts between databases, Flectra needs to know if this database was moved or copied.<br/>
-                                    If you don't know, answer "This database is a copy".
+                            <divclass="form-group">
+                                <labelfor="copy">Thisdatabasemighthavebeenmovedorcopied.</label>
+                                <pclass="form-text">
+                                    Inordertoavoidconflictsbetweendatabases,Flectraneedstoknowifthisdatabasewasmovedorcopied.<br/>
+                                    Ifyoudon'tknow,answer"Thisdatabaseisacopy".
                                 </p>
-                                <div class="custom-control custom-radio">
-                                    <input id="radio_copy_true" name="copy" type="radio" class="custom-control-input" value="true" checked="1">
-                                    <label for="radio_copy_true" class="custom-control-label">This database is a copy</label>
+                                <divclass="custom-controlcustom-radio">
+                                    <inputid="radio_copy_true"name="copy"type="radio"class="custom-control-input"value="true"checked="1">
+                                    <labelfor="radio_copy_true"class="custom-control-label">Thisdatabaseisacopy</label>
                                 </div>
-                                <div class="custom-control custom-radio">
-                                    <input id="radio_copy_false" name="copy" type="radio" class="custom-control-input" value="false">
-                                    <label for="radio_copy_false" class="custom-control-label">This database was moved</label>
+                                <divclass="custom-controlcustom-radio">
+                                    <inputid="radio_copy_false"name="copy"type="radio"class="custom-control-input"value="false">
+                                    <labelfor="radio_copy_false"class="custom-control-label">Thisdatabasewasmoved</label>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <input type="submit" value="Continue" class="btn btn-primary float-right"/>
+                        <divclass="modal-footer">
+                            <inputtype="submit"value="Continue"class="btnbtn-primaryfloat-right"/>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Master password -->
-        <div class="modal fade o_database_master" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Set Master Password</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <!--Masterpassword-->
+        <divclass="modalfadeo_database_master"role="dialog">
+            <divclass="modal-dialog">
+                <divclass="modal-content">
+                    <divclass="modal-header">
+                        <h4class="modal-title">SetMasterPassword</h4>
+                        <buttontype="button"class="close"data-dismiss="modal"aria-label="Close"><spanaria-hidden="true">&times;</span></button>
                     </div>
-                    <form id="form_change_pwd" role="form" action="/web/database/change_password" method="post">
-                        <div class="modal-body">
-                            <p>The master password is required to create, delete, dump or restore databases.</p>
-                            {{ master_input(set_master_pwd=True) }}
-                            <div class="form-group">
-                                <label for="master_pwd_new" class="col-form-label">New Master Password</label>
-                                <div class="input-group">
-                                    <input id="master_pwd_new" type="password" name="master_pwd_new" class="form-control" required="required" autocomplete="new-password"/>
-                                    <div class="input-group-append">
-                                        <span class="fa fa-eye o_little_eye input-group-text" aria-hidden="true" style="cursor: pointer;"></span>
+                    <formid="form_change_pwd"role="form"action="/web/database/change_password"method="post">
+                        <divclass="modal-body">
+                            <p>Themasterpasswordisrequiredtocreate,delete,dumporrestoredatabases.</p>
+                            {{master_input(set_master_pwd=True)}}
+                            <divclass="form-group">
+                                <labelfor="master_pwd_new"class="col-form-label">NewMasterPassword</label>
+                                <divclass="input-group">
+                                    <inputid="master_pwd_new"type="password"name="master_pwd_new"class="form-control"required="required"autocomplete="new-password"/>
+                                    <divclass="input-group-append">
+                                        <spanclass="fafa-eyeo_little_eyeinput-group-text"aria-hidden="true"style="cursor:pointer;"></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <input type="submit" value="Continue" class="btn btn-primary float-right"/>
+                        <divclass="modal-footer">
+                            <inputtype="submit"value="Continue"class="btnbtn-primaryfloat-right"/>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Duplicate DB -->
-        <div class="modal fade o_database_duplicate" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Duplicate Database</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <!--DuplicateDB-->
+        <divclass="modalfadeo_database_duplicate"role="dialog">
+            <divclass="modal-dialog">
+                <divclass="modal-content">
+                    <divclass="modal-header">
+                        <h4class="modal-title">DuplicateDatabase</h4>
+                        <buttontype="button"class="close"data-dismiss="modal"aria-label="Close"><spanaria-hidden="true">&times;</span></button>
                     </div>
-                    <form id="form-duplicate-db" role="form" action="/web/database/duplicate" method="post">
-                        <div class="modal-body">
-                            {{ master_input() }}
-                            <div class="form-group">
-                                <label for="name" class="col-form-label">Database Name</label>
-                                <input id="dbname_duplicate" type="text" name="name" class="form-control" required="required" readonly="readonly"/>
+                    <formid="form-duplicate-db"role="form"action="/web/database/duplicate"method="post">
+                        <divclass="modal-body">
+                            {{master_input()}}
+                            <divclass="form-group">
+                                <labelfor="name"class="col-form-label">DatabaseName</label>
+                                <inputid="dbname_duplicate"type="text"name="name"class="form-control"required="required"readonly="readonly"/>
                             </div>
-                            <div class="form-group">
-                                <label for="new_name" class="col-form-label">New Name</label>
-                                <input id="new_name" type="text" name="new_name" class="form-control" required="required" pattern="{{ pattern }}" title="Only alphanumerical characters, underscore, hyphen and dot are allowed"/>
+                            <divclass="form-group">
+                                <labelfor="new_name"class="col-form-label">NewName</label>
+                                <inputid="new_name"type="text"name="new_name"class="form-control"required="required"pattern="{{pattern}}"title="Onlyalphanumericalcharacters,underscore,hyphenanddotareallowed"/>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <input type="submit" value="Continue" class="btn btn-primary float-right"/>
+                        <divclass="modal-footer">
+                            <inputtype="submit"value="Continue"class="btnbtn-primaryfloat-right"/>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Drop DB -->
-        <div class="modal fade o_database_delete" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Delete Database</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <!--DropDB-->
+        <divclass="modalfadeo_database_delete"role="dialog">
+            <divclass="modal-dialog">
+                <divclass="modal-content">
+                    <divclass="modal-header">
+                        <h4class="modal-title">DeleteDatabase</h4>
+                        <buttontype="button"class="close"data-dismiss="modal"aria-label="Close"><spanaria-hidden="true">&times;</span></button>
                     </div>
-                    <form id="form_drop_db" role="form" action="/web/database/drop" method="post">
-                        <div class="modal-body">
-                            {{ master_input() }}
-                            <div class="form-group">
-                                <label for="name" class="col-form-label">Database</label>
-                                <input id="dbname_delete" type="text" name="name" class="form-control" required="required" readonly="readonly"/>
+                    <formid="form_drop_db"role="form"action="/web/database/drop"method="post">
+                        <divclass="modal-body">
+                            {{master_input()}}
+                            <divclass="form-group">
+                                <labelfor="name"class="col-form-label">Database</label>
+                                <inputid="dbname_delete"type="text"name="name"class="form-control"required="required"readonly="readonly"/>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <input type="submit" value="Delete" class="btn btn-primary float-right"/>
+                        <divclass="modal-footer">
+                            <inputtype="submit"value="Delete"class="btnbtn-primaryfloat-right"/>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Backup DB -->
-        <div class="modal fade o_database_backup" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Backup Database</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <!--BackupDB-->
+        <divclass="modalfadeo_database_backup"role="dialog">
+            <divclass="modal-dialog">
+                <divclass="modal-content">
+                    <divclass="modal-header">
+                        <h4class="modal-title">BackupDatabase</h4>
+                        <buttontype="button"class="close"data-dismiss="modal"aria-label="Close"><spanaria-hidden="true">&times;</span></button>
                     </div>
-                    <form id="form_backup_db" role="form" action="/web/database/backup" method="post">
-                        <div class="modal-body">
-                            {{ master_input() }}
-                            <div class="form-group">
-                                <label for="name" class="col-form-label">Database Name</label>
-                                <input id="dbname_backup" type="text" name="name" class="form-control" required="required" readonly="readonly"/>
+                    <formid="form_backup_db"role="form"action="/web/database/backup"method="post">
+                        <divclass="modal-body">
+                            {{master_input()}}
+                            <divclass="form-group">
+                                <labelfor="name"class="col-form-label">DatabaseName</label>
+                                <inputid="dbname_backup"type="text"name="name"class="form-control"required="required"readonly="readonly"/>
                             </div>
-                            <div class="form-group">
-                                <label for="backup_format" class="col-form-label">Backup Format</label>
-                                <select id="backup_format" name="backup_format" class="form-control" required="required">
-                                    <option value="zip">zip (includes filestore)</option>
-                                    <option value="dump">pg_dump custom format (without filestore)</option>
+                            <divclass="form-group">
+                                <labelfor="backup_format"class="col-form-label">BackupFormat</label>
+                                <selectid="backup_format"name="backup_format"class="form-control"required="required">
+                                    <optionvalue="zip">zip(includesfilestore)</option>
+                                    <optionvalue="dump">pg_dumpcustomformat(withoutfilestore)</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <input type="submit" value="Backup" class="btn btn-primary float-right"/>
+                        <divclass="modal-footer">
+                            <inputtype="submit"value="Backup"class="btnbtn-primaryfloat-right"/>
                         </div>
                     </form>
                 </div>

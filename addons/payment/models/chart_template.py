@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import api, fields, models, _
+fromflectraimportapi,fields,models,_
 
 
-class AccountChartTemplate(models.Model):
-    _inherit = 'account.chart.template'
+classAccountChartTemplate(models.Model):
+    _inherit='account.chart.template'
 
-    def _create_bank_journals(self, company, acc_template_ref):
-        res = super(AccountChartTemplate, self)._create_bank_journals(company, acc_template_ref)
+    def_create_bank_journals(self,company,acc_template_ref):
+        res=super(AccountChartTemplate,self)._create_bank_journals(company,acc_template_ref)
 
-        # Try to generate the missing journals
-        return res + self.env['payment.acquirer']._create_missing_journal_for_acquirers(company=company)
+        #Trytogeneratethemissingjournals
+        returnres+self.env['payment.acquirer']._create_missing_journal_for_acquirers(company=company)

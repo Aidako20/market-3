@@ -1,32 +1,32 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.ro = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.ro=factory()));
+}(this,function(){'usestrict';
 
-    var ro = {
-        code: "ro",
-        week: {
-            dow: 1,
-            doy: 7 // The week that contains Jan 1st is the first week of the year.
+    varro={
+        code:"ro",
+        week:{
+            dow:1,
+            doy:7//TheweekthatcontainsJan1stisthefirstweekoftheyear.
         },
-        buttonText: {
-            prev: "precedentă",
-            next: "următoare",
-            today: "Azi",
-            month: "Lună",
-            week: "Săptămână",
-            day: "Zi",
-            list: "Agendă"
+        buttonText:{
+            prev:"precedentă",
+            next:"următoare",
+            today:"Azi",
+            month:"Lună",
+            week:"Săptămână",
+            day:"Zi",
+            list:"Agendă"
         },
-        weekLabel: "Săpt",
-        allDayText: "Toată ziua",
-        eventLimitText: function (n) {
-            return "+alte " + n;
+        weekLabel:"Săpt",
+        allDayText:"Toatăziua",
+        eventLimitText:function(n){
+            return"+alte"+n;
         },
-        noEventsMessage: "Nu există evenimente de afișat"
+        noEventsMessage:"Nuexistăevenimentedeafișat"
     };
 
-    return ro;
+    returnro;
 
 }));

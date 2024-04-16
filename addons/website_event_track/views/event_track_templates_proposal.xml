@@ -1,147 +1,147 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template id="event_track_proposal">
-    <t t-call="website_event.layout">
-        <div class="oe_structure" id="oe_structure_website_event_track_proposal_1"/>
-        <div class="container">
-            <section class="pt48">
-                <h1 class="o_page_header">Call for Proposals</h1>
-                <h2 class="text-center text-secondary font-weight-bold my-4" t-esc="event.name"/>
+<templateid="event_track_proposal">
+    <tt-call="website_event.layout">
+        <divclass="oe_structure"id="oe_structure_website_event_track_proposal_1"/>
+        <divclass="container">
+            <sectionclass="pt48">
+                <h1class="o_page_header">CallforProposals</h1>
+                <h2class="text-centertext-secondaryfont-weight-boldmy-4"t-esc="event.name"/>
             </section>
-            <section id="forms" t-if="not event.website_track_proposal">
-                <h1>Proposals are closed!</h1>
+            <sectionid="forms"t-if="notevent.website_track_proposal">
+                <h1>Proposalsareclosed!</h1>
                 <p>
-                    This event does not accept proposals.
+                    Thiseventdoesnotacceptproposals.
                 </p>
             </section>
-            <section class="row">
-                <div class="col-lg-9">
-                    <div class="oe_structure">
+            <sectionclass="row">
+                <divclass="col-lg-9">
+                    <divclass="oe_structure">
                         <section>
-                            <h3 class="o_page_header mt16">
+                            <h3class="o_page_headermt16">
                                 Introduction
                             </h3>
                             <p>
-                                We will accept a broad range of
-                                presentations, from reports on academic and
-                                commercial projects to tutorials and case
-                                studies. As long as the presentation is
-                                interesting and potentially useful to the
-                                audience, it will be considered for
-                                inclusion in the programme.
+                                Wewillacceptabroadrangeof
+                                presentations,fromreportsonacademicand
+                                commercialprojectstotutorialsandcase
+                                studies.Aslongasthepresentationis
+                                interestingandpotentiallyusefultothe
+                                audience,itwillbeconsideredfor
+                                inclusionintheprogramme.
                             </p>
                         </section>
                     </div>
-                    <div t-if="not track">
-                        <section class="mt-5">
-                            <h3 class="o_page_header">Application</h3>
+                    <divt-if="nottrack">
+                        <sectionclass="mt-5">
+                            <h3class="o_page_header">Application</h3>
                             <p>
-                                Fill this form to propose your talk.
+                                Fillthisformtoproposeyourtalk.
                             </p>
-                            <div class="alert alert-info" role="alert">
-                                <i class="fa fa-info-circle"/>
-                                You can add multiple speakers by separating names, emails and phones with commas.
+                            <divclass="alertalert-info"role="alert">
+                                <iclass="fafa-info-circle"/>
+                                Youcanaddmultiplespeakersbyseparatingnames,emailsandphoneswithcommas.
                             </div>
                         </section>
-                        <section id="forms" class="mb-5"
+                        <sectionid="forms"class="mb-5"
                             t-if="event.website_track_proposal">
-                            <form class="mt32 js_website_submit_form" t-attf-action="/event/#{event.id}/track_proposal/post" method="post" enctype="multipart/form-data">
-                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-md-4 col-form-label" for="track_name">Talk Title</label>
-                                    <div class="col-lg-7 col-md-8">
-                                        <input type="text" class="form-control" name="track_name" required="True"/>
+                            <formclass="mt32js_website_submit_form"t-attf-action="/event/#{event.id}/track_proposal/post"method="post"enctype="multipart/form-data">
+                                <inputtype="hidden"name="csrf_token"t-att-value="request.csrf_token()"/>
+                                <divclass="form-grouprow">
+                                    <labelclass="col-lg-3col-md-4col-form-label"for="track_name">TalkTitle</label>
+                                    <divclass="col-lg-7col-md-8">
+                                        <inputtype="text"class="form-control"name="track_name"required="True"/>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-md-4 col-form-label" for="description">Talk Introduction</label>
-                                    <div class="col-lg-7 col-md-8">
-                                        <textarea  class="form-control" name="description"/>
+                                <divclass="form-grouprow">
+                                    <labelclass="col-lg-3col-md-4col-form-label"for="description">TalkIntroduction</label>
+                                    <divclass="col-lg-7col-md-8">
+                                        <textarea class="form-control"name="description"/>
                                     </div>
                                 </div>
-                                <div class="form-group row" t-if="len(event.allowed_track_tag_ids)">
-                                    <label class="col-lg-3 col-md-4 col-form-label" for="phone">Tags</label>
-                                    <div class="col-lg-9 col-md-8">
-                                        <div class="row">
-                                            <label class="col-md-4" t-foreach="event.allowed_track_tag_ids" t-as="tag">
-                                                <input type="checkbox" value="1" t-attf-name="tag_#{str(tag.id)}"/>
-                                                <t t-esc="tag.name"/>
+                                <divclass="form-grouprow"t-if="len(event.allowed_track_tag_ids)">
+                                    <labelclass="col-lg-3col-md-4col-form-label"for="phone">Tags</label>
+                                    <divclass="col-lg-9col-md-8">
+                                        <divclass="row">
+                                            <labelclass="col-md-4"t-foreach="event.allowed_track_tag_ids"t-as="tag">
+                                                <inputtype="checkbox"value="1"t-attf-name="tag_#{str(tag.id)}"/>
+                                                <tt-esc="tag.name"/>
                                             </label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-md-4 col-form-label" for="partner_name">Speaker(s) Name</label>
-                                    <div class="col-lg-7 col-md-8">
-                                        <input type="text" class="form-control" name="partner_name" required="True"/>
+                                <divclass="form-grouprow">
+                                    <labelclass="col-lg-3col-md-4col-form-label"for="partner_name">Speaker(s)Name</label>
+                                    <divclass="col-lg-7col-md-8">
+                                        <inputtype="text"class="form-control"name="partner_name"required="True"/>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-md-4 col-form-label" for="email_from">Speaker(s) Email</label>
-                                    <div class="col-lg-7 col-md-8">
-                                        <input type="email" class="form-control" name="email_from" required="True" multiple="multiple"/>
+                                <divclass="form-grouprow">
+                                    <labelclass="col-lg-3col-md-4col-form-label"for="email_from">Speaker(s)Email</label>
+                                    <divclass="col-lg-7col-md-8">
+                                        <inputtype="email"class="form-control"name="email_from"required="True"multiple="multiple"/>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-md-4 col-form-label" for="phone">Speaker(s) Phone</label>
-                                    <div class="col-lg-7 col-md-8">
-                                        <input type="text" class="form-control" name="phone" required="True"/>
+                                <divclass="form-grouprow">
+                                    <labelclass="col-lg-3col-md-4col-form-label"for="phone">Speaker(s)Phone</label>
+                                    <divclass="col-lg-7col-md-8">
+                                        <inputtype="text"class="form-control"name="phone"required="True"/>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-md-4 col-form-label" for="biography">Speaker(s) Biography</label>
-                                    <div class="col-lg-7 col-md-8">
-                                        <textarea  class="form-control" name="biography" rows="5"/>
+                                <divclass="form-grouprow">
+                                    <labelclass="col-lg-3col-md-4col-form-label"for="biography">Speaker(s)Biography</label>
+                                    <divclass="col-lg-7col-md-8">
+                                        <textarea class="form-control"name="biography"rows="5"/>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-md-4 col-form-label" for="image">Speaker(s) Picture</label>
-                                    <div class="col-lg-7 col-md-8">
-                                        <input name="image" type="file" accept="image/*"/>
+                                <divclass="form-grouprow">
+                                    <labelclass="col-lg-3col-md-4col-form-label"for="image">Speaker(s)Picture</label>
+                                    <divclass="col-lg-7col-md-8">
+                                        <inputname="image"type="file"accept="image/*"/>
                                     </div>
                                 </div>
-                                <div class="form-group row o_form_buttons">
-                                    <div class="offset-lg-3 offset-md-4 col-md-8 col-lg-7">
-                                        <button type="submit" class="btn btn-primary">Submit Proposal</button>
+                                <divclass="form-grouprowo_form_buttons">
+                                    <divclass="offset-lg-3offset-md-4col-md-8col-lg-7">
+                                        <buttontype="submit"class="btnbtn-primary">SubmitProposal</button>
                                     </div>
                                 </div>
                             </form>
                         </section>
                     </div>
-                    <div t-else="">
-                        <t t-call="website_event_track.event_track_proposal_success"/>
+                    <divt-else="">
+                        <tt-call="website_event_track.event_track_proposal_success"/>
                     </div>
-                    <div class="oe_structure" id="oe_structure_website_event_track_proposal_2"/>
+                    <divclass="oe_structure"id="oe_structure_website_event_track_proposal_2"/>
                 </div>
-                <div class="col-lg-3">
-                    <div class="card mb-3 bg-secondary">
-                        <h4 class="card-header">Talks Types</h4>
-                        <div class="card-body">
-                            <ul class="list-unstyled">
+                <divclass="col-lg-3">
+                    <divclass="cardmb-3bg-secondary">
+                        <h4class="card-header">TalksTypes</h4>
+                        <divclass="card-body">
+                            <ulclass="list-unstyled">
                                 <li>
-                                    <strong>Regular Talks</strong>. These are standard talks with slides,
-                                    alocated in slots of 60 minutes.
+                                    <strong>RegularTalks</strong>.Thesearestandardtalkswithslides,
+                                    alocatedinslotsof60minutes.
                                 </li><li>
-                                    <strong>Lightning Talks</strong>. These are 30 minutes talks on many
-                                    different topics. Most topics are accepted in lightning talks.
+                                    <strong>LightningTalks</strong>.Theseare30minutestalksonmany
+                                    differenttopics.Mosttopicsareacceptedinlightningtalks.
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    <div class="card bg-secondary">
-                        <h4 class="card-header">Submission Agreement</h4>
-                        <div class="card-body">
+                    <divclass="cardbg-secondary">
+                        <h4class="card-header">SubmissionAgreement</h4>
+                        <divclass="card-body">
                             <p>
-                            We require speakers to accept an agreement in which they commit to:
+                            Werequirespeakerstoacceptanagreementinwhichtheycommitto:
                             </p>
-                            <ul class="list-unstyled">
+                            <ulclass="list-unstyled">
                                 <li>
-                                    Timely release of presentation material (slides),
-                                    for publishing on our website.
+                                    Timelyreleaseofpresentationmaterial(slides),
+                                    forpublishingonourwebsite.
                                 </li><li>
-                                    Allow video and audio recording of their
-                                    presentation, for publishing on our website.
+                                    Allowvideoandaudiorecordingoftheir
+                                    presentation,forpublishingonourwebsite.
                                 </li>
                             </ul>
                         </div>
@@ -149,17 +149,17 @@
                 </div>
             </section>
         </div>
-        <div class="oe_structure" id="oe_structure_website_event_track_proposal_3"/>
+        <divclass="oe_structure"id="oe_structure_website_event_track_proposal_3"/>
     </t>
 </template>
 
-<template id="event_track_proposal_success">
-    <section class="mt-5">
-        <h3 class="o_page_header">Application</h3>
+<templateid="event_track_proposal_success">
+    <sectionclass="mt-5">
+        <h3class="o_page_header">Application</h3>
         <p>
-            Thank you for your proposal.
+            Thankyouforyourproposal.
         </p><p>
-            We will evaluate your proposition and get back to you shortly.
+            Wewillevaluateyourpropositionandgetbacktoyoushortly.
         </p>
     </section>
 </template>

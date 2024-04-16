@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 
-<templates xml:space="preserve">
+<templatesxml:space="preserve">
 
-    <t t-name="website.iframeWidget">
+    <tt-name="website.iframeWidget">
         <iframe
             t-if="url"
             height="100%"
@@ -11,7 +11,7 @@
             t-att-src="url"
             class='d-block'
         ></iframe>
-        <div t-else="">No Url</div>
+        <divt-else="">NoUrl</div>
     </t>
 
 </templates>

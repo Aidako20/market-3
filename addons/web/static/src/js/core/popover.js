@@ -1,328 +1,328 @@
-flectra.define('web.Popover', function (require) {
-    'use strict';
+flectra.define('web.Popover',function(require){
+    'usestrict';
 
-    const patchMixin = require('web.patchMixin');
+    constpatchMixin=require('web.patchMixin');
 
-    const { Component, hooks, misc, QWeb } = owl;
-    const { Portal } = misc;
-    const { useRef, useState } = hooks;
+    const{Component,hooks,misc,QWeb}=owl;
+    const{Portal}=misc;
+    const{useRef,useState}=hooks;
 
     /**
-     * Popover
+     *Popover
      *
-     * Represents a bootstrap-style popover handled with pure JS. The popover
-     * will be visually bound to its `target` using an arrow-like '::before'
-     * CSS pseudo-element.
-     * @extends Component
+     *Representsabootstrap-stylepopoverhandledwithpureJS.Thepopover
+     *willbevisuallyboundtoits`target`usinganarrow-like'::before'
+     *CSSpseudo-element.
+     *@extendsComponent
      **/
-    class Popover extends Component {
+    classPopoverextendsComponent{
         /**
-         * @param {Object} props
-         * @param {String} [props.position='bottom']
-         * @param {String} [props.title]
+         *@param{Object}props
+         *@param{String}[props.position='bottom']
+         *@param{String}[props.title]
          */
-        constructor() {
+        constructor(){
             super(...arguments);
-            this.popoverRef = useRef('popover');
-            this.orderedPositions = ['top', 'bottom', 'left', 'right'];
-            this.state = useState({
-                displayed: false,
+            this.popoverRef=useRef('popover');
+            this.orderedPositions=['top','bottom','left','right'];
+            this.state=useState({
+                displayed:false,
             });
 
-            this._onClickDocument = this._onClickDocument.bind(this);
-            this._onScrollDocument = this._onScrollDocument.bind(this);
-            this._onResizeWindow = this._onResizeWindow.bind(this);
+            this._onClickDocument=this._onClickDocument.bind(this);
+            this._onScrollDocument=this._onScrollDocument.bind(this);
+            this._onResizeWindow=this._onResizeWindow.bind(this);
 
-            this._onScrollDocument = _.throttle(this._onScrollDocument, 50);
-            this._onResizeWindow = _.debounce(this._onResizeWindow, 250);
+            this._onScrollDocument=_.throttle(this._onScrollDocument,50);
+            this._onResizeWindow=_.debounce(this._onResizeWindow,250);
 
             /**
-             * Those events are only necessary if the popover is currently open,
-             * so we decided for performance reasons to avoid binding them while
-             * it is closed. This allows to have many popover instantiated while
-             * keeping the count of global handlers low.
+             *Thoseeventsareonlynecessaryifthepopoveriscurrentlyopen,
+             *sowedecidedforperformancereasonstoavoidbindingthemwhile
+             *itisclosed.Thisallowstohavemanypopoverinstantiatedwhile
+             *keepingthecountofglobalhandlerslow.
              */
-            this._hasGlobalEventListeners = false;
+            this._hasGlobalEventListeners=false;
         }
 
-        mounted() {
+        mounted(){
             this._compute();
         }
 
-        patched() {
+        patched(){
             this._compute();
         }
 
-        willUnmount() {
-            if (this._hasGlobalEventListeners) {
+        willUnmount(){
+            if(this._hasGlobalEventListeners){
                 this._removeGlobalEventListeners();
             }
         }
 
         //----------------------------------------------------------------------
-        // Private
+        //Private
         //----------------------------------------------------------------------
 
         /**
-         * @private
+         *@private
          */
-        _addGlobalEventListeners() {
+        _addGlobalEventListeners(){
             /**
-             * Use capture for the following events to ensure no other part of
-             * the code can stop its propagation from reaching here.
+             *Usecaptureforthefollowingeventstoensurenootherpartof
+             *thecodecanstopitspropagationfromreachinghere.
              */
-            document.addEventListener('click', this._onClickDocument, {
-                capture: true,
+            document.addEventListener('click',this._onClickDocument,{
+                capture:true,
             });
-            document.addEventListener('scroll', this._onScrollDocument, {
-                capture: true,
+            document.addEventListener('scroll',this._onScrollDocument,{
+                capture:true,
             });
-            window.addEventListener('resize', this._onResizeWindow);
-            this._hasGlobalEventListeners = true;
+            window.addEventListener('resize',this._onResizeWindow);
+            this._hasGlobalEventListeners=true;
         }
 
-        _close() {
-            this.state.displayed = false;
+        _close(){
+            this.state.displayed=false;
         }
 
         /**
-         * Computes the popover according to its props. This method will try to position the
-         * popover as requested (according to the `position` props). If the requested position
-         * does not fit the viewport, other positions will be tried in a clockwise order starting
-         * a the requested position (e.g. starting from left: top, right, bottom). If no position
-         * is found that fits the viewport, 'bottom' is used.
+         *Computesthepopoveraccordingtoitsprops.Thismethodwilltrytopositionthe
+         *popoverasrequested(accordingtothe`position`props).Iftherequestedposition
+         *doesnotfittheviewport,otherpositionswillbetriedinaclockwiseorderstarting
+         *atherequestedposition(e.g.startingfromleft:top,right,bottom).Ifnoposition
+         *isfoundthatfitstheviewport,'bottom'isused.
          *
-         * @private
+         *@private
          */
-        _compute() {
-            if (!this._hasGlobalEventListeners && this.state.displayed) {
+        _compute(){
+            if(!this._hasGlobalEventListeners&&this.state.displayed){
                 this._addGlobalEventListeners();
             }
-            if (this._hasGlobalEventListeners && !this.state.displayed) {
+            if(this._hasGlobalEventListeners&&!this.state.displayed){
                 this._removeGlobalEventListeners();
             }
-            if (!this.state.displayed) {
+            if(!this.state.displayed){
                 return;
             }
 
-            // copy the default ordered position to avoid updating them in place
-            const possiblePositions = [...this.orderedPositions];
-            const positionIndex = possiblePositions.indexOf(
+            //copythedefaultorderedpositiontoavoidupdatingtheminplace
+            constpossiblePositions=[...this.orderedPositions];
+            constpositionIndex=possiblePositions.indexOf(
                 this.props.position
             );
 
-            const positioningData = this.constructor.computePositioningData(
+            constpositioningData=this.constructor.computePositioningData(
                 this.popoverRef.el,
                 this.el
             );
 
-            // check if the requested position fits the viewport; if not,
-            // try all other positions and find one that does
-            const position = possiblePositions
+            //checkiftherequestedpositionfitstheviewport;ifnot,
+            //tryallotherpositionsandfindonethatdoes
+            constposition=possiblePositions
                 .slice(positionIndex)
-                .concat(possiblePositions.slice(0, positionIndex))
-                .map((pos) => positioningData[pos])
-                .find((pos) => {
-                    this.popoverRef.el.style.top = `${pos.top}px`;
-                    this.popoverRef.el.style.left = `${pos.left}px`;
-                    const rect = this.popoverRef.el.getBoundingClientRect();
-                    const html = document.documentElement;
-                    return (
-                        rect.top >= 0 &&
-                        rect.left >= 0 &&
-                        rect.bottom <= (window.innerHeight || html.clientHeight) &&
-                        rect.right <= (window.innerWidth || html.clientWidth)
+                .concat(possiblePositions.slice(0,positionIndex))
+                .map((pos)=>positioningData[pos])
+                .find((pos)=>{
+                    this.popoverRef.el.style.top=`${pos.top}px`;
+                    this.popoverRef.el.style.left=`${pos.left}px`;
+                    constrect=this.popoverRef.el.getBoundingClientRect();
+                    consthtml=document.documentElement;
+                    return(
+                        rect.top>=0&&
+                        rect.left>=0&&
+                        rect.bottom<=(window.innerHeight||html.clientHeight)&&
+                        rect.right<=(window.innerWidth||html.clientWidth)
                     );
                 });
 
-            // remove all existing positioning classes
-            possiblePositions.forEach((pos) => {
+            //removeallexistingpositioningclasses
+            possiblePositions.forEach((pos)=>{
                 this.popoverRef.el.classList.remove(`o_popover--${pos}`);
             });
 
-            if (position) {
-                // apply the preferred found position that fits the viewport
+            if(position){
+                //applythepreferredfoundpositionthatfitstheviewport
                 this.popoverRef.el.classList.add(`o_popover--${position.name}`);
-            } else {
-                // use the given `position` props because no position fits
-                this.popoverRef.el.style.top = `${positioningData[this.props.position].top}px`;
-                this.popoverRef.el.style.left = `${positioningData[this.props.position].left}px`;
+            }else{
+                //usethegiven`position`propsbecausenopositionfits
+                this.popoverRef.el.style.top=`${positioningData[this.props.position].top}px`;
+                this.popoverRef.el.style.left=`${positioningData[this.props.position].left}px`;
                 this.popoverRef.el.classList.add(`o_popover--${this.props.position}`);
             }
         }
 
         /**
-         * @private
+         *@private
          */
-        _removeGlobalEventListeners() {
-            document.removeEventListener('click', this._onClickDocument, true);
-            document.removeEventListener('scroll', this._onScrollDocument, true);
-            window.removeEventListener('resize', this._onResizeWindow);
-            this._hasGlobalEventListeners = false;
+        _removeGlobalEventListeners(){
+            document.removeEventListener('click',this._onClickDocument,true);
+            document.removeEventListener('scroll',this._onScrollDocument,true);
+            window.removeEventListener('resize',this._onResizeWindow);
+            this._hasGlobalEventListeners=false;
         }
 
         //----------------------------------------------------------------------
-        // Handlers
+        //Handlers
         //----------------------------------------------------------------------
 
         /**
-         * Toggles the popover depending on its current state.
+         *Togglesthepopoverdependingonitscurrentstate.
          *
-         * @private
-         * @param {MouseEvent} ev
+         *@private
+         *@param{MouseEvent}ev
          */
-        _onClick(ev) {
-            this.state.displayed = !this.state.displayed;
+        _onClick(ev){
+            this.state.displayed=!this.state.displayed;
         }
 
         /**
-         * A click outside the popover will dismiss the current popover.
+         *Aclickoutsidethepopoverwilldismissthecurrentpopover.
          *
-         * @private
-         * @param {MouseEvent} ev
+         *@private
+         *@param{MouseEvent}ev
          */
-        _onClickDocument(ev) {
-            // Handled by `_onClick`.
-            if (this.el.contains(ev.target)) {
+        _onClickDocument(ev){
+            //Handledby`_onClick`.
+            if(this.el.contains(ev.target)){
                 return;
             }
-            // Ignore click inside the popover.
-            if (this.popoverRef.el && this.popoverRef.el.contains(ev.target)) {
+            //Ignoreclickinsidethepopover.
+            if(this.popoverRef.el&&this.popoverRef.el.contains(ev.target)){
                 return;
             }
             this._close();
         }
 
         /**
-         * @private
-         * @param {Event} ev
+         *@private
+         *@param{Event}ev
          */
-        _onPopoverClose(ev) {
+        _onPopoverClose(ev){
             this._close();
         }
 
         /**
-         * Popover must recompute its position when children content changes.
+         *Popovermustrecomputeitspositionwhenchildrencontentchanges.
          *
-         * @private
-         * @param {Event} ev
+         *@private
+         *@param{Event}ev
          */
-        _onPopoverCompute(ev) {
+        _onPopoverCompute(ev){
             this._compute();
         }
 
         /**
-         * A resize event will need to 'reposition' the popover close to its
-         * target.
+         *Aresizeeventwillneedto'reposition'thepopoverclosetoits
+         *target.
          *
-         * @private
-         * @param {Event} ev
+         *@private
+         *@param{Event}ev
          */
-        _onResizeWindow(ev) {
-            if (this.__owl__.status === 5 /* destroyed */) {
+        _onResizeWindow(ev){
+            if(this.__owl__.status===5/*destroyed*/){
                 return;
             }
             this._compute();
         }
 
         /**
-         * A scroll event will need to 'reposition' the popover close to its
-         * target.
+         *Ascrolleventwillneedto'reposition'thepopoverclosetoits
+         *target.
          *
-         * @private
-         * @param {Event} ev
+         *@private
+         *@param{Event}ev
          */
-        _onScrollDocument(ev) {
-            if (this.__owl__.status === 5 /* destroyed */) {
+        _onScrollDocument(ev){
+            if(this.__owl__.status===5/*destroyed*/){
                 return;
             }
             this._compute();
         }
 
         //----------------------------------------------------------------------
-        // Static
+        //Static
         //----------------------------------------------------------------------
 
         /**
-         * Compute the expected positioning coordinates for each possible
-         * positioning based on the target and popover sizes.
-         * In particular the popover must not overflow the viewport in any
-         * direction, it should actually stay at `margin` distance from the
-         * border to look good.
+         *Computetheexpectedpositioningcoordinatesforeachpossible
+         *positioningbasedonthetargetandpopoversizes.
+         *Inparticularthepopovermustnotoverflowtheviewportinany
+         *direction,itshouldactuallystayat`margin`distancefromthe
+         *bordertolookgood.
          *
-         * @static
-         * @param {HTMLElement} popoverElement The popover element
-         * @param {HTMLElement} targetElement The target element, to which
-         *  the popover will be visually 'bound'
-         * @param {integer} [margin=16] Minimal accepted margin from the border
-         *  of the viewport.
-         * @returns {Object}
+         *@static
+         *@param{HTMLElement}popoverElementThepopoverelement
+         *@param{HTMLElement}targetElementThetargetelement,towhich
+         * thepopoverwillbevisually'bound'
+         *@param{integer}[margin=16]Minimalacceptedmarginfromtheborder
+         * oftheviewport.
+         *@returns{Object}
          */
-        static computePositioningData(popoverElement, targetElement, margin = 16) {
-            // set target position, possible position
-            const boundingRectangle = targetElement.getBoundingClientRect();
-            const targetTop = boundingRectangle.top;
-            const targetLeft = boundingRectangle.left;
-            const targetHeight = targetElement.offsetHeight;
-            const targetWidth = targetElement.offsetWidth;
-            const popoverHeight = popoverElement.offsetHeight;
-            const popoverWidth = popoverElement.offsetWidth;
-            const windowWidth = window.innerWidth || document.documentElement.clientWidth;
-            const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-            const leftOffsetForVertical = Math.max(
+        staticcomputePositioningData(popoverElement,targetElement,margin=16){
+            //settargetposition,possibleposition
+            constboundingRectangle=targetElement.getBoundingClientRect();
+            consttargetTop=boundingRectangle.top;
+            consttargetLeft=boundingRectangle.left;
+            consttargetHeight=targetElement.offsetHeight;
+            consttargetWidth=targetElement.offsetWidth;
+            constpopoverHeight=popoverElement.offsetHeight;
+            constpopoverWidth=popoverElement.offsetWidth;
+            constwindowWidth=window.innerWidth||document.documentElement.clientWidth;
+            constwindowHeight=window.innerHeight||document.documentElement.clientHeight;
+            constleftOffsetForVertical=Math.max(
                 margin,
                 Math.min(
-                    Math.round(targetLeft - (popoverWidth - targetWidth) / 2),
-                    windowWidth - popoverWidth - margin,
+                    Math.round(targetLeft-(popoverWidth-targetWidth)/2),
+                    windowWidth-popoverWidth-margin,
                 ),
             );
-            const topOffsetForHorizontal = Math.max(
+            consttopOffsetForHorizontal=Math.max(
                 margin,
                 Math.min(
-                    Math.round(targetTop - (popoverHeight - targetHeight) / 2),
-                    windowHeight - popoverHeight - margin,
+                    Math.round(targetTop-(popoverHeight-targetHeight)/2),
+                    windowHeight-popoverHeight-margin,
                 ),
             );
-            return {
-                top: {
-                    name: 'top',
-                    top: Math.round(targetTop - popoverHeight),
-                    left: leftOffsetForVertical,
+            return{
+                top:{
+                    name:'top',
+                    top:Math.round(targetTop-popoverHeight),
+                    left:leftOffsetForVertical,
                 },
-                right: {
-                    name: 'right',
-                    top: topOffsetForHorizontal,
-                    left: Math.round(targetLeft + targetWidth),
+                right:{
+                    name:'right',
+                    top:topOffsetForHorizontal,
+                    left:Math.round(targetLeft+targetWidth),
                 },
-                bottom: {
-                    name: 'bottom',
-                    top: Math.round(targetTop + targetHeight),
-                    left: leftOffsetForVertical,
+                bottom:{
+                    name:'bottom',
+                    top:Math.round(targetTop+targetHeight),
+                    left:leftOffsetForVertical,
                 },
-                left: {
-                    name: 'left',
-                    top: topOffsetForHorizontal,
-                    left: Math.round(targetLeft - popoverWidth),
+                left:{
+                    name:'left',
+                    top:topOffsetForHorizontal,
+                    left:Math.round(targetLeft-popoverWidth),
                 },
             };
         }
 
     }
 
-    Popover.components = { Portal };
-    Popover.template = 'Popover';
-    Popover.defaultProps = {
-        position: 'bottom',
+    Popover.components={Portal};
+    Popover.template='Popover';
+    Popover.defaultProps={
+        position:'bottom',
     };
-    Popover.props = {
-        position: {
-            type: String,
-            validate: (p) => ['top', 'bottom', 'left', 'right'].includes(p),
+    Popover.props={
+        position:{
+            type:String,
+            validate:(p)=>['top','bottom','left','right'].includes(p),
         },
-        title: { type: String, optional: true },
+        title:{type:String,optional:true},
     };
 
-    QWeb.registerComponent('Popover', Popover);
+    QWeb.registerComponent('Popover',Popover);
 
-    return patchMixin(Popover);
+    returnpatchMixin(Popover);
 });

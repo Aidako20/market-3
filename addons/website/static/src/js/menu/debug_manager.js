@@ -1,21 +1,21 @@
-flectra.define('website.debugManager', function (require) {
-'use strict';
+flectra.define('website.debugManager',function(require){
+'usestrict';
 
-var config = require('web.config');
-var DebugManager = require('web.DebugManager');
-var websiteNavbarData = require('website.navbar');
+varconfig=require('web.config');
+varDebugManager=require('web.DebugManager');
+varwebsiteNavbarData=require('website.navbar');
 
-var DebugManagerMenu = websiteNavbarData.WebsiteNavbar.include({
+varDebugManagerMenu=websiteNavbarData.WebsiteNavbar.include({
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        if (config.isDebug()) {
-            new DebugManager(this).prependTo(this.$('.o_menu_systray'));
+    start:function(){
+        if(config.isDebug()){
+            newDebugManager(this).prependTo(this.$('.o_menu_systray'));
         }
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 });
 
-return DebugManagerMenu;
+returnDebugManagerMenu;
 });

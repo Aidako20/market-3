@@ -1,116 +1,116 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import _
-from flectra.exceptions import UserError
+fromflectraimport_
+fromflectra.exceptionsimportUserError
 
-import logging
+importlogging
 
-_logger = logging.getLogger(__name__)
-_phonenumbers_lib_warning = False
+_logger=logging.getLogger(__name__)
+_phonenumbers_lib_warning=False
 
 
 try:
-    import phonenumbers
+    importphonenumbers
 
-    def phone_parse(number, country_code):
+    defphone_parse(number,country_code):
         try:
-            phone_nbr = phonenumbers.parse(number, region=country_code or None, keep_raw_input=True)
-        except phonenumbers.phonenumberutil.NumberParseException as e:
-            raise UserError(_('Unable to parse %(phone)s: %(error)s', phone=number, error=str(e)))
+            phone_nbr=phonenumbers.parse(number,region=country_codeorNone,keep_raw_input=True)
+        exceptphonenumbers.phonenumberutil.NumberParseExceptionase:
+            raiseUserError(_('Unabletoparse%(phone)s:%(error)s',phone=number,error=str(e)))
 
-        if not phonenumbers.is_possible_number(phone_nbr):
-            raise UserError(_('Impossible number %s: probably invalid number of digits.', number))
-        if not phonenumbers.is_valid_number(phone_nbr):
-            raise UserError(_('Invalid number %s: probably incorrect prefix.', number))
+        ifnotphonenumbers.is_possible_number(phone_nbr):
+            raiseUserError(_('Impossiblenumber%s:probablyinvalidnumberofdigits.',number))
+        ifnotphonenumbers.is_valid_number(phone_nbr):
+            raiseUserError(_('Invalidnumber%s:probablyincorrectprefix.',number))
 
-        return phone_nbr
+        returnphone_nbr
 
-    def phone_format(number, country_code, country_phone_code, force_format='INTERNATIONAL', raise_exception=True):
-        """ Format the given phone number according to the localisation and international options.
-        :param number: number to convert
-        :param country_code: the ISO country code in two chars
-        :type country_code: str
-        :param country_phone_code: country dial in codes, defined by the ITU-T (Ex: 32 for Belgium)
-        :type country_phone_code: int
-        :param force_format: stringified version of format globals (see
+    defphone_format(number,country_code,country_phone_code,force_format='INTERNATIONAL',raise_exception=True):
+        """Formatthegivenphonenumberaccordingtothelocalisationandinternationaloptions.
+        :paramnumber:numbertoconvert
+        :paramcountry_code:theISOcountrycodeintwochars
+        :typecountry_code:str
+        :paramcountry_phone_code:countrydialincodes,definedbytheITU-T(Ex:32forBelgium)
+        :typecountry_phone_code:int
+        :paramforce_format:stringifiedversionofformatglobals(see
           https://github.com/daviddrysdale/python-phonenumbers/blob/dev/python/phonenumbers/phonenumberutil.py)
-            'E164' = 0
-            'INTERNATIONAL' = 1
-            'NATIONAL' = 2
-            'RFC3966' = 3
-        :type force_format: str
-        :rtype: str
+            'E164'=0
+            'INTERNATIONAL'=1
+            'NATIONAL'=2
+            'RFC3966'=3
+        :typeforce_format:str
+        :rtype:str
         """
         try:
-            phone_nbr = phone_parse(number, country_code)
-        except (phonenumbers.phonenumberutil.NumberParseException, UserError) as e:
-            if raise_exception:
+            phone_nbr=phone_parse(number,country_code)
+        except(phonenumbers.phonenumberutil.NumberParseException,UserError)ase:
+            ifraise_exception:
                 raise
             else:
-                return number
-        if force_format == 'E164':
-            phone_fmt = phonenumbers.PhoneNumberFormat.E164
-        elif force_format == 'RFC3966':
-            phone_fmt = phonenumbers.PhoneNumberFormat.RFC3966
-        elif force_format == 'INTERNATIONAL' or phone_nbr.country_code != country_phone_code:
-            phone_fmt = phonenumbers.PhoneNumberFormat.INTERNATIONAL
+                returnnumber
+        ifforce_format=='E164':
+            phone_fmt=phonenumbers.PhoneNumberFormat.E164
+        elifforce_format=='RFC3966':
+            phone_fmt=phonenumbers.PhoneNumberFormat.RFC3966
+        elifforce_format=='INTERNATIONAL'orphone_nbr.country_code!=country_phone_code:
+            phone_fmt=phonenumbers.PhoneNumberFormat.INTERNATIONAL
         else:
-            phone_fmt = phonenumbers.PhoneNumberFormat.NATIONAL
-        return phonenumbers.format_number(phone_nbr, phone_fmt)
+            phone_fmt=phonenumbers.PhoneNumberFormat.NATIONAL
+        returnphonenumbers.format_number(phone_nbr,phone_fmt)
 
-except ImportError:
+exceptImportError:
 
-    def phone_parse(number, country_code):
-        return False
+    defphone_parse(number,country_code):
+        returnFalse
 
-    def phone_format(number, country_code, country_phone_code, force_format='INTERNATIONAL', raise_exception=True):
-        global _phonenumbers_lib_warning
-        if not _phonenumbers_lib_warning:
+    defphone_format(number,country_code,country_phone_code,force_format='INTERNATIONAL',raise_exception=True):
+        global_phonenumbers_lib_warning
+        ifnot_phonenumbers_lib_warning:
             _logger.info(
-                "The `phonenumbers` Python module is not installed, contact numbers will not be "
-                "verified. Please install the `phonenumbers` Python module."
+                "The`phonenumbers`Pythonmoduleisnotinstalled,contactnumberswillnotbe"
+                "verified.Pleaseinstallthe`phonenumbers`Pythonmodule."
             )
-            _phonenumbers_lib_warning = True
-        return number
+            _phonenumbers_lib_warning=True
+        returnnumber
 
 
-def phone_sanitize_numbers(numbers, country_code, country_phone_code, force_format='E164'):
-    """ Given a list of numbers, return parsezd and sanitized information
+defphone_sanitize_numbers(numbers,country_code,country_phone_code,force_format='E164'):
+    """Givenalistofnumbers,returnparsezdandsanitizedinformation
 
-    :return dict: {number: {
-        'sanitized': sanitized and formated number or False (if cannot format)
-        'code': 'empty' (number was a void string), 'invalid' (error) or False (sanitize ok)
-        'msg': error message when 'invalid'
+    :returndict:{number:{
+        'sanitized':sanitizedandformatednumberorFalse(ifcannotformat)
+        'code':'empty'(numberwasavoidstring),'invalid'(error)orFalse(sanitizeok)
+        'msg':errormessagewhen'invalid'
     }}
     """
-    if not isinstance(numbers, (list)):
-        raise NotImplementedError()
-    result = dict.fromkeys(numbers, False)
-    for number in numbers:
-        if not number:
-            result[number] = {'sanitized': False, 'code': 'empty', 'msg': False}
+    ifnotisinstance(numbers,(list)):
+        raiseNotImplementedError()
+    result=dict.fromkeys(numbers,False)
+    fornumberinnumbers:
+        ifnotnumber:
+            result[number]={'sanitized':False,'code':'empty','msg':False}
             continue
         try:
-            stripped = number.strip()
-            sanitized = phone_format(
-                stripped, country_code, country_phone_code,
-                force_format=force_format, raise_exception=True)
-        except Exception as e:
-            result[number] = {'sanitized': False, 'code': 'invalid', 'msg': str(e)}
+            stripped=number.strip()
+            sanitized=phone_format(
+                stripped,country_code,country_phone_code,
+                force_format=force_format,raise_exception=True)
+        exceptExceptionase:
+            result[number]={'sanitized':False,'code':'invalid','msg':str(e)}
         else:
-            result[number] = {'sanitized': sanitized, 'code': False, 'msg': False}
-    return result
+            result[number]={'sanitized':sanitized,'code':False,'msg':False}
+    returnresult
 
 
-def phone_sanitize_numbers_w_record(numbers, record, country=False, record_country_fname='country_id', force_format='E164'):
-    if not isinstance(numbers, (list)):
-        raise NotImplementedError()
-    if not country:
-        if record and record_country_fname and hasattr(record, record_country_fname) and record[record_country_fname]:
-            country = record[record_country_fname]
-        elif record:
-            country = record.env.company.country_id
-    country_code = country.code if country else None
-    country_phone_code = country.phone_code if country else None
-    return phone_sanitize_numbers(numbers, country_code, country_phone_code, force_format=force_format)
+defphone_sanitize_numbers_w_record(numbers,record,country=False,record_country_fname='country_id',force_format='E164'):
+    ifnotisinstance(numbers,(list)):
+        raiseNotImplementedError()
+    ifnotcountry:
+        ifrecordandrecord_country_fnameandhasattr(record,record_country_fname)andrecord[record_country_fname]:
+            country=record[record_country_fname]
+        elifrecord:
+            country=record.env.company.country_id
+    country_code=country.codeifcountryelseNone
+    country_phone_code=country.phone_codeifcountryelseNone
+    returnphone_sanitize_numbers(numbers,country_code,country_phone_code,force_format=force_format)

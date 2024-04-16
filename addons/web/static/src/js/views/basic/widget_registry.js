@@ -1,27 +1,27 @@
-flectra.define('web.widget_registry', function (require) {
-    "use strict";
+flectra.define('web.widget_registry',function(require){
+    "usestrict";
 
-    // This registry is supposed to contain all custom widgets that will be
-    // available in the basic views, with the tag <widget/>.  There are
-    // currently no such widget in the web client, but the functionality is
-    // certainly useful to be able to cleanly add custom behaviour in basic
-    // views (and most notably, the form view)
+    //Thisregistryissupposedtocontainallcustomwidgetsthatwillbe
+    //availableinthebasicviews,withthetag<widget/>. Thereare
+    //currentlynosuchwidgetinthewebclient,butthefunctionalityis
+    //certainlyusefultobeabletocleanlyaddcustombehaviourinbasic
+    //views(andmostnotably,theformview)
     //
-    // The way custom widgets work is that they register themselves to this
-    // registry:
+    //Thewaycustomwidgetsworkisthattheyregisterthemselvestothis
+    //registry:
     //
-    // widgetRegistry.add('some_name', MyWidget);
+    //widgetRegistry.add('some_name',MyWidget);
     //
-    // Then, they are available with the <widget/> tag (in the arch):
+    //Then,theyareavailablewiththe<widget/>tag(inthearch):
     //
-    // <widget name="some_name"/>
+    //<widgetname="some_name"/>
     //
-    // Widgets will be then properly instantiated, rendered and destroyed at the
-    // appropriate time, with the current state in second argument.
+    //Widgetswillbethenproperlyinstantiated,renderedanddestroyedatthe
+    //appropriatetime,withthecurrentstateinsecondargument.
     //
-    // For more examples, look at the tests (grep '<widget' in the test folder)
+    //Formoreexamples,lookatthetests(grep'<widget'inthetestfolder)
 
-    var Registry = require('web.Registry');
+    varRegistry=require('web.Registry');
 
-    return new Registry();
+    returnnewRegistry();
 });

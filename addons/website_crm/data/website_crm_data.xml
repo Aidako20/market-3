@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="crm.model_crm_lead" model="ir.model">
-            <field name="website_form_key">create_lead</field>
-            <field name="website_form_default_field_id" ref="crm.field_crm_lead__description" />
-            <field name="website_form_access">True</field>
-            <field name="website_form_label">Create an Opportunity</field>
+        <recordid="crm.model_crm_lead"model="ir.model">
+            <fieldname="website_form_key">create_lead</field>
+            <fieldname="website_form_default_field_id"ref="crm.field_crm_lead__description"/>
+            <fieldname="website_form_access">True</field>
+            <fieldname="website_form_label">CreateanOpportunity</field>
         </record>
-        <function model="ir.model.fields" name="formbuilder_whitelist">
+        <functionmodel="ir.model.fields"name="formbuilder_whitelist">
             <value>crm.lead</value>
-            <value eval="[
+            <valueeval="[
                 'contact_name',
                 'description',
                 'email_from',
@@ -21,16 +21,16 @@
             ]"/>
         </function>
     </data>
-    <data noupdate="1">
-        <record id="action_open_website" model="ir.actions.act_url">
-            <field name="name">Website Contact Form</field>
-            <field name="target">self</field>
-            <field name="url">/contactus</field>
+    <datanoupdate="1">
+        <recordid="action_open_website"model="ir.actions.act_url">
+            <fieldname="name">WebsiteContactForm</field>
+            <fieldname="target">self</field>
+            <fieldname="url">/contactus</field>
         </record>
 
-        <record id="base.open_menu" model="ir.actions.todo">
-            <field name="action_id" ref="action_open_website"/>
-            <field name="state">open</field>
+        <recordid="base.open_menu"model="ir.actions.todo">
+            <fieldname="action_id"ref="action_open_website"/>
+            <fieldname="state">open</field>
         </record>
     </data>
 </flectra>

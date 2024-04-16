@@ -1,13 +1,13 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import models, fields
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportmodels,fields
 
 
-class AccountJournal(models.Model):
+classAccountJournal(models.Model):
 
-    _inherit = 'account.journal'
+    _inherit='account.journal'
 
-    invoice_reference_model = fields.Selection(selection_add=[
-        ('fi', 'Finnish Standard Reference'),
-        ('fi_rf', 'Finnish Creditor Reference (RF)'),
-    ], ondelete={'fi': lambda recs: recs.write({'invoice_reference_model': 'flectra'}),
-                 'fi_rf': lambda recs: recs.write({'invoice_reference_model': 'flectra'})})
+    invoice_reference_model=fields.Selection(selection_add=[
+        ('fi','FinnishStandardReference'),
+        ('fi_rf','FinnishCreditorReference(RF)'),
+    ],ondelete={'fi':lambdarecs:recs.write({'invoice_reference_model':'flectra'}),
+                 'fi_rf':lambdarecs:recs.write({'invoice_reference_model':'flectra'})})

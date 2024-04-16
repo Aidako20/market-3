@@ -1,30 +1,30 @@
-flectra.define('mail.DebugManager.Backend', function (require) {
-"use strict";
+flectra.define('mail.DebugManager.Backend',function(require){
+"usestrict";
 
-var core = require('web.core');
-var DebugManager = require('web.DebugManager.Backend');
+varcore=require('web.core');
+varDebugManager=require('web.DebugManager.Backend');
 
-var _t = core._t;
+var_t=core._t;
 /**
- * adds a new method available for the debug manager, called by the "Manage Messages" button.
+ *addsanewmethodavailableforthedebugmanager,calledbythe"ManageMessages"button.
  *
  */
 DebugManager.include({
-    getMailMessages: function () {
-        var selectedIDs = this._controller.getSelectedIds();
-        if (!selectedIDs.length) {
-            console.warn(_t("No message available"));
+    getMailMessages:function(){
+        varselectedIDs=this._controller.getSelectedIds();
+        if(!selectedIDs.length){
+            console.warn(_t("Nomessageavailable"));
             return;
         }
         this.do_action({
-            res_model: 'mail.message',
-            name: _t('Manage Messages'),
-            views: [[false, 'list'], [false, 'form']],
-            type: 'ir.actions.act_window',
-            domain: [['res_id', '=', selectedIDs[0]], ['model', '=', this._controller.modelName]],
-            context: {
-                default_res_model: this._controller.modelName,
-                default_res_id: selectedIDs[0],
+            res_model:'mail.message',
+            name:_t('ManageMessages'),
+            views:[[false,'list'],[false,'form']],
+            type:'ir.actions.act_window',
+            domain:[['res_id','=',selectedIDs[0]],['model','=',this._controller.modelName]],
+            context:{
+                default_res_model:this._controller.modelName,
+                default_res_id:selectedIDs[0],
             },
         });
     },

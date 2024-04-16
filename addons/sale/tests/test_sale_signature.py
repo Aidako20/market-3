@@ -1,31 +1,31 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.addons.base.tests.common import HttpCaseWithUserPortal
-from flectra.tests import tagged
+fromflectra.addons.base.tests.commonimportHttpCaseWithUserPortal
+fromflectra.testsimporttagged
 
 
-@tagged('post_install', '-at_install')
-class TestSaleSignature(HttpCaseWithUserPortal):
-    def test_01_portal_sale_signature_tour(self):
-        """The goal of this test is to make sure the portal user can sign SO."""
+@tagged('post_install','-at_install')
+classTestSaleSignature(HttpCaseWithUserPortal):
+    deftest_01_portal_sale_signature_tour(self):
+        """ThegoalofthistestistomakesuretheportalusercansignSO."""
 
-        portal_user = self.partner_portal
-        # create a SO to be signed
-        sales_order = self.env['sale.order'].create({
-            'name': 'test SO',
-            'partner_id': portal_user.id,
-            'state': 'sent',
-            'require_payment': False,
+        portal_user=self.partner_portal
+        #createaSOtobesigned
+        sales_order=self.env['sale.order'].create({
+            'name':'testSO',
+            'partner_id':portal_user.id,
+            'state':'sent',
+            'require_payment':False,
         })
         self.env['sale.order.line'].create({
-            'order_id': sales_order.id,
-            'product_id': self.env['product.product'].create({'name': 'A product'}).id,
+            'order_id':sales_order.id,
+            'product_id':self.env['product.product'].create({'name':'Aproduct'}).id,
         })
 
-        # must be sent to the user so he can see it
-        email_act = sales_order.action_quotation_send()
-        email_ctx = email_act.get('context', {})
+        #mustbesenttotheusersohecanseeit
+        email_act=sales_order.action_quotation_send()
+        email_ctx=email_act.get('context',{})
         sales_order.with_context(**email_ctx).message_post_with_template(email_ctx.get('default_template_id'))
 
-        self.start_tour("/", 'sale_signature', login="portal")
+        self.start_tour("/",'sale_signature',login="portal")

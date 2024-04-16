@@ -1,110 +1,110 @@
-flectra.define('web.list_benchmarks', function (require) {
-    "use strict";
+flectra.define('web.list_benchmarks',function(require){
+    "usestrict";
 
-    const ListView = require('web.ListView');
-    const { createView } = require('web.test_utils');
+    constListView=require('web.ListView');
+    const{createView}=require('web.test_utils');
 
-    QUnit.module('List View', {
-        beforeEach: function () {
-            this.data = {
-                foo: {
-                    fields: {
-                        foo: {string: "Foo", type: "char"},
-                        bar: {string: "Bar", type: "boolean"},
-                        int_field: {string: "int_field", type: "integer", sortable: true},
-                        qux: {string: "my float", type: "float"},
+    QUnit.module('ListView',{
+        beforeEach:function(){
+            this.data={
+                foo:{
+                    fields:{
+                        foo:{string:"Foo",type:"char"},
+                        bar:{string:"Bar",type:"boolean"},
+                        int_field:{string:"int_field",type:"integer",sortable:true},
+                        qux:{string:"myfloat",type:"float"},
                     },
-                    records: [
-                        {id: 1, bar: true, foo: "yop", int_field: 10, qux: 0.4},
-                        {id: 2, bar: true, foo: "blip", int_field: 9, qux: 13},
+                    records:[
+                        {id:1,bar:true,foo:"yop",int_field:10,qux:0.4},
+                        {id:2,bar:true,foo:"blip",int_field:9,qux:13},
                     ]
                 },
             };
-            this.arch = null;
-            this.run = function (assert, cb) {
-                const data = this.data;
-                const arch = this.arch;
-                return new Promise(resolve => {
-                    new Benchmark.Suite({})
-                        .add('list', {
-                            defer: true,
-                            fn: async (deferred) => {
-                                const list = await createView({
-                                    View: ListView,
-                                    model: 'foo',
+            this.arch=null;
+            this.run=function(assert,cb){
+                constdata=this.data;
+                constarch=this.arch;
+                returnnewPromise(resolve=>{
+                    newBenchmark.Suite({})
+                        .add('list',{
+                            defer:true,
+                            fn:async(deferred)=>{
+                                constlist=awaitcreateView({
+                                    View:ListView,
+                                    model:'foo',
                                     data,
                                     arch,
                                 });
-                                if (cb) {
+                                if(cb){
                                     cb(list);
                                 }
                                 list.destroy();
                                 deferred.resolve();
                             },
                         })
-                        .on('cycle', event => {
-                            assert.ok(true, String(event.target));
+                        .on('cycle',event=>{
+                            assert.ok(true,String(event.target));
                         })
-                        .on('complete', resolve)
-                        .run({ async: true });
+                        .on('complete',resolve)
+                        .run({async:true});
                 });
             };
         }
-    }, function () {
-        QUnit.test('simple readonly list with 2 rows and 2 fields', function (assert) {
+    },function(){
+        QUnit.test('simplereadonlylistwith2rowsand2fields',function(assert){
             assert.expect(1);
 
-            this.arch = '<tree><field name="foo"/><field name="int_field"/></tree>';
-            return this.run(assert);
+            this.arch='<tree><fieldname="foo"/><fieldname="int_field"/></tree>';
+            returnthis.run(assert);
         });
 
-        QUnit.test('simple readonly list with 200 rows and 2 fields', function (assert) {
+        QUnit.test('simplereadonlylistwith200rowsand2fields',function(assert){
             assert.expect(1);
 
-            for (let i = 2; i < 200; i++) {
+            for(leti=2;i<200;i++){
                 this.data.foo.records.push({
-                    id: i,
-                    foo: "automated data",
-                    int_field: 10 * i,
+                    id:i,
+                    foo:"automateddata",
+                    int_field:10*i,
                 });
             }
-            this.arch = '<tree><field name="foo"/><field name="int_field"/></tree>';
-            return this.run(assert);
+            this.arch='<tree><fieldname="foo"/><fieldname="int_field"/></tree>';
+            returnthis.run(assert);
         });
 
-        QUnit.test('simple readonly list with 200 rows and 2 fields (with widgets)', function (assert) {
+        QUnit.test('simplereadonlylistwith200rowsand2fields(withwidgets)',function(assert){
             assert.expect(1);
 
-            for (let i = 2; i < 200; i++) {
+            for(leti=2;i<200;i++){
                 this.data.foo.records.push({
-                    id: i,
-                    foo: "automated data",
-                    int_field: 10 * i,
+                    id:i,
+                    foo:"automateddata",
+                    int_field:10*i,
                 });
             }
-            this.arch = '<tree><field name="foo" widget="char"/><field name="int_field" widget="integer"/></tree>';
-            return this.run(assert);
+            this.arch='<tree><fieldname="foo"widget="char"/><fieldname="int_field"widget="integer"/></tree>';
+            returnthis.run(assert);
         });
 
-        QUnit.test('editable list with 200 rows 4 fields', function (assert) {
+        QUnit.test('editablelistwith200rows4fields',function(assert){
             assert.expect(1);
 
-            for (let i = 2; i < 200; i++) {
+            for(leti=2;i<200;i++){
                 this.data.foo.records.push({
-                    id: i,
-                    foo: "automated data",
-                    int_field: 10 * i,
-                    bar: i % 2 === 0,
+                    id:i,
+                    foo:"automateddata",
+                    int_field:10*i,
+                    bar:i%2===0,
                 });
             }
-            this.arch = `
-                <tree editable="bottom">
-                    <field name="foo" attrs="{'readonly': [['bar', '=', True]]}"/>
-                    <field name="int_field"/>
-                    <field name="bar"/>
-                    <field name="qux"/>
+            this.arch=`
+                <treeeditable="bottom">
+                    <fieldname="foo"attrs="{'readonly':[['bar','=',True]]}"/>
+                    <fieldname="int_field"/>
+                    <fieldname="bar"/>
+                    <fieldname="qux"/>
                 </tree>`;
-            return this.run(assert, list => {
+            returnthis.run(assert,list=>{
                 list.$('.o_list_button_add').click();
                 list.$('.o_list_button_discard').click();
             });

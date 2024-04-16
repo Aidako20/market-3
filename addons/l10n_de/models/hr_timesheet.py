@@ -1,16 +1,16 @@
-from flectra import models, fields, api, _
+fromflectraimportmodels,fields,api,_
 
-class AccountAnalyticLine(models.Model):
-    _inherit = 'account.analytic.line'
+classAccountAnalyticLine(models.Model):
+    _inherit='account.analytic.line'
 
-    l10n_de_template_data = fields.Binary(compute='_compute_l10n_de_template_data')
-    l10n_de_document_title = fields.Char(compute='_compute_l10n_de_document_title')
+    l10n_de_template_data=fields.Binary(compute='_compute_l10n_de_template_data')
+    l10n_de_document_title=fields.Char(compute='_compute_l10n_de_document_title')
 
-    def _compute_l10n_de_template_data(self):
-        for record in self:
-            record.l10n_de_template_data = []
+    def_compute_l10n_de_template_data(self):
+        forrecordinself:
+            record.l10n_de_template_data=[]
 
-    def _compute_l10n_de_document_title(self):
-        for record in self:
-            record.l10n_de_document_title = ''
+    def_compute_l10n_de_document_title(self):
+        forrecordinself:
+            record.l10n_de_document_title=''
 

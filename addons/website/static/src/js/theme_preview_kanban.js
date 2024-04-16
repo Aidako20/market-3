@@ -1,61 +1,61 @@
-flectra.define('website.theme_preview_kanban', function (require) {
-"use strict";
+flectra.define('website.theme_preview_kanban',function(require){
+"usestrict";
 
-var KanbanController = require('web.KanbanController');
-var KanbanView = require('web.KanbanView');
-var ViewRegistry = require('web.view_registry');
-const ThemePreviewControllerCommon = require('website.theme_preview_form').ThemePreviewControllerCommon;
-var core = require('web.core');
-var _lt = core._lt;
+varKanbanController=require('web.KanbanController');
+varKanbanView=require('web.KanbanView');
+varViewRegistry=require('web.view_registry');
+constThemePreviewControllerCommon=require('website.theme_preview_form').ThemePreviewControllerCommon;
+varcore=require('web.core');
+var_lt=core._lt;
 
-var ThemePreviewKanbanController = KanbanController.extend(ThemePreviewControllerCommon, {
+varThemePreviewKanbanController=KanbanController.extend(ThemePreviewControllerCommon,{
     /**
-     * @override
+     *@override
      */
-    start: async function () {
-        await this._super(...arguments);
+    start:asyncfunction(){
+        awaitthis._super(...arguments);
 
-        // hide pager
+        //hidepager
         this.el.classList.add('o_view_kanban_theme_preview_controller');
 
-        // update breacrumb
-        const websiteLink = Object.assign(document.createElement('a'), {
-            className: 'btn btn-secondary ml-3 text-black-75',
-            href: '/',
-            innerHTML: '<i class="fa fa-close"></i>',
+        //updatebreacrumb
+        constwebsiteLink=Object.assign(document.createElement('a'),{
+            className:'btnbtn-secondaryml-3text-black-75',
+            href:'/',
+            innerHTML:'<iclass="fafa-close"></i>',
         });
-        const smallBreadcumb = Object.assign(document.createElement('small'), {
-            className: 'mx-2 text-muted',
-            innerHTML: _lt("Don't worry, you can switch later."),
+        constsmallBreadcumb=Object.assign(document.createElement('small'),{
+            className:'mx-2text-muted',
+            innerHTML:_lt("Don'tworry,youcanswitchlater."),
         });
-        this._controlPanelWrapper.el.querySelector('.o_cp_top .breadcrumb li.active').classList.add('text-black-75');
+        this._controlPanelWrapper.el.querySelector('.o_cp_top.breadcrumbli.active').classList.add('text-black-75');
         this._controlPanelWrapper.el.querySelector('.o_cp_top').appendChild(websiteLink);
-        this._controlPanelWrapper.el.querySelector('.o_cp_top li').appendChild(smallBreadcumb);
+        this._controlPanelWrapper.el.querySelector('.o_cp_topli').appendChild(smallBreadcumb);
     },
     /**
-     * Called when user click on any button in kanban view.
-     * Targeted buttons are selected using name attribute value.
+     *Calledwhenuserclickonanybuttoninkanbanview.
+     *Targetedbuttonsareselectedusingnameattributevalue.
      *
-     * @override
+     *@override
      */
-    _onButtonClicked: function (ev) {
-        const attrName = ev.data.attrs.name;
-        if (attrName === 'button_choose_theme' || attrName === 'button_refresh_theme') {
-            this._handleThemeAction(ev.data.record.res_id, attrName);
-        } else {
+    _onButtonClicked:function(ev){
+        constattrName=ev.data.attrs.name;
+        if(attrName==='button_choose_theme'||attrName==='button_refresh_theme'){
+            this._handleThemeAction(ev.data.record.res_id,attrName);
+        }else{
             this._super(...arguments);
         }
     },
 });
 
-var ThemePreviewKanbanView = KanbanView.extend({
-    withSearchBar: false,  // hide searchBar
+varThemePreviewKanbanView=KanbanView.extend({
+    withSearchBar:false, //hidesearchBar
 
-    config: _.extend({}, KanbanView.prototype.config, {
-        Controller: ThemePreviewKanbanController,
+    config:_.extend({},KanbanView.prototype.config,{
+        Controller:ThemePreviewKanbanController,
     }),
 });
 
-ViewRegistry.add('theme_preview_kanban', ThemePreviewKanbanView);
+ViewRegistry.add('theme_preview_kanban',ThemePreviewKanbanView);
 
 });

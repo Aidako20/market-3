@@ -1,23 +1,23 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
-from flectra.exceptions import AccessError
+fromflectraimportmodels
+fromflectra.exceptionsimportAccessError
 
 
-class Partner(models.Model):
+classPartner(models.Model):
 
-    _inherit = ['res.partner']
+    _inherit=['res.partner']
 
-    def name_get(self):
-        """ Override to allow an employee to see its private address in his profile.
-            This avoids to relax access rules on `res.parter` and to add an `ir.rule`.
-            (advantage in both security and performance).
-            Use a try/except instead of systematically checking to minimize the impact on performance.
+    defname_get(self):
+        """Overridetoallowanemployeetoseeitsprivateaddressinhisprofile.
+            Thisavoidstorelaxaccessruleson`res.parter`andtoaddan`ir.rule`.
+            (advantageinbothsecurityandperformance).
+            Useatry/exceptinsteadofsystematicallycheckingtominimizetheimpactonperformance.
             """
         try:
-            return super(Partner, self).name_get()
-        except AccessError as e:
-            if len(self) == 1 and self in self.env.user.employee_ids.mapped('address_home_id'):
-                return super(Partner, self.sudo()).name_get()
-            raise e
+            returnsuper(Partner,self).name_get()
+        exceptAccessErrorase:
+            iflen(self)==1andselfinself.env.user.employee_ids.mapped('address_home_id'):
+                returnsuper(Partner,self.sudo()).name_get()
+            raisee

@@ -1,26 +1,26 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ReportProjectTaskUser(models.Model):
-    _inherit = "report.project.task.user"
+classReportProjectTaskUser(models.Model):
+    _inherit="report.project.task.user"
 
-    hours_planned = fields.Float('Planned Hours', readonly=True)
-    hours_effective = fields.Float('Effective Hours', readonly=True)
-    remaining_hours = fields.Float('Remaining Hours', readonly=True)
-    progress = fields.Float('Progress', group_operator='avg', readonly=True)
+    hours_planned=fields.Float('PlannedHours',readonly=True)
+    hours_effective=fields.Float('EffectiveHours',readonly=True)
+    remaining_hours=fields.Float('RemainingHours',readonly=True)
+    progress=fields.Float('Progress',group_operator='avg',readonly=True)
 
-    def _select(self):
-        return super(ReportProjectTaskUser, self)._select() + """,
-            t.progress as progress,
-            t.effective_hours as hours_effective,
-            t.planned_hours - t.effective_hours - t.subtask_effective_hours as remaining_hours,
-            planned_hours as hours_planned"""
+    def_select(self):
+        returnsuper(ReportProjectTaskUser,self)._select()+""",
+            t.progressasprogress,
+            t.effective_hoursashours_effective,
+            t.planned_hours-t.effective_hours-t.subtask_effective_hoursasremaining_hours,
+            planned_hoursashours_planned"""
 
-    def _group_by(self):
-        return super(ReportProjectTaskUser, self)._group_by() + """,
+    def_group_by(self):
+        returnsuper(ReportProjectTaskUser,self)._group_by()+""",
             remaining_hours,
             t.effective_hours,
             t.progress,

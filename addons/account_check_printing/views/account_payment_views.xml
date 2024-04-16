@@ -1,36 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <record id="view_account_payment_form_inherited" model="ir.ui.view">
-            <field name="name">account.payment.form.inherited</field>
-            <field name="model">account.payment</field>
-            <field name="inherit_id" ref="account.view_account_payment_form" />
-            <field name="arch" type="xml">
-                <xpath expr="//button[@name='action_post']" position="before">
-                    <button name="print_checks" class="oe_highlight" attrs="{'invisible': ['|', '|', ('payment_method_code', '!=', 'check_printing'), ('state', '!=', 'posted'), ('is_move_sent', '=', True)]}" string="Print Check" type="object"/>
-                    <button name="action_unmark_sent" attrs="{'invisible': ['|', ('payment_method_code', '!=', 'check_printing'), ('is_move_sent', '=', False)]}" string="Unmark Sent" type="object"/>
-                    <button name="action_void_check" attrs="{'invisible': ['|', '|', ('payment_method_code', '!=', 'check_printing'), ('state', '!=', 'posted'), ('is_move_sent', '=', False)]}" string="Void Check" type="object"/>
+        <recordid="view_account_payment_form_inherited"model="ir.ui.view">
+            <fieldname="name">account.payment.form.inherited</field>
+            <fieldname="model">account.payment</field>
+            <fieldname="inherit_id"ref="account.view_account_payment_form"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//button[@name='action_post']"position="before">
+                    <buttonname="print_checks"class="oe_highlight"attrs="{'invisible':['|','|',('payment_method_code','!=','check_printing'),('state','!=','posted'),('is_move_sent','=',True)]}"string="PrintCheck"type="object"/>
+                    <buttonname="action_unmark_sent"attrs="{'invisible':['|',('payment_method_code','!=','check_printing'),('is_move_sent','=',False)]}"string="UnmarkSent"type="object"/>
+                    <buttonname="action_void_check"attrs="{'invisible':['|','|',('payment_method_code','!=','check_printing'),('state','!=','posted'),('is_move_sent','=',False)]}"string="VoidCheck"type="object"/>
                 </xpath>
-                <xpath expr="//div[@name='amount_div']" position="after">
-                    <field name="check_amount_in_words" attrs="{'invisible': [('payment_method_code', '!=', 'check_printing')]}" groups="base.group_no_one"/>
+                <xpathexpr="//div[@name='amount_div']"position="after">
+                    <fieldname="check_amount_in_words"attrs="{'invisible':[('payment_method_code','!=','check_printing')]}"groups="base.group_no_one"/>
                 </xpath>
-                <xpath expr="//field[@name='ref']" position="after">
-                    <field name="check_manual_sequencing" invisible="1"/>
-                    <field name="check_number" attrs="{'invisible': ['|', ('payment_method_code', '!=', 'check_printing'), ('check_number', '=', False)]}"/>
+                <xpathexpr="//field[@name='ref']"position="after">
+                    <fieldname="check_manual_sequencing"invisible="1"/>
+                    <fieldname="check_number"attrs="{'invisible':['|',('payment_method_code','!=','check_printing'),('check_number','=',False)]}"/>
                 </xpath>
-                <xpath expr="//field[@name='name']" position='before'>
-                    <widget name="web_ribbon" title="Sent" attrs="{'invisible': [('is_move_sent', '!=', True)]}"/>
+                <xpathexpr="//field[@name='name']"position='before'>
+                    <widgetname="web_ribbon"title="Sent"attrs="{'invisible':[('is_move_sent','!=',True)]}"/>
                 </xpath>
             </field>
         </record>
 
-        <record id="view_payment_check_printing_search" model="ir.ui.view">
-            <field name="name">account.payment.check.printing.search</field>
-            <field name="model">account.payment</field>
-            <field name="inherit_id" ref="account.view_account_payment_search"/>
-            <field name="arch" type="xml">
-                <xpath expr="//filter[@name='activities_overdue']" position="before">
+        <recordid="view_payment_check_printing_search"model="ir.ui.view">
+            <fieldname="name">account.payment.check.printing.search</field>
+            <fieldname="model">account.payment</field>
+            <fieldname="inherit_id"ref="account.view_account_payment_search"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//filter[@name='activities_overdue']"position="before">
                     <separator/>
-                    <filter name="checks_to_send" string="Checks to Print" domain="[('payment_method_id.code', '=', 'check_printing'), ('state', '=', 'posted'), ('is_move_sent', '=', False)]"/>
+                    <filtername="checks_to_send"string="CheckstoPrint"domain="[('payment_method_id.code','=','check_printing'),('state','=','posted'),('is_move_sent','=',False)]"/>
                     <separator/>
                 </xpath>
             </field>

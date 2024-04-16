@@ -1,39 +1,39 @@
-flectra.define('pos_restaurant.tour.TextAreaPopupTourMethods', function (require) {
-    'use strict';
+flectra.define('pos_restaurant.tour.TextAreaPopupTourMethods',function(require){
+    'usestrict';
 
-    const { createTourMethods } = require('point_of_sale.tour.utils');
+    const{createTourMethods}=require('point_of_sale.tour.utils');
 
-    class Do {
-        inputText(val) {
-            return [
+    classDo{
+        inputText(val){
+            return[
                 {
-                    content: `input text '${val}'`,
-                    trigger: `.modal-dialog .popup-textarea textarea`,
-                    run: `text ${val}`,
+                    content:`inputtext'${val}'`,
+                    trigger:`.modal-dialog.popup-textareatextarea`,
+                    run:`text${val}`,
                 },
             ];
         }
-        clickConfirm() {
-            return [
+        clickConfirm(){
+            return[
                 {
-                    content: 'confirm text input popup',
-                    trigger: '.modal-dialog .confirm',
-                },
-            ];
-        }
-    }
-
-    class Check {
-        isShown() {
-            return [
-                {
-                    content: 'text input popup is shown',
-                    trigger: '.modal-dialog .popup-textarea',
-                    run: () => {},
+                    content:'confirmtextinputpopup',
+                    trigger:'.modal-dialog.confirm',
                 },
             ];
         }
     }
 
-    return createTourMethods('TextAreaPopup', Do, Check);
+    classCheck{
+        isShown(){
+            return[
+                {
+                    content:'textinputpopupisshown',
+                    trigger:'.modal-dialog.popup-textarea',
+                    run:()=>{},
+                },
+            ];
+        }
+    }
+
+    returncreateTourMethods('TextAreaPopup',Do,Check);
 });

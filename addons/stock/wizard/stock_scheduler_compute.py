@@ -1,46 +1,46 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
 #
-# Order Point Method:
-#    - Order if the virtual stock of today is below the min of the defined order point
+#OrderPointMethod:
+#   -Orderifthevirtualstockoftodayisbelowtheminofthedefinedorderpoint
 #
 
-from flectra import api, models, tools
+fromflectraimportapi,models,tools
 
-import logging
-import threading
+importlogging
+importthreading
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
 
-class StockSchedulerCompute(models.TransientModel):
-    _name = 'stock.scheduler.compute'
-    _description = 'Run Scheduler Manually'
+classStockSchedulerCompute(models.TransientModel):
+    _name='stock.scheduler.compute'
+    _description='RunSchedulerManually'
 
-    def _procure_calculation_orderpoint(self):
-        # As this function is in a new thread, I need to open a new cursor, because the old one may be closed
-        with api.Environment.manage(), self.pool.cursor() as new_cr:
-            self = self.with_env(self.env(cr=new_cr))
-            scheduler_cron = self.sudo().env.ref('stock.ir_cron_scheduler_action')
-            # Avoid to run the scheduler multiple times in the same time
+    def_procure_calculation_orderpoint(self):
+        #Asthisfunctionisinanewthread,Ineedtoopenanewcursor,becausetheoldonemaybeclosed
+        withapi.Environment.manage(),self.pool.cursor()asnew_cr:
+            self=self.with_env(self.env(cr=new_cr))
+            scheduler_cron=self.sudo().env.ref('stock.ir_cron_scheduler_action')
+            #Avoidtoruntheschedulermultipletimesinthesametime
             try:
-                with tools.mute_logger('flectra.sql_db'):
-                    self._cr.execute("SELECT id FROM ir_cron WHERE id = %s FOR UPDATE NOWAIT", (scheduler_cron.id,))
-            except Exception:
-                _logger.info('Attempt to run procurement scheduler aborted, as already running')
+                withtools.mute_logger('flectra.sql_db'):
+                    self._cr.execute("SELECTidFROMir_cronWHEREid=%sFORUPDATENOWAIT",(scheduler_cron.id,))
+            exceptException:
+                _logger.info('Attempttorunprocurementscheduleraborted,asalreadyrunning')
                 self._cr.rollback()
-                return {}
+                return{}
 
-            for company in self.env.user.company_ids:
-                cids = (self.env.user.company_id | self.env.user.company_ids).ids
+            forcompanyinself.env.user.company_ids:
+                cids=(self.env.user.company_id|self.env.user.company_ids).ids
                 self.env['procurement.group'].with_context(allowed_company_ids=cids).run_scheduler(
                     use_new_cursor=self._cr.dbname,
                     company_id=company.id)
             self._cr.rollback()
-            return {}
+            return{}
 
-    def procure_calculation(self):
-        threaded_calculation = threading.Thread(target=self._procure_calculation_orderpoint, args=())
+    defprocure_calculation(self):
+        threaded_calculation=threading.Thread(target=self._procure_calculation_orderpoint,args=())
         threaded_calculation.start()
-        return {'type': 'ir.actions.client', 'tag': 'reload'}
+        return{'type':'ir.actions.client','tag':'reload'}

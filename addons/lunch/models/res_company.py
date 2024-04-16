@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, fields
+fromflectraimportmodels,fields
 
 
-class Company(models.Model):
-    _inherit = 'res.company'
+classCompany(models.Model):
+    _inherit='res.company'
 
-    lunch_minimum_threshold = fields.Float()
+    lunch_minimum_threshold=fields.Float()

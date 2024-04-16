@@ -1,119 +1,119 @@
-flectra.define('mail/static/src/components/attachment_list/attachment_list.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/attachment_list/attachment_list.js',function(require){
+'usestrict';
 
-const components = {
-    Attachment: require('mail/static/src/components/attachment/attachment.js'),
+constcomponents={
+    Attachment:require('mail/static/src/components/attachment/attachment.js'),
 };
 
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
 
-const { Component } = owl;
+const{Component}=owl;
 
-class AttachmentList extends Component {
+classAttachmentListextendsComponent{
 
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
         useShouldUpdateBasedOnProps({
-            compareDepth: {
-                attachmentLocalIds: 1,
+            compareDepth:{
+                attachmentLocalIds:1,
             },
         });
-        useStore(props => {
-            const attachments = this.env.models['mail.attachment'].all().filter(attachment =>
+        useStore(props=>{
+            constattachments=this.env.models['mail.attachment'].all().filter(attachment=>
                 props.attachmentLocalIds.includes(attachment.localId)
             );
-            return {
-                attachments: attachments
-                    ? attachments.map(attachment => attachment.__state)
-                    : undefined,
+            return{
+                attachments:attachments
+                    ?attachments.map(attachment=>attachment.__state)
+                    :undefined,
             };
-        }, {
-            compareDepth: {
-                attachments: 1,
+        },{
+            compareDepth:{
+                attachments:1,
             },
         });
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @returns {mail.attachment[]}
+     *@returns{mail.attachment[]}
      */
-    get attachments() {
-        return this.env.models['mail.attachment'].all().filter(attachment =>
+    getattachments(){
+        returnthis.env.models['mail.attachment'].all().filter(attachment=>
             this.props.attachmentLocalIds.includes(attachment.localId)
         );
     }
 
     /**
-     * @returns {mail.attachment[]}
+     *@returns{mail.attachment[]}
      */
-    get imageAttachments() {
-        return this.attachments.filter(attachment => attachment.fileType === 'image');
+    getimageAttachments(){
+        returnthis.attachments.filter(attachment=>attachment.fileType==='image');
     }
 
     /**
-     * @returns {mail.attachment[]}
+     *@returns{mail.attachment[]}
      */
-    get nonImageAttachments() {
-        return this.attachments.filter(attachment => attachment.fileType !== 'image');
+    getnonImageAttachments(){
+        returnthis.attachments.filter(attachment=>attachment.fileType!=='image');
     }
 
     /**
-     * @returns {mail.attachment[]}
+     *@returns{mail.attachment[]}
      */
-    get viewableAttachments() {
-        return this.attachments.filter(attachment => attachment.isViewable);
+    getviewableAttachments(){
+        returnthis.attachments.filter(attachment=>attachment.isViewable);
     }
 
 }
 
-Object.assign(AttachmentList, {
+Object.assign(AttachmentList,{
     components,
-    defaultProps: {
-        attachmentLocalIds: [],
+    defaultProps:{
+        attachmentLocalIds:[],
     },
-    props: {
-        areAttachmentsDownloadable: {
-            type: Boolean,
-            optional: true,
+    props:{
+        areAttachmentsDownloadable:{
+            type:Boolean,
+            optional:true,
         },
-        areAttachmentsEditable: {
-            type: Boolean,
-            optional: true,
+        areAttachmentsEditable:{
+            type:Boolean,
+            optional:true,
         },
-        attachmentLocalIds: {
-            type: Array,
-            element: String,
+        attachmentLocalIds:{
+            type:Array,
+            element:String,
         },
-        attachmentsDetailsMode: {
-            type: String,
-            optional: true,
-            validate: prop => ['auto', 'card', 'hover', 'none'].includes(prop),
+        attachmentsDetailsMode:{
+            type:String,
+            optional:true,
+            validate:prop=>['auto','card','hover','none'].includes(prop),
         },
-        attachmentsImageSize: {
-            type: String,
-            optional: true,
-            validate: prop => ['small', 'medium', 'large'].includes(prop),
+        attachmentsImageSize:{
+            type:String,
+            optional:true,
+            validate:prop=>['small','medium','large'].includes(prop),
         },
-        showAttachmentsExtensions: {
-            type: Boolean,
-            optional: true,
+        showAttachmentsExtensions:{
+            type:Boolean,
+            optional:true,
         },
-        showAttachmentsFilenames: {
-            type: Boolean,
-            optional: true,
+        showAttachmentsFilenames:{
+            type:Boolean,
+            optional:true,
         },
     },
-    template: 'mail.AttachmentList',
+    template:'mail.AttachmentList',
 });
 
-return AttachmentList;
+returnAttachmentList;
 
 });

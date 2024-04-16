@@ -1,17 +1,17 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, api
+fromflectraimportmodels,api
 
 
-class ResCompany(models.Model):
-    _inherit = 'res.company'
+classResCompany(models.Model):
+    _inherit='res.company'
 
     @api.model
-    def _set_default_sale_order_template_id_if_empty(self):
-        template = self.env.ref('sale_quotation_builder.sale_order_template_default', raise_if_not_found=False)
-        if not template:
+    def_set_default_sale_order_template_id_if_empty(self):
+        template=self.env.ref('sale_quotation_builder.sale_order_template_default',raise_if_not_found=False)
+        ifnottemplate:
             return
-        companies = self.sudo().search([])
-        for company in companies:
-            company.sale_order_template_id = company.sale_order_template_id or template
+        companies=self.sudo().search([])
+        forcompanyincompanies:
+            company.sale_order_template_id=company.sale_order_template_idortemplate

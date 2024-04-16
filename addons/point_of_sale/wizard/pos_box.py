@@ -1,35 +1,35 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, _
-from flectra.exceptions import UserError
+fromflectraimportapi,_
+fromflectra.exceptionsimportUserError
 
-from flectra.addons.account.wizard.pos_box import CashBox
+fromflectra.addons.account.wizard.pos_boximportCashBox
 
 
-class PosBox(CashBox):
-    _register = False
+classPosBox(CashBox):
+    _register=False
 
-    def run(self):
-        active_model = self.env.context.get('active_model', False)
-        active_ids = self.env.context.get('active_ids', [])
+    defrun(self):
+        active_model=self.env.context.get('active_model',False)
+        active_ids=self.env.context.get('active_ids',[])
 
-        if active_model == 'pos.session':
-            bank_statements = [session.cash_register_id for session in self.env[active_model].browse(active_ids) if session.cash_register_id]
-            if not bank_statements:
-                raise UserError(_("There is no cash register for this PoS Session"))
-            return self._run(bank_statements)
+        ifactive_model=='pos.session':
+            bank_statements=[session.cash_register_idforsessioninself.env[active_model].browse(active_ids)ifsession.cash_register_id]
+            ifnotbank_statements:
+                raiseUserError(_("ThereisnocashregisterforthisPoSSession"))
+            returnself._run(bank_statements)
         else:
-            return super(PosBox, self).run()
+            returnsuper(PosBox,self).run()
 
 
-class PosBoxOut(PosBox):
-    _inherit = 'cash.box.out'
+classPosBoxOut(PosBox):
+    _inherit='cash.box.out'
 
-    def _calculate_values_for_statement_line(self, record):
-        values = super(PosBoxOut, self)._calculate_values_for_statement_line(record)
-        active_model = self.env.context.get('active_model', False)
-        active_ids = self.env.context.get('active_ids', [])
-        if active_model == 'pos.session' and active_ids:
-            values['ref'] = self.env[active_model].browse(active_ids)[0].name
-        return values
+    def_calculate_values_for_statement_line(self,record):
+        values=super(PosBoxOut,self)._calculate_values_for_statement_line(record)
+        active_model=self.env.context.get('active_model',False)
+        active_ids=self.env.context.get('active_ids',[])
+        ifactive_model=='pos.session'andactive_ids:
+            values['ref']=self.env[active_model].browse(active_ids)[0].name
+        returnvalues

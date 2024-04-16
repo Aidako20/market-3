@@ -1,31 +1,31 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra><data>
 
-    <!-- MAIN ITEMS -->
-    <menuitem id="menu_event_track"
+    <!--MAINITEMS-->
+    <menuitemid="menu_event_track"
         name="Tracks"
         sequence="40"
         action="action_event_track"
         parent="event.event_main_menu"
         groups="base.group_no_one"/>
 
-    <!-- CONFIGURATION -->
-    <menuitem id="event_track_stage_menu"
-        name="Track Stages"
+    <!--CONFIGURATION-->
+    <menuitemid="event_track_stage_menu"
+        name="TrackStages"
         action="event_track_stage_action"
         parent="event.menu_event_configuration"
         groups="base.group_no_one"
         sequence="30"/>
 
-    <menuitem id="menu_event_track_location"
-        name="Track Locations"
+    <menuitemid="menu_event_track_location"
+        name="TrackLocations"
         action="action_event_track_location"
         parent="event.menu_event_configuration"
         groups="base.group_no_one"
         sequence="32"/>
 
-    <menuitem id="event_track_tag_category_menu"
-        name="Track Tag Categories"
+    <menuitemid="event_track_tag_category_menu"
+        name="TrackTagCategories"
         action="event_track_tag_category_action"
         parent="event.menu_event_configuration"
         groups="base.group_no_one"
@@ -33,21 +33,21 @@
 
     <menuitem
         id="menu_event_track_tag"
-        name="Track Tags"
+        name="TrackTags"
         action="action_event_track_tag"
         parent="event.menu_event_configuration"
         groups="base.group_no_one"
         sequence="34"/>
 
-    <menuitem id="event_track_visitor_menu"
-        name="Track Visitors"
+    <menuitemid="event_track_visitor_menu"
+        name="TrackVisitors"
         sequence="38"
         action="event_track_visitor_action"
         parent="event.menu_event_configuration"
         groups="base.group_no_one"/>
 
-    <menuitem id="menu_event_sponsor_type"
-        name="Sponsor Types"
+    <menuitemid="menu_event_sponsor_type"
+        name="SponsorTypes"
         action="event_sponsor_type_action"
         parent="event.menu_event_configuration"
         groups="base.group_no_one"

@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="view_picking_form_inherit_website_sale_stock" model="ir.ui.view">
-        <field name="name">stock.picking.form.inherit.website.sale.stock</field>
-        <field name="model">stock.picking</field>
-        <field name="inherit_id" ref="stock.view_picking_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//page[@name='extra']/group/group/field[@name='company_id']" position="before">
-                <field name="website_id" groups="website.group_multi_website" invisible="1"/>
+    <recordid="view_picking_form_inherit_website_sale_stock"model="ir.ui.view">
+        <fieldname="name">stock.picking.form.inherit.website.sale.stock</field>
+        <fieldname="model">stock.picking</field>
+        <fieldname="inherit_id"ref="stock.view_picking_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//page[@name='extra']/group/group/field[@name='company_id']"position="before">
+                <fieldname="website_id"groups="website.group_multi_website"invisible="1"/>
             </xpath>
         </field>
     </record>

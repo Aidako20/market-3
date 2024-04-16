@@ -1,59 +1,59 @@
-flectra.define('website/static/tests/dashboard_tests', function (require) {
-"use strict";
+flectra.define('website/static/tests/dashboard_tests',function(require){
+"usestrict";
 
-const ControlPanel = require('web.ControlPanel');
-const Dashboard = require('website.backend.dashboard');
-const testUtils = require("web.test_utils");
+constControlPanel=require('web.ControlPanel');
+constDashboard=require('website.backend.dashboard');
+consttestUtils=require("web.test_utils");
 
-const { createParent, nextTick, prepareTarget } = testUtils;
+const{createParent,nextTick,prepareTarget}=testUtils;
 
-QUnit.module('Website Backend Dashboard', {
-}, function () {
-    QUnit.test("mounted is called once for the dashboarrd's ControlPanel", async function (assert) {
-        // This test can be removed as soon as we don't mix legacy and owl layers anymore.
+QUnit.module('WebsiteBackendDashboard',{
+},function(){
+    QUnit.test("mountediscalledonceforthedashboarrd'sControlPanel",asyncfunction(assert){
+        //Thistestcanberemovedassoonaswedon'tmixlegacyandowllayersanymore.
         assert.expect(5);
 
-        ControlPanel.patch('test.ControlPanel', T => {
-            class ControlPanelPatchTest extends T {
-                mounted() {
+        ControlPanel.patch('test.ControlPanel',T=>{
+            classControlPanelPatchTestextendsT{
+                mounted(){
                     assert.step('mounted');
                     super.mounted(...arguments);
                 }
-                willUnmount() {
+                willUnmount(){
                     assert.step('willUnmount');
                     super.mounted(...arguments);
                 }
             }
-            return ControlPanelPatchTest;
+            returnControlPanelPatchTest;
         });
 
-        const params = {
-            mockRPC: (route) => {
-                if (route === '/website/fetch_dashboard_data') {
-                    return Promise.resolve({
-                        dashboards: {
-                            visits: {},
-                            sales: { summary: {} },
+        constparams={
+            mockRPC:(route)=>{
+                if(route==='/website/fetch_dashboard_data'){
+                    returnPromise.resolve({
+                        dashboards:{
+                            visits:{},
+                            sales:{summary:{}},
                         },
-                        groups: { system: true, website_designer: true },
-                        websites: [
-                            {id: 1, name: "My Website", domain: "", selected: true},
+                        groups:{system:true,website_designer:true},
+                        websites:[
+                            {id:1,name:"MyWebsite",domain:"",selected:true},
                         ],
                     });
                 }
-                return this._super(...arguments);
+                returnthis._super(...arguments);
             },
         };
-        const parent = await createParent(params);
-        const dashboard = new Dashboard(parent, {});
-        await dashboard.appendTo(document.createDocumentFragment());
+        constparent=awaitcreateParent(params);
+        constdashboard=newDashboard(parent,{});
+        awaitdashboard.appendTo(document.createDocumentFragment());
 
         assert.verifySteps([]);
 
         dashboard.$el.appendTo(prepareTarget());
         dashboard.on_attach_callback();
 
-        await nextTick();
+        awaitnextTick();
 
         assert.verifySteps(['mounted']);
 

@@ -1,51 +1,51 @@
-flectra.define('sale.tour_sale_signature', function (require) {
-'use strict';
+flectra.define('sale.tour_sale_signature',function(require){
+'usestrict';
 
-var tour = require('web_tour.tour');
+vartour=require('web_tour.tour');
 
-// This tour relies on data created on the Python test.
-tour.register('sale_signature', {
-    test: true,
-    url: '/my/quotes',
+//ThistourreliesondatacreatedonthePythontest.
+tour.register('sale_signature',{
+    test:true,
+    url:'/my/quotes',
 },
 [
     {
-        content: "open the test SO",
-        trigger: 'a:containsExact("test SO")',
+        content:"openthetestSO",
+        trigger:'a:containsExact("testSO")',
     },
     {
-        content: "click sign",
-        trigger: 'a:contains("Sign")',
+        content:"clicksign",
+        trigger:'a:contains("Sign")',
     },
     {
-        content: "check submit is disabled",
-        trigger: '.o_portal_sign_submit:disabled',
-        run: function () {},
+        content:"checksubmitisdisabled",
+        trigger:'.o_portal_sign_submit:disabled',
+        run:function(){},
     },
     {
-        content: "click Auto",
-        trigger: '.o_web_sign_auto_button',
+        content:"clickAuto",
+        trigger:'.o_web_sign_auto_button',
     },
     {
-        content: "check submit is enabled",
-        trigger: '.o_portal_sign_submit:enabled',
-        run: function () {},
+        content:"checksubmitisenabled",
+        trigger:'.o_portal_sign_submit:enabled',
+        run:function(){},
     },
     {
-        content: "click select style",
-        trigger: '.o_web_sign_auto_select_style a',
+        content:"clickselectstyle",
+        trigger:'.o_web_sign_auto_select_stylea',
     },
     {
-        content: "click style 4",
-        trigger: '.o_web_sign_auto_font_selection a:eq(3)',
+        content:"clickstyle4",
+        trigger:'.o_web_sign_auto_font_selectiona:eq(3)',
     },
     {
-        content: "click submit",
-        trigger: '.o_portal_sign_submit:enabled',
+        content:"clicksubmit",
+        trigger:'.o_portal_sign_submit:enabled',
     },
     {
-        content: "check it's confirmed",
-        trigger: '#quote_content:contains("Thank You")',
+        content:"checkit'sconfirmed",
+        trigger:'#quote_content:contains("ThankYou")',
     },
 ]);
 });

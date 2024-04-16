@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
 
-<t t-extend="website_event_track_live.website_event_track_suggestion">
-    <t t-jquery="a.owevent_track_suggestion_replay" t-operation="before">
-        <a t-if="widget.currentTrack.showQuiz" class="btn btn-primary btn-lg mr-2 owevent_track_suggestion_quiz"
+<tt-extend="website_event_track_live.website_event_track_suggestion">
+    <tt-jquery="a.owevent_track_suggestion_replay"t-operation="before">
+        <at-if="widget.currentTrack.showQuiz"class="btnbtn-primarybtn-lgmr-2owevent_track_suggestion_quiz"
            href="#we_track_quiz_container"
            onclick="$('.o_quiz_js_quiz_container').removeClass('d-none');">
-            <span>Take the Quiz</span>
+            <span>TaketheQuiz</span>
         </a>
     </t>
 </t>

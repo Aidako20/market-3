@@ -1,70 +1,70 @@
-flectra.define('pos_restaurant.tour.ProductScreenTourMethods', function (require) {
-    'use strict';
+flectra.define('pos_restaurant.tour.ProductScreenTourMethods',function(require){
+    'usestrict';
 
-    const { createTourMethods } = require('point_of_sale.tour.utils');
-    const { Do, Check, Execute } = require('point_of_sale.tour.ProductScreenTourMethods');
+    const{createTourMethods}=require('point_of_sale.tour.utils');
+    const{Do,Check,Execute}=require('point_of_sale.tour.ProductScreenTourMethods');
 
-    class DoExt extends Do {
-        clickSplitBillButton() {
-            return [
+    classDoExtextendsDo{
+        clickSplitBillButton(){
+            return[
                 {
-                    content: 'click split bill button',
-                    trigger: '.control-buttons .control-button.order-split',
+                    content:'clicksplitbillbutton',
+                    trigger:'.control-buttons.control-button.order-split',
                 },
             ];
         }
-        clickTransferButton() {
-            return [
+        clickTransferButton(){
+            return[
                 {
-                    content: 'click transfer button',
-                    trigger: '.control-buttons .control-button span:contains("Transfer")',
+                    content:'clicktransferbutton',
+                    trigger:'.control-buttons.control-buttonspan:contains("Transfer")',
                 },
             ];
         }
-        clickNoteButton() {
-            return [
+        clickNoteButton(){
+            return[
                 {
-                    content: 'click note button',
-                    trigger: '.control-buttons .control-button span:contains("Note")',
+                    content:'clicknotebutton',
+                    trigger:'.control-buttons.control-buttonspan:contains("Note")',
                 },
             ];
         }
-        clickPrintBillButton() {
-            return [
+        clickPrintBillButton(){
+            return[
                 {
-                    content: 'click print bill button',
-                    trigger: '.control-buttons .control-button.order-printbill',
+                    content:'clickprintbillbutton',
+                    trigger:'.control-buttons.control-button.order-printbill',
                 },
             ];
         }
-        clickSubmitButton() {
-            return [
+        clickSubmitButton(){
+            return[
                 {
-                    content: 'click print bill button',
-                    trigger: '.control-buttons .control-button span:contains("Order")',
+                    content:'clickprintbillbutton',
+                    trigger:'.control-buttons.control-buttonspan:contains("Order")',
                 },
             ];
         }
     }
 
-    class CheckExt extends Check {
-        orderlineHasNote(name, quantity, note) {
-            return [
+    classCheckExtextendsCheck{
+        orderlineHasNote(name,quantity,note){
+            return[
                 {
-                    content: `line has ${quantity} quantity`,
-                    trigger: `.order .orderline .product-name:contains("${name}") ~ .info-list em:contains("${quantity}")`,
-                    run: function () {}, // it's a check
+                    content:`linehas${quantity}quantity`,
+                    trigger:`.order.orderline.product-name:contains("${name}")~.info-listem:contains("${quantity}")`,
+                    run:function(){},//it'sacheck
                 },
                 {
-                    content: `line has '${note}' note`,
-                    trigger: `.order .orderline .info-list .orderline-note:contains("${note}")`,
-                    run: function () {}, // it's a check
+                    content:`linehas'${note}'note`,
+                    trigger:`.order.orderline.info-list.orderline-note:contains("${note}")`,
+                    run:function(){},//it'sacheck
                 },
             ];
         }
     }
 
-    class ExecuteExt extends Execute {}
+    classExecuteExtextendsExecute{}
 
-    return createTourMethods('ProductScreen', DoExt, CheckExt, ExecuteExt);
+    returncreateTourMethods('ProductScreen',DoExt,CheckExt,ExecuteExt);
 });

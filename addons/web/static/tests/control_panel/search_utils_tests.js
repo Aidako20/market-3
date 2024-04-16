@@ -1,331 +1,331 @@
-flectra.define('web.search_utils_tests', function (require) {
-    "use strict";
+flectra.define('web.search_utils_tests',function(require){
+    "usestrict";
 
-    const { constructDateDomain } = require('web.searchUtils');
-    const testUtils = require('web.test_utils');
-    const { _t } = require('web.core');
+    const{constructDateDomain}=require('web.searchUtils');
+    consttestUtils=require('web.test_utils');
+    const{_t}=require('web.core');
 
-    const patchDate = testUtils.mock.patchDate;
+    constpatchDate=testUtils.mock.patchDate;
 
-    QUnit.module('SearchUtils', function () {
+    QUnit.module('SearchUtils',function(){
 
-        QUnit.module('Construct domain');
+        QUnit.module('Constructdomain');
 
-        QUnit.test('construct simple domain based on date field (no comparisonOptionId)', function (assert) {
+        QUnit.test('constructsimpledomainbasedondatefield(nocomparisonOptionId)',function(assert){
             assert.expect(4);
-            const unpatchDate = patchDate(2020, 5, 1, 13, 0, 0);
-            const referenceMoment = moment().utc();
+            constunpatchDate=patchDate(2020,5,1,13,0,0);
+            constreferenceMoment=moment().utc();
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'date', []),
+                constructDateDomain(referenceMoment,'date_field','date',[]),
                 {
-                    domain: "[]",
-                    description: "",
+                    domain:"[]",
+                    description:"",
                 }
             );
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'date', ['this_month', 'this_year']),
+                constructDateDomain(referenceMoment,'date_field','date',['this_month','this_year']),
                 {
-                    domain: `["&", ["date_field", ">=", "2020-06-01"], ["date_field", "<=", "2020-06-30"]]`,
-                    description: "June 2020",
+                    domain:`["&",["date_field",">=","2020-06-01"],["date_field","<=","2020-06-30"]]`,
+                    description:"June2020",
                 }
             );
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'date', ['second_quarter', 'this_year']),
+                constructDateDomain(referenceMoment,'date_field','date',['second_quarter','this_year']),
                 {
-                    domain: `["&", ["date_field", ">=", "2020-04-01"], ["date_field", "<=", "2020-06-30"]]`,
-                    description: "Q2 2020",
+                    domain:`["&",["date_field",">=","2020-04-01"],["date_field","<=","2020-06-30"]]`,
+                    description:"Q22020",
                 }
             );
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'date', ['this_year']),
+                constructDateDomain(referenceMoment,'date_field','date',['this_year']),
                 {
-                    domain: `["&", ["date_field", ">=", "2020-01-01"], ["date_field", "<=", "2020-12-31"]]`,
-                    description: "2020",
+                    domain:`["&",["date_field",">=","2020-01-01"],["date_field","<=","2020-12-31"]]`,
+                    description:"2020",
                 }
             );
             unpatchDate();
         });
 
-        QUnit.test('construct simple domain based on datetime field (no comparisonOptionId)', function (assert) {
+        QUnit.test('constructsimpledomainbasedondatetimefield(nocomparisonOptionId)',function(assert){
             assert.expect(3);
-            const unpatchDate = patchDate(2020, 5, 1, 13, 0, 0);
-            const referenceMoment = moment().utc();
+            constunpatchDate=patchDate(2020,5,1,13,0,0);
+            constreferenceMoment=moment().utc();
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'datetime', ['this_month', 'this_year']),
+                constructDateDomain(referenceMoment,'date_field','datetime',['this_month','this_year']),
                 {
-                    domain: `["&", ["date_field", ">=", "2020-06-01 00:00:00"], ["date_field", "<=", "2020-06-30 23:59:59"]]`,
-                    description: "June 2020",
+                    domain:`["&",["date_field",">=","2020-06-0100:00:00"],["date_field","<=","2020-06-3023:59:59"]]`,
+                    description:"June2020",
                 }
             );
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'datetime', ['second_quarter', 'this_year']),
+                constructDateDomain(referenceMoment,'date_field','datetime',['second_quarter','this_year']),
                 {
-                    domain: `["&", ["date_field", ">=", "2020-04-01 00:00:00"], ["date_field", "<=", "2020-06-30 23:59:59"]]`,
-                    description: "Q2 2020",
+                    domain:`["&",["date_field",">=","2020-04-0100:00:00"],["date_field","<=","2020-06-3023:59:59"]]`,
+                    description:"Q22020",
                 }
             );
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'datetime', ['this_year']),
+                constructDateDomain(referenceMoment,'date_field','datetime',['this_year']),
                 {
-                    domain: `["&", ["date_field", ">=", "2020-01-01 00:00:00"], ["date_field", "<=", "2020-12-31 23:59:59"]]`,
-                    description: "2020",
+                    domain:`["&",["date_field",">=","2020-01-0100:00:00"],["date_field","<=","2020-12-3123:59:59"]]`,
+                    description:"2020",
                 }
             );
             unpatchDate();
         });
 
-        QUnit.test('construct domain based on date field (no comparisonOptionId)', function (assert) {
+        QUnit.test('constructdomainbasedondatefield(nocomparisonOptionId)',function(assert){
             assert.expect(3);
-            const unpatchDate = patchDate(2020, 0, 1, 12, 0, 0);
-            const referenceMoment = moment().utc();
+            constunpatchDate=patchDate(2020,0,1,12,0,0);
+            constreferenceMoment=moment().utc();
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'date', ['this_month', 'first_quarter', 'this_year']),
+                constructDateDomain(referenceMoment,'date_field','date',['this_month','first_quarter','this_year']),
                 {
-                    domain: "[" +
-                                `"|", ` +
-                                    `"&", ["date_field", ">=", "2020-01-01"], ["date_field", "<=", "2020-01-31"], ` +
-                                    `"&", ["date_field", ">=", "2020-01-01"], ["date_field", "<=", "2020-03-31"]` +
+                    domain:"["+
+                                `"|",`+
+                                    `"&",["date_field",">=","2020-01-01"],["date_field","<=","2020-01-31"],`+
+                                    `"&",["date_field",">=","2020-01-01"],["date_field","<=","2020-03-31"]`+
                             "]",
-                    description: "January 2020/Q1 2020",
+                    description:"January2020/Q12020",
                 }
             );
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'date', ['second_quarter', 'this_year', 'last_year']),
+                constructDateDomain(referenceMoment,'date_field','date',['second_quarter','this_year','last_year']),
                 {
-                    domain: "[" +
-                                `"|", ` +
-                                    `"&", ["date_field", ">=", "2019-04-01"], ["date_field", "<=", "2019-06-30"], ` +
-                                    `"&", ["date_field", ">=", "2020-04-01"], ["date_field", "<=", "2020-06-30"]` +
+                    domain:"["+
+                                `"|",`+
+                                    `"&",["date_field",">=","2019-04-01"],["date_field","<=","2019-06-30"],`+
+                                    `"&",["date_field",">=","2020-04-01"],["date_field","<=","2020-06-30"]`+
                             "]",
-                    description: "Q2 2019/Q2 2020",
+                    description:"Q22019/Q22020",
                 }
             );
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'date', ['this_year', 'this_month', 'antepenultimate_month']),
+                constructDateDomain(referenceMoment,'date_field','date',['this_year','this_month','antepenultimate_month']),
                 {
-                    domain: "[" +
-                                `"|", ` +
-                                    `"&", ["date_field", ">=", "2020-01-01"], ["date_field", "<=", "2020-01-31"], ` +
-                                    `"&", ["date_field", ">=", "2020-11-01"], ["date_field", "<=", "2020-11-30"]` +
+                    domain:"["+
+                                `"|",`+
+                                    `"&",["date_field",">=","2020-01-01"],["date_field","<=","2020-01-31"],`+
+                                    `"&",["date_field",">=","2020-11-01"],["date_field","<=","2020-11-30"]`+
                             "]",
-                    description: "January 2020/November 2020",
+                    description:"January2020/November2020",
                 }
             );
             unpatchDate();
         });
 
-        QUnit.test('construct domain based on datetime field (no comparisonOptionId)', function (assert) {
+        QUnit.test('constructdomainbasedondatetimefield(nocomparisonOptionId)',function(assert){
             assert.expect(3);
-            const unpatchDate = patchDate(2020, 0, 1, 12, 0, 0);
-            const referenceMoment = moment().utc();
+            constunpatchDate=patchDate(2020,0,1,12,0,0);
+            constreferenceMoment=moment().utc();
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'datetime', ['this_month', 'first_quarter', 'this_year']),
+                constructDateDomain(referenceMoment,'date_field','datetime',['this_month','first_quarter','this_year']),
                 {
-                    domain: "[" +
-                                `"|", ` +
-                                    `"&", ["date_field", ">=", "2020-01-01 00:00:00"], ["date_field", "<=", "2020-01-31 23:59:59"], ` +
-                                    `"&", ["date_field", ">=", "2020-01-01 00:00:00"], ["date_field", "<=", "2020-03-31 23:59:59"]` +
+                    domain:"["+
+                                `"|",`+
+                                    `"&",["date_field",">=","2020-01-0100:00:00"],["date_field","<=","2020-01-3123:59:59"],`+
+                                    `"&",["date_field",">=","2020-01-0100:00:00"],["date_field","<=","2020-03-3123:59:59"]`+
                             "]",
-                    description: "January 2020/Q1 2020",
+                    description:"January2020/Q12020",
                 }
             );
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'datetime', ['second_quarter', 'this_year', 'last_year']),
+                constructDateDomain(referenceMoment,'date_field','datetime',['second_quarter','this_year','last_year']),
                 {
-                    domain: "[" +
-                                `"|", ` +
-                                    `"&", ["date_field", ">=", "2019-04-01 00:00:00"], ["date_field", "<=", "2019-06-30 23:59:59"], ` +
-                                    `"&", ["date_field", ">=", "2020-04-01 00:00:00"], ["date_field", "<=", "2020-06-30 23:59:59"]` +
+                    domain:"["+
+                                `"|",`+
+                                    `"&",["date_field",">=","2019-04-0100:00:00"],["date_field","<=","2019-06-3023:59:59"],`+
+                                    `"&",["date_field",">=","2020-04-0100:00:00"],["date_field","<=","2020-06-3023:59:59"]`+
                             "]",
-                    description: "Q2 2019/Q2 2020",
+                    description:"Q22019/Q22020",
                 }
             );
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'datetime', ['this_year', 'this_month', 'antepenultimate_month']),
+                constructDateDomain(referenceMoment,'date_field','datetime',['this_year','this_month','antepenultimate_month']),
                 {
-                    domain: "[" +
-                                `"|", ` +
-                                    `"&", ["date_field", ">=", "2020-01-01 00:00:00"], ["date_field", "<=", "2020-01-31 23:59:59"], ` +
-                                    `"&", ["date_field", ">=", "2020-11-01 00:00:00"], ["date_field", "<=", "2020-11-30 23:59:59"]` +
+                    domain:"["+
+                                `"|",`+
+                                    `"&",["date_field",">=","2020-01-0100:00:00"],["date_field","<=","2020-01-3123:59:59"],`+
+                                    `"&",["date_field",">=","2020-11-0100:00:00"],["date_field","<=","2020-11-3023:59:59"]`+
                             "]",
-                    description: "January 2020/November 2020",
+                    description:"January2020/November2020",
                 }
             );
             unpatchDate();
         });
 
-        QUnit.test('construct comparison domain based on date field and option "previous_period"', function (assert) {
+        QUnit.test('constructcomparisondomainbasedondatefieldandoption"previous_period"',function(assert){
             assert.expect(5);
-            const unpatchDate = patchDate(2020, 0, 1, 12, 0, 0);
-            const referenceMoment = moment().utc();
+            constunpatchDate=patchDate(2020,0,1,12,0,0);
+            constreferenceMoment=moment().utc();
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'date', ['this_month', 'first_quarter', 'this_year'], 'previous_period'),
+                constructDateDomain(referenceMoment,'date_field','date',['this_month','first_quarter','this_year'],'previous_period'),
                 {
-                    domain: "[" +
-                                `"|", "|", ` +
-                                `"&", ["date_field", ">=", "2019-10-01"], ["date_field", "<=", "2019-10-31"], ` +
-                                `"&", ["date_field", ">=", "2019-11-01"], ["date_field", "<=", "2019-11-30"], ` +
-                                `"&", ["date_field", ">=", "2019-12-01"], ["date_field", "<=", "2019-12-31"]` +
+                    domain:"["+
+                                `"|","|",`+
+                                `"&",["date_field",">=","2019-10-01"],["date_field","<=","2019-10-31"],`+
+                                `"&",["date_field",">=","2019-11-01"],["date_field","<=","2019-11-30"],`+
+                                `"&",["date_field",">=","2019-12-01"],["date_field","<=","2019-12-31"]`+
                             "]",
-                    description: "October 2019/November 2019/December 2019",
+                    description:"October2019/November2019/December2019",
                 }
             );
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'date', ['second_quarter', 'this_year', 'last_year'], 'previous_period'),
+                constructDateDomain(referenceMoment,'date_field','date',['second_quarter','this_year','last_year'],'previous_period'),
                 {
-                    domain: "[" +
-                                `"|", ` +
-                                `"&", ["date_field", ">=", "2018-01-01"], ["date_field", "<=", "2018-03-31"], ` +
-                                    `"&", ["date_field", ">=", "2019-01-01"], ["date_field", "<=", "2019-03-31"]` +
+                    domain:"["+
+                                `"|",`+
+                                `"&",["date_field",">=","2018-01-01"],["date_field","<=","2018-03-31"],`+
+                                    `"&",["date_field",">=","2019-01-01"],["date_field","<=","2019-03-31"]`+
                             "]",
-                    description: "Q1 2018/Q1 2019",
+                    description:"Q12018/Q12019",
                 }
             );
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'date', ['this_year', 'antepenultimate_year', 'this_month', 'antepenultimate_month'], 'previous_period'),
+                constructDateDomain(referenceMoment,'date_field','date',['this_year','antepenultimate_year','this_month','antepenultimate_month'],'previous_period'),
                 {
-                    domain: "[" +
-                                `"|", "|", "|", ` +
-                                    `"&", ["date_field", ">=", "2015-02-01"], ["date_field", "<=", "2015-02-28"], ` +
-                                    `"&", ["date_field", ">=", "2015-12-01"], ["date_field", "<=", "2015-12-31"], ` +
-                                    `"&", ["date_field", ">=", "2017-02-01"], ["date_field", "<=", "2017-02-28"], ` +
-                                    `"&", ["date_field", ">=", "2017-12-01"], ["date_field", "<=", "2017-12-31"]` +
+                    domain:"["+
+                                `"|","|","|",`+
+                                    `"&",["date_field",">=","2015-02-01"],["date_field","<=","2015-02-28"],`+
+                                    `"&",["date_field",">=","2015-12-01"],["date_field","<=","2015-12-31"],`+
+                                    `"&",["date_field",">=","2017-02-01"],["date_field","<=","2017-02-28"],`+
+                                    `"&",["date_field",">=","2017-12-01"],["date_field","<=","2017-12-31"]`+
                             "]",
-                    description: "February 2015/December 2015/February 2017/December 2017",
+                    description:"February2015/December2015/February2017/December2017",
                 }
             );
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'date', ['this_year', 'last_year'], 'previous_period'),
+                constructDateDomain(referenceMoment,'date_field','date',['this_year','last_year'],'previous_period'),
                 {
-                    domain: "[" +
-                                `"|", ` +
-                                    `"&", ["date_field", ">=", "2017-01-01"], ["date_field", "<=", "2017-12-31"], ` +
-                                    `"&", ["date_field", ">=", "2018-01-01"], ["date_field", "<=", "2018-12-31"]` +
+                    domain:"["+
+                                `"|",`+
+                                    `"&",["date_field",">=","2017-01-01"],["date_field","<=","2017-12-31"],`+
+                                    `"&",["date_field",">=","2018-01-01"],["date_field","<=","2018-12-31"]`+
                             "]",
-                    description: "2017/2018",
+                    description:"2017/2018",
                 }
             );
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'date', ['second_quarter', 'third_quarter', 'last_year'], 'previous_period'),
+                constructDateDomain(referenceMoment,'date_field','date',['second_quarter','third_quarter','last_year'],'previous_period'),
                 {
-                    domain: "[" +
-                                `"|", ` +
-                                `"&", ["date_field", ">=", "2018-10-01"], ["date_field", "<=", "2018-12-31"], ` +
-                                    `"&", ["date_field", ">=", "2019-01-01"], ["date_field", "<=", "2019-03-31"]` +
+                    domain:"["+
+                                `"|",`+
+                                `"&",["date_field",">=","2018-10-01"],["date_field","<=","2018-12-31"],`+
+                                    `"&",["date_field",">=","2019-01-01"],["date_field","<=","2019-03-31"]`+
                             "]",
-                    description: "Q4 2018/Q1 2019",
+                    description:"Q42018/Q12019",
                 }
             );
             unpatchDate();
         });
 
-        QUnit.test('construct comparison domain based on datetime field and option "previous_year"', function (assert) {
+        QUnit.test('constructcomparisondomainbasedondatetimefieldandoption"previous_year"',function(assert){
             assert.expect(3);
-            const unpatchDate = patchDate(2020, 5, 1, 13, 0, 0);
-            const referenceMoment = moment().utc();
+            constunpatchDate=patchDate(2020,5,1,13,0,0);
+            constreferenceMoment=moment().utc();
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'datetime', ['this_month', 'first_quarter', 'this_year'], 'previous_year'),
+                constructDateDomain(referenceMoment,'date_field','datetime',['this_month','first_quarter','this_year'],'previous_year'),
                 {
-                    domain: "[" +
-                                `"|", ` +
-                                    `"&", ["date_field", ">=", "2019-06-01 00:00:00"], ["date_field", "<=", "2019-06-30 23:59:59"], ` +
-                                    `"&", ["date_field", ">=", "2019-01-01 00:00:00"], ["date_field", "<=", "2019-03-31 23:59:59"]` +
+                    domain:"["+
+                                `"|",`+
+                                    `"&",["date_field",">=","2019-06-0100:00:00"],["date_field","<=","2019-06-3023:59:59"],`+
+                                    `"&",["date_field",">=","2019-01-0100:00:00"],["date_field","<=","2019-03-3123:59:59"]`+
                             "]",
-                    description: "June 2019/Q1 2019",
+                    description:"June2019/Q12019",
                 }
             );
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'datetime', ['second_quarter', 'this_year', 'last_year'], 'previous_year'),
+                constructDateDomain(referenceMoment,'date_field','datetime',['second_quarter','this_year','last_year'],'previous_year'),
                 {
-                    domain: "[" +
-                                `"|", ` +
-                                    `"&", ["date_field", ">=", "2018-04-01 00:00:00"], ["date_field", "<=", "2018-06-30 23:59:59"], ` +
-                                    `"&", ["date_field", ">=", "2019-04-01 00:00:00"], ["date_field", "<=", "2019-06-30 23:59:59"]` +
+                    domain:"["+
+                                `"|",`+
+                                    `"&",["date_field",">=","2018-04-0100:00:00"],["date_field","<=","2018-06-3023:59:59"],`+
+                                    `"&",["date_field",">=","2019-04-0100:00:00"],["date_field","<=","2019-06-3023:59:59"]`+
                             "]",
-                    description: "Q2 2018/Q2 2019",
+                    description:"Q22018/Q22019",
                 }
             );
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'datetime', ['this_year', 'antepenultimate_year', 'this_month', 'antepenultimate_month'], 'previous_year'),
+                constructDateDomain(referenceMoment,'date_field','datetime',['this_year','antepenultimate_year','this_month','antepenultimate_month'],'previous_year'),
                 {
-                    domain: "[" +
-                                `"|", "|", "|", ` +
-                                `"&", ["date_field", ">=", "2017-04-01 00:00:00"], ["date_field", "<=", "2017-04-30 23:59:59"], ` +
-                                `"&", ["date_field", ">=", "2017-06-01 00:00:00"], ["date_field", "<=", "2017-06-30 23:59:59"], ` +
-                                `"&", ["date_field", ">=", "2019-04-01 00:00:00"], ["date_field", "<=", "2019-04-30 23:59:59"], ` +
-                                `"&", ["date_field", ">=", "2019-06-01 00:00:00"], ["date_field", "<=", "2019-06-30 23:59:59"]` +
+                    domain:"["+
+                                `"|","|","|",`+
+                                `"&",["date_field",">=","2017-04-0100:00:00"],["date_field","<=","2017-04-3023:59:59"],`+
+                                `"&",["date_field",">=","2017-06-0100:00:00"],["date_field","<=","2017-06-3023:59:59"],`+
+                                `"&",["date_field",">=","2019-04-0100:00:00"],["date_field","<=","2019-04-3023:59:59"],`+
+                                `"&",["date_field",">=","2019-06-0100:00:00"],["date_field","<=","2019-06-3023:59:59"]`+
                             "]",
-                    description: "April 2017/June 2017/April 2019/June 2019",
+                    description:"April2017/June2017/April2019/June2019",
                 }
             );
             unpatchDate();
         });
 
-        QUnit.module('Options translation');
+        QUnit.module('Optionstranslation');
 
-        QUnit.test("Quarter option: custom translation", async function (assert) {
+        QUnit.test("Quarteroption:customtranslation",asyncfunction(assert){
             assert.expect(1);
 
-            const unpatchDate = patchDate(2020, 5, 1, 13, 0, 0);
-            const referenceMoment = moment().locale('en');
-            testUtils.mock.patch(_t.database.db, {
-                "Q2": "Deuxième trimestre de l'an de grâce",
+            constunpatchDate=patchDate(2020,5,1,13,0,0);
+            constreferenceMoment=moment().locale('en');
+            testUtils.mock.patch(_t.database.db,{
+                "Q2":"Deuxièmetrimestredel'andegrâce",
             });
 
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'date', ['second_quarter', 'this_year']),
+                constructDateDomain(referenceMoment,'date_field','date',['second_quarter','this_year']),
                 {
-                    domain: `["&", ["date_field", ">=", "2020-04-01"], ["date_field", "<=", "2020-06-30"]]`,
-                    description: "Deuxième trimestre de l'an de grâce 2020",
+                    domain:`["&",["date_field",">=","2020-04-01"],["date_field","<=","2020-06-30"]]`,
+                    description:"Deuxièmetrimestredel'andegrâce2020",
                 },
-                "Quarter term should be translated"
+                "Quartertermshouldbetranslated"
             );
 
             unpatchDate();
             testUtils.mock.unpatch(_t.database.db);
         });
 
-        QUnit.test("Quarter option: right to left", async function (assert) {
+        QUnit.test("Quarteroption:righttoleft",asyncfunction(assert){
             assert.expect(1);
 
-            const unpatchDate = patchDate(2020, 5, 1, 13, 0, 0);
-            const referenceMoment = moment().locale('en');
-            testUtils.mock.patch(_t.database.parameters, {
-                direction: "rtl",
+            constunpatchDate=patchDate(2020,5,1,13,0,0);
+            constreferenceMoment=moment().locale('en');
+            testUtils.mock.patch(_t.database.parameters,{
+                direction:"rtl",
             });
 
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'date', ['second_quarter', 'this_year']),
+                constructDateDomain(referenceMoment,'date_field','date',['second_quarter','this_year']),
                 {
-                    domain: `["&", ["date_field", ">=", "2020-04-01"], ["date_field", "<=", "2020-06-30"]]`,
-                    description: "2020 Q2",
+                    domain:`["&",["date_field",">=","2020-04-01"],["date_field","<=","2020-06-30"]]`,
+                    description:"2020Q2",
                 },
-                "Notation should be right to left"
+                "Notationshouldberighttoleft"
             );
 
             unpatchDate();
             testUtils.mock.unpatch(_t.database.parameters);
         });
 
-        QUnit.test("Quarter option: custom translation and right to left", async function (assert) {
+        QUnit.test("Quarteroption:customtranslationandrighttoleft",asyncfunction(assert){
             assert.expect(1);
 
-            const unpatchDate = patchDate(2020, 5, 1, 13, 0, 0);
-            const referenceMoment = moment().locale('en');
-            testUtils.mock.patch(_t.database.db, {
-                "Q2": "2e Trimestre",
+            constunpatchDate=patchDate(2020,5,1,13,0,0);
+            constreferenceMoment=moment().locale('en');
+            testUtils.mock.patch(_t.database.db,{
+                "Q2":"2eTrimestre",
             });
-            testUtils.mock.patch(_t.database.parameters, {
-                direction: "rtl",
+            testUtils.mock.patch(_t.database.parameters,{
+                direction:"rtl",
             });
 
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'date', ['second_quarter', 'this_year']),
+                constructDateDomain(referenceMoment,'date_field','date',['second_quarter','this_year']),
                 {
-                    domain: `["&", ["date_field", ">=", "2020-04-01"], ["date_field", "<=", "2020-06-30"]]`,
-                    description: "2020 2e Trimestre",
+                    domain:`["&",["date_field",">=","2020-04-01"],["date_field","<=","2020-06-30"]]`,
+                    description:"20202eTrimestre",
                 },
-                "Quarter term should be translated and notation should be right to left"
+                "Quartertermshouldbetranslatedandnotationshouldberighttoleft"
             );
 
             unpatchDate();
@@ -333,29 +333,29 @@ flectra.define('web.search_utils_tests', function (require) {
             testUtils.mock.unpatch(_t.database.parameters);
         });
 
-        QUnit.test("Moment.js localization does not affect formatted domain dates", async function (assert) {
+        QUnit.test("Moment.jslocalizationdoesnotaffectformatteddomaindates",asyncfunction(assert){
             assert.expect(1);
 
-            const unpatchDate = patchDate(2020, 5, 1, 13, 0, 0);
-            const initialLocale = moment.locale();
-            moment.defineLocale('addoneForTest', {
-                postformat: function (string) {
-                    return string.replace(/\d/g, match => (1 + parseInt(match)) % 10);
+            constunpatchDate=patchDate(2020,5,1,13,0,0);
+            constinitialLocale=moment.locale();
+            moment.defineLocale('addoneForTest',{
+                postformat:function(string){
+                    returnstring.replace(/\d/g,match=>(1+parseInt(match))%10);
                 }
             });
-            const referenceMoment = moment().locale('addoneForTest');
+            constreferenceMoment=moment().locale('addoneForTest');
 
             assert.deepEqual(
-                constructDateDomain(referenceMoment, 'date_field', 'date', ['this_month', 'this_year']),
+                constructDateDomain(referenceMoment,'date_field','date',['this_month','this_year']),
                 {
-                    domain: `["&", ["date_field", ">=", "2020-06-01"], ["date_field", "<=", "2020-06-30"]]`,
-                    description: "June 3131",
+                    domain:`["&",["date_field",">=","2020-06-01"],["date_field","<=","2020-06-30"]]`,
+                    description:"June3131",
                 },
-                "Numbers in domain should not use addoneForTest locale"
+                "NumbersindomainshouldnotuseaddoneForTestlocale"
             );
 
             moment.locale(initialLocale);
-            moment.updateLocale("addoneForTest", null);
+            moment.updateLocale("addoneForTest",null);
             unpatchDate();
         });
     });

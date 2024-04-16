@@ -1,29 +1,29 @@
-# -*- coding:utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, fields
-
-
-class ResourceCalendarAttendance(models.Model):
-    _inherit = 'resource.calendar.attendance'
-
-    def _default_work_entry_type_id(self):
-        return self.env.ref('hr_work_entry.work_entry_type_attendance', raise_if_not_found=False)
-
-    work_entry_type_id = fields.Many2one('hr.work.entry.type', 'Work Entry Type', default=_default_work_entry_type_id)
-
-    def _copy_attendance_vals(self):
-        res = super()._copy_attendance_vals()
-        res['work_entry_type_id'] = self.work_entry_type_id.id
-        return res
+fromflectraimportmodels,fields
 
 
-class ResourceCalendarLeave(models.Model):
-    _inherit = 'resource.calendar.leaves'
+classResourceCalendarAttendance(models.Model):
+    _inherit='resource.calendar.attendance'
 
-    work_entry_type_id = fields.Many2one('hr.work.entry.type', 'Work Entry Type')
+    def_default_work_entry_type_id(self):
+        returnself.env.ref('hr_work_entry.work_entry_type_attendance',raise_if_not_found=False)
 
-    def _copy_leave_vals(self):
-        res = super()._copy_leave_vals()
-        res['work_entry_type_id'] = self.work_entry_type_id.id
-        return res
+    work_entry_type_id=fields.Many2one('hr.work.entry.type','WorkEntryType',default=_default_work_entry_type_id)
+
+    def_copy_attendance_vals(self):
+        res=super()._copy_attendance_vals()
+        res['work_entry_type_id']=self.work_entry_type_id.id
+        returnres
+
+
+classResourceCalendarLeave(models.Model):
+    _inherit='resource.calendar.leaves'
+
+    work_entry_type_id=fields.Many2one('hr.work.entry.type','WorkEntryType')
+
+    def_copy_leave_vals(self):
+        res=super()._copy_leave_vals()
+        res['work_entry_type_id']=self.work_entry_type_id.id
+        returnres

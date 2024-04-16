@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template id="s_call_to_action" name="Call to Action">
-    <section class="s_call_to_action o_cc o_cc3 pt48 pb24">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-9 pb16">
-                    <h3><b>50,000+ companies</b> run Flectra to grow their businesses.</h3>
-                    <p>Join us and make your company a better place.</p>
+<templateid="s_call_to_action"name="CalltoAction">
+    <sectionclass="s_call_to_actiono_cco_cc3pt48pb24">
+        <divclass="container">
+            <divclass="row">
+                <divclass="col-lg-9pb16">
+                    <h3><b>50,000+companies</b>runFlectratogrowtheirbusinesses.</h3>
+                    <p>Joinusandmakeyourcompanyabetterplace.</p>
                 </div>
-                <div class="col-lg-3 pt8">
-                    <p style="text-align: right;">
-                        <a href="/contactus" class="btn btn-primary btn-lg mb-2">Contact us</a>
+                <divclass="col-lg-3pt8">
+                    <pstyle="text-align:right;">
+                        <ahref="/contactus"class="btnbtn-primarybtn-lgmb-2">Contactus</a>
                     </p>
                 </div>
             </div>

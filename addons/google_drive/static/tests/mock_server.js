@@ -1,22 +1,22 @@
-flectra.define('google_drive.MockServer', function (require) {
-    'use strict';
+flectra.define('google_drive.MockServer',function(require){
+    'usestrict';
 
-    var MockServer = require('web.MockServer');
+    varMockServer=require('web.MockServer');
 
     MockServer.include({
         //--------------------------------------------------------------------------
-        // Private
+        //Private
         //--------------------------------------------------------------------------
 
         /**
-         * @override
-         * @private
+         *@override
+         *@private
          */
-        async _performRpc(route, args) {
-            if (args.method === 'get_google_drive_config') {
-                return [];
+        async_performRpc(route,args){
+            if(args.method==='get_google_drive_config'){
+                return[];
             }
-            return this._super(...arguments);
+            returnthis._super(...arguments);
         },
     });
 });

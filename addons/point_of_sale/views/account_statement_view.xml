@@ -1,47 +1,47 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="view_bank_statement_pos_session" model="ir.ui.view">
-        <field name="name">view.bank.statement.pos.session</field>
-        <field name="model">account.bank.statement</field>
-        <field name="mode">primary</field>
-        <field name="priority">1000</field>
-        <field name="inherit_id" ref="account.view_bank_statement_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//button[@name='button_validate_or_action']" position="replace"/>
+    <recordid="view_bank_statement_pos_session"model="ir.ui.view">
+        <fieldname="name">view.bank.statement.pos.session</field>
+        <fieldname="model">account.bank.statement</field>
+        <fieldname="mode">primary</field>
+        <fieldname="priority">1000</field>
+        <fieldname="inherit_id"ref="account.view_bank_statement_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//button[@name='button_validate_or_action']"position="replace"/>
         </field>
     </record>
 
-    <record id="view_account_bnk_stmt_cashbox" model="ir.ui.view">
-        <field name="name">account.bnk_stmt_cashbox.form</field>
-        <field name="model">account.bank.statement.cashbox</field>
-        <field name="inherit_id" ref="account.view_account_bnk_stmt_cashbox"/>
-        <field name="arch" type="xml">
-          <xpath expr="//sheet" position="inside">
-              <field name="is_a_template" invisible="1"/>
+    <recordid="view_account_bnk_stmt_cashbox"model="ir.ui.view">
+        <fieldname="name">account.bnk_stmt_cashbox.form</field>
+        <fieldname="model">account.bank.statement.cashbox</field>
+        <fieldname="inherit_id"ref="account.view_account_bnk_stmt_cashbox"/>
+        <fieldname="arch"type="xml">
+          <xpathexpr="//sheet"position="inside">
+              <fieldname="is_a_template"invisible="1"/>
           </xpath>
         </field>
     </record>
 
-    <record id="view_account_bnk_stmt_cashbox_footer" model="ir.ui.view">
-      <field name="name">account.bnk_stmt_cashbox.form.close.modal</field>
-      <field name="model">account.bank.statement.cashbox</field>
-      <field name="inherit_id" ref="account.view_account_bnk_stmt_cashbox_footer"/>
-      <field name="mode">primary</field>
-      <field name="priority">1000</field>
-      <field name="arch" type="xml">
-          <xpath expr="//field[@name='cashbox_lines_ids']" position="before">
-              <button name="set_default_cashbox" type="object" string="Set Default Cash Opening" />
+    <recordid="view_account_bnk_stmt_cashbox_footer"model="ir.ui.view">
+      <fieldname="name">account.bnk_stmt_cashbox.form.close.modal</field>
+      <fieldname="model">account.bank.statement.cashbox</field>
+      <fieldname="inherit_id"ref="account.view_account_bnk_stmt_cashbox_footer"/>
+      <fieldname="mode">primary</field>
+      <fieldname="priority">1000</field>
+      <fieldname="arch"type="xml">
+          <xpathexpr="//field[@name='cashbox_lines_ids']"position="before">
+              <buttonname="set_default_cashbox"type="object"string="SetDefaultCashOpening"/>
           </xpath>
       </field>
     </record>
 
-    <record id="view_account_journal_pos_user_form" model="ir.ui.view">
-        <field name="name">account.journal.pos.user.form.inherit</field>
-        <field name="model">account.journal</field>
-        <field name="inherit_id" ref="account.view_account_journal_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//notebook[last()]" position="inside">
-                <page string="Point of Sale" name="point_of_sale" invisible="1"/>
+    <recordid="view_account_journal_pos_user_form"model="ir.ui.view">
+        <fieldname="name">account.journal.pos.user.form.inherit</field>
+        <fieldname="model">account.journal</field>
+        <fieldname="inherit_id"ref="account.view_account_journal_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//notebook[last()]"position="inside">
+                <pagestring="PointofSale"name="point_of_sale"invisible="1"/>
             </xpath>
         </field>
     </record>

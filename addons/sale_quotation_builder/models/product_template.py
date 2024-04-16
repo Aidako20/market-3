@@ -1,24 +1,24 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, api
-from flectra.tools.translate import html_translate
+fromflectraimportfields,models,api
+fromflectra.tools.translateimporthtml_translate
 
 
-class ProductTemplate(models.Model):
-    _inherit = "product.template"
+classProductTemplate(models.Model):
+    _inherit="product.template"
 
-    quotation_only_description = fields.Html('Quotation Only Description', sanitize_attributes=False,
-        translate=html_translate, help="The quotation description (not used on eCommerce)")
+    quotation_only_description=fields.Html('QuotationOnlyDescription',sanitize_attributes=False,
+        translate=html_translate,help="Thequotationdescription(notusedoneCommerce)")
 
-    quotation_description = fields.Html('Quotation Description', compute='_compute_quotation_description',
-        sanitize_attributes=False, help="This field uses the Quotation Only Description if it is defined, otherwise it will try to read the eCommerce Description.")
+    quotation_description=fields.Html('QuotationDescription',compute='_compute_quotation_description',
+        sanitize_attributes=False,help="ThisfieldusestheQuotationOnlyDescriptionifitisdefined,otherwiseitwilltrytoreadtheeCommerceDescription.")
 
-    def _compute_quotation_description(self):
-        for record in self:
-            if record.quotation_only_description:
-                record.quotation_description = record.quotation_only_description
-            elif hasattr(record, 'website_description') and record.website_description:
-                record.quotation_description = record.website_description
+    def_compute_quotation_description(self):
+        forrecordinself:
+            ifrecord.quotation_only_description:
+                record.quotation_description=record.quotation_only_description
+            elifhasattr(record,'website_description')andrecord.website_description:
+                record.quotation_description=record.website_description
             else:
-                record.quotation_description = ''
+                record.quotation_description=''

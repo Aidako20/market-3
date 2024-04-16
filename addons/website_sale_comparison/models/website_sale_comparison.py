@@ -1,80 +1,80 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from collections import OrderedDict
+fromcollectionsimportOrderedDict
 
-from flectra import fields, models
-
-
-class ProductAttributeCategory(models.Model):
-    _name = "product.attribute.category"
-    _description = "Product Attribute Category"
-    _order = 'sequence, id'
-
-    name = fields.Char("Category Name", required=True, translate=True)
-    sequence = fields.Integer("Sequence", default=10, index=True)
-
-    attribute_ids = fields.One2many('product.attribute', 'category_id', string="Related Attributes", domain="[('category_id', '=', False)]")
+fromflectraimportfields,models
 
 
-class ProductAttribute(models.Model):
-    _inherit = 'product.attribute'
-    _order = 'category_id, sequence, id'
+classProductAttributeCategory(models.Model):
+    _name="product.attribute.category"
+    _description="ProductAttributeCategory"
+    _order='sequence,id'
 
-    category_id = fields.Many2one('product.attribute.category', string="Category", index=True,
-                                  help="Set a category to regroup similar attributes under "
-                                  "the same section in the Comparison page of eCommerce")
+    name=fields.Char("CategoryName",required=True,translate=True)
+    sequence=fields.Integer("Sequence",default=10,index=True)
+
+    attribute_ids=fields.One2many('product.attribute','category_id',string="RelatedAttributes",domain="[('category_id','=',False)]")
 
 
-class ProductTemplateAttributeLine(models.Model):
-    _inherit = 'product.template.attribute.line'
+classProductAttribute(models.Model):
+    _inherit='product.attribute'
+    _order='category_id,sequence,id'
 
-    def _prepare_categories_for_display(self):
-        """On the product page group together the attribute lines that concern
-        attributes that are in the same category.
+    category_id=fields.Many2one('product.attribute.category',string="Category",index=True,
+                                  help="Setacategorytoregroupsimilarattributesunder"
+                                  "thesamesectionintheComparisonpageofeCommerce")
 
-        The returned categories are ordered following their default order.
 
-        :return: OrderedDict [{
-            product.attribute.category: [product.template.attribute.line]
+classProductTemplateAttributeLine(models.Model):
+    _inherit='product.template.attribute.line'
+
+    def_prepare_categories_for_display(self):
+        """Ontheproductpagegrouptogethertheattributelinesthatconcern
+        attributesthatareinthesamecategory.
+
+        Thereturnedcategoriesareorderedfollowingtheirdefaultorder.
+
+        :return:OrderedDict[{
+            product.attribute.category:[product.template.attribute.line]
         }]
         """
-        attributes = self.attribute_id
-        categories = OrderedDict([(cat, self.env['product.template.attribute.line']) for cat in attributes.category_id.sorted()])
-        if any(not pa.category_id for pa in attributes):
-            # category_id is not required and the mapped does not return empty
-            categories[self.env['product.attribute.category']] = self.env['product.template.attribute.line']
-        for ptal in self:
-            categories[ptal.attribute_id.category_id] |= ptal
-        return categories
+        attributes=self.attribute_id
+        categories=OrderedDict([(cat,self.env['product.template.attribute.line'])forcatinattributes.category_id.sorted()])
+        ifany(notpa.category_idforpainattributes):
+            #category_idisnotrequiredandthemappeddoesnotreturnempty
+            categories[self.env['product.attribute.category']]=self.env['product.template.attribute.line']
+        forptalinself:
+            categories[ptal.attribute_id.category_id]|=ptal
+        returncategories
 
 
-class ProductProduct(models.Model):
-    _inherit = 'product.product'
+classProductProduct(models.Model):
+    _inherit='product.product'
 
-    def _prepare_categories_for_display(self):
-        """On the comparison page group on the same line the values of each
-        product that concern the same attributes, and then group those
-        attributes per category.
+    def_prepare_categories_for_display(self):
+        """Onthecomparisonpagegrouponthesamelinethevaluesofeach
+        productthatconcernthesameattributes,andthengroupthose
+        attributespercategory.
 
-        The returned categories are ordered following their default order.
+        Thereturnedcategoriesareorderedfollowingtheirdefaultorder.
 
-        :return: OrderedDict [{
-            product.attribute.category: OrderedDict [{
-                product.attribute: OrderedDict [{
-                    product: [product.template.attribute.value]
+        :return:OrderedDict[{
+            product.attribute.category:OrderedDict[{
+                product.attribute:OrderedDict[{
+                    product:[product.template.attribute.value]
                 }]
             }]
         }]
         """
-        attributes = self.product_tmpl_id.valid_product_template_attribute_line_ids._without_no_variant_attributes().attribute_id.sorted()
-        categories = OrderedDict([(cat, OrderedDict()) for cat in attributes.category_id.sorted()])
-        if any(not pa.category_id for pa in attributes):
-            # category_id is not required and the mapped does not return empty
-            categories[self.env['product.attribute.category']] = OrderedDict()
-        for pa in attributes:
-            categories[pa.category_id][pa] = OrderedDict([(
+        attributes=self.product_tmpl_id.valid_product_template_attribute_line_ids._without_no_variant_attributes().attribute_id.sorted()
+        categories=OrderedDict([(cat,OrderedDict())forcatinattributes.category_id.sorted()])
+        ifany(notpa.category_idforpainattributes):
+            #category_idisnotrequiredandthemappeddoesnotreturnempty
+            categories[self.env['product.attribute.category']]=OrderedDict()
+        forpainattributes:
+            categories[pa.category_id][pa]=OrderedDict([(
                 product,
-                product.product_template_attribute_value_ids.filtered(lambda ptav: ptav.attribute_id == pa)
-            ) for product in self])
+                product.product_template_attribute_value_ids.filtered(lambdaptav:ptav.attribute_id==pa)
+            )forproductinself])
 
-        return categories
+        returncategories

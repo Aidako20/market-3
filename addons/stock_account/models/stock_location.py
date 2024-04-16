@@ -1,33 +1,33 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class StockLocation(models.Model):
-    _inherit = "stock.location"
+classStockLocation(models.Model):
+    _inherit="stock.location"
 
-    valuation_in_account_id = fields.Many2one(
-        'account.account', 'Stock Valuation Account (Incoming)',
-        domain=[('internal_type', '=', 'other'), ('deprecated', '=', False)],
-        help="Used for real-time inventory valuation. When set on a virtual location (non internal type), "
-             "this account will be used to hold the value of products being moved from an internal location "
-             "into this location, instead of the generic Stock Output Account set on the product. "
-             "This has no effect for internal locations.")
-    valuation_out_account_id = fields.Many2one(
-        'account.account', 'Stock Valuation Account (Outgoing)',
-        domain=[('internal_type', '=', 'other'), ('deprecated', '=', False)],
-        help="Used for real-time inventory valuation. When set on a virtual location (non internal type), "
-             "this account will be used to hold the value of products being moved out of this location "
-             "and into an internal location, instead of the generic Stock Output Account set on the product. "
-             "This has no effect for internal locations.")
+    valuation_in_account_id=fields.Many2one(
+        'account.account','StockValuationAccount(Incoming)',
+        domain=[('internal_type','=','other'),('deprecated','=',False)],
+        help="Usedforreal-timeinventoryvaluation.Whensetonavirtuallocation(noninternaltype),"
+             "thisaccountwillbeusedtoholdthevalueofproductsbeingmovedfromaninternallocation"
+             "intothislocation,insteadofthegenericStockOutputAccountsetontheproduct."
+             "Thishasnoeffectforinternallocations.")
+    valuation_out_account_id=fields.Many2one(
+        'account.account','StockValuationAccount(Outgoing)',
+        domain=[('internal_type','=','other'),('deprecated','=',False)],
+        help="Usedforreal-timeinventoryvaluation.Whensetonavirtuallocation(noninternaltype),"
+             "thisaccountwillbeusedtoholdthevalueofproductsbeingmovedoutofthislocation"
+             "andintoaninternallocation,insteadofthegenericStockOutputAccountsetontheproduct."
+             "Thishasnoeffectforinternallocations.")
 
-    def _should_be_valued(self):
-        """ This method returns a boolean reflecting whether the products stored in `self` should
-        be considered when valuating the stock of a company.
+    def_should_be_valued(self):
+        """Thismethodreturnsabooleanreflectingwhethertheproductsstoredin`self`should
+        beconsideredwhenvaluatingthestockofacompany.
         """
         self.ensure_one()
-        if self.usage == 'internal' or (self.usage == 'transit' and self.company_id):
-            return True
-        return False
+        ifself.usage=='internal'or(self.usage=='transit'andself.company_id):
+            returnTrue
+        returnFalse
 

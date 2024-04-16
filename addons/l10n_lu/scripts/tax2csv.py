@@ -1,183 +1,183 @@
-from collections import OrderedDict
+fromcollectionsimportOrderedDict
 
-import xlrd
-from flectra.tools import pycompat
+importxlrd
+fromflectra.toolsimportpycompat
 
-def _is_true(s):
-    return s not in ('F', 'False', 0, '', None, False)
+def_is_true(s):
+    returnsnotin('F','False',0,'',None,False)
 
 
-class LuxTaxGenerator:
+classLuxTaxGenerator:
 
-    def __init__(self, filename):
-        self.workbook = xlrd.open_workbook('tax.xls')
-        self.sheet_info = \
+    def__init__(self,filename):
+        self.workbook=xlrd.open_workbook('tax.xls')
+        self.sheet_info=\
             self.workbook.sheet_by_name('INFO')
-        self.sheet_taxes = \
+        self.sheet_taxes=\
             self.workbook.sheet_by_name('TAXES')
-        self.sheet_tax_codes = \
+        self.sheet_tax_codes=\
             self.workbook.sheet_by_name('TAX.CODES')
-        self.sheet_fiscal_pos_map = \
+        self.sheet_fiscal_pos_map=\
             self.workbook.sheet_by_name('FISCAL.POSITION.MAPPINGS')
-        self.suffix = self.sheet_info.cell_value(4, 2)
+        self.suffix=self.sheet_info.cell_value(4,2)
 
-    def iter_tax_codes(self):
-        keys = [c.value for c in self.sheet_tax_codes.row(0)]
-        yield keys
-        for i in range(1, self.sheet_tax_codes.nrows):
-            row = (c.value for c in self.sheet_tax_codes.row(i))
-            d = OrderedDict(zip(keys, row))
-            d['sign'] = int(d['sign'])
-            d['sequence'] = int(d['sequence'])
-            yield d
+    defiter_tax_codes(self):
+        keys=[c.valueforcinself.sheet_tax_codes.row(0)]
+        yieldkeys
+        foriinrange(1,self.sheet_tax_codes.nrows):
+            row=(c.valueforcinself.sheet_tax_codes.row(i))
+            d=OrderedDict(zip(keys,row))
+            d['sign']=int(d['sign'])
+            d['sequence']=int(d['sequence'])
+            yieldd
 
-    def iter_taxes(self):
-        keys = [c.value for c in self.sheet_taxes.row(0)]
-        yield keys
-        for i in range(1, self.sheet_taxes.nrows):
-            row = (c.value for c in self.sheet_taxes.row(i))
-            yield OrderedDict(zip(keys, row))
+    defiter_taxes(self):
+        keys=[c.valueforcinself.sheet_taxes.row(0)]
+        yieldkeys
+        foriinrange(1,self.sheet_taxes.nrows):
+            row=(c.valueforcinself.sheet_taxes.row(i))
+            yieldOrderedDict(zip(keys,row))
 
-    def iter_fiscal_pos_map(self):
-        keys = [c.value for c in self.sheet_fiscal_pos_map.row(0)]
-        yield keys
-        for i in range(1, self.sheet_fiscal_pos_map.nrows):
-            row = (c.value for c in self.sheet_fiscal_pos_map.row(i))
-            yield OrderedDict(zip(keys, row))
+    defiter_fiscal_pos_map(self):
+        keys=[c.valueforcinself.sheet_fiscal_pos_map.row(0)]
+        yieldkeys
+        foriinrange(1,self.sheet_fiscal_pos_map.nrows):
+            row=(c.valueforcinself.sheet_fiscal_pos_map.row(i))
+            yieldOrderedDict(zip(keys,row))
 
-    def tax_codes_to_csv(self):
-        writer = pycompat.csv_writer(open('account.tax.code.template-%s.csv' %
-                                 self.suffix, 'wb'))
-        tax_codes_iterator = self.iter_tax_codes()
-        keys = next(tax_codes_iterator)
+    deftax_codes_to_csv(self):
+        writer=pycompat.csv_writer(open('account.tax.code.template-%s.csv'%
+                                 self.suffix,'wb'))
+        tax_codes_iterator=self.iter_tax_codes()
+        keys=next(tax_codes_iterator)
         writer.writerow(keys)
 
-        # write structure tax codes
-        tax_codes = {}  # code: id
-        for row in tax_codes_iterator:
-            tax_code = row['code']
-            if tax_code in tax_codes:
-                raise RuntimeError('duplicate tax code %s' % tax_code)
-            tax_codes[tax_code] = row['id']
-            writer.writerow([pycompat.to_text(v) for v in row.values()])
+        #writestructuretaxcodes
+        tax_codes={} #code:id
+        forrowintax_codes_iterator:
+            tax_code=row['code']
+            iftax_codeintax_codes:
+                raiseRuntimeError('duplicatetaxcode%s'%tax_code)
+            tax_codes[tax_code]=row['id']
+            writer.writerow([pycompat.to_text(v)forvinrow.values()])
 
-        # read taxes and add leaf tax codes
-        new_tax_codes = {}  # id: parent_code
+        #readtaxesandaddleaftaxcodes
+        new_tax_codes={} #id:parent_code
 
-        def add_new_tax_code(tax_code_id, new_name, new_parent_code):
-            if not tax_code_id:
+        defadd_new_tax_code(tax_code_id,new_name,new_parent_code):
+            ifnottax_code_id:
                 return
-            name, parent_code = new_tax_codes.get(tax_code_id, (None, None))
-            if parent_code and parent_code != new_parent_code:
-                raise RuntimeError('tax code "%s" already exist with '
-                                   'parent %s while trying to add it with '
-                                   'parent %s' %
-                                   (tax_code_id, parent_code, new_parent_code))
+            name,parent_code=new_tax_codes.get(tax_code_id,(None,None))
+            ifparent_codeandparent_code!=new_parent_code:
+                raiseRuntimeError('taxcode"%s"alreadyexistwith'
+                                   'parent%swhiletryingtoadditwith'
+                                   'parent%s'%
+                                   (tax_code_id,parent_code,new_parent_code))
             else:
-                new_tax_codes[tax_code_id] = (new_name, new_parent_code)
+                new_tax_codes[tax_code_id]=(new_name,new_parent_code)
 
-        taxes_iterator = self.iter_taxes()
+        taxes_iterator=self.iter_taxes()
         next(taxes_iterator)
-        for row in taxes_iterator:
-            if not _is_true(row['active']):
+        forrowintaxes_iterator:
+            ifnot_is_true(row['active']):
                 continue
-            if row['child_depend'] and row['amount'] != 1:
-                raise RuntimeError('amount must be one if child_depend '
-                                   'for %s' % row['id'])
-            # base parent
-            base_code = row['BASE_CODE']
-            if not base_code or base_code == '/':
-                base_code = 'NA'
-            if base_code not in tax_codes:
-                raise RuntimeError('undefined tax code %s' % base_code)
-            if base_code != 'NA':
-                if row['child_depend']:
-                    raise RuntimeError('base code specified '
-                                       'with child_depend for %s' % row['id'])
-            if not row['child_depend']:
-                # ... in lux, we have the same code for invoice and refund
-                if base_code != 'NA':
-                    assert row['base_code_id:id'], 'missing base_code_id for %s' % row['id']
-                assert row['ref_base_code_id:id'] == row['base_code_id:id']
+            ifrow['child_depend']androw['amount']!=1:
+                raiseRuntimeError('amountmustbeoneifchild_depend'
+                                   'for%s'%row['id'])
+            #baseparent
+            base_code=row['BASE_CODE']
+            ifnotbase_codeorbase_code=='/':
+                base_code='NA'
+            ifbase_codenotintax_codes:
+                raiseRuntimeError('undefinedtaxcode%s'%base_code)
+            ifbase_code!='NA':
+                ifrow['child_depend']:
+                    raiseRuntimeError('basecodespecified'
+                                       'withchild_dependfor%s'%row['id'])
+            ifnotrow['child_depend']:
+                #...inlux,wehavethesamecodeforinvoiceandrefund
+                ifbase_code!='NA':
+                    assertrow['base_code_id:id'],'missingbase_code_idfor%s'%row['id']
+                assertrow['ref_base_code_id:id']==row['base_code_id:id']
                 add_new_tax_code(row['base_code_id:id'],
-                                 'Base - ' + row['name'],
+                                 'Base-'+row['name'],
                                  base_code)
-            # tax parent
-            tax_code = row['TAX_CODE']
-            if not tax_code or tax_code == '/':
-                tax_code = 'NA'
-            if tax_code not in tax_codes:
-                raise RuntimeError('undefined tax code %s' % tax_code)
-            if tax_code == 'NA':
-                if row['amount'] and not row['child_depend']:
-                    raise RuntimeError('TAX_CODE not specified '
-                                       'for non-zero tax %s' % row['id'])
-                if row['tax_code_id:id']:
-                    raise RuntimeError('tax_code_id specified '
-                                       'for tax %s' % row['id'])
+            #taxparent
+            tax_code=row['TAX_CODE']
+            ifnottax_codeortax_code=='/':
+                tax_code='NA'
+            iftax_codenotintax_codes:
+                raiseRuntimeError('undefinedtaxcode%s'%tax_code)
+            iftax_code=='NA':
+                ifrow['amount']andnotrow['child_depend']:
+                    raiseRuntimeError('TAX_CODEnotspecified'
+                                       'fornon-zerotax%s'%row['id'])
+                ifrow['tax_code_id:id']:
+                    raiseRuntimeError('tax_code_idspecified'
+                                       'fortax%s'%row['id'])
             else:
-                if row['child_depend']:
-                    raise RuntimeError('TAX_CODE specified '
-                                       'with child_depend for %s' % row['id'])
-                if not row['amount']:
-                    raise RuntimeError('TAX_CODE specified '
-                                       'for zero tax %s' % row['id'])
-                if not row['tax_code_id:id']:
-                    raise RuntimeError('tax_code_id not specified '
-                                       'for tax %s' % row['id'])
-            if not row['child_depend'] and row['amount']:
-                # ... in lux, we have the same code for invoice and refund
-                assert row['tax_code_id:id'], 'missing tax_code_id for %s' % row['id']
-                assert row['ref_tax_code_id:id'] == row['tax_code_id:id']
+                ifrow['child_depend']:
+                    raiseRuntimeError('TAX_CODEspecified'
+                                       'withchild_dependfor%s'%row['id'])
+                ifnotrow['amount']:
+                    raiseRuntimeError('TAX_CODEspecified'
+                                       'forzerotax%s'%row['id'])
+                ifnotrow['tax_code_id:id']:
+                    raiseRuntimeError('tax_code_idnotspecified'
+                                       'fortax%s'%row['id'])
+            ifnotrow['child_depend']androw['amount']:
+                #...inlux,wehavethesamecodeforinvoiceandrefund
+                assertrow['tax_code_id:id'],'missingtax_code_idfor%s'%row['id']
+                assertrow['ref_tax_code_id:id']==row['tax_code_id:id']
                 add_new_tax_code(row['tax_code_id:id'],
-                                 'Taxe - ' + row['name'],
+                                 'Taxe-'+row['name'],
                                  tax_code)
 
-        for tax_code_id in sorted(new_tax_codes):
-            name, parent_code = new_tax_codes[tax_code_id]
+        fortax_code_idinsorted(new_tax_codes):
+            name,parent_code=new_tax_codes[tax_code_id]
             writer.writerow([
                 tax_code_id,
-                u'lu_tct_m' + parent_code,
-                tax_code_id.replace('lu_tax_code_template_', u''),
+                u'lu_tct_m'+parent_code,
+                tax_code_id.replace('lu_tax_code_template_',u''),
                 u'1',
                 u'',
                 pycompat.to_text(name),
                 u''
             ])
 
-    def taxes_to_csv(self):
-        writer = pycompat.csv_writer(open('account.tax.template-%s.csv' %
-                                     self.suffix, 'wb'))
-        taxes_iterator = self.iter_taxes()
-        keys = next(taxes_iterator)
-        writer.writerow(keys[3:] + ['sequence'])
-        seq = 100
-        for row in sorted(taxes_iterator, key=lambda r: r['description']):
-            if not _is_true(row['active']):
+    deftaxes_to_csv(self):
+        writer=pycompat.csv_writer(open('account.tax.template-%s.csv'%
+                                     self.suffix,'wb'))
+        taxes_iterator=self.iter_taxes()
+        keys=next(taxes_iterator)
+        writer.writerow(keys[3:]+['sequence'])
+        seq=100
+        forrowinsorted(taxes_iterator,key=lambdar:r['description']):
+            ifnot_is_true(row['active']):
                 continue
-            seq += 1
-            if row['parent_id:id']:
-                cur_seq = seq + 1000
+            seq+=1
+            ifrow['parent_id:id']:
+                cur_seq=seq+1000
             else:
-                cur_seq = seq
+                cur_seq=seq
             writer.writerow([
                 pycompat.to_text(v)
-                for v in list(row.values())[3:]
-            ] + [cur_seq])
+                forvinlist(row.values())[3:]
+            ]+[cur_seq])
 
-    def fiscal_pos_map_to_csv(self):
-        writer = pycompat.csv_writer(open('account.fiscal.'
-                                     'position.tax.template-%s.csv' %
-                                     self.suffix, 'wb'))
-        fiscal_pos_map_iterator = self.iter_fiscal_pos_map()
-        keys = next(fiscal_pos_map_iterator)
+    deffiscal_pos_map_to_csv(self):
+        writer=pycompat.csv_writer(open('account.fiscal.'
+                                     'position.tax.template-%s.csv'%
+                                     self.suffix,'wb'))
+        fiscal_pos_map_iterator=self.iter_fiscal_pos_map()
+        keys=next(fiscal_pos_map_iterator)
         writer.writerow(keys)
-        for row in fiscal_pos_map_iterator:
-            writer.writerow([pycompat.to_text(s) for s in row.values()])
+        forrowinfiscal_pos_map_iterator:
+            writer.writerow([pycompat.to_text(s)forsinrow.values()])
 
 
-if __name__ == '__main__':
-    o = LuxTaxGenerator('tax.xls')
+if__name__=='__main__':
+    o=LuxTaxGenerator('tax.xls')
     o.tax_codes_to_csv()
     o.taxes_to_csv()
     o.fiscal_pos_map_to_csv()

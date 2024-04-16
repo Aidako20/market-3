@@ -1,18 +1,18 @@
-# coding: utf-8
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import api, fields, models
+#coding:utf-8
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportapi,fields,models
 
 
-class SaleReport(models.Model):
-    _inherit = 'sale.report'
+classSaleReport(models.Model):
+    _inherit='sale.report'
 
-    website_id = fields.Many2one('website', readonly=True)
+    website_id=fields.Many2one('website',readonly=True)
 
-    def _group_by_sale(self, groupby=''):
-        res = super()._group_by_sale(groupby)
-        res += """,s.website_id"""
-        return res
+    def_group_by_sale(self,groupby=''):
+        res=super()._group_by_sale(groupby)
+        res+=""",s.website_id"""
+        returnres
 
-    def _select_additional_fields(self, fields):
-        fields['website_id'] = ", s.website_id as website_id"
-        return super()._select_additional_fields(fields)
+    def_select_additional_fields(self,fields):
+        fields['website_id']=",s.website_idaswebsite_id"
+        returnsuper()._select_additional_fields(fields)

@@ -1,74 +1,74 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
+fromflectraimportapi,fields,models,_
 
 
-class PurchaseOrder(models.Model):
-    _inherit = "purchase.order"
+classPurchaseOrder(models.Model):
+    _inherit="purchase.order"
 
-    sale_order_count = fields.Integer(
-        "Number of Source Sale",
+    sale_order_count=fields.Integer(
+        "NumberofSourceSale",
         compute='_compute_sale_order_count',
         groups='sales_team.group_sale_salesman')
 
     @api.depends('order_line.sale_order_id')
-    def _compute_sale_order_count(self):
-        for purchase in self:
-            purchase.sale_order_count = len(purchase._get_sale_orders())
+    def_compute_sale_order_count(self):
+        forpurchaseinself:
+            purchase.sale_order_count=len(purchase._get_sale_orders())
 
-    def action_view_sale_orders(self):
+    defaction_view_sale_orders(self):
         self.ensure_one()
-        sale_order_ids = self._get_sale_orders().ids
-        action = {
-            'res_model': 'sale.order',
-            'type': 'ir.actions.act_window',
+        sale_order_ids=self._get_sale_orders().ids
+        action={
+            'res_model':'sale.order',
+            'type':'ir.actions.act_window',
         }
-        if len(sale_order_ids) == 1:
+        iflen(sale_order_ids)==1:
             action.update({
-                'view_mode': 'form',
-                'res_id': sale_order_ids[0],
+                'view_mode':'form',
+                'res_id':sale_order_ids[0],
             })
         else:
             action.update({
-                'name': _('Sources Sale Orders %s', self.name),
-                'domain': [('id', 'in', sale_order_ids)],
-                'view_mode': 'tree,form',
+                'name':_('SourcesSaleOrders%s',self.name),
+                'domain':[('id','in',sale_order_ids)],
+                'view_mode':'tree,form',
             })
-        return action
+        returnaction
 
-    def button_cancel(self):
-        result = super(PurchaseOrder, self).button_cancel()
+    defbutton_cancel(self):
+        result=super(PurchaseOrder,self).button_cancel()
         self.sudo()._activity_cancel_on_sale()
-        return result
+        returnresult
 
-    def _get_sale_orders(self):
-        return self.order_line.sale_order_id
+    def_get_sale_orders(self):
+        returnself.order_line.sale_order_id
 
-    def _activity_cancel_on_sale(self):
-        """ If some PO are cancelled, we need to put an activity on their origin SO (only the open ones). Since a PO can have
-            been modified by several SO, when cancelling one PO, many next activities can be schedulded on different SO.
+    def_activity_cancel_on_sale(self):
+        """IfsomePOarecancelled,weneedtoputanactivityontheiroriginSO(onlytheopenones).SinceaPOcanhave
+            beenmodifiedbyseveralSO,whencancellingonePO,manynextactivitiescanbescheduldedondifferentSO.
         """
-        sale_to_notify_map = {}  # map SO -> recordset of PO as {sale.order: set(purchase.order.line)}
-        for order in self:
-            for purchase_line in order.order_line:
-                if purchase_line.sale_line_id:
-                    sale_order = purchase_line.sale_line_id.order_id
-                    sale_to_notify_map.setdefault(sale_order, self.env['purchase.order.line'])
-                    sale_to_notify_map[sale_order] |= purchase_line
+        sale_to_notify_map={} #mapSO->recordsetofPOas{sale.order:set(purchase.order.line)}
+        fororderinself:
+            forpurchase_lineinorder.order_line:
+                ifpurchase_line.sale_line_id:
+                    sale_order=purchase_line.sale_line_id.order_id
+                    sale_to_notify_map.setdefault(sale_order,self.env['purchase.order.line'])
+                    sale_to_notify_map[sale_order]|=purchase_line
 
-        for sale_order, purchase_order_lines in sale_to_notify_map.items():
+        forsale_order,purchase_order_linesinsale_to_notify_map.items():
             sale_order._activity_schedule_with_view('mail.mail_activity_data_warning',
-                user_id=sale_order.user_id.id or self.env.uid,
+                user_id=sale_order.user_id.idorself.env.uid,
                 views_or_xmlid='sale_purchase.exception_sale_on_purchase_cancellation',
                 render_context={
-                    'purchase_orders': purchase_order_lines.mapped('order_id'),
-                    'purchase_order_lines': purchase_order_lines,
+                    'purchase_orders':purchase_order_lines.mapped('order_id'),
+                    'purchase_order_lines':purchase_order_lines,
             })
 
 
-class PurchaseOrderLine(models.Model):
-    _inherit = 'purchase.order.line'
+classPurchaseOrderLine(models.Model):
+    _inherit='purchase.order.line'
 
-    sale_order_id = fields.Many2one(related='sale_line_id.order_id', string="Sale Order", store=True, readonly=True)
-    sale_line_id = fields.Many2one('sale.order.line', string="Origin Sale Item", index=True, copy=False)
+    sale_order_id=fields.Many2one(related='sale_line_id.order_id',string="SaleOrder",store=True,readonly=True)
+    sale_line_id=fields.Many2one('sale.order.line',string="OriginSaleItem",index=True,copy=False)

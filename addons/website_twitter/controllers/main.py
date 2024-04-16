@@ -1,42 +1,42 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import json
-from flectra import _
-from flectra import http
-from flectra.http import request
+importjson
+fromflectraimport_
+fromflectraimporthttp
+fromflectra.httpimportrequest
 
 
-class Twitter(http.Controller):
-    @http.route(['/website_twitter/reload'], type='json', auth="user", website=True)
-    def twitter_reload(self):
-        return request.website.fetch_favorite_tweets()
+classTwitter(http.Controller):
+    @http.route(['/website_twitter/reload'],type='json',auth="user",website=True)
+    deftwitter_reload(self):
+        returnrequest.website.fetch_favorite_tweets()
 
-    @http.route(['/website_twitter/get_favorites'], type='json', auth="public", website=True)
-    def get_tweets(self, limit=20):
-        key = request.website.sudo().twitter_api_key
-        secret = request.website.sudo().twitter_api_secret
-        screen_name = request.website.twitter_screen_name
-        debug = request.env['res.users'].has_group('website.group_website_publisher')
-        if not key or not secret:
-            if debug:
-                return {"error": _("Please set the Twitter API Key and Secret in the Website Settings.")}
-            return []
-        if not screen_name:
-            if debug:
-                return {"error": _("Please set a Twitter screen name to load favorites from, "
-                                   "in the Website Settings (it does not have to be yours)")}
-            return []
-        TwitterTweets = request.env['website.twitter.tweet']
-        tweets = TwitterTweets.search(
-                [('website_id', '=', request.website.id),
-                 ('screen_name', '=', screen_name)],
-                limit=int(limit), order="tweet_id desc")
-        if len(tweets) < 12:
-            if debug:
-                return {"error": _("Twitter user @%(username)s has less than 12 favorite tweets. "
-                                   "Please add more or choose a different screen name.") % \
-                                      {'username': screen_name}}
+    @http.route(['/website_twitter/get_favorites'],type='json',auth="public",website=True)
+    defget_tweets(self,limit=20):
+        key=request.website.sudo().twitter_api_key
+        secret=request.website.sudo().twitter_api_secret
+        screen_name=request.website.twitter_screen_name
+        debug=request.env['res.users'].has_group('website.group_website_publisher')
+        ifnotkeyornotsecret:
+            ifdebug:
+                return{"error":_("PleasesettheTwitterAPIKeyandSecretintheWebsiteSettings.")}
+            return[]
+        ifnotscreen_name:
+            ifdebug:
+                return{"error":_("PleasesetaTwitterscreennametoloadfavoritesfrom,"
+                                   "intheWebsiteSettings(itdoesnothavetobeyours)")}
+            return[]
+        TwitterTweets=request.env['website.twitter.tweet']
+        tweets=TwitterTweets.search(
+                [('website_id','=',request.website.id),
+                 ('screen_name','=',screen_name)],
+                limit=int(limit),order="tweet_iddesc")
+        iflen(tweets)<12:
+            ifdebug:
+                return{"error":_("Twitteruser@%(username)shaslessthan12favoritetweets."
+                                   "Pleaseaddmoreorchooseadifferentscreenname.")%\
+                                      {'username':screen_name}}
             else:
-                return []
-        return tweets.mapped(lambda t: json.loads(t.tweet))
+                return[]
+        returntweets.mapped(lambdat:json.loads(t.tweet))

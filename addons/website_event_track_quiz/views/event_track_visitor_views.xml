@@ -1,37 +1,37 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra><data>
 
-    <record id="event_track_visitor_view_search" model="ir.ui.view" >
-        <field name="name">event.track.visitor.view.search.inherit.quiz</field>
-        <field name="model">event.track.visitor</field>
-        <field name="inherit_id" ref="website_event_track.event_track_visitor_view_search"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='is_wishlisted']" position="after">
-                <field name="quiz_completed"/>
+    <recordid="event_track_visitor_view_search"model="ir.ui.view">
+        <fieldname="name">event.track.visitor.view.search.inherit.quiz</field>
+        <fieldname="model">event.track.visitor</field>
+        <fieldname="inherit_id"ref="website_event_track.event_track_visitor_view_search"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='is_wishlisted']"position="after">
+                <fieldname="quiz_completed"/>
             </xpath>
         </field>
     </record>
 
-    <record id="event_track_visitor_view_form" model="ir.ui.view">
-        <field name="name">event.track.visitor.view.form.inherit.quiz</field>
-        <field name="model">event.track.visitor</field>
-        <field name="inherit_id" ref="website_event_track.event_track_visitor_view_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='is_wishlisted']" position="after">
-                <field name="quiz_completed"/>
-                <field name="quiz_points"/>
+    <recordid="event_track_visitor_view_form"model="ir.ui.view">
+        <fieldname="name">event.track.visitor.view.form.inherit.quiz</field>
+        <fieldname="model">event.track.visitor</field>
+        <fieldname="inherit_id"ref="website_event_track.event_track_visitor_view_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='is_wishlisted']"position="after">
+                <fieldname="quiz_completed"/>
+                <fieldname="quiz_points"/>
             </xpath>
         </field>
     </record>
 
-    <record id="event_track_visitor_view_list" model="ir.ui.view">
-        <field name="name">event.track.visitor.view.list.inherit.quiz</field>
-        <field name="model">event.track.visitor</field>
-        <field name="inherit_id" ref="website_event_track.event_track_visitor_view_list"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='is_wishlisted']" position="after">
-                <field name="quiz_completed"/>
-                <field name="quiz_points"/>
+    <recordid="event_track_visitor_view_list"model="ir.ui.view">
+        <fieldname="name">event.track.visitor.view.list.inherit.quiz</field>
+        <fieldname="model">event.track.visitor</field>
+        <fieldname="inherit_id"ref="website_event_track.event_track_visitor_view_list"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='is_wishlisted']"position="after">
+                <fieldname="quiz_completed"/>
+                <fieldname="quiz_points"/>
             </xpath>
         </field>
     </record>

@@ -1,39 +1,39 @@
-flectra.define('point_of_sale.tour.SelectionPopupTourMethods', function (require) {
-    'use strict';
+flectra.define('point_of_sale.tour.SelectionPopupTourMethods',function(require){
+    'usestrict';
 
-    const { createTourMethods } = require('point_of_sale.tour.utils');
+    const{createTourMethods}=require('point_of_sale.tour.utils');
 
-    class Do {
-        clickItem(name) {
-            return [
+    classDo{
+        clickItem(name){
+            return[
                 {
-                    content: `click selection '${name}'`,
-                    trigger: `.selection-item:contains("${name}")`,
+                    content:`clickselection'${name}'`,
+                    trigger:`.selection-item:contains("${name}")`,
                 },
             ];
         }
     }
 
-    class Check {
-        hasSelectionItem(name) {
-            return [
+    classCheck{
+        hasSelectionItem(name){
+            return[
                 {
-                    content: `selection popup has '${name}'`,
-                    trigger: `.selection-item:contains("${name}")`,
-                    run: () => {},
+                    content:`selectionpopuphas'${name}'`,
+                    trigger:`.selection-item:contains("${name}")`,
+                    run:()=>{},
                 },
             ];
         }
-        isShown() {
-            return [
+        isShown(){
+            return[
                 {
-                    content: 'selection popup is shown',
-                    trigger: '.modal-dialog .popup-selection',
-                    run: () => {},
+                    content:'selectionpopupisshown',
+                    trigger:'.modal-dialog.popup-selection',
+                    run:()=>{},
                 },
             ];
         }
     }
 
-    return createTourMethods('SelectionPopup', Do, Check);
+    returncreateTourMethods('SelectionPopup',Do,Check);
 });

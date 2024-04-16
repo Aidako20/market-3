@@ -1,20 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 
-<templates id="template">
-    <t t-name="hr_expense.dashboard_list_header">
-        <div class="o_expense_container d-flex o_form_statusbar">
-            <t t-foreach="expenses" t-as="expense">
-                <div t-attf-class="o_expense_card o_arrow_button flex-grow-1 d-flex flex-column border-right-0">
-                    <div class="content_center">
+<templatesid="template">
+    <tt-name="hr_expense.dashboard_list_header">
+        <divclass="o_expense_containerd-flexo_form_statusbar">
+            <tt-foreach="expenses"t-as="expense">
+                <divt-attf-class="o_expense_cardo_arrow_buttonflex-grow-1d-flexflex-columnborder-right-0">
+                    <divclass="content_center">
                         <div>
-                            <span t-esc="render_monetary_field(expenses[expense]['amount'], expenses[expense]['currency'])" class="h2 o_expense_purple"/>
+                            <spant-esc="render_monetary_field(expenses[expense]['amount'],expenses[expense]['currency'])"class="h2o_expense_purple"/>
                         </div>
-                        <b class="m-2"><span t-esc="expenses[expense]['description']"/></b>
+                        <bclass="m-2"><spant-esc="expenses[expense]['description']"/></b>
                     </div>
                 </div>
-                <div t-if="expense !== 'approved'" t-attf-class="o_expense_card o_arrow_button flex-grow-1 d-flex flex-column border-right-0">
-                    <div class="content_center">
-                        <span class="fa fa-angle-right fa-3x"/>
+                <divt-if="expense!=='approved'"t-attf-class="o_expense_cardo_arrow_buttonflex-grow-1d-flexflex-columnborder-right-0">
+                    <divclass="content_center">
+                        <spanclass="fafa-angle-rightfa-3x"/>
                     </div>
                 </div>
             </t>

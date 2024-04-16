@@ -1,76 +1,76 @@
-flectra.define('sale_product_matrix.product_configurator', function (require) {
-var ProductConfiguratorWidget = require('sale_product_configurator.product_configurator');
+flectra.define('sale_product_matrix.product_configurator',function(require){
+varProductConfiguratorWidget=require('sale_product_configurator.product_configurator');
 
 /**
- * Extension of the ProductConfiguratorWidget to support product configuration
- * as variant batches to add to the SO..
- * It opens when a configurable product_template is set
- * (multiple variants, or custom attributes)
- * and its configuration mode is matrix.
+ *ExtensionoftheProductConfiguratorWidgettosupportproductconfiguration
+ *asvariantbatchestoaddtotheSO..
+ *Itopenswhenaconfigurableproduct_templateisset
+ *(multiplevariants,orcustomattributes)
+ *anditsconfigurationmodeismatrix.
  *
  */
 ProductConfiguratorWidget.include({
 
     /**
-     * @override
+     *@override
      */
-     _openConfigurator: function (result, productTemplateId, dataPointId) {
-        var self = this;
-        var mode = result.mode;
-        this._super.apply(this, arguments).then(function (configuratorOpened) {
-            if (!configuratorOpened && mode === 'matrix') {
-                self._openGridConfigurator(productTemplateId, dataPointId);
-                return Promise.resolve(true);
+     _openConfigurator:function(result,productTemplateId,dataPointId){
+        varself=this;
+        varmode=result.mode;
+        this._super.apply(this,arguments).then(function(configuratorOpened){
+            if(!configuratorOpened&&mode==='matrix'){
+                self._openGridConfigurator(productTemplateId,dataPointId);
+                returnPromise.resolve(true);
             }
-            return Promise.resolve(configuratorOpened);
+            returnPromise.resolve(configuratorOpened);
         });
     },
 
-    _openGridConfigurator: function (productTemplateId, dataPointId, edit) {
-        var attribs = edit ? this._getPTAVS() : [];
-        this.trigger_up('open_matrix', {
-            product_template_id: productTemplateId,
-            model: 'sale.order',
-            dataPointId: dataPointId,
-            edit: edit,
-            editedCellAttributes: attribs,
+    _openGridConfigurator:function(productTemplateId,dataPointId,edit){
+        varattribs=edit?this._getPTAVS():[];
+        this.trigger_up('open_matrix',{
+            product_template_id:productTemplateId,
+            model:'sale.order',
+            dataPointId:dataPointId,
+            edit:edit,
+            editedCellAttributes:attribs,
         });
     },
 
-    _onEditProductConfiguration: function () {
-        if (!this.recordData.is_configurable_product) {
-            // if line should be edited by another configurator
-            // or simply inline.
-            this._super.apply(this, arguments);
+    _onEditProductConfiguration:function(){
+        if(!this.recordData.is_configurable_product){
+            //iflineshouldbeeditedbyanotherconfigurator
+            //orsimplyinline.
+            this._super.apply(this,arguments);
             return;
         }
-        var self = this;
-        var productTemplateId = this.recordData.product_template_id.data.id;
+        varself=this;
+        varproductTemplateId=this.recordData.product_template_id.data.id;
         this._rpc({
-            model: 'product.template',
-            method: 'read',
-            args: [productTemplateId, ['product_add_mode']],
-        }).then(function (result) {
-            if (result && result[0].product_add_mode === 'matrix') {
-                self._openGridConfigurator(productTemplateId, self.dataPointID, true);
-            } else {
-                self.restoreProductTemplateId = self.recordData.product_template_id;
-                // Call super only if product_add_mode different than matrix
-                // to avoid product configurator opening (which is the default case).
+            model:'product.template',
+            method:'read',
+            args:[productTemplateId,['product_add_mode']],
+        }).then(function(result){
+            if(result&&result[0].product_add_mode==='matrix'){
+                self._openGridConfigurator(productTemplateId,self.dataPointID,true);
+            }else{
+                self.restoreProductTemplateId=self.recordData.product_template_id;
+                //Callsuperonlyifproduct_add_modedifferentthanmatrix
+                //toavoidproductconfiguratoropening(whichisthedefaultcase).
                 self._openProductConfigurator({
-                        configuratorMode: 'edit',
-                        default_product_template_id: self.recordData.product_template_id.data.id,
-                        default_pricelist_id: self._getPricelistId(),
-                        default_product_template_attribute_value_ids: self._convertFromMany2Many(
+                        configuratorMode:'edit',
+                        default_product_template_id:self.recordData.product_template_id.data.id,
+                        default_pricelist_id:self._getPricelistId(),
+                        default_product_template_attribute_value_ids:self._convertFromMany2Many(
                             self.recordData.product_template_attribute_value_ids
                         ),
-                        default_product_no_variant_attribute_value_ids: self._convertFromMany2Many(
+                        default_product_no_variant_attribute_value_ids:self._convertFromMany2Many(
                             self.recordData.product_no_variant_attribute_value_ids
                         ),
-                        default_product_custom_attribute_value_ids: self._convertFromOne2Many(
+                        default_product_custom_attribute_value_ids:self._convertFromOne2Many(
                             self.recordData.product_custom_attribute_value_ids
                         ),
-                        default_quantity: self.recordData.product_uom_qty
+                        default_quantity:self.recordData.product_uom_qty
                     },
                     self.dataPointID
                 );
@@ -79,18 +79,18 @@ ProductConfiguratorWidget.include({
     },
 
     /**
-     * Returns the list of attribute ids (product.template.attribute.value)
-     * from the current SOLine.
+     *Returnsthelistofattributeids(product.template.attribute.value)
+     *fromthecurrentSOLine.
     */
-    _getPTAVS: function () {
-        var PTAVSIDS = [];
-        _.each(this.recordData.product_no_variant_attribute_value_ids.res_ids, function (id) {
+    _getPTAVS:function(){
+        varPTAVSIDS=[];
+        _.each(this.recordData.product_no_variant_attribute_value_ids.res_ids,function(id){
             PTAVSIDS.push(id);
         });
-        _.each(this.recordData.product_template_attribute_value_ids.res_ids, function (id) {
+        _.each(this.recordData.product_template_attribute_value_ids.res_ids,function(id){
             PTAVSIDS.push(id);
         });
-        return PTAVSIDS.sort(function (a, b) {return a - b;});
+        returnPTAVSIDS.sort(function(a,b){returna-b;});
     }
 
 });

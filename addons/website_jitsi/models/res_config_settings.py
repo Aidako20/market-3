@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+classResConfigSettings(models.TransientModel):
+    _inherit='res.config.settings'
 
-    jitsi_server_domain = fields.Char(
-        'Jitsi Server Domain', default='meet.jit.si', config_parameter='website_jitsi.jitsi_server_domain',
-        help='The Jitsi server domain can be customized through the settings to use a different server than the default "meet.jit.si"')
+    jitsi_server_domain=fields.Char(
+        'JitsiServerDomain',default='meet.jit.si',config_parameter='website_jitsi.jitsi_server_domain',
+        help='TheJitsiserverdomaincanbecustomizedthroughthesettingstouseadifferentserverthanthedefault"meet.jit.si"')

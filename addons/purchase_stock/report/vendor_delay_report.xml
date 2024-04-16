@@ -1,35 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="vendor_delay_report_filter" model="ir.ui.view">
-        <field name="name">vendor.delay.report.search</field>
-        <field name="model">vendor.delay.report</field>
-        <field name="arch" type="xml">
-            <search string="On-time Delivery">
-                <field name="partner_id"/>
-                <field name="product_id"/>
-                <filter string="Effective Date Last Year" name="later_than_a_year_ago"  domain="[('date', '&gt;=', ((context_today()-relativedelta(years=1)).strftime('%Y-%m-%d')))]"/>
+    <recordid="vendor_delay_report_filter"model="ir.ui.view">
+        <fieldname="name">vendor.delay.report.search</field>
+        <fieldname="model">vendor.delay.report</field>
+        <fieldname="arch"type="xml">
+            <searchstring="On-timeDelivery">
+                <fieldname="partner_id"/>
+                <fieldname="product_id"/>
+                <filterstring="EffectiveDateLastYear"name="later_than_a_year_ago" domain="[('date','&gt;=',((context_today()-relativedelta(years=1)).strftime('%Y-%m-%d')))]"/>
             </search>
             </field>
     </record>
 
-    <record id="vendor_delay_report_view_graph" model="ir.ui.view">
-        <field name="name">vendor.delay.report.view.graph</field>
-        <field name="model">vendor.delay.report</field>
-        <field name="arch" type="xml">
-            <graph string="On-Time Delivery" type="bar" sample="1" disable_linking="1">
-                <field name="product_id" type="row"/>
-                <field name="on_time_rate" type="measure"/>
+    <recordid="vendor_delay_report_view_graph"model="ir.ui.view">
+        <fieldname="name">vendor.delay.report.view.graph</field>
+        <fieldname="model">vendor.delay.report</field>
+        <fieldname="arch"type="xml">
+            <graphstring="On-TimeDelivery"type="bar"sample="1"disable_linking="1">
+                <fieldname="product_id"type="row"/>
+                <fieldname="on_time_rate"type="measure"/>
             </graph>
         </field>
     </record>
 
-    <record id="action_purchase_vendor_delay_report" model="ir.actions.act_window">
-        <field name="name">On-time Delivery</field>
-        <field name="res_model">vendor.delay.report</field>
-        <field name="view_mode">graph</field>
-        <field name="search_view_id" ref="vendor_delay_report_filter"/>
-        <field name="help">Vendor On-time Delivery analysis</field>
-        <field name="target">current</field>
-        <field name="context">{'search_default_later_than_a_year_ago':1}</field>
+    <recordid="action_purchase_vendor_delay_report"model="ir.actions.act_window">
+        <fieldname="name">On-timeDelivery</field>
+        <fieldname="res_model">vendor.delay.report</field>
+        <fieldname="view_mode">graph</field>
+        <fieldname="search_view_id"ref="vendor_delay_report_filter"/>
+        <fieldname="help">VendorOn-timeDeliveryanalysis</field>
+        <fieldname="target">current</field>
+        <fieldname="context">{'search_default_later_than_a_year_ago':1}</field>
     </record>
 </flectra>

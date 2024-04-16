@@ -1,29 +1,29 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.addons.hr.tests.common import TestHrCommon
+fromflectra.addons.hr.tests.commonimportTestHrCommon
 
 
-class TestChannel(TestHrCommon):
+classTestChannel(TestHrCommon):
 
-    def setUp(self):
-        super(TestChannel, self).setUp()
+    defsetUp(self):
+        super(TestChannel,self).setUp()
 
-        self.channel = self.env['mail.channel'].create({'name': 'Test'})
+        self.channel=self.env['mail.channel'].create({'name':'Test'})
 
-        emp0 = self.env['hr.employee'].create({
-            'user_id': self.res_users_hr_officer.id,
+        emp0=self.env['hr.employee'].create({
+            'user_id':self.res_users_hr_officer.id,
         })
-        self.department = self.env['hr.department'].create({
-            'name': 'Test Department',
-            'member_ids': [(4, emp0.id)],
+        self.department=self.env['hr.department'].create({
+            'name':'TestDepartment',
+            'member_ids':[(4,emp0.id)],
         })
 
-    def test_auto_subscribe_department(self):
-        self.assertEqual(self.channel.channel_partner_ids, self.env['res.partner'])
+    deftest_auto_subscribe_department(self):
+        self.assertEqual(self.channel.channel_partner_ids,self.env['res.partner'])
 
         self.channel.write({
-            'subscription_department_ids': [(4, self.department.id)]
+            'subscription_department_ids':[(4,self.department.id)]
         })
 
-        self.assertEqual(self.channel.channel_partner_ids, self.department.mapped('member_ids.user_id.partner_id'))
+        self.assertEqual(self.channel.channel_partner_ids,self.department.mapped('member_ids.user_id.partner_id'))

@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
 <data>
 
-    <record id="resource_calendar_std" model="resource.calendar">
-        <field name="name">Standard 40 hours/week</field>
-        <field name="company_id" ref="base.main_company"/>
+    <recordid="resource_calendar_std"model="resource.calendar">
+        <fieldname="name">Standard40hours/week</field>
+        <fieldname="company_id"ref="base.main_company"/>
     </record>
 
-    <record id="base.main_company" model="res.company">
-        <field name="resource_calendar_id" ref="resource_calendar_std"/>
+    <recordid="base.main_company"model="res.company">
+        <fieldname="resource_calendar_id"ref="resource_calendar_std"/>
     </record>
 
     <function
@@ -19,44 +19,44 @@
 
 </data>
 
-<data noupdate="1">
+<datanoupdate="1">
 
-    <record id="resource_calendar_std_35h" model="resource.calendar">
-        <field name="name">Standard 35 hours/week</field>
-        <field name="company_id" ref="base.main_company"/>
-        <field name="hours_per_day">7.0</field>
-        <field name="attendance_ids"
-            eval="[(5, 0, 0),
-                (0, 0, {'name': 'Monday Morning', 'dayofweek': '0', 'hour_from': 8, 'hour_to': 12, 'day_period': 'morning'}),
-                (0, 0, {'name': 'Monday Afternoon', 'dayofweek': '0', 'hour_from': 13, 'hour_to': 16, 'day_period': 'afternoon'}),
-                (0, 0, {'name': 'Tuesday Morning', 'dayofweek': '1', 'hour_from': 8, 'hour_to': 12, 'day_period': 'morning'}),
-                (0, 0, {'name': 'Tuesday Afternoon', 'dayofweek': '1', 'hour_from': 13, 'hour_to': 16, 'day_period': 'afternoon'}),
-                (0, 0, {'name': 'Wednesday Morning', 'dayofweek': '2', 'hour_from': 8, 'hour_to': 12, 'day_period': 'morning'}),
-                (0, 0, {'name': 'Wednesday Afternoon', 'dayofweek': '2', 'hour_from': 13, 'hour_to': 16, 'day_period': 'afternoon'}),
-                (0, 0, {'name': 'Thursday Morning', 'dayofweek': '3', 'hour_from': 8, 'hour_to': 12, 'day_period': 'morning'}),
-                (0, 0, {'name': 'Thursday Afternoon', 'dayofweek': '3', 'hour_from': 13, 'hour_to': 16, 'day_period': 'afternoon'}),
-                (0, 0, {'name': 'Friday Morning', 'dayofweek': '4', 'hour_from': 8, 'hour_to': 12, 'day_period': 'morning'}),
-                (0, 0, {'name': 'Friday Afternoon', 'dayofweek': '4', 'hour_from': 13, 'hour_to': 16, 'day_period': 'afternoon'})
+    <recordid="resource_calendar_std_35h"model="resource.calendar">
+        <fieldname="name">Standard35hours/week</field>
+        <fieldname="company_id"ref="base.main_company"/>
+        <fieldname="hours_per_day">7.0</field>
+        <fieldname="attendance_ids"
+            eval="[(5,0,0),
+                (0,0,{'name':'MondayMorning','dayofweek':'0','hour_from':8,'hour_to':12,'day_period':'morning'}),
+                (0,0,{'name':'MondayAfternoon','dayofweek':'0','hour_from':13,'hour_to':16,'day_period':'afternoon'}),
+                (0,0,{'name':'TuesdayMorning','dayofweek':'1','hour_from':8,'hour_to':12,'day_period':'morning'}),
+                (0,0,{'name':'TuesdayAfternoon','dayofweek':'1','hour_from':13,'hour_to':16,'day_period':'afternoon'}),
+                (0,0,{'name':'WednesdayMorning','dayofweek':'2','hour_from':8,'hour_to':12,'day_period':'morning'}),
+                (0,0,{'name':'WednesdayAfternoon','dayofweek':'2','hour_from':13,'hour_to':16,'day_period':'afternoon'}),
+                (0,0,{'name':'ThursdayMorning','dayofweek':'3','hour_from':8,'hour_to':12,'day_period':'morning'}),
+                (0,0,{'name':'ThursdayAfternoon','dayofweek':'3','hour_from':13,'hour_to':16,'day_period':'afternoon'}),
+                (0,0,{'name':'FridayMorning','dayofweek':'4','hour_from':8,'hour_to':12,'day_period':'morning'}),
+                (0,0,{'name':'FridayAfternoon','dayofweek':'4','hour_from':13,'hour_to':16,'day_period':'afternoon'})
             ]"
         />
     </record>
 
-    <record id="resource_calendar_std_38h" model="resource.calendar">
-        <field name="name">Standard 38 hours/week</field>
-        <field name="company_id" ref="base.main_company"/>
-        <field name="hours_per_day">7.6</field>
-        <field name="attendance_ids"
-            eval="[(5, 0, 0),
-                (0, 0, {'name': 'Monday Morning', 'dayofweek': '0', 'hour_from': 8, 'hour_to': 12, 'day_period': 'morning'}),
-                (0, 0, {'name': 'Monday Afternoon', 'dayofweek': '0', 'hour_from': 13, 'hour_to': 16.6, 'day_period': 'afternoon'}),
-                (0, 0, {'name': 'Tuesday Morning', 'dayofweek': '1', 'hour_from': 8, 'hour_to': 12, 'day_period': 'morning'}),
-                (0, 0, {'name': 'Tuesday Afternoon', 'dayofweek': '1', 'hour_from': 13, 'hour_to': 16.6, 'day_period': 'afternoon'}),
-                (0, 0, {'name': 'Wednesday Morning', 'dayofweek': '2', 'hour_from': 8, 'hour_to': 12, 'day_period': 'morning'}),
-                (0, 0, {'name': 'Wednesday Afternoon', 'dayofweek': '2', 'hour_from': 13, 'hour_to': 16.6, 'day_period': 'afternoon'}),
-                (0, 0, {'name': 'Thursday Morning', 'dayofweek': '3', 'hour_from': 8, 'hour_to': 12, 'day_period': 'morning'}),
-                (0, 0, {'name': 'Thursday Afternoon', 'dayofweek': '3', 'hour_from': 13, 'hour_to': 16.6, 'day_period': 'afternoon'}),
-                (0, 0, {'name': 'Friday Morning', 'dayofweek': '4', 'hour_from': 8, 'hour_to': 12, 'day_period': 'morning'}),
-                (0, 0, {'name': 'Friday Afternoon', 'dayofweek': '4', 'hour_from': 13, 'hour_to': 16.6, 'day_period': 'afternoon'})
+    <recordid="resource_calendar_std_38h"model="resource.calendar">
+        <fieldname="name">Standard38hours/week</field>
+        <fieldname="company_id"ref="base.main_company"/>
+        <fieldname="hours_per_day">7.6</field>
+        <fieldname="attendance_ids"
+            eval="[(5,0,0),
+                (0,0,{'name':'MondayMorning','dayofweek':'0','hour_from':8,'hour_to':12,'day_period':'morning'}),
+                (0,0,{'name':'MondayAfternoon','dayofweek':'0','hour_from':13,'hour_to':16.6,'day_period':'afternoon'}),
+                (0,0,{'name':'TuesdayMorning','dayofweek':'1','hour_from':8,'hour_to':12,'day_period':'morning'}),
+                (0,0,{'name':'TuesdayAfternoon','dayofweek':'1','hour_from':13,'hour_to':16.6,'day_period':'afternoon'}),
+                (0,0,{'name':'WednesdayMorning','dayofweek':'2','hour_from':8,'hour_to':12,'day_period':'morning'}),
+                (0,0,{'name':'WednesdayAfternoon','dayofweek':'2','hour_from':13,'hour_to':16.6,'day_period':'afternoon'}),
+                (0,0,{'name':'ThursdayMorning','dayofweek':'3','hour_from':8,'hour_to':12,'day_period':'morning'}),
+                (0,0,{'name':'ThursdayAfternoon','dayofweek':'3','hour_from':13,'hour_to':16.6,'day_period':'afternoon'}),
+                (0,0,{'name':'FridayMorning','dayofweek':'4','hour_from':8,'hour_to':12,'day_period':'morning'}),
+                (0,0,{'name':'FridayAfternoon','dayofweek':'4','hour_from':13,'hour_to':16.6,'day_period':'afternoon'})
             ]"
         />
     </record>

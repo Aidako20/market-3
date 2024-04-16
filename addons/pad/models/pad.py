@@ -1,149 +1,149 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import logging
-import random
-import re
-import string
+importlogging
+importrandom
+importre
+importstring
 
-import requests
+importrequests
 
-from flectra import api, models, _
-from flectra.exceptions import UserError
+fromflectraimportapi,models,_
+fromflectra.exceptionsimportUserError
 
-from ..py_etherpad import EtherpadLiteClient
+from..py_etherpadimportEtherpadLiteClient
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
 
-class PadCommon(models.AbstractModel):
-    _name = 'pad.common'
-    _description = 'Pad Common'
+classPadCommon(models.AbstractModel):
+    _name='pad.common'
+    _description='PadCommon'
 
-    def _valid_field_parameter(self, field, name):
-        return name == 'pad_content_field' or super()._valid_field_parameter(field, name)
-
-    @api.model
-    def pad_is_configured(self):
-        return bool(self.env.company.pad_server)
+    def_valid_field_parameter(self,field,name):
+        returnname=='pad_content_field'orsuper()._valid_field_parameter(field,name)
 
     @api.model
-    def pad_generate_url(self):
-        company = self.env.company.sudo()
+    defpad_is_configured(self):
+        returnbool(self.env.company.pad_server)
 
-        pad = {
-            "server": company.pad_server,
-            "key": company.pad_key,
+    @api.model
+    defpad_generate_url(self):
+        company=self.env.company.sudo()
+
+        pad={
+            "server":company.pad_server,
+            "key":company.pad_key,
         }
 
-        # make sure pad server in the form of http://hostname
-        if not pad["server"]:
-            return pad
-        if not pad["server"].startswith('http'):
-            pad["server"] = 'http://' + pad["server"]
-        pad["server"] = pad["server"].rstrip('/')
-        # generate a salt
-        s = string.ascii_uppercase + string.digits
-        salt = ''.join([s[random.SystemRandom().randint(0, len(s) - 1)] for i in range(10)])
-        # path
-        # etherpad hardcodes pad id length limit to 50
-        path = '-%s-%s' % (self._name, salt)
-        path = '%s%s' % (self.env.cr.dbname.replace('_', '-')[0:50 - len(path)], path)
-        # contruct the url
-        url = '%s/p/%s' % (pad["server"], path)
+        #makesurepadserverintheformofhttp://hostname
+        ifnotpad["server"]:
+            returnpad
+        ifnotpad["server"].startswith('http'):
+            pad["server"]='http://'+pad["server"]
+        pad["server"]=pad["server"].rstrip('/')
+        #generateasalt
+        s=string.ascii_uppercase+string.digits
+        salt=''.join([s[random.SystemRandom().randint(0,len(s)-1)]foriinrange(10)])
+        #path
+        #etherpadhardcodespadidlengthlimitto50
+        path='-%s-%s'%(self._name,salt)
+        path='%s%s'%(self.env.cr.dbname.replace('_','-')[0:50-len(path)],path)
+        #contructtheurl
+        url='%s/p/%s'%(pad["server"],path)
 
-        # if create with content
-        if self.env.context.get('field_name') and self.env.context.get('model'):
-            myPad = EtherpadLiteClient(pad["key"], pad["server"] + '/api')
+        #ifcreatewithcontent
+        ifself.env.context.get('field_name')andself.env.context.get('model'):
+            myPad=EtherpadLiteClient(pad["key"],pad["server"]+'/api')
             try:
                 myPad.createPad(path)
-            except IOError:
-                raise UserError(_("Pad creation failed, either there is a problem with your pad server URL or with your connection."))
+            exceptIOError:
+                raiseUserError(_("Padcreationfailed,eitherthereisaproblemwithyourpadserverURLorwithyourconnection."))
 
-            # get attr on the field model
-            model = self.env[self.env.context["model"]]
-            field = model._fields[self.env.context['field_name']]
-            real_field = field.pad_content_field
+            #getattronthefieldmodel
+            model=self.env[self.env.context["model"]]
+            field=model._fields[self.env.context['field_name']]
+            real_field=field.pad_content_field
 
-            res_id = self.env.context.get("object_id")
-            record = model.browse(res_id)
-            # get content of the real field
-            real_field_value = record[real_field] or self.env.context.get('record', {}).get(real_field, '')
-            if real_field_value:
-                myPad.setHtmlFallbackText(path, real_field_value)
+            res_id=self.env.context.get("object_id")
+            record=model.browse(res_id)
+            #getcontentoftherealfield
+            real_field_value=record[real_field]orself.env.context.get('record',{}).get(real_field,'')
+            ifreal_field_value:
+                myPad.setHtmlFallbackText(path,real_field_value)
 
-        return {
-            "server": pad["server"],
-            "path": path,
-            "url": url,
+        return{
+            "server":pad["server"],
+            "path":path,
+            "url":url,
         }
 
     @api.model
-    def pad_get_content(self, url):
-        company = self.env.company.sudo()
-        myPad = EtherpadLiteClient(company.pad_key, (company.pad_server or '') + '/api')
-        content = ''
-        if url:
-            split_url = url.split('/p/')
-            path = len(split_url) == 2 and split_url[1]
+    defpad_get_content(self,url):
+        company=self.env.company.sudo()
+        myPad=EtherpadLiteClient(company.pad_key,(company.pad_serveror'')+'/api')
+        content=''
+        ifurl:
+            split_url=url.split('/p/')
+            path=len(split_url)==2andsplit_url[1]
             try:
-                content = myPad.getHtml(path).get('html', '')
-            except IOError:
-                _logger.warning('Http Error: the credentials might be absent for url: "%s". Falling back.' % url)
+                content=myPad.getHtml(path).get('html','')
+            exceptIOError:
+                _logger.warning('HttpError:thecredentialsmightbeabsentforurl:"%s".Fallingback.'%url)
                 try:
-                    r = requests.get('%s/export/html' % url)
+                    r=requests.get('%s/export/html'%url)
                     r.raise_for_status()
-                except Exception:
-                    _logger.warning("No pad found with url '%s'.", url)
+                exceptException:
+                    _logger.warning("Nopadfoundwithurl'%s'.",url)
                 else:
-                    mo = re.search('<body>(.*)</body>', r.content.decode(), re.DOTALL)
-                    if mo:
-                        content = mo.group(1)
+                    mo=re.search('<body>(.*)</body>',r.content.decode(),re.DOTALL)
+                    ifmo:
+                        content=mo.group(1)
 
-        return content
+        returncontent
 
-    # TODO
-    # reverse engineer protocol to be setHtml without using the api key
+    #TODO
+    #reverseengineerprotocoltobesetHtmlwithoutusingtheapikey
 
-    def write(self, vals):
+    defwrite(self,vals):
         self._set_field_to_pad(vals)
         self._set_pad_to_field(vals)
-        return super(PadCommon, self).write(vals)
+        returnsuper(PadCommon,self).write(vals)
 
     @api.model
-    def create(self, vals):
-        # Case of a regular creation: we receive the pad url, so we need to update the
-        # corresponding field
+    defcreate(self,vals):
+        #Caseofaregularcreation:wereceivethepadurl,soweneedtoupdatethe
+        #correspondingfield
         self._set_pad_to_field(vals)
-        pad = super(PadCommon, self).create(vals)
+        pad=super(PadCommon,self).create(vals)
 
-        # Case of a programmatical creation (e.g. copy): we receive the field content, so we need
-        # to create the corresponding pad
-        if self.env.context.get('pad_no_create', False):
-            return pad
-        for k, field in self._fields.items():
-            if hasattr(field, 'pad_content_field') and k not in vals:
-                ctx = {
-                    'model': self._name,
-                    'field_name': k,
-                    'object_id': pad.id,
+        #Caseofaprogrammaticalcreation(e.g.copy):wereceivethefieldcontent,soweneed
+        #tocreatethecorrespondingpad
+        ifself.env.context.get('pad_no_create',False):
+            returnpad
+        fork,fieldinself._fields.items():
+            ifhasattr(field,'pad_content_field')andknotinvals:
+                ctx={
+                    'model':self._name,
+                    'field_name':k,
+                    'object_id':pad.id,
                 }
-                pad_info = self.with_context(**ctx).pad_generate_url()
-                pad[k] = pad_info.get('url')
-        return pad
+                pad_info=self.with_context(**ctx).pad_generate_url()
+                pad[k]=pad_info.get('url')
+        returnpad
 
-    def _set_field_to_pad(self, vals):
-        # Update the pad if the `pad_content_field` is modified
-        for k, field in self._fields.items():
-            if hasattr(field, 'pad_content_field') and vals.get(field.pad_content_field) and self[k]:
-                company = self.env.user.sudo().company_id
-                myPad = EtherpadLiteClient(company.pad_key, (company.pad_server or '') + '/api')
-                path = self[k].split('/p/')[1]
-                myPad.setHtmlFallbackText(path, vals[field.pad_content_field])
+    def_set_field_to_pad(self,vals):
+        #Updatethepadifthe`pad_content_field`ismodified
+        fork,fieldinself._fields.items():
+            ifhasattr(field,'pad_content_field')andvals.get(field.pad_content_field)andself[k]:
+                company=self.env.user.sudo().company_id
+                myPad=EtherpadLiteClient(company.pad_key,(company.pad_serveror'')+'/api')
+                path=self[k].split('/p/')[1]
+                myPad.setHtmlFallbackText(path,vals[field.pad_content_field])
 
-    def _set_pad_to_field(self, vals):
-        # Update the `pad_content_field` if the pad is modified
-        for k, v in list(vals.items()):
-            field = self._fields.get(k)
-            if hasattr(field, 'pad_content_field'):
-                vals[field.pad_content_field] = self.pad_get_content(v)
+    def_set_pad_to_field(self,vals):
+        #Updatethe`pad_content_field`ifthepadismodified
+        fork,vinlist(vals.items()):
+            field=self._fields.get(k)
+            ifhasattr(field,'pad_content_field'):
+                vals[field.pad_content_field]=self.pad_get_content(v)

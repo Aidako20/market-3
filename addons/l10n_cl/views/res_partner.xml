@@ -1,22 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="view_move_form" model="ir.ui.view">
-        <field name="name">res.partner.placeholders.l10n_cl.form</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
-        <field name="model">res.partner</field>
-        <field name="arch" type="xml">
-            <field name="street2" position="attributes">
-                <attribute name="placeholder">Datos adic. dirección y Ciudad</attribute>
+    <recordid="view_move_form"model="ir.ui.view">
+        <fieldname="name">res.partner.placeholders.l10n_cl.form</field>
+        <fieldname="inherit_id"ref="base.view_partner_form"/>
+        <fieldname="model">res.partner</field>
+        <fieldname="arch"type="xml">
+            <fieldname="street2"position="attributes">
+                <attributename="placeholder">Datosadic.direcciónyCiudad</attribute>
             </field>
-            <field name="city" position="attributes">
-                <attribute name="placeholder">Comuna</attribute>
+            <fieldname="city"position="attributes">
+                <attributename="placeholder">Comuna</attribute>
             </field>
-            <field name="state_id" position="attributes">
-                <attribute name="placeholder">Región</attribute>
+            <fieldname="state_id"position="attributes">
+                <attributename="placeholder">Región</attribute>
             </field>
-            <field name="vat" position="after">
-                <field name="l10n_cl_sii_taxpayer_type" attrs="{'readonly': [('parent_id', '!=', False)]}" placeholder="Tax Payer Type"/>
+            <fieldname="vat"position="after">
+                <fieldname="l10n_cl_sii_taxpayer_type"attrs="{'readonly':[('parent_id','!=',False)]}"placeholder="TaxPayerType"/>
             </field>
         </field>
     </record>

@@ -1,42 +1,42 @@
-flectra.define('stock.StockOrderpointListModel', function (require) {
-"use strict";
+flectra.define('stock.StockOrderpointListModel',function(require){
+"usestrict";
 
-var core = require('web.core');
-var ListModel = require('web.ListModel');
+varcore=require('web.core');
+varListModel=require('web.ListModel');
 
-var qweb = core.qweb;
+varqweb=core.qweb;
 
 
-var StockOrderpointListModel = ListModel.extend({
+varStockOrderpointListModel=ListModel.extend({
 
-    // -------------------------------------------------------------------------
-    // Public
-    // -------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //Public
+    //-------------------------------------------------------------------------
     /**
      */
-    replenish: function (recordResIds) {
-      var self = this;
-      return this._rpc({
-          model: this.loadParams.modelName,
-          method: 'action_replenish',
-          args: [recordResIds],
-          context: this.loadParams.context,
-      }).then(function () {
-          return self.do_action('stock.action_replenishment');
+    replenish:function(recordResIds){
+      varself=this;
+      returnthis._rpc({
+          model:this.loadParams.modelName,
+          method:'action_replenish',
+          args:[recordResIds],
+          context:this.loadParams.context,
+      }).then(function(){
+          returnself.do_action('stock.action_replenishment');
       });
     },
 
-    snooze: function (recordResIds) {
-      var self = this;
-      return this.do_action('stock.action_orderpoint_snooze', {
-          additional_context: {
-              default_orderpoint_ids: recordResIds
+    snooze:function(recordResIds){
+      varself=this;
+      returnthis.do_action('stock.action_orderpoint_snooze',{
+          additional_context:{
+              default_orderpoint_ids:recordResIds
           },
-          on_close: () => self.do_action('stock.action_replenishment')
+          on_close:()=>self.do_action('stock.action_replenishment')
       });
     },
 });
 
-return StockOrderpointListModel;
+returnStockOrderpointListModel;
 
 });

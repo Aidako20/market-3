@@ -1,228 +1,228 @@
-flectra.define('mail/static/src/components/follower_subtype/follower_subtype_tests.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/follower_subtype/follower_subtype_tests.js',function(require){
+'usestrict';
 
-const components = {
-    FollowerSubtype: require('mail/static/src/components/follower_subtype/follower_subtype.js'),
+constcomponents={
+    FollowerSubtype:require('mail/static/src/components/follower_subtype/follower_subtype.js'),
 };
-const {
+const{
     afterEach,
     afterNextRender,
     beforeEach,
     createRootComponent,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+}=require('mail/static/src/utils/test_utils.js');
 
-QUnit.module('mail', {}, function () {
-QUnit.module('components', {}, function () {
-QUnit.module('follower_subtype', {}, function () {
-QUnit.module('follower_subtype_tests.js', {
-    beforeEach() {
+QUnit.module('mail',{},function(){
+QUnit.module('components',{},function(){
+QUnit.module('follower_subtype',{},function(){
+QUnit.module('follower_subtype_tests.js',{
+    beforeEach(){
         beforeEach(this);
 
-        this.createFollowerSubtypeComponent = async ({ follower, followerSubtype }) => {
-            const props = {
-                followerLocalId: follower.localId,
-                followerSubtypeLocalId: followerSubtype.localId,
+        this.createFollowerSubtypeComponent=async({follower,followerSubtype})=>{
+            constprops={
+                followerLocalId:follower.localId,
+                followerSubtypeLocalId:followerSubtype.localId,
             };
-            await createRootComponent(this, components.FollowerSubtype, {
+            awaitcreateRootComponent(this,components.FollowerSubtype,{
                 props,
-                target: this.widget.el,
+                target:this.widget.el,
             });
         };
 
-        this.start = async params => {
-            const { env, widget } = await start(Object.assign({}, params, {
-                data: this.data,
+        this.start=asyncparams=>{
+            const{env,widget}=awaitstart(Object.assign({},params,{
+                data:this.data,
             }));
-            this.env = env;
-            this.widget = widget;
+            this.env=env;
+            this.widget=widget;
         };
     },
-    afterEach() {
+    afterEach(){
         afterEach(this);
     },
 });
 
-QUnit.test('simplest layout of a followed subtype', async function (assert) {
+QUnit.test('simplestlayoutofafollowedsubtype',asyncfunction(assert){
     assert.expect(5);
 
-    await this.start();
+    awaitthis.start();
 
-    const thread = this.env.models['mail.thread'].create({
-        id: 100,
-        model: 'res.partner',
+    constthread=this.env.models['mail.thread'].create({
+        id:100,
+        model:'res.partner',
     });
-    const follower = this.env.models['mail.follower'].create({
-        channel: [['insert', {
-            id: 1,
-            model: 'mail.channel',
-            name: "François Perusse",
+    constfollower=this.env.models['mail.follower'].create({
+        channel:[['insert',{
+            id:1,
+            model:'mail.channel',
+            name:"FrançoisPerusse",
         }]],
-        followedThread: [['link', thread]],
-        id: 2,
-        isActive: true,
-        isEditable: true,
+        followedThread:[['link',thread]],
+        id:2,
+        isActive:true,
+        isEditable:true,
     });
-    const followerSubtype = this.env.models['mail.follower_subtype'].create({
-        id: 1,
-        isDefault: true,
-        isInternal: false,
-        name: "Dummy test",
-        resModel: 'res.partner'
+    constfollowerSubtype=this.env.models['mail.follower_subtype'].create({
+        id:1,
+        isDefault:true,
+        isInternal:false,
+        name:"Dummytest",
+        resModel:'res.partner'
     });
     follower.update({
-        selectedSubtypes: [['link', followerSubtype]],
-        subtypes: [['link', followerSubtype]],
+        selectedSubtypes:[['link',followerSubtype]],
+        subtypes:[['link',followerSubtype]],
     });
-    await this.createFollowerSubtypeComponent({
+    awaitthis.createFollowerSubtypeComponent({
         follower,
         followerSubtype,
     });
     assert.containsOnce(
         document.body,
         '.o_FollowerSubtype',
-        "should have follower subtype component"
+        "shouldhavefollowersubtypecomponent"
     );
     assert.containsOnce(
         document.body,
         '.o_FollowerSubtype_label',
-        "should have a label"
+        "shouldhavealabel"
     );
     assert.containsOnce(
         document.body,
         '.o_FollowerSubtype_checkbox',
-        "should have a checkbox"
+        "shouldhaveacheckbox"
     );
     assert.strictEqual(
         document.querySelector('.o_FollowerSubtype_label').textContent,
-        "Dummy test",
-        "should have the name of the subtype as label"
+        "Dummytest",
+        "shouldhavethenameofthesubtypeaslabel"
     );
     assert.ok(
         document.querySelector('.o_FollowerSubtype_checkbox').checked,
-        "checkbox should be checked as follower subtype is followed"
+        "checkboxshouldbecheckedasfollowersubtypeisfollowed"
     );
 });
 
-QUnit.test('simplest layout of a not followed subtype', async function (assert) {
+QUnit.test('simplestlayoutofanotfollowedsubtype',asyncfunction(assert){
     assert.expect(5);
 
-    await this.start();
+    awaitthis.start();
 
-    const thread = this.env.models['mail.thread'].create({
-        id: 100,
-        model: 'res.partner',
+    constthread=this.env.models['mail.thread'].create({
+        id:100,
+        model:'res.partner',
     });
-    const follower = this.env.models['mail.follower'].create({
-        channel: [['insert', {
-            id: 1,
-            model: 'mail.channel',
-            name: "François Perusse",
+    constfollower=this.env.models['mail.follower'].create({
+        channel:[['insert',{
+            id:1,
+            model:'mail.channel',
+            name:"FrançoisPerusse",
         }]],
-        followedThread: [['link', thread]],
-        id: 2,
-        isActive: true,
-        isEditable: true,
+        followedThread:[['link',thread]],
+        id:2,
+        isActive:true,
+        isEditable:true,
     });
-    const followerSubtype = this.env.models['mail.follower_subtype'].create({
-        id: 1,
-        isDefault: true,
-        isInternal: false,
-        name: "Dummy test",
-        resModel: 'res.partner'
+    constfollowerSubtype=this.env.models['mail.follower_subtype'].create({
+        id:1,
+        isDefault:true,
+        isInternal:false,
+        name:"Dummytest",
+        resModel:'res.partner'
     });
-    follower.update({ subtypes: [['link', followerSubtype]] });
-    await this.createFollowerSubtypeComponent({
+    follower.update({subtypes:[['link',followerSubtype]]});
+    awaitthis.createFollowerSubtypeComponent({
         follower,
         followerSubtype,
     });
     assert.containsOnce(
         document.body,
         '.o_FollowerSubtype',
-        "should have follower subtype component"
+        "shouldhavefollowersubtypecomponent"
     );
     assert.containsOnce(
         document.body,
         '.o_FollowerSubtype_label',
-        "should have a label"
+        "shouldhavealabel"
     );
     assert.containsOnce(
         document.body,
         '.o_FollowerSubtype_checkbox',
-        "should have a checkbox"
+        "shouldhaveacheckbox"
     );
     assert.strictEqual(
         document.querySelector('.o_FollowerSubtype_label').textContent,
-        "Dummy test",
-        "should have the name of the subtype as label"
+        "Dummytest",
+        "shouldhavethenameofthesubtypeaslabel"
     );
     assert.notOk(
         document.querySelector('.o_FollowerSubtype_checkbox').checked,
-        "checkbox should not be checked as follower subtype is not followed"
+        "checkboxshouldnotbecheckedasfollowersubtypeisnotfollowed"
     );
 });
 
-QUnit.test('toggle follower subtype checkbox', async function (assert) {
+QUnit.test('togglefollowersubtypecheckbox',asyncfunction(assert){
     assert.expect(5);
 
-    await this.start();
+    awaitthis.start();
 
-    const thread = this.env.models['mail.thread'].create({
-        id: 100,
-        model: 'res.partner',
+    constthread=this.env.models['mail.thread'].create({
+        id:100,
+        model:'res.partner',
     });
-    const follower = this.env.models['mail.follower'].create({
-        channel: [['insert', {
-            id: 1,
-            model: 'mail.channel',
-            name: "François Perusse",
+    constfollower=this.env.models['mail.follower'].create({
+        channel:[['insert',{
+            id:1,
+            model:'mail.channel',
+            name:"FrançoisPerusse",
         }]],
-        followedThread: [['link', thread]],
-        id: 2,
-        isActive: true,
-        isEditable: true,
+        followedThread:[['link',thread]],
+        id:2,
+        isActive:true,
+        isEditable:true,
     });
-    const followerSubtype = this.env.models['mail.follower_subtype'].create({
-        id: 1,
-        isDefault: true,
-        isInternal: false,
-        name: "Dummy test",
-        resModel: 'res.partner'
+    constfollowerSubtype=this.env.models['mail.follower_subtype'].create({
+        id:1,
+        isDefault:true,
+        isInternal:false,
+        name:"Dummytest",
+        resModel:'res.partner'
     });
-    follower.update({ subtypes: [['link', followerSubtype]] });
-    await this.createFollowerSubtypeComponent({
+    follower.update({subtypes:[['link',followerSubtype]]});
+    awaitthis.createFollowerSubtypeComponent({
         follower,
         followerSubtype,
     });
     assert.containsOnce(
         document.body,
         '.o_FollowerSubtype',
-        "should have follower subtype component"
+        "shouldhavefollowersubtypecomponent"
     );
     assert.containsOnce(
         document.body,
         '.o_FollowerSubtype_checkbox',
-        "should have a checkbox"
+        "shouldhaveacheckbox"
     );
     assert.notOk(
         document.querySelector('.o_FollowerSubtype_checkbox').checked,
-        "checkbox should not be checked as follower subtype is not followed"
+        "checkboxshouldnotbecheckedasfollowersubtypeisnotfollowed"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_FollowerSubtype_checkbox').click()
     );
     assert.ok(
         document.querySelector('.o_FollowerSubtype_checkbox').checked,
-        "checkbox should now be checked"
+        "checkboxshouldnowbechecked"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_FollowerSubtype_checkbox').click()
     );
     assert.notOk(
         document.querySelector('.o_FollowerSubtype_checkbox').checked,
-        "checkbox should be no more checked"
+        "checkboxshouldbenomorechecked"
     );
 });
 

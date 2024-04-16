@@ -1,73 +1,73 @@
-flectra.define('web.OwlDialog', function (require) {
-    "use strict";
+flectra.define('web.OwlDialog',function(require){
+    "usestrict";
 
-    const patchMixin = require('web.patchMixin');
+    constpatchMixin=require('web.patchMixin');
 
-    const { Component, hooks, misc } = owl;
-    const { Portal } = misc;
-    const { useExternalListener, useRef } = hooks;
-    const SIZE_CLASSES = {
-        'extra-large': 'modal-xl',
-        'large': 'modal-lg',
-        'small': 'modal-sm',
+    const{Component,hooks,misc}=owl;
+    const{Portal}=misc;
+    const{useExternalListener,useRef}=hooks;
+    constSIZE_CLASSES={
+        'extra-large':'modal-xl',
+        'large':'modal-lg',
+        'small':'modal-sm',
     };
 
     /**
-     * Dialog (owl version)
+     *Dialog(owlversion)
      *
-     * Represents a bootstrap-styled dialog handled with pure JS. Its implementation
-     * is roughly the same as the legacy dialog, the only exception being the buttons.
-     * @extends Component
+     *Representsabootstrap-styleddialoghandledwithpureJS.Itsimplementation
+     *isroughlythesameasthelegacydialog,theonlyexceptionbeingthebuttons.
+     *@extendsComponent
      **/
-    class Dialog extends Component {
+    classDialogextendsComponent{
         /**
-         * @param {Object} [props]
-         * @param {(boolean|string)} [props.backdrop='static'] The kind of modal backdrop
-         *      to use (see Bootstrap documentation).
-         * @param {string} [props.contentClass] Class to add to the dialog
-         * @param {boolean} [props.fullscreen=false] Whether the dialog should be
-         *      open in fullscreen mode (the main usecase is mobile).
-         * @param {boolean} [props.renderFooter=true] Whether the dialog footer
-         *      should be rendered.
-         * @param {boolean} [props.renderHeader=true] Whether the dialog header
-         *      should be rendered.
-         * @param {string} [props.size='large'] 'extra-large', 'large', 'medium'
-         *      or 'small'.
-         * @param {string} [props.stopClicks=true] whether the dialog should stop
-         *      the clicks propagation outside of itself.
-         * @param {string} [props.subtitle='']
-         * @param {string} [props.title='Flectra']
-         * @param {boolean} [props.technical=true] If set to false, the modal will have
-         *      the standard frontend style (use this for non-editor frontend features).
+         *@param{Object}[props]
+         *@param{(boolean|string)}[props.backdrop='static']Thekindofmodalbackdrop
+         *     touse(seeBootstrapdocumentation).
+         *@param{string}[props.contentClass]Classtoaddtothedialog
+         *@param{boolean}[props.fullscreen=false]Whetherthedialogshouldbe
+         *     openinfullscreenmode(themainusecaseismobile).
+         *@param{boolean}[props.renderFooter=true]Whetherthedialogfooter
+         *     shouldberendered.
+         *@param{boolean}[props.renderHeader=true]Whetherthedialogheader
+         *     shouldberendered.
+         *@param{string}[props.size='large']'extra-large','large','medium'
+         *     or'small'.
+         *@param{string}[props.stopClicks=true]whetherthedialogshouldstop
+         *     theclickspropagationoutsideofitself.
+         *@param{string}[props.subtitle='']
+         *@param{string}[props.title='Flectra']
+         *@param{boolean}[props.technical=true]Ifsettofalse,themodalwillhave
+         *     thestandardfrontendstyle(usethisfornon-editorfrontendfeatures).
          */
-        constructor() {
+        constructor(){
             super(...arguments);
 
-            this.modalRef = useRef('modal');
-            this.footerRef = useRef('modal-footer');
+            this.modalRef=useRef('modal');
+            this.footerRef=useRef('modal-footer');
 
-            useExternalListener(window, 'keydown', this._onKeydown);
+            useExternalListener(window,'keydown',this._onKeydown);
         }
 
-        mounted() {
+        mounted(){
             this.constructor.display(this);
 
-            this.env.bus.on('close_dialogs', this, this._close);
+            this.env.bus.on('close_dialogs',this,this._close);
 
-            if (this.props.renderFooter) {
-                // Set up main button : will first look for an element with the
-                // 'btn-primary' class, then a 'btn' class, then the first button
-                // element.
-                let mainButton = this.footerRef.el.querySelector('.btn.btn-primary');
-                if (!mainButton) {
-                    mainButton = this.footerRef.el.querySelector('.btn');
+            if(this.props.renderFooter){
+                //Setupmainbutton:willfirstlookforanelementwiththe
+                //'btn-primary'class,thena'btn'class,thenthefirstbutton
+                //element.
+                letmainButton=this.footerRef.el.querySelector('.btn.btn-primary');
+                if(!mainButton){
+                    mainButton=this.footerRef.el.querySelector('.btn');
                 }
-                if (!mainButton) {
-                    mainButton = this.footerRef.el.querySelector('button');
+                if(!mainButton){
+                    mainButton=this.footerRef.el.querySelector('button');
                 }
-                if (mainButton) {
-                    this.mainButton = mainButton;
-                    this.mainButton.addEventListener('keydown', this._onMainButtonKeydown.bind(this));
+                if(mainButton){
+                    this.mainButton=mainButton;
+                    this.mainButton.addEventListener('keydown',this._onMainButtonKeydown.bind(this));
                     this.mainButton.focus();
                 }
             }
@@ -75,8 +75,8 @@ flectra.define('web.OwlDialog', function (require) {
             this._removeTooltips();
         }
 
-        willUnmount() {
-            this.env.bus.off('close_dialogs', this, this._close);
+        willUnmount(){
+            this.env.bus.off('close_dialogs',this,this._close);
 
             this._removeTooltips();
 
@@ -84,110 +84,110 @@ flectra.define('web.OwlDialog', function (require) {
         }
 
         //--------------------------------------------------------------------------
-        // Getters
+        //Getters
         //--------------------------------------------------------------------------
 
         /**
-         * @returns {string}
+         *@returns{string}
          */
-        get size() {
-            return SIZE_CLASSES[this.props.size];
+        getsize(){
+            returnSIZE_CLASSES[this.props.size];
         }
 
         //--------------------------------------------------------------------------
-        // Private
+        //Private
         //--------------------------------------------------------------------------
 
         /**
-         * Send an event signaling that the dialog must be closed.
-         * @private
+         *Sendaneventsignalingthatthedialogmustbeclosed.
+         *@private
          */
-        _close() {
+        _close(){
             this.trigger('dialog-closed');
         }
 
         /**
-         * Remove any existing tooltip present in the DOM.
-         * @private
+         *RemoveanyexistingtooltippresentintheDOM.
+         *@private
          */
-        _removeTooltips() {
-            for (const tooltip of document.querySelectorAll('.tooltip')) {
-                tooltip.remove(); // remove open tooltip if any to prevent them staying when modal is opened
+        _removeTooltips(){
+            for(consttooltipofdocument.querySelectorAll('.tooltip')){
+                tooltip.remove();//removeopentooltipifanytopreventthemstayingwhenmodalisopened
             }
         }
 
         //--------------------------------------------------------------------------
-        // Handlers
+        //Handlers
         //--------------------------------------------------------------------------
 
         /**
-         * @private
-         * @param {MouseEvent} ev
+         *@private
+         *@param{MouseEvent}ev
          */
-        _onBackdropClick(ev) {
-            if (!this.props.backdrop || ev.target !== ev.currentTarget) {
+        _onBackdropClick(ev){
+            if(!this.props.backdrop||ev.target!==ev.currentTarget){
                 return;
             }
-            if (this.props.backdrop === 'static') {
-                if (this.mainButton) {
+            if(this.props.backdrop==='static'){
+                if(this.mainButton){
                     this.mainButton.focus();
                 }
-            } else {
+            }else{
                 this._close();
             }
         }
 
         /**
-         * @private
-         * @param {MouseEvent} ev
+         *@private
+         *@param{MouseEvent}ev
          */
-        _onClick(ev) {
-            if (this.props.stopClicks) {
+        _onClick(ev){
+            if(this.props.stopClicks){
                 ev.stopPropagation();
             }
         }
 
         /**
-         * @private
+         *@private
          */
-        _onFocus() {
-            if (this.mainButton) {
+        _onFocus(){
+            if(this.mainButton){
                 this.mainButton.focus();
             }
         }
 
         /**
-         * Manage the TAB key on the main button. If the focus is on a primary
-         * button and the user tries to tab to go to the next button : a tooltip
-         * will be displayed.
-         * @private
-         * @param {KeyboardEvent} ev
+         *ManagetheTABkeyonthemainbutton.Ifthefocusisonaprimary
+         *buttonandtheusertriestotabtogotothenextbutton:atooltip
+         *willbedisplayed.
+         *@private
+         *@param{KeyboardEvent}ev
          */
-        _onMainButtonKeydown(ev) {
-            if (ev.key === 'Tab' && !ev.shiftKey) {
+        _onMainButtonKeydown(ev){
+            if(ev.key==='Tab'&&!ev.shiftKey){
                 ev.preventDefault();
                 $(this.mainButton)
                     .tooltip({
-                        delay: { show: 200, hide: 0 },
-                        title: () => this.env.qweb.renderToString('web.DialogButton.tooltip', {
-                            title: this.mainButton.innerText.toUpperCase(),
+                        delay:{show:200,hide:0},
+                        title:()=>this.env.qweb.renderToString('web.DialogButton.tooltip',{
+                            title:this.mainButton.innerText.toUpperCase(),
                         }),
-                        trigger: 'manual',
+                        trigger:'manual',
                     })
                     .tooltip('show');
             }
         }
 
         /**
-         * @private
-         * @param {KeyboardEvent} ev
+         *@private
+         *@param{KeyboardEvent}ev
          */
-        _onKeydown(ev) {
-            if (
-                ev.key === 'Escape' &&
-                !['INPUT', 'TEXTAREA'].includes(ev.target.tagName) &&
-                this.constructor.displayed[this.constructor.displayed.length - 1] === this
-            ) {
+        _onKeydown(ev){
+            if(
+                ev.key==='Escape'&&
+                !['INPUT','TEXTAREA'].includes(ev.target.tagName)&&
+                this.constructor.displayed[this.constructor.displayed.length-1]===this
+            ){
                 ev.preventDefault();
                 ev.stopImmediatePropagation();
                 ev.stopPropagation();
@@ -196,80 +196,80 @@ flectra.define('web.OwlDialog', function (require) {
         }
 
         //--------------------------------------------------------------------------
-        // Static
+        //Static
         //--------------------------------------------------------------------------
 
         /**
-         * Push the given dialog at the end of the displayed list then set it as
-         * active and all the others as passive.
-         * @param {(LegacyDialog|OwlDialog)} dialog
+         *Pushthegivendialogattheendofthedisplayedlistthensetitas
+         *activeandalltheothersaspassive.
+         *@param{(LegacyDialog|OwlDialog)}dialog
          */
-        static display(dialog) {
-            const activeDialog = this.displayed[this.displayed.length - 1];
-            if (activeDialog) {
-                // Deactivate previous dialog
-                const activeDialogEl = activeDialog instanceof this ?
-                    // Owl dialog
-                    activeDialog.modalRef.el :
-                    // Legacy dialog
+        staticdisplay(dialog){
+            constactiveDialog=this.displayed[this.displayed.length-1];
+            if(activeDialog){
+                //Deactivatepreviousdialog
+                constactiveDialogEl=activeDialoginstanceofthis?
+                    //Owldialog
+                    activeDialog.modalRef.el:
+                    //Legacydialog
                     activeDialog.$modal[0];
                 activeDialogEl.classList.add('o_inactive_modal');
             }
-            // Push dialog
+            //Pushdialog
             this.displayed.push(dialog);
-            // Update body class
+            //Updatebodyclass
             document.body.classList.add('modal-open');
         }
 
         /**
-         * Set the given displayed dialog as passive and the last added displayed dialog
-         * as active, then remove it from the displayed list.
-         * @param {(LegacyDialog|OwlDialog)} dialog
+         *Setthegivendisplayeddialogaspassiveandthelastaddeddisplayeddialog
+         *asactive,thenremoveitfromthedisplayedlist.
+         *@param{(LegacyDialog|OwlDialog)}dialog
          */
-        static hide(dialog) {
-            // Remove given dialog from the list
-            this.displayed.splice(this.displayed.indexOf(dialog), 1);
-            // Activate last dialog and update body class
-            const lastDialog = this.displayed[this.displayed.length - 1];
-            if (lastDialog) {
+        statichide(dialog){
+            //Removegivendialogfromthelist
+            this.displayed.splice(this.displayed.indexOf(dialog),1);
+            //Activatelastdialogandupdatebodyclass
+            constlastDialog=this.displayed[this.displayed.length-1];
+            if(lastDialog){
                 lastDialog.el.focus();
-                const modalEl = lastDialog instanceof this ?
-                    // Owl dialog
-                    lastDialog.modalRef.el :
-                    // Legacy dialog
+                constmodalEl=lastDialoginstanceofthis?
+                    //Owldialog
+                    lastDialog.modalRef.el:
+                    //Legacydialog
                     lastDialog.$modal[0];
                 modalEl.classList.remove('o_inactive_modal');
-            } else {
+            }else{
                 document.body.classList.remove('modal-open');
             }
         }
     }
 
-    Dialog.displayed = [];
+    Dialog.displayed=[];
 
-    Dialog.components = { Portal };
-    Dialog.defaultProps = {
-        backdrop: 'static',
-        renderFooter: true,
-        renderHeader: true,
-        size: 'large',
-        stopClicks: true,
-        technical: true,
-        title: "Flectra",
+    Dialog.components={Portal};
+    Dialog.defaultProps={
+        backdrop:'static',
+        renderFooter:true,
+        renderHeader:true,
+        size:'large',
+        stopClicks:true,
+        technical:true,
+        title:"Flectra",
     };
-    Dialog.props = {
-        backdrop: { validate: b => ['static', true, false].includes(b) },
-        contentClass: { type: String, optional: 1 },
-        fullscreen: { type: Boolean, optional: 1 },
-        renderFooter: Boolean,
-        renderHeader: Boolean,
-        size: { validate: s => ['extra-large', 'large', 'medium', 'small'].includes(s) },
-        stopClicks: Boolean,
-        subtitle: { type: String, optional: 1 },
-        technical: Boolean,
-        title: String,
+    Dialog.props={
+        backdrop:{validate:b=>['static',true,false].includes(b)},
+        contentClass:{type:String,optional:1},
+        fullscreen:{type:Boolean,optional:1},
+        renderFooter:Boolean,
+        renderHeader:Boolean,
+        size:{validate:s=>['extra-large','large','medium','small'].includes(s)},
+        stopClicks:Boolean,
+        subtitle:{type:String,optional:1},
+        technical:Boolean,
+        title:String,
     };
-    Dialog.template = 'web.OwlDialog';
+    Dialog.template='web.OwlDialog';
 
-    return patchMixin(Dialog);
+    returnpatchMixin(Dialog);
 });

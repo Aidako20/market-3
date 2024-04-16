@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="view_tax_form" model="ir.ui.view">
-        <field name="name">account.tax.view.form.inherit.l10n_ph</field>
-        <field name="model">account.tax</field>
-        <field name="inherit_id" ref="account.view_tax_form" />
-        <field name="arch" type="xml">
-            <notebook position="inside">
-                <page name="l10n_ph" string="Philippines">
+    <recordid="view_tax_form"model="ir.ui.view">
+        <fieldname="name">account.tax.view.form.inherit.l10n_ph</field>
+        <fieldname="model">account.tax</field>
+        <fieldname="inherit_id"ref="account.view_tax_form"/>
+        <fieldname="arch"type="xml">
+            <notebookposition="inside">
+                <pagename="l10n_ph"string="Philippines">
                     <group>
                         <group>
-                            <field name="l10n_ph_atc" />
+                            <fieldname="l10n_ph_atc"/>
                         </group>
                     </group>
                 </page>

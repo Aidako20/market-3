@@ -1,191 +1,191 @@
-define(['summernote/core/func'], function (func) {
+define(['summernote/core/func'],function(func){
   /**
-   * @class core.list
+   *@classcore.list
    *
-   * list utils
+   *listutils
    *
-   * @singleton
-   * @alternateClassName list
+   *@singleton
+   *@alternateClassNamelist
    */
-  var list = (function () {
+  varlist=(function(){
     /**
-     * returns the first item of an array.
+     *returnsthefirstitemofanarray.
      *
-     * @param {Array} array
+     *@param{Array}array
      */
-    var head = function (array) {
-      return array[0];
+    varhead=function(array){
+      returnarray[0];
     };
 
     /**
-     * returns the last item of an array.
+     *returnsthelastitemofanarray.
      *
-     * @param {Array} array
+     *@param{Array}array
      */
-    var last = function (array) {
-      return array[array.length - 1];
+    varlast=function(array){
+      returnarray[array.length-1];
     };
 
     /**
-     * returns everything but the last entry of the array.
+     *returnseverythingbutthelastentryofthearray.
      *
-     * @param {Array} array
+     *@param{Array}array
      */
-    var initial = function (array) {
-      return array.slice(0, array.length - 1);
+    varinitial=function(array){
+      returnarray.slice(0,array.length-1);
     };
 
     /**
-     * returns the rest of the items in an array.
+     *returnstherestoftheitemsinanarray.
      *
-     * @param {Array} array
+     *@param{Array}array
      */
-    var tail = function (array) {
-      return array.slice(1);
+    vartail=function(array){
+      returnarray.slice(1);
     };
 
     /**
-     * returns item of array
+     *returnsitemofarray
      */
-    var find = function (array, pred) {
-      for (var idx = 0, len = array.length; idx < len; idx ++) {
-        var item = array[idx];
-        if (pred(item)) {
-          return item;
+    varfind=function(array,pred){
+      for(varidx=0,len=array.length;idx<len;idx++){
+        varitem=array[idx];
+        if(pred(item)){
+          returnitem;
         }
       }
     };
 
     /**
-     * returns true if all of the values in the array pass the predicate truth test.
+     *returnstrueifallofthevaluesinthearraypassthepredicatetruthtest.
      */
-    var all = function (array, pred) {
-      for (var idx = 0, len = array.length; idx < len; idx ++) {
-        if (!pred(array[idx])) {
-          return false;
+    varall=function(array,pred){
+      for(varidx=0,len=array.length;idx<len;idx++){
+        if(!pred(array[idx])){
+          returnfalse;
         }
       }
-      return true;
+      returntrue;
     };
 
     /**
-     * returns index of item
+     *returnsindexofitem
      */
-    var indexOf = function (array, item) {
-      return $.inArray(item, array);
+    varindexOf=function(array,item){
+      return$.inArray(item,array);
     };
 
     /**
-     * returns true if the value is present in the list.
+     *returnstrueifthevalueispresentinthelist.
      */
-    var contains = function (array, item) {
-      return indexOf(array, item) !== -1;
+    varcontains=function(array,item){
+      returnindexOf(array,item)!==-1;
     };
 
     /**
-     * get sum from a list
+     *getsumfromalist
      *
-     * @param {Array} array - array
-     * @param {Function} fn - iterator
+     *@param{Array}array-array
+     *@param{Function}fn-iterator
      */
-    var sum = function (array, fn) {
-      fn = fn || func.self;
-      return array.reduce(function (memo, v) {
-        return memo + fn(v);
-      }, 0);
+    varsum=function(array,fn){
+      fn=fn||func.self;
+      returnarray.reduce(function(memo,v){
+        returnmemo+fn(v);
+      },0);
     };
   
     /**
-     * returns a copy of the collection with array type.
-     * @param {Collection} collection - collection eg) node.childNodes, ...
+     *returnsacopyofthecollectionwitharraytype.
+     *@param{Collection}collection-collectioneg)node.childNodes,...
      */
-    var from = function (collection) {
-      var result = [], idx = -1, length = collection.length;
-      while (++idx < length) {
-        result[idx] = collection[idx];
+    varfrom=function(collection){
+      varresult=[],idx=-1,length=collection.length;
+      while(++idx<length){
+        result[idx]=collection[idx];
       }
-      return result;
+      returnresult;
     };
   
     /**
-     * cluster elements by predicate function.
+     *clusterelementsbypredicatefunction.
      *
-     * @param {Array} array - array
-     * @param {Function} fn - predicate function for cluster rule
-     * @param {Array[]}
+     *@param{Array}array-array
+     *@param{Function}fn-predicatefunctionforclusterrule
+     *@param{Array[]}
      */
-    var clusterBy = function (array, fn) {
-      if (!array.length) { return []; }
-      var aTail = tail(array);
-      return aTail.reduce(function (memo, v) {
-        var aLast = last(memo);
-        if (fn(last(aLast), v)) {
-          aLast[aLast.length] = v;
-        } else {
-          memo[memo.length] = [v];
+    varclusterBy=function(array,fn){
+      if(!array.length){return[];}
+      varaTail=tail(array);
+      returnaTail.reduce(function(memo,v){
+        varaLast=last(memo);
+        if(fn(last(aLast),v)){
+          aLast[aLast.length]=v;
+        }else{
+          memo[memo.length]=[v];
         }
-        return memo;
-      }, [[head(array)]]);
+        returnmemo;
+      },[[head(array)]]);
     };
   
     /**
-     * returns a copy of the array with all falsy values removed
+     *returnsacopyofthearraywithallfalsyvaluesremoved
      *
-     * @param {Array} array - array
-     * @param {Function} fn - predicate function for cluster rule
+     *@param{Array}array-array
+     *@param{Function}fn-predicatefunctionforclusterrule
      */
-    var compact = function (array) {
-      var aResult = [];
-      for (var idx = 0, len = array.length; idx < len; idx ++) {
-        if (array[idx]) { aResult.push(array[idx]); }
+    varcompact=function(array){
+      varaResult=[];
+      for(varidx=0,len=array.length;idx<len;idx++){
+        if(array[idx]){aResult.push(array[idx]);}
       }
-      return aResult;
+      returnaResult;
     };
 
     /**
-     * produces a duplicate-free version of the array
+     *producesaduplicate-freeversionofthearray
      *
-     * @param {Array} array
+     *@param{Array}array
      */
-    var unique = function (array) {
-      var results = [];
+    varunique=function(array){
+      varresults=[];
 
-      for (var idx = 0, len = array.length; idx < len; idx ++) {
-        if (!contains(results, array[idx])) {
+      for(varidx=0,len=array.length;idx<len;idx++){
+        if(!contains(results,array[idx])){
           results.push(array[idx]);
         }
       }
 
-      return results;
+      returnresults;
     };
 
     /**
-     * returns next item.
-     * @param {Array} array
+     *returnsnextitem.
+     *@param{Array}array
      */
-    var next = function (array, item) {
-      var idx = indexOf(array, item);
-      if (idx === -1) { return null; }
+    varnext=function(array,item){
+      varidx=indexOf(array,item);
+      if(idx===-1){returnnull;}
 
-      return array[idx + 1];
+      returnarray[idx+1];
     };
 
     /**
-     * returns prev item.
-     * @param {Array} array
+     *returnsprevitem.
+     *@param{Array}array
      */
-    var prev = function (array, item) {
-      var idx = indexOf(array, item);
-      if (idx === -1) { return null; }
+    varprev=function(array,item){
+      varidx=indexOf(array,item);
+      if(idx===-1){returnnull;}
 
-      return array[idx - 1];
+      returnarray[idx-1];
     };
   
-    return { head: head, last: last, initial: initial, tail: tail,
-             prev: prev, next: next, find: find, contains: contains,
-             all: all, sum: sum, from: from,
-             clusterBy: clusterBy, compact: compact, unique: unique };
+    return{head:head,last:last,initial:initial,tail:tail,
+             prev:prev,next:next,find:find,contains:contains,
+             all:all,sum:sum,from:from,
+             clusterBy:clusterBy,compact:compact,unique:unique};
   })();
 
-  return list;
+  returnlist;
 });

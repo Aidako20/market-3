@@ -1,25 +1,25 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import logging
+importlogging
 
-from flectra import fields, models, _
-from flectra.tools import float_compare
+fromflectraimportfields,models,_
+fromflectra.toolsimportfloat_compare
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
 
-class PaymentTransaction(models.Model):
-    _inherit = 'payment.transaction'
+classPaymentTransaction(models.Model):
+    _inherit='payment.transaction'
 
-    def render_invoice_button(self, invoice, submit_txt=None, render_values=None):
-        values = {
-            'partner_id': invoice.partner_id.id,
-            'type': self.type,
+    defrender_invoice_button(self,invoice,submit_txt=None,render_values=None):
+        values={
+            'partner_id':invoice.partner_id.id,
+            'type':self.type,
         }
-        if render_values:
+        ifrender_values:
             values.update(render_values)
-        return self.acquirer_id.with_context(submit_class='btn btn-primary', submit_txt=submit_txt or _('Pay Now')).sudo().render(
+        returnself.acquirer_id.with_context(submit_class='btnbtn-primary',submit_txt=submit_txtor_('PayNow')).sudo().render(
             self.reference,
             invoice.amount_residual,
             invoice.currency_id.id,

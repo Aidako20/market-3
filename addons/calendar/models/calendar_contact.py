@@ -1,21 +1,21 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class Contacts(models.Model):
-    _name = 'calendar.contacts'
-    _description = 'Calendar Contacts'
+classContacts(models.Model):
+    _name='calendar.contacts'
+    _description='CalendarContacts'
 
-    user_id = fields.Many2one('res.users', 'Me', required=True, default=lambda self: self.env.user)
-    partner_id = fields.Many2one('res.partner', 'Employee', required=True)
-    active = fields.Boolean('Active', default=True)
+    user_id=fields.Many2one('res.users','Me',required=True,default=lambdaself:self.env.user)
+    partner_id=fields.Many2one('res.partner','Employee',required=True)
+    active=fields.Boolean('Active',default=True)
 
-    _sql_constraints = [
-        ('user_id_partner_id_unique', 'UNIQUE(user_id, partner_id)', 'A user cannot have the same contact twice.')
+    _sql_constraints=[
+        ('user_id_partner_id_unique','UNIQUE(user_id,partner_id)','Ausercannothavethesamecontacttwice.')
     ]
 
     @api.model
-    def unlink_from_partner_id(self, partner_id):
-        return self.search([('partner_id', '=', partner_id)]).unlink()
+    defunlink_from_partner_id(self,partner_id):
+        returnself.search([('partner_id','=',partner_id)]).unlink()

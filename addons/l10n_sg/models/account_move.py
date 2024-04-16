@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class AccountMove(models.Model):
-    _inherit = 'account.move'
+classAccountMove(models.Model):
+    _inherit='account.move'
 
-    l10n_sg_permit_number = fields.Char(string="Permit No.")
+    l10n_sg_permit_number=fields.Char(string="PermitNo.")
 
-    l10n_sg_permit_number_date = fields.Date(string="Date of permit number")
+    l10n_sg_permit_number_date=fields.Date(string="Dateofpermitnumber")

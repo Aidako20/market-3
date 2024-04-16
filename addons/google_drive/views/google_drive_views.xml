@@ -1,49 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-        <!-- add google drive config field in user form -->
-        <record id="view_google_drive_config_tree" model="ir.ui.view">
-            <field name="name">google_drive.config.tree</field>
-            <field name="model">google.drive.config</field>
-            <field name="arch" type="xml">
-                <tree string="Google Drive Configuration">
-                    <field name="name" />
-                    <field name="model_id" />
+        <!--addgoogledriveconfigfieldinuserform-->
+        <recordid="view_google_drive_config_tree"model="ir.ui.view">
+            <fieldname="name">google_drive.config.tree</field>
+            <fieldname="model">google.drive.config</field>
+            <fieldname="arch"type="xml">
+                <treestring="GoogleDriveConfiguration">
+                    <fieldname="name"/>
+                    <fieldname="model_id"/>
                 </tree>
             </field>
         </record>
 
-        <record id="view_google_drive_config_form" model="ir.ui.view">
-            <field name="name">google_drive.config.form</field>
-            <field name="model">google.drive.config</field>
-            <field name="arch" type="xml">
-                <form string="Google Drive Configuration">
-                    <field name="model" invisible="1" />
+        <recordid="view_google_drive_config_form"model="ir.ui.view">
+            <fieldname="name">google_drive.config.form</field>
+            <fieldname="model">google.drive.config</field>
+            <fieldname="arch"type="xml">
+                <formstring="GoogleDriveConfiguration">
+                    <fieldname="model"invisible="1"/>
                     <group>
-                        <field name="name" />
-                        <field name="active" widget="boolean_toggle"/>
-                        <field name="model_id"/>
-                        <label for='filter_id' />
+                        <fieldname="name"/>
+                        <fieldname="active"widget="boolean_toggle"/>
+                        <fieldname="model_id"/>
+                        <labelfor='filter_id'/>
                         <div>
-                            <field name='filter_id' />
-                            <p class="oe_grey">
-                                <b>To create a new filter:</b><br/>
-                                - Go to the Flectra document you want to filter. For instance, go to Opportunities and search on Sales Department.<br/>
-                                - In this "Search" view, select the option "Save Current Filter", enter the name (Ex: Sales Department)<br/>
-                                - If you select "Share with all users", link of google document in "More" options will appear for all users in opportunities of Sales Department.<br/>
-                                - If you don't select "Share with all users", link of google document in "More" options will not appear for other users in opportunities of Sales Department.<br/>
-                                - If filter is not specified, link of google document will appear in "More" option for all users for all opportunities.
+                            <fieldname='filter_id'/>
+                            <pclass="oe_grey">
+                                <b>Tocreateanewfilter:</b><br/>
+                                -GototheFlectradocumentyouwanttofilter.Forinstance,gotoOpportunitiesandsearchonSalesDepartment.<br/>
+                                -Inthis"Search"view,selecttheoption"SaveCurrentFilter",enterthename(Ex:SalesDepartment)<br/>
+                                -Ifyouselect"Sharewithallusers",linkofgoogledocumentin"More"optionswillappearforallusersinopportunitiesofSalesDepartment.<br/>
+                                -Ifyoudon'tselect"Sharewithallusers",linkofgoogledocumentin"More"optionswillnotappearforotherusersinopportunitiesofSalesDepartment.<br/>
+                                -Iffilterisnotspecified,linkofgoogledocumentwillappearin"More"optionforallusersforallopportunities.
                             </p>
                         </div>
-                        <field name='google_drive_template_url' placeholder="https://docs.google.com/document/d/1vOtpJK9scIQz6taD9tJRIETWbEw3fSiaQHArsJYcua4/edit" required="1" />
-                        <field name='google_drive_resource_id' invisible="1" />
-                        <label for='name_template' />
+                        <fieldname='google_drive_template_url'placeholder="https://docs.google.com/document/d/1vOtpJK9scIQz6taD9tJRIETWbEw3fSiaQHArsJYcua4/edit"required="1"/>
+                        <fieldname='google_drive_resource_id'invisible="1"/>
+                        <labelfor='name_template'/>
                         <div>
-                            <field name='name_template' />
-                            <p class="oe_grey">
-                                The name of the attached document can use fixed or variable data. To distinguish between documents in
-                                Google Drive, use fixed words and fields. For instance, in the example above, if you wrote Deco_Addict_%%(name)s_Sales
-                                in the Google Drive name field, the document in your Google Drive and in Flectra attachment will be named
+                            <fieldname='name_template'/>
+                            <pclass="oe_grey">
+                                Thenameoftheattacheddocumentcanusefixedorvariabledata.Todistinguishbetweendocumentsin
+                                GoogleDrive,usefixedwordsandfields.Forinstance,intheexampleabove,ifyouwroteDeco_Addict_%%(name)s_Sales
+                                intheGoogleDrivenamefield,thedocumentinyourGoogleDriveandinFlectraattachmentwillbenamed
                                 'Deco_Addict_SO0001_Sales'.
                             </p>
                         </div>
@@ -52,28 +52,28 @@
             </field>
         </record>
 
-        <record id="view_google_drive_config_kanban" model="ir.ui.view">
-            <field name="name">google.drive.config.kanban</field>
-            <field name="model">google.drive.config</field>
-            <field name="arch" type="xml">
+        <recordid="view_google_drive_config_kanban"model="ir.ui.view">
+            <fieldname="name">google.drive.config.kanban</field>
+            <fieldname="model">google.drive.config</field>
+            <fieldname="arch"type="xml">
                 <kanban>
-                    <field name="name"/>
-                    <field name="active"/>
-                    <field name="model_id"/>
+                    <fieldname="name"/>
+                    <fieldname="active"/>
+                    <fieldname="model_id"/>
                     <templates>
-                        <t t-name="kanban-box">
-                            <div t-attf-class="oe_kanban_global_click">
-                                <div class="row o_kanban_record_title">
-                                    <div class="col-4 text-center"><strong>Template</strong></div>
-                                    <div class="col-4 text-center"><strong>Model</strong></div>
-                                    <div class="col-4 text-center"><strong>Active</strong></div>
+                        <tt-name="kanban-box">
+                            <divt-attf-class="oe_kanban_global_click">
+                                <divclass="rowo_kanban_record_title">
+                                    <divclass="col-4text-center"><strong>Template</strong></div>
+                                    <divclass="col-4text-center"><strong>Model</strong></div>
+                                    <divclass="col-4text-center"><strong>Active</strong></div>
                                 </div>
-                                <hr class="mb4 mt4"/>
-                                <div class="row o_kanban_record_subtitle">
-                                    <div class="col-4 text-center"><field name="name"/></div>
-                                    <div class="col-4 text-center"><field name="model_id"/></div>
-                                    <div class="col-4 text-center">
-                                        <field name="active" widget="boolean"/>
+                                <hrclass="mb4mt4"/>
+                                <divclass="rowo_kanban_record_subtitle">
+                                    <divclass="col-4text-center"><fieldname="name"/></div>
+                                    <divclass="col-4text-center"><fieldname="model_id"/></div>
+                                    <divclass="col-4text-center">
+                                        <fieldname="active"widget="boolean"/>
                                     </div>
                                 </div>
                             </div>
@@ -83,31 +83,31 @@
             </field>
         </record>
 
-        <record id="google_drive_config_view_search" model="ir.ui.view">
-            <field name="name">google.drive.config.view.search</field>
-            <field name="model">google.drive.config</field>
-            <field name="arch" type="xml">
-                <search string="Search Google Drive Config">
-                    <field name="name"/>
+        <recordid="google_drive_config_view_search"model="ir.ui.view">
+            <fieldname="name">google.drive.config.view.search</field>
+            <fieldname="model">google.drive.config</field>
+            <fieldname="arch"type="xml">
+                <searchstring="SearchGoogleDriveConfig">
+                    <fieldname="name"/>
                     <separator/>
-                    <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                    <filtername="archived"string="Archived"domain="[('active','=',False)]"/>
                 </search>
             </field>
         </record>
 
-        <record id='action_google_drive_users_config' model='ir.actions.act_window'>
-            <field name='name'>Templates</field>
-            <field name='res_model'>google.drive.config</field>
-            <field name='type'>ir.actions.act_window</field>
-            <field name="view_mode">tree,kanban,form</field>
-            <field name='view_id' ref='view_google_drive_config_tree'/>
-            <field name="search_view_id" ref="google_drive_config_view_search"/>
-            <field name="help" type="html">
-                <p class="o_view_nocontent_smiling_face">
-                    Add a new template
+        <recordid='action_google_drive_users_config'model='ir.actions.act_window'>
+            <fieldname='name'>Templates</field>
+            <fieldname='res_model'>google.drive.config</field>
+            <fieldname='type'>ir.actions.act_window</field>
+            <fieldname="view_mode">tree,kanban,form</field>
+            <fieldname='view_id'ref='view_google_drive_config_tree'/>
+            <fieldname="search_view_id"ref="google_drive_config_view_search"/>
+            <fieldname="help"type="html">
+                <pclass="o_view_nocontent_smiling_face">
+                    Addanewtemplate
                 </p>
                 <p>
-                    Link your own google drive templates to any record of Flectra. If you have really specific documents you want your collaborator fill in, e.g. Use a spreadsheet to control the quality of your product or review the delivery checklist for each order in a foreign country, ... Its very easy to manage them, link them to Flectra and use them to collaborate with your employees.
+                    LinkyourowngoogledrivetemplatestoanyrecordofFlectra.Ifyouhavereallyspecificdocumentsyouwantyourcollaboratorfillin,e.g.Useaspreadsheettocontrolthequalityofyourproductorreviewthedeliverychecklistforeachorderinaforeigncountry,...Itsveryeasytomanagethem,linkthemtoFlectraandusethemtocollaboratewithyouremployees.
                 </p>
             </field>
         </record>

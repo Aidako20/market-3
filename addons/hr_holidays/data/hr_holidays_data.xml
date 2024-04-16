@@ -1,54 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <!-- Casual leave -->
-        <record id="holiday_status_cl" model="hr.leave.type">
-            <field name="name">Paid Time Off</field>
-            <field name="allocation_type">fixed</field>
-            <field name="leave_validation_type">both</field>
-            <field name="allocation_validation_type">both</field>
-            <field name="color_name">black</field>
-            <field name="leave_notif_subtype_id" ref="mt_leave"/>
-            <field name="allocation_notif_subtype_id" ref="mt_leave_allocation"/>
-            <field name="validity_start" eval="time.strftime('%Y-%m-01')"/>
-            <field name="responsible_id" ref="base.user_admin"/>
+    <datanoupdate="1">
+        <!--Casualleave-->
+        <recordid="holiday_status_cl"model="hr.leave.type">
+            <fieldname="name">PaidTimeOff</field>
+            <fieldname="allocation_type">fixed</field>
+            <fieldname="leave_validation_type">both</field>
+            <fieldname="allocation_validation_type">both</field>
+            <fieldname="color_name">black</field>
+            <fieldname="leave_notif_subtype_id"ref="mt_leave"/>
+            <fieldname="allocation_notif_subtype_id"ref="mt_leave_allocation"/>
+            <fieldname="validity_start"eval="time.strftime('%Y-%m-01')"/>
+            <fieldname="responsible_id"ref="base.user_admin"/>
         </record>
 
-        <!-- Sick leave -->
-        <record id="holiday_status_sl" model="hr.leave.type">
-            <field name="name">Sick Time Off</field>
-            <field name="allocation_type">no</field>
-            <field name="color_name">red</field>
-            <field name="validity_start" eval="time.strftime('%Y-01-01')"/>
-            <field name="leave_notif_subtype_id" ref="mt_leave_sick"/>
-            <field name="responsible_id" ref="base.user_admin"/>
+        <!--Sickleave-->
+        <recordid="holiday_status_sl"model="hr.leave.type">
+            <fieldname="name">SickTimeOff</field>
+            <fieldname="allocation_type">no</field>
+            <fieldname="color_name">red</field>
+            <fieldname="validity_start"eval="time.strftime('%Y-01-01')"/>
+            <fieldname="leave_notif_subtype_id"ref="mt_leave_sick"/>
+            <fieldname="responsible_id"ref="base.user_admin"/>
         </record>
 
-        <!-- Compensatory Days -->
-        <record id="holiday_status_comp" model="hr.leave.type">
-            <field name="name">Compensatory Days</field>
-            <field name="allocation_type">fixed_allocation</field>
-            <field name="leave_validation_type">manager</field>
-            <field name="allocation_validation_type">manager</field>
-            <field name="request_unit">hour</field>
-            <field name="color_name">lavender</field>
-            <field name="validity_start" eval="False"/>
-            <field name="leave_notif_subtype_id" ref="mt_leave"/>
-            <field name="responsible_id" ref="base.user_admin"/>
+        <!--CompensatoryDays-->
+        <recordid="holiday_status_comp"model="hr.leave.type">
+            <fieldname="name">CompensatoryDays</field>
+            <fieldname="allocation_type">fixed_allocation</field>
+            <fieldname="leave_validation_type">manager</field>
+            <fieldname="allocation_validation_type">manager</field>
+            <fieldname="request_unit">hour</field>
+            <fieldname="color_name">lavender</field>
+            <fieldname="validity_start"eval="False"/>
+            <fieldname="leave_notif_subtype_id"ref="mt_leave"/>
+            <fieldname="responsible_id"ref="base.user_admin"/>
         </record>
 
-        <!--Unpaid Leave -->
-        <record id="holiday_status_unpaid" model="hr.leave.type">
-            <field name="name">Unpaid</field>
-            <field name="allocation_type">no</field>
-            <field name="leave_validation_type">both</field>
-            <field name="allocation_validation_type">both</field>
-            <field name="color_name">brown</field>
-            <field name="request_unit">hour</field>
-            <field name="unpaid" eval="True"/>
-            <field name="validity_start" eval="time.strftime('%Y-01-01')"/>
-            <field name="leave_notif_subtype_id" ref="mt_leave_unpaid"/>
-            <field name="responsible_id" ref="base.user_admin"/>
+        <!--UnpaidLeave-->
+        <recordid="holiday_status_unpaid"model="hr.leave.type">
+            <fieldname="name">Unpaid</field>
+            <fieldname="allocation_type">no</field>
+            <fieldname="leave_validation_type">both</field>
+            <fieldname="allocation_validation_type">both</field>
+            <fieldname="color_name">brown</field>
+            <fieldname="request_unit">hour</field>
+            <fieldname="unpaid"eval="True"/>
+            <fieldname="validity_start"eval="time.strftime('%Y-01-01')"/>
+            <fieldname="leave_notif_subtype_id"ref="mt_leave_unpaid"/>
+            <fieldname="responsible_id"ref="base.user_admin"/>
         </record>
     </data>
 </flectra>

@@ -1,170 +1,170 @@
-define(['jquery'], function ($) {
-  if (!Array.prototype.reduce) {
+define(['jquery'],function($){
+  if(!Array.prototype.reduce){
     /**
-     * Array.prototype.reduce polyfill
+     *Array.prototype.reducepolyfill
      *
-     * @param {Function} callback
-     * @param {Value} [initialValue]
-     * @return {Value}
+     *@param{Function}callback
+     *@param{Value}[initialValue]
+     *@return{Value}
      *
-     * @see http://goo.gl/WNriQD
+     *@seehttp://goo.gl/WNriQD
      */
-    Array.prototype.reduce = function (callback) {
-      var t = Object(this), len = t.length >>> 0, k = 0, value;
-      if (arguments.length === 2) {
-        value = arguments[1];
-      } else {
-        while (k < len && !(k in t)) {
+    Array.prototype.reduce=function(callback){
+      vart=Object(this),len=t.length>>>0,k=0,value;
+      if(arguments.length===2){
+        value=arguments[1];
+      }else{
+        while(k<len&&!(kint)){
           k++;
         }
-        if (k >= len) {
-          throw new TypeError('Reduce of empty array with no initial value');
+        if(k>=len){
+          thrownewTypeError('Reduceofemptyarraywithnoinitialvalue');
         }
-        value = t[k++];
+        value=t[k++];
       }
-      for (; k < len; k++) {
-        if (k in t) {
-          value = callback(value, t[k], k, t);
+      for(;k<len;k++){
+        if(kint){
+          value=callback(value,t[k],k,t);
         }
       }
-      return value;
+      returnvalue;
     };
   }
 
-  if ('function' !== typeof Array.prototype.filter) {
+  if('function'!==typeofArray.prototype.filter){
     /**
-     * Array.prototype.filter polyfill
+     *Array.prototype.filterpolyfill
      *
-     * @param {Function} func
-     * @return {Array}
+     *@param{Function}func
+     *@return{Array}
      *
-     * @see http://goo.gl/T1KFnq
+     *@seehttp://goo.gl/T1KFnq
      */
-    Array.prototype.filter = function (func) {
-      var t = Object(this), len = t.length >>> 0;
+    Array.prototype.filter=function(func){
+      vart=Object(this),len=t.length>>>0;
 
-      var res = [];
-      var thisArg = arguments.length >= 2 ? arguments[1] : void 0;
-      for (var i = 0; i < len; i++) {
-        if (i in t) {
-          var val = t[i];
-          if (func.call(thisArg, val, i, t)) {
+      varres=[];
+      varthisArg=arguments.length>=2?arguments[1]:void0;
+      for(vari=0;i<len;i++){
+        if(iint){
+          varval=t[i];
+          if(func.call(thisArg,val,i,t)){
             res.push(val);
           }
         }
       }
   
-      return res;
+      returnres;
     };
   }
 
-  if (!Array.prototype.map) {
+  if(!Array.prototype.map){
     /**
-     * Array.prototype.map polyfill
+     *Array.prototype.mappolyfill
      *
-     * @param {Function} callback
-     * @return {Array}
+     *@param{Function}callback
+     *@return{Array}
      *
-     * @see https://goo.gl/SMWaMK
+     *@seehttps://goo.gl/SMWaMK
      */
-    Array.prototype.map = function (callback, thisArg) {
-      var T, A, k;
-      if (this === null) {
-        throw new TypeError(' this is null or not defined');
+    Array.prototype.map=function(callback,thisArg){
+      varT,A,k;
+      if(this===null){
+        thrownewTypeError('thisisnullornotdefined');
       }
 
-      var O = Object(this);
-      var len = O.length >>> 0;
-      if (typeof callback !== 'function') {
-        throw new TypeError(callback + ' is not a function');
+      varO=Object(this);
+      varlen=O.length>>>0;
+      if(typeofcallback!=='function'){
+        thrownewTypeError(callback+'isnotafunction');
       }
   
-      if (arguments.length > 1) {
-        T = thisArg;
+      if(arguments.length>1){
+        T=thisArg;
       }
   
-      A = new Array(len);
-      k = 0;
+      A=newArray(len);
+      k=0;
   
-      while (k < len) {
-        var kValue, mappedValue;
-        if (k in O) {
-          kValue = O[k];
-          mappedValue = callback.call(T, kValue, k, O);
-          A[k] = mappedValue;
+      while(k<len){
+        varkValue,mappedValue;
+        if(kinO){
+          kValue=O[k];
+          mappedValue=callback.call(T,kValue,k,O);
+          A[k]=mappedValue;
         }
         k++;
       }
-      return A;
+      returnA;
     };
   }
 
-  var isSupportAmd = typeof define === 'function' && define.amd;
+  varisSupportAmd=typeofdefine==='function'&&define.amd;
 
   /**
-   * returns whether font is installed or not.
+   *returnswhetherfontisinstalledornot.
    *
-   * @param {String} fontName
-   * @return {Boolean}
+   *@param{String}fontName
+   *@return{Boolean}
    */
-  var isFontInstalled = function (fontName) {
-    var testFontName = fontName === 'Comic Sans MS' ? 'Courier New' : 'Comic Sans MS';
-    var $tester = $('<div>').css({
-      position: 'absolute',
-      left: '-9999px',
-      top: '-9999px',
-      fontSize: '200px'
+  varisFontInstalled=function(fontName){
+    vartestFontName=fontName==='ComicSansMS'?'CourierNew':'ComicSansMS';
+    var$tester=$('<div>').css({
+      position:'absolute',
+      left:'-9999px',
+      top:'-9999px',
+      fontSize:'200px'
     }).text('mmmmmmmmmwwwwwww').appendTo(document.body);
 
-    var originalWidth = $tester.css('fontFamily', testFontName).width();
-    var width = $tester.css('fontFamily', fontName + ',' + testFontName).width();
+    varoriginalWidth=$tester.css('fontFamily',testFontName).width();
+    varwidth=$tester.css('fontFamily',fontName+','+testFontName).width();
 
     $tester.remove();
 
-    return originalWidth !== width;
+    returnoriginalWidth!==width;
   };
 
-  var userAgent = navigator.userAgent;
-  var isMSIE = /MSIE|Trident/i.test(userAgent);
-  var browserVersion;
-  if (isMSIE) {
-    var matches = /MSIE (\d+[.]\d+)/.exec(userAgent);
-    if (matches) {
-      browserVersion = parseFloat(matches[1]);
+  varuserAgent=navigator.userAgent;
+  varisMSIE=/MSIE|Trident/i.test(userAgent);
+  varbrowserVersion;
+  if(isMSIE){
+    varmatches=/MSIE(\d+[.]\d+)/.exec(userAgent);
+    if(matches){
+      browserVersion=parseFloat(matches[1]);
     }
-    matches = /Trident\/.*rv:([0-9]{1,}[\.0-9]{0,})/.exec(userAgent);
-    if (matches) {
-      browserVersion = parseFloat(matches[1]);
+    matches=/Trident\/.*rv:([0-9]{1,}[\.0-9]{0,})/.exec(userAgent);
+    if(matches){
+      browserVersion=parseFloat(matches[1]);
     }
   }
 
   /**
-   * @class core.agent
+   *@classcore.agent
    *
-   * Object which check platform and agent
+   *Objectwhichcheckplatformandagent
    *
-   * @singleton
-   * @alternateClassName agent
+   *@singleton
+   *@alternateClassNameagent
    */
-  var agent = {
-    /** @property {Boolean} [isMac=false] true if this agent is Mac  */
-    isMac: navigator.appVersion.indexOf('Mac') > -1,
-    /** @property {Boolean} [isMSIE=false] true if this agent is a Internet Explorer  */
-    isMSIE: isMSIE,
-    /** @property {Boolean} [isFF=false] true if this agent is a Firefox  */
-    isFF: /firefox/i.test(userAgent),
-    isWebkit: /webkit/i.test(userAgent),
-    /** @property {Boolean} [isSafari=false] true if this agent is a Safari  */
-    isSafari: /safari/i.test(userAgent),
-    /** @property {Float} browserVersion current browser version  */
-    browserVersion: browserVersion,
-    /** @property {String} jqueryVersion current jQuery version string  */
-    jqueryVersion: parseFloat($.fn.jquery),
-    isSupportAmd: isSupportAmd,
-    hasCodeMirror: isSupportAmd ? require.specified('CodeMirror') : !!window.CodeMirror,
-    isFontInstalled: isFontInstalled,
-    isW3CRangeSupport: !!document.createRange
+  varagent={
+    /**@property{Boolean}[isMac=false]trueifthisagentisMac */
+    isMac:navigator.appVersion.indexOf('Mac')>-1,
+    /**@property{Boolean}[isMSIE=false]trueifthisagentisaInternetExplorer */
+    isMSIE:isMSIE,
+    /**@property{Boolean}[isFF=false]trueifthisagentisaFirefox */
+    isFF:/firefox/i.test(userAgent),
+    isWebkit:/webkit/i.test(userAgent),
+    /**@property{Boolean}[isSafari=false]trueifthisagentisaSafari */
+    isSafari:/safari/i.test(userAgent),
+    /**@property{Float}browserVersioncurrentbrowserversion */
+    browserVersion:browserVersion,
+    /**@property{String}jqueryVersioncurrentjQueryversionstring */
+    jqueryVersion:parseFloat($.fn.jquery),
+    isSupportAmd:isSupportAmd,
+    hasCodeMirror:isSupportAmd?require.specified('CodeMirror'):!!window.CodeMirror,
+    isFontInstalled:isFontInstalled,
+    isW3CRangeSupport:!!document.createRange
   };
 
-  return agent;
+  returnagent;
 });

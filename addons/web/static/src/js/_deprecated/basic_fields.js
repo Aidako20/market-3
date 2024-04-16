@@ -1,154 +1,154 @@
 ////////////////////////////////////////////////////////////////////////////////
-// /!\ DEPRECATED
-// 
-// Legacy Field Widgets are added in this file when they are converted into
-// Owl Component.
+///!\DEPRECATED
+//
+//LegacyFieldWidgetsareaddedinthisfilewhentheyareconvertedinto
+//OwlComponent.
 ////////////////////////////////////////////////////////////////////////////////
 
-flectra.define('web.basic_fields.deprecated', function (require) {
-"use strict";
+flectra.define('web.basic_fields.deprecated',function(require){
+"usestrict";
 
 /**
- * This module contains most of the basic (meaning: non relational) field
- * widgets. Field widgets are supposed to be used in views inheriting from
- * BasicView, so, they can work with the records obtained from a BasicModel.
+ *Thismodulecontainsmostofthebasic(meaning:nonrelational)field
+ *widgets.Fieldwidgetsaresupposedtobeusedinviewsinheritingfrom
+ *BasicView,so,theycanworkwiththerecordsobtainedfromaBasicModel.
  */
 
-var AbstractField = require('web.AbstractField');
-var core = require('web.core');
+varAbstractField=require('web.AbstractField');
+varcore=require('web.core');
 
-var _lt = core._lt;
+var_lt=core._lt;
 
-var FieldBoolean = AbstractField.extend({
-    className: 'o_field_boolean',
-    description: _lt("Checkbox"),
-    events: _.extend({}, AbstractField.prototype.events, {
-        change: '_onChange',
+varFieldBoolean=AbstractField.extend({
+    className:'o_field_boolean',
+    description:_lt("Checkbox"),
+    events:_.extend({},AbstractField.prototype.events,{
+        change:'_onChange',
     }),
-    supportedFieldTypes: ['boolean'],
+    supportedFieldTypes:['boolean'],
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Toggle the checkbox if it is activated due to a click on itself.
+     *Togglethecheckboxifitisactivatedduetoaclickonitself.
      *
-     * @override
+     *@override
      */
-    activate: function (options) {
-        var activated = this._super.apply(this, arguments);
-        // The formatValue of boolean fields renders HTML elements similar to
-        // the one rendered by the widget itself. Even though the event might
-        // have been fired on the non-widget version of this field, we can still
-        // test the presence of its custom class.
-        if (activated && options && options.event && $(options.event.target).closest('.custom-control.custom-checkbox').length) {
-            this._setValue(!this.value);  // Toggle the checkbox
+    activate:function(options){
+        varactivated=this._super.apply(this,arguments);
+        //TheformatValueofbooleanfieldsrendersHTMLelementssimilarto
+        //theonerenderedbythewidgetitself.Eventhoughtheeventmight
+        //havebeenfiredonthenon-widgetversionofthisfield,wecanstill
+        //testthepresenceofitscustomclass.
+        if(activated&&options&&options.event&&$(options.event.target).closest('.custom-control.custom-checkbox').length){
+            this._setValue(!this.value); //Togglethecheckbox
         }
-        return activated;
+        returnactivated;
     },
 
     /**
-     * @override
-     * @returns {jQuery} the focusable checkbox input
+     *@override
+     *@returns{jQuery}thefocusablecheckboxinput
      */
-    getFocusableElement: function () {
-        return this.mode === 'readonly' ? $() : this.$input;
+    getFocusableElement:function(){
+        returnthis.mode==='readonly'?$():this.$input;
     },
     /**
-     * A boolean field is always set since false is a valid value.
+     *Abooleanfieldisalwayssetsincefalseisavalidvalue.
      *
-     * @override
+     *@override
      */
-    isSet: function () {
-        return true;
+    isSet:function(){
+        returntrue;
     },
     /**
-     * When the checkbox is rerendered, we need to check if it was the actual
-     * origin of the reset. If it is, we need to activate it back so it looks
-     * like it was not rerendered but is still the same input.
+     *Whenthecheckboxisrerendered,weneedtocheckifitwastheactual
+     *originofthereset.Ifitis,weneedtoactivateitbacksoitlooks
+     *likeitwasnotrerenderedbutisstillthesameinput.
      *
-     * @override
+     *@override
      */
-    reset: function (record, event) {
-        var rendered = this._super.apply(this, arguments);
-        if (event && event.target.name === this.name) {
+    reset:function(record,event){
+        varrendered=this._super.apply(this,arguments);
+        if(event&&event.target.name===this.name){
             this.activate();
         }
-        return rendered;
+        returnrendered;
     },
     /**
-     * Associates the 'for' attribute of the internal label.
+     *Associatesthe'for'attributeoftheinternallabel.
      *
-     * @override
+     *@override
      */
-    setIDForLabel: function (id) {
-        this._super.apply(this, arguments);
-        this.$('.custom-control-label').attr('for', id);
+    setIDForLabel:function(id){
+        this._super.apply(this,arguments);
+        this.$('.custom-control-label').attr('for',id);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * The actual checkbox is designed in css to have full control over its
-     * appearance, as opposed to letting the browser and the os decide how
-     * a checkbox should look. The actual input is disabled and hidden. In
-     * readonly mode, the checkbox is disabled.
+     *Theactualcheckboxisdesignedincsstohavefullcontroloverits
+     *appearance,asopposedtolettingthebrowserandtheosdecidehow
+     *acheckboxshouldlook.Theactualinputisdisabledandhidden.In
+     *readonlymode,thecheckboxisdisabled.
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _render: function () {
-        var $checkbox = this._formatValue(this.value);
-        this.$input = $checkbox.find('input');
-        this.$input.prop('disabled', this.mode === 'readonly');
+    _render:function(){
+        var$checkbox=this._formatValue(this.value);
+        this.$input=$checkbox.find('input');
+        this.$input.prop('disabled',this.mode==='readonly');
         this.$el.addClass($checkbox.attr('class'));
         this.$el.empty().append($checkbox.contents());
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Properly update the value when the checkbox is (un)ticked to trigger
-     * possible onchanges.
+     *Properlyupdatethevaluewhenthecheckboxis(un)tickedtotrigger
+     *possibleonchanges.
      *
-     * @private
+     *@private
      */
-    _onChange: function () {
+    _onChange:function(){
         this._setValue(this.$input[0].checked);
     },
     /**
-     * Implement keyboard movements.  Mostly useful for its environment, such
-     * as a list view.
+     *Implementkeyboardmovements. Mostlyusefulforitsenvironment,such
+     *asalistview.
      *
-     * @override
-     * @private
-     * @param {KeyEvent} ev
+     *@override
+     *@private
+     *@param{KeyEvent}ev
      */
-    _onKeydown: function (ev) {
-        switch (ev.which) {
-            case $.ui.keyCode.ENTER:
-                // prevent subsequent 'click' event (see _onKeydown of AbstractField)
+    _onKeydown:function(ev){
+        switch(ev.which){
+            case$.ui.keyCode.ENTER:
+                //preventsubsequent'click'event(see_onKeydownofAbstractField)
                 ev.preventDefault();
-                this.$input.prop('checked', !this.value);
+                this.$input.prop('checked',!this.value);
                 this._setValue(!this.value);
                 return;
-            case $.ui.keyCode.UP:
-            case $.ui.keyCode.RIGHT:
-            case $.ui.keyCode.DOWN:
-            case $.ui.keyCode.LEFT:
+            case$.ui.keyCode.UP:
+            case$.ui.keyCode.RIGHT:
+            case$.ui.keyCode.DOWN:
+            case$.ui.keyCode.LEFT:
                 ev.preventDefault();
         }
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
 });
 
-return {
-    FieldBoolean: FieldBoolean,
+return{
+    FieldBoolean:FieldBoolean,
 };
 
 });

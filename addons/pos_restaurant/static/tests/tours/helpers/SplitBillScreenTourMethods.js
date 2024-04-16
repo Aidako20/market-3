@@ -1,65 +1,65 @@
-flectra.define('pos_restaurant.tour.SplitBillScreenTourMethods', function (require) {
-    'use strict';
+flectra.define('pos_restaurant.tour.SplitBillScreenTourMethods',function(require){
+    'usestrict';
 
-    const { createTourMethods } = require('point_of_sale.tour.utils');
+    const{createTourMethods}=require('point_of_sale.tour.utils');
 
-    class Do {
-        clickOrderline(name, totalQuantity) {
-            let trigger = `li.orderline .product-name:contains("${name}")`;
-            if (totalQuantity) {
-                trigger += ` ~ .info-list .info:contains("${totalQuantity}")`;
+    classDo{
+        clickOrderline(name,totalQuantity){
+            lettrigger=`li.orderline.product-name:contains("${name}")`;
+            if(totalQuantity){
+                trigger+=`~.info-list.info:contains("${totalQuantity}")`;
             }
-            return [
+            return[
                 {
-                    content: `click '${name}' orderline with total quantity of '${totalQuantity}'`,
+                    content:`click'${name}'orderlinewithtotalquantityof'${totalQuantity}'`,
                     trigger,
                 },
             ];
         }
-        clickBack() {
-            return [
+        clickBack(){
+            return[
                 {
-                    content: 'click back button',
-                    trigger: `.splitbill-screen .button.back`,
+                    content:'clickbackbutton',
+                    trigger:`.splitbill-screen.button.back`,
                 },
             ];
         }
-        clickPay() {
-            return [
+        clickPay(){
+            return[
                 {
-                    content: 'click pay button',
-                    trigger: `.splitbill-screen .pay-button .button`
+                    content:'clickpaybutton',
+                    trigger:`.splitbill-screen.pay-button.button`
                 }
             ]
         }
     }
 
-    class Check {
-        orderlineHas(name, totalQuantity, splitQuantity) {
-            return [
+    classCheck{
+        orderlineHas(name,totalQuantity,splitQuantity){
+            return[
                 {
-                    content: `'${name}' orderline has total quantity of '${totalQuantity}'`,
-                    trigger: `li.orderline .product-name:contains("${name}") ~ .info-list .info:contains("${totalQuantity}")`,
-                    run: () => {},
+                    content:`'${name}'orderlinehastotalquantityof'${totalQuantity}'`,
+                    trigger:`li.orderline.product-name:contains("${name}")~.info-list.info:contains("${totalQuantity}")`,
+                    run:()=>{},
                 },
                 {
-                    content: `'${name}' orderline has '${splitQuantity}' quantity to split`,
-                    trigger: `li.orderline .product-name:contains("${name}") ~ .info-list .info em:contains("${splitQuantity}")`,
-                    run: () => {},
+                    content:`'${name}'orderlinehas'${splitQuantity}'quantitytosplit`,
+                    trigger:`li.orderline.product-name:contains("${name}")~.info-list.infoem:contains("${splitQuantity}")`,
+                    run:()=>{},
                 },
             ];
         }
-        subtotalIs(amount) {
-            return [
+        subtotalIs(amount){
+            return[
                 {
-                    content: `total amount of split is '${amount}'`,
-                    trigger: `.splitbill-screen .order-info .subtotal:contains("${amount}")`,
+                    content:`totalamountofsplitis'${amount}'`,
+                    trigger:`.splitbill-screen.order-info.subtotal:contains("${amount}")`,
                 },
             ];
         }
     }
 
-    class Execute {}
+    classExecute{}
 
-    return createTourMethods('SplitBillScreen', Do, Check, Execute);
+    returncreateTourMethods('SplitBillScreen',Do,Check,Execute);
 });

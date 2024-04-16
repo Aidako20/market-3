@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record id="stock_location_14" model="stock.location">
-            <field name="name">Shelf 2</field>
-            <field name="posx">0</field>
-            <field name="barcode">2601985</field>
-            <field name="location_id" model="stock.location"
+    <datanoupdate="1">
+        <recordid="stock_location_14"model="stock.location">
+            <fieldname="name">Shelf2</field>
+            <fieldname="posx">0</field>
+            <fieldname="barcode">2601985</field>
+            <fieldname="location_id"model="stock.location"
                 eval="obj().env.ref('stock.warehouse0').lot_stock_id.id"/>
         </record>
-        <record id="stock_location_components" model="stock.location">
-            <field name="name">Shelf 1</field>
-            <field name="posx">0</field>
-            <field name="barcode">2601892</field>
-            <field name="location_id" model="stock.location"
+        <recordid="stock_location_components"model="stock.location">
+            <fieldname="name">Shelf1</field>
+            <fieldname="posx">0</field>
+            <fieldname="barcode">2601892</field>
+            <fieldname="location_id"model="stock.location"
                 eval="obj().env.ref('stock.warehouse0').lot_stock_id.id"/>
         </record>
     </data>

@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="stock_scrap_view_form2_mrp_inherit_mrp" model="ir.ui.view">
-        <field name="name">stock.scrap.view.form2.inherit.mrp</field>
-        <field name="model">stock.scrap</field>
-        <field name="inherit_id" ref="stock.stock_scrap_form_view2"/>
-        <field name="arch" type="xml">
-            <field name="owner_id" position="after">
-                <field name="workorder_id" invisible="1"/>
-                <field name="production_id" invisible="1"/>
+    <recordid="stock_scrap_view_form2_mrp_inherit_mrp"model="ir.ui.view">
+        <fieldname="name">stock.scrap.view.form2.inherit.mrp</field>
+        <fieldname="model">stock.scrap</field>
+        <fieldname="inherit_id"ref="stock.stock_scrap_form_view2"/>
+        <fieldname="arch"type="xml">
+            <fieldname="owner_id"position="after">
+                <fieldname="workorder_id"invisible="1"/>
+                <fieldname="production_id"invisible="1"/>
             </field>
         </field>
     </record>
-    <record id="stock_scrap_view_form_mrp_inherit_mrp" model="ir.ui.view">
-        <field name="name">stock.scrap.view.form.inherit.mrp</field>
-        <field name="model">stock.scrap</field>
-        <field name="inherit_id" ref="stock.stock_scrap_form_view"/>
-        <field name="arch" type="xml">
-            <field name="owner_id" position="after">
-                <field name="workorder_id" domain="[('production_id', '=', product_id)]" attrs="{'invisible': [('workorder_id', '=', False)]}"/>
-                <field name="production_id" domain="[('company_id', '=', company_id)]" attrs="{'invisible': [('production_id', '=', False)]}"/>
+    <recordid="stock_scrap_view_form_mrp_inherit_mrp"model="ir.ui.view">
+        <fieldname="name">stock.scrap.view.form.inherit.mrp</field>
+        <fieldname="model">stock.scrap</field>
+        <fieldname="inherit_id"ref="stock.stock_scrap_form_view"/>
+        <fieldname="arch"type="xml">
+            <fieldname="owner_id"position="after">
+                <fieldname="workorder_id"domain="[('production_id','=',product_id)]"attrs="{'invisible':[('workorder_id','=',False)]}"/>
+                <fieldname="production_id"domain="[('company_id','=',company_id)]"attrs="{'invisible':[('production_id','=',False)]}"/>
             </field>
         </field>
     </record>

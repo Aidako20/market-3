@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*
+#-*-coding:utf-8-*
 
-from flectra.addons.bus.controllers.main import BusController
-from flectra.http import request
+fromflectra.addons.bus.controllers.mainimportBusController
+fromflectra.httpimportrequest
 
 
-class CalendarBusController(BusController):
-    # --------------------------
-    # Extends BUS Controller Poll
-    # --------------------------
-    def _poll(self, dbname, channels, last, options):
-        if request.session.uid:
-            channels = list(channels)
-            channels.append((request.db, 'calendar.alarm', request.env.user.partner_id.id))
-        return super(CalendarBusController, self)._poll(dbname, channels, last, options)
+classCalendarBusController(BusController):
+    #--------------------------
+    #ExtendsBUSControllerPoll
+    #--------------------------
+    def_poll(self,dbname,channels,last,options):
+        ifrequest.session.uid:
+            channels=list(channels)
+            channels.append((request.db,'calendar.alarm',request.env.user.partner_id.id))
+        returnsuper(CalendarBusController,self)._poll(dbname,channels,last,options)

@@ -1,11 +1,11 @@
-flectra.define("web.public_env", function (require) {
-    "use strict";
+flectra.define("web.public_env",function(require){
+    "usestrict";
 
     /**
-     * This file defines the env to use in the public side.
+     *Thisfiledefinestheenvtouseinthepublicside.
      */
 
-    const commonEnv = require("web.commonEnv");
+    constcommonEnv=require("web.commonEnv");
 
-    return commonEnv;
+    returncommonEnv;
 });

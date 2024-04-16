@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
-    <t t-name="mail.ModerationDiscardDialog" owl="1">
-        <Dialog contentClass="'o_ModerationDiscardDialog'" title="getTitle()" size="'medium'" t-ref="dialog">
-            <p t-esc="getBody()"/>
-            <p>Do you confirm the action?</p>
-            <t t-set-slot="buttons">
-                <button class="o-discard btn btn-primary" t-on-click="_onClickDiscard">Discard</button>
-                <button class="o-cancel btn btn-secondary" t-on-click="_onClickCancel">Cancel</button>
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
+    <tt-name="mail.ModerationDiscardDialog"owl="1">
+        <DialogcontentClass="'o_ModerationDiscardDialog'"title="getTitle()"size="'medium'"t-ref="dialog">
+            <pt-esc="getBody()"/>
+            <p>Doyouconfirmtheaction?</p>
+            <tt-set-slot="buttons">
+                <buttonclass="o-discardbtnbtn-primary"t-on-click="_onClickDiscard">Discard</button>
+                <buttonclass="o-cancelbtnbtn-secondary"t-on-click="_onClickCancel">Cancel</button>
             </t>
         </Dialog>
     </t>

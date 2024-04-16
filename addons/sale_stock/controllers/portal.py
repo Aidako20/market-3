@@ -1,38 +1,38 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import exceptions, SUPERUSER_ID
-from flectra.addons.sale.controllers.portal import CustomerPortal
-from flectra.http import request, route
-from flectra.tools import consteq
+fromflectraimportexceptions,SUPERUSER_ID
+fromflectra.addons.sale.controllers.portalimportCustomerPortal
+fromflectra.httpimportrequest,route
+fromflectra.toolsimportconsteq
 
 
-class SaleStockPortal(CustomerPortal):
+classSaleStockPortal(CustomerPortal):
 
-    def _stock_picking_check_access(self, picking_id, access_token=None):
-        picking = request.env['stock.picking'].browse([picking_id])
-        picking_sudo = picking.sudo()
+    def_stock_picking_check_access(self,picking_id,access_token=None):
+        picking=request.env['stock.picking'].browse([picking_id])
+        picking_sudo=picking.sudo()
         try:
             picking.check_access_rights('read')
             picking.check_access_rule('read')
-        except exceptions.AccessError:
-            if not access_token or not consteq(picking_sudo.sale_id.access_token, access_token):
+        exceptexceptions.AccessError:
+            ifnotaccess_tokenornotconsteq(picking_sudo.sale_id.access_token,access_token):
                 raise
-        return picking_sudo
+        returnpicking_sudo
 
-    @route(['/my/picking/pdf/<int:picking_id>'], type='http', auth="public", website=True)
-    def portal_my_picking_report(self, picking_id, access_token=None, **kw):
-        """ Print delivery slip for customer, using either access rights or access token
-        to be sure customer has access """
+    @route(['/my/picking/pdf/<int:picking_id>'],type='http',auth="public",website=True)
+    defportal_my_picking_report(self,picking_id,access_token=None,**kw):
+        """Printdeliveryslipforcustomer,usingeitheraccessrightsoraccesstoken
+        tobesurecustomerhasaccess"""
         try:
-            picking_sudo = self._stock_picking_check_access(picking_id, access_token=access_token)
-        except exceptions.AccessError:
-            return request.redirect('/my')
+            picking_sudo=self._stock_picking_check_access(picking_id,access_token=access_token)
+        exceptexceptions.AccessError:
+            returnrequest.redirect('/my')
 
-        # print report as SUPERUSER, since it require access to product, taxes, payment term etc.. and portal does not have those access rights.
-        pdf = request.env.ref('stock.action_report_delivery').with_user(SUPERUSER_ID)._render_qweb_pdf([picking_sudo.id])[0]
-        pdfhttpheaders = [
-            ('Content-Type', 'application/pdf'),
-            ('Content-Length', len(pdf)),
+        #printreportasSUPERUSER,sinceitrequireaccesstoproduct,taxes,paymenttermetc..andportaldoesnothavethoseaccessrights.
+        pdf=request.env.ref('stock.action_report_delivery').with_user(SUPERUSER_ID)._render_qweb_pdf([picking_sudo.id])[0]
+        pdfhttpheaders=[
+            ('Content-Type','application/pdf'),
+            ('Content-Length',len(pdf)),
         ]
-        return request.make_response(pdf, headers=pdfhttpheaders)
+        returnrequest.make_response(pdf,headers=pdfhttpheaders)

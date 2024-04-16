@@ -1,45 +1,45 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
 
-    <record id="view_l10n_latam_identification_type_tree" model="ir.ui.view">
-        <field name="name">l10n_latam.identification.type.tree</field>
-        <field name="model">l10n_latam.identification.type</field>
-        <field name="type">tree</field>
-        <field name="arch" type="xml">
-            <tree decoration-muted="(not active)" create="0" edit="0">
-                <field name="name"/>
-                <field name="description"/>
-                <field name="country_id"/>
-                <field name="active" widget="boolean_toggle"/>
+    <recordid="view_l10n_latam_identification_type_tree"model="ir.ui.view">
+        <fieldname="name">l10n_latam.identification.type.tree</field>
+        <fieldname="model">l10n_latam.identification.type</field>
+        <fieldname="type">tree</field>
+        <fieldname="arch"type="xml">
+            <treedecoration-muted="(notactive)"create="0"edit="0">
+                <fieldname="name"/>
+                <fieldname="description"/>
+                <fieldname="country_id"/>
+                <fieldname="active"widget="boolean_toggle"/>
             </tree>
         </field>
     </record>
 
-    <record id="view_l10n_latam_identification_type_search" model="ir.ui.view">
-        <field name="name">l10n_latam.identification.type.search</field>
-        <field name="model">l10n_latam.identification.type</field>
-        <field name="type">search</field>
-        <field name="arch" type="xml">
+    <recordid="view_l10n_latam_identification_type_search"model="ir.ui.view">
+        <fieldname="name">l10n_latam.identification.type.search</field>
+        <fieldname="model">l10n_latam.identification.type</field>
+        <fieldname="type">search</field>
+        <fieldname="arch"type="xml">
             <search>
-                <field name="name"/>
-                <field name="description"/>
-                <field name="country_id"/>
-                <filter name="active" string="Active" domain="[('active','=',True)]" help="Show active identification types"/>
-                <filter name="inactive" string="Archived" domain="[('active','=',False)]" help="Show archived identification types"/>
+                <fieldname="name"/>
+                <fieldname="description"/>
+                <fieldname="country_id"/>
+                <filtername="active"string="Active"domain="[('active','=',True)]"help="Showactiveidentificationtypes"/>
+                <filtername="inactive"string="Archived"domain="[('active','=',False)]"help="Showarchivedidentificationtypes"/>
             </search>
         </field>
     </record>
 
-    <record id="action_l10n_latam_identification_type" model="ir.actions.act_window">
-        <field name="name">Identification Type</field>
-        <field name="res_model">l10n_latam.identification.type</field>
-        <field name="view_mode">tree</field>
-        <field name="search_view_id" ref="view_l10n_latam_identification_type_search"/>
-        <field name="domain">['|', ('active', '=', True), ('active', '=', False)]</field>
-        <field name="context">{"search_default_active":1}</field>
+    <recordid="action_l10n_latam_identification_type"model="ir.actions.act_window">
+        <fieldname="name">IdentificationType</field>
+        <fieldname="res_model">l10n_latam.identification.type</field>
+        <fieldname="view_mode">tree</field>
+        <fieldname="search_view_id"ref="view_l10n_latam_identification_type_search"/>
+        <fieldname="domain">['|',('active','=',True),('active','=',False)]</field>
+        <fieldname="context">{"search_default_active":1}</field>
     </record>
 
-    <menuitem action="action_l10n_latam_identification_type"
+    <menuitemaction="action_l10n_latam_identification_type"
             id="menu_l10n_latam_identification_type"
             parent="contacts.res_partner_menu_config"/>
 

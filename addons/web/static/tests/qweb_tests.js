@@ -1,100 +1,100 @@
-flectra.define('web.qweb_tests', function (require) {
-"use strict";
+flectra.define('web.qweb_tests',function(require){
+"usestrict";
 
-var qwebPath = '/web/static/lib/qweb/';
+varqwebPath='/web/static/lib/qweb/';
 
-function trim(s) {
-    return s.replace(/(^\s+|\s+$)/g, '');
+functiontrim(s){
+    returns.replace(/(^\s+|\s+$)/g,'');
 }
 
 /**
- * Loads the template file, and executes all the test template in a
- * qunit module $title
+ *Loadsthetemplatefile,andexecutesallthetesttemplateina
+ *qunitmodule$title
  */
-function loadTest(assert, template, context) {
-    var done = assert.async();
+functionloadTest(assert,template,context){
+    vardone=assert.async();
     assert.expect(1);
 
-    var qweb = new window.QWeb2.Engine();
-    var prom = new Promise(function (resolve, reject) {
-        qweb.add_template(qwebPath + template, function (error, doc) {
-            if (error) {
-                return reject(error);
+    varqweb=newwindow.QWeb2.Engine();
+    varprom=newPromise(function(resolve,reject){
+        qweb.add_template(qwebPath+template,function(error,doc){
+            if(error){
+                returnreject(error);
             }
             resolve({
-                qweb: qweb,
-                doc: doc
+                qweb:qweb,
+                doc:doc
             });
         });
     });
 
-    prom.then(function (r) {
-        var qweb = r.qweb;
-        var doc = r.doc;
+    prom.then(function(r){
+        varqweb=r.qweb;
+        vardoc=r.doc;
         assert.expect(doc.querySelectorAll('result').length);
 
-        var templates = qweb.templates;
-        for (var template in templates) {
-            try {
-                if (!templates.hasOwnProperty(template)) {
+        vartemplates=qweb.templates;
+        for(vartemplateintemplates){
+            try{
+                if(!templates.hasOwnProperty(template)){
                     continue;
                 }
-                // ignore templates whose name starts with _, they're
-                // helpers/internal
-                if (/^_/.test(template)) {
+                //ignoretemplateswhosenamestartswith_,they're
+                //helpers/internal
+                if(/^_/.test(template)){
                     continue;
                 }
 
-                var params = doc.querySelector('params#' + template);
-                var args = params ? JSON.parse(params.textContent) : (context ? _.clone(context) : {});
+                varparams=doc.querySelector('params#'+template);
+                varargs=params?JSON.parse(params.textContent):(context?_.clone(context):{});
 
-                var results = doc.querySelector('result#' + template);
+                varresults=doc.querySelector('result#'+template);
 
                 assert.equal(
-                    trim(qweb.render(template, args)),
-                    trim(results.textContent.replace(new RegExp(String.fromCharCode(13), 'g'), '')),
+                    trim(qweb.render(template,args)),
+                    trim(results.textContent.replace(newRegExp(String.fromCharCode(13),'g'),'')),
                     template);
-            } catch (error) {
-                assert.notOk(error.stack || error, 'Rendering error');
+            }catch(error){
+                assert.notOk(error.stack||error,'Renderingerror');
             }
         }
         done();
     });
-    return prom;
+    returnprom;
 }
 
-QUnit.module('QWeb', {}, function () {
-    QUnit.test('Output', function (assert) {
-        loadTest(assert, 'qweb-test-output.xml');
+QUnit.module('QWeb',{},function(){
+    QUnit.test('Output',function(assert){
+        loadTest(assert,'qweb-test-output.xml');
     });
-    QUnit.test('Context-setting', function (assert) {
-        loadTest(assert, 'qweb-test-set.xml');
+    QUnit.test('Context-setting',function(assert){
+        loadTest(assert,'qweb-test-set.xml');
     });
-    QUnit.test('Conditionals', function (assert) {
-        loadTest(assert, 'qweb-test-conditionals.xml');
+    QUnit.test('Conditionals',function(assert){
+        loadTest(assert,'qweb-test-conditionals.xml');
     });
-    QUnit.test('Attributes manipulation', function (assert) {
-        loadTest(assert, 'qweb-test-attributes.xml');
+    QUnit.test('Attributesmanipulation',function(assert){
+        loadTest(assert,'qweb-test-attributes.xml');
     });
-    QUnit.test('Template calling (to the faraway pages)', function (assert) {
-        loadTest(assert, 'qweb-test-call.xml', {True: true});
+    QUnit.test('Templatecalling(tothefarawaypages)',function(assert){
+        loadTest(assert,'qweb-test-call.xml',{True:true});
     });
-    QUnit.test('Foreach', function (assert) {
-        loadTest(assert, 'qweb-test-foreach.xml');
+    QUnit.test('Foreach',function(assert){
+        loadTest(assert,'qweb-test-foreach.xml');
     });
-    QUnit.test('Global', function (assert) {
-        // test use python syntax
-        var WORD_REPLACEMENT = window.QWeb2.WORD_REPLACEMENT;
-        window.QWeb2.WORD_REPLACEMENT = _.extend({not: '!', None: 'undefined'}, WORD_REPLACEMENT);
-        loadTest(assert, 'qweb-test-global.xml', {bool: function (v) { return !!v ? 'True' : 'False';}})
-            .then(function () {
-                window.QWeb2.WORD_REPLACEMENT = WORD_REPLACEMENT;
-            }, function () {
-                window.QWeb2.WORD_REPLACEMENT = WORD_REPLACEMENT;
+    QUnit.test('Global',function(assert){
+        //testusepythonsyntax
+        varWORD_REPLACEMENT=window.QWeb2.WORD_REPLACEMENT;
+        window.QWeb2.WORD_REPLACEMENT=_.extend({not:'!',None:'undefined'},WORD_REPLACEMENT);
+        loadTest(assert,'qweb-test-global.xml',{bool:function(v){return!!v?'True':'False';}})
+            .then(function(){
+                window.QWeb2.WORD_REPLACEMENT=WORD_REPLACEMENT;
+            },function(){
+                window.QWeb2.WORD_REPLACEMENT=WORD_REPLACEMENT;
             });
     });
-    QUnit.test('Template inheritance', function (assert) {
-        loadTest(assert, 'qweb-test-extend.xml');
+    QUnit.test('Templateinheritance',function(assert){
+        loadTest(assert,'qweb-test-extend.xml');
     });
 });
 });

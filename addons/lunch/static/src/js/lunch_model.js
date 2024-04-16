@@ -1,130 +1,130 @@
-flectra.define('lunch.LunchModel', function (require) {
-"use strict";
+flectra.define('lunch.LunchModel',function(require){
+"usestrict";
 
 /**
- * This file defines the Model for the Lunch Kanban view, which is an
- * override of the KanbanModel.
+ *ThisfiledefinestheModelfortheLunchKanbanview,whichisan
+ *overrideoftheKanbanModel.
  */
 
-var session = require('web.session');
-var BasicModel = require('web.BasicModel');
+varsession=require('web.session');
+varBasicModel=require('web.BasicModel');
 
-var LunchModel = BasicModel.extend({
-    init: function () {
-        this.locationId = false;
-        this.userId = false;
-        this._promInitLocation = null;
+varLunchModel=BasicModel.extend({
+    init:function(){
+        this.locationId=false;
+        this.userId=false;
+        this._promInitLocation=null;
 
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @return {Promise} resolved with the location domain
+     *@return{Promise}resolvedwiththelocationdomain
      */
-    getLocationDomain: function () {
-        var self = this;
-        return this._initUserLocation().then(function () {
-            return self._buildLocationDomainLeaf() ? [self._buildLocationDomainLeaf()]: [];
+    getLocationDomain:function(){
+        varself=this;
+        returnthis._initUserLocation().then(function(){
+            returnself._buildLocationDomainLeaf()?[self._buildLocationDomainLeaf()]:[];
         });
     },
-    __load: function () {
-        var self = this;
-        var args = arguments;
-        var _super = this._super;
+    __load:function(){
+        varself=this;
+        varargs=arguments;
+        var_super=this._super;
 
-        return this._initUserLocation().then(function () {
-            var params = args[0];
-            self._addOrUpdate(params.domain, self._buildLocationDomainLeaf());
+        returnthis._initUserLocation().then(function(){
+            varparams=args[0];
+            self._addOrUpdate(params.domain,self._buildLocationDomainLeaf());
 
-            return _super.apply(self, args);
+            return_super.apply(self,args);
         });
     },
-    __reload: function (id, options) {
-        var domain = options && options.domain || this.localData[id].domain;
+    __reload:function(id,options){
+        vardomain=options&&options.domain||this.localData[id].domain;
 
-        this._addOrUpdate(domain, this._buildLocationDomainLeaf());
-        options = _.extend(options, {domain: domain});
+        this._addOrUpdate(domain,this._buildLocationDomainLeaf());
+        options=_.extend(options,{domain:domain});
 
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
-    _addOrUpdate: function (domain, subDomain) {
-        if (subDomain && subDomain.length) {
-            var key = subDomain[0];
-            var index = _.findIndex(domain, function (val) {
-                return val[0] === key;
+    _addOrUpdate:function(domain,subDomain){
+        if(subDomain&&subDomain.length){
+            varkey=subDomain[0];
+            varindex=_.findIndex(domain,function(val){
+                returnval[0]===key;
             });
 
-            if (index < 0) {
+            if(index<0){
                 domain.push(subDomain);
-            } else {
-                domain[index] = subDomain;
+            }else{
+                domain[index]=subDomain;
             }
 
-            return domain;
+            returndomain;
         }
 
-        return domain;
+        returndomain;
     },
     /**
-     * Builds the domain leaf corresponding to the current user's location
+     *Buildsthedomainleafcorrespondingtothecurrentuser'slocation
      *
-     * @private
-     * @return {(Array[])|undefined}
+     *@private
+     *@return{(Array[])|undefined}
      */
-    _buildLocationDomainLeaf: function () {
-        if (this.locationId) {
-            return ['is_available_at', 'in', [this.locationId]];
+    _buildLocationDomainLeaf:function(){
+        if(this.locationId){
+            return['is_available_at','in',[this.locationId]];
         }
     },
-    _getUserLocation: function () {
-        return this._rpc({
-            route: '/lunch/user_location_get',
-            params: {
-                context: session.user_context,
-                user_id: this.userId,
+    _getUserLocation:function(){
+        returnthis._rpc({
+            route:'/lunch/user_location_get',
+            params:{
+                context:session.user_context,
+                user_id:this.userId,
             },
         });
     },
     /**
-     * Gets the user location once.
-     * Can be triggered from anywhere
-     * Useful to inject the location domain in the search panel
+     *Getstheuserlocationonce.
+     *Canbetriggeredfromanywhere
+     *Usefultoinjectthelocationdomaininthesearchpanel
      *
-     * @private
-     * @return {Promise}
+     *@private
+     *@return{Promise}
      */
-    _initUserLocation: function () {
-        var self = this;
-        if (!this._promInitLocation) {
-            this._promInitLocation = new Promise(function (resolve) {
-                self._getUserLocation().then(function (locationId) {
-                    self.locationId = locationId;
+    _initUserLocation:function(){
+        varself=this;
+        if(!this._promInitLocation){
+            this._promInitLocation=newPromise(function(resolve){
+                self._getUserLocation().then(function(locationId){
+                    self.locationId=locationId;
                     resolve();
                 });
             });
         }
-        return this._promInitLocation;
+        returnthis._promInitLocation;
     },
-    _updateLocation: function (locationId) {
-        this.locationId = locationId;
-        return Promise.resolve();
+    _updateLocation:function(locationId){
+        this.locationId=locationId;
+        returnPromise.resolve();
     },
-    _updateUser: function (userId) {
-        this.userId = userId;
-        this._promInitLocation = null;
-        return this._initUserLocation();
+    _updateUser:function(userId){
+        this.userId=userId;
+        this._promInitLocation=null;
+        returnthis._initUserLocation();
     }
 });
 
-return LunchModel;
+returnLunchModel;
 
 });

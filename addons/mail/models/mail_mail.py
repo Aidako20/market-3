@@ -1,374 +1,374 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import ast
-import base64
-import datetime
-import logging
-import psycopg2
-import smtplib
-import threading
-import re
+importast
+importbase64
+importdatetime
+importlogging
+importpsycopg2
+importsmtplib
+importthreading
+importre
 
-from collections import defaultdict
+fromcollectionsimportdefaultdict
 
-from flectra import _, api, fields, models
-from flectra import tools
-from flectra.addons.base.models.ir_mail_server import MailDeliveryException
+fromflectraimport_,api,fields,models
+fromflectraimporttools
+fromflectra.addons.base.models.ir_mail_serverimportMailDeliveryException
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
 
-class MailMail(models.Model):
-    """ Model holding RFC2822 email messages to send. This model also provides
-        facilities to queue and send new email messages.  """
-    _name = 'mail.mail'
-    _description = 'Outgoing Mails'
-    _inherits = {'mail.message': 'mail_message_id'}
-    _order = 'id desc'
-    _rec_name = 'subject'
+classMailMail(models.Model):
+    """ModelholdingRFC2822emailmessagestosend.Thismodelalsoprovides
+        facilitiestoqueueandsendnewemailmessages. """
+    _name='mail.mail'
+    _description='OutgoingMails'
+    _inherits={'mail.message':'mail_message_id'}
+    _order='iddesc'
+    _rec_name='subject'
 
-    # content
-    mail_message_id = fields.Many2one('mail.message', 'Message', required=True, ondelete='cascade', index=True, auto_join=True)
-    body_html = fields.Text('Rich-text Contents', help="Rich-text/HTML message")
-    references = fields.Text('References', help='Message references, such as identifiers of previous messages', readonly=1)
-    headers = fields.Text('Headers', copy=False)
-    # Auto-detected based on create() - if 'mail_message_id' was passed then this mail is a notification
-    # and during unlink() we will not cascade delete the parent and its attachments
-    notification = fields.Boolean('Is Notification', help='Mail has been created to notify people of an existing mail.message')
-    # recipients: include inactive partners (they may have been archived after
-    # the message was sent, but they should remain visible in the relation)
-    email_to = fields.Text('To', help='Message recipients (emails)')
-    email_cc = fields.Char('Cc', help='Carbon copy message recipients')
-    recipient_ids = fields.Many2many('res.partner', string='To (Partners)',
-        context={'active_test': False})
-    # process
-    state = fields.Selection([
-        ('outgoing', 'Outgoing'),
-        ('sent', 'Sent'),
-        ('received', 'Received'),
-        ('exception', 'Delivery Failed'),
-        ('cancel', 'Cancelled'),
-    ], 'Status', readonly=True, copy=False, default='outgoing')
-    auto_delete = fields.Boolean(
-        'Auto Delete',
-        help="This option permanently removes any track of email after it's been sent, including from the Technical menu in the Settings, in order to preserve storage space of your Flectra database.")
-    failure_reason = fields.Text(
-        'Failure Reason', readonly=1,
-        help="Failure reason. This is usually the exception thrown by the email server, stored to ease the debugging of mailing issues.")
-    scheduled_date = fields.Char('Scheduled Send Date',
-        help="If set, the queue manager will send the email after the date. If not set, the email will be send as soon as possible.")
+    #content
+    mail_message_id=fields.Many2one('mail.message','Message',required=True,ondelete='cascade',index=True,auto_join=True)
+    body_html=fields.Text('Rich-textContents',help="Rich-text/HTMLmessage")
+    references=fields.Text('References',help='Messagereferences,suchasidentifiersofpreviousmessages',readonly=1)
+    headers=fields.Text('Headers',copy=False)
+    #Auto-detectedbasedoncreate()-if'mail_message_id'waspassedthenthismailisanotification
+    #andduringunlink()wewillnotcascadedeletetheparentanditsattachments
+    notification=fields.Boolean('IsNotification',help='Mailhasbeencreatedtonotifypeopleofanexistingmail.message')
+    #recipients:includeinactivepartners(theymayhavebeenarchivedafter
+    #themessagewassent,buttheyshouldremainvisibleintherelation)
+    email_to=fields.Text('To',help='Messagerecipients(emails)')
+    email_cc=fields.Char('Cc',help='Carboncopymessagerecipients')
+    recipient_ids=fields.Many2many('res.partner',string='To(Partners)',
+        context={'active_test':False})
+    #process
+    state=fields.Selection([
+        ('outgoing','Outgoing'),
+        ('sent','Sent'),
+        ('received','Received'),
+        ('exception','DeliveryFailed'),
+        ('cancel','Cancelled'),
+    ],'Status',readonly=True,copy=False,default='outgoing')
+    auto_delete=fields.Boolean(
+        'AutoDelete',
+        help="Thisoptionpermanentlyremovesanytrackofemailafterit'sbeensent,includingfromtheTechnicalmenuintheSettings,inordertopreservestoragespaceofyourFlectradatabase.")
+    failure_reason=fields.Text(
+        'FailureReason',readonly=1,
+        help="Failurereason.Thisisusuallytheexceptionthrownbytheemailserver,storedtoeasethedebuggingofmailingissues.")
+    scheduled_date=fields.Char('ScheduledSendDate',
+        help="Ifset,thequeuemanagerwillsendtheemailafterthedate.Ifnotset,theemailwillbesendassoonaspossible.")
 
     @api.model_create_multi
-    def create(self, values_list):
-        # notification field: if not set, set if mail comes from an existing mail.message
-        for values in values_list:
-            if 'notification' not in values and values.get('mail_message_id'):
-                values['notification'] = True
+    defcreate(self,values_list):
+        #notificationfield:ifnotset,setifmailcomesfromanexistingmail.message
+        forvaluesinvalues_list:
+            if'notification'notinvaluesandvalues.get('mail_message_id'):
+                values['notification']=True
 
-        new_mails = super(MailMail, self).create(values_list)
+        new_mails=super(MailMail,self).create(values_list)
 
-        new_mails_w_attach = self
-        for mail, values in zip(new_mails, values_list):
-            if values.get('attachment_ids'):
-                new_mails_w_attach += mail
-        if new_mails_w_attach:
+        new_mails_w_attach=self
+        formail,valuesinzip(new_mails,values_list):
+            ifvalues.get('attachment_ids'):
+                new_mails_w_attach+=mail
+        ifnew_mails_w_attach:
             new_mails_w_attach.mapped('attachment_ids').check(mode='read')
 
-        return new_mails
+        returnnew_mails
 
-    def write(self, vals):
-        res = super(MailMail, self).write(vals)
-        if vals.get('attachment_ids'):
-            for mail in self:
+    defwrite(self,vals):
+        res=super(MailMail,self).write(vals)
+        ifvals.get('attachment_ids'):
+            formailinself:
                 mail.attachment_ids.check(mode='read')
-        return res
+        returnres
 
-    def unlink(self):
-        # cascade-delete the parent message for all mails that are not created for a notification
-        mail_msg_cascade_ids = [mail.mail_message_id.id for mail in self if not mail.notification]
-        res = super(MailMail, self).unlink()
-        if mail_msg_cascade_ids:
+    defunlink(self):
+        #cascade-deletetheparentmessageforallmailsthatarenotcreatedforanotification
+        mail_msg_cascade_ids=[mail.mail_message_id.idformailinselfifnotmail.notification]
+        res=super(MailMail,self).unlink()
+        ifmail_msg_cascade_ids:
             self.env['mail.message'].browse(mail_msg_cascade_ids).unlink()
-        return res
+        returnres
 
     @api.model
-    def default_get(self, fields):
-        # protection for `default_type` values leaking from menu action context (e.g. for invoices)
-        # To remove when automatic context propagation is removed in web client
-        if self._context.get('default_type') not in self._fields['message_type'].base_field.selection:
-            self = self.with_context(dict(self._context, default_type=None))
-        if self._context.get('default_state') not in self._fields['state'].base_field.selection:
-            self = self.with_context(dict(self._context, default_state='outgoing'))
-        return super(MailMail, self).default_get(fields)
+    defdefault_get(self,fields):
+        #protectionfor`default_type`valuesleakingfrommenuactioncontext(e.g.forinvoices)
+        #Toremovewhenautomaticcontextpropagationisremovedinwebclient
+        ifself._context.get('default_type')notinself._fields['message_type'].base_field.selection:
+            self=self.with_context(dict(self._context,default_type=None))
+        ifself._context.get('default_state')notinself._fields['state'].base_field.selection:
+            self=self.with_context(dict(self._context,default_state='outgoing'))
+        returnsuper(MailMail,self).default_get(fields)
 
-    def mark_outgoing(self):
-        return self.write({'state': 'outgoing'})
+    defmark_outgoing(self):
+        returnself.write({'state':'outgoing'})
 
-    def cancel(self):
-        return self.write({'state': 'cancel'})
+    defcancel(self):
+        returnself.write({'state':'cancel'})
 
     @api.model
-    def process_email_queue(self, ids=None):
-        """Send immediately queued messages, committing after each
-           message is sent - this is not transactional and should
-           not be called during another transaction!
+    defprocess_email_queue(self,ids=None):
+        """Sendimmediatelyqueuedmessages,committingaftereach
+           messageissent-thisisnottransactionalandshould
+           notbecalledduringanothertransaction!
 
-           :param list ids: optional list of emails ids to send. If passed
-                            no search is performed, and these ids are used
+           :paramlistids:optionallistofemailsidstosend.Ifpassed
+                            nosearchisperformed,andtheseidsareused
                             instead.
-           :param dict context: if a 'filters' key is present in context,
-                                this value will be used as an additional
-                                filter to further restrict the outgoing
-                                messages to send (by default all 'outgoing'
-                                messages are sent).
+           :paramdictcontext:ifa'filters'keyispresentincontext,
+                                thisvaluewillbeusedasanadditional
+                                filtertofurtherrestricttheoutgoing
+                                messagestosend(bydefaultall'outgoing'
+                                messagesaresent).
         """
-        filters = ['&',
-                   ('state', '=', 'outgoing'),
+        filters=['&',
+                   ('state','=','outgoing'),
                    '|',
-                   ('scheduled_date', '<', datetime.datetime.now()),
-                   ('scheduled_date', '=', False)]
-        if 'filters' in self._context:
+                   ('scheduled_date','<',datetime.datetime.now()),
+                   ('scheduled_date','=',False)]
+        if'filters'inself._context:
             filters.extend(self._context['filters'])
-        # TODO: make limit configurable
-        filtered_ids = self.search(filters, limit=10000).ids
-        if not ids:
-            ids = filtered_ids
+        #TODO:makelimitconfigurable
+        filtered_ids=self.search(filters,limit=10000).ids
+        ifnotids:
+            ids=filtered_ids
         else:
-            ids = list(set(filtered_ids) & set(ids))
+            ids=list(set(filtered_ids)&set(ids))
         ids.sort()
 
-        res = None
+        res=None
         try:
-            # auto-commit except in testing mode
-            auto_commit = not getattr(threading.currentThread(), 'testing', False)
-            res = self.browse(ids).send(auto_commit=auto_commit)
-        except Exception:
-            _logger.exception("Failed processing mail queue")
-        return res
+            #auto-commitexceptintestingmode
+            auto_commit=notgetattr(threading.currentThread(),'testing',False)
+            res=self.browse(ids).send(auto_commit=auto_commit)
+        exceptException:
+            _logger.exception("Failedprocessingmailqueue")
+        returnres
 
-    def _postprocess_sent_message(self, success_pids, failure_reason=False, failure_type=None):
-        """Perform any post-processing necessary after sending ``mail``
-        successfully, including deleting it completely along with its
-        attachment if the ``auto_delete`` flag of the mail was set.
-        Overridden by subclasses for extra post-processing behaviors.
+    def_postprocess_sent_message(self,success_pids,failure_reason=False,failure_type=None):
+        """Performanypost-processingnecessaryaftersending``mail``
+        successfully,includingdeletingitcompletelyalongwithits
+        attachmentifthe``auto_delete``flagofthemailwasset.
+        Overriddenbysubclassesforextrapost-processingbehaviors.
 
-        :return: True
+        :return:True
         """
-        notif_mails_ids = [mail.id for mail in self if mail.notification]
-        if notif_mails_ids:
-            notifications = self.env['mail.notification'].search([
-                ('notification_type', '=', 'email'),
-                ('mail_id', 'in', notif_mails_ids),
-                ('notification_status', 'not in', ('sent', 'canceled'))
+        notif_mails_ids=[mail.idformailinselfifmail.notification]
+        ifnotif_mails_ids:
+            notifications=self.env['mail.notification'].search([
+                ('notification_type','=','email'),
+                ('mail_id','in',notif_mails_ids),
+                ('notification_status','notin',('sent','canceled'))
             ])
-            if notifications:
-                # find all notification linked to a failure
-                failed = self.env['mail.notification']
-                if failure_type:
-                    failed = notifications.filtered(lambda notif: notif.res_partner_id not in success_pids)
-                (notifications - failed).sudo().write({
-                    'notification_status': 'sent',
-                    'failure_type': '',
-                    'failure_reason': '',
+            ifnotifications:
+                #findallnotificationlinkedtoafailure
+                failed=self.env['mail.notification']
+                iffailure_type:
+                    failed=notifications.filtered(lambdanotif:notif.res_partner_idnotinsuccess_pids)
+                (notifications-failed).sudo().write({
+                    'notification_status':'sent',
+                    'failure_type':'',
+                    'failure_reason':'',
                 })
-                if failed:
+                iffailed:
                     failed.sudo().write({
-                        'notification_status': 'exception',
-                        'failure_type': failure_type,
-                        'failure_reason': failure_reason,
+                        'notification_status':'exception',
+                        'failure_type':failure_type,
+                        'failure_reason':failure_reason,
                     })
-                    messages = notifications.mapped('mail_message_id').filtered(lambda m: m.is_thread_message())
-                    # TDE TODO: could be great to notify message-based, not notifications-based, to lessen number of notifs
-                    messages._notify_message_notification_update()  # notify user that we have a failure
-        if not failure_type or failure_type == 'RECIPIENT':  # if we have another error, we want to keep the mail.
-            mail_to_delete_ids = [mail.id for mail in self if mail.auto_delete]
+                    messages=notifications.mapped('mail_message_id').filtered(lambdam:m.is_thread_message())
+                    #TDETODO:couldbegreattonotifymessage-based,notnotifications-based,tolessennumberofnotifs
+                    messages._notify_message_notification_update() #notifyuserthatwehaveafailure
+        ifnotfailure_typeorfailure_type=='RECIPIENT': #ifwehaveanothererror,wewanttokeepthemail.
+            mail_to_delete_ids=[mail.idformailinselfifmail.auto_delete]
             self.browse(mail_to_delete_ids).sudo().unlink()
-        return True
+        returnTrue
 
-    # ------------------------------------------------------
-    # mail_mail formatting, tools and send mechanism
-    # ------------------------------------------------------
+    #------------------------------------------------------
+    #mail_mailformatting,toolsandsendmechanism
+    #------------------------------------------------------
 
-    def _send_prepare_body(self):
-        """Return a specific ir_email body. The main purpose of this method
-        is to be inherited to add custom content depending on some module."""
+    def_send_prepare_body(self):
+        """Returnaspecificir_emailbody.Themainpurposeofthismethod
+        istobeinheritedtoaddcustomcontentdependingonsomemodule."""
         self.ensure_one()
-        return self.body_html or ''
+        returnself.body_htmlor''
 
-    def _send_prepare_values(self, partner=None):
-        """Return a dictionary for specific email values, depending on a
-        partner, or generic to the whole recipients given by mail.email_to.
+    def_send_prepare_values(self,partner=None):
+        """Returnadictionaryforspecificemailvalues,dependingona
+        partner,orgenerictothewholerecipientsgivenbymail.email_to.
 
-            :param Model partner: specific recipient partner
+            :paramModelpartner:specificrecipientpartner
         """
         self.ensure_one()
-        body = self._send_prepare_body()
-        body_alternative = tools.html2plaintext(body)
-        if partner:
-            emails_normalized = tools.email_normalize_all(partner.email)
-            if emails_normalized:
-                email_to = [
-                    tools.formataddr((partner.name or "False", email or "False"))
-                    for email in emails_normalized
+        body=self._send_prepare_body()
+        body_alternative=tools.html2plaintext(body)
+        ifpartner:
+            emails_normalized=tools.email_normalize_all(partner.email)
+            ifemails_normalized:
+                email_to=[
+                    tools.formataddr((partner.nameor"False",emailor"False"))
+                    foremailinemails_normalized
                 ]
             else:
-                email_to = [tools.formataddr((partner.name or "False", partner.email or "False"))]
+                email_to=[tools.formataddr((partner.nameor"False",partner.emailor"False"))]
         else:
-            email_to = tools.email_split_and_format(self.email_to)
-        res = {
-            'body': body,
-            'body_alternative': body_alternative,
-            'email_to': email_to,
+            email_to=tools.email_split_and_format(self.email_to)
+        res={
+            'body':body,
+            'body_alternative':body_alternative,
+            'email_to':email_to,
         }
-        return res
+        returnres
 
-    def _split_by_server(self):
-        """Returns an iterator of pairs `(mail_server_id, record_ids)` for current recordset.
+    def_split_by_server(self):
+        """Returnsaniteratorofpairs`(mail_server_id,record_ids)`forcurrentrecordset.
 
-        The same `mail_server_id` may repeat in order to limit batch size according to
-        the `mail.session.batch.size` system parameter.
+        Thesame`mail_server_id`mayrepeatinordertolimitbatchsizeaccordingto
+        the`mail.session.batch.size`systemparameter.
         """
-        groups = defaultdict(list)
-        # Turn prefetch OFF to avoid MemoryError on very large mail queues, we only care
-        # about the mail server ids in this case.
-        for mail in self.with_context(prefetch_fields=False):
+        groups=defaultdict(list)
+        #TurnprefetchOFFtoavoidMemoryErroronverylargemailqueues,weonlycare
+        #aboutthemailserveridsinthiscase.
+        formailinself.with_context(prefetch_fields=False):
             groups[mail.mail_server_id.id].append(mail.id)
-        sys_params = self.env['ir.config_parameter'].sudo()
-        batch_size = int(sys_params.get_param('mail.session.batch.size', 1000))
-        for server_id, record_ids in groups.items():
-            for mail_batch in tools.split_every(batch_size, record_ids):
-                yield server_id, mail_batch
+        sys_params=self.env['ir.config_parameter'].sudo()
+        batch_size=int(sys_params.get_param('mail.session.batch.size',1000))
+        forserver_id,record_idsingroups.items():
+            formail_batchintools.split_every(batch_size,record_ids):
+                yieldserver_id,mail_batch
 
-    def send(self, auto_commit=False, raise_exception=False):
-        """ Sends the selected emails immediately, ignoring their current
-            state (mails that have already been sent should not be passed
-            unless they should actually be re-sent).
-            Emails successfully delivered are marked as 'sent', and those
-            that fail to be deliver are marked as 'exception', and the
-            corresponding error mail is output in the server logs.
+    defsend(self,auto_commit=False,raise_exception=False):
+        """Sendstheselectedemailsimmediately,ignoringtheircurrent
+            state(mailsthathavealreadybeensentshouldnotbepassed
+            unlesstheyshouldactuallybere-sent).
+            Emailssuccessfullydeliveredaremarkedas'sent',andthose
+            thatfailtobedeliveraremarkedas'exception',andthe
+            correspondingerrormailisoutputintheserverlogs.
 
-            :param bool auto_commit: whether to force a commit of the mail status
-                after sending each mail (meant only for scheduler processing);
-                should never be True during normal transactions (default: False)
-            :param bool raise_exception: whether to raise an exception if the
-                email sending process has failed
-            :return: True
+            :paramboolauto_commit:whethertoforceacommitofthemailstatus
+                aftersendingeachmail(meantonlyforschedulerprocessing);
+                shouldneverbeTrueduringnormaltransactions(default:False)
+            :paramboolraise_exception:whethertoraiseanexceptionifthe
+                emailsendingprocesshasfailed
+            :return:True
         """
-        for server_id, batch_ids in self._split_by_server():
-            smtp_session = None
+        forserver_id,batch_idsinself._split_by_server():
+            smtp_session=None
             try:
-                smtp_session = self.env['ir.mail_server'].connect(mail_server_id=server_id)
-            except Exception as exc:
-                if raise_exception:
-                    # To be consistent and backward compatible with mail_mail.send() raised
-                    # exceptions, it is encapsulated into an Flectra MailDeliveryException
-                    raise MailDeliveryException(_('Unable to connect to SMTP Server'), exc)
+                smtp_session=self.env['ir.mail_server'].connect(mail_server_id=server_id)
+            exceptExceptionasexc:
+                ifraise_exception:
+                    #Tobeconsistentandbackwardcompatiblewithmail_mail.send()raised
+                    #exceptions,itisencapsulatedintoanFlectraMailDeliveryException
+                    raiseMailDeliveryException(_('UnabletoconnecttoSMTPServer'),exc)
                 else:
-                    batch = self.browse(batch_ids)
-                    batch.write({'state': 'exception', 'failure_reason': exc})
-                    batch._postprocess_sent_message(success_pids=[], failure_type="SMTP")
+                    batch=self.browse(batch_ids)
+                    batch.write({'state':'exception','failure_reason':exc})
+                    batch._postprocess_sent_message(success_pids=[],failure_type="SMTP")
             else:
                 self.browse(batch_ids)._send(
                     auto_commit=auto_commit,
                     raise_exception=raise_exception,
                     smtp_session=smtp_session)
                 _logger.info(
-                    'Sent batch %s emails via mail server ID #%s',
-                    len(batch_ids), server_id)
+                    'Sentbatch%semailsviamailserverID#%s',
+                    len(batch_ids),server_id)
             finally:
-                if smtp_session:
+                ifsmtp_session:
                     smtp_session.quit()
 
-    def _send(self, auto_commit=False, raise_exception=False, smtp_session=None):
-        IrMailServer = self.env['ir.mail_server']
-        IrAttachment = self.env['ir.attachment']
-        for mail_id in self.ids:
-            success_pids = []
-            failure_type = None
-            processing_pid = None
-            mail = None
+    def_send(self,auto_commit=False,raise_exception=False,smtp_session=None):
+        IrMailServer=self.env['ir.mail_server']
+        IrAttachment=self.env['ir.attachment']
+        formail_idinself.ids:
+            success_pids=[]
+            failure_type=None
+            processing_pid=None
+            mail=None
             try:
-                mail = self.browse(mail_id)
-                if mail.state != 'outgoing':
-                    if mail.state != 'exception' and mail.auto_delete:
+                mail=self.browse(mail_id)
+                ifmail.state!='outgoing':
+                    ifmail.state!='exception'andmail.auto_delete:
                         mail.sudo().unlink()
                     continue
 
-                # remove attachments if user send the link with the access_token
-                body = mail.body_html or ''
-                attachments = mail.attachment_ids
-                for link in re.findall(r'/web/(?:content|image)/([0-9]+)', body):
-                    attachments = attachments - IrAttachment.browse(int(link))
+                #removeattachmentsifusersendthelinkwiththeaccess_token
+                body=mail.body_htmlor''
+                attachments=mail.attachment_ids
+                forlinkinre.findall(r'/web/(?:content|image)/([0-9]+)',body):
+                    attachments=attachments-IrAttachment.browse(int(link))
 
-                # load attachment binary data with a separate read(), as prefetching all
-                # `datas` (binary field) could bloat the browse cache, triggerring
-                # soft/hard mem limits with temporary data.
-                attachments = [(a['name'], base64.b64decode(a['datas']), a['mimetype'])
-                               for a in attachments.sudo().read(['name', 'datas', 'mimetype']) if a['datas'] is not False]
+                #loadattachmentbinarydatawithaseparateread(),asprefetchingall
+                #`datas`(binaryfield)couldbloatthebrowsecache,triggerring
+                #soft/hardmemlimitswithtemporarydata.
+                attachments=[(a['name'],base64.b64decode(a['datas']),a['mimetype'])
+                               forainattachments.sudo().read(['name','datas','mimetype'])ifa['datas']isnotFalse]
 
-                # specific behavior to customize the send email for notified partners
-                email_list = []
-                if mail.email_to:
+                #specificbehaviortocustomizethesendemailfornotifiedpartners
+                email_list=[]
+                ifmail.email_to:
                     email_list.append(mail._send_prepare_values())
-                for partner in mail.recipient_ids:
-                    values = mail._send_prepare_values(partner=partner)
-                    values['partner_id'] = partner
+                forpartnerinmail.recipient_ids:
+                    values=mail._send_prepare_values(partner=partner)
+                    values['partner_id']=partner
                     email_list.append(values)
 
-                # headers
-                headers = {}
-                ICP = self.env['ir.config_parameter'].sudo()
-                bounce_alias = ICP.get_param("mail.bounce.alias")
-                bounce_alias_static = tools.str2bool(ICP.get_param("mail.bounce.alias.static", "False"))
-                catchall_domain = ICP.get_param("mail.catchall.domain")
-                if bounce_alias and catchall_domain:
-                    if bounce_alias_static:
-                        headers['Return-Path'] = '%s@%s' % (bounce_alias, catchall_domain)
-                    elif mail.mail_message_id.is_thread_message():
-                        headers['Return-Path'] = '%s+%d-%s-%d@%s' % (bounce_alias, mail.id, mail.model, mail.res_id, catchall_domain)
+                #headers
+                headers={}
+                ICP=self.env['ir.config_parameter'].sudo()
+                bounce_alias=ICP.get_param("mail.bounce.alias")
+                bounce_alias_static=tools.str2bool(ICP.get_param("mail.bounce.alias.static","False"))
+                catchall_domain=ICP.get_param("mail.catchall.domain")
+                ifbounce_aliasandcatchall_domain:
+                    ifbounce_alias_static:
+                        headers['Return-Path']='%s@%s'%(bounce_alias,catchall_domain)
+                    elifmail.mail_message_id.is_thread_message():
+                        headers['Return-Path']='%s+%d-%s-%d@%s'%(bounce_alias,mail.id,mail.model,mail.res_id,catchall_domain)
                     else:
-                        headers['Return-Path'] = '%s+%d@%s' % (bounce_alias, mail.id, catchall_domain)
-                if mail.headers:
+                        headers['Return-Path']='%s+%d@%s'%(bounce_alias,mail.id,catchall_domain)
+                ifmail.headers:
                     try:
                         headers.update(ast.literal_eval(mail.headers))
-                    except Exception:
+                    exceptException:
                         pass
 
-                # Writing on the mail object may fail (e.g. lock on user) which
-                # would trigger a rollback *after* actually sending the email.
-                # To avoid sending twice the same email, provoke the failure earlier
+                #Writingonthemailobjectmayfail(e.g.lockonuser)which
+                #wouldtriggerarollback*after*actuallysendingtheemail.
+                #Toavoidsendingtwicethesameemail,provokethefailureearlier
                 mail.write({
-                    'state': 'exception',
-                    'failure_reason': _('Error without exception. Probably due do sending an email without computed recipients.'),
+                    'state':'exception',
+                    'failure_reason':_('Errorwithoutexception.Probablyduedosendinganemailwithoutcomputedrecipients.'),
                 })
-                # Update notification in a transient exception state to avoid concurrent
-                # update in case an email bounces while sending all emails related to current
-                # mail record.
-                notifs = self.env['mail.notification'].search([
-                    ('notification_type', '=', 'email'),
-                    ('mail_id', 'in', mail.ids),
-                    ('notification_status', 'not in', ('sent', 'canceled'))
+                #Updatenotificationinatransientexceptionstatetoavoidconcurrent
+                #updateincaseanemailbounceswhilesendingallemailsrelatedtocurrent
+                #mailrecord.
+                notifs=self.env['mail.notification'].search([
+                    ('notification_type','=','email'),
+                    ('mail_id','in',mail.ids),
+                    ('notification_status','notin',('sent','canceled'))
                 ])
-                if notifs:
-                    notif_msg = _('Error without exception. Probably due do concurrent access update of notification records. Please see with an administrator.')
+                ifnotifs:
+                    notif_msg=_('Errorwithoutexception.Probablyduedoconcurrentaccessupdateofnotificationrecords.Pleaseseewithanadministrator.')
                     notifs.sudo().write({
-                        'notification_status': 'exception',
-                        'failure_type': 'UNKNOWN',
-                        'failure_reason': notif_msg,
+                        'notification_status':'exception',
+                        'failure_type':'UNKNOWN',
+                        'failure_reason':notif_msg,
                     })
-                    # `test_mail_bounce_during_send`, force immediate update to obtain the lock.
-                    # see rev. 56596e5240ef920df14d99087451ce6f06ac6d36
-                    notifs.flush(fnames=['notification_status', 'failure_type', 'failure_reason'], records=notifs)
+                    #`test_mail_bounce_during_send`,forceimmediateupdatetoobtainthelock.
+                    #seerev.56596e5240ef920df14d99087451ce6f06ac6d36
+                    notifs.flush(fnames=['notification_status','failure_type','failure_reason'],records=notifs)
 
-                # protect against ill-formatted email_from when formataddr was used on an already formatted email
-                emails_from = tools.email_split_and_format(mail.email_from)
-                email_from = emails_from[0] if emails_from else mail.email_from
+                #protectagainstill-formattedemail_fromwhenformataddrwasusedonanalreadyformattedemail
+                emails_from=tools.email_split_and_format(mail.email_from)
+                email_from=emails_from[0]ifemails_fromelsemail.email_from
 
-                # build an RFC2822 email.message.Message object and send it without queuing
-                res = None
-                for email in email_list:
-                    msg = IrMailServer.build_email(
+                #buildanRFC2822email.message.Messageobjectandsenditwithoutqueuing
+                res=None
+                foremailinemail_list:
+                    msg=IrMailServer.build_email(
                         email_from=email_from,
                         email_to=email.get('email_to'),
                         subject=mail.subject,
@@ -379,63 +379,63 @@ class MailMail(models.Model):
                         attachments=attachments,
                         message_id=mail.message_id,
                         references=mail.references,
-                        object_id=mail.res_id and ('%s-%s' % (mail.res_id, mail.model)),
+                        object_id=mail.res_idand('%s-%s'%(mail.res_id,mail.model)),
                         subtype='html',
                         subtype_alternative='plain',
                         headers=headers)
-                    processing_pid = email.pop("partner_id", None)
+                    processing_pid=email.pop("partner_id",None)
                     try:
-                        res = IrMailServer.send_email(
-                            msg, mail_server_id=mail.mail_server_id.id, smtp_session=smtp_session)
-                        if processing_pid:
+                        res=IrMailServer.send_email(
+                            msg,mail_server_id=mail.mail_server_id.id,smtp_session=smtp_session)
+                        ifprocessing_pid:
                             success_pids.append(processing_pid)
-                        processing_pid = None
-                    except AssertionError as error:
-                        if str(error) == IrMailServer.NO_VALID_RECIPIENT:
-                            failure_type = "RECIPIENT"
-                            # No valid recipient found for this particular
-                            # mail item -> ignore error to avoid blocking
-                            # delivery to next recipients, if any. If this is
-                            # the only recipient, the mail will show as failed.
-                            _logger.info("Ignoring invalid recipients for mail.mail %s: %s",
-                                         mail.message_id, email.get('email_to'))
+                        processing_pid=None
+                    exceptAssertionErroraserror:
+                        ifstr(error)==IrMailServer.NO_VALID_RECIPIENT:
+                            failure_type="RECIPIENT"
+                            #Novalidrecipientfoundforthisparticular
+                            #mailitem->ignoreerrortoavoidblocking
+                            #deliverytonextrecipients,ifany.Ifthisis
+                            #theonlyrecipient,themailwillshowasfailed.
+                            _logger.info("Ignoringinvalidrecipientsformail.mail%s:%s",
+                                         mail.message_id,email.get('email_to'))
                         else:
                             raise
-                if res:  # mail has been sent at least once, no major exception occured
-                    mail.write({'state': 'sent', 'message_id': res, 'failure_reason': False})
-                    _logger.info('Mail with ID %r and Message-Id %r successfully sent', mail.id, mail.message_id)
-                    # /!\ can't use mail.state here, as mail.refresh() will cause an error
-                    # see revid:odo@openerp.com-20120622152536-42b2s28lvdv3odyr in 6.1
-                mail._postprocess_sent_message(success_pids=success_pids, failure_type=failure_type)
-            except MemoryError:
-                # prevent catching transient MemoryErrors, bubble up to notify user or abort cron job
-                # instead of marking the mail as failed
+                ifres: #mailhasbeensentatleastonce,nomajorexceptionoccured
+                    mail.write({'state':'sent','message_id':res,'failure_reason':False})
+                    _logger.info('MailwithID%randMessage-Id%rsuccessfullysent',mail.id,mail.message_id)
+                    #/!\can'tusemail.statehere,asmail.refresh()willcauseanerror
+                    #seerevid:odo@openerp.com-20120622152536-42b2s28lvdv3odyrin6.1
+                mail._postprocess_sent_message(success_pids=success_pids,failure_type=failure_type)
+            exceptMemoryError:
+                #preventcatchingtransientMemoryErrors,bubbleuptonotifyuserorabortcronjob
+                #insteadofmarkingthemailasfailed
                 _logger.exception(
-                    'MemoryError while processing mail with ID %r and Msg-Id %r. Consider raising the --limit-memory-hard startup option',
-                    mail.id, mail.message_id)
-                # mail status will stay on ongoing since transaction will be rollback
+                    'MemoryErrorwhileprocessingmailwithID%randMsg-Id%r.Considerraisingthe--limit-memory-hardstartupoption',
+                    mail.id,mail.message_id)
+                #mailstatuswillstayonongoingsincetransactionwillberollback
                 raise
-            except (psycopg2.Error, smtplib.SMTPServerDisconnected):
-                # If an error with the database or SMTP session occurs, chances are that the cursor
-                # or SMTP session are unusable, causing further errors when trying to save the state.
+            except(psycopg2.Error,smtplib.SMTPServerDisconnected):
+                #IfanerrorwiththedatabaseorSMTPsessionoccurs,chancesarethatthecursor
+                #orSMTPsessionareunusable,causingfurthererrorswhentryingtosavethestate.
                 _logger.exception(
-                    'Exception while processing mail with ID %r and Msg-Id %r.',
-                    mail.id, mail.message_id)
+                    'ExceptionwhileprocessingmailwithID%randMsg-Id%r.',
+                    mail.id,mail.message_id)
                 raise
-            except Exception as e:
-                failure_reason = tools.ustr(e)
-                _logger.exception('failed sending mail (id: %s) due to %s', mail.id, failure_reason)
-                mail.write({'state': 'exception', 'failure_reason': failure_reason})
-                mail._postprocess_sent_message(success_pids=success_pids, failure_reason=failure_reason, failure_type='UNKNOWN')
-                if raise_exception:
-                    if isinstance(e, (AssertionError, UnicodeEncodeError)):
-                        if isinstance(e, UnicodeEncodeError):
-                            value = "Invalid text: %s" % e.object
+            exceptExceptionase:
+                failure_reason=tools.ustr(e)
+                _logger.exception('failedsendingmail(id:%s)dueto%s',mail.id,failure_reason)
+                mail.write({'state':'exception','failure_reason':failure_reason})
+                mail._postprocess_sent_message(success_pids=success_pids,failure_reason=failure_reason,failure_type='UNKNOWN')
+                ifraise_exception:
+                    ifisinstance(e,(AssertionError,UnicodeEncodeError)):
+                        ifisinstance(e,UnicodeEncodeError):
+                            value="Invalidtext:%s"%e.object
                         else:
-                            value = '. '.join(e.args)
-                        raise MailDeliveryException(value)
+                            value='.'.join(e.args)
+                        raiseMailDeliveryException(value)
                     raise
 
-            if auto_commit is True:
+            ifauto_commitisTrue:
                 self._cr.commit()
-        return True
+        returnTrue

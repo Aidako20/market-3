@@ -1,90 +1,90 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from datetime import datetime, timedelta
+fromdatetimeimportdatetime,timedelta
 
-from flectra import fields
-from flectra.addons.website_event.tests.common import TestWebsiteEventCommon
-from flectra.tests.common import users
+fromflectraimportfields
+fromflectra.addons.website_event.tests.commonimportTestWebsiteEventCommon
+fromflectra.tests.commonimportusers
 
 
-class TestEventWebsiteTrack(TestWebsiteEventCommon):
+classTestEventWebsiteTrack(TestWebsiteEventCommon):
 
-    def _get_menus(self):
-        return super(TestEventWebsiteTrack, self)._get_menus() | set(['Community', 'Talks', 'Agenda', 'Talk Proposals'])
+    def_get_menus(self):
+        returnsuper(TestEventWebsiteTrack,self)._get_menus()|set(['Community','Talks','Agenda','TalkProposals'])
 
     @users('user_eventmanager')
-    def test_create_menu(self):
-        event = self.env['event.event'].create({
-            'name': 'TestEvent',
-            'date_begin': fields.Datetime.to_string(datetime.today() + timedelta(days=1)),
-            'date_end': fields.Datetime.to_string(datetime.today() + timedelta(days=15)),
-            'registration_ids': [(0, 0, {
-                'partner_id': self.user_eventuser.partner_id.id,
-                'name': 'test_reg',
+    deftest_create_menu(self):
+        event=self.env['event.event'].create({
+            'name':'TestEvent',
+            'date_begin':fields.Datetime.to_string(datetime.today()+timedelta(days=1)),
+            'date_end':fields.Datetime.to_string(datetime.today()+timedelta(days=15)),
+            'registration_ids':[(0,0,{
+                'partner_id':self.user_eventuser.partner_id.id,
+                'name':'test_reg',
             })],
-            'website_menu': True,
-            'community_menu': True,
-            'website_track': True,
-            'website_track_proposal': True,
+            'website_menu':True,
+            'community_menu':True,
+            'website_track':True,
+            'website_track_proposal':True,
         })
 
         self._assert_website_menus(event)
 
     @users('user_event_web_manager')
-    def test_menu_management_frontend(self):
-        event = self.env['event.event'].create({
-            'name': 'TestEvent',
-            'date_begin': fields.Datetime.to_string(datetime.today() + timedelta(days=1)),
-            'date_end': fields.Datetime.to_string(datetime.today() + timedelta(days=15)),
-            'website_menu': True,
-            'community_menu': True,
-            'website_track': True,
-            'website_track_proposal': True,
+    deftest_menu_management_frontend(self):
+        event=self.env['event.event'].create({
+            'name':'TestEvent',
+            'date_begin':fields.Datetime.to_string(datetime.today()+timedelta(days=1)),
+            'date_end':fields.Datetime.to_string(datetime.today()+timedelta(days=15)),
+            'website_menu':True,
+            'community_menu':True,
+            'website_track':True,
+            'website_track_proposal':True,
         })
         self.assertTrue(event.website_track)
         self.assertTrue(event.website_track_proposal)
         self._assert_website_menus(event)
 
-        introduction_menu = event.menu_id.child_id.filtered(lambda menu: menu.name == 'Introduction')
+        introduction_menu=event.menu_id.child_id.filtered(lambdamenu:menu.name=='Introduction')
         introduction_menu.unlink()
-        self._assert_website_menus(event, set(['Location', 'Register', 'Community', 'Talks', 'Agenda', 'Talk Proposals']))
+        self._assert_website_menus(event,set(['Location','Register','Community','Talks','Agenda','TalkProposals']))
 
-        menus = event.menu_id.child_id.filtered(lambda menu: menu.name in ['Agenda', 'Talk Proposals'])
+        menus=event.menu_id.child_id.filtered(lambdamenu:menu.namein['Agenda','TalkProposals'])
         menus.unlink()
         self.assertTrue(event.website_track)
         self.assertFalse(event.website_track_proposal)
 
-        menus = event.menu_id.child_id.filtered(lambda menu: menu.name in ['Talks'])
+        menus=event.menu_id.child_id.filtered(lambdamenu:menu.namein['Talks'])
         menus.unlink()
         self.assertFalse(event.website_track)
         self.assertFalse(event.website_track_proposal)
 
-        self._assert_website_menus(event, set(['Location', 'Register', 'Community']))
+        self._assert_website_menus(event,set(['Location','Register','Community']))
 
-        event.write({'website_track_proposal': True})
+        event.write({'website_track_proposal':True})
         self.assertFalse(event.website_track)
         self.assertTrue(event.website_track_proposal)
-        self._assert_website_menus(event, set(['Location', 'Register', 'Community', 'Talk Proposals']))
+        self._assert_website_menus(event,set(['Location','Register','Community','TalkProposals']))
 
-        event.write({'website_track': True})
+        event.write({'website_track':True})
         self.assertTrue(event.website_track)
         self.assertTrue(event.website_track_proposal)
-        self._assert_website_menus(event, set(['Location', 'Register', 'Community', 'Talks', 'Agenda', 'Talk Proposals']))
+        self._assert_website_menus(event,set(['Location','Register','Community','Talks','Agenda','TalkProposals']))
 
     @users('user_eventmanager')
-    def test_write_menu(self):
-        event = self.env['event.event'].create({
-            'name': 'TestEvent',
-            'date_begin': fields.Datetime.to_string(datetime.today() + timedelta(days=1)),
-            'date_end': fields.Datetime.to_string(datetime.today() + timedelta(days=15)),
-            'website_menu': False,
+    deftest_write_menu(self):
+        event=self.env['event.event'].create({
+            'name':'TestEvent',
+            'date_begin':fields.Datetime.to_string(datetime.today()+timedelta(days=1)),
+            'date_end':fields.Datetime.to_string(datetime.today()+timedelta(days=15)),
+            'website_menu':False,
         })
         self.assertFalse(event.menu_id)
         event.write({
-            'website_menu': True,
-            'community_menu': True,
-            'website_track': True,
-            'website_track_proposal': True,
+            'website_menu':True,
+            'community_menu':True,
+            'website_track':True,
+            'website_track_proposal':True,
         })
         self._assert_website_menus(event)

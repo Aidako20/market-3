@@ -1,88 +1,88 @@
-flectra.define('point_of_sale.ProductsWidget', function(require) {
-    'use strict';
+flectra.define('point_of_sale.ProductsWidget',function(require){
+    'usestrict';
 
-    const { useState } = owl.hooks;
-    const PosComponent = require('point_of_sale.PosComponent');
-    const { useListener } = require('web.custom_hooks');
-    const Registries = require('point_of_sale.Registries');
+    const{useState}=owl.hooks;
+    constPosComponent=require('point_of_sale.PosComponent');
+    const{useListener}=require('web.custom_hooks');
+    constRegistries=require('point_of_sale.Registries');
 
-    class ProductsWidget extends PosComponent {
+    classProductsWidgetextendsPosComponent{
         /**
-         * @param {Object} props
-         * @param {number?} props.startCategoryId
+         *@param{Object}props
+         *@param{number?}props.startCategoryId
          */
-        constructor() {
+        constructor(){
             super(...arguments);
-            useListener('switch-category', this._switchCategory);
-            useListener('update-search', this._updateSearch);
-            useListener('try-add-product', this._tryAddProduct);
-            useListener('clear-search', this._clearSearch);
-            this.state = useState({ searchWord: '' });
+            useListener('switch-category',this._switchCategory);
+            useListener('update-search',this._updateSearch);
+            useListener('try-add-product',this._tryAddProduct);
+            useListener('clear-search',this._clearSearch);
+            this.state=useState({searchWord:''});
         }
-        mounted() {
-            this.env.pos.on('change:selectedCategoryId', this.render, this);
+        mounted(){
+            this.env.pos.on('change:selectedCategoryId',this.render,this);
         }
-        willUnmount() {
-            this.env.pos.off('change:selectedCategoryId', null, this);
+        willUnmount(){
+            this.env.pos.off('change:selectedCategoryId',null,this);
         }
-        get selectedCategoryId() {
-            return this.env.pos.get('selectedCategoryId');
+        getselectedCategoryId(){
+            returnthis.env.pos.get('selectedCategoryId');
         }
-        get searchWord() {
-            return this.state.searchWord.trim();
+        getsearchWord(){
+            returnthis.state.searchWord.trim();
         }
-        get productsToDisplay() {
-            if (this.searchWord !== '') {
-                return this.env.pos.db.search_product_in_category(
+        getproductsToDisplay(){
+            if(this.searchWord!==''){
+                returnthis.env.pos.db.search_product_in_category(
                     this.selectedCategoryId,
                     this.searchWord
                 );
-            } else {
-                return this.env.pos.db.get_product_by_category(this.selectedCategoryId);
+            }else{
+                returnthis.env.pos.db.get_product_by_category(this.selectedCategoryId);
             }
         }
-        get subcategories() {
-            return this.env.pos.db
+        getsubcategories(){
+            returnthis.env.pos.db
                 .get_category_childs_ids(this.selectedCategoryId)
-                .map(id => this.env.pos.db.get_category_by_id(id));
+                .map(id=>this.env.pos.db.get_category_by_id(id));
         }
-        get breadcrumbs() {
-            if (this.selectedCategoryId === this.env.pos.db.root_category_id) return [];
-            return [
+        getbreadcrumbs(){
+            if(this.selectedCategoryId===this.env.pos.db.root_category_id)return[];
+            return[
                 ...this.env.pos.db
                     .get_category_ancestors_ids(this.selectedCategoryId)
                     .slice(1),
                 this.selectedCategoryId,
-            ].map(id => this.env.pos.db.get_category_by_id(id));
+            ].map(id=>this.env.pos.db.get_category_by_id(id));
         }
-        get hasNoCategories() {
-            return this.env.pos.db.get_category_childs_ids(0).length === 0;
+        gethasNoCategories(){
+            returnthis.env.pos.db.get_category_childs_ids(0).length===0;
         }
-        _switchCategory(event) {
-            this.env.pos.set('selectedCategoryId', event.detail);
+        _switchCategory(event){
+            this.env.pos.set('selectedCategoryId',event.detail);
         }
-        _updateSearch(event) {
-            this.state.searchWord = event.detail;
+        _updateSearch(event){
+            this.state.searchWord=event.detail;
         }
-        _tryAddProduct(event) {
-            const searchResults = this.productsToDisplay;
-            // If the search result contains one item, add the product and clear the search.
-            if (searchResults.length === 1) {
-                const { searchWordInput } = event.detail;
-                this.trigger('click-product', searchResults[0]);
-                // the value of the input element is not linked to the searchWord state,
-                // so we clear both the state and the element's value.
-                searchWordInput.el.value = '';
+        _tryAddProduct(event){
+            constsearchResults=this.productsToDisplay;
+            //Ifthesearchresultcontainsoneitem,addtheproductandclearthesearch.
+            if(searchResults.length===1){
+                const{searchWordInput}=event.detail;
+                this.trigger('click-product',searchResults[0]);
+                //thevalueoftheinputelementisnotlinkedtothesearchWordstate,
+                //soweclearboththestateandtheelement'svalue.
+                searchWordInput.el.value='';
                 this._clearSearch();
             }
         }
-        _clearSearch() {
-            this.state.searchWord = '';
+        _clearSearch(){
+            this.state.searchWord='';
         }
     }
-    ProductsWidget.template = 'ProductsWidget';
+    ProductsWidget.template='ProductsWidget';
 
     Registries.Component.add(ProductsWidget);
 
-    return ProductsWidget;
+    returnProductsWidget;
 });

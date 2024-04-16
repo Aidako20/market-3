@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <record id="view_users_form" model="ir.ui.view">
-            <field name="name">res.users.form.inherit</field>
-            <field name="model">res.users</field>
-            <field name="type">form</field>
-            <field name="inherit_id" ref="base.view_users_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//page[@name='access_rights']" position="after">
-                    <page string="Oauth" name="oauth">
+        <recordid="view_users_form"model="ir.ui.view">
+            <fieldname="name">res.users.form.inherit</field>
+            <fieldname="model">res.users</field>
+            <fieldname="type">form</field>
+            <fieldname="inherit_id"ref="base.view_users_form"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//page[@name='access_rights']"position="after">
+                    <pagestring="Oauth"name="oauth">
                         <group>
-                            <field name="oauth_provider_id"/>
-                            <field name="oauth_uid"/>
-                            <field name="oauth_access_token"/>
+                            <fieldname="oauth_provider_id"/>
+                            <fieldname="oauth_uid"/>
+                            <fieldname="oauth_access_token"/>
                         </group>
                     </page>
                 </xpath>

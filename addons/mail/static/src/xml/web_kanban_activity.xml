@@ -1,112 +1,112 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-<t t-name="mail.KanbanActivity">
-    <div class="o_kanban_inline_block dropdown o_mail_activity">
-        <!-- Dropdowns are created in JS to avoid some bugs, that's why the <a/> contains no args for the dropdown creation -->
-        <a class="dropdown-toggle o-no-caret o_activity_btn" data-boundary="viewport" data-flip="false" data-toggle="dropdown" role="button">
-            <!-- span classes are generated dynamically (see _render) -->
-            <span t-att-title="widget.selection[widget.activityState]" role="img" t-att-aria-label="widget.selection[widget.activity_state]"/>
+<tt-name="mail.KanbanActivity">
+    <divclass="o_kanban_inline_blockdropdowno_mail_activity">
+        <!--DropdownsarecreatedinJStoavoidsomebugs,that'swhythe<a/>containsnoargsforthedropdowncreation-->
+        <aclass="dropdown-toggleo-no-careto_activity_btn"data-boundary="viewport"data-flip="false"data-toggle="dropdown"role="button">
+            <!--spanclassesaregenerateddynamically(see_render)-->
+            <spant-att-title="widget.selection[widget.activityState]"role="img"t-att-aria-label="widget.selection[widget.activity_state]"/>
        </a>
-        <div class="dropdown-menu o_activity" role="menu"/>
+        <divclass="dropdown-menuo_activity"role="menu"/>
     </div>
 </t>
 
-<t t-name="mail.ListActivity" t-extend="mail.KanbanActivity">
-    <t t-jquery=".o_mail_activity" t-operation="append">
-        <span class="o_activity_summary"/>
+<tt-name="mail.ListActivity"t-extend="mail.KanbanActivity">
+    <tt-jquery=".o_mail_activity"t-operation="append">
+        <spanclass="o_activity_summary"/>
     </t>
 </t>
 
-<t t-name="mail.KanbanActivityLoading">
-    <div class="dropdown-item text-center o_no_activity">
-        <span class="fa fa-spinner fa-spin fa-2x" role="img" aria-label="Loading..." title="Loading..."/>
+<tt-name="mail.KanbanActivityLoading">
+    <divclass="dropdown-itemtext-centero_no_activity">
+        <spanclass="fafa-spinnerfa-spinfa-2x"role="img"aria-label="Loading..."title="Loading..."/>
     </div>
 </t>
 
-<t t-name="mail.KanbanActivityDropdown">
-    <span role="menuitem" t-if="_.isEmpty(records)" class="dropdown-item-text text-center o_no_activity">
-        <i>Schedule activities to help you get things done.</i>
+<tt-name="mail.KanbanActivityDropdown">
+    <spanrole="menuitem"t-if="_.isEmpty(records)"class="dropdown-item-texttext-centero_no_activity">
+        <i>Scheduleactivitiestohelpyougetthingsdone.</i>
     </span>
-    <div t-else="" aria-haspopup="true" role="menu" class="o_activity_log_container dropdown-item bg-100 p-0">
-        <ul class="o_activity_log list-group list-group-flush mb-2" role="menu">
-            <t t-foreach="_.keys(records)" t-as="key">
-                <t t-set="logs" t-value="records[key]" />
-                <t t-set="contextual_class" t-value="key == 'planned' ? 'success' : (key == 'today' ? 'warning' : 'danger') "/>
+    <divt-else=""aria-haspopup="true"role="menu"class="o_activity_log_containerdropdown-itembg-100p-0">
+        <ulclass="o_activity_loglist-grouplist-group-flushmb-2"role="menu">
+            <tt-foreach="_.keys(records)"t-as="key">
+                <tt-set="logs"t-value="records[key]"/>
+                <tt-set="contextual_class"t-value="key=='planned'?'success':(key=='today'?'warning':'danger')"/>
 
-                <li role="menuitem" t-attf-class="o_activity_label list-group-item list-group-item list-group-item-light d-flex justify-content-between align-items-center o_activity_color_{{key}} {{!key_first ? 'mt-2' : ''}}">
-                    <strong><t t-esc="selection[key]"/></strong>
-                    <span t-attf-class="badge badge-pill badge-{{contextual_class}} border-0 mr-0"><t t-esc="logs.length"/></span>
+                <lirole="menuitem"t-attf-class="o_activity_labellist-group-itemlist-group-itemlist-group-item-lightd-flexjustify-content-betweenalign-items-centero_activity_color_{{key}}{{!key_first?'mt-2':''}}">
+                    <strong><tt-esc="selection[key]"/></strong>
+                    <spant-attf-class="badgebadge-pillbadge-{{contextual_class}}border-0mr-0"><tt-esc="logs.length"/></span>
                 </li>
-                <t t-foreach="logs" t-as="log">
-                    <t t-set="edit_class" t-value="'o_edit_activity'"/>
-                    <t t-if="log.force_next">
-                        <t t-set="edit_class" t-value=""/>
+                <tt-foreach="logs"t-as="log">
+                    <tt-set="edit_class"t-value="'o_edit_activity'"/>
+                    <tt-if="log.force_next">
+                        <tt-set="edit_class"t-value=""/>
                     </t>
-                    <t class="activities_list_group_item">
-                        <t t-call="mail.activities-list-group-item"/>
+                    <tclass="activities_list_group_item">
+                        <tt-call="mail.activities-list-group-item"/>
                     </t>
-                    <li t-attf-id="o_activity_form_{{log.id}}" class="o_activity_form list-group-item border-top-0 py-0 mb-2 collapse"></li>
+                    <lit-attf-id="o_activity_form_{{log.id}}"class="o_activity_formlist-group-itemborder-top-0py-0mb-2collapse"></li>
                 </t>
             </t>
         </ul>
     </div>
-    <div class="dropdown-divider m-0"/>
-    <div role="menuitem" class="o_schedule_activity dropdown-header p-0 text-center">
-        <button class="btn btn-secondary btn-block p-3">
-            <i class="fa fa-plus fa-fw"></i><strong>Schedule an activity</strong>
+    <divclass="dropdown-dividerm-0"/>
+    <divrole="menuitem"class="o_schedule_activitydropdown-headerp-0text-center">
+        <buttonclass="btnbtn-secondarybtn-blockp-3">
+            <iclass="fafa-plusfa-fw"></i><strong>Scheduleanactivity</strong>
         </button>
     </div>
 </t>
 
-<t t-name="mail.activities-list-group-item">
-    <li t-attf-class="list-group-item o_log_activity d-flex #{log_last ? 'border-bottom' : ''}" role="menuitem">
-        <div t-attf-class="o_activity_title o_log_activity #{edit_class}" t-att-data-activity-id="log.id">
-            <div t-attf-class="o_activity_title_entry o_mail_activity {{! log.force_next ? 'align-items-center' : 'mb-1'}}">
-                <span t-attf-class="fa #{log.icon ? log.icon : 'fa-bell' } fa-fw mr-2 text-center text-muted" role="img" aria-label="Log" title="Log"/>
-                <strong class="text-dark o_activity_summary"><t t-esc="log.title_action or log.summary or log.activity_type_id[1]"/></strong>
-                <button t-if="! log.force_next and log.can_write" class="btn btn-sm btn-link py-0 o_edit_button"><i class="fa fa-pencil"/></button>
+<tt-name="mail.activities-list-group-item">
+    <lit-attf-class="list-group-itemo_log_activityd-flex#{log_last?'border-bottom':''}"role="menuitem">
+        <divt-attf-class="o_activity_titleo_log_activity#{edit_class}"t-att-data-activity-id="log.id">
+            <divt-attf-class="o_activity_title_entryo_mail_activity{{!log.force_next?'align-items-center':'mb-1'}}">
+                <spant-attf-class="fa#{log.icon?log.icon:'fa-bell'}fa-fwmr-2text-centertext-muted"role="img"aria-label="Log"title="Log"/>
+                <strongclass="text-darko_activity_summary"><tt-esc="log.title_actionorlog.summaryorlog.activity_type_id[1]"/></strong>
+                <buttont-if="!log.force_nextandlog.can_write"class="btnbtn-smbtn-linkpy-0o_edit_button"><iclass="fafa-pencil"/></button>
             </div>
-            <div class="o_activity_title_entry mt-1" t-if="log.state != 'today'">
-                <span class="fa fa-clock-o fa-fw mr-2 text-center text-muted" role="img" aria-label="Deadline" title="Deadline"/>
-                <small t-if="log.user_id[0] !== session.uid and log.mail_template_ids" class="mr-1"><t t-esc="log.user_id[1]"/> -</small>
-                <small t-att-title="log.date_deadline"><t t-esc="log.label_delay" /></small>
+            <divclass="o_activity_title_entrymt-1"t-if="log.state!='today'">
+                <spanclass="fafa-clock-ofa-fwmr-2text-centertext-muted"role="img"aria-label="Deadline"title="Deadline"/>
+                <smallt-if="log.user_id[0]!==session.uidandlog.mail_template_ids"class="mr-1"><tt-esc="log.user_id[1]"/>-</small>
+                <smallt-att-title="log.date_deadline"><tt-esc="log.label_delay"/></small>
             </div>
-            <t t-if="log.mail_template_ids">
-                <div t-foreach="log.mail_template_ids" t-as="mail_template" class="o_activity_title_entry mt-2" t-att-data-activity-id="log.id" t-att-data-force-next-activity="log.force_next" t-att-data-previous-activity-type-id="log.activity_type_id[0]">
-                    <i class="fa fa-envelope-o fa-fw mr-2 text-center text-muted" aria-label="Mail" title="Mail" role="img"></i>
+            <tt-if="log.mail_template_ids">
+                <divt-foreach="log.mail_template_ids"t-as="mail_template"class="o_activity_title_entrymt-2"t-att-data-activity-id="log.id"t-att-data-force-next-activity="log.force_next"t-att-data-previous-activity-type-id="log.activity_type_id[0]">
+                    <iclass="fafa-envelope-ofa-fwmr-2text-centertext-muted"aria-label="Mail"title="Mail"role="img"></i>
                     <small>
-                        <div class="mb-1" t-esc="mail_template.name + ':'"/>
-                        <a class="o_activity_template_preview" t-att-data-template-id="mail_template.id" href="#"><b>Preview</b></a>
+                        <divclass="mb-1"t-esc="mail_template.name+':'"/>
+                        <aclass="o_activity_template_preview"t-att-data-template-id="mail_template.id"href="#"><b>Preview</b></a>
                         <small>or</small>
-                        <a class="o_activity_template_send" t-att-data-template-id="mail_template.id" href="#"><b>Send Now</b></a>
+                        <aclass="o_activity_template_send"t-att-data-template-id="mail_template.id"href="#"><b>SendNow</b></a>
                     </small>
                 </div>
             </t>
         </div>
-        <div t-if="log.can_write" class="flex-grow-1 text-right">
-            <t t-if="log.activity_category === 'upload_file'">
-                <a  t-att-data-force-next-activity="log.force_next"
+        <divt-if="log.can_write"class="flex-grow-1text-right">
+            <tt-if="log.activity_category==='upload_file'">
+                <a t-att-data-force-next-activity="log.force_next"
                     t-att-data-previous-activity-type-id="log.activity_type_id[0]"
                     t-att-data-activity-id="log.id"
-                    class="o_mark_as_done_upload_file o_activity_link o_activity_link_kanban fa fa-upload"
-                    title="Upload file" role="img" t-att-data-fileupload-id="log.fileuploadID"/>
-                    <span class="d-none">
-                        <t t-call="HiddenInputFile">
-                            <t t-set="fileupload_id" t-value="log.fileuploadID"/>
-                            <t t-set="fileupload_action" t-translation="off">/web/binary/upload_attachment</t>
-                            <input type="hidden" name="model" t-att-value="log.res_model"/>
-                            <input type="hidden" name="id" t-att-value="log.res_id"/>
+                    class="o_mark_as_done_upload_fileo_activity_linko_activity_link_kanbanfafa-upload"
+                    title="Uploadfile"role="img"t-att-data-fileupload-id="log.fileuploadID"/>
+                    <spanclass="d-none">
+                        <tt-call="HiddenInputFile">
+                            <tt-set="fileupload_id"t-value="log.fileuploadID"/>
+                            <tt-set="fileupload_action"t-translation="off">/web/binary/upload_attachment</t>
+                            <inputtype="hidden"name="model"t-att-value="log.res_model"/>
+                            <inputtype="hidden"name="id"t-att-value="log.res_id"/>
                         </t>
                     </span>
             </t>
-            <t t-else="">
-                <a  t-att-data-force-next-activity="log.force_next"
+            <tt-else="">
+                <a t-att-data-force-next-activity="log.force_next"
                     t-att-data-previous-activity-type-id="log.activity_type_id[0]"
                     t-att-data-activity-id="log.id"
                     t-attf-href="#o_mark_done_form{{log.id}}"
-                    class="o_mark_as_done o_activity_link o_activity_link_kanban fa fa-check-circle"
-                    data-toggle="collapse" title="Mark as done" role="img" aria-label="Mark as done"/>
+                    class="o_mark_as_doneo_activity_linko_activity_link_kanbanfafa-check-circle"
+                    data-toggle="collapse"title="Markasdone"role="img"aria-label="Markasdone"/>
             </t>
         </div>
     </li>

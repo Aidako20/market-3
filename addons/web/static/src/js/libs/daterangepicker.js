@@ -1,24 +1,24 @@
-flectra.define('web.daterangepicker.extensions', function () {
-'use strict';
+flectra.define('web.daterangepicker.extensions',function(){
+'usestrict';
 
 /**
- * Don't allow user to select off days(Dates which are out of current calendar).
+ *Don'tallowusertoselectoffdays(Dateswhichareoutofcurrentcalendar).
  */
-var clickDateFunction = daterangepicker.prototype.clickDate;
-daterangepicker.prototype.clickDate = function (ev) {
-    if (!$(ev.target).hasClass('off')) {
-        clickDateFunction.apply(this, arguments);
+varclickDateFunction=daterangepicker.prototype.clickDate;
+daterangepicker.prototype.clickDate=function(ev){
+    if(!$(ev.target).hasClass('off')){
+        clickDateFunction.apply(this,arguments);
     }
 };
 
 /**
- * Override to open up or down based on top/bottom space in window.
+ *Overridetoopenupordownbasedontop/bottomspaceinwindow.
  */
-const moveFunction = daterangepicker.prototype.move;
-daterangepicker.prototype.move = function () {
-    const offset = this.element.offset();
-    this.drops = this.container.height() < offset.top ? 'up' : 'down';
-    moveFunction.apply(this, arguments);
+constmoveFunction=daterangepicker.prototype.move;
+daterangepicker.prototype.move=function(){
+    constoffset=this.element.offset();
+    this.drops=this.container.height()<offset.top?'up':'down';
+    moveFunction.apply(this,arguments);
 };
 
 });

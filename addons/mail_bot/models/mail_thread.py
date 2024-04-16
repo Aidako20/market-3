@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class MailThread(models.AbstractModel):
-    _inherit = 'mail.thread'
+classMailThread(models.AbstractModel):
+    _inherit='mail.thread'
 
-    def _message_post_after_hook(self, message, msg_vals):
-        self.env['mail.bot']._apply_logic(self, msg_vals)
-        return super(MailThread, self)._message_post_after_hook(message, msg_vals)
+    def_message_post_after_hook(self,message,msg_vals):
+        self.env['mail.bot']._apply_logic(self,msg_vals)
+        returnsuper(MailThread,self)._message_post_after_hook(message,msg_vals)

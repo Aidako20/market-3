@@ -1,1221 +1,1221 @@
-flectra.define('web_editor.snippets.options', function (require) {
-'use strict';
+flectra.define('web_editor.snippets.options',function(require){
+'usestrict';
 
-var core = require('web.core');
-const {ColorpickerWidget} = require('web.Colorpicker');
-const Dialog = require('web.Dialog');
-const {scrollTo} = require('web.dom');
-const rpc = require('web.rpc');
-const time = require('web.time');
-const utils = require('web.utils');
-var Widget = require('web.Widget');
-var ColorPaletteWidget = require('web_editor.ColorPalette').ColorPaletteWidget;
-const weUtils = require('web_editor.utils');
-const {
+varcore=require('web.core');
+const{ColorpickerWidget}=require('web.Colorpicker');
+constDialog=require('web.Dialog');
+const{scrollTo}=require('web.dom');
+constrpc=require('web.rpc');
+consttime=require('web.time');
+constutils=require('web.utils');
+varWidget=require('web.Widget');
+varColorPaletteWidget=require('web_editor.ColorPalette').ColorPaletteWidget;
+constweUtils=require('web_editor.utils');
+const{
     normalizeColor,
     getBgImageURL,
     isBackgroundImageAttribute,
-} = weUtils;
-var weWidgets = require('wysiwyg.widgets');
-const {
+}=weUtils;
+varweWidgets=require('wysiwyg.widgets');
+const{
     loadImage,
     loadImageInfo,
     applyModifications,
     removeOnImageChangeAttrs,
-} = require('web_editor.image_processing');
+}=require('web_editor.image_processing');
 
-var qweb = core.qweb;
-var _t = core._t;
+varqweb=core.qweb;
+var_t=core._t;
 
 /**
- * @param {HTMLElement} el
- * @param {string} [title]
- * @param {Object} [options]
- * @param {string[]} [options.classes]
- * @param {string} [options.tooltip]
- * @param {string} [options.placeholder]
- * @param {Object} [options.dataAttributes]
- * @returns {HTMLElement} - the original 'el' argument
+ *@param{HTMLElement}el
+ *@param{string}[title]
+ *@param{Object}[options]
+ *@param{string[]}[options.classes]
+ *@param{string}[options.tooltip]
+ *@param{string}[options.placeholder]
+ *@param{Object}[options.dataAttributes]
+ *@returns{HTMLElement}-theoriginal'el'argument
  */
-function _addTitleAndAllowedAttributes(el, title, options) {
-    let tooltipEl = el;
-    if (title) {
-        const titleEl = _buildTitleElement(title);
-        tooltipEl = titleEl;
+function_addTitleAndAllowedAttributes(el,title,options){
+    lettooltipEl=el;
+    if(title){
+        consttitleEl=_buildTitleElement(title);
+        tooltipEl=titleEl;
         el.appendChild(titleEl);
     }
 
-    if (options && options.classes) {
+    if(options&&options.classes){
         el.classList.add(...options.classes);
     }
-    if (options && options.tooltip) {
-        tooltipEl.title = options.tooltip;
+    if(options&&options.tooltip){
+        tooltipEl.title=options.tooltip;
     }
-    if (options && options.placeholder) {
-        el.setAttribute('placeholder', options.placeholder);
+    if(options&&options.placeholder){
+        el.setAttribute('placeholder',options.placeholder);
     }
-    if (options && options.dataAttributes) {
-        for (const key in options.dataAttributes) {
-            el.dataset[key] = options.dataAttributes[key];
+    if(options&&options.dataAttributes){
+        for(constkeyinoptions.dataAttributes){
+            el.dataset[key]=options.dataAttributes[key];
         }
     }
 
-    return el;
+    returnel;
 }
 /**
- * @param {string} tagName
- * @param {string} title - @see _addTitleAndAllowedAttributes
- * @param {Object} options - @see _addTitleAndAllowedAttributes
- * @returns {HTMLElement}
+ *@param{string}tagName
+ *@param{string}title-@see_addTitleAndAllowedAttributes
+ *@param{Object}options-@see_addTitleAndAllowedAttributes
+ *@returns{HTMLElement}
  */
-function _buildElement(tagName, title, options) {
-    const el = document.createElement(tagName);
-    return _addTitleAndAllowedAttributes(el, title, options);
+function_buildElement(tagName,title,options){
+    constel=document.createElement(tagName);
+    return_addTitleAndAllowedAttributes(el,title,options);
 }
 /**
- * @param {string} title
- * @returns {HTMLElement}
+ *@param{string}title
+ *@returns{HTMLElement}
  */
-function _buildTitleElement(title) {
-    const titleEl = document.createElement('we-title');
-    // As a stable fix, to not touch XML templates and break existing
-    // translations, the ⌙ character is automatically replaced by └ which makes
-    // more sense for the usecase and should work properly in all browsers. The
-    // ⌙ character is actually rendered mirrored on Windows 11 Chrome (and
-    // others) as the font used for those unicode characters is left to the
-    // browser. We could force a font of our own but it's probably not worth it.
-    // TODO a better solution with a SVG or CSS solution has to be done in
-    // master. That would unify the look of the symbol across all browsers and
-    // also prevent special characters to be placed in translations.
-    titleEl.textContent = title.replace(/⌙/g, '└');
-    return titleEl;
+function_buildTitleElement(title){
+    consttitleEl=document.createElement('we-title');
+    //Asastablefix,tonottouchXMLtemplatesandbreakexisting
+    //translations,the⌙characterisautomaticallyreplacedby└whichmakes
+    //moresensefortheusecaseandshouldworkproperlyinallbrowsers.The
+    //⌙characterisactuallyrenderedmirroredonWindows11Chrome(and
+    //others)asthefontusedforthoseunicodecharactersislefttothe
+    //browser.Wecouldforceafontofourownbutit'sprobablynotworthit.
+    //TODOabettersolutionwithaSVGorCSSsolutionhastobedonein
+    //master.Thatwouldunifythelookofthesymbolacrossallbrowsersand
+    //alsopreventspecialcharacterstobeplacedintranslations.
+    titleEl.textContent=title.replace(/⌙/g,'└');
+    returntitleEl;
 }
 /**
- * @param {string} src
- * @returns {HTMLElement}
+ *@param{string}src
+ *@returns{HTMLElement}
  */
-const _buildImgElementCache = {};
-async function _buildImgElement(src) {
-    if (!(src in _buildImgElementCache)) {
-        _buildImgElementCache[src] = (async () => {
-            if (src.split('.').pop() === 'svg') {
-                const response = await window.fetch(src);
-                const text = await response.text();
-                const parser = new window.DOMParser();
-                const xmlDoc = parser.parseFromString(text, 'text/xml');
-                return xmlDoc.getElementsByTagName('svg')[0];
-            } else {
-                const imgEl = document.createElement('img');
-                imgEl.src = src;
-                return imgEl;
+const_buildImgElementCache={};
+asyncfunction_buildImgElement(src){
+    if(!(srcin_buildImgElementCache)){
+        _buildImgElementCache[src]=(async()=>{
+            if(src.split('.').pop()==='svg'){
+                constresponse=awaitwindow.fetch(src);
+                consttext=awaitresponse.text();
+                constparser=newwindow.DOMParser();
+                constxmlDoc=parser.parseFromString(text,'text/xml');
+                returnxmlDoc.getElementsByTagName('svg')[0];
+            }else{
+                constimgEl=document.createElement('img');
+                imgEl.src=src;
+                returnimgEl;
             }
         })();
     }
-    const node = await _buildImgElementCache[src];
-    return node.cloneNode(true);
+    constnode=await_buildImgElementCache[src];
+    returnnode.cloneNode(true);
 }
 /**
- * Build the correct DOM for a we-row element.
+ *BuildthecorrectDOMforawe-rowelement.
  *
- * @param {string} [title] - @see _buildElement
- * @param {Object} [options] - @see _buildElement
- * @param {HTMLElement[]} [options.childNodes]
- * @returns {HTMLElement}
+ *@param{string}[title]-@see_buildElement
+ *@param{Object}[options]-@see_buildElement
+ *@param{HTMLElement[]}[options.childNodes]
+ *@returns{HTMLElement}
  */
-function _buildRowElement(title, options) {
-    const groupEl = _buildElement('we-row', title, options);
+function_buildRowElement(title,options){
+    constgroupEl=_buildElement('we-row',title,options);
 
-    const rowEl = document.createElement('div');
+    constrowEl=document.createElement('div');
     groupEl.appendChild(rowEl);
 
-    if (options && options.childNodes) {
-        options.childNodes.forEach(node => rowEl.appendChild(node));
+    if(options&&options.childNodes){
+        options.childNodes.forEach(node=>rowEl.appendChild(node));
     }
 
-    return groupEl;
+    returngroupEl;
 }
 /**
- * Build the correct DOM for a we-collapse element.
+ *BuildthecorrectDOMforawe-collapseelement.
  *
- * @param {string} [title] - @see _buildElement
- * @param {Object} [options] - @see _buildElement
- * @param {HTMLElement[]} [options.childNodes]
- * @returns {HTMLElement}
+ *@param{string}[title]-@see_buildElement
+ *@param{Object}[options]-@see_buildElement
+ *@param{HTMLElement[]}[options.childNodes]
+ *@returns{HTMLElement}
  */
-function _buildCollapseElement(title, options) {
-    const groupEl = _buildElement('we-collapse', title, options);
-    const titleEl = groupEl.querySelector('we-title');
+function_buildCollapseElement(title,options){
+    constgroupEl=_buildElement('we-collapse',title,options);
+    consttitleEl=groupEl.querySelector('we-title');
 
-    const children = options && options.childNodes || [];
-    if (titleEl) {
+    constchildren=options&&options.childNodes||[];
+    if(titleEl){
         titleEl.remove();
         children.unshift(titleEl);
     }
-    let i = 0;
-    for (i = 0; i < children.length; i++) {
+    leti=0;
+    for(i=0;i<children.length;i++){
         groupEl.appendChild(children[i]);
-        if (children[i].nodeType === Node.ELEMENT_NODE) {
+        if(children[i].nodeType===Node.ELEMENT_NODE){
             break;
         }
     }
 
-    const togglerEl = document.createElement('we-toggler');
+    consttogglerEl=document.createElement('we-toggler');
     togglerEl.classList.add('o_we_collapse_toggler');
-    if (_t.database.parameters.direction === 'rtl') {
+    if(_t.database.parameters.direction==='rtl'){
         togglerEl.classList.add('o_we_collapse_toggler_rtl');
     }
     groupEl.appendChild(togglerEl);
 
-    const containerEl = document.createElement('div');
-    children.slice(i + 1).forEach(node => containerEl.appendChild(node));
+    constcontainerEl=document.createElement('div');
+    children.slice(i+1).forEach(node=>containerEl.appendChild(node));
     groupEl.appendChild(containerEl);
 
-    return groupEl;
+    returngroupEl;
 }
 /**
- * Creates a proxy for an object where one property is replaced by a different
- * value. This value is captured in the closure and can be read and written to.
+ *Createsaproxyforanobjectwhereonepropertyisreplacedbyadifferent
+ *value.Thisvalueiscapturedintheclosureandcanbereadandwrittento.
  *
- * @param {Object} obj - the object for which to create a proxy
- * @param {string} propertyName - the name/key of the property to replace
- * @param {*} value - the initial value to give to the property's copy
- * @returns {Proxy} a proxy of the object with the property replaced
+ *@param{Object}obj-theobjectforwhichtocreateaproxy
+ *@param{string}propertyName-thename/keyofthepropertytoreplace
+ *@param{*}value-theinitialvaluetogivetotheproperty'scopy
+ *@returns{Proxy}aproxyoftheobjectwiththepropertyreplaced
  */
-function createPropertyProxy(obj, propertyName, value) {
-    return new Proxy(obj, {
-        get: function (obj, prop) {
-            if (prop === propertyName) {
-                return value;
+functioncreatePropertyProxy(obj,propertyName,value){
+    returnnewProxy(obj,{
+        get:function(obj,prop){
+            if(prop===propertyName){
+                returnvalue;
             }
-            return obj[prop];
+            returnobj[prop];
         },
-        set: function (obj, prop, val) {
-            if (prop === propertyName) {
-                return (value = val);
+        set:function(obj,prop,val){
+            if(prop===propertyName){
+                return(value=val);
             }
-            return Reflect.set(...arguments);
+            returnReflect.set(...arguments);
         },
     });
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-const NULL_ID = '__NULL__';
+constNULL_ID='__NULL__';
 
 /**
- * Base class for components to be used in snippet options widgets to retrieve
- * user values.
+ *Baseclassforcomponentstobeusedinsnippetoptionswidgetstoretrieve
+ *uservalues.
  */
-const UserValueWidget = Widget.extend({
-    className: 'o_we_user_value_widget',
-    custom_events: {
-        'user_value_update': '_onUserValueNotification',
+constUserValueWidget=Widget.extend({
+    className:'o_we_user_value_widget',
+    custom_events:{
+        'user_value_update':'_onUserValueNotification',
     },
 
     /**
-     * @constructor
+     *@constructor
      */
-    init: function (parent, title, options, $target) {
+    init:function(parent,title,options,$target){
         this._super(...arguments);
-        this.title = title;
-        this.options = options;
-        this._userValueWidgets = [];
-        this._value = '';
-        this.$target = $target;
+        this.title=title;
+        this.options=options;
+        this._userValueWidgets=[];
+        this._value='';
+        this.$target=$target;
     },
     /**
-     * @override
+     *@override
      */
-    async willStart() {
-        await this._super(...arguments);
-        if (this.options.dataAttributes.img) {
-            this.imgEl = await _buildImgElement(this.options.dataAttributes.img);
+    asyncwillStart(){
+        awaitthis._super(...arguments);
+        if(this.options.dataAttributes.img){
+            this.imgEl=await_buildImgElement(this.options.dataAttributes.img);
         }
     },
     /**
-     * @override
+     *@override
      */
-    _makeDescriptive: function () {
-        const $el = this._super(...arguments);
-        const el = $el[0];
-        _addTitleAndAllowedAttributes(el, this.title, this.options);
-        this.containerEl = document.createElement('div');
+    _makeDescriptive:function(){
+        const$el=this._super(...arguments);
+        constel=$el[0];
+        _addTitleAndAllowedAttributes(el,this.title,this.options);
+        this.containerEl=document.createElement('div');
 
-        if (this.imgEl) {
+        if(this.imgEl){
             this.containerEl.appendChild(this.imgEl);
         }
 
         el.appendChild(this.containerEl);
-        return $el;
+        return$el;
     },
     /**
-     * @override
+     *@override
      */
-    async start() {
-        await this._super(...arguments);
+    asyncstart(){
+        awaitthis._super(...arguments);
 
-        if (this.el.classList.contains('o_we_img_animate')) {
-            const buildImgExtensionSwitcher = (from, to) => {
-                const regex = new RegExp(`${from}$`, 'i');
-                return ev => {
-                    const img = ev.currentTarget.getElementsByTagName("img")[0];
-                    img.src = img.src.replace(regex, to);
+        if(this.el.classList.contains('o_we_img_animate')){
+            constbuildImgExtensionSwitcher=(from,to)=>{
+                constregex=newRegExp(`${from}$`,'i');
+                returnev=>{
+                    constimg=ev.currentTarget.getElementsByTagName("img")[0];
+                    img.src=img.src.replace(regex,to);
                 };
             };
-            this.$el.on('mouseenter.img_animate', buildImgExtensionSwitcher('png', 'gif'));
-            this.$el.on('mouseleave.img_animate', buildImgExtensionSwitcher('gif', 'png'));
+            this.$el.on('mouseenter.img_animate',buildImgExtensionSwitcher('png','gif'));
+            this.$el.on('mouseleave.img_animate',buildImgExtensionSwitcher('gif','png'));
         }
     },
     /**
-     * @override
+     *@override
      */
-    destroy() {
-        // Check if $el exists in case the widget is destroyed before it has
-        // been fully initialized.
-        // TODO there is probably better to do. This case was found only in
-        // tours, where the editor is left before the widget icon is loaded.
-        if (this.$el) {
+    destroy(){
+        //Checkif$elexistsincasethewidgetisdestroyedbeforeithas
+        //beenfullyinitialized.
+        //TODOthereisprobablybettertodo.Thiscasewasfoundonlyin
+        //tours,wheretheeditorisleftbeforethewidgeticonisloaded.
+        if(this.$el){
             this.$el.off('.img_animate');
         }
         this._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Closes the widget (only meaningful for widgets that can be closed).
+     *Closesthewidget(onlymeaningfulforwidgetsthatcanbeclosed).
      */
-    close: function () {
-        if (!this.el) {
-            // In case the method is called while the widget is not fully
-            // initialized yet. No need to prevent that case: asking a non
-            // initialized widget to close itself should just not be a problem
-            // and just be ignored.
+    close:function(){
+        if(!this.el){
+            //Incasethemethodiscalledwhilethewidgetisnotfully
+            //initializedyet.Noneedtopreventthatcase:askinganon
+            //initializedwidgettocloseitselfshouldjustnotbeaproblem
+            //andjustbeignored.
             return;
         }
-        if (!this.el.classList.contains('o_we_widget_opened')) {
-            // Small optimization: it would normally not matter asking to
-            // remove a class of an element if it does not already have it but
-            // in this case we do more: we trigger_up an event and ask to close
-            // all sub widgets. When we ask the editor to close all widgets...
-            // it makes sense not letting every sub button of every select
-            // trigger_up an event. This allows to avoid tens of thousands of
-            // instructions being done at each click in the editor.
+        if(!this.el.classList.contains('o_we_widget_opened')){
+            //Smalloptimization:itwouldnormallynotmatteraskingto
+            //removeaclassofanelementifitdoesnotalreadyhaveitbut
+            //inthiscasewedomore:wetrigger_upaneventandasktoclose
+            //allsubwidgets.Whenweasktheeditortocloseallwidgets...
+            //itmakessensenotlettingeverysubbuttonofeveryselect
+            //trigger_upanevent.Thisallowstoavoidtensofthousandsof
+            //instructionsbeingdoneateachclickintheeditor.
             return;
         }
         this.trigger_up('user_value_widget_closing');
         this.el.classList.remove('o_we_widget_opened');
-        this._userValueWidgets.forEach(widget => widget.close());
+        this._userValueWidgets.forEach(widget=>widget.close());
     },
     /**
-     * Simulates the correct event on the element to make it active.
+     *Simulatesthecorrecteventontheelementtomakeitactive.
      */
-    enable() {
+    enable(){
         this.$el.click();
     },
     /**
-     * @param {string} name
-     * @returns {UserValueWidget|null}
+     *@param{string}name
+     *@returns{UserValueWidget|null}
      */
-    findWidget: function (name) {
-        for (const widget of this._userValueWidgets) {
-            if (widget.getName() === name) {
-                return widget;
+    findWidget:function(name){
+        for(constwidgetofthis._userValueWidgets){
+            if(widget.getName()===name){
+                returnwidget;
             }
-            const depWidget = widget.findWidget(name);
-            if (depWidget) {
-                return depWidget;
+            constdepWidget=widget.findWidget(name);
+            if(depWidget){
+                returndepWidget;
             }
         }
-        return null;
+        returnnull;
     },
     /**
-     * Returns the value that the widget would hold if it was active, by default
-     * the internal value it holds.
+     *Returnsthevaluethatthewidgetwouldholdifitwasactive,bydefault
+     *theinternalvalueitholds.
      *
-     * @param {string} [methodName]
-     * @returns {string}
+     *@param{string}[methodName]
+     *@returns{string}
      */
-    getActiveValue: function (methodName) {
-        return this._value;
+    getActiveValue:function(methodName){
+        returnthis._value;
     },
     /**
-     * Returns the default value the widget holds when inactive, by default the
-     * first "possible value".
+     *Returnsthedefaultvaluethewidgetholdswheninactive,bydefaultthe
+     *first"possiblevalue".
      *
-     * @param {string} [methodName]
-     * @returns {string}
+     *@param{string}[methodName]
+     *@returns{string}
      */
-    getDefaultValue: function (methodName) {
-        const possibleValues = this._methodsParams.optionsPossibleValues[methodName];
-        return possibleValues && possibleValues[0] || '';
+    getDefaultValue:function(methodName){
+        constpossibleValues=this._methodsParams.optionsPossibleValues[methodName];
+        returnpossibleValues&&possibleValues[0]||'';
     },
     /**
-     * @returns {string[]}
+     *@returns{string[]}
      */
-    getDependencies: function () {
-        return this._dependencies;
+    getDependencies:function(){
+        returnthis._dependencies;
     },
     /**
-     * Returns the names of the option methods associated to the widget. Those
-     * are loaded with @see loadMethodsData.
+     *Returnsthenamesoftheoptionmethodsassociatedtothewidget.Those
+     *areloadedwith@seeloadMethodsData.
      *
-     * @returns {string[]}
+     *@returns{string[]}
      */
-    getMethodsNames: function () {
-        return this._methodsNames;
+    getMethodsNames:function(){
+        returnthis._methodsNames;
     },
     /**
-     * Returns the option parameters associated to the widget (for a given
-     * method name or not). Most are loaded with @see loadMethodsData.
+     *Returnstheoptionparametersassociatedtothewidget(foragiven
+     *methodnameornot).Mostareloadedwith@seeloadMethodsData.
      *
-     * @param {string} [methodName]
-     * @returns {Object}
+     *@param{string}[methodName]
+     *@returns{Object}
      */
-    getMethodsParams: function (methodName) {
-        const params = _.extend({}, this._methodsParams);
-        if (methodName) {
-            params.possibleValues = params.optionsPossibleValues[methodName] || [];
-            params.activeValue = this.getActiveValue(methodName);
-            params.defaultValue = this.getDefaultValue(methodName);
+    getMethodsParams:function(methodName){
+        constparams=_.extend({},this._methodsParams);
+        if(methodName){
+            params.possibleValues=params.optionsPossibleValues[methodName]||[];
+            params.activeValue=this.getActiveValue(methodName);
+            params.defaultValue=this.getDefaultValue(methodName);
         }
-        return params;
+        returnparams;
     },
     /**
-     * @returns {string} empty string if no name is used by the widget
+     *@returns{string}emptystringifnonameisusedbythewidget
      */
-    getName: function () {
-        return this._methodsParams.name || '';
+    getName:function(){
+        returnthis._methodsParams.name||'';
     },
     /**
-     * Returns the user value that the widget currently holds. The value is a
-     * string, this is the value that will be received in the option methods
-     * of SnippetOptionWidget instances.
+     *Returnstheuservaluethatthewidgetcurrentlyholds.Thevalueisa
+     *string,thisisthevaluethatwillbereceivedintheoptionmethods
+     *ofSnippetOptionWidgetinstances.
      *
-     * @param {string} [methodName]
-     * @returns {string}
+     *@param{string}[methodName]
+     *@returns{string}
      */
-    getValue: function (methodName) {
-        const isActive = this.isActive();
-        if (!methodName || !this._methodsNames.includes(methodName)) {
-            return isActive ? 'true' : '';
+    getValue:function(methodName){
+        constisActive=this.isActive();
+        if(!methodName||!this._methodsNames.includes(methodName)){
+            returnisActive?'true':'';
         }
-        if (isActive) {
-            return this.getActiveValue(methodName);
+        if(isActive){
+            returnthis.getActiveValue(methodName);
         }
-        return this.getDefaultValue(methodName);
+        returnthis.getDefaultValue(methodName);
     },
     /**
-     * Returns whether or not the widget is active (holds a value).
+     *Returnswhetherornotthewidgetisactive(holdsavalue).
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    isActive: function () {
-        return this._value && this._value !== NULL_ID;
+    isActive:function(){
+        returnthis._value&&this._value!==NULL_ID;
     },
     /**
-     * Indicates if the widget can contain sub user value widgets or not.
+     *Indicatesifthewidgetcancontainsubuservaluewidgetsornot.
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    isContainer: function () {
-        return false;
+    isContainer:function(){
+        returnfalse;
     },
     /**
-     * Indicates if the widget is being previewed or not: the user is
-     * manipulating it. Base case: if an internal <input/> element is focused.
+     *Indicatesifthewidgetisbeingpreviewedornot:theuseris
+     *manipulatingit.Basecase:ifaninternal<input/>elementisfocused.
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    isPreviewed: function () {
-        const focusEl = document.activeElement;
-        if (focusEl && focusEl.tagName === 'INPUT'
-                && (this.el === focusEl || this.el.contains(focusEl))) {
-            return true;
+    isPreviewed:function(){
+        constfocusEl=document.activeElement;
+        if(focusEl&&focusEl.tagName==='INPUT'
+                &&(this.el===focusEl||this.el.contains(focusEl))){
+            returntrue;
         }
-        return this.el.classList.contains('o_we_preview');
+        returnthis.el.classList.contains('o_we_preview');
     },
     /**
-     * Loads option method names and option method parameters.
+     *Loadsoptionmethodnamesandoptionmethodparameters.
      *
-     * @param {string[]} validMethodNames
-     * @param {Object} extraParams
+     *@param{string[]}validMethodNames
+     *@param{Object}extraParams
      */
-    loadMethodsData: function (validMethodNames, extraParams) {
-        this._methodsNames = [];
-        this._methodsParams = _.extend({}, extraParams);
-        this._methodsParams.optionsPossibleValues = {};
-        this._dependencies = [];
-        this._triggerWidgetsNames = [];
-        this._triggerWidgetsValues = [];
+    loadMethodsData:function(validMethodNames,extraParams){
+        this._methodsNames=[];
+        this._methodsParams=_.extend({},extraParams);
+        this._methodsParams.optionsPossibleValues={};
+        this._dependencies=[];
+        this._triggerWidgetsNames=[];
+        this._triggerWidgetsValues=[];
 
-        for (const key in this.el.dataset) {
-            const dataValue = this.el.dataset[key].trim();
+        for(constkeyinthis.el.dataset){
+            constdataValue=this.el.dataset[key].trim();
 
-            if (key === 'dependencies') {
+            if(key==='dependencies'){
                 this._dependencies.push(...dataValue.split(/\s*,\s*/g));
-            } else if (key === 'trigger') {
+            }elseif(key==='trigger'){
                 this._triggerWidgetsNames.push(...dataValue.split(/\s*,\s*/g));
-            } else if (key === 'triggerValue') {
+            }elseif(key==='triggerValue'){
                 this._triggerWidgetsValues.push(...dataValue.split(/\s*,\s*/g));
-            } else if (validMethodNames.includes(key)) {
+            }elseif(validMethodNames.includes(key)){
                 this._methodsNames.push(key);
-                this._methodsParams.optionsPossibleValues[key] = dataValue.split(/\s*\|\s*/g);
-            } else {
-                this._methodsParams[key] = dataValue;
+                this._methodsParams.optionsPossibleValues[key]=dataValue.split(/\s*\|\s*/g);
+            }else{
+                this._methodsParams[key]=dataValue;
             }
         }
-        this._userValueWidgets.forEach(widget => {
-            const inheritedParams = _.extend({}, this._methodsParams);
-            inheritedParams.optionsPossibleValues = null;
-            widget.loadMethodsData(validMethodNames, inheritedParams);
-            const subMethodsNames = widget.getMethodsNames();
-            const subMethodsParams = widget.getMethodsParams();
+        this._userValueWidgets.forEach(widget=>{
+            constinheritedParams=_.extend({},this._methodsParams);
+            inheritedParams.optionsPossibleValues=null;
+            widget.loadMethodsData(validMethodNames,inheritedParams);
+            constsubMethodsNames=widget.getMethodsNames();
+            constsubMethodsParams=widget.getMethodsParams();
 
-            for (const methodName of subMethodsNames) {
-                if (!this._methodsNames.includes(methodName)) {
+            for(constmethodNameofsubMethodsNames){
+                if(!this._methodsNames.includes(methodName)){
                     this._methodsNames.push(methodName);
-                    this._methodsParams.optionsPossibleValues[methodName] = [];
+                    this._methodsParams.optionsPossibleValues[methodName]=[];
                 }
-                for (const subPossibleValue of subMethodsParams.optionsPossibleValues[methodName]) {
+                for(constsubPossibleValueofsubMethodsParams.optionsPossibleValues[methodName]){
                     this._methodsParams.optionsPossibleValues[methodName].push(subPossibleValue);
                 }
             }
         });
-        for (const methodName of this._methodsNames) {
-            const arr = this._methodsParams.optionsPossibleValues[methodName];
-            const uniqArr = arr.filter((v, i, arr) => i === arr.indexOf(v));
-            this._methodsParams.optionsPossibleValues[methodName] = uniqArr;
+        for(constmethodNameofthis._methodsNames){
+            constarr=this._methodsParams.optionsPossibleValues[methodName];
+            constuniqArr=arr.filter((v,i,arr)=>i===arr.indexOf(v));
+            this._methodsParams.optionsPossibleValues[methodName]=uniqArr;
         }
     },
     /**
-     * @param {boolean} [previewMode=false]
-     * @param {boolean} [isSimulatedEvent=false]
+     *@param{boolean}[previewMode=false]
+     *@param{boolean}[isSimulatedEvent=false]
      */
-    notifyValueChange: function (previewMode, isSimulatedEvent) {
-        // If the widget has no associated method, it should not notify user
-        // value changes
-        if (!this._methodsNames.length) {
+    notifyValueChange:function(previewMode,isSimulatedEvent){
+        //Ifthewidgethasnoassociatedmethod,itshouldnotnotifyuser
+        //valuechanges
+        if(!this._methodsNames.length){
             return;
         }
 
-        // In the case we notify a change update, force a preview update if it
-        // was not already previewed
-        const isPreviewed = this.isPreviewed();
-        if (!previewMode && !isPreviewed) {
+        //Inthecasewenotifyachangeupdate,forceapreviewupdateifit
+        //wasnotalreadypreviewed
+        constisPreviewed=this.isPreviewed();
+        if(!previewMode&&!isPreviewed){
             this.notifyValueChange(true);
         }
 
-        const data = {
-            previewMode: previewMode || false,
-            isSimulatedEvent: !!isSimulatedEvent,
+        constdata={
+            previewMode:previewMode||false,
+            isSimulatedEvent:!!isSimulatedEvent,
         };
-        // TODO improve this. The preview state has to be updated only when the
-        // actual option _select is gonna be called... but this is delayed by a
-        // mutex. So, during test tours, we would notify both 'preview' and
-        // 'reset' before the 'preview' handling is done: and so the widget
-        // would not be considered in preview during that 'preview' handling.
-        if (previewMode === true || previewMode === false) {
-            // Note: the widgets need to be considered in preview mode during
-            // non-preview handling (a previewed checkbox is considered having
-            // an inverted state)... but if, for example, a modal opens before
-            // handling that non-preview, a 'reset' will be thrown thus removing
-            // the preview class. So we force it in non-preview too.
-            data.prepare = () => this.el.classList.add('o_we_preview');
-        } else if (previewMode === 'reset') {
-            data.prepare = () => this.el.classList.remove('o_we_preview');
+        //TODOimprovethis.Thepreviewstatehastobeupdatedonlywhenthe
+        //actualoption_selectisgonnabecalled...butthisisdelayedbya
+        //mutex.So,duringtesttours,wewouldnotifyboth'preview'and
+        //'reset'beforethe'preview'handlingisdone:andsothewidget
+        //wouldnotbeconsideredinpreviewduringthat'preview'handling.
+        if(previewMode===true||previewMode===false){
+            //Note:thewidgetsneedtobeconsideredinpreviewmodeduring
+            //non-previewhandling(apreviewedcheckboxisconsideredhaving
+            //aninvertedstate)...butif,forexample,amodalopensbefore
+            //handlingthatnon-preview,a'reset'willbethrownthusremoving
+            //thepreviewclass.Soweforceitinnon-previewtoo.
+            data.prepare=()=>this.el.classList.add('o_we_preview');
+        }elseif(previewMode==='reset'){
+            data.prepare=()=>this.el.classList.remove('o_we_preview');
         }
 
-        this.trigger_up('user_value_update', data);
+        this.trigger_up('user_value_update',data);
     },
     /**
-     * Opens the widget (only meaningful for widgets that can be opened).
+     *Opensthewidget(onlymeaningfulforwidgetsthatcanbeopened).
      */
-    open() {
+    open(){
         this.trigger_up('user_value_widget_opening');
         this.el.classList.add('o_we_widget_opened');
     },
     /**
-     * Adds the given widget to the known list of user value sub-widgets (useful
-     * for container widgets).
+     *Addsthegivenwidgettotheknownlistofuservaluesub-widgets(useful
+     *forcontainerwidgets).
      *
-     * @param {UserValueWidget} widget
+     *@param{UserValueWidget}widget
      */
-    registerSubWidget: function (widget) {
+    registerSubWidget:function(widget){
         this._userValueWidgets.push(widget);
     },
     /**
-     * Sets the user value that the widget should currently hold, for the
-     * given method name.
+     *Setstheuservaluethatthewidgetshouldcurrentlyhold,forthe
+     *givenmethodname.
      *
-     * Note: a widget typically only holds one value for the only method it
-     * supports. However, widgets can have several methods; in that case, the
-     * value is typically received for a first method and receiving the value
-     * for other ones should not affect the widget (otherwise, it means the
-     * methods are conflicting with each other).
+     *Note:awidgettypicallyonlyholdsonevaluefortheonlymethodit
+     *supports.However,widgetscanhaveseveralmethods;inthatcase,the
+     *valueistypicallyreceivedforafirstmethodandreceivingthevalue
+     *forotheronesshouldnotaffectthewidget(otherwise,itmeansthe
+     *methodsareconflictingwitheachother).
      *
-     * @param {string} value
-     * @param {string} [methodName]
+     *@param{string}value
+     *@param{string}[methodName]
      */
-    async setValue(value, methodName) {
-        this._value = value;
+    asyncsetValue(value,methodName){
+        this._value=value;
         this.el.classList.remove('o_we_preview');
     },
     /**
-     * @param {boolean} show
+     *@param{boolean}show
      */
-    toggleVisibility: function (show) {
-        this.el.classList.toggle('d-none', !show);
+    toggleVisibility:function(show){
+        this.el.classList.toggle('d-none',!show);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {FlectraEvent|Event}
-     * @returns {boolean}
+     *@private
+     *@param{FlectraEvent|Event}
+     *@returns{boolean}
      */
-    _handleNotifierEvent: function (ev) {
-        if (!ev) {
-            return true;
+    _handleNotifierEvent:function(ev){
+        if(!ev){
+            returntrue;
         }
-        if (ev._seen) {
-            return false;
+        if(ev._seen){
+            returnfalse;
         }
-        ev._seen = true;
-        if (ev.preventDefault) {
+        ev._seen=true;
+        if(ev.preventDefault){
             ev.preventDefault();
         }
-        return true;
+        returntrue;
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Should be called when an user event on the widget indicates a value
-     * change.
+     *Shouldbecalledwhenanusereventonthewidgetindicatesavalue
+     *change.
      *
-     * @private
-     * @param {FlectraEvent|Event} [ev]
+     *@private
+     *@param{FlectraEvent|Event}[ev]
      */
-    _onUserValueChange: function (ev) {
-        if (this._handleNotifierEvent(ev)) {
+    _onUserValueChange:function(ev){
+        if(this._handleNotifierEvent(ev)){
             this.notifyValueChange(false);
         }
     },
     /**
-     * Allows container widgets to add additional data if needed.
+     *Allowscontainerwidgetstoaddadditionaldataifneeded.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onUserValueNotification: function (ev) {
-        ev.data.widget = this;
+    _onUserValueNotification:function(ev){
+        ev.data.widget=this;
 
-        if (!ev.data.triggerWidgetsNames) {
-            ev.data.triggerWidgetsNames = [];
+        if(!ev.data.triggerWidgetsNames){
+            ev.data.triggerWidgetsNames=[];
         }
         ev.data.triggerWidgetsNames.push(...this._triggerWidgetsNames);
 
-        if (!ev.data.triggerWidgetsValues) {
-            ev.data.triggerWidgetsValues = [];
+        if(!ev.data.triggerWidgetsValues){
+            ev.data.triggerWidgetsValues=[];
         }
         ev.data.triggerWidgetsValues.push(...this._triggerWidgetsValues);
     },
     /**
-     * Should be called when an user event on the widget indicates a value
-     * preview.
+     *Shouldbecalledwhenanusereventonthewidgetindicatesavalue
+     *preview.
      *
-     * @private
-     * @param {FlectraEvent|Event} [ev]
+     *@private
+     *@param{FlectraEvent|Event}[ev]
      */
-    _onUserValuePreview: function (ev) {
-        if (this._handleNotifierEvent(ev)) {
+    _onUserValuePreview:function(ev){
+        if(this._handleNotifierEvent(ev)){
             this.notifyValueChange(true);
         }
     },
     /**
-     * Should be called when an user event on the widget indicates a value
-     * reset.
+     *Shouldbecalledwhenanusereventonthewidgetindicatesavalue
+     *reset.
      *
-     * @private
-     * @param {FlectraEvent|Event} [ev]
+     *@private
+     *@param{FlectraEvent|Event}[ev]
      */
-    _onUserValueReset: function (ev) {
-        if (this._handleNotifierEvent(ev)) {
+    _onUserValueReset:function(ev){
+        if(this._handleNotifierEvent(ev)){
             this.notifyValueChange('reset');
         }
     },
 });
 
-const ButtonUserValueWidget = UserValueWidget.extend({
-    tagName: 'we-button',
-    events: {
-        'click': '_onButtonClick',
-        'click [role="button"]': '_onInnerButtonClick',
-        'mouseenter': '_onUserValuePreview',
-        'mouseleave': '_onUserValueReset',
+constButtonUserValueWidget=UserValueWidget.extend({
+    tagName:'we-button',
+    events:{
+        'click':'_onButtonClick',
+        'click[role="button"]':'_onInnerButtonClick',
+        'mouseenter':'_onUserValuePreview',
+        'mouseleave':'_onUserValueReset',
     },
 
     /**
-     * @override
+     *@override
      */
-    start: function (parent, title, options) {
-        if (this.options && this.options.childNodes) {
-            this.options.childNodes.forEach(node => this.containerEl.appendChild(node));
+    start:function(parent,title,options){
+        if(this.options&&this.options.childNodes){
+            this.options.childNodes.forEach(node=>this.containerEl.appendChild(node));
         }
 
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    getActiveValue: function (methodName) {
-        const possibleValues = this._methodsParams.optionsPossibleValues[methodName];
-        return possibleValues && possibleValues[possibleValues.length - 1] || '';
+    getActiveValue:function(methodName){
+        constpossibleValues=this._methodsParams.optionsPossibleValues[methodName];
+        returnpossibleValues&&possibleValues[possibleValues.length-1]||'';
     },
     /**
-     * @override
+     *@override
      */
-    isActive: function () {
-        return (this.isPreviewed() !== this.el.classList.contains('active'));
+    isActive:function(){
+        return(this.isPreviewed()!==this.el.classList.contains('active'));
     },
     /**
-     * @override
+     *@override
      */
-    loadMethodsData: function (validMethodNames) {
-        this._super.apply(this, arguments);
-        for (const methodName of this._methodsNames) {
-            const possibleValues = this._methodsParams.optionsPossibleValues[methodName];
-            if (possibleValues.length <= 1) {
+    loadMethodsData:function(validMethodNames){
+        this._super.apply(this,arguments);
+        for(constmethodNameofthis._methodsNames){
+            constpossibleValues=this._methodsParams.optionsPossibleValues[methodName];
+            if(possibleValues.length<=1){
                 possibleValues.unshift('');
             }
         }
     },
     /**
-     * @override
+     *@override
      */
-    async setValue(value, methodName) {
-        await this._super(...arguments);
-        let active = !!value;
-        if (methodName) {
-            if (!this._methodsNames.includes(methodName)) {
+    asyncsetValue(value,methodName){
+        awaitthis._super(...arguments);
+        letactive=!!value;
+        if(methodName){
+            if(!this._methodsNames.includes(methodName)){
                 return;
             }
-            active = (this.getActiveValue(methodName) === value);
+            active=(this.getActiveValue(methodName)===value);
         }
-        this.el.classList.toggle('active', active);
+        this.el.classList.toggle('active',active);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onButtonClick: function (ev) {
-        if (!ev._innerButtonClicked) {
+    _onButtonClick:function(ev){
+        if(!ev._innerButtonClicked){
             this._onUserValueChange(ev);
         }
     },
     /**
-     * @private
+     *@private
      */
-    _onInnerButtonClick: function (ev) {
-        // Cannot just stop propagation as the click needs to be propagated to
-        // potential parent widgets for event delegation on those inner buttons.
-        ev._innerButtonClicked = true;
+    _onInnerButtonClick:function(ev){
+        //Cannotjuststoppropagationastheclickneedstobepropagatedto
+        //potentialparentwidgetsforeventdelegationonthoseinnerbuttons.
+        ev._innerButtonClicked=true;
     },
 });
 
-const CheckboxUserValueWidget = ButtonUserValueWidget.extend({
-    className: (ButtonUserValueWidget.prototype.className || '') + ' o_we_checkbox_wrapper',
+constCheckboxUserValueWidget=ButtonUserValueWidget.extend({
+    className:(ButtonUserValueWidget.prototype.className||'')+'o_we_checkbox_wrapper',
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        const checkboxEl = document.createElement('we-checkbox');
+    start:function(){
+        constcheckboxEl=document.createElement('we-checkbox');
         this.containerEl.appendChild(checkboxEl);
 
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    enable() {
+    enable(){
         this.$('we-checkbox').click();
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _onButtonClick(ev) {
-        if (!ev.target.closest('we-title, we-checkbox')) {
-            // Only consider clicks on the label and the checkbox control itself
+    _onButtonClick(ev){
+        if(!ev.target.closest('we-title,we-checkbox')){
+            //Onlyconsiderclicksonthelabelandthecheckboxcontrolitself
             return;
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 });
 
-const BaseSelectionUserValueWidget = UserValueWidget.extend({
+constBaseSelectionUserValueWidget=UserValueWidget.extend({
     /**
-     * @override
+     *@override
      */
-    async start() {
-        await this._super(...arguments);
+    asyncstart(){
+        awaitthis._super(...arguments);
 
-        this.menuEl = document.createElement('we-selection-items');
-        if (this.options && this.options.childNodes) {
-            this.options.childNodes.forEach(node => this.menuEl.appendChild(node));
+        this.menuEl=document.createElement('we-selection-items');
+        if(this.options&&this.options.childNodes){
+            this.options.childNodes.forEach(node=>this.menuEl.appendChild(node));
         }
         this.containerEl.appendChild(this.menuEl);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    getMethodsParams(methodName) {
-        const params = this._super(...arguments);
-        const activeWidget = this._getActiveSubWidget();
-        if (!activeWidget) {
-            return params;
+    getMethodsParams(methodName){
+        constparams=this._super(...arguments);
+        constactiveWidget=this._getActiveSubWidget();
+        if(!activeWidget){
+            returnparams;
         }
-        return Object.assign(activeWidget.getMethodsParams(...arguments), params);
+        returnObject.assign(activeWidget.getMethodsParams(...arguments),params);
     },
     /**
-     * @override
+     *@override
      */
-    getValue(methodName) {
-        const activeWidget = this._getActiveSubWidget();
-        if (activeWidget) {
-            return activeWidget.getActiveValue(methodName);
+    getValue(methodName){
+        constactiveWidget=this._getActiveSubWidget();
+        if(activeWidget){
+            returnactiveWidget.getActiveValue(methodName);
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    isContainer() {
-        return true;
+    isContainer(){
+        returntrue;
     },
     /**
-     * @override
+     *@override
      */
-    async setValue(value, methodName) {
-        const _super = this._super.bind(this);
-        for (const widget of this._userValueWidgets) {
-            await widget.setValue(NULL_ID, methodName);
+    asyncsetValue(value,methodName){
+        const_super=this._super.bind(this);
+        for(constwidgetofthis._userValueWidgets){
+            awaitwidget.setValue(NULL_ID,methodName);
         }
-        for (const widget of [...this._userValueWidgets].reverse()) {
-            await widget.setValue(value, methodName);
-            if (widget.isActive()) {
-                // Only one select item can be true at a time, we consider the
-                // last one if multiple would be active.
+        for(constwidgetof[...this._userValueWidgets].reverse()){
+            awaitwidget.setValue(value,methodName);
+            if(widget.isActive()){
+                //Onlyoneselectitemcanbetrueatatime,weconsiderthe
+                //lastoneifmultiplewouldbeactive.
                 return;
             }
         }
-        await _super(...arguments);
+        await_super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @returns {UserValueWidget|undefined}
+     *@private
+     *@returns{UserValueWidget|undefined}
      */
-    _getActiveSubWidget() {
-        const previewedWidget = this._userValueWidgets.find(widget => widget.isPreviewed());
-        if (previewedWidget) {
-            return previewedWidget;
+    _getActiveSubWidget(){
+        constpreviewedWidget=this._userValueWidgets.find(widget=>widget.isPreviewed());
+        if(previewedWidget){
+            returnpreviewedWidget;
         }
-        return this._userValueWidgets.find(widget => widget.isActive());
+        returnthis._userValueWidgets.find(widget=>widget.isActive());
     },
 });
 
-const SelectUserValueWidget = BaseSelectionUserValueWidget.extend({
-    tagName: 'we-select',
-    events: {
-        'click': '_onClick',
+constSelectUserValueWidget=BaseSelectionUserValueWidget.extend({
+    tagName:'we-select',
+    events:{
+        'click':'_onClick',
     },
 
     /**
-     * @override
+     *@override
      */
-    async start() {
-        await this._super(...arguments);
-        if (!this.menuEl.children.length) {
-            // Remove empty text nodes so that :empty css rule can work
-            // TODO this has been added here as a fix to be extra careful. In
-            // master we should just avoid adding text nodes inside
-            // we-selection-items in the first place.
-            while (this.menuEl.firstChild
-                    && !this.menuEl.firstChild.data.trim().length) {
+    asyncstart(){
+        awaitthis._super(...arguments);
+        if(!this.menuEl.children.length){
+            //Removeemptytextnodessothat:emptycssrulecanwork
+            //TODOthishasbeenaddedhereasafixtobeextracareful.In
+            //masterweshouldjustavoidaddingtextnodesinside
+            //we-selection-itemsinthefirstplace.
+            while(this.menuEl.firstChild
+                    &&!this.menuEl.firstChild.data.trim().length){
                 this.menuEl.firstChild.remove();
             }
         }
 
-        if (this.options && this.options.valueEl) {
-            this.containerEl.insertBefore(this.options.valueEl, this.menuEl);
+        if(this.options&&this.options.valueEl){
+            this.containerEl.insertBefore(this.options.valueEl,this.menuEl);
         }
 
-        this.menuTogglerEl = document.createElement('we-toggler');
-        this.icon = this.el.dataset.icon || false;
-        if (this.icon) {
+        this.menuTogglerEl=document.createElement('we-toggler');
+        this.icon=this.el.dataset.icon||false;
+        if(this.icon){
             this.el.classList.add('o_we_icon_select');
-            const iconEl = document.createElement('i');
-            iconEl.classList.add('fa', 'fa-fw', this.icon);
+            consticonEl=document.createElement('i');
+            iconEl.classList.add('fa','fa-fw',this.icon);
             this.menuTogglerEl.appendChild(iconEl);
         }
-        this.containerEl.insertBefore(this.menuTogglerEl, this.menuEl);
+        this.containerEl.insertBefore(this.menuTogglerEl,this.menuEl);
 
-        const dropdownCaretEl = document.createElement('span');
+        constdropdownCaretEl=document.createElement('span');
         dropdownCaretEl.classList.add('o_we_dropdown_caret');
         this.containerEl.appendChild(dropdownCaretEl);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    close: function () {
+    close:function(){
         this._super(...arguments);
-        if (this.menuTogglerEl) {
+        if(this.menuTogglerEl){
             this.menuTogglerEl.classList.remove('active');
         }
     },
     /**
-     * @override
+     *@override
      */
-    isPreviewed: function () {
-        return this._super(...arguments) || this.menuTogglerEl.classList.contains('active');
+    isPreviewed:function(){
+        returnthis._super(...arguments)||this.menuTogglerEl.classList.contains('active');
     },
     /**
-     * @override
+     *@override
      */
-    open() {
+    open(){
         this._super(...arguments);
         this.menuTogglerEl.classList.add('active');
     },
     /**
-     * @override
+     *@override
      */
-    async setValue() {
-        await this._super(...arguments);
+    asyncsetValue(){
+        awaitthis._super(...arguments);
 
-        if (this.icon) {
+        if(this.icon){
             return;
         }
 
-        if (this.menuTogglerItemEl) {
+        if(this.menuTogglerItemEl){
             this.menuTogglerItemEl.remove();
-            this.menuTogglerItemEl = null;
+            this.menuTogglerItemEl=null;
         }
 
-        let textContent = '';
-        const activeWidget = this._userValueWidgets.find(widget => !widget.isPreviewed() && widget.isActive());
-        if (activeWidget) {
-            const svgTag = activeWidget.el.querySelector('svg'); // useful to avoid searching text content in svg element
-            const value = (activeWidget.el.dataset.selectLabel || (!svgTag && activeWidget.el.textContent.trim()));
-            const imgSrc = activeWidget.el.dataset.img;
-            if (value) {
-                textContent = value;
-            } else if (imgSrc) {
-                this.menuTogglerItemEl = document.createElement('img');
-                this.menuTogglerItemEl.src = imgSrc;
-            } else {
-                const fakeImgEl = activeWidget.el.querySelector('.o_we_fake_img_item');
-                if (fakeImgEl) {
-                    this.menuTogglerItemEl = fakeImgEl.cloneNode(true);
+        lettextContent='';
+        constactiveWidget=this._userValueWidgets.find(widget=>!widget.isPreviewed()&&widget.isActive());
+        if(activeWidget){
+            constsvgTag=activeWidget.el.querySelector('svg');//usefultoavoidsearchingtextcontentinsvgelement
+            constvalue=(activeWidget.el.dataset.selectLabel||(!svgTag&&activeWidget.el.textContent.trim()));
+            constimgSrc=activeWidget.el.dataset.img;
+            if(value){
+                textContent=value;
+            }elseif(imgSrc){
+                this.menuTogglerItemEl=document.createElement('img');
+                this.menuTogglerItemEl.src=imgSrc;
+            }else{
+                constfakeImgEl=activeWidget.el.querySelector('.o_we_fake_img_item');
+                if(fakeImgEl){
+                    this.menuTogglerItemEl=fakeImgEl.cloneNode(true);
                 }
             }
-        } else {
-            textContent = "/";
+        }else{
+            textContent="/";
         }
 
-        this.menuTogglerEl.textContent = textContent;
-        if (this.menuTogglerItemEl) {
+        this.menuTogglerEl.textContent=textContent;
+        if(this.menuTogglerItemEl){
             this.menuTogglerEl.appendChild(this.menuTogglerItemEl);
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _shouldIgnoreClick(ev) {
-        return !!ev.target.closest('[role="button"]');
+    _shouldIgnoreClick(ev){
+        return!!ev.target.closest('[role="button"]');
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when the select is clicked anywhere -> open/close it.
+     *Calledwhentheselectisclickedanywhere->open/closeit.
      *
-     * @private
+     *@private
      */
-    _onClick: function (ev) {
-        if (this._shouldIgnoreClick(ev)) {
+    _onClick:function(ev){
+        if(this._shouldIgnoreClick(ev)){
             return;
         }
 
-        if (!this.menuTogglerEl.classList.contains('active')) {
+        if(!this.menuTogglerEl.classList.contains('active')){
             this.open();
-        } else {
+        }else{
             this.close();
         }
-        const activeButton = this._userValueWidgets.find(widget => widget.isActive());
-        if (activeButton) {
-            this.menuEl.scrollTop = activeButton.el.offsetTop - (this.menuEl.offsetHeight / 2);
+        constactiveButton=this._userValueWidgets.find(widget=>widget.isActive());
+        if(activeButton){
+            this.menuEl.scrollTop=activeButton.el.offsetTop-(this.menuEl.offsetHeight/2);
         }
     },
 });
 
-const ButtonGroupUserValueWidget = BaseSelectionUserValueWidget.extend({
-    tagName: 'we-button-group',
+constButtonGroupUserValueWidget=BaseSelectionUserValueWidget.extend({
+    tagName:'we-button-group',
 });
 
-const UnitUserValueWidget = UserValueWidget.extend({
+constUnitUserValueWidget=UserValueWidget.extend({
     /**
-     * @override
+     *@override
      */
-    start: async function () {
-        const unit = this.el.dataset.unit || '';
-        this.el.dataset.unit = unit;
-        if (this.el.dataset.saveUnit === undefined) {
-            this.el.dataset.saveUnit = unit;
+    start:asyncfunction(){
+        constunit=this.el.dataset.unit||'';
+        this.el.dataset.unit=unit;
+        if(this.el.dataset.saveUnit===undefined){
+            this.el.dataset.saveUnit=unit;
         }
 
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    getActiveValue: function (methodName) {
-        const activeValue = this._super(...arguments);
+    getActiveValue:function(methodName){
+        constactiveValue=this._super(...arguments);
 
-        const params = this._methodsParams;
-        if (!params.unit) {
-            return activeValue;
+        constparams=this._methodsParams;
+        if(!params.unit){
+            returnactiveValue;
         }
 
-        const defaultValue = this.getDefaultValue(methodName, false);
+        constdefaultValue=this.getDefaultValue(methodName,false);
 
-        return activeValue.split(/\s+/g).map(v => {
-            const numValue = parseFloat(v);
-            if (isNaN(numValue)) {
-                return defaultValue;
-            } else {
-                const value = weUtils.convertNumericToUnit(numValue, params.unit, params.saveUnit, params.cssProperty, this.$target);
-                return `${this._floatToStr(value)}${params.saveUnit}`;
+        returnactiveValue.split(/\s+/g).map(v=>{
+            constnumValue=parseFloat(v);
+            if(isNaN(numValue)){
+                returndefaultValue;
+            }else{
+                constvalue=weUtils.convertNumericToUnit(numValue,params.unit,params.saveUnit,params.cssProperty,this.$target);
+                return`${this._floatToStr(value)}${params.saveUnit}`;
             }
-        }).join(' ');
+        }).join('');
     },
     /**
-     * @override
-     * @param {boolean} [useInputUnit=false]
+     *@override
+     *@param{boolean}[useInputUnit=false]
      */
-    getDefaultValue: function (methodName, useInputUnit) {
-        const defaultValue = this._super(...arguments);
+    getDefaultValue:function(methodName,useInputUnit){
+        constdefaultValue=this._super(...arguments);
 
-        const params = this._methodsParams;
-        if (!params.unit) {
-            return defaultValue;
+        constparams=this._methodsParams;
+        if(!params.unit){
+            returndefaultValue;
         }
 
-        const unit = useInputUnit ? params.unit : params.saveUnit;
-        const numValue = weUtils.convertValueToUnit(defaultValue || '0', unit, params.cssProperty, this.$target);
-        if (isNaN(numValue)) {
-            return defaultValue;
+        constunit=useInputUnit?params.unit:params.saveUnit;
+        constnumValue=weUtils.convertValueToUnit(defaultValue||'0',unit,params.cssProperty,this.$target);
+        if(isNaN(numValue)){
+            returndefaultValue;
         }
-        return `${this._floatToStr(numValue)}${unit}`;
+        return`${this._floatToStr(numValue)}${unit}`;
     },
     /**
-     * @override
+     *@override
      */
-    isActive: function () {
-        const isSuperActive = this._super(...arguments);
-        const params = this._methodsParams;
-        if (!params.unit) {
-            return isSuperActive;
+    isActive:function(){
+        constisSuperActive=this._super(...arguments);
+        constparams=this._methodsParams;
+        if(!params.unit){
+            returnisSuperActive;
         }
-        return isSuperActive && this._floatToStr(parseFloat(this._value)) !== '0';
+        returnisSuperActive&&this._floatToStr(parseFloat(this._value))!=='0';
     },
     /**
-     * @override
+     *@override
      */
-    async setValue(value, methodName) {
-        const params = this._methodsParams;
-        if (params.unit) {
-            value = value.split(' ').map(v => {
-                const numValue = weUtils.convertValueToUnit(v, params.unit, params.cssProperty, this.$target);
-                if (isNaN(numValue)) {
-                    return ''; // Something not supported
+    asyncsetValue(value,methodName){
+        constparams=this._methodsParams;
+        if(params.unit){
+            value=value.split('').map(v=>{
+                constnumValue=weUtils.convertValueToUnit(v,params.unit,params.cssProperty,this.$target);
+                if(isNaN(numValue)){
+                    return'';//Somethingnotsupported
                 }
-                return this._floatToStr(numValue);
-            }).join(' ');
+                returnthis._floatToStr(numValue);
+            }).join('');
         }
-        return this._super(value, methodName);
+        returnthis._super(value,methodName);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Converts a floating value to a string, rounded to 5 digits without zeros.
+     *Convertsafloatingvaluetoastring,roundedto5digitswithoutzeros.
      *
-     * @private
-     * @param {number} value
-     * @returns {string}
+     *@private
+     *@param{number}value
+     *@returns{string}
      */
-    _floatToStr: function (value) {
-        return `${parseFloat(value.toFixed(5))}`;
+    _floatToStr:function(value){
+        return`${parseFloat(value.toFixed(5))}`;
     },
 });
 
-const InputUserValueWidget = UnitUserValueWidget.extend({
-    tagName: 'we-input',
-    events: {
-        'input input': '_onInputInput',
-        'blur input': '_onInputBlur',
-        'keydown input': '_onInputKeydown',
+constInputUserValueWidget=UnitUserValueWidget.extend({
+    tagName:'we-input',
+    events:{
+        'inputinput':'_onInputInput',
+        'blurinput':'_onInputBlur',
+        'keydowninput':'_onInputKeydown',
     },
 
     /**
-     * @override
+     *@override
      */
-    start: async function () {
-        await this._super(...arguments);
+    start:asyncfunction(){
+        awaitthis._super(...arguments);
 
-        const unit = this.el.dataset.unit;
-        this.inputEl = document.createElement('input');
-        this.inputEl.setAttribute('type', 'text');
-        this.inputEl.setAttribute('autocomplete', 'chrome-off');
-        this.inputEl.setAttribute('placeholder', this.el.getAttribute('placeholder') || '');
-        this.inputEl.classList.toggle('text-left', !unit);
-        this.inputEl.classList.toggle('text-right', !!unit);
+        constunit=this.el.dataset.unit;
+        this.inputEl=document.createElement('input');
+        this.inputEl.setAttribute('type','text');
+        this.inputEl.setAttribute('autocomplete','chrome-off');
+        this.inputEl.setAttribute('placeholder',this.el.getAttribute('placeholder')||'');
+        this.inputEl.classList.toggle('text-left',!unit);
+        this.inputEl.classList.toggle('text-right',!!unit);
         this.containerEl.appendChild(this.inputEl);
 
-        var unitEl = document.createElement('span');
-        unitEl.textContent = unit;
+        varunitEl=document.createElement('span');
+        unitEl.textContent=unit;
         this.containerEl.appendChild(unitEl);
-        if (unit.length > 3) {
+        if(unit.length>3){
             this.el.classList.add('o_we_large_input');
         }
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    async setValue() {
-        await this._super(...arguments);
-        this.inputEl.value = this._value;
+    asyncsetValue(){
+        awaitthis._super(...arguments);
+        this.inputEl.value=this._value;
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onInputInput: function (ev) {
-        this._value = this.inputEl.value;
+    _onInputInput:function(ev){
+        this._value=this.inputEl.value;
         this._onUserValuePreview(ev);
     },
     /**
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onInputBlur: function (ev) {
-        // Sometimes, an input is focusout for internal reason (like an undo
-        // recording) then focused again manually in the same JS stack
-        // execution. In that case, the blur should not trigger an option
-        // selection as the user did not leave the input. We thus defer the blur
-        // handling to then check that the target is indeed still blurred before
-        // executing the actual option selection.
-        setTimeout(() => {
-            if (ev.currentTarget === document.activeElement) {
+    _onInputBlur:function(ev){
+        //Sometimes,aninputisfocusoutforinternalreason(likeanundo
+        //recording)thenfocusedagainmanuallyinthesameJSstack
+        //execution.Inthatcase,theblurshouldnottriggeranoption
+        //selectionastheuserdidnotleavetheinput.Wethusdefertheblur
+        //handlingtothencheckthatthetargetisindeedstillblurredbefore
+        //executingtheactualoptionselection.
+        setTimeout(()=>{
+            if(ev.currentTarget===document.activeElement){
                 return;
             }
             this._onUserValueChange(ev);
         });
     },
     /**
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onInputKeydown: function (ev) {
-        switch (ev.which) {
-            case $.ui.keyCode.ENTER: {
+    _onInputKeydown:function(ev){
+        switch(ev.which){
+            case$.ui.keyCode.ENTER:{
                 this._onUserValueChange(ev);
                 break;
             }
-            case $.ui.keyCode.UP:
-            case $.ui.keyCode.DOWN: {
-                const input = ev.currentTarget;
-                const params = this._methodsParams;
-                if (!params.unit && !params.step) {
+            case$.ui.keyCode.UP:
+            case$.ui.keyCode.DOWN:{
+                constinput=ev.currentTarget;
+                constparams=this._methodsParams;
+                if(!params.unit&&!params.step){
                     break;
                 }
-                let value = parseFloat(input.value || input.placeholder);
-                if (isNaN(value)) {
-                    value = 0.0;
+                letvalue=parseFloat(input.value||input.placeholder);
+                if(isNaN(value)){
+                    value=0.0;
                 }
-                let step = parseFloat(params.step);
-                if (isNaN(step)) {
-                    step = 1.0;
+                letstep=parseFloat(params.step);
+                if(isNaN(step)){
+                    step=1.0;
                 }
-                value += (ev.which === $.ui.keyCode.UP ? step : -step);
-                input.value = this._floatToStr(value);
+                value+=(ev.which===$.ui.keyCode.UP?step:-step);
+                input.value=this._floatToStr(value);
                 $(input).trigger('input');
                 break;
             }
@@ -1223,201 +1223,201 @@ const InputUserValueWidget = UnitUserValueWidget.extend({
     },
 });
 
-const MultiUserValueWidget = UserValueWidget.extend({
-    tagName: 'we-multi',
+constMultiUserValueWidget=UserValueWidget.extend({
+    tagName:'we-multi',
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        if (this.options && this.options.childNodes) {
-            this.options.childNodes.forEach(node => this.containerEl.appendChild(node));
+    start:function(){
+        if(this.options&&this.options.childNodes){
+            this.options.childNodes.forEach(node=>this.containerEl.appendChild(node));
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    getValue: function (methodName) {
-        const value = this._userValueWidgets.map(widget => {
-            return widget.getValue(methodName);
-        }).join(' ').trim();
+    getValue:function(methodName){
+        constvalue=this._userValueWidgets.map(widget=>{
+            returnwidget.getValue(methodName);
+        }).join('').trim();
 
-        return value || this._super(...arguments);
+        returnvalue||this._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    isContainer: function () {
-        return true;
+    isContainer:function(){
+        returntrue;
     },
     /**
-     * @override
+     *@override
      */
-    async setValue(value, methodName) {
-        let values = value.split(/\s*\|\s*/g);
-        if (values.length === 1) {
-            values = value.split(/\s+/g);
+    asyncsetValue(value,methodName){
+        letvalues=value.split(/\s*\|\s*/g);
+        if(values.length===1){
+            values=value.split(/\s+/g);
         }
-        for (let i = 0; i < this._userValueWidgets.length - 1; i++) {
-            await this._userValueWidgets[i].setValue(values.shift() || '', methodName);
+        for(leti=0;i<this._userValueWidgets.length-1;i++){
+            awaitthis._userValueWidgets[i].setValue(values.shift()||'',methodName);
         }
-        await this._userValueWidgets[this._userValueWidgets.length - 1].setValue(values.join(' '), methodName);
+        awaitthis._userValueWidgets[this._userValueWidgets.length-1].setValue(values.join(''),methodName);
     },
 });
 
-const ColorpickerUserValueWidget = SelectUserValueWidget.extend({
-    className: (SelectUserValueWidget.prototype.className || '') + ' o_we_so_color_palette',
-    custom_events: _.extend({}, SelectUserValueWidget.prototype.custom_events, {
-        'custom_color_picked': '_onCustomColorPicked',
-        'color_picked': '_onColorPicked',
-        'color_hover': '_onColorHovered',
-        'color_leave': '_onColorLeft',
-        'enter_key_color_colorpicker': '_onEnterKey'
+constColorpickerUserValueWidget=SelectUserValueWidget.extend({
+    className:(SelectUserValueWidget.prototype.className||'')+'o_we_so_color_palette',
+    custom_events:_.extend({},SelectUserValueWidget.prototype.custom_events,{
+        'custom_color_picked':'_onCustomColorPicked',
+        'color_picked':'_onColorPicked',
+        'color_hover':'_onColorHovered',
+        'color_leave':'_onColorLeft',
+        'enter_key_color_colorpicker':'_onEnterKey'
     }),
 
     /**
-     * @override
+     *@override
      */
-    start: async function () {
-        const _super = this._super.bind(this);
-        const args = arguments;
+    start:asyncfunction(){
+        const_super=this._super.bind(this);
+        constargs=arguments;
 
-        if (this.options.dataAttributes.lazyPalette === 'true') {
-            // TODO review in master, this was done in stable to keep the speed
-            // fix as stable as possible (to have a reference to a widget even
-            // if not a colorPalette widget).
-            this.colorPalette = new Widget(this);
-            this.colorPalette.getColorNames = () => [];
-            await this.colorPalette.appendTo(document.createDocumentFragment());
-        } else {
-            await this._renderColorPalette();
+        if(this.options.dataAttributes.lazyPalette==='true'){
+            //TODOreviewinmaster,thiswasdoneinstabletokeepthespeed
+            //fixasstableaspossible(tohaveareferencetoawidgeteven
+            //ifnotacolorPalettewidget).
+            this.colorPalette=newWidget(this);
+            this.colorPalette.getColorNames=()=>[];
+            awaitthis.colorPalette.appendTo(document.createDocumentFragment());
+        }else{
+            awaitthis._renderColorPalette();
         }
 
-        // Build the select element with a custom span to hold the color preview
-        this.colorPreviewEl = document.createElement('span');
+        //Buildtheselectelementwithacustomspantoholdthecolorpreview
+        this.colorPreviewEl=document.createElement('span');
         this.colorPreviewEl.classList.add('o_we_color_preview');
-        this.options.childNodes = [this.colorPalette.el];
-        this.options.valueEl = this.colorPreviewEl;
+        this.options.childNodes=[this.colorPalette.el];
+        this.options.valueEl=this.colorPreviewEl;
 
-        return _super(...args);
+        return_super(...args);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    open: function () {
-        if (this.colorPalette.setSelectedColor) {
+    open:function(){
+        if(this.colorPalette.setSelectedColor){
             this.colorPalette.setSelectedColor(this._value);
-        } else {
-            // TODO review in master, this does async stuff. Maybe the open
-            // method should now be async. This is not really robust as the
-            // colorPalette can be used without it to be fully rendered but
-            // the use of the saved promise where we can should mitigate that
-            // issue.
-            this._colorPaletteRenderPromise = this._renderColorPalette();
+        }else{
+            //TODOreviewinmaster,thisdoesasyncstuff.Maybetheopen
+            //methodshouldnowbeasync.Thisisnotreallyrobustasthe
+            //colorPalettecanbeusedwithoutittobefullyrenderedbut
+            //theuseofthesavedpromisewherewecanshouldmitigatethat
+            //issue.
+            this._colorPaletteRenderPromise=this._renderColorPalette();
         }
         this._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    close: function () {
+    close:function(){
         this._super(...arguments);
-        if (this._customColorValue && this._customColorValue !== this._value) {
-            this._value = this._customColorValue;
-            this._customColorValue = false;
+        if(this._customColorValue&&this._customColorValue!==this._value){
+            this._value=this._customColorValue;
+            this._customColorValue=false;
             this._onUserValueChange();
         }
     },
     /**
-     * @override
+     *@override
      */
-    getMethodsParams: function () {
-        return _.extend(this._super(...arguments), {
-            colorNames: this.colorPalette.getColorNames(),
+    getMethodsParams:function(){
+        return_.extend(this._super(...arguments),{
+            colorNames:this.colorPalette.getColorNames(),
         });
     },
     /**
-     * @override
+     *@override
      */
-    getValue: function (methodName) {
-        if (typeof this._previewColor === 'string') {
-            return this._previewColor;
+    getValue:function(methodName){
+        if(typeofthis._previewColor==='string'){
+            returnthis._previewColor;
         }
-        if (typeof this._customColorValue === 'string') {
-            return this._customColorValue;
+        if(typeofthis._customColorValue==='string'){
+            returnthis._customColorValue;
         }
-        let value = this._super(...arguments);
-        if (value) {
-            const useCssColor = this.options.dataAttributes.hasOwnProperty('useCssColor');
-            const cssCompatible = this.options.dataAttributes.hasOwnProperty('cssCompatible');
-            if ((useCssColor || cssCompatible) && !ColorpickerWidget.isCSSColor(value)) {
-                if (useCssColor) {
-                    value = weUtils.getCSSVariableValue(value);
-                } else {
-                    value = `var(--${value})`;
+        letvalue=this._super(...arguments);
+        if(value){
+            constuseCssColor=this.options.dataAttributes.hasOwnProperty('useCssColor');
+            constcssCompatible=this.options.dataAttributes.hasOwnProperty('cssCompatible');
+            if((useCssColor||cssCompatible)&&!ColorpickerWidget.isCSSColor(value)){
+                if(useCssColor){
+                    value=weUtils.getCSSVariableValue(value);
+                }else{
+                    value=`var(--${value})`;
                 }
             }
         }
-        return value;
+        returnvalue;
     },
     /**
-     * @override
+     *@override
      */
-    isContainer: function () {
-        return false;
+    isContainer:function(){
+        returnfalse;
     },
     /**
-     * @override
+     *@override
      */
-    isActive: function () {
-        return !weUtils.areCssValuesEqual(this._value, 'rgba(0, 0, 0, 0)');
+    isActive:function(){
+        return!weUtils.areCssValuesEqual(this._value,'rgba(0,0,0,0)');
     },
     /**
-     * Updates the color preview + re-render the whole color palette widget.
+     *Updatesthecolorpreview+re-renderthewholecolorpalettewidget.
      *
-     * @override
+     *@override
      */
-    async setValue(color) {
-        await this._super(...arguments);
+    asyncsetValue(color){
+        awaitthis._super(...arguments);
 
-        await this._colorPaletteRenderPromise;
+        awaitthis._colorPaletteRenderPromise;
 
-        const classes = weUtils.computeColorClasses(this.colorPalette.getColorNames());
+        constclasses=weUtils.computeColorClasses(this.colorPalette.getColorNames());
         this.colorPreviewEl.classList.remove(...classes);
         this.colorPreviewEl.style.removeProperty('background-color');
 
-        if (this._value) {
-            if (ColorpickerWidget.isCSSColor(this._value)) {
-                this.colorPreviewEl.style.backgroundColor = this._value;
-            } else if (weUtils.isColorCombinationName(this._value)) {
-                this.colorPreviewEl.classList.add('o_cc', `o_cc${this._value}`);
-            } else {
-                // Checking if the className actually exists seems overkill but
-                // it is actually needed to prevent a crash. As an example, if a
-                // colorpicker widget is linked to a SnippetOption instance's
-                // `selectStyle` method designed to handle the "border-color"
-                // property of an element, the value received can be split if
-                // the item uses different colors for its top/right/bottom/left
-                // borders. For instance, you could receive "red blue" if the
-                // item as red top and bottom borders and blue left and right
-                // borders, in which case you would reach this `else` and try to
-                // add the class "bg-red blue" which would crash because of the
-                // space inside). In that case, we simply do not show any color.
-                // We could choose to handle this split-value case specifically
-                // but it was decided that this is enough for the moment.
-                const className = `bg-${this._value}`;
-                if (classes.includes(className)) {
+        if(this._value){
+            if(ColorpickerWidget.isCSSColor(this._value)){
+                this.colorPreviewEl.style.backgroundColor=this._value;
+            }elseif(weUtils.isColorCombinationName(this._value)){
+                this.colorPreviewEl.classList.add('o_cc',`o_cc${this._value}`);
+            }else{
+                //CheckingiftheclassNameactuallyexistsseemsoverkillbut
+                //itisactuallyneededtopreventacrash.Asanexample,ifa
+                //colorpickerwidgetislinkedtoaSnippetOptioninstance's
+                //`selectStyle`methoddesignedtohandlethe"border-color"
+                //propertyofanelement,thevaluereceivedcanbesplitif
+                //theitemusesdifferentcolorsforitstop/right/bottom/left
+                //borders.Forinstance,youcouldreceive"redblue"ifthe
+                //itemasredtopandbottombordersandblueleftandright
+                //borders,inwhichcaseyouwouldreachthis`else`andtryto
+                //addtheclass"bg-redblue"whichwouldcrashbecauseofthe
+                //spaceinside).Inthatcase,wesimplydonotshowanycolor.
+                //Wecouldchoosetohandlethissplit-valuecasespecifically
+                //butitwasdecidedthatthisisenoughforthemoment.
+                constclassName=`bg-${this._value}`;
+                if(classes.includes(className)){
                     this.colorPreviewEl.classList.add(className);
                 }
             }
@@ -1426,3411 +1426,3411 @@ const ColorpickerUserValueWidget = SelectUserValueWidget.extend({
 
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @returns {Promise}
+     *@private
+     *@returns{Promise}
      */
-    _renderColorPalette: function () {
-        const options = {
-            selectedColor: this._value,
+    _renderColorPalette:function(){
+        constoptions={
+            selectedColor:this._value,
         };
-        if (this.options.dataAttributes.excluded) {
-            options.excluded = this.options.dataAttributes.excluded.replace(/ /g, '').split(',');
+        if(this.options.dataAttributes.excluded){
+            options.excluded=this.options.dataAttributes.excluded.replace(//g,'').split(',');
         }
-        if (this.options.dataAttributes.withCombinations) {
-            options.withCombinations = !!this.options.dataAttributes.withCombinations;
+        if(this.options.dataAttributes.withCombinations){
+            options.withCombinations=!!this.options.dataAttributes.withCombinations;
         }
-        const oldColorPalette = this.colorPalette;
-        this.colorPalette = new ColorPaletteWidget(this, options);
-        if (oldColorPalette) {
-            return this.colorPalette.insertAfter(oldColorPalette.el).then(() => {
+        constoldColorPalette=this.colorPalette;
+        this.colorPalette=newColorPaletteWidget(this,options);
+        if(oldColorPalette){
+            returnthis.colorPalette.insertAfter(oldColorPalette.el).then(()=>{
                 oldColorPalette.destroy();
             });
         }
-        return this.colorPalette.appendTo(document.createDocumentFragment());
+        returnthis.colorPalette.appendTo(document.createDocumentFragment());
     },
     /**
-     * @override
+     *@override
      */
-    _shouldIgnoreClick(ev) {
-        return ev.originalEvent.__isColorpickerClick || this._super(...arguments);
+    _shouldIgnoreClick(ev){
+        returnev.originalEvent.__isColorpickerClick||this._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when a custom color is selected -> preview the color
-     * and set the current value. Update of this value on close
+     *Calledwhenacustomcolorisselected->previewthecolor
+     *andsetthecurrentvalue.Updateofthisvalueonclose
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onCustomColorPicked: function (ev) {
-        this._customColorValue = ev.data.color;
+    _onCustomColorPicked:function(ev){
+        this._customColorValue=ev.data.color;
     },
     /**
-     * Called when a color button is clicked -> confirms the preview.
+     *Calledwhenacolorbuttonisclicked->confirmsthepreview.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onColorPicked: function (ev) {
-        this._previewColor = false;
-        this._customColorValue = false;
-        this._value = ev.data.color;
+    _onColorPicked:function(ev){
+        this._previewColor=false;
+        this._customColorValue=false;
+        this._value=ev.data.color;
         this._onUserValueChange(ev);
     },
     /**
-     * Called when a color button is entered -> previews the background color.
+     *Calledwhenacolorbuttonisentered->previewsthebackgroundcolor.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onColorHovered: function (ev) {
-        this._previewColor = ev.data.color;
+    _onColorHovered:function(ev){
+        this._previewColor=ev.data.color;
         this._onUserValuePreview(ev);
     },
     /**
-     * Called when a color button is left -> cancels the preview.
+     *Calledwhenacolorbuttonisleft->cancelsthepreview.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onColorLeft: function (ev) {
-        this._previewColor = false;
+    _onColorLeft:function(ev){
+        this._previewColor=false;
         this._onUserValueReset(ev);
     },
     /**
-     * @private
+     *@private
      */
-    _onEnterKey: function () {
+    _onEnterKey:function(){
         this.close();
     },
 });
 
-const MediapickerUserValueWidget = UserValueWidget.extend({
-    tagName: 'we-button',
-    events: {
-        'click': '_onEditMedia',
+constMediapickerUserValueWidget=UserValueWidget.extend({
+    tagName:'we-button',
+    events:{
+        'click':'_onEditMedia',
     },
 
     /**
-     * @override
+     *@override
      */
-    async start() {
-        await this._super(...arguments);
-        const iconEl = document.createElement('i');
-        if (this.options.dataAttributes.buttonStyle) {
-            iconEl.classList.add('fa', 'fa-fw', 'fa-camera');
-        } else {
-            iconEl.classList.add('fa', 'fa-fw', 'fa-refresh', 'mr-1');
+    asyncstart(){
+        awaitthis._super(...arguments);
+        consticonEl=document.createElement('i');
+        if(this.options.dataAttributes.buttonStyle){
+            iconEl.classList.add('fa','fa-fw','fa-camera');
+        }else{
+            iconEl.classList.add('fa','fa-fw','fa-refresh','mr-1');
             this.el.classList.add('o_we_no_toggle');
-            this.containerEl.textContent = _t("Replace media");
+            this.containerEl.textContent=_t("Replacemedia");
         }
         $(this.containerEl).prepend(iconEl);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Creates and opens a media dialog to edit a given element's media.
+     *Createsandopensamediadialogtoeditagivenelement'smedia.
      *
-     * @private
-     * @param {HTMLElement} el the element whose media should be edited
-     * @param {boolean} [images] whether images should be available
-     *   default: false
-     * @param {boolean} [videos] whether videos should be available
-     *   default: false
+     *@private
+     *@param{HTMLElement}eltheelementwhosemediashouldbeedited
+     *@param{boolean}[images]whetherimagesshouldbeavailable
+     *  default:false
+     *@param{boolean}[videos]whethervideosshouldbeavailable
+     *  default:false
      */
-    _openDialog(el, {images = false, videos = false}) {
-        el.src = this._value;
-        const $editable = this.$target.closest('.o_editable');
-        const mediaDialog = new weWidgets.MediaDialog(this, {
-            noImages: !images,
-            noVideos: !videos,
-            noIcons: true,
-            noDocuments: true,
-            isForBgVideo: true,
-            'res_model': $editable.data('oe-model'),
-            'res_id': $editable.data('oe-id'),
-        }, el).open();
-        return mediaDialog;
+    _openDialog(el,{images=false,videos=false}){
+        el.src=this._value;
+        const$editable=this.$target.closest('.o_editable');
+        constmediaDialog=newweWidgets.MediaDialog(this,{
+            noImages:!images,
+            noVideos:!videos,
+            noIcons:true,
+            noDocuments:true,
+            isForBgVideo:true,
+            'res_model':$editable.data('oe-model'),
+            'res_id':$editable.data('oe-id'),
+        },el).open();
+        returnmediaDialog;
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    async setValue() {
-        await this._super(...arguments);
-        this.el.classList.toggle('active', this.isActive());
+    asyncsetValue(){
+        awaitthis._super(...arguments);
+        this.el.classList.toggle('active',this.isActive());
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when the edit button is clicked.
+     *Calledwhentheeditbuttonisclicked.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onEditMedia: function (ev) {},
+    _onEditMedia:function(ev){},
 });
 
-const ImagepickerUserValueWidget = MediapickerUserValueWidget.extend({
+constImagepickerUserValueWidget=MediapickerUserValueWidget.extend({
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _onEditMedia(ev) {
-        // Need a dummy element for the media dialog to modify.
-        const dummyEl = document.createElement('img');
-        const dialog = this._openDialog(dummyEl, {images: true});
-        dialog.on('save', this, data => {
-            // Accessing the value directly through dummyEl.src converts the url to absolute,
-            // using getAttribute allows us to keep the url as it was inserted in the DOM
-            // which can be useful to compare it to values stored in db.
-            this._value = dummyEl.getAttribute('src');
+    _onEditMedia(ev){
+        //Needadummyelementforthemediadialogtomodify.
+        constdummyEl=document.createElement('img');
+        constdialog=this._openDialog(dummyEl,{images:true});
+        dialog.on('save',this,data=>{
+            //AccessingthevaluedirectlythroughdummyEl.srcconvertstheurltoabsolute,
+            //usinggetAttributeallowsustokeeptheurlasitwasinsertedintheDOM
+            //whichcanbeusefultocompareittovaluesstoredindb.
+            this._value=dummyEl.getAttribute('src');
             this._onUserValueChange();
         });
     },
 });
 
-const VideopickerUserValueWidget = MediapickerUserValueWidget.extend({
+constVideopickerUserValueWidget=MediapickerUserValueWidget.extend({
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _onEditMedia(ev) {
-        // Need a dummy element for the media dialog to modify.
-        const dummyEl = document.createElement('iframe');
-        const dialog = this._openDialog(dummyEl, {videos: true});
-        dialog.on('save', this, data => {
-            this._value = data.bgVideoSrc;
+    _onEditMedia(ev){
+        //Needadummyelementforthemediadialogtomodify.
+        constdummyEl=document.createElement('iframe');
+        constdialog=this._openDialog(dummyEl,{videos:true});
+        dialog.on('save',this,data=>{
+            this._value=data.bgVideoSrc;
             this._onUserValueChange();
         });
     },
 });
 
-const DatetimePickerUserValueWidget = InputUserValueWidget.extend({
-    events: { // Explicitely not consider all InputUserValueWidget events
-        'blur input': '_onInputBlur',
-        'change.datetimepicker': '_onDateTimePickerChange',
-        'error.datetimepicker': '_onDateTimePickerError',
+constDatetimePickerUserValueWidget=InputUserValueWidget.extend({
+    events:{//ExplicitelynotconsiderallInputUserValueWidgetevents
+        'blurinput':'_onInputBlur',
+        'change.datetimepicker':'_onDateTimePickerChange',
+        'error.datetimepicker':'_onDateTimePickerError',
     },
 
     /**
-     * @override
+     *@override
      */
-    init: function () {
+    init:function(){
         this._super(...arguments);
-        this._value = moment().unix().toString();
-        this.__libInput = 0;
+        this._value=moment().unix().toString();
+        this.__libInput=0;
     },
     /**
-     * @override
+     *@override
      */
-    start: async function () {
-        await this._super(...arguments);
+    start:asyncfunction(){
+        awaitthis._super(...arguments);
 
-        const datetimePickerId = _.uniqueId('datetimepicker');
+        constdatetimePickerId=_.uniqueId('datetimepicker');
         this.el.classList.add('o_we_large_input');
-        this.inputEl.classList.add('datetimepicker-input', 'mx-0', 'text-left');
-        this.inputEl.setAttribute('id', datetimePickerId);
-        this.inputEl.setAttribute('data-target', '#' + datetimePickerId);
+        this.inputEl.classList.add('datetimepicker-input','mx-0','text-left');
+        this.inputEl.setAttribute('id',datetimePickerId);
+        this.inputEl.setAttribute('data-target','#'+datetimePickerId);
 
-        const datepickersOptions = {
-            minDate: moment({ y: 1000 }),
-            maxDate: moment().add(200, 'y'),
-            calendarWeeks: true,
-            defaultDate: moment().format(),
-            icons: {
-                close: 'fa fa-check primary',
+        constdatepickersOptions={
+            minDate:moment({y:1000}),
+            maxDate:moment().add(200,'y'),
+            calendarWeeks:true,
+            defaultDate:moment().format(),
+            icons:{
+                close:'fafa-checkprimary',
             },
-            locale: moment.locale(),
-            format: time.getLangDatetimeFormat(),
-            sideBySide: true,
-            buttons: {
-                showClose: true,
-                showToday: true,
+            locale:moment.locale(),
+            format:time.getLangDatetimeFormat(),
+            sideBySide:true,
+            buttons:{
+                showClose:true,
+                showToday:true,
             },
-            widgetParent: 'body',
+            widgetParent:'body',
 
-            // Open the datetimepicker on focus not on click. This allows to
-            // take care of a bug which is due to the summernote editor:
-            // sometimes, the datetimepicker loses the focus then get it back
-            // in the same execution flow. This was making the datepicker close
-            // for no apparent reason. Now, it only closes then reopens directly
-            // without it be possible to notice.
-            allowInputToggle: true,
+            //Openthedatetimepickeronfocusnotonclick.Thisallowsto
+            //takecareofabugwhichisduetothesummernoteeditor:
+            //sometimes,thedatetimepickerlosesthefocusthengetitback
+            //inthesameexecutionflow.Thiswasmakingthedatepickerclose
+            //fornoapparentreason.Now,itonlyclosesthenreopensdirectly
+            //withoutitbepossibletonotice.
+            allowInputToggle:true,
         };
         this.__libInput++;
-        const $input = $(this.inputEl);
+        const$input=$(this.inputEl);
         $input.datetimepicker(datepickersOptions);
         this.__libInput--;
 
-        // Monkey-patch the library option to add custom classes on the pickers
-        const libObject = $input.data('datetimepicker');
-        const oldFunc = libObject._getTemplate;
-        libObject._getTemplate = function () {
-            const $template = oldFunc.call(this, ...arguments);
-            $template.addClass('o_we_no_overlay o_we_datetimepicker');
-            return $template;
+        //Monkey-patchthelibraryoptiontoaddcustomclassesonthepickers
+        constlibObject=$input.data('datetimepicker');
+        constoldFunc=libObject._getTemplate;
+        libObject._getTemplate=function(){
+            const$template=oldFunc.call(this,...arguments);
+            $template.addClass('o_we_no_overlayo_we_datetimepicker');
+            return$template;
         };
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    isPreviewed: function () {
-        return this._super(...arguments) || !!$(this.inputEl).data('datetimepicker').widget;
+    isPreviewed:function(){
+        returnthis._super(...arguments)||!!$(this.inputEl).data('datetimepicker').widget;
     },
     /**
-     * @override
+     *@override
      */
-    async setValue() {
-        await this._super(...arguments);
-        let momentObj = moment.unix(this._value);
-        if (!momentObj.isValid()) {
-            momentObj = moment();
+    asyncsetValue(){
+        awaitthis._super(...arguments);
+        letmomentObj=moment.unix(this._value);
+        if(!momentObj.isValid()){
+            momentObj=moment();
         }
         this.__libInput++;
-        $(this.inputEl).datetimepicker('date', momentObj);
+        $(this.inputEl).datetimepicker('date',momentObj);
         this.__libInput--;
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onDateTimePickerChange: function (ev) {
-        if (this.__libInput > 0) {
+    _onDateTimePickerChange:function(ev){
+        if(this.__libInput>0){
             return;
         }
-        if (!ev.date || !ev.date.isValid()) {
+        if(!ev.date||!ev.date.isValid()){
             return;
         }
-        this._value = ev.date.unix().toString();
+        this._value=ev.date.unix().toString();
         this._onUserValuePreview(ev);
     },
     /**
-     * Prevents crash manager to throw CORS error. Note that library already
-     * clears the wrong date format.
+     *PreventscrashmanagertothrowCORSerror.Notethatlibraryalready
+     *clearsthewrongdateformat.
      */
-    _onDateTimePickerError: function (ev) {
+    _onDateTimePickerError:function(ev){
         ev.stopPropagation();
     },
 });
 
-const RangeUserValueWidget = UnitUserValueWidget.extend({
-    tagName: 'we-range',
-    events: {
-        'change input': '_onInputChange',
+constRangeUserValueWidget=UnitUserValueWidget.extend({
+    tagName:'we-range',
+    events:{
+        'changeinput':'_onInputChange',
     },
 
     /**
-     * @override
+     *@override
      */
-    async start() {
-        await this._super(...arguments);
-        this.input = document.createElement('input');
-        this.input.type = "range";
-        let min = this.el.dataset.min && parseFloat(this.el.dataset.min) || 0;
-        let max = this.el.dataset.max && parseFloat(this.el.dataset.max) || 100;
-        const step = this.el.dataset.step && parseFloat(this.el.dataset.step) || 1;
-        if (min > max) {
-            [min, max] = [max, min];
+    asyncstart(){
+        awaitthis._super(...arguments);
+        this.input=document.createElement('input');
+        this.input.type="range";
+        letmin=this.el.dataset.min&&parseFloat(this.el.dataset.min)||0;
+        letmax=this.el.dataset.max&&parseFloat(this.el.dataset.max)||100;
+        conststep=this.el.dataset.step&&parseFloat(this.el.dataset.step)||1;
+        if(min>max){
+            [min,max]=[max,min];
             this.input.classList.add('o_we_inverted_range');
         }
-        this.input.setAttribute('min', min);
-        this.input.setAttribute('max', max);
-        this.input.setAttribute('step', step);
+        this.input.setAttribute('min',min);
+        this.input.setAttribute('max',max);
+        this.input.setAttribute('step',step);
         this.containerEl.appendChild(this.input);
 
-        this._onInputChange = _.debounce(this._onInputChange, 100);
+        this._onInputChange=_.debounce(this._onInputChange,100);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    async setValue(value, methodName) {
-        await this._super(...arguments);
-        this.input.value = this._value;
+    asyncsetValue(value,methodName){
+        awaitthis._super(...arguments);
+        this.input.value=this._value;
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onInputChange(ev) {
-        this._value = ev.target.value;
+    _onInputChange(ev){
+        this._value=ev.target.value;
         this._onUserValueChange(ev);
     },
 });
 
-const SelectPagerUserValueWidget = SelectUserValueWidget.extend({
-    className: (SelectUserValueWidget.prototype.className || '') + ' o_we_select_pager',
-    events: Object.assign({}, SelectUserValueWidget.prototype.events, {
-        'click .o_we_pager_next, .o_we_pager_prev': '_onPageChange',
+constSelectPagerUserValueWidget=SelectUserValueWidget.extend({
+    className:(SelectUserValueWidget.prototype.className||'')+'o_we_select_pager',
+    events:Object.assign({},SelectUserValueWidget.prototype.events,{
+        'click.o_we_pager_next,.o_we_pager_prev':'_onPageChange',
     }),
 
     /**
-     * @override
+     *@override
      */
-    async start() {
-        const _super = this._super.bind(this);
-        this.pages = this.options.childNodes.filter(node => node.matches && node.matches('we-select-page'));
-        this.numPages = this.pages.length;
+    asyncstart(){
+        const_super=this._super.bind(this);
+        this.pages=this.options.childNodes.filter(node=>node.matches&&node.matches('we-select-page'));
+        this.numPages=this.pages.length;
 
-        const prev = document.createElement('i');
-        prev.classList.add('o_we_pager_prev', 'fa', 'fa-chevron-left');
+        constprev=document.createElement('i');
+        prev.classList.add('o_we_pager_prev','fa','fa-chevron-left');
 
-        this.pageNum = document.createElement('span');
-        this.currentPage = 0;
+        this.pageNum=document.createElement('span');
+        this.currentPage=0;
 
-        const next = document.createElement('i');
-        next.classList.add('o_we_pager_next', 'fa', 'fa-chevron-right');
+        constnext=document.createElement('i');
+        next.classList.add('o_we_pager_next','fa','fa-chevron-right');
 
-        const pagerControls = document.createElement('div');
+        constpagerControls=document.createElement('div');
         pagerControls.classList.add('o_we_pager_controls');
         pagerControls.appendChild(prev);
         pagerControls.appendChild(this.pageNum);
         pagerControls.appendChild(next);
 
-        this.pageName = document.createElement('b');
-        const pagerHeader = document.createElement('div');
+        this.pageName=document.createElement('b');
+        constpagerHeader=document.createElement('div');
         pagerHeader.classList.add('o_we_pager_header');
         pagerHeader.appendChild(this.pageName);
         pagerHeader.appendChild(pagerControls);
 
-        await _super(...arguments);
+        await_super(...arguments);
         this.menuEl.classList.add('o_we_has_pager');
         $(this.menuEl).prepend(pagerHeader);
         this._updatePage();
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _shouldIgnoreClick(ev) {
-        return !!ev.target.closest('.o_we_pager_header') || this._super(...arguments);
+    _shouldIgnoreClick(ev){
+        return!!ev.target.closest('.o_we_pager_header')||this._super(...arguments);
     },
     /**
-     * Updates the pager's page number display.
+     *Updatesthepager'spagenumberdisplay.
      *
-     * @private
+     *@private
      */
-    _updatePage() {
-        this.pages.forEach((page, i) => page.classList.toggle('active', i === this.currentPage));
-        this.pageNum.textContent = `${this.currentPage + 1}/${this.numPages}`;
-        const activePage = this.pages.find((page, i) => i === this.currentPage);
-        this.pageName.textContent = activePage.getAttribute('string');
+    _updatePage(){
+        this.pages.forEach((page,i)=>page.classList.toggle('active',i===this.currentPage));
+        this.pageNum.textContent=`${this.currentPage+1}/${this.numPages}`;
+        constactivePage=this.pages.find((page,i)=>i===this.currentPage);
+        this.pageName.textContent=activePage.getAttribute('string');
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Goes to the previous/next page with wrap-around.
+     *Goestotheprevious/nextpagewithwrap-around.
      *
-     * @private
+     *@private
      */
-    _onPageChange(ev) {
+    _onPageChange(ev){
         ev.preventDefault();
         ev.stopPropagation();
-        const delta = ev.target.matches('.o_we_pager_next') ? 1 : -1;
-        this.currentPage = (this.currentPage + this.numPages + delta) % this.numPages;
+        constdelta=ev.target.matches('.o_we_pager_next')?1:-1;
+        this.currentPage=(this.currentPage+this.numPages+delta)%this.numPages;
         this._updatePage();
     },
     /**
-     * @override
+     *@override
      */
-    _onClick(ev) {
-        const activeButton = this._getActiveSubWidget();
-        if (activeButton) {
-            const currentPage = this.pages.indexOf(activeButton.el.closest('we-select-page'));
-            if (currentPage !== -1) {
-                this.currentPage = currentPage;
+    _onClick(ev){
+        constactiveButton=this._getActiveSubWidget();
+        if(activeButton){
+            constcurrentPage=this.pages.indexOf(activeButton.el.closest('we-select-page'));
+            if(currentPage!==-1){
+                this.currentPage=currentPage;
                 this._updatePage();
             }
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 });
 
-const userValueWidgetsRegistry = {
-    'we-button': ButtonUserValueWidget,
-    'we-checkbox': CheckboxUserValueWidget,
-    'we-select': SelectUserValueWidget,
-    'we-button-group': ButtonGroupUserValueWidget,
-    'we-input': InputUserValueWidget,
-    'we-multi': MultiUserValueWidget,
-    'we-colorpicker': ColorpickerUserValueWidget,
-    'we-datetimepicker': DatetimePickerUserValueWidget,
-    'we-imagepicker': ImagepickerUserValueWidget,
-    'we-videopicker': VideopickerUserValueWidget,
-    'we-range': RangeUserValueWidget,
-    'we-select-pager': SelectPagerUserValueWidget,
+constuserValueWidgetsRegistry={
+    'we-button':ButtonUserValueWidget,
+    'we-checkbox':CheckboxUserValueWidget,
+    'we-select':SelectUserValueWidget,
+    'we-button-group':ButtonGroupUserValueWidget,
+    'we-input':InputUserValueWidget,
+    'we-multi':MultiUserValueWidget,
+    'we-colorpicker':ColorpickerUserValueWidget,
+    'we-datetimepicker':DatetimePickerUserValueWidget,
+    'we-imagepicker':ImagepickerUserValueWidget,
+    'we-videopicker':VideopickerUserValueWidget,
+    'we-range':RangeUserValueWidget,
+    'we-select-pager':SelectPagerUserValueWidget,
 };
 
 /**
- * Handles a set of options for one snippet. The registry returned by this
- * module contains the names of the specialized SnippetOptionWidget which can be
- * referenced thanks to the data-js key in the web_editor options template.
+ *Handlesasetofoptionsforonesnippet.Theregistryreturnedbythis
+ *modulecontainsthenamesofthespecializedSnippetOptionWidgetwhichcanbe
+ *referencedthankstothedata-jskeyintheweb_editoroptionstemplate.
  */
-const SnippetOptionWidget = Widget.extend({
-    tagName: 'we-customizeblock-option',
-    events: {
-        'click .o_we_collapse_toggler': '_onCollapseTogglerClick',
+constSnippetOptionWidget=Widget.extend({
+    tagName:'we-customizeblock-option',
+    events:{
+        'click.o_we_collapse_toggler':'_onCollapseTogglerClick',
     },
-    custom_events: {
-        'user_value_update': '_onUserValueUpdate',
-        'user_value_widget_critical': '_onUserValueWidgetCritical',
-    },
-    /**
-     * Indicates if the option should be displayed in the button group at the
-     * top of the options panel, next to the clone/remove button.
-     *
-     * @type {boolean}
-     */
-    isTopOption: false,
-    /**
-     * Forces the target to not be possible to remove.
-     *
-     * @type {boolean}
-     */
-    forceNoDeleteButton: false,
-
-    /**
-     * The option `$el` is supposed to be the associated DOM UI element.
-     * The option controls another DOM element: the snippet it
-     * customizes, which can be found at `$target`. Access to the whole edition
-     * overlay is possible with `$overlay` (this is not recommended though).
-     *
-     * @constructor
-     */
-    init: function (parent, $uiElements, $target, $overlay, data, options) {
-        this._super.apply(this, arguments);
-
-        this.$originalUIElements = $uiElements;
-
-        this.$target = $target;
-        this.$overlay = $overlay;
-        this.data = data;
-        this.options = options;
-
-        this.className = 'snippet-option-' + this.data.optionName;
-
-        this.ownerDocument = this.$target[0].ownerDocument;
-
-        this._userValueWidgets = [];
-        this._actionQueues = new Map();
+    custom_events:{
+        'user_value_update':'_onUserValueUpdate',
+        'user_value_widget_critical':'_onUserValueWidgetCritical',
     },
     /**
-     * @override
+     *Indicatesiftheoptionshouldbedisplayedinthebuttongroupatthe
+     *topoftheoptionspanel,nexttotheclone/removebutton.
+     *
+     *@type{boolean}
      */
-    willStart: async function () {
-        await this._super(...arguments);
-        return this._renderOriginalXML().then(uiFragment => {
-            this.uiFragment = uiFragment;
+    isTopOption:false,
+    /**
+     *Forcesthetargettonotbepossibletoremove.
+     *
+     *@type{boolean}
+     */
+    forceNoDeleteButton:false,
+
+    /**
+     *Theoption`$el`issupposedtobetheassociatedDOMUIelement.
+     *TheoptioncontrolsanotherDOMelement:thesnippetit
+     *customizes,whichcanbefoundat`$target`.Accesstothewholeedition
+     *overlayispossiblewith`$overlay`(thisisnotrecommendedthough).
+     *
+     *@constructor
+     */
+    init:function(parent,$uiElements,$target,$overlay,data,options){
+        this._super.apply(this,arguments);
+
+        this.$originalUIElements=$uiElements;
+
+        this.$target=$target;
+        this.$overlay=$overlay;
+        this.data=data;
+        this.options=options;
+
+        this.className='snippet-option-'+this.data.optionName;
+
+        this.ownerDocument=this.$target[0].ownerDocument;
+
+        this._userValueWidgets=[];
+        this._actionQueues=newMap();
+    },
+    /**
+     *@override
+     */
+    willStart:asyncfunction(){
+        awaitthis._super(...arguments);
+        returnthis._renderOriginalXML().then(uiFragment=>{
+            this.uiFragment=uiFragment;
         });
     },
     /**
-     * @override
+     *@override
      */
-    renderElement: function () {
+    renderElement:function(){
         this._super(...arguments);
         this.el.appendChild(this.uiFragment);
-        this.uiFragment = null;
+        this.uiFragment=null;
     },
     /**
-     * Called when the parent edition overlay is covering the associated snippet
-     * (the first time, this follows the call to the @see start method).
+     *Calledwhentheparenteditionoverlayiscoveringtheassociatedsnippet
+     *(thefirsttime,thisfollowsthecalltothe@seestartmethod).
      *
-     * @abstract
+     *@abstract
      */
-    onFocus: function () {},
+    onFocus:function(){},
     /**
-     * Called when the parent edition overlay is covering the associated snippet
-     * for the first time, when it is a new snippet dropped from the d&d snippet
-     * menu. Note: this is called after the start and onFocus methods.
+     *Calledwhentheparenteditionoverlayiscoveringtheassociatedsnippet
+     *forthefirsttime,whenitisanewsnippetdroppedfromthed&dsnippet
+     *menu.Note:thisiscalledafterthestartandonFocusmethods.
      *
-     * @abstract
+     *@abstract
      */
-    onBuilt: function () {},
+    onBuilt:function(){},
     /**
-     * Called when the parent edition overlay is removed from the associated
-     * snippet (another snippet enters edition for example).
+     *Calledwhentheparenteditionoverlayisremovedfromtheassociated
+     *snippet(anothersnippetenterseditionforexample).
      *
-     * @abstract
+     *@abstract
      */
-    onBlur: function () {},
+    onBlur:function(){},
     /**
-     * Called when the associated snippet is the result of the cloning of
-     * another snippet (so `this.$target` is a cloned element).
+     *Calledwhentheassociatedsnippetistheresultofthecloningof
+     *anothersnippet(so`this.$target`isaclonedelement).
      *
-     * @abstract
-     * @param {Object} options
-     * @param {boolean} options.isCurrent
-     *        true if the associated snippet is a clone of the main element that
-     *        was cloned (so not a clone of a child of this main element that
-     *        was cloned)
+     *@abstract
+     *@param{Object}options
+     *@param{boolean}options.isCurrent
+     *       trueiftheassociatedsnippetisacloneofthemainelementthat
+     *       wascloned(sonotacloneofachildofthismainelementthat
+     *       wascloned)
      */
-    onClone: function (options) {},
+    onClone:function(options){},
     /**
-     * Called when the associated snippet is moved to another DOM location.
+     *CalledwhentheassociatedsnippetismovedtoanotherDOMlocation.
      *
-     * @abstract
+     *@abstract
      */
-    onMove: function () {},
+    onMove:function(){},
     /**
-     * Called when the associated snippet is about to be removed from the DOM.
+     *CalledwhentheassociatedsnippetisabouttoberemovedfromtheDOM.
      *
-     * @abstract
+     *@abstract
      */
-    onRemove: function () {},
+    onRemove:function(){},
     /**
-     * Called when the target is shown, only meaningful if the target was hidden
-     * at some point (typically used for 'invisible' snippets).
+     *Calledwhenthetargetisshown,onlymeaningfulifthetargetwashidden
+     *atsomepoint(typicallyusedfor'invisible'snippets).
      *
-     * @abstract
-     * @returns {Promise|undefined}
+     *@abstract
+     *@returns{Promise|undefined}
      */
-    onTargetShow: async function () {},
+    onTargetShow:asyncfunction(){},
     /**
-     * Called when the target is hidden (typically used for 'invisible'
-     * snippets).
+     *Calledwhenthetargetishidden(typicallyusedfor'invisible'
+     *snippets).
      *
-     * @abstract
-     * @returns {Promise|undefined}
+     *@abstract
+     *@returns{Promise|undefined}
      */
-    onTargetHide: async function () {},
+    onTargetHide:asyncfunction(){},
     /**
-     * Called when the template which contains the associated snippet is about
-     * to be saved.
+     *Calledwhenthetemplatewhichcontainstheassociatedsnippetisabout
+     *tobesaved.
      *
-     * @abstract
-     * @return {Promise|undefined}
+     *@abstract
+     *@return{Promise|undefined}
      */
-    cleanForSave: async function () {},
+    cleanForSave:asyncfunction(){},
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * Default option method which allows to select one and only one class in
-     * the option classes set and set it on the associated snippet. The common
-     * case is having a select with each item having a `data-select-class`
-     * value allowing to choose the associated class, or simply an unique
-     * checkbox to allow toggling a unique class.
+     *Defaultoptionmethodwhichallowstoselectoneandonlyoneclassin
+     *theoptionclassessetandsetitontheassociatedsnippet.Thecommon
+     *caseishavingaselectwitheachitemhavinga`data-select-class`
+     *valueallowingtochoosetheassociatedclass,orsimplyanunique
+     *checkboxtoallowtogglingauniqueclass.
      *
-     * @param {boolean|string} previewMode
-     *        - truthy if the option is enabled for preview or if leaving it (in
-     *          that second case, the value is 'reset')
-     *        - false if the option should be activated for good
-     * @param {string} widgetValue
-     * @param {Object} params
-     * @returns {Promise|undefined}
+     *@param{boolean|string}previewMode
+     *       -truthyiftheoptionisenabledforprevieworifleavingit(in
+     *         thatsecondcase,thevalueis'reset')
+     *       -falseiftheoptionshouldbeactivatedforgood
+     *@param{string}widgetValue
+     *@param{Object}params
+     *@returns{Promise|undefined}
      */
-    selectClass: function (previewMode, widgetValue, params) {
-        for (const classNames of params.possibleValues) {
-            if (classNames) {
+    selectClass:function(previewMode,widgetValue,params){
+        for(constclassNamesofparams.possibleValues){
+            if(classNames){
                 this.$target[0].classList.remove(...classNames.trim().split(/\s+/g));
             }
         }
-        if (widgetValue) {
+        if(widgetValue){
             this.$target[0].classList.add(...widgetValue.trim().split(/\s+/g));
         }
     },
     /**
-     * Default option method which allows to select a value and set it on the
-     * associated snippet as a data attribute. The name of the data attribute is
-     * given by the attributeName parameter.
+     *Defaultoptionmethodwhichallowstoselectavalueandsetitonthe
+     *associatedsnippetasadataattribute.Thenameofthedataattributeis
+     *givenbytheattributeNameparameter.
      *
-     * @param {boolean} previewMode - @see this.selectClass
-     * @param {string} widgetValue
-     * @param {Object} params
-     * @returns {Promise|undefined}
+     *@param{boolean}previewMode-@seethis.selectClass
+     *@param{string}widgetValue
+     *@param{Object}params
+     *@returns{Promise|undefined}
      */
-    selectDataAttribute: function (previewMode, widgetValue, params) {
-        const value = this._selectAttributeHelper(widgetValue, params);
-        this.$target[0].dataset[params.attributeName] = value;
+    selectDataAttribute:function(previewMode,widgetValue,params){
+        constvalue=this._selectAttributeHelper(widgetValue,params);
+        this.$target[0].dataset[params.attributeName]=value;
     },
     /**
-     * Default option method which allows to select a value and set it on the
-     * associated snippet as an attribute. The name of the attribute is
-     * given by the attributeName parameter.
+     *Defaultoptionmethodwhichallowstoselectavalueandsetitonthe
+     *associatedsnippetasanattribute.Thenameoftheattributeis
+     *givenbytheattributeNameparameter.
      *
-     * @param {boolean} previewMode - @see this.selectClass
-     * @param {string} widgetValue
-     * @param {Object} params
-     * @returns {Promise|undefined}
+     *@param{boolean}previewMode-@seethis.selectClass
+     *@param{string}widgetValue
+     *@param{Object}params
+     *@returns{Promise|undefined}
      */
-    selectAttribute: function (previewMode, widgetValue, params) {
-        const value = this._selectAttributeHelper(widgetValue, params);
-        this.$target[0].setAttribute(params.attributeName, value);
+    selectAttribute:function(previewMode,widgetValue,params){
+        constvalue=this._selectAttributeHelper(widgetValue,params);
+        this.$target[0].setAttribute(params.attributeName,value);
     },
     /**
-     * Default option method which allows to select a value and set it on the
-     * associated snippet as a css style. The name of the css property is
-     * given by the cssProperty parameter.
+     *Defaultoptionmethodwhichallowstoselectavalueandsetitonthe
+     *associatedsnippetasacssstyle.Thenameofthecsspropertyis
+     *givenbythecssPropertyparameter.
      *
-     * @param {boolean} previewMode - @see this.selectClass
-     * @param {string} widgetValue
-     * @param {Object} params
-     * @param {string} [params.forceStyle] if undefined, the method will not
-     *      set the inline style (and thus even remove it) if the item would
-     *      already have the given style without it (thanks to a CSS rule for
-     *      example). If defined (as a string), it acts as the "priority" param
-     *      of @see CSSStyleDeclaration.setProperty: it should be 'important' to
-     *      set the style as important or '' otherwise. Note that if forceStyle
-     *      is undefined, the style is always set as important when applied.
-     * @returns {Promise|undefined}
+     *@param{boolean}previewMode-@seethis.selectClass
+     *@param{string}widgetValue
+     *@param{Object}params
+     *@param{string}[params.forceStyle]ifundefined,themethodwillnot
+     *     settheinlinestyle(andthusevenremoveit)iftheitemwould
+     *     alreadyhavethegivenstylewithoutit(thankstoaCSSrulefor
+     *     example).Ifdefined(asastring),itactsasthe"priority"param
+     *     of@seeCSSStyleDeclaration.setProperty:itshouldbe'important'to
+     *     setthestyleasimportantor''otherwise.NotethatifforceStyle
+     *     isundefined,thestyleisalwayssetasimportantwhenapplied.
+     *@returns{Promise|undefined}
      */
-    selectStyle: function (previewMode, widgetValue, params) {
-        // Disable all transitions for the duration of the method as many
-        // comparisons will be done on the element to know if applying a
-        // property has an effect or not. Also, changing a css property via the
-        // editor should not show any transition as previews would not be done
-        // immediately, which is not good for the user experience.
+    selectStyle:function(previewMode,widgetValue,params){
+        //Disablealltransitionsforthedurationofthemethodasmany
+        //comparisonswillbedoneontheelementtoknowifapplyinga
+        //propertyhasaneffectornot.Also,changingacsspropertyviathe
+        //editorshouldnotshowanytransitionaspreviewswouldnotbedone
+        //immediately,whichisnotgoodfortheuserexperience.
         this.$target[0].classList.add('o_we_force_no_transition');
-        const _restoreTransitions = () => this.$target[0].classList.remove('o_we_force_no_transition');
+        const_restoreTransitions=()=>this.$target[0].classList.remove('o_we_force_no_transition');
 
-        if (params.cssProperty === 'background-color') {
-            this.$target.trigger('background-color-event', previewMode);
+        if(params.cssProperty==='background-color'){
+            this.$target.trigger('background-color-event',previewMode);
         }
 
-        const cssProps = weUtils.CSS_SHORTHANDS[params.cssProperty] || [params.cssProperty];
-        for (const cssProp of cssProps) {
-            // Always reset the inline style first to not put inline style on an
-            // element which already have this style through css stylesheets.
-            this.$target[0].style.setProperty(cssProp, '');
+        constcssProps=weUtils.CSS_SHORTHANDS[params.cssProperty]||[params.cssProperty];
+        for(constcssPropofcssProps){
+            //Alwaysresettheinlinestylefirsttonotputinlinestyleonan
+            //elementwhichalreadyhavethisstylethroughcssstylesheets.
+            this.$target[0].style.setProperty(cssProp,'');
         }
-        if (params.extraClass) {
+        if(params.extraClass){
             this.$target.removeClass(params.extraClass);
         }
 
-        // Only allow to use a color name as a className if we know about the
-        // other potential color names (to remove) and if we know about a prefix
-        // (otherwise we suppose that we should use the actual related color).
-        if (params.colorNames && params.colorPrefix) {
-            const classes = weUtils.computeColorClasses(params.colorNames, params.colorPrefix);
+        //OnlyallowtouseacolornameasaclassNameifweknowaboutthe
+        //otherpotentialcolornames(toremove)andifweknowaboutaprefix
+        //(otherwisewesupposethatweshouldusetheactualrelatedcolor).
+        if(params.colorNames&&params.colorPrefix){
+            constclasses=weUtils.computeColorClasses(params.colorNames,params.colorPrefix);
             this.$target[0].classList.remove(...classes);
 
-            if (weUtils.isColorCombinationName(widgetValue)) {
-                // Those are the special color combinations classes. Just have
-                // to add it (and adding the potential extra class) then leave.
-                this.$target[0].classList.add('o_cc', `o_cc${widgetValue}`, params.extraClass);
+            if(weUtils.isColorCombinationName(widgetValue)){
+                //Thosearethespecialcolorcombinationsclasses.Justhave
+                //toaddit(andaddingthepotentialextraclass)thenleave.
+                this.$target[0].classList.add('o_cc',`o_cc${widgetValue}`,params.extraClass);
                 _restoreTransitions();
                 return;
             }
-            if (params.colorNames.includes(widgetValue)) {
-                const originalCSSValue = window.getComputedStyle(this.$target[0])[cssProps[0]];
-                const className = params.colorPrefix + widgetValue;
+            if(params.colorNames.includes(widgetValue)){
+                constoriginalCSSValue=window.getComputedStyle(this.$target[0])[cssProps[0]];
+                constclassName=params.colorPrefix+widgetValue;
                 this.$target[0].classList.add(className);
-                if (originalCSSValue !== window.getComputedStyle(this.$target[0])[cssProps[0]]) {
-                    // If applying the class did indeed changed the css
-                    // property we are editing, nothing more has to be done.
-                    // (except adding the extra class)
+                if(originalCSSValue!==window.getComputedStyle(this.$target[0])[cssProps[0]]){
+                    //Ifapplyingtheclassdidindeedchangedthecss
+                    //propertyweareediting,nothingmorehastobedone.
+                    //(exceptaddingtheextraclass)
                     this.$target.addClass(params.extraClass);
                     _restoreTransitions();
                     return;
                 }
-                // Otherwise, it means that class probably does not exist,
-                // we remove it and continue. Especially useful for some
-                // prefixes which only work with some color names but not all.
+                //Otherwise,itmeansthatclassprobablydoesnotexist,
+                //weremoveitandcontinue.Especiallyusefulforsome
+                //prefixeswhichonlyworkwithsomecolornamesbutnotall.
                 this.$target[0].classList.remove(className);
             }
         }
 
-        // At this point, the widget value is either a property/color name or
-        // an actual css property value. If it is a property/color name, we will
-        // apply a css variable as style value.
-        const htmlPropValue = weUtils.getCSSVariableValue(widgetValue);
-        if (htmlPropValue) {
-            widgetValue = `var(--${widgetValue})`;
+        //Atthispoint,thewidgetvalueiseitheraproperty/colornameor
+        //anactualcsspropertyvalue.Ifitisaproperty/colorname,wewill
+        //applyacssvariableasstylevalue.
+        consthtmlPropValue=weUtils.getCSSVariableValue(widgetValue);
+        if(htmlPropValue){
+            widgetValue=`var(--${widgetValue})`;
         }
 
-        // replacing ', ' by ',' to prevent attributes with internal space separators from being split:
-        // eg: "rgba(55, 12, 47, 1.9) 47px" should be split as ["rgba(55,12,47,1.9)", "47px"]
-        const values = widgetValue.replace(/,\s/g, ',').split(/\s+/g);
-        while (values.length < cssProps.length) {
-            switch (values.length) {
-                case 1:
-                case 2: {
+        //replacing','by','topreventattributeswithinternalspaceseparatorsfrombeingsplit:
+        //eg:"rgba(55,12,47,1.9)47px"shouldbesplitas["rgba(55,12,47,1.9)","47px"]
+        constvalues=widgetValue.replace(/,\s/g,',').split(/\s+/g);
+        while(values.length<cssProps.length){
+            switch(values.length){
+                case1:
+                case2:{
                     values.push(values[0]);
                     break;
                 }
-                case 3: {
+                case3:{
                     values.push(values[1]);
                     break;
                 }
-                default: {
-                    values.push(values[values.length - 1]);
+                default:{
+                    values.push(values[values.length-1]);
                 }
             }
         }
 
-        const styles = window.getComputedStyle(this.$target[0]);
-        let hasUserValue = false;
-        for (let i = cssProps.length - 1; i > 0; i--) {
-            hasUserValue = applyCSS.call(this, cssProps[i], values.pop(), styles) || hasUserValue;
+        conststyles=window.getComputedStyle(this.$target[0]);
+        lethasUserValue=false;
+        for(leti=cssProps.length-1;i>0;i--){
+            hasUserValue=applyCSS.call(this,cssProps[i],values.pop(),styles)||hasUserValue;
         }
-        hasUserValue = applyCSS.call(this, cssProps[0], values.join(' '), styles) || hasUserValue;
+        hasUserValue=applyCSS.call(this,cssProps[0],values.join(''),styles)||hasUserValue;
 
-        function applyCSS(cssProp, cssValue, styles) {
-            const forceStyle = (typeof params.forceStyle !== 'undefined');
-            if (forceStyle
-                    || !weUtils.areCssValuesEqual(styles[cssProp], cssValue, cssProp, this.$target[0])) {
-                const priority = forceStyle ? params.forceStyle : 'important';
-                this.$target[0].style.setProperty(cssProp, cssValue, priority);
-                return true;
+        functionapplyCSS(cssProp,cssValue,styles){
+            constforceStyle=(typeofparams.forceStyle!=='undefined');
+            if(forceStyle
+                    ||!weUtils.areCssValuesEqual(styles[cssProp],cssValue,cssProp,this.$target[0])){
+                constpriority=forceStyle?params.forceStyle:'important';
+                this.$target[0].style.setProperty(cssProp,cssValue,priority);
+                returntrue;
             }
-            return false;
+            returnfalse;
         }
 
-        if (params.extraClass) {
-            this.$target.toggleClass(params.extraClass, hasUserValue);
+        if(params.extraClass){
+            this.$target.toggleClass(params.extraClass,hasUserValue);
         }
 
         _restoreTransitions();
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Override the helper method to search inside the $target element instead
-     * of the UI item element.
+     *Overridethehelpermethodtosearchinsidethe$targetelementinstead
+     *oftheUIitemelement.
      *
-     * @override
+     *@override
      */
-    $: function () {
-        return this.$target.find.apply(this.$target, arguments);
+    $:function(){
+        returnthis.$target.find.apply(this.$target,arguments);
     },
     /**
-     * Closes all user value widgets.
+     *Closesalluservaluewidgets.
      */
-    closeWidgets: function () {
-        this._userValueWidgets.forEach(widget => widget.close());
+    closeWidgets:function(){
+        this._userValueWidgets.forEach(widget=>widget.close());
     },
     /**
-     * @param {string} name
-     * @returns {UserValueWidget|null}
+     *@param{string}name
+     *@returns{UserValueWidget|null}
      */
-    findWidget: function (name) {
-        for (const widget of this._userValueWidgets) {
-            if (widget.getName() === name) {
-                return widget;
+    findWidget:function(name){
+        for(constwidgetofthis._userValueWidgets){
+            if(widget.getName()===name){
+                returnwidget;
             }
-            const depWidget = widget.findWidget(name);
-            if (depWidget) {
-                return depWidget;
+            constdepWidget=widget.findWidget(name);
+            if(depWidget){
+                returndepWidget;
             }
         }
-        return null;
+        returnnull;
     },
     /**
-     * Sometimes, options may need to notify other options, even in parent
-     * editors. This can be done thanks to the 'option_update' event, which
-     * will then be handled by this function.
+     *Sometimes,optionsmayneedtonotifyotheroptions,eveninparent
+     *editors.Thiscanbedonethankstothe'option_update'event,which
+     *willthenbehandledbythisfunction.
      *
-     * @param {string} name - an identifier for a type of update
-     * @param {*} data
+     *@param{string}name-anidentifierforatypeofupdate
+     *@param{*}data
      */
-    notify: function (name, data) {
-        if (name === 'target') {
+    notify:function(name,data){
+        if(name==='target'){
             this.setTarget(data);
         }
     },
     /**
-     * Sometimes, an option is binded on an element but should in fact apply on
-     * another one. For example, elements which contain slides: we want all the
-     * per-slide options to be in the main menu of the whole snippet. This
-     * function allows to set the option's target.
+     *Sometimes,anoptionisbindedonanelementbutshouldinfactapplyon
+     *anotherone.Forexample,elementswhichcontainslides:wewantallthe
+     *per-slideoptionstobeinthemainmenuofthewholesnippet.This
+     *functionallowstosettheoption'starget.
      *
-     * Note: the UI is not updated accordindly automatically.
+     *Note:theUIisnotupdatedaccordindlyautomatically.
      *
-     * @param {jQuery} $target - the new target element
-     * @returns {Promise}
+     *@param{jQuery}$target-thenewtargetelement
+     *@returns{Promise}
      */
-    setTarget: function ($target) {
-        this.$target = $target;
+    setTarget:function($target){
+        this.$target=$target;
     },
     /**
-     * Updates the UI. For widget update, @see _computeWidgetState.
+     *UpdatestheUI.Forwidgetupdate,@see_computeWidgetState.
      *
-     * @param {boolean} [noVisibility=false]
-     *     If true, only update widget values and their UI, not their visibility
-     *     -> @see updateUIVisibility for toggling visibility only
-     * @returns {Promise}
+     *@param{boolean}[noVisibility=false]
+     *    Iftrue,onlyupdatewidgetvaluesandtheirUI,nottheirvisibility
+     *    ->@seeupdateUIVisibilityfortogglingvisibilityonly
+     *@returns{Promise}
      */
-    updateUI: async function ({noVisibility} = {}) {
-        // For each widget, for each of their option method, notify to the
-        // widget the current value they should hold according to the $target's
-        // current state, related for that method.
-        const proms = this._userValueWidgets.map(async widget => {
-            // Update widget value (for each method)
-            const methodsNames = widget.getMethodsNames();
-            for (const methodName of methodsNames) {
-                const params = widget.getMethodsParams(methodName);
+    updateUI:asyncfunction({noVisibility}={}){
+        //Foreachwidget,foreachoftheiroptionmethod,notifytothe
+        //widgetthecurrentvaluetheyshouldholdaccordingtothe$target's
+        //currentstate,relatedforthatmethod.
+        constproms=this._userValueWidgets.map(asyncwidget=>{
+            //Updatewidgetvalue(foreachmethod)
+            constmethodsNames=widget.getMethodsNames();
+            for(constmethodNameofmethodsNames){
+                constparams=widget.getMethodsParams(methodName);
 
-                let obj = this;
-                if (params.applyTo) {
-                    const $firstSubTarget = this.$(params.applyTo).eq(0);
-                    if (!$firstSubTarget.length) {
+                letobj=this;
+                if(params.applyTo){
+                    const$firstSubTarget=this.$(params.applyTo).eq(0);
+                    if(!$firstSubTarget.length){
                         continue;
                     }
-                    obj = createPropertyProxy(this, '$target', $firstSubTarget);
+                    obj=createPropertyProxy(this,'$target',$firstSubTarget);
                 }
 
-                const value = await this._computeWidgetState.call(obj, methodName, params);
-                if (value === undefined) {
+                constvalue=awaitthis._computeWidgetState.call(obj,methodName,params);
+                if(value===undefined){
                     continue;
                 }
-                const normalizedValue = this._normalizeWidgetValue(value);
-                await widget.setValue(normalizedValue, methodName);
+                constnormalizedValue=this._normalizeWidgetValue(value);
+                awaitwidget.setValue(normalizedValue,methodName);
             }
         });
-        await Promise.all(proms);
+        awaitPromise.all(proms);
 
-        if (!noVisibility) {
-            await this.updateUIVisibility();
+        if(!noVisibility){
+            awaitthis.updateUIVisibility();
         }
     },
     /**
-     * Updates the UI visibility - @see _computeVisibility. For widget update,
-     * @see _computeWidgetVisibility.
+     *UpdatestheUIvisibility-@see_computeVisibility.Forwidgetupdate,
+     *@see_computeWidgetVisibility.
      *
-     * @returns {Promise}
+     *@returns{Promise}
      */
-    updateUIVisibility: async function () {
-        const proms = this._userValueWidgets.map(async widget => {
-            const params = widget.getMethodsParams();
+    updateUIVisibility:asyncfunction(){
+        constproms=this._userValueWidgets.map(asyncwidget=>{
+            constparams=widget.getMethodsParams();
 
-            let obj = this;
-            if (params.applyTo) {
-                const $firstSubTarget = this.$(params.applyTo).eq(0);
-                if (!$firstSubTarget.length) {
+            letobj=this;
+            if(params.applyTo){
+                const$firstSubTarget=this.$(params.applyTo).eq(0);
+                if(!$firstSubTarget.length){
                     widget.toggleVisibility(false);
                     return;
                 }
-                obj = createPropertyProxy(this, '$target', $firstSubTarget);
+                obj=createPropertyProxy(this,'$target',$firstSubTarget);
             }
 
-            // Make sure to check the visibility of all sub-widgets. For
-            // simplicity and efficiency, those will be checked with main
-            // widgets params.
-            const allSubWidgets = [widget];
-            let i = 0;
-            while (i < allSubWidgets.length) {
+            //Makesuretocheckthevisibilityofallsub-widgets.For
+            //simplicityandefficiency,thosewillbecheckedwithmain
+            //widgetsparams.
+            constallSubWidgets=[widget];
+            leti=0;
+            while(i<allSubWidgets.length){
                 allSubWidgets.push(...allSubWidgets[i]._userValueWidgets);
                 i++;
             }
-            const proms = allSubWidgets.map(async widget => {
-                const show = await this._computeWidgetVisibility.call(obj, widget.getName(), params);
-                if (!show) {
+            constproms=allSubWidgets.map(asyncwidget=>{
+                constshow=awaitthis._computeWidgetVisibility.call(obj,widget.getName(),params);
+                if(!show){
                     widget.toggleVisibility(false);
                     return;
                 }
 
-                const dependencies = widget.getDependencies();
-                const dependenciesData = [];
-                dependencies.forEach(depName => {
-                    const toBeActive = (depName[0] !== '!');
-                    if (!toBeActive) {
-                        depName = depName.substr(1);
+                constdependencies=widget.getDependencies();
+                constdependenciesData=[];
+                dependencies.forEach(depName=>{
+                    consttoBeActive=(depName[0]!=='!');
+                    if(!toBeActive){
+                        depName=depName.substr(1);
                     }
 
-                    const widget = this._requestUserValueWidgets(depName)[0];
-                    if (widget) {
+                    constwidget=this._requestUserValueWidgets(depName)[0];
+                    if(widget){
                         dependenciesData.push({
-                            widget: widget,
-                            toBeActive: toBeActive,
+                            widget:widget,
+                            toBeActive:toBeActive,
                         });
                     }
                 });
-                const dependenciesOK = !dependenciesData.length || dependenciesData.some(depData => {
-                    return (depData.widget.isActive() === depData.toBeActive);
+                constdependenciesOK=!dependenciesData.length||dependenciesData.some(depData=>{
+                    return(depData.widget.isActive()===depData.toBeActive);
                 });
 
                 widget.toggleVisibility(dependenciesOK);
             });
-            return Promise.all(proms);
+            returnPromise.all(proms);
         });
 
-        const showUI = await this._computeVisibility();
-        this.el.classList.toggle('d-none', !showUI);
+        constshowUI=awaitthis._computeVisibility();
+        this.el.classList.toggle('d-none',!showUI);
 
-        await Promise.all(proms);
+        awaitPromise.all(proms);
 
-        // Hide layouting elements which contains only hidden widgets
-        // TODO improve this, this is hackish to rely on DOM structure here.
-        // Layouting elements should be handled as widgets or other.
-        for (const el of this.$el.find('we-row')) {
-            el.classList.toggle('d-none', !$(el).find('> div > .o_we_user_value_widget').not('.d-none').length);
+        //Hidelayoutingelementswhichcontainsonlyhiddenwidgets
+        //TODOimprovethis,thisishackishtorelyonDOMstructurehere.
+        //Layoutingelementsshouldbehandledaswidgetsorother.
+        for(constelofthis.$el.find('we-row')){
+            el.classList.toggle('d-none',!$(el).find('>div>.o_we_user_value_widget').not('.d-none').length);
         }
-        for (const el of this.$el.find('we-collapse')) {
-            const $el = $(el);
-            el.classList.toggle('d-none', $el.children().first().hasClass('d-none'));
-            const hasNoVisibleElInCollapseMenu = !$el.children().last().children().not('.d-none').length;
-            if (hasNoVisibleElInCollapseMenu) {
-                this._toggleCollapseEl(el, false);
+        for(constelofthis.$el.find('we-collapse')){
+            const$el=$(el);
+            el.classList.toggle('d-none',$el.children().first().hasClass('d-none'));
+            consthasNoVisibleElInCollapseMenu=!$el.children().last().children().not('.d-none').length;
+            if(hasNoVisibleElInCollapseMenu){
+                this._toggleCollapseEl(el,false);
             }
-            el.querySelector('.o_we_collapse_toggler').classList.toggle('d-none', hasNoVisibleElInCollapseMenu);
+            el.querySelector('.o_we_collapse_toggler').classList.toggle('d-none',hasNoVisibleElInCollapseMenu);
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {UserValueWidget[]} widgets
-     * @returns {Promise<string>}
+     *@private
+     *@param{UserValueWidget[]}widgets
+     *@returns{Promise<string>}
      */
-    async _checkIfWidgetsUpdateNeedWarning(widgets) {
-        const messages = [];
-        for (const widget of widgets) {
-            const message = widget.getMethodsParams().warnMessage;
-            if (message) {
+    async_checkIfWidgetsUpdateNeedWarning(widgets){
+        constmessages=[];
+        for(constwidgetofwidgets){
+            constmessage=widget.getMethodsParams().warnMessage;
+            if(message){
                 messages.push(message);
             }
         }
-        return messages.join(' ');
+        returnmessages.join('');
     },
     /**
-     * @private
-     * @param {UserValueWidget[]} widgets
-     * @returns {Promise<boolean|string>}
+     *@private
+     *@param{UserValueWidget[]}widgets
+     *@returns{Promise<boolean|string>}
      */
-    async _checkIfWidgetsUpdateNeedReload(widgets) {
-        return false;
+    async_checkIfWidgetsUpdateNeedReload(widgets){
+        returnfalse;
     },
     /**
-     * @private
-     * @returns {Promise<boolean>|boolean}
+     *@private
+     *@returns{Promise<boolean>|boolean}
      */
-    _computeVisibility: async function () {
-        return true;
+    _computeVisibility:asyncfunction(){
+        returntrue;
     },
     /**
-     * Returns the string value that should be hold by the widget which is
-     * related to the given method name.
+     *Returnsthestringvaluethatshouldbeholdbythewidgetwhichis
+     *relatedtothegivenmethodname.
      *
-     * If the value is irrelevant for a method, it must return undefined.
+     *Ifthevalueisirrelevantforamethod,itmustreturnundefined.
      *
-     * @private
-     * @param {string} methodName
-     * @param {Object} params
-     * @returns {Promise<string|undefined>|string|undefined}
+     *@private
+     *@param{string}methodName
+     *@param{Object}params
+     *@returns{Promise<string|undefined>|string|undefined}
      */
-    _computeWidgetState: async function (methodName, params) {
-        switch (methodName) {
-            case 'selectClass': {
-                let maxNbClasses = 0;
-                let activeClassNames = '';
-                params.possibleValues.forEach(classNames => {
-                    if (!classNames) {
+    _computeWidgetState:asyncfunction(methodName,params){
+        switch(methodName){
+            case'selectClass':{
+                letmaxNbClasses=0;
+                letactiveClassNames='';
+                params.possibleValues.forEach(classNames=>{
+                    if(!classNames){
                         return;
                     }
-                    const classes = classNames.split(/\s+/g);
-                    if (classes.length >= maxNbClasses
-                            && classes.every(className => this.$target[0].classList.contains(className))) {
-                        maxNbClasses = classes.length;
-                        activeClassNames = classNames;
+                    constclasses=classNames.split(/\s+/g);
+                    if(classes.length>=maxNbClasses
+                            &&classes.every(className=>this.$target[0].classList.contains(className))){
+                        maxNbClasses=classes.length;
+                        activeClassNames=classNames;
                     }
                 });
-                return activeClassNames;
+                returnactiveClassNames;
             }
-            case 'selectAttribute':
-            case 'selectDataAttribute': {
-                const attrName = params.attributeName;
-                let attrValue;
-                if (methodName === 'selectAttribute') {
-                    attrValue = this.$target[0].getAttribute(attrName);
-                } else if (methodName === 'selectDataAttribute') {
-                    attrValue = this.$target[0].dataset[attrName];
+            case'selectAttribute':
+            case'selectDataAttribute':{
+                constattrName=params.attributeName;
+                letattrValue;
+                if(methodName==='selectAttribute'){
+                    attrValue=this.$target[0].getAttribute(attrName);
+                }elseif(methodName==='selectDataAttribute'){
+                    attrValue=this.$target[0].dataset[attrName];
                 }
-                attrValue = (attrValue || '').trim();
-                if (params.saveUnit && !params.withUnit) {
-                    attrValue = attrValue.split(/\s+/g).map(v => v + params.saveUnit).join(' ');
+                attrValue=(attrValue||'').trim();
+                if(params.saveUnit&&!params.withUnit){
+                    attrValue=attrValue.split(/\s+/g).map(v=>v+params.saveUnit).join('');
                 }
-                return attrValue || params.attributeDefaultValue || '';
+                returnattrValue||params.attributeDefaultValue||'';
             }
-            case 'selectStyle': {
-                if (params.colorPrefix && params.colorNames) {
-                    for (const c of params.colorNames) {
-                        const className = weUtils.computeColorClasses([c], params.colorPrefix)[0];
-                        if (this.$target[0].classList.contains(className)) {
-                            return c;
+            case'selectStyle':{
+                if(params.colorPrefix&&params.colorNames){
+                    for(constcofparams.colorNames){
+                        constclassName=weUtils.computeColorClasses([c],params.colorPrefix)[0];
+                        if(this.$target[0].classList.contains(className)){
+                            returnc;
                         }
                     }
                 }
 
-                // Disable all transitions for the duration of the style check
-                // as we want to know the final value of a property to properly
-                // update the UI.
+                //Disablealltransitionsforthedurationofthestylecheck
+                //aswewanttoknowthefinalvalueofapropertytoproperly
+                //updatetheUI.
                 this.$target[0].classList.add('o_we_force_no_transition');
-                const _restoreTransitions = () => this.$target[0].classList.remove('o_we_force_no_transition');
+                const_restoreTransitions=()=>this.$target[0].classList.remove('o_we_force_no_transition');
 
-                const styles = window.getComputedStyle(this.$target[0]);
-                const cssProps = weUtils.CSS_SHORTHANDS[params.cssProperty] || [params.cssProperty];
-                const borderWidthCssProps = weUtils.CSS_SHORTHANDS['border-width'];
-                const cssValues = cssProps.map(cssProp => {
-                    let value = styles[cssProp].trim();
-                    if (cssProp === 'box-shadow') {
-                        const inset = value.includes('inset');
-                        let values = value.replace(/,\s/g, ',').replace('inset', '').trim().split(/\s+/g);
-                        const color = values.find(s => !s.match(/^\d/));
-                        values = values.join(' ').replace(color, '').trim();
-                        value = `${color} ${values}${inset ? ' inset' : ''}`;
+                conststyles=window.getComputedStyle(this.$target[0]);
+                constcssProps=weUtils.CSS_SHORTHANDS[params.cssProperty]||[params.cssProperty];
+                constborderWidthCssProps=weUtils.CSS_SHORTHANDS['border-width'];
+                constcssValues=cssProps.map(cssProp=>{
+                    letvalue=styles[cssProp].trim();
+                    if(cssProp==='box-shadow'){
+                        constinset=value.includes('inset');
+                        letvalues=value.replace(/,\s/g,',').replace('inset','').trim().split(/\s+/g);
+                        constcolor=values.find(s=>!s.match(/^\d/));
+                        values=values.join('').replace(color,'').trim();
+                        value=`${color}${values}${inset?'inset':''}`;
                     }
-                    if (borderWidthCssProps.includes(cssProp) && value.endsWith('px')) {
-                        // Rounding value up avoids zoom-in issues.
-                        // Zoom-out issues are not an expected use case.
-                        value = `${Math.ceil(parseFloat(value))}px`;
+                    if(borderWidthCssProps.includes(cssProp)&&value.endsWith('px')){
+                        //Roundingvalueupavoidszoom-inissues.
+                        //Zoom-outissuesarenotanexpectedusecase.
+                        value=`${Math.ceil(parseFloat(value))}px`;
                     }
-                    return value;
+                    returnvalue;
                 });
-                if (cssValues.length === 4 && weUtils.areCssValuesEqual(cssValues[3], cssValues[1], params.cssProperty, this.$target)) {
+                if(cssValues.length===4&&weUtils.areCssValuesEqual(cssValues[3],cssValues[1],params.cssProperty,this.$target)){
                     cssValues.pop();
                 }
-                if (cssValues.length === 3 && weUtils.areCssValuesEqual(cssValues[2], cssValues[0], params.cssProperty, this.$target)) {
+                if(cssValues.length===3&&weUtils.areCssValuesEqual(cssValues[2],cssValues[0],params.cssProperty,this.$target)){
                     cssValues.pop();
                 }
-                if (cssValues.length === 2 && weUtils.areCssValuesEqual(cssValues[1], cssValues[0], params.cssProperty, this.$target)) {
+                if(cssValues.length===2&&weUtils.areCssValuesEqual(cssValues[1],cssValues[0],params.cssProperty,this.$target)){
                     cssValues.pop();
                 }
 
                 _restoreTransitions();
 
-                return cssValues.join(' ');
+                returncssValues.join('');
             }
         }
     },
     /**
-     * @private
-     * @param {string} widgetName
-     * @param {Object} params
-     * @returns {Promise<boolean>|boolean}
+     *@private
+     *@param{string}widgetName
+     *@param{Object}params
+     *@returns{Promise<boolean>|boolean}
      */
-    _computeWidgetVisibility: async function (widgetName, params) {
-        if (widgetName === 'move_up_opt' || widgetName === 'move_left_opt') {
-            return !this.$target.is(':first-child');
+    _computeWidgetVisibility:asyncfunction(widgetName,params){
+        if(widgetName==='move_up_opt'||widgetName==='move_left_opt'){
+            return!this.$target.is(':first-child');
         }
-        if (widgetName === 'move_down_opt' || widgetName === 'move_right_opt') {
-            return !this.$target.is(':last-child');
+        if(widgetName==='move_down_opt'||widgetName==='move_right_opt'){
+            return!this.$target.is(':last-child');
         }
-        return true;
+        returntrue;
     },
     /**
-     * @private
-     * @param {HTMLElement} el
-     * @returns {Object}
+     *@private
+     *@param{HTMLElement}el
+     *@returns{Object}
      */
-    _extraInfoFromDescriptionElement: function (el) {
-        return {
-            title: el.getAttribute('string'),
-            options: {
-                classes: el.classList,
-                dataAttributes: el.dataset,
-                tooltip: el.title,
-                placeholder: el.getAttribute('placeholder'),
-                childNodes: [...el.childNodes],
+    _extraInfoFromDescriptionElement:function(el){
+        return{
+            title:el.getAttribute('string'),
+            options:{
+                classes:el.classList,
+                dataAttributes:el.dataset,
+                tooltip:el.title,
+                placeholder:el.getAttribute('placeholder'),
+                childNodes:[...el.childNodes],
             },
         };
     },
     /**
-     * @private
-     * @param {*}
-     * @returns {string}
+     *@private
+     *@param{*}
+     *@returns{string}
      */
-    _normalizeWidgetValue: function (value) {
-        value = `${value}`.trim(); // Force to a trimmed string
-        value = ColorpickerWidget.normalizeCSSColor(value); // If is a css color, normalize it
-        return value;
+    _normalizeWidgetValue:function(value){
+        value=`${value}`.trim();//Forcetoatrimmedstring
+        value=ColorpickerWidget.normalizeCSSColor(value);//Ifisacsscolor,normalizeit
+        returnvalue;
     },
     /**
-     * @private
-     * @param {string} widgetName
-     * @param {UserValueWidget|this|null} parent
-     * @param {string} title
-     * @param {Object} options
-     * @returns {UserValueWidget}
+     *@private
+     *@param{string}widgetName
+     *@param{UserValueWidget|this|null}parent
+     *@param{string}title
+     *@param{Object}options
+     *@returns{UserValueWidget}
      */
-    _registerUserValueWidget: function (widgetName, parent, title, options) {
-        const widget = new userValueWidgetsRegistry[widgetName](parent, title, options, this.$target);
-        if (!parent || parent === this) {
+    _registerUserValueWidget:function(widgetName,parent,title,options){
+        constwidget=newuserValueWidgetsRegistry[widgetName](parent,title,options,this.$target);
+        if(!parent||parent===this){
             this._userValueWidgets.push(widget);
-        } else {
+        }else{
             parent.registerSubWidget(widget);
         }
-        return widget;
+        returnwidget;
     },
     /**
-     * @private
-     * @param {HTMLElement} uiFragment
-     * @returns {Promise}
+     *@private
+     *@param{HTMLElement}uiFragment
+     *@returns{Promise}
      */
-    _renderCustomWidgets: function (uiFragment) {
-        return Promise.resolve();
+    _renderCustomWidgets:function(uiFragment){
+        returnPromise.resolve();
     },
     /**
-     * @private
-     * @param {HTMLElement} uiFragment
-     * @returns {Promise}
+     *@private
+     *@param{HTMLElement}uiFragment
+     *@returns{Promise}
      */
-    _renderCustomXML: function (uiFragment) {
-        return Promise.resolve();
+    _renderCustomXML:function(uiFragment){
+        returnPromise.resolve();
     },
     /**
-     * @private
-     * @param {jQuery} [$xml] - default to original xml content
-     * @returns {Promise}
+     *@private
+     *@param{jQuery}[$xml]-defaulttooriginalxmlcontent
+     *@returns{Promise}
      */
-    _renderOriginalXML: async function ($xml) {
-        const uiFragment = document.createDocumentFragment();
-        ($xml || this.$originalUIElements).clone(true).appendTo(uiFragment);
+    _renderOriginalXML:asyncfunction($xml){
+        constuiFragment=document.createDocumentFragment();
+        ($xml||this.$originalUIElements).clone(true).appendTo(uiFragment);
 
-        await this._renderCustomXML(uiFragment);
+        awaitthis._renderCustomXML(uiFragment);
 
-        // Build layouting components first
-        for (const [itemName, build] of [['we-row', _buildRowElement], ['we-collapse', _buildCollapseElement]]) {
-            uiFragment.querySelectorAll(itemName).forEach(el => {
-                const infos = this._extraInfoFromDescriptionElement(el);
-                const groupEl = build(infos.title, infos.options);
-                el.parentNode.insertBefore(groupEl, el);
+        //Buildlayoutingcomponentsfirst
+        for(const[itemName,build]of[['we-row',_buildRowElement],['we-collapse',_buildCollapseElement]]){
+            uiFragment.querySelectorAll(itemName).forEach(el=>{
+                constinfos=this._extraInfoFromDescriptionElement(el);
+                constgroupEl=build(infos.title,infos.options);
+                el.parentNode.insertBefore(groupEl,el);
                 el.parentNode.removeChild(el);
             });
         }
 
-        // Load widgets
-        await this._renderXMLWidgets(uiFragment);
-        await this._renderCustomWidgets(uiFragment);
+        //Loadwidgets
+        awaitthis._renderXMLWidgets(uiFragment);
+        awaitthis._renderCustomWidgets(uiFragment);
 
-        if (this.isDestroyed()) {
-            // TODO there is probably better to do. This case was found only in
-            // tours, where the editor is left before the widget are fully
-            // loaded (loadMethodsData doesn't work if the widget is destroyed).
-            return uiFragment;
+        if(this.isDestroyed()){
+            //TODOthereisprobablybettertodo.Thiscasewasfoundonlyin
+            //tours,wheretheeditorisleftbeforethewidgetarefully
+            //loaded(loadMethodsDatadoesn'tworkifthewidgetisdestroyed).
+            returnuiFragment;
         }
 
-        const validMethodNames = [];
-        for (const key in this) {
+        constvalidMethodNames=[];
+        for(constkeyinthis){
             validMethodNames.push(key);
         }
-        this._userValueWidgets.forEach(widget => {
+        this._userValueWidgets.forEach(widget=>{
             widget.loadMethodsData(validMethodNames);
         });
 
-        return uiFragment;
+        returnuiFragment;
     },
     /**
-     * @private
-     * @param {HTMLElement} parentEl
-     * @param {SnippetOptionWidget|UserValueWidget} parentWidget
-     * @returns {Promise}
+     *@private
+     *@param{HTMLElement}parentEl
+     *@param{SnippetOptionWidget|UserValueWidget}parentWidget
+     *@returns{Promise}
      */
-    _renderXMLWidgets: function (parentEl, parentWidget) {
-        const proms = [...parentEl.children].map(el => {
-            const widgetName = el.tagName.toLowerCase();
-            if (!userValueWidgetsRegistry.hasOwnProperty(widgetName)) {
-                return this._renderXMLWidgets(el, parentWidget);
+    _renderXMLWidgets:function(parentEl,parentWidget){
+        constproms=[...parentEl.children].map(el=>{
+            constwidgetName=el.tagName.toLowerCase();
+            if(!userValueWidgetsRegistry.hasOwnProperty(widgetName)){
+                returnthis._renderXMLWidgets(el,parentWidget);
             }
 
-            const infos = this._extraInfoFromDescriptionElement(el);
-            const widget = this._registerUserValueWidget(widgetName, parentWidget || this, infos.title, infos.options);
-            return widget.insertAfter(el).then(() => {
-                // Remove the original element afterwards as the insertion
-                // operation may move some of its inner content during
-                // widget start.
+            constinfos=this._extraInfoFromDescriptionElement(el);
+            constwidget=this._registerUserValueWidget(widgetName,parentWidget||this,infos.title,infos.options);
+            returnwidget.insertAfter(el).then(()=>{
+                //Removetheoriginalelementafterwardsastheinsertion
+                //operationmaymovesomeofitsinnercontentduring
+                //widgetstart.
                 parentEl.removeChild(el);
 
-                if (widget.isContainer()) {
-                    return this._renderXMLWidgets(widget.el, widget);
+                if(widget.isContainer()){
+                    returnthis._renderXMLWidgets(widget.el,widget);
                 }
             });
         });
-        return Promise.all(proms);
+        returnPromise.all(proms);
     },
     /**
-     * @private
-     * @param {...string} widgetNames
-     * @returns {UserValueWidget[]}
+     *@private
+     *@param{...string}widgetNames
+     *@returns{UserValueWidget[]}
      */
-    _requestUserValueWidgets: function (...widgetNames) {
-        const widgets = [];
-        for (const widgetName of widgetNames) {
-            let widget = null;
-            this.trigger_up('user_value_widget_request', {
-                name: widgetName,
-                onSuccess: _widget => widget = _widget,
+    _requestUserValueWidgets:function(...widgetNames){
+        constwidgets=[];
+        for(constwidgetNameofwidgetNames){
+            letwidget=null;
+            this.trigger_up('user_value_widget_request',{
+                name:widgetName,
+                onSuccess:_widget=>widget=_widget,
             });
-            if (widget) {
+            if(widget){
                 widgets.push(widget);
             }
         }
-        return widgets;
+        returnwidgets;
     },
     /**
-     * @private
-     * @param {function<Promise<jQuery>>} [callback]
-     * @returns {Promise}
+     *@private
+     *@param{function<Promise<jQuery>>}[callback]
+     *@returns{Promise}
      */
-    _rerenderXML: async function (callback) {
-        this._userValueWidgets.forEach(widget => widget.destroy());
-        this._userValueWidgets = [];
+    _rerenderXML:asyncfunction(callback){
+        this._userValueWidgets.forEach(widget=>widget.destroy());
+        this._userValueWidgets=[];
         this.$el.empty();
 
-        let $xml = undefined;
-        if (callback) {
-            $xml = await callback.call(this);
+        let$xml=undefined;
+        if(callback){
+            $xml=awaitcallback.call(this);
         }
 
-        return this._renderOriginalXML($xml).then(uiFragment => {
+        returnthis._renderOriginalXML($xml).then(uiFragment=>{
             this.$el.append(uiFragment);
-            return this.updateUI();
+            returnthis.updateUI();
         });
     },
     /**
-     * Activates the option associated to the given DOM element.
+     *ActivatestheoptionassociatedtothegivenDOMelement.
      *
-     * @private
-     * @param {boolean|string} previewMode
-     *        - truthy if the option is enabled for preview or if leaving it (in
-     *          that second case, the value is 'reset')
-     *        - false if the option should be activated for good
-     * @param {UserValueWidget} widget - the widget which triggered the option change
-     * @returns {Promise}
+     *@private
+     *@param{boolean|string}previewMode
+     *       -truthyiftheoptionisenabledforprevieworifleavingit(in
+     *         thatsecondcase,thevalueis'reset')
+     *       -falseiftheoptionshouldbeactivatedforgood
+     *@param{UserValueWidget}widget-thewidgetwhichtriggeredtheoptionchange
+     *@returns{Promise}
      */
-    _select: async function (previewMode, widget) {
-        let $applyTo = null;
+    _select:asyncfunction(previewMode,widget){
+        let$applyTo=null;
 
-        // Call each option method sequentially
-        for (const methodName of widget.getMethodsNames()) {
-            const widgetValue = widget.getValue(methodName);
-            const params = widget.getMethodsParams(methodName);
+        //Calleachoptionmethodsequentially
+        for(constmethodNameofwidget.getMethodsNames()){
+            constwidgetValue=widget.getValue(methodName);
+            constparams=widget.getMethodsParams(methodName);
 
-            if (params.applyTo) {
-                if (!$applyTo) {
-                    $applyTo = this.$(params.applyTo);
+            if(params.applyTo){
+                if(!$applyTo){
+                    $applyTo=this.$(params.applyTo);
                 }
-                const proms = _.map($applyTo, subTargetEl => {
-                    const proxy = createPropertyProxy(this, '$target', $(subTargetEl));
-                    return this[methodName].call(proxy, previewMode, widgetValue, params);
+                constproms=_.map($applyTo,subTargetEl=>{
+                    constproxy=createPropertyProxy(this,'$target',$(subTargetEl));
+                    returnthis[methodName].call(proxy,previewMode,widgetValue,params);
                 });
-                await Promise.all(proms);
-            } else {
-                await this[methodName](previewMode, widgetValue, params);
+                awaitPromise.all(proms);
+            }else{
+                awaitthis[methodName](previewMode,widgetValue,params);
             }
         }
 
-        // We trigger the event on elements targeted by apply-to if any as
-        // this.$target could not be in an editable element while the elements
-        // targeted by apply-to are.
-        ($applyTo || this.$target).trigger('content_changed');
+        //Wetriggertheeventonelementstargetedbyapply-toifanyas
+        //this.$targetcouldnotbeinaneditableelementwhiletheelements
+        //targetedbyapply-toare.
+        ($applyTo||this.$target).trigger('content_changed');
     },
     /**
-     * Used to handle attribute or data attribute value change
+     *Usedtohandleattributeordataattributevaluechange
      *
-     * @param {string} value
-     * @param {Object} params
-     * @returns {string|undefined}
+     *@param{string}value
+     *@param{Object}params
+     *@returns{string|undefined}
      */
-    _selectAttributeHelper(value, params) {
-        if (!params.attributeName) {
-            throw new Error('Attribute name missing');
+    _selectAttributeHelper(value,params){
+        if(!params.attributeName){
+            thrownewError('Attributenamemissing');
         }
-        if (params.saveUnit && !params.withUnit) {
-            // Values that come with an unit are saved without unit as
-            // data-attribute unless told otherwise.
-            value = value.split(params.saveUnit).join('');
+        if(params.saveUnit&&!params.withUnit){
+            //Valuesthatcomewithanunitaresavedwithoutunitas
+            //data-attributeunlesstoldotherwise.
+            value=value.split(params.saveUnit).join('');
         }
-        if (params.extraClass) {
-            this.$target.toggleClass(params.extraClass, params.defaultValue !== value);
+        if(params.extraClass){
+            this.$target.toggleClass(params.extraClass,params.defaultValue!==value);
         }
-        return value;
+        returnvalue;
     },
     /**
-     * @private
-     * @param {HTMLElement} collapseEl
-     * @param {boolean|undefined} [show]
+     *@private
+     *@param{HTMLElement}collapseEl
+     *@param{boolean|undefined}[show]
      */
-    _toggleCollapseEl(collapseEl, show) {
-        collapseEl.classList.toggle('active', show);
-        collapseEl.querySelector('.o_we_collapse_toggler').classList.toggle('active', show);
+    _toggleCollapseEl(collapseEl,show){
+        collapseEl.classList.toggle('active',show);
+        collapseEl.querySelector('.o_we_collapse_toggler').classList.toggle('active',show);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onCollapseTogglerClick(ev) {
-        const currentCollapseEl = ev.currentTarget.parentNode;
+    _onCollapseTogglerClick(ev){
+        constcurrentCollapseEl=ev.currentTarget.parentNode;
         this._toggleCollapseEl(currentCollapseEl);
-        for (const collapseEl of currentCollapseEl.querySelectorAll('we-collapse')) {
-            this._toggleCollapseEl(collapseEl, false);
+        for(constcollapseElofcurrentCollapseEl.querySelectorAll('we-collapse')){
+            this._toggleCollapseEl(collapseEl,false);
         }
     },
     /**
-     * Called when a widget notifies a preview/change/reset.
+     *Calledwhenawidgetnotifiesapreview/change/reset.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onUserValueUpdate: async function (ev) {
+    _onUserValueUpdate:asyncfunction(ev){
         ev.stopPropagation();
-        const widget = ev.data.widget;
-        const previewMode = ev.data.previewMode;
+        constwidget=ev.data.widget;
+        constpreviewMode=ev.data.previewMode;
 
-        // First check if the updated widget or any of the widgets it triggers
-        // will require a reload or a confirmation choice by the user. If it is
-        // the case, warn the user and potentially ask if he agrees to save its
-        // current changes. If not, just do nothing.
-        let requiresReload = false;
-        if (!ev.data.previewMode && !ev.data.isSimulatedEvent) {
-            const linkedWidgets = this._requestUserValueWidgets(...ev.data.triggerWidgetsNames);
-            const widgets = [ev.data.widget].concat(linkedWidgets);
+        //Firstcheckiftheupdatedwidgetoranyofthewidgetsittriggers
+        //willrequireareloadoraconfirmationchoicebytheuser.Ifitis
+        //thecase,warntheuserandpotentiallyaskifheagreestosaveits
+        //currentchanges.Ifnot,justdonothing.
+        letrequiresReload=false;
+        if(!ev.data.previewMode&&!ev.data.isSimulatedEvent){
+            constlinkedWidgets=this._requestUserValueWidgets(...ev.data.triggerWidgetsNames);
+            constwidgets=[ev.data.widget].concat(linkedWidgets);
 
-            const warnMessage = await this._checkIfWidgetsUpdateNeedWarning(widgets);
-            if (warnMessage) {
-                const okWarning = await new Promise(resolve => {
-                    Dialog.confirm(this, warnMessage, {
-                        confirm_callback: () => resolve(true),
-                        cancel_callback: () => resolve(false),
+            constwarnMessage=awaitthis._checkIfWidgetsUpdateNeedWarning(widgets);
+            if(warnMessage){
+                constokWarning=awaitnewPromise(resolve=>{
+                    Dialog.confirm(this,warnMessage,{
+                        confirm_callback:()=>resolve(true),
+                        cancel_callback:()=>resolve(false),
                     });
                 });
-                if (!okWarning) {
+                if(!okWarning){
                     return;
                 }
             }
 
-            const reloadMessage = await this._checkIfWidgetsUpdateNeedReload(widgets);
-            requiresReload = !!reloadMessage;
-            if (requiresReload) {
-                const save = await new Promise(resolve => {
-                    Dialog.confirm(this, _t("This change needs to reload the page, this will save all your changes and reload the page, are you sure you want to proceed?") + ' '
-                            + (typeof reloadMessage === 'string' ? reloadMessage : ''), {
-                        confirm_callback: () => resolve(true),
-                        cancel_callback: () => resolve(false),
+            constreloadMessage=awaitthis._checkIfWidgetsUpdateNeedReload(widgets);
+            requiresReload=!!reloadMessage;
+            if(requiresReload){
+                constsave=awaitnewPromise(resolve=>{
+                    Dialog.confirm(this,_t("Thischangeneedstoreloadthepage,thiswillsaveallyourchangesandreloadthepage,areyousureyouwanttoproceed?")+''
+                            +(typeofreloadMessage==='string'?reloadMessage:''),{
+                        confirm_callback:()=>resolve(true),
+                        cancel_callback:()=>resolve(false),
                     });
                 });
-                if (!save) {
+                if(!save){
                     return;
                 }
             }
         }
 
-        // Queue action so that we can later skip useless actions.
-        if (!this._actionQueues.get(widget)) {
-            this._actionQueues.set(widget, []);
+        //Queueactionsothatwecanlaterskipuselessactions.
+        if(!this._actionQueues.get(widget)){
+            this._actionQueues.set(widget,[]);
         }
-        const currentAction = {previewMode};
+        constcurrentAction={previewMode};
         this._actionQueues.get(widget).push(currentAction);
 
-        // Ask a mutexed snippet update according to the widget value change
-        const shouldRecordUndo = (!previewMode && !ev.data.isSimulatedEvent);
-        this.trigger_up('snippet_edition_request', {exec: async () => {
-            // If some previous snippet edition in the mutex removed the target from
-            // the DOM, the widget can be destroyed, in that case the edition request
-            // is now useless and can be discarded.
-            if (this.isDestroyed()) {
+        //Askamutexedsnippetupdateaccordingtothewidgetvaluechange
+        constshouldRecordUndo=(!previewMode&&!ev.data.isSimulatedEvent);
+        this.trigger_up('snippet_edition_request',{exec:async()=>{
+            //Ifsomeprevioussnippeteditioninthemutexremovedthetargetfrom
+            //theDOM,thewidgetcanbedestroyed,inthatcasetheeditionrequest
+            //isnowuselessandcanbediscarded.
+            if(this.isDestroyed()){
                 return;
             }
-            // Filter actions that are counterbalanced by earlier/later actions
-            const actionQueue = this._actionQueues.get(widget).filter(({previewMode}, i, actions) => {
-                const prev = actions[i - 1];
-                const next = actions[i + 1];
-                if (previewMode === true && next && next.previewMode) {
-                    return false;
-                } else if (previewMode === 'reset' && prev && prev.previewMode) {
-                    return false;
+            //Filteractionsthatarecounterbalancedbyearlier/lateractions
+            constactionQueue=this._actionQueues.get(widget).filter(({previewMode},i,actions)=>{
+                constprev=actions[i-1];
+                constnext=actions[i+1];
+                if(previewMode===true&&next&&next.previewMode){
+                    returnfalse;
+                }elseif(previewMode==='reset'&&prev&&prev.previewMode){
+                    returnfalse;
                 }
-                return true;
+                returntrue;
             });
-            // Skip action if it's been counterbalanced
-            if (!actionQueue.includes(currentAction)) {
-                this._actionQueues.set(widget, actionQueue);
+            //Skipactionifit'sbeencounterbalanced
+            if(!actionQueue.includes(currentAction)){
+                this._actionQueues.set(widget,actionQueue);
                 return;
             }
-            this._actionQueues.set(widget, actionQueue.filter(action => action !== currentAction));
+            this._actionQueues.set(widget,actionQueue.filter(action=>action!==currentAction));
 
-            if (ev.data.prepare) {
+            if(ev.data.prepare){
                 ev.data.prepare();
             }
 
-            if (previewMode && (widget.$el.closest('[data-no-preview="true"]').length)) {
-                // TODO the flag should be fetched through widget params somehow
+            if(previewMode&&(widget.$el.closest('[data-no-preview="true"]').length)){
+                //TODOtheflagshouldbefetchedthroughwidgetparamssomehow
                 return;
             }
 
-            // If it is not preview mode, the user selected the option for good
-            // (so record the action)
-            if (shouldRecordUndo) {
-                this.trigger_up('request_history_undo_record', {$target: this.$target});
+            //Ifitisnotpreviewmode,theuserselectedtheoptionforgood
+            //(sorecordtheaction)
+            if(shouldRecordUndo){
+                this.trigger_up('request_history_undo_record',{$target:this.$target});
             }
 
-            // Call widget option methods and update $target
-            await this._select(previewMode, widget);
-            if (previewMode) {
+            //Callwidgetoptionmethodsandupdate$target
+            awaitthis._select(previewMode,widget);
+            if(previewMode){
                 return;
             }
 
-            await new Promise(resolve => setTimeout(() => {
-                // Will update the UI of the correct widgets for all options
-                // related to the same $target/editor
-                this.trigger_up('snippet_option_update', {
-                    onSuccess: () => resolve(),
+            awaitnewPromise(resolve=>setTimeout(()=>{
+                //WillupdatetheUIofthecorrectwidgetsforalloptions
+                //relatedtothesame$target/editor
+                this.trigger_up('snippet_option_update',{
+                    onSuccess:()=>resolve(),
                 });
-            // Set timeout needed so that the user event which triggered the
-            // option can bubble first.
+            //Settimeoutneededsothattheusereventwhichtriggeredthe
+            //optioncanbubblefirst.
             }));
         }});
 
-        if (ev.data.isSimulatedEvent) {
-            // If the user value update was simulated through a trigger, we
-            // prevent triggering further widgets. This could be allowed at some
-            // point but does not work correctly in complex website cases (see
-            // customizeWebsite).
+        if(ev.data.isSimulatedEvent){
+            //Iftheuservalueupdatewassimulatedthroughatrigger,we
+            //preventtriggeringfurtherwidgets.Thiscouldbeallowedatsome
+            //pointbutdoesnotworkcorrectlyincomplexwebsitecases(see
+            //customizeWebsite).
             return;
         }
 
-        // Check linked widgets: force their value and simulate a notification
-        const linkedWidgets = this._requestUserValueWidgets(...ev.data.triggerWidgetsNames);
-        if (linkedWidgets.length !== ev.data.triggerWidgetsNames.length) {
-            console.warn('Missing widget to trigger');
+        //Checklinkedwidgets:forcetheirvalueandsimulateanotification
+        constlinkedWidgets=this._requestUserValueWidgets(...ev.data.triggerWidgetsNames);
+        if(linkedWidgets.length!==ev.data.triggerWidgetsNames.length){
+            console.warn('Missingwidgettotrigger');
             return;
         }
-        let i = 0;
-        const triggerWidgetsValues = ev.data.triggerWidgetsValues;
-        for (const linkedWidget of linkedWidgets) {
-            const widgetValue = triggerWidgetsValues[i];
-            if (widgetValue !== undefined) {
-                // FIXME right now only make this work supposing it is a
-                // colorpicker widget with big big hacks, this should be
-                // improved a lot
-                const normValue = this._normalizeWidgetValue(widgetValue);
-                if (previewMode === true) {
-                    linkedWidget._previewColor = normValue;
-                } else if (previewMode === false) {
-                    linkedWidget._previewColor = false;
-                    linkedWidget._value = normValue;
-                } else {
-                    linkedWidget._previewColor = false;
+        leti=0;
+        consttriggerWidgetsValues=ev.data.triggerWidgetsValues;
+        for(constlinkedWidgetoflinkedWidgets){
+            constwidgetValue=triggerWidgetsValues[i];
+            if(widgetValue!==undefined){
+                //FIXMErightnowonlymakethisworksupposingitisa
+                //colorpickerwidgetwithbigbighacks,thisshouldbe
+                //improvedalot
+                constnormValue=this._normalizeWidgetValue(widgetValue);
+                if(previewMode===true){
+                    linkedWidget._previewColor=normValue;
+                }elseif(previewMode===false){
+                    linkedWidget._previewColor=false;
+                    linkedWidget._value=normValue;
+                }else{
+                    linkedWidget._previewColor=false;
                 }
             }
 
-            linkedWidget.notifyValueChange(previewMode, true);
+            linkedWidget.notifyValueChange(previewMode,true);
             i++;
         }
 
-        if (requiresReload) {
-            this.trigger_up('request_save', {
-                reloadEditor: true,
+        if(requiresReload){
+            this.trigger_up('request_save',{
+                reloadEditor:true,
             });
         }
     },
     /**
-     * @private
+     *@private
      */
-    _onUserValueWidgetCritical() {
-        this.trigger_up('remove_snippet', {
-            $snippet: this.$target,
+    _onUserValueWidgetCritical(){
+        this.trigger_up('remove_snippet',{
+            $snippet:this.$target,
         });
     },
 });
-const registry = {};
+constregistry={};
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-registry.sizing = SnippetOptionWidget.extend({
+registry.sizing=SnippetOptionWidget.extend({
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var self = this;
-        var def = this._super.apply(this, arguments);
+    start:function(){
+        varself=this;
+        vardef=this._super.apply(this,arguments);
 
-        this.$handles = this.$overlay.find('.o_handle');
+        this.$handles=this.$overlay.find('.o_handle');
 
-        var resizeValues = this._getSize();
-        this.$handles.on('mousedown', function (ev) {
+        varresizeValues=this._getSize();
+        this.$handles.on('mousedown',function(ev){
             ev.preventDefault();
 
-            // First update size values as some element sizes may not have been
-            // initialized on option start (hidden slides, etc)
-            resizeValues = self._getSize();
-            var $handle = $(ev.currentTarget);
+            //Firstupdatesizevaluesassomeelementsizesmaynothavebeen
+            //initializedonoptionstart(hiddenslides,etc)
+            resizeValues=self._getSize();
+            var$handle=$(ev.currentTarget);
 
-            var compass = false;
-            var XY = false;
-            if ($handle.hasClass('n')) {
-                compass = 'n';
-                XY = 'Y';
-            } else if ($handle.hasClass('s')) {
-                compass = 's';
-                XY = 'Y';
-            } else if ($handle.hasClass('e')) {
-                compass = 'e';
-                XY = 'X';
-            } else if ($handle.hasClass('w')) {
-                compass = 'w';
-                XY = 'X';
+            varcompass=false;
+            varXY=false;
+            if($handle.hasClass('n')){
+                compass='n';
+                XY='Y';
+            }elseif($handle.hasClass('s')){
+                compass='s';
+                XY='Y';
+            }elseif($handle.hasClass('e')){
+                compass='e';
+                XY='X';
+            }elseif($handle.hasClass('w')){
+                compass='w';
+                XY='X';
             }
 
-            var resize = resizeValues[compass];
-            if (!resize) {
+            varresize=resizeValues[compass];
+            if(!resize){
                 return;
             }
 
-            var current = 0;
-            var cssProperty = resize[2];
-            var cssPropertyValue = parseInt(self.$target.css(cssProperty));
-            _.each(resize[0], function (val, key) {
-                if (self.$target.hasClass(val)) {
-                    current = key;
-                } else if (resize[1][key] === cssPropertyValue) {
-                    current = key;
+            varcurrent=0;
+            varcssProperty=resize[2];
+            varcssPropertyValue=parseInt(self.$target.css(cssProperty));
+            _.each(resize[0],function(val,key){
+                if(self.$target.hasClass(val)){
+                    current=key;
+                }elseif(resize[1][key]===cssPropertyValue){
+                    current=key;
                 }
             });
-            var begin = current;
-            var beginClass = self.$target.attr('class');
-            var regClass = new RegExp('\\s*' + resize[0][begin].replace(/[-]*[0-9]+/, '[-]*[0-9]+'), 'g');
+            varbegin=current;
+            varbeginClass=self.$target.attr('class');
+            varregClass=newRegExp('\\s*'+resize[0][begin].replace(/[-]*[0-9]+/,'[-]*[0-9]+'),'g');
 
-            var cursor = $handle.css('cursor') + '-important';
-            var $body = $(this.ownerDocument.body);
+            varcursor=$handle.css('cursor')+'-important';
+            var$body=$(this.ownerDocument.body);
             $body.addClass(cursor);
 
-            var xy = ev['page' + XY];
-            var bodyMouseMove = function (ev) {
+            varxy=ev['page'+XY];
+            varbodyMouseMove=function(ev){
                 ev.preventDefault();
 
-                var dd = ev['page' + XY] - xy + resize[1][begin];
-                var next = current + (current + 1 === resize[1].length ? 0 : 1);
-                var prev = current ? (current - 1) : 0;
+                vardd=ev['page'+XY]-xy+resize[1][begin];
+                varnext=current+(current+1===resize[1].length?0:1);
+                varprev=current?(current-1):0;
 
-                var change = false;
-                if (dd > (2 * resize[1][next] + resize[1][current]) / 3) {
-                    self.$target.attr('class', (self.$target.attr('class') || '').replace(regClass, ''));
+                varchange=false;
+                if(dd>(2*resize[1][next]+resize[1][current])/3){
+                    self.$target.attr('class',(self.$target.attr('class')||'').replace(regClass,''));
                     self.$target.addClass(resize[0][next]);
-                    current = next;
-                    change = true;
+                    current=next;
+                    change=true;
                 }
-                if (prev !== current && dd < (2 * resize[1][prev] + resize[1][current]) / 3) {
-                    self.$target.attr('class', (self.$target.attr('class') || '').replace(regClass, ''));
+                if(prev!==current&&dd<(2*resize[1][prev]+resize[1][current])/3){
+                    self.$target.attr('class',(self.$target.attr('class')||'').replace(regClass,''));
                     self.$target.addClass(resize[0][prev]);
-                    current = prev;
-                    change = true;
+                    current=prev;
+                    change=true;
                 }
 
-                if (change) {
-                    self._onResize(compass, beginClass, current);
+                if(change){
+                    self._onResize(compass,beginClass,current);
                     self.trigger_up('cover_update');
                     $handle.addClass('o_active');
                 }
             };
-            var bodyMouseUp = function () {
-                $body.off('mousemove', bodyMouseMove);
-                $(window).off('mouseup', bodyMouseUp);
+            varbodyMouseUp=function(){
+                $body.off('mousemove',bodyMouseMove);
+                $(window).off('mouseup',bodyMouseUp);
                 $body.removeClass(cursor);
                 $handle.removeClass('o_active');
 
-                // Highlights the previews for a while
-                var $handlers = self.$overlay.find('.o_handle');
-                $handlers.addClass('o_active').delay(300).queue(function () {
+                //Highlightsthepreviewsforawhile
+                var$handlers=self.$overlay.find('.o_handle');
+                $handlers.addClass('o_active').delay(300).queue(function(){
                     $handlers.removeClass('o_active').dequeue();
                 });
 
-                if (begin === current) {
+                if(begin===current){
                     return;
                 }
-                setTimeout(function () {
-                    self.trigger_up('request_history_undo_record', {
-                        $target: self.$target,
-                        event: 'resize_' + XY,
+                setTimeout(function(){
+                    self.trigger_up('request_history_undo_record',{
+                        $target:self.$target,
+                        event:'resize_'+XY,
                     });
-                }, 0);
+                },0);
             };
-            $body.on('mousemove', bodyMouseMove);
-            $(window).on('mouseup', bodyMouseUp);
+            $body.on('mousemove',bodyMouseMove);
+            $(window).on('mouseup',bodyMouseUp);
         });
 
-        return def;
+        returndef;
     },
     /**
-     * @override
+     *@override
      */
-    onFocus: function () {
+    onFocus:function(){
         this._onResize();
     },
     /**
-     * @override
+     *@override
      */
-    onBlur: function () {
+    onBlur:function(){
         this.$handles.addClass('readonly');
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    setTarget: function () {
+    setTarget:function(){
         this._super(...arguments);
         this._onResize();
     },
     /**
-     * @override
+     *@override
      */
-    updateUI: async function () {
-        await this._super(...arguments);
-        const resizeValues = this._getSize();
-        _.each(resizeValues, (value, key) => {
-            this.$handles.filter('.' + key).toggleClass('readonly', !value);
+    updateUI:asyncfunction(){
+        awaitthis._super(...arguments);
+        constresizeValues=this._getSize();
+        _.each(resizeValues,(value,key)=>{
+            this.$handles.filter('.'+key).toggleClass('readonly',!value);
         });
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Returns an object mapping one or several cardinal direction (n, e, s, w)
-     * to an Array containing:
-     * 1) A list of classes to toggle when using this cardinal direction
-     * 2) A list of values these classes are supposed to set on a given CSS prop
-     * 3) The mentioned CSS prop
+     *Returnsanobjectmappingoneorseveralcardinaldirection(n,e,s,w)
+     *toanArraycontaining:
+     *1)Alistofclassestotogglewhenusingthiscardinaldirection
+     *2)AlistofvaluestheseclassesaresupposedtosetonagivenCSSprop
+     *3)ThementionedCSSprop
      *
-     * Note: this object must also be saved in this.grid before being returned.
+     *Note:thisobjectmustalsobesavedinthis.gridbeforebeingreturned.
      *
-     * @abstract
-     * @private
-     * @returns {Object}
+     *@abstract
+     *@private
+     *@returns{Object}
      */
-    _getSize: function () {},
+    _getSize:function(){},
     /**
-     * Called when the snippet is being resized and its classes changes.
+     *Calledwhenthesnippetisbeingresizedanditsclasseschanges.
      *
-     * @private
-     * @param {string} [compass] - resize direction ('n', 's', 'e' or 'w')
-     * @param {string} [beginClass] - attributes class at the beginning
-     * @param {integer} [current] - current increment in this.grid
+     *@private
+     *@param{string}[compass]-resizedirection('n','s','e'or'w')
+     *@param{string}[beginClass]-attributesclassatthebeginning
+     *@param{integer}[current]-currentincrementinthis.grid
      */
-    _onResize: function (compass, beginClass, current) {
-        var self = this;
+    _onResize:function(compass,beginClass,current){
+        varself=this;
 
-        // Adapt the resize handles according to the classes and dimensions
-        var resizeValues = this._getSize();
-        var $handles = this.$overlay.find('.o_handle');
-        _.each(resizeValues, function (resizeValue, direction) {
-            var classes = resizeValue[0];
-            var values = resizeValue[1];
-            var cssProperty = resizeValue[2];
+        //Adapttheresizehandlesaccordingtotheclassesanddimensions
+        varresizeValues=this._getSize();
+        var$handles=this.$overlay.find('.o_handle');
+        _.each(resizeValues,function(resizeValue,direction){
+            varclasses=resizeValue[0];
+            varvalues=resizeValue[1];
+            varcssProperty=resizeValue[2];
 
-            var $handle = $handles.filter('.' + direction);
+            var$handle=$handles.filter('.'+direction);
 
-            var current = 0;
-            var cssPropertyValue = parseInt(self.$target.css(cssProperty));
-            _.each(classes, function (className, key) {
-                if (self.$target.hasClass(className)) {
-                    current = key;
-                } else if (values[key] === cssPropertyValue) {
-                    current = key;
+            varcurrent=0;
+            varcssPropertyValue=parseInt(self.$target.css(cssProperty));
+            _.each(classes,function(className,key){
+                if(self.$target.hasClass(className)){
+                    current=key;
+                }elseif(values[key]===cssPropertyValue){
+                    current=key;
                 }
             });
 
-            $handle.toggleClass('o_handle_start', current === 0);
-            $handle.toggleClass('o_handle_end', current === classes.length - 1);
+            $handle.toggleClass('o_handle_start',current===0);
+            $handle.toggleClass('o_handle_end',current===classes.length-1);
         });
 
-        // Adapt the handles to fit the left, top and bottom sizes
-        var ml = this.$target.css('margin-left');
+        //Adaptthehandlestofittheleft,topandbottomsizes
+        varml=this.$target.css('margin-left');
         this.$overlay.find('.o_handle.w').css({
-            width: ml,
-            left: '-' + ml,
+            width:ml,
+            left:'-'+ml,
         });
         this.$overlay.find('.o_handle.e').css({
-            width: 0,
+            width:0,
         });
-        _.each(this.$overlay.find(".o_handle.n, .o_handle.s"), function (handle) {
-            var $handle = $(handle);
-            var direction = $handle.hasClass('n') ? 'top' : 'bottom';
-            $handle.height(self.$target.css('padding-' + direction));
+        _.each(this.$overlay.find(".o_handle.n,.o_handle.s"),function(handle){
+            var$handle=$(handle);
+            vardirection=$handle.hasClass('n')?'top':'bottom';
+            $handle.height(self.$target.css('padding-'+direction));
         });
         this.$target.trigger('content_changed');
     },
 });
 
 /**
- * Handles the edition of padding-top and padding-bottom.
+ *Handlestheeditionofpadding-topandpadding-bottom.
  */
-registry['sizing_y'] = registry.sizing.extend({
+registry['sizing_y']=registry.sizing.extend({
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _getSize: function () {
-        var nClass = 'pt';
-        var nProp = 'padding-top';
-        var sClass = 'pb';
-        var sProp = 'padding-bottom';
-        if (this.$target.is('hr')) {
-            nClass = 'mt';
-            nProp = 'margin-top';
-            sClass = 'mb';
-            sProp = 'margin-bottom';
+    _getSize:function(){
+        varnClass='pt';
+        varnProp='padding-top';
+        varsClass='pb';
+        varsProp='padding-bottom';
+        if(this.$target.is('hr')){
+            nClass='mt';
+            nProp='margin-top';
+            sClass='mb';
+            sProp='margin-bottom';
         }
 
-        var grid = [];
-        for (var i = 0; i <= (256 / 8); i++) {
-            grid.push(i * 8);
+        vargrid=[];
+        for(vari=0;i<=(256/8);i++){
+            grid.push(i*8);
         }
-        grid.splice(1, 0, 4);
-        this.grid = {
-            n: [grid.map(v => nClass + v), grid, nProp],
-            s: [grid.map(v => sClass + v), grid, sProp],
+        grid.splice(1,0,4);
+        this.grid={
+            n:[grid.map(v=>nClass+v),grid,nProp],
+            s:[grid.map(v=>sClass+v),grid,sProp],
         };
-        return this.grid;
+        returnthis.grid;
     },
 });
 
 /*
- * Abstract option to be extended by the ImageOptimize and BackgroundOptimize
- * options that handles all the common parts.
+ *AbstractoptiontobeextendedbytheImageOptimizeandBackgroundOptimize
+ *optionsthathandlesallthecommonparts.
  */
-const ImageHandlerOption = SnippetOptionWidget.extend({
+constImageHandlerOption=SnippetOptionWidget.extend({
 
     /**
-     * @override
+     *@override
      */
-    async willStart() {
-        const _super = this._super.bind(this);
-        await this._loadImageInfo();
-        return _super(...arguments);
+    asyncwillStart(){
+        const_super=this._super.bind(this);
+        awaitthis._loadImageInfo();
+        return_super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    selectWidth(previewMode, widgetValue, params) {
-        this._getImg().dataset.resizeWidth = widgetValue;
-        return this._applyOptions();
+    selectWidth(previewMode,widgetValue,params){
+        this._getImg().dataset.resizeWidth=widgetValue;
+        returnthis._applyOptions();
     },
     /**
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    setQuality(previewMode, widgetValue, params) {
-        this._getImg().dataset.quality = widgetValue;
-        return this._applyOptions();
+    setQuality(previewMode,widgetValue,params){
+        this._getImg().dataset.quality=widgetValue;
+        returnthis._applyOptions();
     },
     /**
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    glFilter(previewMode, widgetValue, params) {
-        const dataset = this._getImg().dataset;
-        if (widgetValue) {
-            dataset.glFilter = widgetValue;
-        } else {
-            delete dataset.glFilter;
+    glFilter(previewMode,widgetValue,params){
+        constdataset=this._getImg().dataset;
+        if(widgetValue){
+            dataset.glFilter=widgetValue;
+        }else{
+            deletedataset.glFilter;
         }
-        return this._applyOptions();
+        returnthis._applyOptions();
     },
     /**
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    customFilter(previewMode, widgetValue, params) {
-        const img = this._getImg();
-        const {filterOptions} = img.dataset;
-        const {filterProperty} = params;
-        if (filterProperty === 'filterColor') {
-            widgetValue = normalizeColor(widgetValue);
+    customFilter(previewMode,widgetValue,params){
+        constimg=this._getImg();
+        const{filterOptions}=img.dataset;
+        const{filterProperty}=params;
+        if(filterProperty==='filterColor'){
+            widgetValue=normalizeColor(widgetValue);
         }
-        const newOptions = Object.assign(JSON.parse(filterOptions || "{}"), {[filterProperty]: widgetValue});
-        img.dataset.filterOptions = JSON.stringify(newOptions);
-        return this._applyOptions();
+        constnewOptions=Object.assign(JSON.parse(filterOptions||"{}"),{[filterProperty]:widgetValue});
+        img.dataset.filterOptions=JSON.stringify(newOptions);
+        returnthis._applyOptions();
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _computeVisibility() {
-        const src = this._getImg().getAttribute('src');
-        return src && src !== '/';
+    _computeVisibility(){
+        constsrc=this._getImg().getAttribute('src');
+        returnsrc&&src!=='/';
     },
     /**
-     * @override
+     *@override
      */
-    async _computeWidgetState(methodName, params) {
-        const img = this._getImg();
+    async_computeWidgetState(methodName,params){
+        constimg=this._getImg();
 
-        // Make sure image is loaded because we need its naturalWidth
-        await new Promise((resolve, reject) => {
-            if (img.complete) {
+        //MakesureimageisloadedbecauseweneeditsnaturalWidth
+        awaitnewPromise((resolve,reject)=>{
+            if(img.complete){
                 resolve();
                 return;
             }
-            img.addEventListener('load', resolve, {once: true});
-            img.addEventListener('error', resolve, {once: true});
+            img.addEventListener('load',resolve,{once:true});
+            img.addEventListener('error',resolve,{once:true});
         });
 
-        switch (methodName) {
-            case 'selectWidth':
-                return img.naturalWidth;
-            case 'setFilter':
-                return img.dataset.filter;
-            case 'glFilter':
-                return img.dataset.glFilter || "";
-            case 'setQuality':
-                return img.dataset.quality || 75;
-            case 'customFilter': {
-                const {filterProperty} = params;
-                const options = JSON.parse(img.dataset.filterOptions || "{}");
-                const defaultValue = filterProperty === 'blend' ? 'normal' : 0;
-                return options[filterProperty] || defaultValue;
+        switch(methodName){
+            case'selectWidth':
+                returnimg.naturalWidth;
+            case'setFilter':
+                returnimg.dataset.filter;
+            case'glFilter':
+                returnimg.dataset.glFilter||"";
+            case'setQuality':
+                returnimg.dataset.quality||75;
+            case'customFilter':{
+                const{filterProperty}=params;
+                constoptions=JSON.parse(img.dataset.filterOptions||"{}");
+                constdefaultValue=filterProperty==='blend'?'normal':0;
+                returnoptions[filterProperty]||defaultValue;
             }
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    async _renderCustomXML(uiFragment) {
-        const isLocalURL = href => new URL(href, window.location.origin).origin === window.location.origin;
+    async_renderCustomXML(uiFragment){
+        constisLocalURL=href=>newURL(href,window.location.origin).origin===window.location.origin;
 
-        const img = this._getImg();
-        if (!this.originalSrc || !['image/png', 'image/jpeg'].includes(img.dataset.mimetype)) {
-            return [...uiFragment.childNodes].forEach(node => {
-                if (node.matches('.o_we_external_warning')) {
+        constimg=this._getImg();
+        if(!this.originalSrc||!['image/png','image/jpeg'].includes(img.dataset.mimetype)){
+            return[...uiFragment.childNodes].forEach(node=>{
+                if(node.matches('.o_we_external_warning')){
                     node.classList.remove('d-none');
-                    if (isLocalURL(img.getAttribute('src'))) {
-                        const title = node.querySelector('we-title');
-                        title.textContent = ` ${_t("Quality options unavailable")}`;
-                        $(title).prepend('<i class="fa fa-warning" />');
-                        if (img.dataset.mimetype) {
-                            title.setAttribute('title', _t("Only PNG and JPEG images support quality options and image filtering"));
-                        } else {
-                            title.setAttribute('title', _t("Due to technical limitations, you can only change optimization settings on this image by choosing it again in the media-dialog or reuploading it (double click on the image)"));
+                    if(isLocalURL(img.getAttribute('src'))){
+                        consttitle=node.querySelector('we-title');
+                        title.textContent=`${_t("Qualityoptionsunavailable")}`;
+                        $(title).prepend('<iclass="fafa-warning"/>');
+                        if(img.dataset.mimetype){
+                            title.setAttribute('title',_t("OnlyPNGandJPEGimagessupportqualityoptionsandimagefiltering"));
+                        }else{
+                            title.setAttribute('title',_t("Duetotechnicallimitations,youcanonlychangeoptimizationsettingsonthisimagebychoosingitagaininthemedia-dialogorreuploadingit(doubleclickontheimage)"));
                         }
                     }
-                } else {
+                }else{
                     node.remove();
                 }
             });
         }
-        const $select = $(uiFragment).find('we-select[data-name=width_select_opt]');
-        (await this._computeAvailableWidths()).forEach(([value, label]) => {
-            $select.append(`<we-button data-select-width="${value}">${label}</we-button>`);
+        const$select=$(uiFragment).find('we-select[data-name=width_select_opt]');
+        (awaitthis._computeAvailableWidths()).forEach(([value,label])=>{
+            $select.append(`<we-buttondata-select-width="${value}">${label}</we-button>`);
         });
 
-        if (img.dataset.mimetype !== 'image/jpeg') {
+        if(img.dataset.mimetype!=='image/jpeg'){
             uiFragment.querySelector('we-range[data-set-quality]').remove();
         }
     },
     /**
-     * Returns a list of valid widths for a given image.
+     *Returnsalistofvalidwidthsforagivenimage.
      *
-     * @private
+     *@private
      */
-    async _computeAvailableWidths() {
-        const img = this._getImg();
-        const original = await loadImage(this.originalSrc);
-        const maxWidth = img.dataset.width ? img.naturalWidth : original.naturalWidth;
-        const optimizedWidth = Math.min(maxWidth, this._computeMaxDisplayWidth());
-        this.optimizedWidth = optimizedWidth;
-        const widths = {
-            128: '128px',
-            256: '256px',
-            512: '512px',
-            1024: '1024px',
-            1920: '1920px',
+    async_computeAvailableWidths(){
+        constimg=this._getImg();
+        constoriginal=awaitloadImage(this.originalSrc);
+        constmaxWidth=img.dataset.width?img.naturalWidth:original.naturalWidth;
+        constoptimizedWidth=Math.min(maxWidth,this._computeMaxDisplayWidth());
+        this.optimizedWidth=optimizedWidth;
+        constwidths={
+            128:'128px',
+            256:'256px',
+            512:'512px',
+            1024:'1024px',
+            1920:'1920px',
         };
-        widths[img.naturalWidth] = _.str.sprintf(_t("%spx"), img.naturalWidth);
-        widths[optimizedWidth] = _.str.sprintf(_t("%dpx (Suggested)"), optimizedWidth);
-        widths[maxWidth] = _.str.sprintf(_t("%dpx (Original)"), maxWidth);
-        return Object.entries(widths)
-            .filter(([width]) => width <= maxWidth)
-            .sort(([v1], [v2]) => v1 - v2);
+        widths[img.naturalWidth]=_.str.sprintf(_t("%spx"),img.naturalWidth);
+        widths[optimizedWidth]=_.str.sprintf(_t("%dpx(Suggested)"),optimizedWidth);
+        widths[maxWidth]=_.str.sprintf(_t("%dpx(Original)"),maxWidth);
+        returnObject.entries(widths)
+            .filter(([width])=>width<=maxWidth)
+            .sort(([v1],[v2])=>v1-v2);
     },
     /**
-     * Applies all selected options on the original image.
+     *Appliesallselectedoptionsontheoriginalimage.
      *
-     * @private
+     *@private
      */
-    async _applyOptions() {
-        const img = this._getImg();
-        if (!['image/jpeg', 'image/png'].includes(img.dataset.mimetype)) {
-            this.originalId = null;
+    async_applyOptions(){
+        constimg=this._getImg();
+        if(!['image/jpeg','image/png'].includes(img.dataset.mimetype)){
+            this.originalId=null;
             return;
         }
-        const dataURL = await applyModifications(img);
-        const weight = dataURL.split(',')[1].length / 4 * 3;
-        const $weight = this.$el.find('.o_we_image_weight');
-        $weight.find('> small').text(_t("New size"));
-        $weight.find('b').text(`${(weight / 1024).toFixed(1)} kb`);
+        constdataURL=awaitapplyModifications(img);
+        constweight=dataURL.split(',')[1].length/4*3;
+        const$weight=this.$el.find('.o_we_image_weight');
+        $weight.find('>small').text(_t("Newsize"));
+        $weight.find('b').text(`${(weight/1024).toFixed(1)}kb`);
         $weight.removeClass('d-none');
         img.classList.add('o_modified_image_to_save');
-        const loadedImg = await loadImage(dataURL, img);
+        constloadedImg=awaitloadImage(dataURL,img);
         this._applyImage(loadedImg);
-        return loadedImg;
+        returnloadedImg;
     },
     /**
-     * Loads the image's attachment info.
+     *Loadstheimage'sattachmentinfo.
      *
-     * @private
+     *@private
      */
-    async _loadImageInfo() {
-        const img = this._getImg();
-        await loadImageInfo(img, this._rpc.bind(this));
-        if (!img.dataset.originalId) {
-            this.originalId = null;
-            this.originalSrc = null;
+    async_loadImageInfo(){
+        constimg=this._getImg();
+        awaitloadImageInfo(img,this._rpc.bind(this));
+        if(!img.dataset.originalId){
+            this.originalId=null;
+            this.originalSrc=null;
             return;
         }
-        this.originalId = img.dataset.originalId;
-        this.originalSrc = img.dataset.originalSrc;
+        this.originalId=img.dataset.originalId;
+        this.originalSrc=img.dataset.originalSrc;
     },
     /**
-     * Sets the image's width to its suggested size.
+     *Setstheimage'swidthtoitssuggestedsize.
      *
-     * @private
+     *@private
      */
-    async _autoOptimizeImage() {
-        await this._loadImageInfo();
-        await this._rerenderXML();
-        this._getImg().dataset.resizeWidth = this.optimizedWidth;
-        await this._applyOptions();
-        await this.updateUI();
+    async_autoOptimizeImage(){
+        awaitthis._loadImageInfo();
+        awaitthis._rerenderXML();
+        this._getImg().dataset.resizeWidth=this.optimizedWidth;
+        awaitthis._applyOptions();
+        awaitthis.updateUI();
     },
     /**
-     * Returns the image that is currently being modified.
+     *Returnstheimagethatiscurrentlybeingmodified.
      *
-     * @private
-     * @abstract
-     * @returns {HTMLImageElement} the image to use for modifications
+     *@private
+     *@abstract
+     *@returns{HTMLImageElement}theimagetouseformodifications
      */
-    _getImg() {},
+    _getImg(){},
     /**
-     * Computes the image's maximum display width.
+     *Computestheimage'smaximumdisplaywidth.
      *
-     * @private
-     * @abstract
-     * @returns {Int} the maximum width at which the image can be displayed
+     *@private
+     *@abstract
+     *@returns{Int}themaximumwidthatwhichtheimagecanbedisplayed
      */
-    _computeMaxDisplayWidth() {},
+    _computeMaxDisplayWidth(){},
     /**
-     * Use the processed image when it's needed in the DOM.
+     *Usetheprocessedimagewhenit'sneededintheDOM.
      *
-     * @private
-     * @abstract
-     * @param {HTMLImageElement} img
+     *@private
+     *@abstract
+     *@param{HTMLImageElement}img
      */
-    _applyImage(img) {},
+    _applyImage(img){},
 });
 
 /**
- * Controls image width and quality.
+ *Controlsimagewidthandquality.
  */
-registry.ImageOptimize = ImageHandlerOption.extend({
-    MAX_SUGGESTED_WIDTH: 1920,
+registry.ImageOptimize=ImageHandlerOption.extend({
+    MAX_SUGGESTED_WIDTH:1920,
 
     /**
-     * @override
+     *@override
      */
-    start() {
-        this.$target.on('image_changed.ImageOptimization', this._onImageChanged.bind(this));
-        this.$target.on('image_cropped.ImageOptimization', this._onImageCropped.bind(this));
-        return this._super(...arguments);
+    start(){
+        this.$target.on('image_changed.ImageOptimization',this._onImageChanged.bind(this));
+        this.$target.on('image_cropped.ImageOptimization',this._onImageCropped.bind(this));
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    destroy() {
+    destroy(){
         this.$target.off('.ImageOptimization');
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _computeMaxDisplayWidth() {
-        const img = this._getImg();
-        const computedStyles = window.getComputedStyle(img);
-        const displayWidth = parseFloat(computedStyles.getPropertyValue('width'));
-        const gutterWidth = parseFloat(computedStyles.getPropertyValue('--o-grid-gutter-width')) || 30;
+    _computeMaxDisplayWidth(){
+        constimg=this._getImg();
+        constcomputedStyles=window.getComputedStyle(img);
+        constdisplayWidth=parseFloat(computedStyles.getPropertyValue('width'));
+        constgutterWidth=parseFloat(computedStyles.getPropertyValue('--o-grid-gutter-width'))||30;
 
-        // For the logos we don't want to suggest a width too small.
-        if (this.$target[0].closest('nav')) {
-            return Math.round(Math.min(displayWidth * 3, this.MAX_SUGGESTED_WIDTH));
-        // If the image is in a container(-small), it might get bigger on
-        // smaller screens. So we suggest the width of the current image unless
-        // it is smaller than the size of the container on the md breapoint
-        // (which is where our bootstrap columns fallback to full container
-        // width since we only use col-lg-* in Flectra).
-        } else if (img.closest('.container, .o_container_small')) {
-            const mdContainerMaxWidth = parseFloat(computedStyles.getPropertyValue('--o-md-container-max-width')) || 720;
-            const mdContainerInnerWidth = mdContainerMaxWidth - gutterWidth;
-            return Math.round(utils.confine(displayWidth, mdContainerInnerWidth, this.MAX_SUGGESTED_WIDTH));
-        // If the image is displayed in a container-fluid, it might also get
-        // bigger on smaller screens. The same way, we suggest the width of the
-        // current image unless it is smaller than the max size of the container
-        // on the md breakpoint (which is the LG breakpoint since the container
-        // fluid is full-width).
-        } else if (img.closest('.container-fluid')) {
-            const lgBp = parseFloat(computedStyles.getPropertyValue('--breakpoint-lg')) || 992;
-            const mdContainerFluidMaxInnerWidth = lgBp - gutterWidth;
-            return Math.round(utils.confine(displayWidth, mdContainerFluidMaxInnerWidth, this.MAX_SUGGESTED_WIDTH));
+        //Forthelogoswedon'twanttosuggestawidthtoosmall.
+        if(this.$target[0].closest('nav')){
+            returnMath.round(Math.min(displayWidth*3,this.MAX_SUGGESTED_WIDTH));
+        //Iftheimageisinacontainer(-small),itmightgetbiggeron
+        //smallerscreens.Sowesuggestthewidthofthecurrentimageunless
+        //itissmallerthanthesizeofthecontaineronthemdbreapoint
+        //(whichiswhereourbootstrapcolumnsfallbacktofullcontainer
+        //widthsinceweonlyusecol-lg-*inFlectra).
+        }elseif(img.closest('.container,.o_container_small')){
+            constmdContainerMaxWidth=parseFloat(computedStyles.getPropertyValue('--o-md-container-max-width'))||720;
+            constmdContainerInnerWidth=mdContainerMaxWidth-gutterWidth;
+            returnMath.round(utils.confine(displayWidth,mdContainerInnerWidth,this.MAX_SUGGESTED_WIDTH));
+        //Iftheimageisdisplayedinacontainer-fluid,itmightalsoget
+        //biggeronsmallerscreens.Thesameway,wesuggestthewidthofthe
+        //currentimageunlessitissmallerthanthemaxsizeofthecontainer
+        //onthemdbreakpoint(whichistheLGbreakpointsincethecontainer
+        //fluidisfull-width).
+        }elseif(img.closest('.container-fluid')){
+            constlgBp=parseFloat(computedStyles.getPropertyValue('--breakpoint-lg'))||992;
+            constmdContainerFluidMaxInnerWidth=lgBp-gutterWidth;
+            returnMath.round(utils.confine(displayWidth,mdContainerFluidMaxInnerWidth,this.MAX_SUGGESTED_WIDTH));
         }
-        // If it's not in a container, it's probably not going to change size
-        // depending on breakpoints. We still keep a margin safety.
-        return Math.round(Math.min(displayWidth * 1.5, this.MAX_SUGGESTED_WIDTH));
+        //Ifit'snotinacontainer,it'sprobablynotgoingtochangesize
+        //dependingonbreakpoints.Westillkeepamarginsafety.
+        returnMath.round(Math.min(displayWidth*1.5,this.MAX_SUGGESTED_WIDTH));
     },
     /**
-     * @override
+     *@override
      */
-    _getImg() {
-        return this.$target[0];
+    _getImg(){
+        returnthis.$target[0];
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Reloads image data and auto-optimizes the new image.
+     *Reloadsimagedataandauto-optimizesthenewimage.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    async _onImageChanged(ev) {
-        this.trigger_up('snippet_edition_request', {exec: async () => {
-            await this._autoOptimizeImage();
+    async_onImageChanged(ev){
+        this.trigger_up('snippet_edition_request',{exec:async()=>{
+            awaitthis._autoOptimizeImage();
             this.trigger_up('cover_update');
         }});
     },
     /**
-     * Available widths will change, need to rerender the width select.
+     *Availablewidthswillchange,needtorerenderthewidthselect.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    async _onImageCropped(ev) {
-        await this._rerenderXML();
+    async_onImageCropped(ev){
+        awaitthis._rerenderXML();
     },
 });
 
 /**
- * Controls background image width and quality.
+ *Controlsbackgroundimagewidthandquality.
  */
-registry.BackgroundOptimize = ImageHandlerOption.extend({
+registry.BackgroundOptimize=ImageHandlerOption.extend({
     /**
-     * @override
+     *@override
      */
-    start() {
-        this.$target.on('background_changed.BackgroundOptimize', this._onBackgroundChanged.bind(this));
-        return this._super(...arguments);
+    start(){
+        this.$target.on('background_changed.BackgroundOptimize',this._onBackgroundChanged.bind(this));
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    destroy() {
+    destroy(){
         this.$target.off('.BackgroundOptimize');
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _getImg() {
-        return this.img;
+    _getImg(){
+        returnthis.img;
     },
     /**
-     * @override
+     *@override
      */
-    _computeMaxDisplayWidth() {
-        return 1920;
+    _computeMaxDisplayWidth(){
+        return1920;
     },
     /**
-     * Initializes this.img to an image with the background image url as src.
+     *Initializesthis.imgtoanimagewiththebackgroundimageurlassrc.
      *
-     * @override
+     *@override
      */
-    async _loadImageInfo() {
-        this.img = new Image();
-        // In the case of a parallax, the background of the snippet is actually
-        // set on a child <span> and should be focused here. This is necessary
-        // because, at this point, the $target has not yet been updated in the
-        // notify() method ("option_update" event), although the event is
-        // properly fired from the parallax.
-        const targetEl = this.$target[0].classList.contains("oe_img_bg")
-            ? this.$target[0] : this.$target[0].querySelector(":scope > .s_parallax_bg.oe_img_bg");
-        if (targetEl) {
-            Object.entries(targetEl.dataset).filter(([key]) =>
-                isBackgroundImageAttribute(key)).forEach(([key, value]) => {
-                this.img.dataset[key] = value;
+    async_loadImageInfo(){
+        this.img=newImage();
+        //Inthecaseofaparallax,thebackgroundofthesnippetisactually
+        //setonachild<span>andshouldbefocusedhere.Thisisnecessary
+        //because,atthispoint,the$targethasnotyetbeenupdatedinthe
+        //notify()method("option_update"event),althoughtheeventis
+        //properlyfiredfromtheparallax.
+        consttargetEl=this.$target[0].classList.contains("oe_img_bg")
+            ?this.$target[0]:this.$target[0].querySelector(":scope>.s_parallax_bg.oe_img_bg");
+        if(targetEl){
+            Object.entries(targetEl.dataset).filter(([key])=>
+                isBackgroundImageAttribute(key)).forEach(([key,value])=>{
+                this.img.dataset[key]=value;
             });
-            const src = getBgImageURL(targetEl);
-            // Don't set the src if not relative (ie, not local image: cannot be
-            // modified)
-            this.img.src = src.startsWith("/") ? src : "";
+            constsrc=getBgImageURL(targetEl);
+            //Don'tsetthesrcifnotrelative(ie,notlocalimage:cannotbe
+            //modified)
+            this.img.src=src.startsWith("/")?src:"";
         }
-        return await this._super(...arguments);
+        returnawaitthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    _applyImage(img) {
-        this.$target.css('background-image', `url('${img.getAttribute('src')}')`);
-        // Apply modification on the DOM HTML element that is currently being
-        // modified.
+    _applyImage(img){
+        this.$target.css('background-image',`url('${img.getAttribute('src')}')`);
+        //ApplymodificationontheDOMHTMLelementthatiscurrentlybeing
+        //modified.
         this.$target[0].classList.add("o_modified_image_to_save");
-        // First delete the data attributes relative to the image background
-        // from the target as a data attribute could have been be removed (ex:
-        // glFilter).
-        for (const attribute in this.$target[0].dataset) {
-            if (isBackgroundImageAttribute(attribute)) {
-                delete this.$target[0].dataset[attribute];
+        //Firstdeletethedataattributesrelativetotheimagebackground
+        //fromthetargetasadataattributecouldhavebeenberemoved(ex:
+        //glFilter).
+        for(constattributeinthis.$target[0].dataset){
+            if(isBackgroundImageAttribute(attribute)){
+                deletethis.$target[0].dataset[attribute];
             }
         }
-        Object.entries(img.dataset).forEach(([key, value]) => {
-            this.$target[0].dataset[key] = value;
+        Object.entries(img.dataset).forEach(([key,value])=>{
+            this.$target[0].dataset[key]=value;
         });
-        this.$target[0].dataset.bgSrc = img.getAttribute("src");
+        this.$target[0].dataset.bgSrc=img.getAttribute("src");
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Reloads image data when the background is changed.
+     *Reloadsimagedatawhenthebackgroundischanged.
      *
-     * @private
+     *@private
      */
-    async _onBackgroundChanged(ev, previewMode) {
+    async_onBackgroundChanged(ev,previewMode){
         ev.stopPropagation();
-        if (!previewMode) {
-            this.trigger_up('snippet_edition_request', {exec: async () => {
-                await this._autoOptimizeImage();
+        if(!previewMode){
+            this.trigger_up('snippet_edition_request',{exec:async()=>{
+                awaitthis._autoOptimizeImage();
             }});
         }
     },
 });
 
-registry.BackgroundToggler = SnippetOptionWidget.extend({
+registry.BackgroundToggler=SnippetOptionWidget.extend({
     /**
-     * @override
+     *@override
      */
-    start() {
-        this.$target.on('content_changed.BackgroundToggler', this._onExternalUpdate.bind(this));
-        return this._super(...arguments);
+    start(){
+        this.$target.on('content_changed.BackgroundToggler',this._onExternalUpdate.bind(this));
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    destroy() {
+    destroy(){
         this._super(...arguments);
         this.$target.off('.BackgroundToggler');
     },
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * Toggles background image on or off.
+     *Togglesbackgroundimageonoroff.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    toggleBgImage(previewMode, widgetValue, params) {
-        if (!widgetValue) {
-            // TODO: use setWidgetValue instead of calling background directly when possible
-            const [bgImageWidget] = this._requestUserValueWidgets('bg_image_opt');
-            const bgImageOpt = bgImageWidget.getParent();
-            return bgImageOpt.background(false, '', bgImageWidget.getMethodsParams('background'));
-        } else {
-            // TODO: use trigger instead of el.click when possible
+    toggleBgImage(previewMode,widgetValue,params){
+        if(!widgetValue){
+            //TODO:usesetWidgetValueinsteadofcallingbackgrounddirectlywhenpossible
+            const[bgImageWidget]=this._requestUserValueWidgets('bg_image_opt');
+            constbgImageOpt=bgImageWidget.getParent();
+            returnbgImageOpt.background(false,'',bgImageWidget.getMethodsParams('background'));
+        }else{
+            //TODO:usetriggerinsteadofel.clickwhenpossible
             this._requestUserValueWidgets('bg_image_opt')[0].el.click();
         }
     },
     /**
-     * Toggles background shape on or off.
+     *Togglesbackgroundshapeonoroff.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    toggleBgShape(previewMode, widgetValue, params) {
-        const [shapeWidget] = this._requestUserValueWidgets('bg_shape_opt');
-        const shapeOption = shapeWidget.getParent();
-        // TODO: open select after shape was selected?
-        // TODO: use setWidgetValue instead of calling shapeOption method directly when possible
-        return shapeOption._toggleShape();
+    toggleBgShape(previewMode,widgetValue,params){
+        const[shapeWidget]=this._requestUserValueWidgets('bg_shape_opt');
+        constshapeOption=shapeWidget.getParent();
+        //TODO:openselectaftershapewasselected?
+        //TODO:usesetWidgetValueinsteadofcallingshapeOptionmethoddirectlywhenpossible
+        returnshapeOption._toggleShape();
     },
     /**
-     * Toggles background filter on or off.
+     *Togglesbackgroundfilteronoroff.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    toggleBgFilter(previewMode, widgetValue, params) {
-        if (widgetValue) {
-            const bgFilterEl = document.createElement('div');
-            bgFilterEl.classList.add('o_we_bg_filter', 'bg-black-50');
-            const lastBackgroundEl = this._getLastPreFilterLayerElement();
-            if (lastBackgroundEl) {
+    toggleBgFilter(previewMode,widgetValue,params){
+        if(widgetValue){
+            constbgFilterEl=document.createElement('div');
+            bgFilterEl.classList.add('o_we_bg_filter','bg-black-50');
+            constlastBackgroundEl=this._getLastPreFilterLayerElement();
+            if(lastBackgroundEl){
                 $(lastBackgroundEl).after(bgFilterEl);
-            } else {
+            }else{
                 this.$target.prepend(bgFilterEl);
             }
-        } else {
-            this.$target.find('> .o_we_bg_filter').remove();
+        }else{
+            this.$target.find('>.o_we_bg_filter').remove();
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _computeWidgetState(methodName, params) {
-        switch (methodName) {
-            case 'toggleBgImage': {
-                const [bgImageWidget] = this._requestUserValueWidgets('bg_image_opt');
-                const bgImageOpt = bgImageWidget.getParent();
-                return !!bgImageOpt._computeWidgetState('background', bgImageWidget.getMethodsParams('background'));
+    _computeWidgetState(methodName,params){
+        switch(methodName){
+            case'toggleBgImage':{
+                const[bgImageWidget]=this._requestUserValueWidgets('bg_image_opt');
+                constbgImageOpt=bgImageWidget.getParent();
+                return!!bgImageOpt._computeWidgetState('background',bgImageWidget.getMethodsParams('background'));
             }
-            case 'toggleBgFilter': {
-                return this._hasBgFilter();
+            case'toggleBgFilter':{
+                returnthis._hasBgFilter();
             }
-            case 'toggleBgShape': {
-                const [shapeWidget] = this._requestUserValueWidgets('bg_shape_opt');
-                const shapeOption = shapeWidget.getParent();
-                return !!shapeOption._computeWidgetState('shape', shapeWidget.getMethodsParams('shape'));
+            case'toggleBgShape':{
+                const[shapeWidget]=this._requestUserValueWidgets('bg_shape_opt');
+                constshapeOption=shapeWidget.getParent();
+                return!!shapeOption._computeWidgetState('shape',shapeWidget.getMethodsParams('shape'));
             }
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * @private
+     *@private
      */
-    _getLastPreFilterLayerElement() {
-        return null;
+    _getLastPreFilterLayerElement(){
+        returnnull;
     },
     /**
-     * @private
-     * @returns {Boolean}
+     *@private
+     *@returns{Boolean}
      */
-    _hasBgFilter() {
-        return !!this.$target.find('> .o_we_bg_filter').length;
+    _hasBgFilter(){
+        return!!this.$target.find('>.o_we_bg_filter').length;
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onExternalUpdate() {
-        if (this._hasBgFilter()
-                && !this._getLastPreFilterLayerElement()
-                && !getBgImageURL(this.$target)) {
-            // No 'pre-filter' background layout anymore and no more background
-            // image: remove the background filter option.
-            // TODO there probably is a better system to implement to do that
-            const widget = this._requestUserValueWidgets('bg_filter_toggle_opt')[0];
+    _onExternalUpdate(){
+        if(this._hasBgFilter()
+                &&!this._getLastPreFilterLayerElement()
+                &&!getBgImageURL(this.$target)){
+            //No'pre-filter'backgroundlayoutanymoreandnomorebackground
+            //image:removethebackgroundfilteroption.
+            //TODOthereprobablyisabettersystemtoimplementtodothat
+            constwidget=this._requestUserValueWidgets('bg_filter_toggle_opt')[0];
             widget.enable();
         }
     },
 });
 
 /**
- * Handles the edition of snippet's background image.
+ *Handlestheeditionofsnippet'sbackgroundimage.
  */
-registry.BackgroundImage = SnippetOptionWidget.extend({
+registry.BackgroundImage=SnippetOptionWidget.extend({
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        this.__customImageSrc = getBgImageURL(this.$target[0]);
-        return this._super(...arguments);
+    start:function(){
+        this.__customImageSrc=getBgImageURL(this.$target[0]);
+        returnthis._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * Handles a background change.
+     *Handlesabackgroundchange.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    background: async function (previewMode, widgetValue, params) {
-        if (previewMode === true) {
-            this.__customImageSrc = getBgImageURL(this.$target[0]);
-        } else if (previewMode === 'reset') {
-            widgetValue = this.__customImageSrc;
-        } else {
-            this.__customImageSrc = widgetValue;
+    background:asyncfunction(previewMode,widgetValue,params){
+        if(previewMode===true){
+            this.__customImageSrc=getBgImageURL(this.$target[0]);
+        }elseif(previewMode==='reset'){
+            widgetValue=this.__customImageSrc;
+        }else{
+            this.__customImageSrc=widgetValue;
         }
 
         this._setBackground(widgetValue);
 
-        if (previewMode !== 'reset') {
-            removeOnImageChangeAttrs.forEach(attr => delete this.$target[0].dataset[attr]);
-            this.$target.trigger('background_changed', [previewMode]);
+        if(previewMode!=='reset'){
+            removeOnImageChangeAttrs.forEach(attr=>deletethis.$target[0].dataset[attr]);
+            this.$target.trigger('background_changed',[previewMode]);
         }
     },
     /**
-     * Changes the main color of dynamic SVGs.
+     *ChangesthemaincolorofdynamicSVGs.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    async dynamicColor(previewMode, widgetValue, params) {
-        const currentSrc = getBgImageURL(this.$target[0]);
-        switch (previewMode) {
-            case true:
-                this.previousSrc = currentSrc;
+    asyncdynamicColor(previewMode,widgetValue,params){
+        constcurrentSrc=getBgImageURL(this.$target[0]);
+        switch(previewMode){
+            casetrue:
+                this.previousSrc=currentSrc;
                 break;
-            case 'reset':
-                this.$target.css('background-image', `url('${this.previousSrc}')`);
+            case'reset':
+                this.$target.css('background-image',`url('${this.previousSrc}')`);
                 return;
         }
-        const newURL = new URL(currentSrc, window.location.origin);
-        newURL.searchParams.set('c1', normalizeColor(widgetValue));
-        const src = newURL.pathname + newURL.search;
-        await loadImage(src);
-        this.$target.css('background-image', `url('${src}')`);
-        if (!previewMode) {
-            this.previousSrc = src;
+        constnewURL=newURL(currentSrc,window.location.origin);
+        newURL.searchParams.set('c1',normalizeColor(widgetValue));
+        constsrc=newURL.pathname+newURL.search;
+        awaitloadImage(src);
+        this.$target.css('background-image',`url('${src}')`);
+        if(!previewMode){
+            this.previousSrc=src;
         }
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    setTarget: function () {
-        // When we change the target of this option we need to transfer the
-        // background-image and the dataset information relative to this image
-        // from the old target to the new one.
-        const oldBgURL = getBgImageURL(this.$target);
-        const isModifiedImage = this.$target[0].classList.contains("o_modified_image_to_save");
-        const filteredOldDataset = Object.entries(this.$target[0].dataset).filter(([key]) => {
-            return isBackgroundImageAttribute(key);
+    setTarget:function(){
+        //Whenwechangethetargetofthisoptionweneedtotransferthe
+        //background-imageandthedatasetinformationrelativetothisimage
+        //fromtheoldtargettothenewone.
+        constoldBgURL=getBgImageURL(this.$target);
+        constisModifiedImage=this.$target[0].classList.contains("o_modified_image_to_save");
+        constfilteredOldDataset=Object.entries(this.$target[0].dataset).filter(([key])=>{
+            returnisBackgroundImageAttribute(key);
         });
-        // Delete the dataset information relative to the background-image of
-        // the old target.
-        filteredOldDataset.forEach(([key]) => {
-            delete this.$target[0].dataset[key];
+        //Deletethedatasetinformationrelativetothebackground-imageof
+        //theoldtarget.
+        filteredOldDataset.forEach(([key])=>{
+            deletethis.$target[0].dataset[key];
         });
-        // It is important to delete ".o_modified_image_to_save" from the old
-        // target as its image source will be deleted.
+        //Itisimportanttodelete".o_modified_image_to_save"fromtheold
+        //targetasitsimagesourcewillbedeleted.
         this.$target[0].classList.remove("o_modified_image_to_save");
         this._setBackground('');
         this._super(...arguments);
-        if (oldBgURL) {
+        if(oldBgURL){
             this._setBackground(oldBgURL);
-            filteredOldDataset.forEach(([key, value]) => {
-                this.$target[0].dataset[key] = value;
+            filteredOldDataset.forEach(([key,value])=>{
+                this.$target[0].dataset[key]=value;
             });
-            this.$target[0].classList.toggle("o_modified_image_to_save", isModifiedImage);
+            this.$target[0].classList.toggle("o_modified_image_to_save",isModifiedImage);
         }
 
-        // TODO should be automatic for all options as equal to the start method
-        this.__customImageSrc = getBgImageURL(this.$target[0]);
+        //TODOshouldbeautomaticforalloptionsasequaltothestartmethod
+        this.__customImageSrc=getBgImageURL(this.$target[0]);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _computeWidgetState: function (methodName) {
-        switch (methodName) {
-            case 'background':
-                return getBgImageURL(this.$target[0]);
-            case 'dynamicColor':
-                return new URL(getBgImageURL(this.$target[0]), window.location.origin).searchParams.get('c1');
+    _computeWidgetState:function(methodName){
+        switch(methodName){
+            case'background':
+                returngetBgImageURL(this.$target[0]);
+            case'dynamicColor':
+                returnnewURL(getBgImageURL(this.$target[0]),window.location.origin).searchParams.get('c1');
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    _computeWidgetVisibility(widgetName, params) {
-        if (widgetName === 'dynamic_color_opt') {
-            const src = new URL(getBgImageURL(this.$target[0]), window.location.origin);
-            return src.origin === window.location.origin && src.pathname.startsWith('/web_editor/shape/');
+    _computeWidgetVisibility(widgetName,params){
+        if(widgetName==='dynamic_color_opt'){
+            constsrc=newURL(getBgImageURL(this.$target[0]),window.location.origin);
+            returnsrc.origin===window.location.origin&&src.pathname.startsWith('/web_editor/shape/');
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * @private
-     * @param {string} backgroundURL
+     *@private
+     *@param{string}backgroundURL
      */
-    _setBackground(backgroundURL) {
-        if (backgroundURL) {
-            this.$target.css('background-image', `url('${backgroundURL}')`);
+    _setBackground(backgroundURL){
+        if(backgroundURL){
+            this.$target.css('background-image',`url('${backgroundURL}')`);
             this.$target.addClass('oe_img_bg');
-        } else {
-            this.$target.css('background-image', '');
+        }else{
+            this.$target.css('background-image','');
             this.$target.removeClass('oe_img_bg');
         }
     },
 });
 
 /**
- * Handles background shapes.
+ *Handlesbackgroundshapes.
  */
-registry.BackgroundShape = SnippetOptionWidget.extend({
+registry.BackgroundShape=SnippetOptionWidget.extend({
     /**
-     * @override
+     *@override
      */
-    updateUI() {
-        if (this.rerender) {
-            this.rerender = false;
-            return this._rerenderXML();
+    updateUI(){
+        if(this.rerender){
+            this.rerender=false;
+            returnthis._rerenderXML();
         }
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    onBuilt() {
-        // Flip classes should no longer be used but are still present in some
-        // theme snippets.
-        if (this.$target[0].querySelector('.o_we_flip_x, .o_we_flip_y')) {
-            this._handlePreviewState(false, () => {
-                return {flip: this._getShapeData().flip};
+    onBuilt(){
+        //Flipclassesshouldnolongerbeusedbutarestillpresentinsome
+        //themesnippets.
+        if(this.$target[0].querySelector('.o_we_flip_x,.o_we_flip_y')){
+            this._handlePreviewState(false,()=>{
+                return{flip:this._getShapeData().flip};
             });
         }
     },
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * Sets the current background shape.
+     *Setsthecurrentbackgroundshape.
      *
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    shape(previewMode, widgetValue, params) {
-        this._handlePreviewState(previewMode, () => {
-            return {shape: widgetValue, colors: this._getDefaultColors(), flip: []};
+    shape(previewMode,widgetValue,params){
+        this._handlePreviewState(previewMode,()=>{
+            return{shape:widgetValue,colors:this._getDefaultColors(),flip:[]};
         });
     },
     /**
-     * Sets the current background shape's colors.
+     *Setsthecurrentbackgroundshape'scolors.
      *
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    color(previewMode, widgetValue, params) {
-        this._handlePreviewState(previewMode, () => {
-            const {colorName} = params;
-            const {colors: previousColors} = this._getShapeData();
-            const newColor = normalizeColor(widgetValue) || this._getDefaultColors()[colorName];
-            const newColors = Object.assign(previousColors, {[colorName]: newColor});
-            return {colors: newColors};
+    color(previewMode,widgetValue,params){
+        this._handlePreviewState(previewMode,()=>{
+            const{colorName}=params;
+            const{colors:previousColors}=this._getShapeData();
+            constnewColor=normalizeColor(widgetValue)||this._getDefaultColors()[colorName];
+            constnewColors=Object.assign(previousColors,{[colorName]:newColor});
+            return{colors:newColors};
         });
     },
     /**
-     * Flips the shape on its x axis.
+     *Flipstheshapeonitsxaxis.
      *
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    flipX(previewMode, widgetValue, params) {
-        this._flipShape(previewMode, 'x');
+    flipX(previewMode,widgetValue,params){
+        this._flipShape(previewMode,'x');
     },
     /**
-     * Flips the shape on its y axis.
+     *Flipstheshapeonitsyaxis.
      *
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    flipY(previewMode, widgetValue, params) {
-        this._flipShape(previewMode, 'y');
+    flipY(previewMode,widgetValue,params){
+        this._flipShape(previewMode,'y');
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _computeWidgetState(methodName, params) {
-        switch (methodName) {
-            case 'shape': {
-                return this._getShapeData().shape;
+    _computeWidgetState(methodName,params){
+        switch(methodName){
+            case'shape':{
+                returnthis._getShapeData().shape;
             }
-            case 'color': {
-                const {shape, colors: customColors} = this._getShapeData();
-                const colors = Object.assign(this._getDefaultColors(), customColors);
-                const color = shape && colors[params.colorName];
-                return color || '';
+            case'color':{
+                const{shape,colors:customColors}=this._getShapeData();
+                constcolors=Object.assign(this._getDefaultColors(),customColors);
+                constcolor=shape&&colors[params.colorName];
+                returncolor||'';
             }
-            case 'flipX': {
-                // Compat: flip classes are no longer used but may be present in client db
-                const hasFlipClass = this.$target.find('> .o_we_shape.o_we_flip_x').length !== 0;
-                return hasFlipClass || this._getShapeData().flip.includes('x');
+            case'flipX':{
+                //Compat:flipclassesarenolongerusedbutmaybepresentinclientdb
+                consthasFlipClass=this.$target.find('>.o_we_shape.o_we_flip_x').length!==0;
+                returnhasFlipClass||this._getShapeData().flip.includes('x');
             }
-            case 'flipY': {
-                // Compat: flip classes are no longer used but may be present in client db
-                const hasFlipClass = this.$target.find('> .o_we_shape.o_we_flip_y').length !== 0;
-                return hasFlipClass || this._getShapeData().flip.includes('y');
+            case'flipY':{
+                //Compat:flipclassesarenolongerusedbutmaybepresentinclientdb
+                consthasFlipClass=this.$target.find('>.o_we_shape.o_we_flip_y').length!==0;
+                returnhasFlipClass||this._getShapeData().flip.includes('y');
             }
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    _renderCustomXML(uiFragment) {
-        Object.keys(this._getDefaultColors()).map(colorName => {
+    _renderCustomXML(uiFragment){
+        Object.keys(this._getDefaultColors()).map(colorName=>{
             uiFragment.querySelector('[data-name="colors"]')
-                .prepend($(`<we-colorpicker data-color="true" data-color-name="${colorName}">`)[0]);
+                .prepend($(`<we-colorpickerdata-color="true"data-color-name="${colorName}">`)[0]);
         });
 
-        uiFragment.querySelectorAll('we-select-pager we-button[data-shape]').forEach(btn => {
-            const btnContent = document.createElement('div');
-            btnContent.classList.add('o_we_shape_btn_content', 'position-relative', 'border-dark');
-            const btnContentInnerDiv = document.createElement('div');
+        uiFragment.querySelectorAll('we-select-pagerwe-button[data-shape]').forEach(btn=>{
+            constbtnContent=document.createElement('div');
+            btnContent.classList.add('o_we_shape_btn_content','position-relative','border-dark');
+            constbtnContentInnerDiv=document.createElement('div');
             btnContentInnerDiv.classList.add('o_we_shape');
             btnContent.appendChild(btnContentInnerDiv);
 
-            const {shape} = btn.dataset;
-            const shapeEl = btnContent.querySelector('.o_we_shape');
-            shapeEl.classList.add(`o_${shape.replace(/\//g, '_')}`);
+            const{shape}=btn.dataset;
+            constshapeEl=btnContent.querySelector('.o_we_shape');
+            shapeEl.classList.add(`o_${shape.replace(/\//g,'_')}`);
             btn.append(btnContent);
         });
-        return uiFragment;
+        returnuiFragment;
     },
     /**
-     * @override
+     *@override
      */
-    async _computeWidgetVisibility(widgetName, params) {
-        if (widgetName === 'shape_none_opt') {
-            return false;
+    async_computeWidgetVisibility(widgetName,params){
+        if(widgetName==='shape_none_opt'){
+            returnfalse;
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * Flips the shape on its x/y axis.
+     *Flipstheshapeonitsx/yaxis.
      *
-     * @param {boolean} previewMode
-     * @param {'x'|'y'} axis the axis of the shape that should be flipped.
+     *@param{boolean}previewMode
+     *@param{'x'|'y'}axistheaxisoftheshapethatshouldbeflipped.
      */
-    _flipShape(previewMode, axis) {
-        this._handlePreviewState(previewMode, () => {
-            const flip = new Set(this._getShapeData().flip);
-            if (flip.has(axis)) {
+    _flipShape(previewMode,axis){
+        this._handlePreviewState(previewMode,()=>{
+            constflip=newSet(this._getShapeData().flip);
+            if(flip.has(axis)){
                 flip.delete(axis);
-            } else {
+            }else{
                 flip.add(axis);
             }
-            return {flip: [...flip]};
+            return{flip:[...flip]};
         });
     },
     /**
-     * Handles everything related to saving state before preview and restoring
-     * it after a preview or locking in the changes when not in preview.
+     *Handleseverythingrelatedtosavingstatebeforepreviewandrestoring
+     *itafteraprevieworlockinginthechangeswhennotinpreview.
      *
-     * @param {boolean} previewMode
-     * @param {function} computeShapeData function to compute the new shape data.
+     *@param{boolean}previewMode
+     *@param{function}computeShapeDatafunctiontocomputethenewshapedata.
      */
-    _handlePreviewState(previewMode, computeShapeData) {
-        const target = this.$target[0];
-        const insertShapeContainer = newContainer => {
-            const shapeContainer = target.querySelector(':scope > .o_we_shape');
-            if (shapeContainer) {
+    _handlePreviewState(previewMode,computeShapeData){
+        consttarget=this.$target[0];
+        constinsertShapeContainer=newContainer=>{
+            constshapeContainer=target.querySelector(':scope>.o_we_shape');
+            if(shapeContainer){
                 this._removeShapeEl(shapeContainer);
             }
-            if (newContainer) {
-                const preShapeLayerElement = this._getLastPreShapeLayerElement();
-                if (preShapeLayerElement) {
+            if(newContainer){
+                constpreShapeLayerElement=this._getLastPreShapeLayerElement();
+                if(preShapeLayerElement){
                     $(preShapeLayerElement).after(newContainer);
-                } else {
+                }else{
                     this.$target.prepend(newContainer);
                 }
             }
-            return newContainer;
+            returnnewContainer;
         };
 
-        let changedShape = false;
-        if (previewMode === 'reset') {
+        letchangedShape=false;
+        if(previewMode==='reset'){
             insertShapeContainer(this.prevShapeContainer);
-            if (this.prevShape) {
-                target.dataset.oeShapeData = this.prevShape;
-            } else {
-                delete target.dataset.oeShapeData;
+            if(this.prevShape){
+                target.dataset.oeShapeData=this.prevShape;
+            }else{
+                deletetarget.dataset.oeShapeData;
             }
             return;
-        } else {
-            if (previewMode === true) {
-                const shapeContainer = target.querySelector(':scope > .o_we_shape');
-                this.prevShapeContainer = shapeContainer && shapeContainer.cloneNode(true);
-                this.prevShape = target.dataset.oeShapeData;
+        }else{
+            if(previewMode===true){
+                constshapeContainer=target.querySelector(':scope>.o_we_shape');
+                this.prevShapeContainer=shapeContainer&&shapeContainer.cloneNode(true);
+                this.prevShape=target.dataset.oeShapeData;
             }
-            const curShapeData = target.dataset.oeShapeData || {};
-            const newShapeData = computeShapeData();
-            const {shape: curShape} = curShapeData;
-            changedShape = newShapeData.shape !== curShape;
+            constcurShapeData=target.dataset.oeShapeData||{};
+            constnewShapeData=computeShapeData();
+            const{shape:curShape}=curShapeData;
+            changedShape=newShapeData.shape!==curShape;
             this._markShape(newShapeData);
-            if (previewMode === false && changedShape) {
-                // Need to rerender for correct number of colorpickers
-                this.rerender = true;
+            if(previewMode===false&&changedShape){
+                //Needtorerenderforcorrectnumberofcolorpickers
+                this.rerender=true;
             }
         }
 
-        // Updates/removes the shape container as needed and gives it the
-        // correct background shape
-        const json = target.dataset.oeShapeData;
-        const {shape, colors, flip = []} = json ? JSON.parse(json) : {};
-        let shapeContainer = target.querySelector(':scope > .o_we_shape');
-        if (!shape) {
-            return insertShapeContainer(null);
+        //Updates/removestheshapecontainerasneededandgivesitthe
+        //correctbackgroundshape
+        constjson=target.dataset.oeShapeData;
+        const{shape,colors,flip=[]}=json?JSON.parse(json):{};
+        letshapeContainer=target.querySelector(':scope>.o_we_shape');
+        if(!shape){
+            returninsertShapeContainer(null);
         }
-        // When changing shape we want to reset the shape container (for transparency color)
-        if (changedShape) {
-            shapeContainer = insertShapeContainer(null);
+        //Whenchangingshapewewanttoresettheshapecontainer(fortransparencycolor)
+        if(changedShape){
+            shapeContainer=insertShapeContainer(null);
         }
-        if (!shapeContainer) {
-            shapeContainer = insertShapeContainer(document.createElement('div'));
-            target.style.position = 'relative';
-            shapeContainer.className = `o_we_shape o_${shape.replace(/\//g, '_')}`;
+        if(!shapeContainer){
+            shapeContainer=insertShapeContainer(document.createElement('div'));
+            target.style.position='relative';
+            shapeContainer.className=`o_we_shapeo_${shape.replace(/\//g,'_')}`;
         }
-        // Compat: remove old flip classes as flipping is now done inside the svg
-        shapeContainer.classList.remove('o_we_flip_x', 'o_we_flip_y');
+        //Compat:removeoldflipclassesasflippingisnowdoneinsidethesvg
+        shapeContainer.classList.remove('o_we_flip_x','o_we_flip_y');
 
-        if (colors || flip.length) {
-            // Custom colors/flip, overwrite shape that is set by the class
-            $(shapeContainer).css('background-image', `url("${this._getShapeSrc()}")`);
-            shapeContainer.style.backgroundPosition = '';
-            if (flip.length) {
-                let [xPos, yPos] = $(shapeContainer)
+        if(colors||flip.length){
+            //Customcolors/flip,overwriteshapethatissetbytheclass
+            $(shapeContainer).css('background-image',`url("${this._getShapeSrc()}")`);
+            shapeContainer.style.backgroundPosition='';
+            if(flip.length){
+                let[xPos,yPos]=$(shapeContainer)
                     .css('background-position')
-                    .split(' ')
-                    .map(p => parseFloat(p));
-                // -X + 2*Y is a symmetry of X around Y, this is a symmetry around 50%
-                xPos = flip.includes('x') ? -xPos + 100 : xPos;
-                yPos = flip.includes('y') ? -yPos + 100 : yPos;
-                shapeContainer.style.backgroundPosition = `${xPos}% ${yPos}%`;
+                    .split('')
+                    .map(p=>parseFloat(p));
+                //-X+2*YisasymmetryofXaroundY,thisisasymmetryaround50%
+                xPos=flip.includes('x')?-xPos+100:xPos;
+                yPos=flip.includes('y')?-yPos+100:yPos;
+                shapeContainer.style.backgroundPosition=`${xPos}%${yPos}%`;
             }
-        } else {
-            // Remove custom bg image and let the shape class set the bg shape
-            $(shapeContainer).css('background-image', '');
-            $(shapeContainer).css('background-position', '');
+        }else{
+            //Removecustombgimageandlettheshapeclasssetthebgshape
+            $(shapeContainer).css('background-image','');
+            $(shapeContainer).css('background-position','');
         }
-        if (previewMode === false) {
-            this.prevShapeContainer = shapeContainer.cloneNode(true);
-            this.prevShape = target.dataset.oeShapeData;
+        if(previewMode===false){
+            this.prevShapeContainer=shapeContainer.cloneNode(true);
+            this.prevShape=target.dataset.oeShapeData;
         }
     },
     /**
-     * @private
-     * @param {HTMLElement} shapeEl
+     *@private
+     *@param{HTMLElement}shapeEl
      */
-    _removeShapeEl(shapeEl) {
+    _removeShapeEl(shapeEl){
         shapeEl.remove();
     },
     /**
-     * Overwrites shape properties with the specified data.
+     *Overwritesshapepropertieswiththespecifieddata.
      *
-     * @private
-     * @param {Object} newData an object with the new data
+     *@private
+     *@param{Object}newDataanobjectwiththenewdata
      */
-    _markShape(newData) {
-        const defaultColors = this._getDefaultColors();
-        const shapeData = Object.assign(this._getShapeData(), newData);
-        const areColorsDefault = Object.entries(shapeData.colors).every(([colorName, colorValue]) => {
-            return colorValue.toLowerCase() === defaultColors[colorName].toLowerCase();
+    _markShape(newData){
+        constdefaultColors=this._getDefaultColors();
+        constshapeData=Object.assign(this._getShapeData(),newData);
+        constareColorsDefault=Object.entries(shapeData.colors).every(([colorName,colorValue])=>{
+            returncolorValue.toLowerCase()===defaultColors[colorName].toLowerCase();
         });
-        if (areColorsDefault) {
-            delete shapeData.colors;
+        if(areColorsDefault){
+            deleteshapeData.colors;
         }
-        if (!shapeData.shape) {
-            delete this.$target[0].dataset.oeShapeData;
-        } else {
-            this.$target[0].dataset.oeShapeData = JSON.stringify(shapeData);
+        if(!shapeData.shape){
+            deletethis.$target[0].dataset.oeShapeData;
+        }else{
+            this.$target[0].dataset.oeShapeData=JSON.stringify(shapeData);
         }
     },
     /**
-     * @private
+     *@private
      */
-    _getLastPreShapeLayerElement() {
-        const $filterEl = this.$target.find('> .o_we_bg_filter');
-        if ($filterEl.length) {
-            return $filterEl[0];
+    _getLastPreShapeLayerElement(){
+        const$filterEl=this.$target.find('>.o_we_bg_filter');
+        if($filterEl.length){
+            return$filterEl[0];
         }
-        return null;
+        returnnull;
     },
     /**
-     * Returns the src of the shape corresponding to the current parameters.
+     *Returnsthesrcoftheshapecorrespondingtothecurrentparameters.
      *
-     * @private
+     *@private
      */
-    _getShapeSrc() {
-        const {shape, colors, flip} = this._getShapeData();
-        if (!shape) {
-            return '';
+    _getShapeSrc(){
+        const{shape,colors,flip}=this._getShapeData();
+        if(!shape){
+            return'';
         }
-        const searchParams = Object.entries(colors)
-            .map(([colorName, colorValue]) => {
-                const encodedCol = encodeURIComponent(normalizeColor(colorValue));
-                return `${colorName}=${encodedCol}`;
+        constsearchParams=Object.entries(colors)
+            .map(([colorName,colorValue])=>{
+                constencodedCol=encodeURIComponent(normalizeColor(colorValue));
+                return`${colorName}=${encodedCol}`;
             });
-        if (flip.length) {
+        if(flip.length){
             searchParams.push(`flip=${flip.sort().join('')}`);
         }
-        return `/web_editor/shape/${shape}.svg?${searchParams.join('&')}`;
+        return`/web_editor/shape/${shape}.svg?${searchParams.join('&')}`;
     },
     /**
-     * Retrieves current shape data from the target's dataset.
+     *Retrievescurrentshapedatafromthetarget'sdataset.
      *
-     * @private
-     * @param {HTMLElement} [target=this.$target[0]] the target on which to read
-     *   the shape data.
+     *@private
+     *@param{HTMLElement}[target=this.$target[0]]thetargetonwhichtoread
+     *  theshapedata.
      */
-    _getShapeData(target = this.$target[0]) {
-        const defaultData = {
-            shape: '',
-            colors: this._getDefaultColors(),
-            flip: [],
+    _getShapeData(target=this.$target[0]){
+        constdefaultData={
+            shape:'',
+            colors:this._getDefaultColors(),
+            flip:[],
         };
-        const json = target.dataset.oeShapeData;
-        return json ? Object.assign(defaultData, JSON.parse(json.replace(/'/g, '"'))) : defaultData;
+        constjson=target.dataset.oeShapeData;
+        returnjson?Object.assign(defaultData,JSON.parse(json.replace(/'/g,'"'))):defaultData;
     },
     /**
-     * Returns the default colors for the currently selected shape.
+     *Returnsthedefaultcolorsforthecurrentlyselectedshape.
      *
-     * @private
+     *@private
      */
-    _getDefaultColors() {
-        const $shapeContainer = this.$target.find('> .o_we_shape')
+    _getDefaultColors(){
+        const$shapeContainer=this.$target.find('>.o_we_shape')
             .clone()
             .addClass('d-none')
-            // Needs to be in document for bg-image class to take effect
+            //Needstobeindocumentforbg-imageclasstotakeeffect
             .appendTo(document.body);
-        const shapeContainer = $shapeContainer[0];
-        $shapeContainer.css('background-image', '');
-        const shapeSrc = shapeContainer && getBgImageURL(shapeContainer);
+        constshapeContainer=$shapeContainer[0];
+        $shapeContainer.css('background-image','');
+        constshapeSrc=shapeContainer&&getBgImageURL(shapeContainer);
         $shapeContainer.remove();
-        if (!shapeSrc) {
-            return {};
+        if(!shapeSrc){
+            return{};
         }
-        const url = new URL(shapeSrc, window.location.origin);
-        return Object.fromEntries(url.searchParams.entries());
+        consturl=newURL(shapeSrc,window.location.origin);
+        returnObject.fromEntries(url.searchParams.entries());
     },
     /**
-     * Toggles whether there is a shape or not, to be called from bg toggler.
+     *Toggleswhetherthereisashapeornot,tobecalledfrombgtoggler.
      *
-     * @private
+     *@private
      */
-    _toggleShape() {
-        if (this._getShapeData().shape) {
-            return this._handlePreviewState(false, () => ({shape: ''}));
-        } else {
-            const target = this.$target[0];
-            const previousSibling = target.previousElementSibling;
-            const [shapeWidget] = this._requestUserValueWidgets('bg_shape_opt');
-            const possibleShapes = shapeWidget.getMethodsParams('shape').possibleValues;
-            let shapeToSelect;
-            if (previousSibling) {
-                const previousShape = this._getShapeData(previousSibling).shape;
-                shapeToSelect = possibleShapes.find((shape, i) => {
-                    return possibleShapes[i - 1] === previousShape;
+    _toggleShape(){
+        if(this._getShapeData().shape){
+            returnthis._handlePreviewState(false,()=>({shape:''}));
+        }else{
+            consttarget=this.$target[0];
+            constpreviousSibling=target.previousElementSibling;
+            const[shapeWidget]=this._requestUserValueWidgets('bg_shape_opt');
+            constpossibleShapes=shapeWidget.getMethodsParams('shape').possibleValues;
+            letshapeToSelect;
+            if(previousSibling){
+                constpreviousShape=this._getShapeData(previousSibling).shape;
+                shapeToSelect=possibleShapes.find((shape,i)=>{
+                    returnpossibleShapes[i-1]===previousShape;
                 });
             }
-            // If there is no previous sibling, if the previous sibling had the
-            // last shape selected or if the previous shape could not be found
-            // in the possible shapes, default to the first shape. ([0] being no
-            // shapes selected.)
-            if (!shapeToSelect) {
-                shapeToSelect = possibleShapes[1];
+            //Ifthereisnoprevioussibling,iftheprevioussiblinghadthe
+            //lastshapeselectedorifthepreviousshapecouldnotbefound
+            //inthepossibleshapes,defaulttothefirstshape.([0]beingno
+            //shapesselected.)
+            if(!shapeToSelect){
+                shapeToSelect=possibleShapes[1];
             }
-            return this._handlePreviewState(false, () => ({shape: shapeToSelect}));
+            returnthis._handlePreviewState(false,()=>({shape:shapeToSelect}));
         }
     },
 });
 
 /**
- * Handles the edition of snippets' background image position.
+ *Handlestheeditionofsnippets'backgroundimageposition.
  */
-registry.BackgroundPosition = SnippetOptionWidget.extend({
-    xmlDependencies: ['/web_editor/static/src/xml/editor.xml'],
+registry.BackgroundPosition=SnippetOptionWidget.extend({
+    xmlDependencies:['/web_editor/static/src/xml/editor.xml'],
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        this._super.apply(this, arguments);
+    start:function(){
+        this._super.apply(this,arguments);
 
         this._initOverlay();
 
-        // Resize overlay content on window resize because background images
-        // change size, and on carousel slide because they sometimes take up
-        // more space and move elements around them.
-        $(window).on('resize.bgposition', () => this._dimensionOverlay());
+        //Resizeoverlaycontentonwindowresizebecausebackgroundimages
+        //changesize,andoncarouselslidebecausetheysometimestakeup
+        //morespaceandmoveelementsaroundthem.
+        $(window).on('resize.bgposition',()=>this._dimensionOverlay());
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
+    destroy:function(){
         this._toggleBgOverlay(false);
         $(window).off('.bgposition');
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * Sets the background type (cover/repeat pattern).
+     *Setsthebackgroundtype(cover/repeatpattern).
      *
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    backgroundType: function (previewMode, widgetValue, params) {
-        this.$target.toggleClass('o_bg_img_opt_repeat', widgetValue === 'repeat-pattern');
-        this.$target.css('background-position', '');
-        this.$target.css('background-size', '');
+    backgroundType:function(previewMode,widgetValue,params){
+        this.$target.toggleClass('o_bg_img_opt_repeat',widgetValue==='repeat-pattern');
+        this.$target.css('background-position','');
+        this.$target.css('background-size','');
     },
     /**
-     * Saves current background position and enables overlay.
+     *Savescurrentbackgroundpositionandenablesoverlay.
      *
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    backgroundPositionOverlay: async function (previewMode, widgetValue, params) {
-        // Updates the internal image
-        await new Promise(resolve => {
-            this.img = document.createElement('img');
-            this.img.addEventListener('load', () => resolve());
-            this.img.src = getBgImageURL(this.$target[0]);
+    backgroundPositionOverlay:asyncfunction(previewMode,widgetValue,params){
+        //Updatestheinternalimage
+        awaitnewPromise(resolve=>{
+            this.img=document.createElement('img');
+            this.img.addEventListener('load',()=>resolve());
+            this.img.src=getBgImageURL(this.$target[0]);
         });
 
-        const position = this.$target.css('background-position').split(' ').map(v => parseInt(v));
-        const delta = this._getBackgroundDelta();
-        // originalPosition kept in % for when movement in one direction doesn't make sense
-        this.originalPosition = {
-            left: position[0],
-            top: position[1],
+        constposition=this.$target.css('background-position').split('').map(v=>parseInt(v));
+        constdelta=this._getBackgroundDelta();
+        //originalPositionkeptin%forwhenmovementinonedirectiondoesn'tmakesense
+        this.originalPosition={
+            left:position[0],
+            top:position[1],
         };
-        // Convert % values to pixels for current position because mouse movement is in pixels
-        this.currentPosition = {
-            left: position[0] / 100 * delta.x || 0,
-            top: position[1] / 100 * delta.y || 0,
+        //Convert%valuestopixelsforcurrentpositionbecausemousemovementisinpixels
+        this.currentPosition={
+            left:position[0]/100*delta.x||0,
+            top:position[1]/100*delta.y||0,
         };
-        // Make sure the element is in a visible area.
-        const rect = this.$target[0].getBoundingClientRect();
-        const viewportTop = $(window).scrollTop();
-        const viewportBottom = viewportTop + $(window).height();
-        const visibleHeight = rect.top < viewportTop
-            ? Math.max(0, Math.min(viewportBottom, rect.bottom) - viewportTop) // Starts above
-            : rect.top < viewportBottom
-                ? Math.min(viewportBottom, rect.bottom) - rect.top // Starts inside
-                : 0; // Starts after
-        if (visibleHeight < 200) {
-            await scrollTo(this.$target[0], {extraOffset: 50});
+        //Makesuretheelementisinavisiblearea.
+        constrect=this.$target[0].getBoundingClientRect();
+        constviewportTop=$(window).scrollTop();
+        constviewportBottom=viewportTop+$(window).height();
+        constvisibleHeight=rect.top<viewportTop
+            ?Math.max(0,Math.min(viewportBottom,rect.bottom)-viewportTop)//Startsabove
+            :rect.top<viewportBottom
+                ?Math.min(viewportBottom,rect.bottom)-rect.top//Startsinside
+                :0;//Startsafter
+        if(visibleHeight<200){
+            awaitscrollTo(this.$target[0],{extraOffset:50});
         }
         this._toggleBgOverlay(true);
     },
     /**
-     * @override
+     *@override
      */
-    selectStyle: function (previewMode, widgetValue, params) {
-        if (params.cssProperty === 'background-size'
-                && !this.$target.hasClass('o_bg_img_opt_repeat')) {
-            // Disable the option when the image is in cover mode, otherwise
-            // the background-size: auto style may be forced.
+    selectStyle:function(previewMode,widgetValue,params){
+        if(params.cssProperty==='background-size'
+                &&!this.$target.hasClass('o_bg_img_opt_repeat')){
+            //Disabletheoptionwhentheimageisincovermode,otherwise
+            //thebackground-size:autostylemaybeforced.
             return;
         }
         this._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _computeVisibility: function () {
-        return this._super(...arguments) && !!getBgImageURL(this.$target[0]);
+    _computeVisibility:function(){
+        returnthis._super(...arguments)&&!!getBgImageURL(this.$target[0]);
     },
     /**
-     * @override
+     *@override
      */
-    _computeWidgetState: function (methodName, params) {
-        if (methodName === 'backgroundType') {
-            return this.$target.css('background-repeat') === 'repeat' ? 'repeat-pattern' : 'cover';
+    _computeWidgetState:function(methodName,params){
+        if(methodName==='backgroundType'){
+            returnthis.$target.css('background-repeat')==='repeat'?'repeat-pattern':'cover';
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * Initializes the overlay, binds events to the buttons, inserts it in
-     * the DOM.
+     *Initializestheoverlay,bindseventstothebuttons,insertsitin
+     *theDOM.
      *
-     * @private
+     *@private
      */
-    _initOverlay: function () {
-        this.$backgroundOverlay = $(qweb.render('web_editor.background_position_overlay'));
-        this.$overlayContent = this.$backgroundOverlay.find('.o_we_overlay_content');
-        this.$overlayBackground = this.$overlayContent.find('.o_overlay_background');
+    _initOverlay:function(){
+        this.$backgroundOverlay=$(qweb.render('web_editor.background_position_overlay'));
+        this.$overlayContent=this.$backgroundOverlay.find('.o_we_overlay_content');
+        this.$overlayBackground=this.$overlayContent.find('.o_overlay_background');
 
-        this.$backgroundOverlay.on('click', '.o_btn_apply', () => {
-            this.$target.css('background-position', this.$bgDragger.css('background-position'));
+        this.$backgroundOverlay.on('click','.o_btn_apply',()=>{
+            this.$target.css('background-position',this.$bgDragger.css('background-position'));
             this._toggleBgOverlay(false);
         });
-        this.$backgroundOverlay.on('click', '.o_btn_discard', () => {
+        this.$backgroundOverlay.on('click','.o_btn_discard',()=>{
             this._toggleBgOverlay(false);
         });
 
         this.$backgroundOverlay.insertAfter(this.$overlay);
     },
     /**
-     * Sets the overlay in the right place so that the draggable background
-     * renders over the target, and size the background item like the target.
+     *Setstheoverlayintherightplacesothatthedraggablebackground
+     *rendersoverthetarget,andsizethebackgrounditemlikethetarget.
      *
-     * @private
+     *@private
      */
-    _dimensionOverlay: function () {
-        if (!this.$backgroundOverlay.is('.oe_active')) {
+    _dimensionOverlay:function(){
+        if(!this.$backgroundOverlay.is('.oe_active')){
             return;
         }
-        // TODO: change #wrapwrap after web_editor rework.
-        const $wrapwrap = $('#wrapwrap');
-        const targetOffset = this.$target.offset();
+        //TODO:change#wrapwrapafterweb_editorrework.
+        const$wrapwrap=$('#wrapwrap');
+        consttargetOffset=this.$target.offset();
 
         this.$backgroundOverlay.css({
-            width: $wrapwrap.innerWidth(),
-            height: $wrapwrap.innerHeight(),
+            width:$wrapwrap.innerWidth(),
+            height:$wrapwrap.innerHeight(),
         });
 
         this.$overlayContent.offset(targetOffset);
 
         this.$bgDragger.css({
-            width: `${this.$target.innerWidth()}px`,
-            height: `${this.$target.innerHeight()}px`,
+            width:`${this.$target.innerWidth()}px`,
+            height:`${this.$target.innerHeight()}px`,
         });
 
-        const topPos = Math.max(0, $(window).scrollTop() - this.$target.offset().top);
-        this.$overlayContent.find('.o_we_overlay_buttons').css('top', `${topPos}px`);
+        consttopPos=Math.max(0,$(window).scrollTop()-this.$target.offset().top);
+        this.$overlayContent.find('.o_we_overlay_buttons').css('top',`${topPos}px`);
     },
     /**
-     * Toggles the overlay's display and renders a background clone inside of it.
+     *Togglestheoverlay'sdisplayandrendersabackgroundcloneinsideofit.
      *
-     * @private
-     * @param {boolean} activate toggle the overlay on (true) or off (false)
+     *@private
+     *@param{boolean}activatetoggletheoverlayon(true)oroff(false)
      */
-    _toggleBgOverlay: function (activate) {
-        if (!this.$backgroundOverlay || this.$backgroundOverlay.is('.oe_active') === activate) {
+    _toggleBgOverlay:function(activate){
+        if(!this.$backgroundOverlay||this.$backgroundOverlay.is('.oe_active')===activate){
             return;
         }
 
-        if (!activate) {
+        if(!activate){
             this.$backgroundOverlay.removeClass('oe_active');
             this.trigger_up('unblock_preview_overlays');
-            this.trigger_up('activate_snippet', {$snippet: this.$target});
+            this.trigger_up('activate_snippet',{$snippet:this.$target});
 
             $(document).off('click.bgposition');
             return;
         }
 
         this.trigger_up('hide_overlay');
-        this.trigger_up('activate_snippet', {
-            $snippet: this.$target,
-            previewMode: true,
+        this.trigger_up('activate_snippet',{
+            $snippet:this.$target,
+            previewMode:true,
         });
         this.trigger_up('block_preview_overlays');
 
-        // Create empty clone of $target with same display size, make it draggable and give it a tooltip.
-        this.$bgDragger = this.$target.clone().empty();
-        // Prevent clone from being seen as editor if target is editor (eg. background on root tag)
+        //Createemptycloneof$targetwithsamedisplaysize,makeitdraggableandgiveitatooltip.
+        this.$bgDragger=this.$target.clone().empty();
+        //Preventclonefrombeingseenaseditoriftargetiseditor(eg.backgroundonroottag)
         this.$bgDragger.removeClass('o_editable');
-        // Some CSS child selector rules will not be applied since the clone has a different container from $target.
-        // The background-attachment property should be the same in both $target & $bgDragger, this will keep the
-        // preview more "wysiwyg" instead of getting different result when bg position saved (e.g. parallax snippet)
-        // TODO: improve this to copy all style from $target and override it with overlay related style (copying all
-        // css into $bgDragger will not work since it will change overlay content style too).
-        this.$bgDragger.css('background-attachment', this.$target.css('background-attachment'));
-        this.$bgDragger.on('mousedown', this._onDragBackgroundStart.bind(this));
+        //SomeCSSchildselectorruleswillnotbeappliedsincetheclonehasadifferentcontainerfrom$target.
+        //Thebackground-attachmentpropertyshouldbethesameinboth$target&$bgDragger,thiswillkeepthe
+        //previewmore"wysiwyg"insteadofgettingdifferentresultwhenbgpositionsaved(e.g.parallaxsnippet)
+        //TODO:improvethistocopyallstylefrom$targetandoverrideitwithoverlayrelatedstyle(copyingall
+        //cssinto$bgDraggerwillnotworksinceitwillchangeoverlaycontentstyletoo).
+        this.$bgDragger.css('background-attachment',this.$target.css('background-attachment'));
+        this.$bgDragger.on('mousedown',this._onDragBackgroundStart.bind(this));
         this.$bgDragger.tooltip({
-            title: 'Click and drag the background to adjust its position!',
-            trigger: 'manual',
-            container: this.$backgroundOverlay
+            title:'Clickanddragthebackgroundtoadjustitsposition!',
+            trigger:'manual',
+            container:this.$backgroundOverlay
         });
 
-        // Replace content of overlayBackground, activate the overlay and give it the right dimensions.
+        //ReplacecontentofoverlayBackground,activatetheoverlayandgiveittherightdimensions.
         this.$overlayBackground.empty().append(this.$bgDragger);
         this.$backgroundOverlay.addClass('oe_active');
         this._dimensionOverlay();
         this.$bgDragger.tooltip('show');
 
-        // Needs to be deferred or the click event that activated the overlay deactivates it as well.
-        // This is caused by the click event which we are currently handling bubbling up to the document.
-        window.setTimeout(() => $(document).on('click.bgposition', this._onDocumentClicked.bind(this)), 0);
+        //Needstobedeferredortheclickeventthatactivatedtheoverlaydeactivatesitaswell.
+        //Thisiscausedbytheclickeventwhichwearecurrentlyhandlingbubblinguptothedocument.
+        window.setTimeout(()=>$(document).on('click.bgposition',this._onDocumentClicked.bind(this)),0);
     },
     /**
-     * Returns the difference between the target's size and the background's
-     * rendered size. Background position values in % are a percentage of this.
+     *Returnsthedifferencebetweenthetarget'ssizeandthebackground's
+     *renderedsize.Backgroundpositionvaluesin%areapercentageofthis.
      *
-     * @private
+     *@private
      */
-    _getBackgroundDelta: function () {
-        const bgSize = this.$target.css('background-size');
-        if (bgSize !== 'cover') {
-            let [width, height] = bgSize.split(' ');
-            if (width === 'auto' && (height === 'auto' || !height)) {
-                return {
-                    x: this.$target.outerWidth() - this.img.naturalWidth,
-                    y: this.$target.outerHeight() - this.img.naturalHeight,
+    _getBackgroundDelta:function(){
+        constbgSize=this.$target.css('background-size');
+        if(bgSize!=='cover'){
+            let[width,height]=bgSize.split('');
+            if(width==='auto'&&(height==='auto'||!height)){
+                return{
+                    x:this.$target.outerWidth()-this.img.naturalWidth,
+                    y:this.$target.outerHeight()-this.img.naturalHeight,
                 };
             }
-            // At least one of width or height is not auto, so we can use it to calculate the other if it's not set
-            [width, height] = [parseInt(width), parseInt(height)];
-            return {
-                x: this.$target.outerWidth() - (width || (height * this.img.naturalWidth / this.img.naturalHeight)),
-                y: this.$target.outerHeight() - (height || (width * this.img.naturalHeight / this.img.naturalWidth)),
+            //Atleastoneofwidthorheightisnotauto,sowecanuseittocalculatetheotherifit'snotset
+            [width,height]=[parseInt(width),parseInt(height)];
+            return{
+                x:this.$target.outerWidth()-(width||(height*this.img.naturalWidth/this.img.naturalHeight)),
+                y:this.$target.outerHeight()-(height||(width*this.img.naturalHeight/this.img.naturalWidth)),
             };
         }
 
-        const renderRatio = Math.max(
-            this.$target.outerWidth() / this.img.naturalWidth,
-            this.$target.outerHeight() / this.img.naturalHeight
+        constrenderRatio=Math.max(
+            this.$target.outerWidth()/this.img.naturalWidth,
+            this.$target.outerHeight()/this.img.naturalHeight
         );
 
-        return {
-            x: this.$target.outerWidth() - Math.round(renderRatio * this.img.naturalWidth),
-            y: this.$target.outerHeight() - Math.round(renderRatio * this.img.naturalHeight),
+        return{
+            x:this.$target.outerWidth()-Math.round(renderRatio*this.img.naturalWidth),
+            y:this.$target.outerHeight()-Math.round(renderRatio*this.img.naturalHeight),
         };
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Drags the overlay's background image, copied to target on "Apply".
+     *Dragstheoverlay'sbackgroundimage,copiedtotargeton"Apply".
      *
-     * @private
+     *@private
      */
-    _onDragBackgroundStart: function (ev) {
+    _onDragBackgroundStart:function(ev){
         ev.preventDefault();
         this.$bgDragger.addClass('o_we_grabbing');
-        const $document = $(this.ownerDocument);
-        $document.on('mousemove.bgposition', this._onDragBackgroundMove.bind(this));
-        $document.one('mouseup', () => {
+        const$document=$(this.ownerDocument);
+        $document.on('mousemove.bgposition',this._onDragBackgroundMove.bind(this));
+        $document.one('mouseup',()=>{
             this.$bgDragger.removeClass('o_we_grabbing');
             $document.off('mousemove.bgposition');
         });
     },
     /**
-     * Drags the overlay's background image, copied to target on "Apply".
+     *Dragstheoverlay'sbackgroundimage,copiedtotargeton"Apply".
      *
-     * @private
+     *@private
      */
-    _onDragBackgroundMove: function (ev) {
+    _onDragBackgroundMove:function(ev){
         ev.preventDefault();
 
-        const delta = this._getBackgroundDelta();
-        this.currentPosition.left = clamp(this.currentPosition.left + ev.originalEvent.movementX, [0, delta.x]);
-        this.currentPosition.top = clamp(this.currentPosition.top + ev.originalEvent.movementY, [0, delta.y]);
+        constdelta=this._getBackgroundDelta();
+        this.currentPosition.left=clamp(this.currentPosition.left+ev.originalEvent.movementX,[0,delta.x]);
+        this.currentPosition.top=clamp(this.currentPosition.top+ev.originalEvent.movementY,[0,delta.y]);
 
-        const percentPosition = {
-            left: this.currentPosition.left / delta.x * 100,
-            top: this.currentPosition.top / delta.y * 100,
+        constpercentPosition={
+            left:this.currentPosition.left/delta.x*100,
+            top:this.currentPosition.top/delta.y*100,
         };
-        // In cover mode, one delta will be 0 and dividing by it will yield Infinity.
-        // Defaulting to originalPosition in that case (can't be dragged)
-        percentPosition.left = isFinite(percentPosition.left) ? percentPosition.left : this.originalPosition.left;
-        percentPosition.top = isFinite(percentPosition.top) ? percentPosition.top : this.originalPosition.top;
+        //Incovermode,onedeltawillbe0anddividingbyitwillyieldInfinity.
+        //DefaultingtooriginalPositioninthatcase(can'tbedragged)
+        percentPosition.left=isFinite(percentPosition.left)?percentPosition.left:this.originalPosition.left;
+        percentPosition.top=isFinite(percentPosition.top)?percentPosition.top:this.originalPosition.top;
 
-        this.$bgDragger.css('background-position', `${percentPosition.left}% ${percentPosition.top}%`);
+        this.$bgDragger.css('background-position',`${percentPosition.left}%${percentPosition.top}%`);
 
-        function clamp(val, bounds) {
-            // We sort the bounds because when one dimension of the rendered background is
-            // larger than the container, delta is negative, and we want to use it as lower bound
-            bounds = bounds.sort();
-            return Math.max(bounds[0], Math.min(val, bounds[1]));
+        functionclamp(val,bounds){
+            //Wesorttheboundsbecausewhenonedimensionoftherenderedbackgroundis
+            //largerthanthecontainer,deltaisnegative,andwewanttouseitaslowerbound
+            bounds=bounds.sort();
+            returnMath.max(bounds[0],Math.min(val,bounds[1]));
         }
     },
     /**
-     * Deactivates the overlay if the user clicks outside of it.
+     *Deactivatestheoverlayiftheuserclicksoutsideofit.
      *
-     * @private
+     *@private
      */
-    _onDocumentClicked: function (ev) {
-        if (!$(ev.target).closest('.o_we_background_position_overlay').length) {
+    _onDocumentClicked:function(ev){
+        if(!$(ev.target).closest('.o_we_background_position_overlay').length){
             this._toggleBgOverlay(false);
         }
     },
 });
 
 /**
- * Marks color levels of any element that may get or has a color classes. This
- * is done for the specific main colorpicker option so that those are marked on
- * snippet drop (so that base snippet definition do not need to care about that)
- * and on first focus (for compatibility).
+ *Markscolorlevelsofanyelementthatmaygetorhasacolorclasses.This
+ *isdoneforthespecificmaincolorpickeroptionsothatthosearemarkedon
+ *snippetdrop(sothatbasesnippetdefinitiondonotneedtocareaboutthat)
+ *andonfirstfocus(forcompatibility).
  */
-registry.ColoredLevelBackground = registry.BackgroundToggler.extend({
+registry.ColoredLevelBackground=registry.BackgroundToggler.extend({
     /**
-     * @override
+     *@override
      */
-    start: function () {
+    start:function(){
         this._markColorLevel();
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    onBuilt: function () {
+    onBuilt:function(){
         this._markColorLevel();
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Adds a specific class indicating the element is colored so that nested
-     * color classes work (we support one-level). Removing it is not useful,
-     * technically the class can be added on anything that *may* receive a color
-     * class: this does not come with any CSS rule.
+     *Addsaspecificclassindicatingtheelementiscoloredsothatnested
+     *colorclasseswork(wesupportone-level).Removingitisnotuseful,
+     *technicallytheclasscanbeaddedonanythingthat*may*receiveacolor
+     *class:thisdoesnotcomewithanyCSSrule.
      *
-     * @private
+     *@private
      */
-    _markColorLevel: function () {
+    _markColorLevel:function(){
         this.$target.addClass('o_colored_level');
     },
 });
 
 /**
- * Allows to replace a text value with the name of a database record.
- * @todo replace this mechanism with real backend m2o field ?
+ *Allowstoreplaceatextvaluewiththenameofadatabaserecord.
+ *@todoreplacethismechanismwithrealbackendm2ofield?
  */
-registry.many2one = SnippetOptionWidget.extend({
-    xmlDependencies: ['/web_editor/static/src/xml/snippets.xml'],
+registry.many2one=SnippetOptionWidget.extend({
+    xmlDependencies:['/web_editor/static/src/xml/snippets.xml'],
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var self = this;
-        this.trigger_up('getRecordInfo', _.extend(this.options, {
-            callback: function (recordInfo) {
-                _.defaults(self.options, recordInfo);
+    start:function(){
+        varself=this;
+        this.trigger_up('getRecordInfo',_.extend(this.options,{
+            callback:function(recordInfo){
+                _.defaults(self.options,recordInfo);
             },
         }));
 
-        this.Model = this.$target.data('oe-many2one-model');
-        this.ID = +this.$target.data('oe-many2one-id');
+        this.Model=this.$target.data('oe-many2one-model');
+        this.ID=+this.$target.data('oe-many2one-id');
 
-        // create search button and bind search bar
-        this.$btn = $(qweb.render('web_editor.many2one.button'))
+        //createsearchbuttonandbindsearchbar
+        this.$btn=$(qweb.render('web_editor.many2one.button'))
             .prependTo(this.$el);
 
-        this.$ul = this.$btn.find('ul');
-        this.$search = this.$ul.find('li:first');
-        this.$search.find('input').on('mousedown click mouseup keyup keydown', function (e) {
+        this.$ul=this.$btn.find('ul');
+        this.$search=this.$ul.find('li:first');
+        this.$search.find('input').on('mousedownclickmouseupkeyupkeydown',function(e){
             e.stopPropagation();
         });
 
-        // move menu item
-        setTimeout(function () {
-            self.$btn.find('a').on('click', function (e) {
+        //movemenuitem
+        setTimeout(function(){
+            self.$btn.find('a').on('click',function(e){
                 self._clear();
             });
-        }, 0);
+        },0);
 
-        // bind search input
+        //bindsearchinput
         this.$search.find('input')
             .focus()
-            .on('keyup', function (e) {
+            .on('keyup',function(e){
                 self.$overlay.removeClass('o_overlay_hidden');
                 self._findExisting($(this).val());
             });
 
-        // bind result
-        this.$ul.on('click', 'li:not(:first) a', function (e) {
+        //bindresult
+        this.$ul.on('click','li:not(:first)a',function(e){
             self._selectRecord($(e.currentTarget));
         });
 
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    onFocus: function () {
-        this.$target.attr('contentEditable', 'false');
+    onFocus:function(){
+        this.$target.attr('contentEditable','false');
         this._clear();
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Removes the input value and suggestions.
+     *Removestheinputvalueandsuggestions.
      *
-     * @private
+     *@private
      */
-    _clear: function () {
-        var self = this;
+    _clear:function(){
+        varself=this;
         this.$search.siblings().remove();
         self.$search.find('input').val('');
-        setTimeout(function () {
+        setTimeout(function(){
             self.$search.find('input').focus();
-        }, 0);
+        },0);
     },
     /**
-     * Find existing record with the given name and suggest them.
+     *Findexistingrecordwiththegivennameandsuggestthem.
      *
-     * @private
-     * @param {string} name
-     * @returns {Promise}
+     *@private
+     *@param{string}name
+     *@returns{Promise}
      */
-    _findExisting: function (name) {
-        var self = this;
-        var domain = [];
-        if (!name || !name.length) {
+    _findExisting:function(name){
+        varself=this;
+        vardomain=[];
+        if(!name||!name.length){
             self.$search.siblings().remove();
             return;
         }
-        if (isNaN(+name)) {
-            if (this.Model !== 'res.partner') {
-                domain.push(['name', 'ilike', name]);
-            } else {
-                domain.push('|', ['name', 'ilike', name], ['email', 'ilike', name]);
+        if(isNaN(+name)){
+            if(this.Model!=='res.partner'){
+                domain.push(['name','ilike',name]);
+            }else{
+                domain.push('|',['name','ilike',name],['email','ilike',name]);
             }
-        } else {
-            domain.push(['id', '=', name]);
+        }else{
+            domain.push(['id','=',name]);
         }
 
-        return this._rpc({
-            model: this.Model,
-            method: 'search_read',
-            args: [domain, this.Model === 'res.partner' ? ['name', 'display_name', 'city', 'country_id'] : ['name', 'display_name']],
-            kwargs: {
-                order: [{name: 'name', asc: false}],
-                limit: 5,
-                context: this.options.context,
+        returnthis._rpc({
+            model:this.Model,
+            method:'search_read',
+            args:[domain,this.Model==='res.partner'?['name','display_name','city','country_id']:['name','display_name']],
+            kwargs:{
+                order:[{name:'name',asc:false}],
+                limit:5,
+                context:this.options.context,
             },
-        }).then(function (result) {
+        }).then(function(result){
             self.$search.siblings().remove();
-            self.$search.after(qweb.render('web_editor.many2one.search', {contacts: result}));
+            self.$search.after(qweb.render('web_editor.many2one.search',{contacts:result}));
         });
     },
     /**
-     * Selects the given suggestion and displays it the proper way.
+     *Selectsthegivensuggestionanddisplaysittheproperway.
      *
-     * @private
-     * @param {jQuery} $li
+     *@private
+     *@param{jQuery}$li
      */
-    _selectRecord: function ($li) {
-        var self = this;
+    _selectRecord:function($li){
+        varself=this;
 
-        this.ID = +$li.data('id');
-        this.$target.attr('data-oe-many2one-id', this.ID).data('oe-many2one-id', this.ID);
+        this.ID=+$li.data('id');
+        this.$target.attr('data-oe-many2one-id',this.ID).data('oe-many2one-id',this.ID);
 
-        this.trigger_up('request_history_undo_record', {$target: this.$target});
+        this.trigger_up('request_history_undo_record',{$target:this.$target});
         this.$target.trigger('content_changed');
 
-        if (self.$target.data('oe-type') === 'contact') {
+        if(self.$target.data('oe-type')==='contact'){
             $('[data-oe-contact-options]')
-                .filter('[data-oe-model="' + self.$target.data('oe-model') + '"]')
-                .filter('[data-oe-id="' + self.$target.data('oe-id') + '"]')
-                .filter('[data-oe-field="' + self.$target.data('oe-field') + '"]')
-                .filter('[data-oe-contact-options!="' + self.$target.data('oe-contact-options') + '"]')
+                .filter('[data-oe-model="'+self.$target.data('oe-model')+'"]')
+                .filter('[data-oe-id="'+self.$target.data('oe-id')+'"]')
+                .filter('[data-oe-field="'+self.$target.data('oe-field')+'"]')
+                .filter('[data-oe-contact-options!="'+self.$target.data('oe-contact-options')+'"]')
                 .add(self.$target)
-                .attr('data-oe-many2one-id', self.ID).data('oe-many2one-id', self.ID)
-                .each(function () {
-                    var $node = $(this);
-                    var options = $node.data('oe-contact-options');
+                .attr('data-oe-many2one-id',self.ID).data('oe-many2one-id',self.ID)
+                .each(function(){
+                    var$node=$(this);
+                    varoptions=$node.data('oe-contact-options');
                     self._rpc({
-                        model: 'ir.qweb.field.contact',
-                        method: 'get_record_to_html',
-                        args: [[self.ID]],
-                        kwargs: {
-                            options: options,
-                            context: self.options.context,
+                        model:'ir.qweb.field.contact',
+                        method:'get_record_to_html',
+                        args:[[self.ID]],
+                        kwargs:{
+                            options:options,
+                            context:self.options.context,
                         },
-                    }).then(function (html) {
+                    }).then(function(html){
                         $node.html(html);
                     });
                 });
-        } else {
+        }else{
             self.$target.text($li.data('name'));
         }
 
@@ -4839,231 +4839,231 @@ registry.many2one = SnippetOptionWidget.extend({
 });
 
 /**
- * Allows to display a warning message on outdated snippets.
+ *Allowstodisplayawarningmessageonoutdatedsnippets.
  */
-registry.VersionControl = SnippetOptionWidget.extend({
-    xmlDependencies: ['/web_editor/static/src/xml/snippets.xml'],
+registry.VersionControl=SnippetOptionWidget.extend({
+    xmlDependencies:['/web_editor/static/src/xml/snippets.xml'],
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        this.trigger_up('get_snippet_versions', {
-            snippetName: this.$target[0].dataset.snippet,
-            onSuccess: snippetVersions => {
-                const isUpToDate = snippetVersions && ['vjs', 'vcss', 'vxml'].every(key => this.$target[0].dataset[key] === snippetVersions[key]);
-                if (!isUpToDate) {
+    start:function(){
+        this.trigger_up('get_snippet_versions',{
+            snippetName:this.$target[0].dataset.snippet,
+            onSuccess:snippetVersions=>{
+                constisUpToDate=snippetVersions&&['vjs','vcss','vxml'].every(key=>this.$target[0].dataset[key]===snippetVersions[key]);
+                if(!isUpToDate){
                     this.$el.prepend(qweb.render('web_editor.outdated_block_message'));
                 }
             },
         });
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 });
 
 /**
- * Handle the save of a snippet as a template that can be reused later
+ *Handlethesaveofasnippetasatemplatethatcanbereusedlater
  */
-registry.SnippetSave = SnippetOptionWidget.extend({
-    xmlDependencies: ['/web_editor/static/src/xml/editor.xml'],
-    isTopOption: true,
+registry.SnippetSave=SnippetOptionWidget.extend({
+    xmlDependencies:['/web_editor/static/src/xml/editor.xml'],
+    isTopOption:true,
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    saveSnippet: function (previewMode, widgetValue, params) {
-        return new Promise(resolve => {
-            const dialog = new Dialog(this, {
-                title: _t("Save Your Block"),
-                size: 'small',
-                $content: $(qweb.render('web_editor.dialog.save_snippet', {
-                    currentSnippetName: _.str.sprintf(_t("Custom %s"), this.data.snippetName),
+    saveSnippet:function(previewMode,widgetValue,params){
+        returnnewPromise(resolve=>{
+            constdialog=newDialog(this,{
+                title:_t("SaveYourBlock"),
+                size:'small',
+                $content:$(qweb.render('web_editor.dialog.save_snippet',{
+                    currentSnippetName:_.str.sprintf(_t("Custom%s"),this.data.snippetName),
                 })),
-                buttons: [{
-                    text: _t("Save"),
-                    classes: 'btn-primary',
-                    close: true,
-                    click: async () => {
-                        const save = await new Promise(resolve => {
-                            Dialog.confirm(this, _t("To save a snippet, we need to save all your previous modifications and reload the page."), {
-                                buttons: [
+                buttons:[{
+                    text:_t("Save"),
+                    classes:'btn-primary',
+                    close:true,
+                    click:async()=>{
+                        constsave=awaitnewPromise(resolve=>{
+                            Dialog.confirm(this,_t("Tosaveasnippet,weneedtosaveallyourpreviousmodificationsandreloadthepage."),{
+                                buttons:[
                                     {
-                                        text: _t("Save and Reload"),
-                                        classes: 'btn-primary',
-                                        close: true,
-                                        click: () => resolve(true),
-                                    }, {
-                                        text: _t("Cancel"),
-                                        close: true,
-                                        click: () => resolve(false),
+                                        text:_t("SaveandReload"),
+                                        classes:'btn-primary',
+                                        close:true,
+                                        click:()=>resolve(true),
+                                    },{
+                                        text:_t("Cancel"),
+                                        close:true,
+                                        click:()=>resolve(false),
                                     }
                                 ]
                             });
                         });
-                        if (!save) {
+                        if(!save){
                             return;
                         }
-                        const snippetKey = this.$target[0].dataset.snippet;
-                        let thumbnailURL;
-                        this.trigger_up('snippet_thumbnail_url_request', {
-                            key: snippetKey,
-                            onSuccess: url => thumbnailURL = url,
+                        constsnippetKey=this.$target[0].dataset.snippet;
+                        letthumbnailURL;
+                        this.trigger_up('snippet_thumbnail_url_request',{
+                            key:snippetKey,
+                            onSuccess:url=>thumbnailURL=url,
                         });
-                        let context;
-                        this.trigger_up('context_get', {
-                            callback: ctx => context = ctx,
+                        letcontext;
+                        this.trigger_up('context_get',{
+                            callback:ctx=>context=ctx,
                         });
-                        this.trigger_up('request_save', {
-                            reloadEditor: true,
-                            onSuccess: async () => {
-                                const snippetName = dialog.el.querySelector('.o_we_snippet_name_input').value;
-                                const targetCopyEl = this.$target[0].cloneNode(true);
-                                delete targetCopyEl.dataset.name;
-                                // By the time onSuccess is called after request_save, the
-                                // current widget has been destroyed and is orphaned, so this._rpc
-                                // will not work as it can't trigger_up. For this reason, we need
-                                // to bypass the service provider and use the global RPC directly
-                                await rpc.query({
-                                    model: 'ir.ui.view',
-                                    method: 'save_snippet',
-                                    kwargs: {
-                                        'name': snippetName,
-                                        'arch': targetCopyEl.outerHTML,
-                                        'template_key': this.options.snippets,
-                                        'snippet_key': snippetKey,
-                                        'thumbnail_url': thumbnailURL,
-                                        'context': context,
+                        this.trigger_up('request_save',{
+                            reloadEditor:true,
+                            onSuccess:async()=>{
+                                constsnippetName=dialog.el.querySelector('.o_we_snippet_name_input').value;
+                                consttargetCopyEl=this.$target[0].cloneNode(true);
+                                deletetargetCopyEl.dataset.name;
+                                //BythetimeonSuccessiscalledafterrequest_save,the
+                                //currentwidgethasbeendestroyedandisorphaned,sothis._rpc
+                                //willnotworkasitcan'ttrigger_up.Forthisreason,weneed
+                                //tobypasstheserviceproviderandusetheglobalRPCdirectly
+                                awaitrpc.query({
+                                    model:'ir.ui.view',
+                                    method:'save_snippet',
+                                    kwargs:{
+                                        'name':snippetName,
+                                        'arch':targetCopyEl.outerHTML,
+                                        'template_key':this.options.snippets,
+                                        'snippet_key':snippetKey,
+                                        'thumbnail_url':thumbnailURL,
+                                        'context':context,
                                     },
                                 });
                             },
                         });
                     },
-                }, {
-                    text: _t("Discard"),
-                    close: true,
+                },{
+                    text:_t("Discard"),
+                    close:true,
                 }],
             }).open();
-            dialog.on('closed', this, () => resolve());
+            dialog.on('closed',this,()=>resolve());
         });
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * TODO adapt in master, this option should only be instantiated for real
-     * snippets in the first place.
+     *TODOadaptinmaster,thisoptionshouldonlybeinstantiatedforreal
+     *snippetsinthefirstplace.
      *
-     * @override
+     *@override
      */
-    _computeVisibility() {
-        return this.$target[0].hasAttribute('data-snippet');
+    _computeVisibility(){
+        returnthis.$target[0].hasAttribute('data-snippet');
     },
 });
 
 /**
- * Handles the dynamic colors for dynamic SVGs.
+ *HandlesthedynamiccolorsfordynamicSVGs.
  */
-registry.DynamicSvg = SnippetOptionWidget.extend({
+registry.DynamicSvg=SnippetOptionWidget.extend({
     /**
-     * @override
+     *@override
      */
-    start() {
-        this.$target.on('image_changed.DynamicSvg', this._onImageChanged.bind(this));
-        return this._super(...arguments);
+    start(){
+        this.$target.on('image_changed.DynamicSvg',this._onImageChanged.bind(this));
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    destroy() {
+    destroy(){
         this.$target.off('.DynamicSvg');
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * Sets the dynamic SVG's dynamic color.
+     *SetsthedynamicSVG'sdynamiccolor.
      *
-     * @see this.selectClass for params
+     *@seethis.selectClassforparams
      */
-    async color(previewMode, widgetValue, params) {
-        const target = this.$target[0];
-        switch (previewMode) {
-            case true:
-                this.previousSrc = target.getAttribute('src');
+    asynccolor(previewMode,widgetValue,params){
+        consttarget=this.$target[0];
+        switch(previewMode){
+            casetrue:
+                this.previousSrc=target.getAttribute('src');
                 break;
-            case 'reset':
-                target.src = this.previousSrc;
+            case'reset':
+                target.src=this.previousSrc;
                 return;
         }
-        const newURL = new URL(target.src, window.location.origin);
-        newURL.searchParams.set('c1', normalizeColor(widgetValue));
-        const src = newURL.pathname + newURL.search;
-        await loadImage(src);
-        target.src = src;
-        if (!previewMode) {
-            this.previousSrc = src;
+        constnewURL=newURL(target.src,window.location.origin);
+        newURL.searchParams.set('c1',normalizeColor(widgetValue));
+        constsrc=newURL.pathname+newURL.search;
+        awaitloadImage(src);
+        target.src=src;
+        if(!previewMode){
+            this.previousSrc=src;
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _computeWidgetState(methodName, params) {
-        switch (methodName) {
-            case 'color':
-                return new URL(this.$target[0].src, window.location.origin).searchParams.get('c1');
+    _computeWidgetState(methodName,params){
+        switch(methodName){
+            case'color':
+                returnnewURL(this.$target[0].src,window.location.origin).searchParams.get('c1');
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    _computeVisibility(methodName, params) {
-        return this.$target.is("img[src^='/web_editor/shape/']");
+    _computeVisibility(methodName,params){
+        returnthis.$target.is("img[src^='/web_editor/shape/']");
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _onImageChanged(methodName, params) {
-        return this.updateUI();
+    _onImageChanged(methodName,params){
+        returnthis.updateUI();
     },
 });
 
-return {
-    SnippetOptionWidget: SnippetOptionWidget,
-    snippetOptionRegistry: registry,
+return{
+    SnippetOptionWidget:SnippetOptionWidget,
+    snippetOptionRegistry:registry,
 
-    NULL_ID: NULL_ID,
-    UserValueWidget: UserValueWidget,
-    userValueWidgetsRegistry: userValueWidgetsRegistry,
-    UnitUserValueWidget: UnitUserValueWidget,
+    NULL_ID:NULL_ID,
+    UserValueWidget:UserValueWidget,
+    userValueWidgetsRegistry:userValueWidgetsRegistry,
+    UnitUserValueWidget:UnitUserValueWidget,
 
-    addTitleAndAllowedAttributes: _addTitleAndAllowedAttributes,
-    buildElement: _buildElement,
-    buildTitleElement: _buildTitleElement,
-    buildRowElement: _buildRowElement,
-    buildCollapseElement: _buildCollapseElement,
+    addTitleAndAllowedAttributes:_addTitleAndAllowedAttributes,
+    buildElement:_buildElement,
+    buildTitleElement:_buildTitleElement,
+    buildRowElement:_buildRowElement,
+    buildCollapseElement:_buildCollapseElement,
 
-    // Other names for convenience
-    Class: SnippetOptionWidget,
-    registry: registry,
+    //Othernamesforconvenience
+    Class:SnippetOptionWidget,
+    registry:registry,
 };
 });

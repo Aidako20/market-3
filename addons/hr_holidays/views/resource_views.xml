@@ -1,14 +1,14 @@
-<?xml version='1.0' encoding='UTF-8' ?>
+<?xmlversion='1.0'encoding='UTF-8'?>
 <flectra>
-    <!-- Holiday on resource leave -->
-    <record id="resource_calendar_leave_form_inherit" model="ir.ui.view">
-        <field name="name">resource.calendar.leaves.form.inherit</field>
-        <field name="model">resource.calendar.leaves</field>
-        <field name="inherit_id" ref="resource.resource_calendar_leave_form"/>
-        <field name="arch" type="xml">
-            <field name="name" position="after">
-                <field name="holiday_id"/>
+    <!--Holidayonresourceleave-->
+    <recordid="resource_calendar_leave_form_inherit"model="ir.ui.view">
+        <fieldname="name">resource.calendar.leaves.form.inherit</field>
+        <fieldname="model">resource.calendar.leaves</field>
+        <fieldname="inherit_id"ref="resource.resource_calendar_leave_form"/>
+        <fieldname="arch"type="xml">
+            <fieldname="name"position="after">
+                <fieldname="holiday_id"/>
             </field>
         </field>
     </record>
-</flectra> 
+</flectra>

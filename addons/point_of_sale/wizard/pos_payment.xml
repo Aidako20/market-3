@@ -1,28 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <record id="view_pos_payment" model="ir.ui.view">
-            <field name="name">pos.make.payment.form</field>
-            <field name="model">pos.make.payment</field>
-            <field name="arch" type="xml">
-            <form string="Pay Order">
+        <recordid="view_pos_payment"model="ir.ui.view">
+            <fieldname="name">pos.make.payment.form</field>
+            <fieldname="model">pos.make.payment</field>
+            <fieldname="arch"type="xml">
+            <formstring="PayOrder">
                 <group>
-                    <field name="config_id" invisible="1" />
-                    <field name="payment_method_id" domain="[('config_ids', 'in', config_id)]"/>
-                    <field name="amount" />
-                    <field name="payment_name"/>
+                    <fieldname="config_id"invisible="1"/>
+                    <fieldname="payment_method_id"domain="[('config_ids','in',config_id)]"/>
+                    <fieldname="amount"/>
+                    <fieldname="payment_name"/>
                 </group>
                 <footer>
-                    <button name="check" string="Make Payment" type="object" class="btn-primary"/>
-                    <button special="cancel" string="Cancel" class="btn-secondary"/>
+                    <buttonname="check"string="MakePayment"type="object"class="btn-primary"/>
+                    <buttonspecial="cancel"string="Cancel"class="btn-secondary"/>
                 </footer>
             </form>
             </field>
         </record>
-        <record id="action_pos_payment" model="ir.actions.act_window">
-            <field name="name">Payment</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">pos.make.payment</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
+        <recordid="action_pos_payment"model="ir.actions.act_window">
+            <fieldname="name">Payment</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">pos.make.payment</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="target">new</field>
         </record>
 </flectra>

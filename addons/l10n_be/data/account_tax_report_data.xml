@@ -1,354 +1,354 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="tax_report_vat" model="account.tax.report">
-        <field name="name">VAT Report</field>
-        <field name="country_id" ref="base.be"/>
+    <recordid="tax_report_vat"model="account.tax.report">
+        <fieldname="name">VATReport</field>
+        <fieldname="country_id"ref="base.be"/>
     </record>
 
-    <record id="tax_report_title_operations" model="account.tax.report.line">
-        <field name="name">Opérations</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="sequence">1</field>
+    <recordid="tax_report_title_operations"model="account.tax.report.line">
+        <fieldname="name">Opérations</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="sequence">1</field>
     </record>
 
-    <record id="tax_report_title_operations_sortie" model="account.tax.report.line">
-        <field name="name">II A la sortie</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations"/>
-        <field name="sequence">1</field>
+    <recordid="tax_report_title_operations_sortie"model="account.tax.report.line">
+        <fieldname="name">IIAlasortie</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations"/>
+        <fieldname="sequence">1</field>
     </record>
 
-    <record id="tax_report_line_00" model="account.tax.report.line">
-        <field name="name">00 - Opérations soumises à un régime particulier</field>
-        <field name="code">c00</field>
-        <field name="tag_name">00</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_sortie"/>
-        <field name="sequence">1</field>
+    <recordid="tax_report_line_00"model="account.tax.report.line">
+        <fieldname="name">00-Opérationssoumisesàunrégimeparticulier</field>
+        <fieldname="code">c00</field>
+        <fieldname="tag_name">00</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_sortie"/>
+        <fieldname="sequence">1</field>
     </record>
 
-    <record id="tax_report_line_01" model="account.tax.report.line">
-        <field name="name">01 - Opérations avec TVA à 6%</field>
-        <field name="code">c01</field>
-        <field name="tag_name">01</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_sortie"/>
-        <field name="sequence">2</field>
+    <recordid="tax_report_line_01"model="account.tax.report.line">
+        <fieldname="name">01-OpérationsavecTVAà6%</field>
+        <fieldname="code">c01</field>
+        <fieldname="tag_name">01</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_sortie"/>
+        <fieldname="sequence">2</field>
     </record>
 
-    <record id="tax_report_line_02" model="account.tax.report.line">
-        <field name="name">02 - Opérations avec TVA à 12%</field>
-        <field name="code">c02</field>
-        <field name="tag_name">02</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_sortie"/>
-        <field name="sequence">3</field>
+    <recordid="tax_report_line_02"model="account.tax.report.line">
+        <fieldname="name">02-OpérationsavecTVAà12%</field>
+        <fieldname="code">c02</field>
+        <fieldname="tag_name">02</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_sortie"/>
+        <fieldname="sequence">3</field>
     </record>
 
-    <record id="tax_report_line_03" model="account.tax.report.line">
-        <field name="name">03 - Opérations avec TVA à 21%</field>
-        <field name="code">c03</field>
-        <field name="tag_name">03</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_sortie"/>
-        <field name="sequence">4</field>
+    <recordid="tax_report_line_03"model="account.tax.report.line">
+        <fieldname="name">03-OpérationsavecTVAà21%</field>
+        <fieldname="code">c03</field>
+        <fieldname="tag_name">03</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_sortie"/>
+        <fieldname="sequence">4</field>
     </record>
 
-    <record id="tax_report_line_44" model="account.tax.report.line">
-        <field name="name">44 - Services intra-communautaires</field>
-        <field name="code">c44</field>
-        <field name="tag_name">44</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_sortie"/>
-        <field name="sequence">5</field>
+    <recordid="tax_report_line_44"model="account.tax.report.line">
+        <fieldname="name">44-Servicesintra-communautaires</field>
+        <fieldname="code">c44</field>
+        <fieldname="tag_name">44</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_sortie"/>
+        <fieldname="sequence">5</field>
     </record>
 
-    <record id="tax_report_line_45" model="account.tax.report.line">
-        <field name="name">45 - Opérations avec TVA due par le cocontractant</field>
-        <field name="code">c45</field>
-        <field name="tag_name">45</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_sortie"/>
-        <field name="sequence">6</field>
+    <recordid="tax_report_line_45"model="account.tax.report.line">
+        <fieldname="name">45-OpérationsavecTVAdueparlecocontractant</field>
+        <fieldname="code">c45</field>
+        <fieldname="tag_name">45</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_sortie"/>
+        <fieldname="sequence">6</field>
     </record>
 
-    <record id="tax_report_title_operations_sortie_46" model="account.tax.report.line">
-        <field name="name">46 - Livraisons intra-communautaires exemptées</field>
-        <field name="code">c46</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_sortie"/>
-        <field name="sequence">7</field>
+    <recordid="tax_report_title_operations_sortie_46"model="account.tax.report.line">
+        <fieldname="name">46-Livraisonsintra-communautairesexemptées</field>
+        <fieldname="code">c46</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_sortie"/>
+        <fieldname="sequence">7</field>
     </record>
 
-    <record id="tax_report_line_46L" model="account.tax.report.line">
-        <field name="name">46L - Livraisons biens intra-communautaires exemptées</field>
-        <field name="tag_name">46L</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_sortie_46"/>
-        <field name="sequence">1</field>
+    <recordid="tax_report_line_46L"model="account.tax.report.line">
+        <fieldname="name">46L-Livraisonsbiensintra-communautairesexemptées</field>
+        <fieldname="tag_name">46L</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_sortie_46"/>
+        <fieldname="sequence">1</field>
     </record>
 
-    <record id="tax_report_line_46T" model="account.tax.report.line">
-        <field name="name">46T - Livraisons biens intra-communautaire exemptées</field>
-        <field name="tag_name">46T</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_sortie_46"/>
-        <field name="sequence">2</field>
+    <recordid="tax_report_line_46T"model="account.tax.report.line">
+        <fieldname="name">46T-Livraisonsbiensintra-communautaireexemptées</field>
+        <fieldname="tag_name">46T</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_sortie_46"/>
+        <fieldname="sequence">2</field>
     </record>
 
-    <record id="tax_report_line_47" model="account.tax.report.line">
-        <field name="name">47 - Autres opérations exemptées</field>
-        <field name="code">c47</field>
-        <field name="tag_name">47</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_sortie"/>
-        <field name="sequence">8</field>
+    <recordid="tax_report_line_47"model="account.tax.report.line">
+        <fieldname="name">47-Autresopérationsexemptées</field>
+        <fieldname="code">c47</field>
+        <fieldname="tag_name">47</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_sortie"/>
+        <fieldname="sequence">8</field>
     </record>
 
-    <record id="tax_report_title_operations_sortie_48" model="account.tax.report.line">
-        <field name="name">48 - Notes de crédit aux opérations grilles [44] et [46]</field>
-        <field name="code">c48</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_sortie"/>
-        <field name="sequence">9</field>
+    <recordid="tax_report_title_operations_sortie_48"model="account.tax.report.line">
+        <fieldname="name">48-Notesdecréditauxopérationsgrilles[44]et[46]</field>
+        <fieldname="code">c48</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_sortie"/>
+        <fieldname="sequence">9</field>
     </record>
 
-    <record id="tax_report_line_48s44" model="account.tax.report.line">
-        <field name="name">48s44 - Notes de crédit aux opérations grilles [44]</field>
-        <field name="tag_name">48s44</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_sortie_48"/>
-        <field name="sequence">1</field>
+    <recordid="tax_report_line_48s44"model="account.tax.report.line">
+        <fieldname="name">48s44-Notesdecréditauxopérationsgrilles[44]</field>
+        <fieldname="tag_name">48s44</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_sortie_48"/>
+        <fieldname="sequence">1</field>
     </record>
 
-    <record id="tax_report_line_48s46L" model="account.tax.report.line">
-        <field name="name">48s46L - Notes de crédit aux opérations grilles [46L]</field>
-        <field name="tag_name">48s46L</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_sortie_48"/>
-        <field name="sequence">2</field>
+    <recordid="tax_report_line_48s46L"model="account.tax.report.line">
+        <fieldname="name">48s46L-Notesdecréditauxopérationsgrilles[46L]</field>
+        <fieldname="tag_name">48s46L</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_sortie_48"/>
+        <fieldname="sequence">2</field>
     </record>
 
-    <record id="tax_report_line_48s46T" model="account.tax.report.line">
-        <field name="name">48s46T - Notes de crédit aux opérations grilles [46T]</field>
-        <field name="tag_name">48s46T</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_sortie_48"/>
-        <field name="sequence">3</field>
+    <recordid="tax_report_line_48s46T"model="account.tax.report.line">
+        <fieldname="name">48s46T-Notesdecréditauxopérationsgrilles[46T]</field>
+        <fieldname="tag_name">48s46T</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_sortie_48"/>
+        <fieldname="sequence">3</field>
     </record>
 
-    <record id="tax_report_line_49" model="account.tax.report.line">
-        <field name="name">49 - Notes de crédit aux opérations du point II</field>
-        <field name="code">c49</field>
-        <field name="tag_name">49</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_sortie"/>
-        <field name="sequence">10</field>
+    <recordid="tax_report_line_49"model="account.tax.report.line">
+        <fieldname="name">49-NotesdecréditauxopérationsdupointII</field>
+        <fieldname="code">c49</field>
+        <fieldname="tag_name">49</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_sortie"/>
+        <fieldname="sequence">10</field>
     </record>
 
-    <record id="tax_report_title_operations_entree" model="account.tax.report.line">
-        <field name="name">III A l'entrée</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations"/>
-        <field name="sequence">2</field>
+    <recordid="tax_report_title_operations_entree"model="account.tax.report.line">
+        <fieldname="name">IIIAl'entrée</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations"/>
+        <fieldname="sequence">2</field>
     </record>
 
-    <record id="tax_report_line_81" model="account.tax.report.line">
-        <field name="name">81 - Marchandises, matières premières et auxiliaires</field>
-        <field name="code">c81</field>
-        <field name="tag_name">81</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_entree"/>
-        <field name="sequence">1</field>
+    <recordid="tax_report_line_81"model="account.tax.report.line">
+        <fieldname="name">81-Marchandises,matièrespremièresetauxiliaires</field>
+        <fieldname="code">c81</field>
+        <fieldname="tag_name">81</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_entree"/>
+        <fieldname="sequence">1</field>
     </record>
 
-    <record id="tax_report_line_82" model="account.tax.report.line">
-        <field name="name">82 - Services et biens divers</field>
-        <field name="code">c82</field>
-        <field name="tag_name">82</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_entree"/>
-        <field name="sequence">2</field>
+    <recordid="tax_report_line_82"model="account.tax.report.line">
+        <fieldname="name">82-Servicesetbiensdivers</field>
+        <fieldname="code">c82</field>
+        <fieldname="tag_name">82</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_entree"/>
+        <fieldname="sequence">2</field>
     </record>
 
-    <record id="tax_report_line_83" model="account.tax.report.line">
-        <field name="name">83 - Biens d'investissement</field>
-        <field name="code">c83</field>
-        <field name="tag_name">83</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_entree"/>
-        <field name="sequence">3</field>
+    <recordid="tax_report_line_83"model="account.tax.report.line">
+        <fieldname="name">83-Biensd'investissement</field>
+        <fieldname="code">c83</field>
+        <fieldname="tag_name">83</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_entree"/>
+        <fieldname="sequence">3</field>
     </record>
 
-    <record id="tax_report_line_84" model="account.tax.report.line">
-        <field name="name">84 - Notes de crédits sur opérations case [86] et [88]</field>
-        <field name="code">c84</field>
-        <field name="tag_name">84</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_entree"/>
-        <field name="sequence">4</field>
+    <recordid="tax_report_line_84"model="account.tax.report.line">
+        <fieldname="name">84-Notesdecréditssuropérationscase[86]et[88]</field>
+        <fieldname="code">c84</field>
+        <fieldname="tag_name">84</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_entree"/>
+        <fieldname="sequence">4</field>
     </record>
 
-    <record id="tax_report_line_85" model="account.tax.report.line">
-        <field name="name">85 - Notes de crédits autres opérations</field>
-        <field name="code">c85</field>
-        <field name="tag_name">85</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_entree"/>
-        <field name="sequence">5</field>
+    <recordid="tax_report_line_85"model="account.tax.report.line">
+        <fieldname="name">85-Notesdecréditsautresopérations</field>
+        <fieldname="code">c85</field>
+        <fieldname="tag_name">85</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_entree"/>
+        <fieldname="sequence">5</field>
     </record>
 
-    <record id="tax_report_line_86" model="account.tax.report.line">
-        <field name="name">86 - Acquisition intra-communautaires et ventes ABC</field>
-        <field name="code">c86</field>
-        <field name="tag_name">86</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_entree"/>
-        <field name="sequence">6</field>
+    <recordid="tax_report_line_86"model="account.tax.report.line">
+        <fieldname="name">86-Acquisitionintra-communautairesetventesABC</field>
+        <fieldname="code">c86</field>
+        <fieldname="tag_name">86</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_entree"/>
+        <fieldname="sequence">6</field>
     </record>
 
-    <record id="tax_report_line_87" model="account.tax.report.line">
-        <field name="name">87 - Autres opérations</field>
-        <field name="code">c87</field>
-        <field name="tag_name">87</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_entree"/>
-        <field name="sequence">7</field>
+    <recordid="tax_report_line_87"model="account.tax.report.line">
+        <fieldname="name">87-Autresopérations</field>
+        <fieldname="code">c87</field>
+        <fieldname="tag_name">87</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_entree"/>
+        <fieldname="sequence">7</field>
     </record>
 
-    <record id="tax_report_line_88" model="account.tax.report.line">
-        <field name="name">88 - Acquisition services intra-communautaires</field>
-        <field name="code">c88</field>
-        <field name="tag_name">88</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_operations_entree"/>
-        <field name="sequence">8</field>
+    <recordid="tax_report_line_88"model="account.tax.report.line">
+        <fieldname="name">88-Acquisitionservicesintra-communautaires</field>
+        <fieldname="code">c88</field>
+        <fieldname="tag_name">88</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_operations_entree"/>
+        <fieldname="sequence">8</field>
     </record>
 
-    <record id="tax_report_title_taxes" model="account.tax.report.line">
-        <field name="name">Taxes</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="sequence">2</field>
+    <recordid="tax_report_title_taxes"model="account.tax.report.line">
+        <fieldname="name">Taxes</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="sequence">2</field>
     </record>
 
-    <record id="tax_report_title_taxes_dues" model="account.tax.report.line">
-        <field name="name">IV Dues</field>
-        <field name="code">tax_be_iv</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_taxes"/>
-        <field name="sequence">1</field>
+    <recordid="tax_report_title_taxes_dues"model="account.tax.report.line">
+        <fieldname="name">IVDues</field>
+        <fieldname="code">tax_be_iv</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_taxes"/>
+        <fieldname="sequence">1</field>
     </record>
 
-    <record id="tax_report_line_54" model="account.tax.report.line">
-        <field name="name">54 - TVA sur opérations des grilles [01], [02], [03]</field>
-        <field name="code">c54</field>
-        <field name="tag_name">54</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_taxes_dues"/>
-        <field name="sequence">1</field>
+    <recordid="tax_report_line_54"model="account.tax.report.line">
+        <fieldname="name">54-TVAsuropérationsdesgrilles[01],[02],[03]</field>
+        <fieldname="code">c54</field>
+        <fieldname="tag_name">54</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_taxes_dues"/>
+        <fieldname="sequence">1</field>
     </record>
 
-    <record id="tax_report_line_55" model="account.tax.report.line">
-        <field name="name">55 - TVA sur opérations des grilles [86] et [88]</field>
-        <field name="code">c55</field>
-        <field name="tag_name">55</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_taxes_dues"/>
-        <field name="sequence">2</field>
+    <recordid="tax_report_line_55"model="account.tax.report.line">
+        <fieldname="name">55-TVAsuropérationsdesgrilles[86]et[88]</field>
+        <fieldname="code">c55</field>
+        <fieldname="tag_name">55</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_taxes_dues"/>
+        <fieldname="sequence">2</field>
     </record>
 
-    <record id="tax_report_line_56" model="account.tax.report.line">
-        <field name="name">56 - TVA sur opérations de la grille [87]</field>
-        <field name="code">c56</field>
-        <field name="tag_name">56</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_taxes_dues"/>
-        <field name="sequence">3</field>
+    <recordid="tax_report_line_56"model="account.tax.report.line">
+        <fieldname="name">56-TVAsuropérationsdelagrille[87]</field>
+        <fieldname="code">c56</field>
+        <fieldname="tag_name">56</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_taxes_dues"/>
+        <fieldname="sequence">3</field>
     </record>
 
-    <record id="tax_report_line_57" model="account.tax.report.line">
-        <field name="name">57 - TVA relatives aux importations</field>
-        <field name="code">c57</field>
-        <field name="tag_name">57</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_taxes_dues"/>
-        <field name="sequence">4</field>
+    <recordid="tax_report_line_57"model="account.tax.report.line">
+        <fieldname="name">57-TVArelativesauximportations</field>
+        <fieldname="code">c57</field>
+        <fieldname="tag_name">57</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_taxes_dues"/>
+        <fieldname="sequence">4</field>
     </record>
 
-    <record id="tax_report_line_61" model="account.tax.report.line">
-        <field name="name">61 - Diverses régularisations en faveur de l'Etat</field>
-        <field name="code">c61</field>
-        <field name="tag_name">61</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_taxes_dues"/>
-        <field name="sequence">5</field>
+    <recordid="tax_report_line_61"model="account.tax.report.line">
+        <fieldname="name">61-Diversesrégularisationsenfaveurdel'Etat</field>
+        <fieldname="code">c61</field>
+        <fieldname="tag_name">61</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_taxes_dues"/>
+        <fieldname="sequence">5</field>
     </record>
 
-    <record id="tax_report_line_63" model="account.tax.report.line">
-        <field name="name">63 - TVA à reverser sur notes de crédit recues</field>
-        <field name="code">c63</field>
-        <field name="tag_name">63</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_taxes_dues"/>
-        <field name="sequence">6</field>
+    <recordid="tax_report_line_63"model="account.tax.report.line">
+        <fieldname="name">63-TVAàreversersurnotesdecréditrecues</field>
+        <fieldname="code">c63</field>
+        <fieldname="tag_name">63</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_taxes_dues"/>
+        <fieldname="sequence">6</field>
     </record>
 
-    <record id="tax_report_title_taxes_deductibles" model="account.tax.report.line">
-        <field name="name">V Déductibles</field>
-        <field name="code">tax_be_v</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_taxes"/>
-        <field name="sequence">2</field>
+    <recordid="tax_report_title_taxes_deductibles"model="account.tax.report.line">
+        <fieldname="name">VDéductibles</field>
+        <fieldname="code">tax_be_v</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_taxes"/>
+        <fieldname="sequence">2</field>
     </record>
 
-    <record id="tax_report_line_59" model="account.tax.report.line">
-        <field name="name">59 - TVA déductible</field>
-        <field name="code">c59</field>
-        <field name="tag_name">59</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_taxes_deductibles"/>
-        <field name="sequence">1</field>
+    <recordid="tax_report_line_59"model="account.tax.report.line">
+        <fieldname="name">59-TVAdéductible</field>
+        <fieldname="code">c59</field>
+        <fieldname="tag_name">59</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_taxes_deductibles"/>
+        <fieldname="sequence">1</field>
     </record>
 
-    <record id="tax_report_line_62" model="account.tax.report.line">
-        <field name="name">62 - Diverses régularisations en faveur du déclarant</field>
-        <field name="code">c62</field>
-        <field name="tag_name">62</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_taxes_deductibles"/>
-        <field name="sequence">2</field>
+    <recordid="tax_report_line_62"model="account.tax.report.line">
+        <fieldname="name">62-Diversesrégularisationsenfaveurdudéclarant</field>
+        <fieldname="code">c62</field>
+        <fieldname="tag_name">62</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_taxes_deductibles"/>
+        <fieldname="sequence">2</field>
     </record>
 
-    <record id="tax_report_line_64" model="account.tax.report.line">
-        <field name="name">64 - TVA à récupérer sur notes de crédit delivrées</field>
-        <field name="code">c64</field>
-        <field name="tag_name">64</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_taxes_deductibles"/>
-        <field name="sequence">3</field>
+    <recordid="tax_report_line_64"model="account.tax.report.line">
+        <fieldname="name">64-TVAàrécupérersurnotesdecréditdelivrées</field>
+        <fieldname="code">c64</field>
+        <fieldname="tag_name">64</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_taxes_deductibles"/>
+        <fieldname="sequence">3</field>
     </record>
 
-    <record id="tax_report_title_taxes_soldes" model="account.tax.report.line">
-        <field name="name">VI Soldes</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_taxes"/>
-        <field name="sequence">3</field>
+    <recordid="tax_report_title_taxes_soldes"model="account.tax.report.line">
+        <fieldname="name">VISoldes</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_taxes"/>
+        <fieldname="sequence">3</field>
     </record>
 
-    <record id="tax_report_line_71" model="account.tax.report.line">
-        <field name="name">71 - Taxes dues à l'état</field>
-        <field name="formula">tax_be_iv&gt;tax_be_v and tax_be_iv-tax_be_v or 0</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_taxes_soldes"/>
-        <field name="sequence">1</field>
+    <recordid="tax_report_line_71"model="account.tax.report.line">
+        <fieldname="name">71-Taxesduesàl'état</field>
+        <fieldname="formula">tax_be_iv&gt;tax_be_vandtax_be_iv-tax_be_vor0</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_taxes_soldes"/>
+        <fieldname="sequence">1</field>
     </record>
 
-    <record id="tax_report_line_72" model="account.tax.report.line">
-        <field name="name">72 - Somme due par l'état</field>
-        <field name="formula">tax_be_iv&lt;tax_be_v and tax_be_v-tax_be_iv or 0</field>
-        <field name="report_id" ref="tax_report_vat"/>
-        <field name="parent_id" ref="tax_report_title_taxes_soldes"/>
-        <field name="sequence">2</field>
+    <recordid="tax_report_line_72"model="account.tax.report.line">
+        <fieldname="name">72-Sommedueparl'état</field>
+        <fieldname="formula">tax_be_iv&lt;tax_be_vandtax_be_v-tax_be_ivor0</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
+        <fieldname="parent_id"ref="tax_report_title_taxes_soldes"/>
+        <fieldname="sequence">2</field>
     </record>
 
 </flectra>

@@ -1,23 +1,23 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import _, api, models
+fromflectraimport_,api,models
 
-class PricelistItem(models.Model):
-    _inherit = "product.pricelist.item"
+classPricelistItem(models.Model):
+    _inherit="product.pricelist.item"
 
-    @api.onchange('applied_on', 'product_id', 'product_tmpl_id', 'min_quantity')
-    def _onchange_event_sale_warning(self):
-        if self.min_quantity > 0:
-            msg = ''
-            if self.applied_on == '3_global' or self.applied_on == '2_product_category':
-                msg = _("A pricelist item with a positive min. quantity will not be applied to the event tickets products.")
-            elif ((self.applied_on == '1_product' and self.product_tmpl_id.event_ok) or
-                    (self.applied_on == '0_product_variant' and self.product_id.event_ok)):
-                msg = _("A pricelist item with a positive min. quantity cannot be applied to this event tickets product.")
-            if msg:
-                return {'warning':
+    @api.onchange('applied_on','product_id','product_tmpl_id','min_quantity')
+    def_onchange_event_sale_warning(self):
+        ifself.min_quantity>0:
+            msg=''
+            ifself.applied_on=='3_global'orself.applied_on=='2_product_category':
+                msg=_("Apricelistitemwithapositivemin.quantitywillnotbeappliedtotheeventticketsproducts.")
+            elif((self.applied_on=='1_product'andself.product_tmpl_id.event_ok)or
+                    (self.applied_on=='0_product_variant'andself.product_id.event_ok)):
+                msg=_("Apricelistitemwithapositivemin.quantitycannotbeappliedtothiseventticketsproduct.")
+            ifmsg:
+                return{'warning':
                     {
-                        'title': _("Warning"),
-                        'message': msg
+                        'title':_("Warning"),
+                        'message':msg
                     }
                 }

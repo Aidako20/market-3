@@ -1,57 +1,57 @@
-flectra.define('web.test_utils_pivot', function (require) {
-"use strict";
+flectra.define('web.test_utils_pivot',function(require){
+"usestrict";
 
-var testUtilsDom = require('web.test_utils_dom');
+vartestUtilsDom=require('web.test_utils_dom');
 
 /**
- * Pivot Test Utils
+ *PivotTestUtils
  *
- * This module defines various utility functions to help test pivot views.
+ *Thismoduledefinesvariousutilityfunctionstohelptestpivotviews.
  *
- * Note that all methods defined in this module are exported in the main
- * testUtils file.
+ *Notethatallmethodsdefinedinthismoduleareexportedinthemain
+ *testUtilsfile.
  */
 
 
 /**
- * Select a measure by clicking on the corresponding dropdown item (in the
- * control panel 'Measure' submenu).
+ *Selectameasurebyclickingonthecorrespondingdropdownitem(inthe
+ *controlpanel'Measure'submenu).
  *
- * Note that this method assumes that the dropdown menu is open.
- * @see toggleMeasuresDropdown
+ *Notethatthismethodassumesthatthedropdownmenuisopen.
+ *@seetoggleMeasuresDropdown
  *
- * @param {PivotController} pivot
- * @param {string} measure
+ *@param{PivotController}pivot
+ *@param{string}measure
  */
-function clickMeasure(pivot, measure) {
-    return testUtilsDom.click(pivot.$buttons.find(`.dropdown-item[data-field=${measure}]`));
+functionclickMeasure(pivot,measure){
+    returntestUtilsDom.click(pivot.$buttons.find(`.dropdown-item[data-field=${measure}]`));
 }
 
 /**
- * Open the 'Measure' dropdown menu (in the control panel)
+ *Openthe'Measure'dropdownmenu(inthecontrolpanel)
  *
- * @see clickMeasure
+ *@seeclickMeasure
  *
- * @param {PivotController} pivot
+ *@param{PivotController}pivot
  */
-function toggleMeasuresDropdown(pivot) {
-    return testUtilsDom.click(pivot.$buttons.filter('.btn-group:first').find('> button'));
+functiontoggleMeasuresDropdown(pivot){
+    returntestUtilsDom.click(pivot.$buttons.filter('.btn-group:first').find('>button'));
 }
 
 /**
- * Reloads a graph view.
+ *Reloadsagraphview.
  *
- * @param {PivotController} pivot
- * @param {[Object]} params given to the controller reload method
+ *@param{PivotController}pivot
+ *@param{[Object]}paramsgiventothecontrollerreloadmethod
  */
-function reload(pivot, params) {
-    return pivot.reload(params);
+functionreload(pivot,params){
+    returnpivot.reload(params);
 }
 
-return {
-    clickMeasure: clickMeasure,
-    reload: reload,
-    toggleMeasuresDropdown: toggleMeasuresDropdown,
+return{
+    clickMeasure:clickMeasure,
+    reload:reload,
+    toggleMeasuresDropdown:toggleMeasuresDropdown,
 };
 
 });

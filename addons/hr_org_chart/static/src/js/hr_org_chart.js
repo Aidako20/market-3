@@ -1,201 +1,201 @@
-flectra.define('web.OrgChart', function (require) {
-"use strict";
+flectra.define('web.OrgChart',function(require){
+"usestrict";
 
-var AbstractField = require('web.AbstractField');
-var concurrency = require('web.concurrency');
-var core = require('web.core');
-var field_registry = require('web.field_registry');
-var session = require('web.session');
+varAbstractField=require('web.AbstractField');
+varconcurrency=require('web.concurrency');
+varcore=require('web.core');
+varfield_registry=require('web.field_registry');
+varsession=require('web.session');
 
-var QWeb = core.qweb;
-var _t = core._t;
+varQWeb=core.qweb;
+var_t=core._t;
 
-var FieldOrgChart = AbstractField.extend({
+varFieldOrgChart=AbstractField.extend({
 
-    events: {
-        "click .o_employee_redirect": "_onEmployeeRedirect",
-        "click .o_employee_sub_redirect": "_onEmployeeSubRedirect",
-        "click .o_employee_more_managers": "_onEmployeeMoreManager"
+    events:{
+        "click.o_employee_redirect":"_onEmployeeRedirect",
+        "click.o_employee_sub_redirect":"_onEmployeeSubRedirect",
+        "click.o_employee_more_managers":"_onEmployeeMoreManager"
     },
     /**
-     * @constructor
-     * @override
+     *@constructor
+     *@override
      */
-    init: function (parent, options) {
-        this._super.apply(this, arguments);
-        this.dm = new concurrency.DropMisordered();
-        this.employee = null;
+    init:function(parent,options){
+        this._super.apply(this,arguments);
+        this.dm=newconcurrency.DropMisordered();
+        this.employee=null;
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
     /**
-     * Get the chart data through a rpc call.
+     *Getthechartdatathrougharpccall.
      *
-     * @private
-     * @param {integer} employee_id
-     * @returns {Promise}
+     *@private
+     *@param{integer}employee_id
+     *@returns{Promise}
      */
-    _getOrgData: function () {
-        var self = this;
-        return this.dm.add(this._rpc({
-            route: '/hr/get_org_chart',
-            params: {
-                employee_id: this.employee,
-                context: session.user_context,
+    _getOrgData:function(){
+        varself=this;
+        returnthis.dm.add(this._rpc({
+            route:'/hr/get_org_chart',
+            params:{
+                employee_id:this.employee,
+                context:session.user_context,
             },
-        })).then(function (data) {
-            return data;
+        })).then(function(data){
+            returndata;
         });
     },
     /**
-     * Get subordonates of an employee through a rpc call.
+     *Getsubordonatesofanemployeethrougharpccall.
      *
-     * @private
-     * @param {integer} employee_id
-     * @returns {Promise}
+     *@private
+     *@param{integer}employee_id
+     *@returns{Promise}
      */
-    _getSubordinatesData: function (employee_id, type) {
-        return this.dm.add(this._rpc({
-            route: '/hr/get_subordinates',
-            params: {
-                employee_id: employee_id,
-                subordinates_type: type,
-                context: session.user_context,
+    _getSubordinatesData:function(employee_id,type){
+        returnthis.dm.add(this._rpc({
+            route:'/hr/get_subordinates',
+            params:{
+                employee_id:employee_id,
+                subordinates_type:type,
+                context:session.user_context,
             },
         }));
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _render: function () {
-        if (!this.recordData.id) {
-            return this.$el.html(QWeb.render("hr_org_chart", {
-                managers: [],
-                children: [],
+    _render:function(){
+        if(!this.recordData.id){
+            returnthis.$el.html(QWeb.render("hr_org_chart",{
+                managers:[],
+                children:[],
             }));
         }
-        else if (!this.employee) {
-            // the widget is either dispayed in the context of a hr.employee form or a res.users form
-            this.employee = this.recordData.employee_ids !== undefined ? this.recordData.employee_ids.res_ids[0] : this.recordData.id;
+        elseif(!this.employee){
+            //thewidgetiseitherdispayedinthecontextofahr.employeeformorares.usersform
+            this.employee=this.recordData.employee_ids!==undefined?this.recordData.employee_ids.res_ids[0]:this.recordData.id;
         }
 
-        var self = this;
-        return this._getOrgData().then(function (orgData) {
-            if (_.isEmpty(orgData)) {
-                orgData = {
-                    managers: [],
-                    children: [],
+        varself=this;
+        returnthis._getOrgData().then(function(orgData){
+            if(_.isEmpty(orgData)){
+                orgData={
+                    managers:[],
+                    children:[],
                 }
             }
-            orgData.view_employee_id = self.recordData.id;
-            self.$el.html(QWeb.render("hr_org_chart", orgData));
-            self.$('[data-toggle="popover"]').each(function () {
+            orgData.view_employee_id=self.recordData.id;
+            self.$el.html(QWeb.render("hr_org_chart",orgData));
+            self.$('[data-toggle="popover"]').each(function(){
                 $(this).popover({
-                    html: true,
-                    title: function () {
-                        var $title = $(QWeb.render('hr_orgchart_emp_popover_title', {
-                            employee: {
-                                name: $(this).data('emp-name'),
-                                id: $(this).data('emp-id'),
+                    html:true,
+                    title:function(){
+                        var$title=$(QWeb.render('hr_orgchart_emp_popover_title',{
+                            employee:{
+                                name:$(this).data('emp-name'),
+                                id:$(this).data('emp-id'),
                             },
                         }));
                         $title.on('click',
-                            '.o_employee_redirect', _.bind(self._onEmployeeRedirect, self));
-                        return $title;
+                            '.o_employee_redirect',_.bind(self._onEmployeeRedirect,self));
+                        return$title;
                     },
-                    container: this,
-                    placement: 'left',
-                    trigger: 'focus',
-                    content: function () {
-                        var $content = $(QWeb.render('hr_orgchart_emp_popover_content', {
-                            employee: {
-                                id: $(this).data('emp-id'),
-                                name: $(this).data('emp-name'),
-                                direct_sub_count: parseInt($(this).data('emp-dir-subs')),
-                                indirect_sub_count: parseInt($(this).data('emp-ind-subs')),
+                    container:this,
+                    placement:'left',
+                    trigger:'focus',
+                    content:function(){
+                        var$content=$(QWeb.render('hr_orgchart_emp_popover_content',{
+                            employee:{
+                                id:$(this).data('emp-id'),
+                                name:$(this).data('emp-name'),
+                                direct_sub_count:parseInt($(this).data('emp-dir-subs')),
+                                indirect_sub_count:parseInt($(this).data('emp-ind-subs')),
                             },
                         }));
                         $content.on('click',
-                            '.o_employee_sub_redirect', _.bind(self._onEmployeeSubRedirect, self));
-                        return $content;
+                            '.o_employee_sub_redirect',_.bind(self._onEmployeeSubRedirect,self));
+                        return$content;
                     },
-                    template: QWeb.render('hr_orgchart_emp_popover', {}),
+                    template:QWeb.render('hr_orgchart_emp_popover',{}),
                 });
             });
         });
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
-    _onEmployeeMoreManager: function(event) {
+    _onEmployeeMoreManager:function(event){
         event.preventDefault();
-        this.employee = parseInt($(event.currentTarget).data('employee-id'));
+        this.employee=parseInt($(event.currentTarget).data('employee-id'));
         this._render();
     },
     /**
-     * Redirect to the employee form view.
+     *Redirecttotheemployeeformview.
      *
-     * @private
-     * @param {MouseEvent} event
-     * @returns {Promise} action loaded
+     *@private
+     *@param{MouseEvent}event
+     *@returns{Promise}actionloaded
      */
-    _onEmployeeRedirect: function (event) {
-        var self = this;
+    _onEmployeeRedirect:function(event){
+        varself=this;
         event.preventDefault();
-        var employee_id = parseInt($(event.currentTarget).data('employee-id'));
-        return this._rpc({
-            model: 'hr.employee',
-            method: 'get_formview_action',
-            args: [employee_id],
-        }).then(function(action) {
-            return self.do_action(action); 
+        varemployee_id=parseInt($(event.currentTarget).data('employee-id'));
+        returnthis._rpc({
+            model:'hr.employee',
+            method:'get_formview_action',
+            args:[employee_id],
+        }).then(function(action){
+            returnself.do_action(action);
         });
     },
     /**
-     * Redirect to the sub employee form view.
+     *Redirecttothesubemployeeformview.
      *
-     * @private
-     * @param {MouseEvent} event
-     * @returns {Promise} action loaded
+     *@private
+     *@param{MouseEvent}event
+     *@returns{Promise}actionloaded
      */
-    _onEmployeeSubRedirect: function (event) {
+    _onEmployeeSubRedirect:function(event){
         event.preventDefault();
-        var employee_id = parseInt($(event.currentTarget).data('employee-id'));
-        var employee_name = $(event.currentTarget).data('employee-name');
-        var type = $(event.currentTarget).data('type') || 'direct';
-        var self = this;
-        if (employee_id) {
-            this._getSubordinatesData(employee_id, type).then(function(data) {
-                var domain = [['id', 'in', data]];
-                return self._rpc({
-                    model: 'hr.employee',
-                    method: 'get_formview_action',
-                    args: [employee_id],
-                }).then(function(action) {
-                    action = _.extend(action, {
-                        'name': _t('Team'),
-                        'view_mode': 'kanban,list,form',
-                        'views':  [[false, 'kanban'], [false, 'list'], [false, 'form']],
-                        'domain': domain,
-                        'context': {
-                            'default_parent_id': employee_id,
+        varemployee_id=parseInt($(event.currentTarget).data('employee-id'));
+        varemployee_name=$(event.currentTarget).data('employee-name');
+        vartype=$(event.currentTarget).data('type')||'direct';
+        varself=this;
+        if(employee_id){
+            this._getSubordinatesData(employee_id,type).then(function(data){
+                vardomain=[['id','in',data]];
+                returnself._rpc({
+                    model:'hr.employee',
+                    method:'get_formview_action',
+                    args:[employee_id],
+                }).then(function(action){
+                    action=_.extend(action,{
+                        'name':_t('Team'),
+                        'view_mode':'kanban,list,form',
+                        'views': [[false,'kanban'],[false,'list'],[false,'form']],
+                        'domain':domain,
+                        'context':{
+                            'default_parent_id':employee_id,
                         }
                     });
-                    delete action['res_id'];
-                    return self.do_action(action); 
+                    deleteaction['res_id'];
+                    returnself.do_action(action);
                 });
             });
         }
     },
 });
 
-field_registry.add('hr_org_chart', FieldOrgChart);
+field_registry.add('hr_org_chart',FieldOrgChart);
 
-return FieldOrgChart;
+returnFieldOrgChart;
 
 });

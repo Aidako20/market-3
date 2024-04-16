@@ -1,322 +1,322 @@
 /*!
-  * Bootstrap scrollspy.js v4.3.1 (https://getbootstrap.com/)
-  * Copyright 2011-2019 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
-  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  *Bootstrapscrollspy.jsv4.3.1(https://getbootstrap.com/)
+  *Copyright2011-2019TheBootstrapAuthors(https://github.com/twbs/bootstrap/graphs/contributors)
+  *LicensedunderMIT(https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery'), require('./util.js')) :
-  typeof define === 'function' && define.amd ? define(['jquery', './util.js'], factory) :
-  (global = global || self, global.ScrollSpy = factory(global.jQuery, global.Util));
-}(this, function ($, Util) { 'use strict';
+(function(global,factory){
+  typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory(require('jquery'),require('./util.js')):
+  typeofdefine==='function'&&define.amd?define(['jquery','./util.js'],factory):
+  (global=global||self,global.ScrollSpy=factory(global.jQuery,global.Util));
+}(this,function($,Util){'usestrict';
 
-  $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
-  Util = Util && Util.hasOwnProperty('default') ? Util['default'] : Util;
+  $=$&&$.hasOwnProperty('default')?$['default']:$;
+  Util=Util&&Util.hasOwnProperty('default')?Util['default']:Util;
 
-  function _defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
+  function_defineProperties(target,props){
+    for(vari=0;i<props.length;i++){
+      vardescriptor=props[i];
+      descriptor.enumerable=descriptor.enumerable||false;
+      descriptor.configurable=true;
+      if("value"indescriptor)descriptor.writable=true;
+      Object.defineProperty(target,descriptor.key,descriptor);
     }
   }
 
-  function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
-    return Constructor;
+  function_createClass(Constructor,protoProps,staticProps){
+    if(protoProps)_defineProperties(Constructor.prototype,protoProps);
+    if(staticProps)_defineProperties(Constructor,staticProps);
+    returnConstructor;
   }
 
-  function _defineProperty(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, {
-        value: value,
-        enumerable: true,
-        configurable: true,
-        writable: true
+  function_defineProperty(obj,key,value){
+    if(keyinobj){
+      Object.defineProperty(obj,key,{
+        value:value,
+        enumerable:true,
+        configurable:true,
+        writable:true
       });
-    } else {
-      obj[key] = value;
+    }else{
+      obj[key]=value;
     }
 
-    return obj;
+    returnobj;
   }
 
-  function _objectSpread(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
-      var ownKeys = Object.keys(source);
+  function_objectSpread(target){
+    for(vari=1;i<arguments.length;i++){
+      varsource=arguments[i]!=null?arguments[i]:{};
+      varownKeys=Object.keys(source);
 
-      if (typeof Object.getOwnPropertySymbols === 'function') {
-        ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
-          return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      if(typeofObject.getOwnPropertySymbols==='function'){
+        ownKeys=ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym){
+          returnObject.getOwnPropertyDescriptor(source,sym).enumerable;
         }));
       }
 
-      ownKeys.forEach(function (key) {
-        _defineProperty(target, key, source[key]);
+      ownKeys.forEach(function(key){
+        _defineProperty(target,key,source[key]);
       });
     }
 
-    return target;
+    returntarget;
   }
 
   /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
+   *------------------------------------------------------------------------
+   *Constants
+   *------------------------------------------------------------------------
    */
 
-  var NAME = 'scrollspy';
-  var VERSION = '4.3.1';
-  var DATA_KEY = 'bs.scrollspy';
-  var EVENT_KEY = "." + DATA_KEY;
-  var DATA_API_KEY = '.data-api';
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
-  var Default = {
-    offset: 10,
-    method: 'auto',
-    target: ''
+  varNAME='scrollspy';
+  varVERSION='4.3.1';
+  varDATA_KEY='bs.scrollspy';
+  varEVENT_KEY="."+DATA_KEY;
+  varDATA_API_KEY='.data-api';
+  varJQUERY_NO_CONFLICT=$.fn[NAME];
+  varDefault={
+    offset:10,
+    method:'auto',
+    target:''
   };
-  var DefaultType = {
-    offset: 'number',
-    method: 'string',
-    target: '(string|element)'
+  varDefaultType={
+    offset:'number',
+    method:'string',
+    target:'(string|element)'
   };
-  var Event = {
-    ACTIVATE: "activate" + EVENT_KEY,
-    SCROLL: "scroll" + EVENT_KEY,
-    LOAD_DATA_API: "load" + EVENT_KEY + DATA_API_KEY
+  varEvent={
+    ACTIVATE:"activate"+EVENT_KEY,
+    SCROLL:"scroll"+EVENT_KEY,
+    LOAD_DATA_API:"load"+EVENT_KEY+DATA_API_KEY
   };
-  var ClassName = {
-    DROPDOWN_ITEM: 'dropdown-item',
-    DROPDOWN_MENU: 'dropdown-menu',
-    ACTIVE: 'active'
+  varClassName={
+    DROPDOWN_ITEM:'dropdown-item',
+    DROPDOWN_MENU:'dropdown-menu',
+    ACTIVE:'active'
   };
-  var Selector = {
-    DATA_SPY: '[data-spy="scroll"]',
-    ACTIVE: '.active',
-    NAV_LIST_GROUP: '.nav, .list-group',
-    NAV_LINKS: '.nav-link',
-    NAV_ITEMS: '.nav-item',
-    LIST_ITEMS: '.list-group-item',
-    DROPDOWN: '.dropdown',
-    DROPDOWN_ITEMS: '.dropdown-item',
-    DROPDOWN_TOGGLE: '.dropdown-toggle'
+  varSelector={
+    DATA_SPY:'[data-spy="scroll"]',
+    ACTIVE:'.active',
+    NAV_LIST_GROUP:'.nav,.list-group',
+    NAV_LINKS:'.nav-link',
+    NAV_ITEMS:'.nav-item',
+    LIST_ITEMS:'.list-group-item',
+    DROPDOWN:'.dropdown',
+    DROPDOWN_ITEMS:'.dropdown-item',
+    DROPDOWN_TOGGLE:'.dropdown-toggle'
   };
-  var OffsetMethod = {
-    OFFSET: 'offset',
-    POSITION: 'position'
+  varOffsetMethod={
+    OFFSET:'offset',
+    POSITION:'position'
     /**
-     * ------------------------------------------------------------------------
-     * Class Definition
-     * ------------------------------------------------------------------------
+     *------------------------------------------------------------------------
+     *ClassDefinition
+     *------------------------------------------------------------------------
      */
 
   };
 
-  var ScrollSpy =
+  varScrollSpy=
   /*#__PURE__*/
-  function () {
-    function ScrollSpy(element, config) {
-      var _this = this;
+  function(){
+    functionScrollSpy(element,config){
+      var_this=this;
 
-      this._element = element;
-      this._scrollElement = element.tagName === 'BODY' ? window : element;
-      this._config = this._getConfig(config);
-      this._selector = this._config.target + " " + Selector.NAV_LINKS + "," + (this._config.target + " " + Selector.LIST_ITEMS + ",") + (this._config.target + " " + Selector.DROPDOWN_ITEMS);
-      this._offsets = [];
-      this._targets = [];
-      this._activeTarget = null;
-      this._scrollHeight = 0;
-      $(this._scrollElement).on(Event.SCROLL, function (event) {
-        return _this._process(event);
+      this._element=element;
+      this._scrollElement=element.tagName==='BODY'?window:element;
+      this._config=this._getConfig(config);
+      this._selector=this._config.target+""+Selector.NAV_LINKS+","+(this._config.target+""+Selector.LIST_ITEMS+",")+(this._config.target+""+Selector.DROPDOWN_ITEMS);
+      this._offsets=[];
+      this._targets=[];
+      this._activeTarget=null;
+      this._scrollHeight=0;
+      $(this._scrollElement).on(Event.SCROLL,function(event){
+        return_this._process(event);
       });
       this.refresh();
 
       this._process();
-    } // Getters
+    }//Getters
 
 
-    var _proto = ScrollSpy.prototype;
+    var_proto=ScrollSpy.prototype;
 
-    // Public
-    _proto.refresh = function refresh() {
-      var _this2 = this;
+    //Public
+    _proto.refresh=functionrefresh(){
+      var_this2=this;
 
-      var autoMethod = this._scrollElement === this._scrollElement.window ? OffsetMethod.OFFSET : OffsetMethod.POSITION;
-      var offsetMethod = this._config.method === 'auto' ? autoMethod : this._config.method;
-      var offsetBase = offsetMethod === OffsetMethod.POSITION ? this._getScrollTop() : 0;
-      this._offsets = [];
-      this._targets = [];
-      this._scrollHeight = this._getScrollHeight();
-      var targets = [].slice.call(document.querySelectorAll(this._selector));
-      targets.map(function (element) {
-        var target;
-        var targetSelector = Util.getSelectorFromElement(element);
+      varautoMethod=this._scrollElement===this._scrollElement.window?OffsetMethod.OFFSET:OffsetMethod.POSITION;
+      varoffsetMethod=this._config.method==='auto'?autoMethod:this._config.method;
+      varoffsetBase=offsetMethod===OffsetMethod.POSITION?this._getScrollTop():0;
+      this._offsets=[];
+      this._targets=[];
+      this._scrollHeight=this._getScrollHeight();
+      vartargets=[].slice.call(document.querySelectorAll(this._selector));
+      targets.map(function(element){
+        vartarget;
+        vartargetSelector=Util.getSelectorFromElement(element);
 
-        if (targetSelector) {
-          target = document.querySelector(targetSelector);
+        if(targetSelector){
+          target=document.querySelector(targetSelector);
         }
 
-        if (target) {
-          var targetBCR = target.getBoundingClientRect();
+        if(target){
+          vartargetBCR=target.getBoundingClientRect();
 
-          if (targetBCR.width || targetBCR.height) {
-            // TODO (fat): remove sketch reliance on jQuery position/offset
-            return [$(target)[offsetMethod]().top + offsetBase, targetSelector];
+          if(targetBCR.width||targetBCR.height){
+            //TODO(fat):removesketchrelianceonjQueryposition/offset
+            return[$(target)[offsetMethod]().top+offsetBase,targetSelector];
           }
         }
 
-        return null;
-      }).filter(function (item) {
-        return item;
-      }).sort(function (a, b) {
-        return a[0] - b[0];
-      }).forEach(function (item) {
+        returnnull;
+      }).filter(function(item){
+        returnitem;
+      }).sort(function(a,b){
+        returna[0]-b[0];
+      }).forEach(function(item){
         _this2._offsets.push(item[0]);
 
         _this2._targets.push(item[1]);
       });
     };
 
-    _proto.dispose = function dispose() {
-      $.removeData(this._element, DATA_KEY);
+    _proto.dispose=functiondispose(){
+      $.removeData(this._element,DATA_KEY);
       $(this._scrollElement).off(EVENT_KEY);
-      this._element = null;
-      this._scrollElement = null;
-      this._config = null;
-      this._selector = null;
-      this._offsets = null;
-      this._targets = null;
-      this._activeTarget = null;
-      this._scrollHeight = null;
-    } // Private
+      this._element=null;
+      this._scrollElement=null;
+      this._config=null;
+      this._selector=null;
+      this._offsets=null;
+      this._targets=null;
+      this._activeTarget=null;
+      this._scrollHeight=null;
+    }//Private
     ;
 
-    _proto._getConfig = function _getConfig(config) {
-      config = _objectSpread({}, Default, typeof config === 'object' && config ? config : {});
+    _proto._getConfig=function_getConfig(config){
+      config=_objectSpread({},Default,typeofconfig==='object'&&config?config:{});
 
-      if (typeof config.target !== 'string') {
-        var id = $(config.target).attr('id');
+      if(typeofconfig.target!=='string'){
+        varid=$(config.target).attr('id');
 
-        if (!id) {
-          id = Util.getUID(NAME);
-          $(config.target).attr('id', id);
+        if(!id){
+          id=Util.getUID(NAME);
+          $(config.target).attr('id',id);
         }
 
-        config.target = "#" + id;
+        config.target="#"+id;
       }
 
-      Util.typeCheckConfig(NAME, config, DefaultType);
-      return config;
+      Util.typeCheckConfig(NAME,config,DefaultType);
+      returnconfig;
     };
 
-    _proto._getScrollTop = function _getScrollTop() {
-      return this._scrollElement === window ? this._scrollElement.pageYOffset : this._scrollElement.scrollTop;
+    _proto._getScrollTop=function_getScrollTop(){
+      returnthis._scrollElement===window?this._scrollElement.pageYOffset:this._scrollElement.scrollTop;
     };
 
-    _proto._getScrollHeight = function _getScrollHeight() {
-      return this._scrollElement.scrollHeight || Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+    _proto._getScrollHeight=function_getScrollHeight(){
+      returnthis._scrollElement.scrollHeight||Math.max(document.body.scrollHeight,document.documentElement.scrollHeight);
     };
 
-    _proto._getOffsetHeight = function _getOffsetHeight() {
-      return this._scrollElement === window ? window.innerHeight : this._scrollElement.getBoundingClientRect().height;
+    _proto._getOffsetHeight=function_getOffsetHeight(){
+      returnthis._scrollElement===window?window.innerHeight:this._scrollElement.getBoundingClientRect().height;
     };
 
-    _proto._process = function _process() {
-      var scrollTop = this._getScrollTop() + this._config.offset;
+    _proto._process=function_process(){
+      varscrollTop=this._getScrollTop()+this._config.offset;
 
-      var scrollHeight = this._getScrollHeight();
+      varscrollHeight=this._getScrollHeight();
 
-      var maxScroll = this._config.offset + scrollHeight - this._getOffsetHeight();
+      varmaxScroll=this._config.offset+scrollHeight-this._getOffsetHeight();
 
-      if (this._scrollHeight !== scrollHeight) {
+      if(this._scrollHeight!==scrollHeight){
         this.refresh();
       }
 
-      if (scrollTop >= maxScroll) {
-        var target = this._targets[this._targets.length - 1];
+      if(scrollTop>=maxScroll){
+        vartarget=this._targets[this._targets.length-1];
 
-        if (this._activeTarget !== target) {
+        if(this._activeTarget!==target){
           this._activate(target);
         }
 
         return;
       }
 
-      if (this._activeTarget && scrollTop < this._offsets[0] && this._offsets[0] > 0) {
-        this._activeTarget = null;
+      if(this._activeTarget&&scrollTop<this._offsets[0]&&this._offsets[0]>0){
+        this._activeTarget=null;
 
         this._clear();
 
         return;
       }
 
-      var offsetLength = this._offsets.length;
+      varoffsetLength=this._offsets.length;
 
-      for (var i = offsetLength; i--;) {
-        var isActiveTarget = this._activeTarget !== this._targets[i] && scrollTop >= this._offsets[i] && (typeof this._offsets[i + 1] === 'undefined' || scrollTop < this._offsets[i + 1]);
+      for(vari=offsetLength;i--;){
+        varisActiveTarget=this._activeTarget!==this._targets[i]&&scrollTop>=this._offsets[i]&&(typeofthis._offsets[i+1]==='undefined'||scrollTop<this._offsets[i+1]);
 
-        if (isActiveTarget) {
+        if(isActiveTarget){
           this._activate(this._targets[i]);
         }
       }
     };
 
-    _proto._activate = function _activate(target) {
-      this._activeTarget = target;
+    _proto._activate=function_activate(target){
+      this._activeTarget=target;
 
       this._clear();
 
-      var queries = this._selector.split(',').map(function (selector) {
-        return selector + "[data-target=\"" + target + "\"]," + selector + "[href=\"" + target + "\"]";
+      varqueries=this._selector.split(',').map(function(selector){
+        returnselector+"[data-target=\""+target+"\"],"+selector+"[href=\""+target+"\"]";
       });
 
-      var $link = $([].slice.call(document.querySelectorAll(queries.join(','))));
+      var$link=$([].slice.call(document.querySelectorAll(queries.join(','))));
 
-      if ($link.hasClass(ClassName.DROPDOWN_ITEM)) {
+      if($link.hasClass(ClassName.DROPDOWN_ITEM)){
         $link.closest(Selector.DROPDOWN).find(Selector.DROPDOWN_TOGGLE).addClass(ClassName.ACTIVE);
         $link.addClass(ClassName.ACTIVE);
-      } else {
-        // Set triggered link as active
-        $link.addClass(ClassName.ACTIVE); // Set triggered links parents as active
-        // With both <ul> and <nav> markup a parent is the previous sibling of any nav ancestor
+      }else{
+        //Settriggeredlinkasactive
+        $link.addClass(ClassName.ACTIVE);//Settriggeredlinksparentsasactive
+        //Withboth<ul>and<nav>markupaparentistheprevioussiblingofanynavancestor
 
-        $link.parents(Selector.NAV_LIST_GROUP).prev(Selector.NAV_LINKS + ", " + Selector.LIST_ITEMS).addClass(ClassName.ACTIVE); // Handle special case when .nav-link is inside .nav-item
+        $link.parents(Selector.NAV_LIST_GROUP).prev(Selector.NAV_LINKS+","+Selector.LIST_ITEMS).addClass(ClassName.ACTIVE);//Handlespecialcasewhen.nav-linkisinside.nav-item
 
         $link.parents(Selector.NAV_LIST_GROUP).prev(Selector.NAV_ITEMS).children(Selector.NAV_LINKS).addClass(ClassName.ACTIVE);
       }
 
-      $(this._scrollElement).trigger(Event.ACTIVATE, {
-        relatedTarget: target
+      $(this._scrollElement).trigger(Event.ACTIVATE,{
+        relatedTarget:target
       });
     };
 
-    _proto._clear = function _clear() {
-      [].slice.call(document.querySelectorAll(this._selector)).filter(function (node) {
-        return node.classList.contains(ClassName.ACTIVE);
-      }).forEach(function (node) {
-        return node.classList.remove(ClassName.ACTIVE);
+    _proto._clear=function_clear(){
+      [].slice.call(document.querySelectorAll(this._selector)).filter(function(node){
+        returnnode.classList.contains(ClassName.ACTIVE);
+      }).forEach(function(node){
+        returnnode.classList.remove(ClassName.ACTIVE);
       });
-    } // Static
+    }//Static
     ;
 
-    ScrollSpy._jQueryInterface = function _jQueryInterface(config) {
-      return this.each(function () {
-        var data = $(this).data(DATA_KEY);
+    ScrollSpy._jQueryInterface=function_jQueryInterface(config){
+      returnthis.each(function(){
+        vardata=$(this).data(DATA_KEY);
 
-        var _config = typeof config === 'object' && config;
+        var_config=typeofconfig==='object'&&config;
 
-        if (!data) {
-          data = new ScrollSpy(this, _config);
-          $(this).data(DATA_KEY, data);
+        if(!data){
+          data=newScrollSpy(this,_config);
+          $(this).data(DATA_KEY,data);
         }
 
-        if (typeof config === 'string') {
-          if (typeof data[config] === 'undefined') {
-            throw new TypeError("No method named \"" + config + "\"");
+        if(typeofconfig==='string'){
+          if(typeofdata[config]==='undefined'){
+            thrownewTypeError("Nomethodnamed\""+config+"\"");
           }
 
           data[config]();
@@ -324,51 +324,51 @@
       });
     };
 
-    _createClass(ScrollSpy, null, [{
-      key: "VERSION",
-      get: function get() {
-        return VERSION;
+    _createClass(ScrollSpy,null,[{
+      key:"VERSION",
+      get:functionget(){
+        returnVERSION;
       }
-    }, {
-      key: "Default",
-      get: function get() {
-        return Default;
+    },{
+      key:"Default",
+      get:functionget(){
+        returnDefault;
       }
     }]);
 
-    return ScrollSpy;
+    returnScrollSpy;
   }();
   /**
-   * ------------------------------------------------------------------------
-   * Data Api implementation
-   * ------------------------------------------------------------------------
+   *------------------------------------------------------------------------
+   *DataApiimplementation
+   *------------------------------------------------------------------------
    */
 
 
-  $(window).on(Event.LOAD_DATA_API, function () {
-    var scrollSpys = [].slice.call(document.querySelectorAll(Selector.DATA_SPY));
-    var scrollSpysLength = scrollSpys.length;
+  $(window).on(Event.LOAD_DATA_API,function(){
+    varscrollSpys=[].slice.call(document.querySelectorAll(Selector.DATA_SPY));
+    varscrollSpysLength=scrollSpys.length;
 
-    for (var i = scrollSpysLength; i--;) {
-      var $spy = $(scrollSpys[i]);
+    for(vari=scrollSpysLength;i--;){
+      var$spy=$(scrollSpys[i]);
 
-      ScrollSpy._jQueryInterface.call($spy, $spy.data());
+      ScrollSpy._jQueryInterface.call($spy,$spy.data());
     }
   });
   /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
+   *------------------------------------------------------------------------
+   *jQuery
+   *------------------------------------------------------------------------
    */
 
-  $.fn[NAME] = ScrollSpy._jQueryInterface;
-  $.fn[NAME].Constructor = ScrollSpy;
+  $.fn[NAME]=ScrollSpy._jQueryInterface;
+  $.fn[NAME].Constructor=ScrollSpy;
 
-  $.fn[NAME].noConflict = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return ScrollSpy._jQueryInterface;
+  $.fn[NAME].noConflict=function(){
+    $.fn[NAME]=JQUERY_NO_CONFLICT;
+    returnScrollSpy._jQueryInterface;
   };
 
-  return ScrollSpy;
+  returnScrollSpy;
 
 }));

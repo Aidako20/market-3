@@ -1,72 +1,72 @@
-flectra.define('point_of_sale.tour.NumberPopupTourMethods', function (require) {
-    'use strict';
+flectra.define('point_of_sale.tour.NumberPopupTourMethods',function(require){
+    'usestrict';
 
-    const { createTourMethods } = require('point_of_sale.tour.utils');
+    const{createTourMethods}=require('point_of_sale.tour.utils');
 
-    class Do {
+    classDo{
         /**
-         * Note: Maximum of 2 characters because NumberBuffer only allows 2 consecutive
-         * fast inputs. Fast inputs is the case in tours.
+         *Note:Maximumof2charactersbecauseNumberBufferonlyallows2consecutive
+         *fastinputs.Fastinputsisthecaseintours.
          *
-         * @param {String} keys space-separated input keys
+         *@param{String}keysspace-separatedinputkeys
          */
-        pressNumpad(keys) {
-            const numberChars = '0 1 2 3 4 5 6 7 8 9 C'.split(' ');
-            const modeButtons = '+1 +10 +2 +20 +5 +50'.split(' ');
-            const decimalSeparators = ', .'.split(' ');
-            function generateStep(key) {
-                let trigger;
-                if (numberChars.includes(key)) {
-                    trigger = `.popup-numpad .number-char:contains("${key}")`;
-                } else if (modeButtons.includes(key)) {
-                    trigger = `.popup-numpad .mode-button:contains("${key}")`;
-                } else if (key === 'Backspace') {
-                    trigger = `.popup-numpad .numpad-backspace`;
-                } else if (decimalSeparators.includes(key)) {
-                    trigger = `.popup-numpad .number-char.dot`;
+        pressNumpad(keys){
+            constnumberChars='0123456789C'.split('');
+            constmodeButtons='+1+10+2+20+5+50'.split('');
+            constdecimalSeparators=',.'.split('');
+            functiongenerateStep(key){
+                lettrigger;
+                if(numberChars.includes(key)){
+                    trigger=`.popup-numpad.number-char:contains("${key}")`;
+                }elseif(modeButtons.includes(key)){
+                    trigger=`.popup-numpad.mode-button:contains("${key}")`;
+                }elseif(key==='Backspace'){
+                    trigger=`.popup-numpad.numpad-backspace`;
+                }elseif(decimalSeparators.includes(key)){
+                    trigger=`.popup-numpad.number-char.dot`;
                 }
-                return {
-                    content: `'${key}' pressed in numpad`,
+                return{
+                    content:`'${key}'pressedinnumpad`,
                     trigger,
                 };
             }
-            return keys.split(' ').map(generateStep);
+            returnkeys.split('').map(generateStep);
         }
-        clickConfirm() {
-            return [
+        clickConfirm(){
+            return[
                 {
-                    content: 'click confirm button',
-                    trigger: '.popup-number .footer .confirm',
+                    content:'clickconfirmbutton',
+                    trigger:'.popup-number.footer.confirm',
                 },
             ];
         }
     }
 
-    class Check {
-        isShown() {
-            return [
+    classCheck{
+        isShown(){
+            return[
                 {
-                    content: 'number popup is shown',
-                    trigger: '.modal-dialog .popup-number',
-                    run: () => {},
+                    content:'numberpopupisshown',
+                    trigger:'.modal-dialog.popup-number',
+                    run:()=>{},
                 },
             ];
         }
-        inputShownIs(val) {
-            return [
+        inputShownIs(val){
+            return[
                 {
-                    content: 'number input element check',
-                    trigger: '.modal-dialog .popup-number .popup-input',
-                    run: () => {},
+                    content:'numberinputelementcheck',
+                    trigger:'.modal-dialog.popup-number.popup-input',
+                    run:()=>{},
                 },
                 {
-                    content: `input shown is '${val}'`,
-                    trigger: `.modal-dialog .popup-number .popup-input:contains("${val}")`,
-                    run: () => {},
+                    content:`inputshownis'${val}'`,
+                    trigger:`.modal-dialog.popup-number.popup-input:contains("${val}")`,
+                    run:()=>{},
                 },
             ];
         }
     }
 
-    return createTourMethods('NumberPopup', Do, Check);
+    returncreateTourMethods('NumberPopup',Do,Check);
 });

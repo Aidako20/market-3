@@ -1,49 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="res_config_settings_view_form" model="ir.ui.view">
-        <field name="name">res.config.settings.view.form.inherit.website.sale.delivery</field>
-        <field name="model">res.config.settings</field>
-        <field name="inherit_id" ref="website_sale.res_config_settings_view_form"/>
-        <field name="arch" type="xml">
-            <div id="msg_delivery_method_setting" position="after">
-                <div class="content-group" attrs="{'invisible': [('module_website_sale_delivery', '=', False)]}">
-                    <div class="mt16">
-                        <button type="action" name="%(delivery.action_delivery_carrier_form)d" string="Shipping Methods" class="btn-link" icon="fa-arrow-right"/>
+    <recordid="res_config_settings_view_form"model="ir.ui.view">
+        <fieldname="name">res.config.settings.view.form.inherit.website.sale.delivery</field>
+        <fieldname="model">res.config.settings</field>
+        <fieldname="inherit_id"ref="website_sale.res_config_settings_view_form"/>
+        <fieldname="arch"type="xml">
+            <divid="msg_delivery_method_setting"position="after">
+                <divclass="content-group"attrs="{'invisible':[('module_website_sale_delivery','=',False)]}">
+                    <divclass="mt16">
+                        <buttontype="action"name="%(delivery.action_delivery_carrier_form)d"string="ShippingMethods"class="btn-link"icon="fa-arrow-right"/>
                     </div>
                 </div>
             </div>
-            <div id="website_delivery_dhl" position="after">
-                <div class="content-group">
-                    <div class="mt8" attrs="{'invisible': [('module_delivery_dhl', '=', False)]}">
-                        <button name="%(delivery.action_delivery_carrier_form)d" icon="fa-arrow-right" type="action" string="DHL Shipping Methods" class="btn-link" context="{'search_default_delivery_type': 'dhl'}"/>
+            <divid="website_delivery_dhl"position="after">
+                <divclass="content-group">
+                    <divclass="mt8"attrs="{'invisible':[('module_delivery_dhl','=',False)]}">
+                        <buttonname="%(delivery.action_delivery_carrier_form)d"icon="fa-arrow-right"type="action"string="DHLShippingMethods"class="btn-link"context="{'search_default_delivery_type':'dhl'}"/>
                     </div>
                 </div>
             </div>
-            <div id="website_delivery_fedex" position="after">
-                <div class="content-group">
-                    <div class="mt8" attrs="{'invisible': [('module_delivery_fedex', '=', False)]}">
-                        <button name="%(delivery.action_delivery_carrier_form)d" icon="fa-arrow-right" type="action" string="FedEx Shipping Methods" class="btn-link" context="{'search_default_delivery_type': 'fedex'}"/>
+            <divid="website_delivery_fedex"position="after">
+                <divclass="content-group">
+                    <divclass="mt8"attrs="{'invisible':[('module_delivery_fedex','=',False)]}">
+                        <buttonname="%(delivery.action_delivery_carrier_form)d"icon="fa-arrow-right"type="action"string="FedExShippingMethods"class="btn-link"context="{'search_default_delivery_type':'fedex'}"/>
                     </div>
                 </div>
             </div>
-            <div id="website_delivery_usps" position="after">
-                <div class="content-group">
-                    <div class="mt8" attrs="{'invisible': [('module_delivery_usps', '=', False)]}">
-                        <button name="%(delivery.action_delivery_carrier_form)d" icon="fa-arrow-right" type="action" string="USPS Shipping Methods" class="btn-link" context="{'search_default_delivery_type': 'usps'}"/>
+            <divid="website_delivery_usps"position="after">
+                <divclass="content-group">
+                    <divclass="mt8"attrs="{'invisible':[('module_delivery_usps','=',False)]}">
+                        <buttonname="%(delivery.action_delivery_carrier_form)d"icon="fa-arrow-right"type="action"string="USPSShippingMethods"class="btn-link"context="{'search_default_delivery_type':'usps'}"/>
                     </div>
                 </div>
             </div>
-            <div id="website_delivery_bpost" position="after">
-                <div class="content-group">
-                    <div class="mt8" attrs="{'invisible': [('module_delivery_bpost', '=', False)]}">
-                        <button name="%(delivery.action_delivery_carrier_form)d" icon="fa-arrow-right" type="action" string="bpost Shipping Methods" class="btn-link" context="{'search_default_delivery_type': 'bpost'}"/>
+            <divid="website_delivery_bpost"position="after">
+                <divclass="content-group">
+                    <divclass="mt8"attrs="{'invisible':[('module_delivery_bpost','=',False)]}">
+                        <buttonname="%(delivery.action_delivery_carrier_form)d"icon="fa-arrow-right"type="action"string="bpostShippingMethods"class="btn-link"context="{'search_default_delivery_type':'bpost'}"/>
                     </div>
                 </div>
             </div>
-            <div id="website_delivery_easypost" position="after">
-                <div class="content-group">
-                    <div class="mt8" attrs="{'invisible': [('module_delivery_easypost', '=', False)]}">
-                        <button name="%(delivery.action_delivery_carrier_form)d" icon="fa-arrow-right" type="action" string="Easypost Shipping Methods" class="btn-link" context="{'search_default_delivery_type': 'easypost'}"/>
+            <divid="website_delivery_easypost"position="after">
+                <divclass="content-group">
+                    <divclass="mt8"attrs="{'invisible':[('module_delivery_easypost','=',False)]}">
+                        <buttonname="%(delivery.action_delivery_carrier_form)d"icon="fa-arrow-right"type="action"string="EasypostShippingMethods"class="btn-link"context="{'search_default_delivery_type':'easypost'}"/>
                     </div>
                 </div>
             </div>

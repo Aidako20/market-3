@@ -1,56 +1,56 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <!-- Routings Workcenter -->
-        <record id="mrp_routing_workcenter_tree_view" model="ir.ui.view">
-            <field name="name">mrp.routing.workcenter.tree</field>
-            <field name="model">mrp.routing.workcenter</field>
-            <field name="arch" type="xml">
-                <tree string="Routing Work Centers">
-                    <field name="sequence" widget="handle"/>
-                    <field name="name"/>
-                    <field name="workcenter_id"/>
-                    <field name="time_cycle" widget="float_time" string="Duration (minutes)" sum="Total Duration" width="1.5"/>
+        <!--RoutingsWorkcenter-->
+        <recordid="mrp_routing_workcenter_tree_view"model="ir.ui.view">
+            <fieldname="name">mrp.routing.workcenter.tree</field>
+            <fieldname="model">mrp.routing.workcenter</field>
+            <fieldname="arch"type="xml">
+                <treestring="RoutingWorkCenters">
+                    <fieldname="sequence"widget="handle"/>
+                    <fieldname="name"/>
+                    <fieldname="workcenter_id"/>
+                    <fieldname="time_cycle"widget="float_time"string="Duration(minutes)"sum="TotalDuration"width="1.5"/>
                 </tree>
             </field>
         </record>
 
-        <record id="mrp_routing_workcenter_form_view" model="ir.ui.view">
-            <field name="name">mrp.routing.workcenter.form</field>
-            <field name="model">mrp.routing.workcenter</field>
-            <field name="arch" type="xml">
-                <form string="Routing Work Centers">
+        <recordid="mrp_routing_workcenter_form_view"model="ir.ui.view">
+            <fieldname="name">mrp.routing.workcenter.form</field>
+            <fieldname="model">mrp.routing.workcenter</field>
+            <fieldname="arch"type="xml">
+                <formstring="RoutingWorkCenters">
                     <sheet>
                         <group>
-                            <group name="description">
-                                <field name="name"/>
-                                <field name="workcenter_id" context="{'default_company_id': company_id}"/>
-                                <field name="sequence" groups="base.group_no_one"/>
-                                <field name="bom_id" invisible="context.get('bom_id_invisible', False)"/>
-                            </group><group name="workorder">
-                                <field name="workorder_count" invisible="1"/>
-                                <field name="time_mode" widget="radio"/>
-                                <label for="time_mode_batch" attrs="{'invisible': [('time_mode', '=', 'manual')]}"/>
-                                <div attrs="{'invisible': [('time_mode', '=', 'manual')]}">
+                            <groupname="description">
+                                <fieldname="name"/>
+                                <fieldname="workcenter_id"context="{'default_company_id':company_id}"/>
+                                <fieldname="sequence"groups="base.group_no_one"/>
+                                <fieldname="bom_id"invisible="context.get('bom_id_invisible',False)"/>
+                            </group><groupname="workorder">
+                                <fieldname="workorder_count"invisible="1"/>
+                                <fieldname="time_mode"widget="radio"/>
+                                <labelfor="time_mode_batch"attrs="{'invisible':[('time_mode','=','manual')]}"/>
+                                <divattrs="{'invisible':[('time_mode','=','manual')]}">
                                     last
-                                    <field name="time_mode_batch" class="oe_inline"/>
-                                    work orders
+                                    <fieldname="time_mode_batch"class="oe_inline"/>
+                                    workorders
                                 </div>
-                                <label for="time_cycle_manual" attrs="{'invisible': [('time_mode', '=', 'auto'), ('workorder_count', '!=' , 0)]}" string="Default Duration"/>
-                                <div attrs="{'invisible':  [('time_mode', '=', 'auto'), ('workorder_count', '!=' , 0)]}">
-                                    <field name="time_cycle_manual" widget="float_time" class="oe_inline"/> minutes
+                                <labelfor="time_cycle_manual"attrs="{'invisible':[('time_mode','=','auto'),('workorder_count','!=',0)]}"string="DefaultDuration"/>
+                                <divattrs="{'invisible': [('time_mode','=','auto'),('workorder_count','!=',0)]}">
+                                    <fieldname="time_cycle_manual"widget="float_time"class="oe_inline"/>minutes
                                 </div>
-                                <field name="time_cycle" invisible="1"/>
-                                <field name="company_id" groups="base.group_multi_company" />
+                                <fieldname="time_cycle"invisible="1"/>
+                                <fieldname="company_id"groups="base.group_multi_company"/>
                             </group>
                         </group>
                         <notebook>
-                            <page string="Work Sheet" name="worksheet">
+                            <pagestring="WorkSheet"name="worksheet">
                                 <group>
-                                    <field name="worksheet_type" widget="radio"/>
-                                    <field name="worksheet" help="Upload your PDF file." widget="pdf_viewer" attrs="{'invisible':  [('worksheet_type', '!=', 'pdf')], 'required':  [('worksheet_type', '=', 'pdf')]}"/>
-                                    <field name="worksheet_google_slide" placeholder="Google Slide Link" widget="embed_viewer" attrs="{'invisible':  [('worksheet_type', '!=', 'google_slide')], 'required': [('worksheet_type', '=', 'google_slide')]}"/>
-                                    <field name="note" attrs="{'invisible':  [('worksheet_type', '!=', 'text')]}"/>
+                                    <fieldname="worksheet_type"widget="radio"/>
+                                    <fieldname="worksheet"help="UploadyourPDFfile."widget="pdf_viewer"attrs="{'invisible': [('worksheet_type','!=','pdf')],'required': [('worksheet_type','=','pdf')]}"/>
+                                    <fieldname="worksheet_google_slide"placeholder="GoogleSlideLink"widget="embed_viewer"attrs="{'invisible': [('worksheet_type','!=','google_slide')],'required':[('worksheet_type','=','google_slide')]}"/>
+                                    <fieldname="note"attrs="{'invisible': [('worksheet_type','!=','text')]}"/>
                                 </group>
                             </page>
                         </notebook>
@@ -59,24 +59,24 @@
             </field>
         </record>
 
-        <record id="mrp_routing_action" model="ir.actions.act_window">
-            <field name="name">Operations</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">mrp.routing.workcenter</field>
-            <field name="view_mode">tree,form</field>
-            <field name="view_id" ref="mrp_routing_workcenter_tree_view"/>
-            <field name="help" type="html">
-              <p class="o_view_nocontent_smiling_face">
-                Create a new operation
+        <recordid="mrp_routing_action"model="ir.actions.act_window">
+            <fieldname="name">Operations</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">mrp.routing.workcenter</field>
+            <fieldname="view_mode">tree,form</field>
+            <fieldname="view_id"ref="mrp_routing_workcenter_tree_view"/>
+            <fieldname="help"type="html">
+              <pclass="o_view_nocontent_smiling_face">
+                Createanewoperation
               </p><p>
-                Operation define that need to be done to realize a Work Order.
-                Each operation is done at a specific Work Center and has a specific duration.
+                OperationdefinethatneedtobedonetorealizeaWorkOrder.
+                EachoperationisdoneataspecificWorkCenterandhasaspecificduration.
               </p>
             </field>
-            <field name="domain">['|', ('bom_id', '=', False), ('bom_id.active', '=', True)]</field>
+            <fieldname="domain">['|',('bom_id','=',False),('bom_id.active','=',True)]</field>
         </record>
 
-        <menuitem id="menu_mrp_routing_action"
+        <menuitemid="menu_mrp_routing_action"
           action="mrp_routing_action"
           parent="menu_mrp_configuration"
           groups="group_mrp_routings"

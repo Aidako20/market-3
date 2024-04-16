@@ -1,34 +1,34 @@
-flectra.define('utm.campaing_kanban_examples', function (require) {
-'use strict';
+flectra.define('utm.campaing_kanban_examples',function(require){
+'usestrict';
 
-var core = require('web.core');
-var kanbanExamplesRegistry = require('web.kanban_examples_registry');
+varcore=require('web.core');
+varkanbanExamplesRegistry=require('web.kanban_examples_registry');
 
-var _lt = core._lt;
+var_lt=core._lt;
 
-kanbanExamplesRegistry.add('utm_campaign', {
-    ghostColumns: [_lt('Ideas'), _lt('Design'), _lt('Review'), _lt('Send'), _lt('Done')],
-    applyExamplesText: _lt("Use This For My Campaigns"),
-    examples: [{
-        name: _lt('Creative Flow'),
-        columns: [_lt('Ideas'), _lt('Design'), _lt('Review'), _lt('Send'), _lt('Done')],
-        description: _lt("Collect ideas, design creative content and publish it once reviewed."),
-    }, {
-        name: _lt('Event-driven Flow'),
-        columns: [_lt('Later'), _lt('This Month'), _lt('This Week'), _lt('Running'), _lt('Sent')],
-        description: _lt("Track incoming events (e.g. : Christmas, Black Friday, ...) and publish timely content."),
-    }, {
-        name: _lt('Soft-Launch Flow'),
-        columns: [_lt('Pre-Launch'), _lt('Soft-Launch'), _lt('Deploy'), _lt('Report'), _lt('Done')],
-        description: _lt("Prepare your Campaign, test it with part of your audience and deploy it fully afterwards."),
-    }, {
-        name: _lt('Audience-driven Flow'),
-        columns: [_lt('Gather Data'), _lt('List-Building'), _lt('Copywriting'), _lt('Sent')],
-        description: _lt("Gather data, build a recipient list and write content based on your Marketing target."),
-    }, {
-        name: _lt('Approval-based Flow'),
-        columns: [_lt('To be Approved'), _lt('Approved'), _lt('Deployed')],
-        description: _lt("Prepare Campaigns and get them approved before making them go live."),
+kanbanExamplesRegistry.add('utm_campaign',{
+    ghostColumns:[_lt('Ideas'),_lt('Design'),_lt('Review'),_lt('Send'),_lt('Done')],
+    applyExamplesText:_lt("UseThisForMyCampaigns"),
+    examples:[{
+        name:_lt('CreativeFlow'),
+        columns:[_lt('Ideas'),_lt('Design'),_lt('Review'),_lt('Send'),_lt('Done')],
+        description:_lt("Collectideas,designcreativecontentandpublishitoncereviewed."),
+    },{
+        name:_lt('Event-drivenFlow'),
+        columns:[_lt('Later'),_lt('ThisMonth'),_lt('ThisWeek'),_lt('Running'),_lt('Sent')],
+        description:_lt("Trackincomingevents(e.g.:Christmas,BlackFriday,...)andpublishtimelycontent."),
+    },{
+        name:_lt('Soft-LaunchFlow'),
+        columns:[_lt('Pre-Launch'),_lt('Soft-Launch'),_lt('Deploy'),_lt('Report'),_lt('Done')],
+        description:_lt("PrepareyourCampaign,testitwithpartofyouraudienceanddeployitfullyafterwards."),
+    },{
+        name:_lt('Audience-drivenFlow'),
+        columns:[_lt('GatherData'),_lt('List-Building'),_lt('Copywriting'),_lt('Sent')],
+        description:_lt("Gatherdata,buildarecipientlistandwritecontentbasedonyourMarketingtarget."),
+    },{
+        name:_lt('Approval-basedFlow'),
+        columns:[_lt('TobeApproved'),_lt('Approved'),_lt('Deployed')],
+        description:_lt("PrepareCampaignsandgetthemapprovedbeforemakingthemgolive."),
     }],
 });
 });

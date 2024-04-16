@@ -1,104 +1,104 @@
 
-flectra.define('pos_epson_printer.Printer', function (require) {
-"use strict";
+flectra.define('pos_epson_printer.Printer',function(require){
+"usestrict";
 
-const { Gui } = require('point_of_sale.Gui');
-var core = require('web.core');
-var PrinterMixin = require('point_of_sale.Printer').PrinterMixin;
+const{Gui}=require('point_of_sale.Gui');
+varcore=require('web.core');
+varPrinterMixin=require('point_of_sale.Printer').PrinterMixin;
 
-var _t = core._t;
+var_t=core._t;
 
-var EpsonPrinter = core.Class.extend(PrinterMixin, {
-    init: function (ip, pos) {
-        PrinterMixin.init.call(this, pos);
-        this.ePOSDevice = new epson.ePOSDevice();
-        var port = window.location.protocol === 'http:' ? '8008' : '8043';
-        this.ePOSDevice.connect(ip, port, this.callback_connect.bind(this), {eposprint: true});
+varEpsonPrinter=core.Class.extend(PrinterMixin,{
+    init:function(ip,pos){
+        PrinterMixin.init.call(this,pos);
+        this.ePOSDevice=newepson.ePOSDevice();
+        varport=window.location.protocol==='http:'?'8008':'8043';
+        this.ePOSDevice.connect(ip,port,this.callback_connect.bind(this),{eposprint:true});
     },
 
-    callback_connect: function (resultConnect) {
-        var deviceId = 'local_printer';
-        var options = {'crypto' : false, 'buffer' : false};
-        if ((resultConnect == 'OK') || (resultConnect == 'SSL_CONNECT_OK')) {
-            this.ePOSDevice.createDevice(deviceId, this.ePOSDevice.DEVICE_TYPE_PRINTER, options, this.callback_createDevice.bind(this));
-        } else {
-            Gui.showPopup('ErrorPopup', {
-                'title': _t('Connection to the printer failed'),
-                'body': _t('Please check if the printer is still connected, if the configured IP address is correct and if your printer supports the ePOS protocol. \n' +
-                    'Some browsers don\'t allow HTTP calls from websites to devices in the network (for security reasons). ' +
-                    'If it is the case, you will need to follow Flectra\'s documentation for ' +
-                    '\'Self-signed certificate for ePOS printers\' and \'Secure connection (HTTPS)\' to solve the issue'
+    callback_connect:function(resultConnect){
+        vardeviceId='local_printer';
+        varoptions={'crypto':false,'buffer':false};
+        if((resultConnect=='OK')||(resultConnect=='SSL_CONNECT_OK')){
+            this.ePOSDevice.createDevice(deviceId,this.ePOSDevice.DEVICE_TYPE_PRINTER,options,this.callback_createDevice.bind(this));
+        }else{
+            Gui.showPopup('ErrorPopup',{
+                'title':_t('Connectiontotheprinterfailed'),
+                'body':_t('Pleasecheckiftheprinterisstillconnected,iftheconfiguredIPaddressiscorrectandifyourprintersupportstheePOSprotocol.\n'+
+                    'Somebrowsersdon\'tallowHTTPcallsfromwebsitestodevicesinthenetwork(forsecurityreasons).'+
+                    'Ifitisthecase,youwillneedtofollowFlectra\'sdocumentationfor'+
+                    '\'Self-signedcertificateforePOSprinters\'and\'Secureconnection(HTTPS)\'tosolvetheissue'
                 ),
             });
         }
     },
 
-    callback_createDevice: function (deviceObj, errorCode) {
-        if (deviceObj === null) {
-            Gui.showPopup('ErrorPopup', {
-                'title': _t('Connection to the printer failed'),
-                'body':  _t('Please check if the printer is still connected. Error code: ') + errorCode,
+    callback_createDevice:function(deviceObj,errorCode){
+        if(deviceObj===null){
+            Gui.showPopup('ErrorPopup',{
+                'title':_t('Connectiontotheprinterfailed'),
+                'body': _t('Pleasecheckiftheprinterisstillconnected.Errorcode:')+errorCode,
             });
             return;
         }
-        this.printer = deviceObj;
-        this.printer.onreceive = function(response){
-            if (!response.success) {
-                Gui.showPopup('ErrorPopup', {
-                    'title': _t('Epson ePOS Error'),
-                    'body':  _t('An error happened while sending data to the printer. Error code: ') + response.code,
+        this.printer=deviceObj;
+        this.printer.onreceive=function(response){
+            if(!response.success){
+                Gui.showPopup('ErrorPopup',{
+                    'title':_t('EpsonePOSError'),
+                    'body': _t('Anerrorhappenedwhilesendingdatatotheprinter.Errorcode:')+response.code,
                 });
             }
         };
     },
 
     /**
-     * Create the print request for webPRNT from a canvas
-     * 
-     * @override
+     *CreatetheprintrequestforwebPRNTfromacanvas
+     *
+     *@override
      */
-    process_canvas: function (canvas) {
-        if (this.printer) {
+    process_canvas:function(canvas){
+        if(this.printer){
             this.printer.addTextAlign(this.printer.ALIGN_CENTER);
-            this.printer.addImage(canvas.getContext('2d'), 0, 0, canvas.width, canvas.height);
+            this.printer.addImage(canvas.getContext('2d'),0,0,canvas.width,canvas.height);
             this.printer.addCut();
         }
     },
 
     /**
-     * @override
+     *@override
      */
-    open_cashbox: function () {
-        if (this.printer) {
+    open_cashbox:function(){
+        if(this.printer){
             this.printer.addPulse();
             this.printer.send();
         }
     },
 
     /**
-     * @override
+     *@override
      */
-    send_printing_job: function () {
-        if (this.printer) {
+    send_printing_job:function(){
+        if(this.printer){
             this.printer.send();
-            return {
-                result: true
+            return{
+                result:true
             };
         }
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Not applicable to Epson ePOS
-     * @override
+     *NotapplicabletoEpsonePOS
+     *@override
      */
-    _onIoTActionFail: function () {},
-    _onIoTActionResult: function () {},
+    _onIoTActionFail:function(){},
+    _onIoTActionResult:function(){},
 });
 
-return EpsonPrinter;
+returnEpsonPrinter;
 
 });

@@ -1,26 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <template id="buckaroo_form">
+    <datanoupdate="1">
+        <templateid="buckaroo_form">
             <div>
-                <input type="hidden" name="data_set" t-att-data-action-url="tx_url" data-remove-me=""/>
-                <input type="hidden" name="Brq_websitekey" t-att-value="Brq_websitekey"/>
-                <input type="hidden" name="Brq_amount" t-att-value="Brq_amount"/>
-                <input type="hidden" name="Brq_currency" t-att-value="Brq_currency"/>
-                <input type="hidden" name="Brq_invoicenumber" t-att-value="Brq_invoicenumber"/>
-                <input type="hidden" name="Brq_signature" t-att-value="Brq_signature"/>
-                <input type="hidden" name="brq_test" t-att-value="brq_test"/>
-                <input type="hidden" name="Brq_culture" t-att-value="Brq_culture"/>
-                <!-- URLs -->
-                <input t-if="Brq_return" type="hidden" name='Brq_return'
+                <inputtype="hidden"name="data_set"t-att-data-action-url="tx_url"data-remove-me=""/>
+                <inputtype="hidden"name="Brq_websitekey"t-att-value="Brq_websitekey"/>
+                <inputtype="hidden"name="Brq_amount"t-att-value="Brq_amount"/>
+                <inputtype="hidden"name="Brq_currency"t-att-value="Brq_currency"/>
+                <inputtype="hidden"name="Brq_invoicenumber"t-att-value="Brq_invoicenumber"/>
+                <inputtype="hidden"name="Brq_signature"t-att-value="Brq_signature"/>
+                <inputtype="hidden"name="brq_test"t-att-value="brq_test"/>
+                <inputtype="hidden"name="Brq_culture"t-att-value="Brq_culture"/>
+                <!--URLs-->
+                <inputt-if="Brq_return"type="hidden"name='Brq_return'
                     t-att-value="Brq_return"/>
-                <input t-if="Brq_returncancel" type="hidden" name='Brq_returncancel'
+                <inputt-if="Brq_returncancel"type="hidden"name='Brq_returncancel'
                     t-att-value="Brq_returncancel"/>
-                <input t-if="Brq_returnerror" type="hidden" name='Brq_returnerror'
+                <inputt-if="Brq_returnerror"type="hidden"name='Brq_returnerror'
                     t-att-value="Brq_returnerror"/>
-                <input t-if="Brq_returnreject" type="hidden" name='Brq_returnreject'
+                <inputt-if="Brq_returnreject"type="hidden"name='Brq_returnreject'
                     t-att-value="Brq_returnreject"/>
-                <input type="hidden" name='add_returndata' t-att-value="add_returndata"/>
+                <inputtype="hidden"name='add_returndata't-att-value="add_returndata"/>
             </div>
         </template>
     </data>

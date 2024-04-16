@@ -1,39 +1,39 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class HrEmployeeBase(models.AbstractModel):
-    _inherit = "hr.employee.base"
+classHrEmployeeBase(models.AbstractModel):
+    _inherit="hr.employee.base"
 
-    child_all_count = fields.Integer(
-        'Indirect Subordinates Count',
-        compute='_compute_subordinates', store=False,
+    child_all_count=fields.Integer(
+        'IndirectSubordinatesCount',
+        compute='_compute_subordinates',store=False,
         compute_sudo=True)
 
-    def _get_subordinates(self, parents=None):
+    def_get_subordinates(self,parents=None):
         """
-        Helper function to compute subordinates_ids.
-        Get all subordinates (direct and indirect) of an employee.
-        An employee can be a manager of his own manager (recursive hierarchy; e.g. the CEO is manager of everyone but is also
-        member of the RD department, managed by the CTO itself managed by the CEO).
-        In that case, the manager in not counted as a subordinate if it's in the 'parents' set.
+        Helperfunctiontocomputesubordinates_ids.
+        Getallsubordinates(directandindirect)ofanemployee.
+        Anemployeecanbeamanagerofhisownmanager(recursivehierarchy;e.g.theCEOismanagerofeveryonebutisalso
+        memberoftheRDdepartment,managedbytheCTOitselfmanagedbytheCEO).
+        Inthatcase,themanagerinnotcountedasasubordinateifit'sinthe'parents'set.
         """
-        if not parents:
-            parents = self.env[self._name]
+        ifnotparents:
+            parents=self.env[self._name]
 
-        indirect_subordinates = self.env[self._name]
-        parents |= self
-        direct_subordinates = self.child_ids - parents
-        for child in direct_subordinates:
-            child_subordinate = child._get_subordinates(parents=parents)
-            indirect_subordinates |= child_subordinate
-        return indirect_subordinates | direct_subordinates
+        indirect_subordinates=self.env[self._name]
+        parents|=self
+        direct_subordinates=self.child_ids-parents
+        forchildindirect_subordinates:
+            child_subordinate=child._get_subordinates(parents=parents)
+            indirect_subordinates|=child_subordinate
+        returnindirect_subordinates|direct_subordinates
 
 
-    @api.depends('child_ids', 'child_ids.child_all_count')
-    def _compute_subordinates(self):
-        for employee in self:
-            employee.subordinate_ids = employee._get_subordinates()
-            employee.child_all_count = len(employee.subordinate_ids)
+    @api.depends('child_ids','child_ids.child_all_count')
+    def_compute_subordinates(self):
+        foremployeeinself:
+            employee.subordinate_ids=employee._get_subordinates()
+            employee.child_all_count=len(employee.subordinate_ids)

@@ -1,398 +1,398 @@
-flectra.define('mail/static/src/models/messaging_notification_handler/messaging_notification_handler.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/messaging_notification_handler/messaging_notification_handler.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { one2one } = require('mail/static/src/model/model_field.js');
-const { decrement, increment } = require('mail/static/src/model/model_field_command.js');
-const { htmlToTextContentInline } = require('mail.utils');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{one2one}=require('mail/static/src/model/model_field.js');
+const{decrement,increment}=require('mail/static/src/model/model_field_command.js');
+const{htmlToTextContentInline}=require('mail.utils');
 
-const PREVIEW_MSG_MAX_SIZE = 350; // optimal for native English speakers
+constPREVIEW_MSG_MAX_SIZE=350;//optimalfornativeEnglishspeakers
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class MessagingNotificationHandler extends dependencies['mail.model'] {
+    classMessagingNotificationHandlerextendsdependencies['mail.model']{
 
         /**
-         * @override
+         *@override
          */
-        _willDelete() {
-            if (this.env.services['bus_service']) {
+        _willDelete(){
+            if(this.env.services['bus_service']){
                 this.env.services['bus_service'].off('notification');
                 this.env.services['bus_service'].stopPolling();
             }
-            return super._willDelete(...arguments);
+            returnsuper._willDelete(...arguments);
         }
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * Fetch messaging data initially to populate the store specifically for
-         * the current users. This includes pinned channels for instance.
+         *Fetchmessagingdatainitiallytopopulatethestorespecificallyfor
+         *thecurrentusers.Thisincludespinnedchannelsforinstance.
          */
-        start() {
-            this.env.services.bus_service.onNotification(null, notifs => this._handleNotifications(notifs));
+        start(){
+            this.env.services.bus_service.onNotification(null,notifs=>this._handleNotifications(notifs));
             this.env.services.bus_service.startPolling();
         }
 
         //----------------------------------------------------------------------
-        // Private
+        //Private
         //----------------------------------------------------------------------
 
         /**
-         * @private
-         * @param {Object[]} notifications
-         * @returns {Object[]}
+         *@private
+         *@param{Object[]}notifications
+         *@returns{Object[]}
          */
-        _filterNotificationsOnUnsubscribe(notifications) {
-            const unsubscribedNotif = notifications.find(notif =>
-                notif[1].info === 'unsubscribe');
-            if (unsubscribedNotif) {
-                notifications = notifications.filter(notif =>
-                    notif[0][1] !== 'mail.channel' ||
-                    notif[0][2] !== unsubscribedNotif[1].id
+        _filterNotificationsOnUnsubscribe(notifications){
+            constunsubscribedNotif=notifications.find(notif=>
+                notif[1].info==='unsubscribe');
+            if(unsubscribedNotif){
+                notifications=notifications.filter(notif=>
+                    notif[0][1]!=='mail.channel'||
+                    notif[0][2]!==unsubscribedNotif[1].id
                 );
             }
-            return notifications;
+            returnnotifications;
         }
 
         /**
-         * @private
-         * @param {Object[]} notifications
-         * @param {Array|string} notifications[i][0] meta-data of the notification.
-         * @param {string} notifications[i][0][0] name of database this
-         *   notification comes from.
-         * @param {string} notifications[i][0][1] type of notification.
-         * @param {integer} notifications[i][0][2] usually id of related type
-         *   of notification. For instance, with `mail.channel`, this is the id
-         *   of the channel.
-         * @param {Object} notifications[i][1] payload of the notification
+         *@private
+         *@param{Object[]}notifications
+         *@param{Array|string}notifications[i][0]meta-dataofthenotification.
+         *@param{string}notifications[i][0][0]nameofdatabasethis
+         *  notificationcomesfrom.
+         *@param{string}notifications[i][0][1]typeofnotification.
+         *@param{integer}notifications[i][0][2]usuallyidofrelatedtype
+         *  ofnotification.Forinstance,with`mail.channel`,thisistheid
+         *  ofthechannel.
+         *@param{Object}notifications[i][1]payloadofthenotification
          */
-        async _handleNotifications(notifications) {
-            const filteredNotifications = this._filterNotificationsOnUnsubscribe(notifications);
-            const proms = filteredNotifications.map(notification => {
-                const [channel, message] = notification;
-                if (typeof channel === 'string') {
-                    // uuid notification, only for (livechat) public handler
+        async_handleNotifications(notifications){
+            constfilteredNotifications=this._filterNotificationsOnUnsubscribe(notifications);
+            constproms=filteredNotifications.map(notification=>{
+                const[channel,message]=notification;
+                if(typeofchannel==='string'){
+                    //uuidnotification,onlyfor(livechat)publichandler
                     return;
                 }
-                const [, model, id] = channel;
-                switch (model) {
-                    case 'ir.needaction':
-                        return this._handleNotificationNeedaction(message);
-                    case 'mail.channel':
-                        return this._handleNotificationChannel(id, message);
-                    case 'res.partner':
-                        if (id !== this.env.messaging.currentPartner.id) {
-                            // ignore broadcast to other partners
+                const[,model,id]=channel;
+                switch(model){
+                    case'ir.needaction':
+                        returnthis._handleNotificationNeedaction(message);
+                    case'mail.channel':
+                        returnthis._handleNotificationChannel(id,message);
+                    case'res.partner':
+                        if(id!==this.env.messaging.currentPartner.id){
+                            //ignorebroadcasttootherpartners
                             return;
                         }
-                        return this._handleNotificationPartner(Object.assign({}, message));
+                        returnthis._handleNotificationPartner(Object.assign({},message));
                 }
             });
-            await this.async(() => Promise.all(proms));
+            awaitthis.async(()=>Promise.all(proms));
         }
 
         /**
-         * @private
-         * @param {integer} channelId
-         * @param {Object} data
-         * @param {string} [data.info]
-         * @param {boolean} [data.is_typing]
-         * @param {integer} [data.last_message_id]
-         * @param {integer} [data.partner_id]
+         *@private
+         *@param{integer}channelId
+         *@param{Object}data
+         *@param{string}[data.info]
+         *@param{boolean}[data.is_typing]
+         *@param{integer}[data.last_message_id]
+         *@param{integer}[data.partner_id]
          */
-        async _handleNotificationChannel(channelId, data) {
-            const {
+        async_handleNotificationChannel(channelId,data){
+            const{
                 info,
                 last_message_id,
                 partner_id,
-            } = data;
-            switch (info) {
-                case 'channel_fetched':
-                    return this._handleNotificationChannelFetched(channelId, {
+            }=data;
+            switch(info){
+                case'channel_fetched':
+                    returnthis._handleNotificationChannelFetched(channelId,{
                         last_message_id,
                         partner_id,
                     });
-                case 'channel_seen':
-                    return this._handleNotificationChannelSeen(channelId, {
+                case'channel_seen':
+                    returnthis._handleNotificationChannelSeen(channelId,{
                         last_message_id,
                         partner_id,
                     });
-                case 'delete':
-                    return this._handleNotificationChannelDelete(channelId);
-                case 'typing_status':
-                    return this._handleNotificationChannelTypingStatus(channelId, data);
+                case'delete':
+                    returnthis._handleNotificationChannelDelete(channelId);
+                case'typing_status':
+                    returnthis._handleNotificationChannelTypingStatus(channelId,data);
                 default:
-                    return this._handleNotificationChannelMessage(channelId, data);
+                    returnthis._handleNotificationChannelMessage(channelId,data);
             }
         }
 
         /**
-         * @private
-         * @param {integer} channelId
-         * @param {Object} param1
-         * @param {integer} param1.partner_id
-         * @param {string} param1.partner_name
+         *@private
+         *@param{integer}channelId
+         *@param{Object}param1
+         *@param{integer}param1.partner_id
+         *@param{string}param1.partner_name
          */
-        async _handleNotificationChannelDelete(channelId) {
-            const channel = this.env.models['mail.thread'].findFromIdentifyingData({
-                id: channelId,
-                model: 'mail.channel',
+        async_handleNotificationChannelDelete(channelId){
+            constchannel=this.env.models['mail.thread'].findFromIdentifyingData({
+                id:channelId,
+                model:'mail.channel',
             });
-            if (!channel) {
+            if(!channel){
                 return;
             }
             channel.delete();
         }
 
         /**
-         * @private
-         * @param {integer} channelId
-         * @param {Object} param1
-         * @param {integer} param1.last_message_id
-         * @param {integer} param1.partner_id
+         *@private
+         *@param{integer}channelId
+         *@param{Object}param1
+         *@param{integer}param1.last_message_id
+         *@param{integer}param1.partner_id
          */
-        async _handleNotificationChannelFetched(channelId, {
+        async_handleNotificationChannelFetched(channelId,{
             last_message_id,
             partner_id,
-        }) {
-            const channel = this.env.models['mail.thread'].findFromIdentifyingData({
-                id: channelId,
-                model: 'mail.channel',
+        }){
+            constchannel=this.env.models['mail.thread'].findFromIdentifyingData({
+                id:channelId,
+                model:'mail.channel',
             });
-            if (!channel) {
-                // for example seen from another browser, the current one has no
-                // knowledge of the channel
+            if(!channel){
+                //forexampleseenfromanotherbrowser,thecurrentonehasno
+                //knowledgeofthechannel
                 return;
             }
-            if (channel.channel_type === 'channel') {
-                // disabled on `channel` channels for performance reasons
+            if(channel.channel_type==='channel'){
+                //disabledon`channel`channelsforperformancereasons
                 return;
             }
             this.env.models['mail.thread_partner_seen_info'].insert({
-                channelId: channel.id,
-                lastFetchedMessage: [['insert', { id: last_message_id }]],
-                partnerId: partner_id,
+                channelId:channel.id,
+                lastFetchedMessage:[['insert',{id:last_message_id}]],
+                partnerId:partner_id,
             });
             channel.update({
-                messageSeenIndicators: [['insert',
+                messageSeenIndicators:[['insert',
                     {
-                        channelId: channel.id,
-                        messageId: last_message_id,
+                        channelId:channel.id,
+                        messageId:last_message_id,
                     }
                 ]],
             });
-            // FIXME force the computing of message values (cf task-2261221)
+            //FIXMEforcethecomputingofmessagevalues(cftask-2261221)
             this.env.models['mail.message_seen_indicator'].recomputeFetchedValues(channel);
         }
 
         /**
-         * @private
-         * @param {integer} channelId
-         * @param {Object} messageData
+         *@private
+         *@param{integer}channelId
+         *@param{Object}messageData
          */
-        async _handleNotificationChannelMessage(channelId, messageData) {
-            let channel = this.env.models['mail.thread'].findFromIdentifyingData({
-                id: channelId,
-                model: 'mail.channel',
+        async_handleNotificationChannelMessage(channelId,messageData){
+            letchannel=this.env.models['mail.thread'].findFromIdentifyingData({
+                id:channelId,
+                model:'mail.channel',
             });
-            const wasChannelExisting = !!channel;
-            const convertedData = this.env.models['mail.message'].convertData(messageData);
-            const oldMessage = this.env.models['mail.message'].findFromIdentifyingData(convertedData);
-            // locally save old values, as insert would overwrite them
-            const oldMessageModerationStatus = (
-                oldMessage && oldMessage.moderation_status
+            constwasChannelExisting=!!channel;
+            constconvertedData=this.env.models['mail.message'].convertData(messageData);
+            constoldMessage=this.env.models['mail.message'].findFromIdentifyingData(convertedData);
+            //locallysaveoldvalues,asinsertwouldoverwritethem
+            constoldMessageModerationStatus=(
+                oldMessage&&oldMessage.moderation_status
             );
-            const oldMessageWasModeratedByCurrentPartner = (
-                oldMessage && oldMessage.isModeratedByCurrentPartner
+            constoldMessageWasModeratedByCurrentPartner=(
+                oldMessage&&oldMessage.isModeratedByCurrentPartner
             );
 
-            // Fetch missing info from channel before going further. Inserting
-            // a channel with incomplete info can lead to issues. This is in
-            // particular the case with the `uuid` field that is assumed
-            // "required" by the rest of the code and is necessary for some
-            // features such as chat windows.
-            if (!channel) {
-                channel = (await this.async(() =>
-                    this.env.models['mail.thread'].performRpcChannelInfo({ ids: [channelId] })
+            //Fetchmissinginfofromchannelbeforegoingfurther.Inserting
+            //achannelwithincompleteinfocanleadtoissues.Thisisin
+            //particularthecasewiththe`uuid`fieldthatisassumed
+            //"required"bytherestofthecodeandisnecessaryforsome
+            //featuressuchaschatwindows.
+            if(!channel){
+                channel=(awaitthis.async(()=>
+                    this.env.models['mail.thread'].performRpcChannelInfo({ids:[channelId]})
                 ))[0];
             }
-            if (!channel.isPinned) {
+            if(!channel.isPinned){
                 channel.pin();
             }
 
-            const message = this.env.models['mail.message'].insert(convertedData);
+            constmessage=this.env.models['mail.message'].insert(convertedData);
             this._notifyThreadViewsMessageReceived(message);
 
-            // If the message was already known: nothing else should be done,
-            // except if it was pending moderation by the current partner, then
-            // decrement the moderation counter.
-            if (oldMessage) {
-                if (
-                    oldMessageModerationStatus === 'pending_moderation' &&
-                    message.moderation_status !== 'pending_moderation' &&
+            //Ifthemessagewasalreadyknown:nothingelseshouldbedone,
+            //exceptifitwaspendingmoderationbythecurrentpartner,then
+            //decrementthemoderationcounter.
+            if(oldMessage){
+                if(
+                    oldMessageModerationStatus==='pending_moderation'&&
+                    message.moderation_status!=='pending_moderation'&&
                     oldMessageWasModeratedByCurrentPartner
-                ) {
-                    const moderation = this.env.messaging.moderation;
-                    moderation.update({ counter: decrement() });
+                ){
+                    constmoderation=this.env.messaging.moderation;
+                    moderation.update({counter:decrement()});
                 }
                 return;
             }
 
-            // If the current partner is author, do nothing else.
-            if (message.author === this.env.messaging.currentPartner) {
+            //Ifthecurrentpartnerisauthor,donothingelse.
+            if(message.author===this.env.messaging.currentPartner){
                 return;
             }
 
-            // Message from mailing channel should not make a notification in
-            // Flectra for users with notification "Handled by Email".
-            // Channel has been marked as read server-side in this case, so
-            // it should not display a notification by incrementing the
-            // unread counter.
-            if (
-                channel.mass_mailing &&
-                this.env.session.notification_type === 'email'
-            ) {
-                this._handleNotificationChannelSeen(channelId, {
-                    last_message_id: messageData.id,
-                    partner_id: this.env.messaging.currentPartner.id,
+            //Messagefrommailingchannelshouldnotmakeanotificationin
+            //Flectraforuserswithnotification"HandledbyEmail".
+            //Channelhasbeenmarkedasreadserver-sideinthiscase,so
+            //itshouldnotdisplayanotificationbyincrementingthe
+            //unreadcounter.
+            if(
+                channel.mass_mailing&&
+                this.env.session.notification_type==='email'
+            ){
+                this._handleNotificationChannelSeen(channelId,{
+                    last_message_id:messageData.id,
+                    partner_id:this.env.messaging.currentPartner.id,
                 });
                 return;
             }
-            // In all other cases: update counter and notify if necessary
+            //Inallothercases:updatecounterandnotifyifnecessary
 
-            // Chat from FlectraBot is considered disturbing and should only be
-            // shown on the menu, but no notification and no thread open.
-            const isChatWithFlectraBot = (
-                channel.correspondent &&
-                channel.correspondent === this.env.messaging.partnerRoot
+            //ChatfromFlectraBotisconsidereddisturbingandshouldonlybe
+            //shownonthemenu,butnonotificationandnothreadopen.
+            constisChatWithFlectraBot=(
+                channel.correspondent&&
+                channel.correspondent===this.env.messaging.partnerRoot
             );
-            if (!isChatWithFlectraBot) {
-                const isFlectraFocused = this.env.services['bus_service'].isFlectraFocused();
-                // Notify if out of focus
-                if (!isFlectraFocused && channel.isChatChannel) {
+            if(!isChatWithFlectraBot){
+                constisFlectraFocused=this.env.services['bus_service'].isFlectraFocused();
+                //Notifyifoutoffocus
+                if(!isFlectraFocused&&channel.isChatChannel){
                     this._notifyNewChannelMessageWhileOutOfFocus({
                         channel,
                         message,
                     });
                 }
-                if (channel.model === 'mail.channel' && channel.channel_type !== 'channel') {
-                    // disabled on non-channel threads and
-                    // on `channel` channels for performance reasons
+                if(channel.model==='mail.channel'&&channel.channel_type!=='channel'){
+                    //disabledonnon-channelthreadsand
+                    //on`channel`channelsforperformancereasons
                     channel.markAsFetched();
                 }
-                // open chat on receiving new message if it was not already opened or folded
-                if (channel.channel_type !== 'channel' && !this.env.messaging.device.isMobile && !channel.chatWindow) {
+                //openchatonreceivingnewmessageifitwasnotalreadyopenedorfolded
+                if(channel.channel_type!=='channel'&&!this.env.messaging.device.isMobile&&!channel.chatWindow){
                     this.env.messaging.chatWindowManager.openThread(channel);
                 }
             }
 
-            // If the channel wasn't known its correct counter was fetched at
-            // the start of the method, no need update it here.
-            if (!wasChannelExisting) {
+            //Ifthechannelwasn'tknownitscorrectcounterwasfetchedat
+            //thestartofthemethod,noneedupdateithere.
+            if(!wasChannelExisting){
                 return;
             }
-            // manually force recompute of counter
+            //manuallyforcerecomputeofcounter
             this.messaging.messagingMenu.update();
         }
 
         /**
-         * Called when a channel has been seen, and the server responds with the
-         * last message seen. Useful in order to track last message seen.
+         *Calledwhenachannelhasbeenseen,andtheserverrespondswiththe
+         *lastmessageseen.Usefulinordertotracklastmessageseen.
          *
-         * @private
-         * @param {integer} channelId
-         * @param {Object} param1
-         * @param {integer} param1.last_message_id
-         * @param {integer} param1.partner_id
+         *@private
+         *@param{integer}channelId
+         *@param{Object}param1
+         *@param{integer}param1.last_message_id
+         *@param{integer}param1.partner_id
          */
-        async _handleNotificationChannelSeen(channelId, {
+        async_handleNotificationChannelSeen(channelId,{
             last_message_id,
             partner_id,
-        }) {
-            const channel = this.env.models['mail.thread'].findFromIdentifyingData({
-                id: channelId,
-                model: 'mail.channel',
+        }){
+            constchannel=this.env.models['mail.thread'].findFromIdentifyingData({
+                id:channelId,
+                model:'mail.channel',
             });
-            if (!channel) {
-                // for example seen from another browser, the current one has no
-                // knowledge of the channel
+            if(!channel){
+                //forexampleseenfromanotherbrowser,thecurrentonehasno
+                //knowledgeofthechannel
                 return;
             }
-            const lastMessage = this.env.models['mail.message'].insert({ id: last_message_id });
-            // restrict computation of seen indicator for "non-channel" channels
-            // for performance reasons
-            const shouldComputeSeenIndicators = channel.channel_type !== 'channel';
-            const updateData = {};
-            if (shouldComputeSeenIndicators) {
+            constlastMessage=this.env.models['mail.message'].insert({id:last_message_id});
+            //restrictcomputationofseenindicatorfor"non-channel"channels
+            //forperformancereasons
+            constshouldComputeSeenIndicators=channel.channel_type!=='channel';
+            constupdateData={};
+            if(shouldComputeSeenIndicators){
                 this.env.models['mail.thread_partner_seen_info'].insert({
-                    channelId: channel.id,
-                    lastSeenMessage: [['link', lastMessage]],
-                    partnerId: partner_id,
+                    channelId:channel.id,
+                    lastSeenMessage:[['link',lastMessage]],
+                    partnerId:partner_id,
                 });
-                Object.assign(updateData, {
-                    // FIXME should no longer use computeId (task-2335647)
-                    messageSeenIndicators: [['insert',
+                Object.assign(updateData,{
+                    //FIXMEshouldnolongerusecomputeId(task-2335647)
+                    messageSeenIndicators:[['insert',
                         {
-                            channelId: channel.id,
-                            messageId: lastMessage.id,
+                            channelId:channel.id,
+                            messageId:lastMessage.id,
                         },
                     ]],
                 });
             }
-            if (this.env.messaging.currentPartner.id === partner_id) {
-                Object.assign(updateData, {
-                    lastSeenByCurrentPartnerMessageId: last_message_id,
-                    pendingSeenMessageId: undefined,
+            if(this.env.messaging.currentPartner.id===partner_id){
+                Object.assign(updateData,{
+                    lastSeenByCurrentPartnerMessageId:last_message_id,
+                    pendingSeenMessageId:undefined,
                 });
             }
             channel.update(updateData);
-            if (shouldComputeSeenIndicators) {
-                // FIXME force the computing of thread values (cf task-2261221)
+            if(shouldComputeSeenIndicators){
+                //FIXMEforcethecomputingofthreadvalues(cftask-2261221)
                 this.env.models['mail.thread'].computeLastCurrentPartnerMessageSeenByEveryone(channel);
-                // FIXME force the computing of message values (cf task-2261221)
+                //FIXMEforcethecomputingofmessagevalues(cftask-2261221)
                 this.env.models['mail.message_seen_indicator'].recomputeSeenValues(channel);
             }
-            // manually force recompute of counter
+            //manuallyforcerecomputeofcounter
             this.messaging.messagingMenu.update();
         }
 
         /**
-         * @private
-         * @param {integer} channelId
-         * @param {Object} param1
-         * @param {boolean} param1.is_typing
-         * @param {integer} param1.partner_id
-         * @param {string} param1.partner_name
+         *@private
+         *@param{integer}channelId
+         *@param{Object}param1
+         *@param{boolean}param1.is_typing
+         *@param{integer}param1.partner_id
+         *@param{string}param1.partner_name
          */
-        _handleNotificationChannelTypingStatus(channelId, { is_typing, partner_id, partner_name }) {
-            const channel = this.env.models['mail.thread'].findFromIdentifyingData({
-                id: channelId,
-                model: 'mail.channel',
+        _handleNotificationChannelTypingStatus(channelId,{is_typing,partner_id,partner_name}){
+            constchannel=this.env.models['mail.thread'].findFromIdentifyingData({
+                id:channelId,
+                model:'mail.channel',
             });
-            if (!channel) {
+            if(!channel){
                 return;
             }
-            const partner = this.env.models['mail.partner'].insert({
-                id: partner_id,
-                name: partner_name,
+            constpartner=this.env.models['mail.partner'].insert({
+                id:partner_id,
+                name:partner_name,
             });
-            if (partner === this.env.messaging.currentPartner) {
-                // Ignore management of current partner is typing notification.
+            if(partner===this.env.messaging.currentPartner){
+                //Ignoremanagementofcurrentpartneristypingnotification.
                 return;
             }
-            if (is_typing) {
-                if (channel.typingMembers.includes(partner)) {
+            if(is_typing){
+                if(channel.typingMembers.includes(partner)){
                     channel.refreshOtherMemberTypingMember(partner);
-                } else {
+                }else{
                     channel.registerOtherMemberTypingMember(partner);
                 }
-            } else {
-                if (!channel.typingMembers.includes(partner)) {
-                    // Ignore no longer typing notifications of members that
-                    // are not registered as typing something.
+            }else{
+                if(!channel.typingMembers.includes(partner)){
+                    //Ignorenolongertypingnotificationsofmembersthat
+                    //arenotregisteredastypingsomething.
                     return;
                 }
                 channel.unregisterOtherMemberTypingMember(partner);
@@ -400,412 +400,412 @@ function factory(dependencies) {
         }
 
         /**
-         * @private
-         * @param {Object} data
+         *@private
+         *@param{Object}data
          */
-        _handleNotificationNeedaction(data) {
-            const message = this.env.models['mail.message'].insert(
+        _handleNotificationNeedaction(data){
+            constmessage=this.env.models['mail.message'].insert(
                 this.env.models['mail.message'].convertData(data)
             );
-            this.env.messaging.inbox.update({ counter: increment() });
-            const originThread = message.originThread;
-            if (originThread && message.isNeedaction) {
-                originThread.update({ message_needaction_counter: increment() });
+            this.env.messaging.inbox.update({counter:increment()});
+            constoriginThread=message.originThread;
+            if(originThread&&message.isNeedaction){
+                originThread.update({message_needaction_counter:increment()});
             }
-            // manually force recompute of counter
+            //manuallyforcerecomputeofcounter
             this.messaging.messagingMenu.update();
         }
 
         /**
-         * @private
-         * @param {Object} data
-         * @param {string} [data.info]
-         * @param {string} [data.type]
+         *@private
+         *@param{Object}data
+         *@param{string}[data.info]
+         *@param{string}[data.type]
          */
-        async _handleNotificationPartner(data) {
-            const {
+        async_handleNotificationPartner(data){
+            const{
                 info,
                 type,
-            } = data;
-            if (type === 'activity_updated') {
-                this.env.bus.trigger('activity_updated', data);
-            } else if (type === 'author') {
-                return this._handleNotificationPartnerAuthor(data);
-            } else if (info === 'channel_seen') {
-                return this._handleNotificationChannelSeen(data.channel_id, data);
-            } else if (type === 'deletion') {
-                return this._handleNotificationPartnerDeletion(data);
-            } else if (type === 'message_notification_update') {
-                return this._handleNotificationPartnerMessageNotificationUpdate(data.elements);
-            } else if (type === 'mark_as_read') {
-                return this._handleNotificationPartnerMarkAsRead(data);
-            } else if (type === 'moderator') {
-                return this._handleNotificationPartnerModerator(data);
-            } else if (type === 'simple_notification') {
-                const escapedMessage = owl.utils.escape(data.message);
+            }=data;
+            if(type==='activity_updated'){
+                this.env.bus.trigger('activity_updated',data);
+            }elseif(type==='author'){
+                returnthis._handleNotificationPartnerAuthor(data);
+            }elseif(info==='channel_seen'){
+                returnthis._handleNotificationChannelSeen(data.channel_id,data);
+            }elseif(type==='deletion'){
+                returnthis._handleNotificationPartnerDeletion(data);
+            }elseif(type==='message_notification_update'){
+                returnthis._handleNotificationPartnerMessageNotificationUpdate(data.elements);
+            }elseif(type==='mark_as_read'){
+                returnthis._handleNotificationPartnerMarkAsRead(data);
+            }elseif(type==='moderator'){
+                returnthis._handleNotificationPartnerModerator(data);
+            }elseif(type==='simple_notification'){
+                constescapedMessage=owl.utils.escape(data.message);
                 this.env.services['notification'].notify({
-                    message: escapedMessage,
-                    sticky: data.sticky,
-                    type: data.warning ? 'warning' : 'danger',
+                    message:escapedMessage,
+                    sticky:data.sticky,
+                    type:data.warning?'warning':'danger',
                 });
-            } else if (type === 'toggle_star') {
-                return this._handleNotificationPartnerToggleStar(data);
-            } else if (info === 'transient_message') {
-                return this._handleNotificationPartnerTransientMessage(data);
-            } else if (info === 'unsubscribe') {
-                return this._handleNotificationPartnerUnsubscribe(data.id);
-            } else if (type === 'user_connection') {
-                return this._handleNotificationPartnerUserConnection(data);
-            } else if (!type) {
-                return this._handleNotificationPartnerChannel(data);
+            }elseif(type==='toggle_star'){
+                returnthis._handleNotificationPartnerToggleStar(data);
+            }elseif(info==='transient_message'){
+                returnthis._handleNotificationPartnerTransientMessage(data);
+            }elseif(info==='unsubscribe'){
+                returnthis._handleNotificationPartnerUnsubscribe(data.id);
+            }elseif(type==='user_connection'){
+                returnthis._handleNotificationPartnerUserConnection(data);
+            }elseif(!type){
+                returnthis._handleNotificationPartnerChannel(data);
             }
         }
 
         /**
-         * @private
-         * @param {Object} data
-         * @param {Object} data.message
+         *@private
+         *@param{Object}data
+         *@param{Object}data.message
          */
-        _handleNotificationPartnerAuthor(data) {
+        _handleNotificationPartnerAuthor(data){
             this.env.models['mail.message'].insert(
                 this.env.models['mail.message'].convertData(data.message)
             );
         }
 
         /**
-         * @private
-         * @param {Object} data
-         * @param {string} data.channel_type
-         * @param {integer} data.id
-         * @param {string} [data.info]
-         * @param {boolean} data.is_minimized
-         * @param {string} data.name
-         * @param {string} data.state
-         * @param {string} data.uuid
+         *@private
+         *@param{Object}data
+         *@param{string}data.channel_type
+         *@param{integer}data.id
+         *@param{string}[data.info]
+         *@param{boolean}data.is_minimized
+         *@param{string}data.name
+         *@param{string}data.state
+         *@param{string}data.uuid
          */
-        _handleNotificationPartnerChannel(data) {
-            const convertedData = this.env.models['mail.thread'].convertData(
-                Object.assign({ model: 'mail.channel' }, data)
+        _handleNotificationPartnerChannel(data){
+            constconvertedData=this.env.models['mail.thread'].convertData(
+                Object.assign({model:'mail.channel'},data)
             );
-            if (!convertedData.members) {
-                // channel_info does not return all members of channel for
-                // performance reasons, but code is expecting to know at
-                // least if the current partner is member of it.
-                // (e.g. to know when to display "invited" notification)
-                // Current partner can always be assumed to be a member of
-                // channels received through this notification.
-                convertedData.members = [['link', this.env.messaging.currentPartner]];
+            if(!convertedData.members){
+                //channel_infodoesnotreturnallmembersofchannelfor
+                //performancereasons,butcodeisexpectingtoknowat
+                //leastifthecurrentpartnerismemberofit.
+                //(e.g.toknowwhentodisplay"invited"notification)
+                //Currentpartnercanalwaysbeassumedtobeamemberof
+                //channelsreceivedthroughthisnotification.
+                convertedData.members=[['link',this.env.messaging.currentPartner]];
             }
-            let channel = this.env.models['mail.thread'].findFromIdentifyingData(convertedData);
-            const wasCurrentPartnerMember = (
-                channel &&
+            letchannel=this.env.models['mail.thread'].findFromIdentifyingData(convertedData);
+            constwasCurrentPartnerMember=(
+                channel&&
                 channel.members.includes(this.env.messaging.currentPartner)
             );
 
-            channel = this.env.models['mail.thread'].insert(convertedData);
-            if (
-                channel.channel_type === 'channel' &&
-                data.info !== 'creation' &&
+            channel=this.env.models['mail.thread'].insert(convertedData);
+            if(
+                channel.channel_type==='channel'&&
+                data.info!=='creation'&&
                 !wasCurrentPartnerMember
-            ) {
+            ){
                 this.env.services['notification'].notify({
-                    message: _.str.sprintf(
-                        this.env._t("You have been invited to: %s"),
+                    message:_.str.sprintf(
+                        this.env._t("Youhavebeeninvitedto:%s"),
                         owl.utils.escape(channel.name)
                     ),
-                    type: 'warning',
+                    type:'warning',
                 });
             }
-            // a new thread with unread messages could have been added
-            // manually force recompute of counter
+            //anewthreadwithunreadmessagescouldhavebeenadded
+            //manuallyforcerecomputeofcounter
             this.messaging.messagingMenu.update();
         }
 
         /**
-         * @private
-         * @param {Object} param0
-         * @param {integer[]} param0.messag_ids
+         *@private
+         *@param{Object}param0
+         *@param{integer[]}param0.messag_ids
          */
-        _handleNotificationPartnerDeletion({ message_ids }) {
-            const moderationMailbox = this.env.messaging.moderation;
-            for (const id of message_ids) {
-                const message = this.env.models['mail.message'].findFromIdentifyingData({ id });
-                if (message) {
-                    if (
-                        message.moderation_status === 'pending_moderation' &&
+        _handleNotificationPartnerDeletion({message_ids}){
+            constmoderationMailbox=this.env.messaging.moderation;
+            for(constidofmessage_ids){
+                constmessage=this.env.models['mail.message'].findFromIdentifyingData({id});
+                if(message){
+                    if(
+                        message.moderation_status==='pending_moderation'&&
                         message.originThread.isModeratedByCurrentPartner
-                    ) {
-                        moderationMailbox.update({ counter: decrement() });
+                    ){
+                        moderationMailbox.update({counter:decrement()});
                     }
                     message.delete();
                 }
             }
-            // deleting message might have deleted notifications, force recompute
+            //deletingmessagemighthavedeletednotifications,forcerecompute
             this.messaging.notificationGroupManager.computeGroups();
-            // manually force recompute of counter (after computing the groups)
+            //manuallyforcerecomputeofcounter(aftercomputingthegroups)
             this.messaging.messagingMenu.update();
         }
 
         /**
-         * @private
-         * @param {Object} data
+         *@private
+         *@param{Object}data
          */
-        _handleNotificationPartnerMessageNotificationUpdate(data) {
-            for (const messageData of data) {
-                const message = this.env.models['mail.message'].insert(
+        _handleNotificationPartnerMessageNotificationUpdate(data){
+            for(constmessageDataofdata){
+                constmessage=this.env.models['mail.message'].insert(
                     this.env.models['mail.message'].convertData(messageData)
                 );
-                // implicit: failures are sent by the server as notification
-                // only if the current partner is author of the message
-                if (!message.author && this.messaging.currentPartner) {
-                    message.update({ author: [['link', this.messaging.currentPartner]] });
+                //implicit:failuresaresentbytheserverasnotification
+                //onlyifthecurrentpartnerisauthorofthemessage
+                if(!message.author&&this.messaging.currentPartner){
+                    message.update({author:[['link',this.messaging.currentPartner]]});
                 }
             }
             this.messaging.notificationGroupManager.computeGroups();
-            // manually force recompute of counter (after computing the groups)
+            //manuallyforcerecomputeofcounter(aftercomputingthegroups)
             this.messaging.messagingMenu.update();
         }
 
         /**
-         * @private
-         * @param {Object} param0
-         * @param {integer[]} [param0.channel_ids
-         * @param {integer[]} [param0.message_ids=[]]
-         * @param {integer} [param0.needaction_inbox_counter]
+         *@private
+         *@param{Object}param0
+         *@param{integer[]}[param0.channel_ids
+         *@param{integer[]}[param0.message_ids=[]]
+         *@param{integer}[param0.needaction_inbox_counter]
          */
-        _handleNotificationPartnerMarkAsRead({ channel_ids, message_ids = [], needaction_inbox_counter }) {
-            for (const message_id of message_ids) {
-                // We need to ignore all not yet known messages because we don't want them
-                // to be shown partially as they would be linked directly to mainCache
-                // Furthermore, server should not send back all message_ids marked as read
-                // but something like last read message_id or something like that.
-                // (just imagine you mark 1000 messages as read ... )
-                const message = this.env.models['mail.message'].findFromIdentifyingData({ id: message_id });
-                if (!message) {
+        _handleNotificationPartnerMarkAsRead({channel_ids,message_ids=[],needaction_inbox_counter}){
+            for(constmessage_idofmessage_ids){
+                //Weneedtoignoreallnotyetknownmessagesbecausewedon'twantthem
+                //tobeshownpartiallyastheywouldbelinkeddirectlytomainCache
+                //Furthermore,servershouldnotsendbackallmessage_idsmarkedasread
+                //butsomethinglikelastreadmessage_idorsomethinglikethat.
+                //(justimagineyoumark1000messagesasread...)
+                constmessage=this.env.models['mail.message'].findFromIdentifyingData({id:message_id});
+                if(!message){
                     continue;
                 }
-                // update thread counter
-                const originThread = message.originThread;
-                if (originThread && message.isNeedaction) {
-                    originThread.update({ message_needaction_counter: decrement() });
+                //updatethreadcounter
+                constoriginThread=message.originThread;
+                if(originThread&&message.isNeedaction){
+                    originThread.update({message_needaction_counter:decrement()});
                 }
-                // move messages from Inbox to history
+                //movemessagesfromInboxtohistory
                 message.update({
-                    isHistory: true,
-                    isNeedaction: false,
+                    isHistory:true,
+                    isNeedaction:false,
                 });
             }
-            const inbox = this.env.messaging.inbox;
-            if (needaction_inbox_counter !== undefined) {
-                inbox.update({ counter: needaction_inbox_counter });
-            } else {
-                // kept for compatibility in stable
-                inbox.update({ counter: decrement(message_ids.length) });
+            constinbox=this.env.messaging.inbox;
+            if(needaction_inbox_counter!==undefined){
+                inbox.update({counter:needaction_inbox_counter});
+            }else{
+                //keptforcompatibilityinstable
+                inbox.update({counter:decrement(message_ids.length)});
             }
-            if (inbox.counter > inbox.mainCache.fetchedMessages.length) {
-                // Force refresh Inbox because depending on what was marked as
-                // read the cache might become empty even though there are more
-                // messages on the server.
-                inbox.mainCache.update({ hasToLoadMessages: true });
+            if(inbox.counter>inbox.mainCache.fetchedMessages.length){
+                //ForcerefreshInboxbecausedependingonwhatwasmarkedas
+                //readthecachemightbecomeemptyeventhoughtherearemore
+                //messagesontheserver.
+                inbox.mainCache.update({hasToLoadMessages:true});
             }
-            // manually force recompute of counter
+            //manuallyforcerecomputeofcounter
             this.messaging.messagingMenu.update();
         }
 
         /**
-         * @private
-         * @param {Object} param0
-         * @param {Object} param0.message
+         *@private
+         *@param{Object}param0
+         *@param{Object}param0.message
          */
-        _handleNotificationPartnerModerator({ message: data }) {
+        _handleNotificationPartnerModerator({message:data}){
             this.env.models['mail.message'].insert(
                 this.env.models['mail.message'].convertData(data)
             );
-            const moderationMailbox = this.env.messaging.moderation;
-            if (moderationMailbox) {
-                moderationMailbox.update({ counter: increment() });
+            constmoderationMailbox=this.env.messaging.moderation;
+            if(moderationMailbox){
+                moderationMailbox.update({counter:increment()});
             }
-            // manually force recompute of counter
+            //manuallyforcerecomputeofcounter
             this.messaging.messagingMenu.update();
         }
 
         /**
-         * @private
-         * @param {Object} param0
-         * @param {integer[]} param0.message_ids
-         * @param {boolean} param0.starred
+         *@private
+         *@param{Object}param0
+         *@param{integer[]}param0.message_ids
+         *@param{boolean}param0.starred
          */
-        _handleNotificationPartnerToggleStar({ message_ids = [], starred }) {
-            const starredMailbox = this.env.messaging.starred;
-            for (const messageId of message_ids) {
-                const message = this.env.models['mail.message'].findFromIdentifyingData({
-                    id: messageId,
+        _handleNotificationPartnerToggleStar({message_ids=[],starred}){
+            conststarredMailbox=this.env.messaging.starred;
+            for(constmessageIdofmessage_ids){
+                constmessage=this.env.models['mail.message'].findFromIdentifyingData({
+                    id:messageId,
                 });
-                if (!message) {
+                if(!message){
                     continue;
                 }
-                message.update({ isStarred: starred });
+                message.update({isStarred:starred});
                 starredMailbox.update({
-                    counter: starred ? increment() : decrement(),
+                    counter:starred?increment():decrement(),
                 });
             }
         }
 
         /**
-         * On receiving a transient message, i.e. a message which does not come
-         * from a member of the channel. Usually a log message, such as one
-         * generated from a command with ('/').
+         *Onreceivingatransientmessage,i.e.amessagewhichdoesnotcome
+         *fromamemberofthechannel.Usuallyalogmessage,suchasone
+         *generatedfromacommandwith('/').
          *
-         * @private
-         * @param {Object} data
+         *@private
+         *@param{Object}data
          */
-        _handleNotificationPartnerTransientMessage(data) {
-            const convertedData = this.env.models['mail.message'].convertData(data);
-            const lastMessageId = this.env.models['mail.message'].all().reduce(
-                (lastMessageId, message) => Math.max(lastMessageId, message.id),
+        _handleNotificationPartnerTransientMessage(data){
+            constconvertedData=this.env.models['mail.message'].convertData(data);
+            constlastMessageId=this.env.models['mail.message'].all().reduce(
+                (lastMessageId,message)=>Math.max(lastMessageId,message.id),
                 0
             );
-            const partnerRoot = this.env.messaging.partnerRoot;
-            const message = this.env.models['mail.message'].create(Object.assign(convertedData, {
-                author: [['link', partnerRoot]],
-                id: lastMessageId + 0.01,
-                isTransient: true,
+            constpartnerRoot=this.env.messaging.partnerRoot;
+            constmessage=this.env.models['mail.message'].create(Object.assign(convertedData,{
+                author:[['link',partnerRoot]],
+                id:lastMessageId+0.01,
+                isTransient:true,
             }));
             this._notifyThreadViewsMessageReceived(message);
-            // manually force recompute of counter
+            //manuallyforcerecomputeofcounter
             this.messaging.messagingMenu.update();
         }
 
         /**
-         * @private
-         * @param {integer} channelId
+         *@private
+         *@param{integer}channelId
          */
-        _handleNotificationPartnerUnsubscribe(channelId) {
-            const channel = this.env.models['mail.thread'].findFromIdentifyingData({
-                id: channelId,
-                model: 'mail.channel',
+        _handleNotificationPartnerUnsubscribe(channelId){
+            constchannel=this.env.models['mail.thread'].findFromIdentifyingData({
+                id:channelId,
+                model:'mail.channel',
             });
-            if (!channel) {
+            if(!channel){
                 return;
             }
-            let message;
-            if (channel.correspondent) {
-                const correspondent = channel.correspondent;
-                message = _.str.sprintf(
-                    this.env._t("You unpinned your conversation with <b>%s</b>."),
+            letmessage;
+            if(channel.correspondent){
+                constcorrespondent=channel.correspondent;
+                message=_.str.sprintf(
+                    this.env._t("Youunpinnedyourconversationwith<b>%s</b>."),
                     owl.utils.escape(correspondent.name)
                 );
-            } else {
-                message = _.str.sprintf(
-                    this.env._t("You unsubscribed from <b>%s</b>."),
+            }else{
+                message=_.str.sprintf(
+                    this.env._t("Youunsubscribedfrom<b>%s</b>."),
                     owl.utils.escape(channel.name)
                 );
             }
-            // We assume that arriving here the server has effectively
-            // unpinned the channel
-            channel.update({ isServerPinned: false });
+            //Weassumethatarrivingheretheserverhaseffectively
+            //unpinnedthechannel
+            channel.update({isServerPinned:false});
             this.env.services['notification'].notify({
                 message,
-                type: 'warning',
+                type:'warning',
             });
         }
 
         /**
-         * @private
-         * @param {Object} param0
-         * @param {string} param0.message
-         * @param {integer} param0.partner_id
-         * @param {string} param0.title
+         *@private
+         *@param{Object}param0
+         *@param{string}param0.message
+         *@param{integer}param0.partner_id
+         *@param{string}param0.title
          */
-        async _handleNotificationPartnerUserConnection({ message, partner_id, title }) {
-            // If the current user invited a new user, and the new user is
-            // connecting for the first time while the current user is present
-            // then open a chat for the current user with the new user.
-            this.env.services['bus_service'].sendNotification(title, message);
-            const chat = await this.async(() =>
-                this.env.messaging.getChat({ partnerId: partner_id }
+        async_handleNotificationPartnerUserConnection({message,partner_id,title}){
+            //Ifthecurrentuserinvitedanewuser,andthenewuseris
+            //connectingforthefirsttimewhilethecurrentuserispresent
+            //thenopenachatforthecurrentuserwiththenewuser.
+            this.env.services['bus_service'].sendNotification(title,message);
+            constchat=awaitthis.async(()=>
+                this.env.messaging.getChat({partnerId:partner_id}
             ));
-            if (!chat || this.env.messaging.device.isMobile) {
+            if(!chat||this.env.messaging.device.isMobile){
                 return;
             }
             this.env.messaging.chatWindowManager.openThread(chat);
         }
 
         /**
-         * @private
-         * @param {Object} param0
-         * @param {mail.thread} param0.channel
-         * @param {mail.message} param0.message
+         *@private
+         *@param{Object}param0
+         *@param{mail.thread}param0.channel
+         *@param{mail.message}param0.message
          */
-        _notifyNewChannelMessageWhileOutOfFocus({ channel, message }) {
-            const author = message.author;
-            const messaging = this.env.messaging;
-            let notificationTitle;
-            if (!author) {
-                notificationTitle = this.env._t("New message");
-            } else {
-                const authorName = author.nameOrDisplayName;
-                if (channel.channel_type === 'channel') {
-                    // hack: notification template does not support OWL components,
-                    // so we simply use their template to make HTML as if it comes
-                    // from component
-                    const channelIcon = this.env.qweb.renderToString('mail.ThreadIcon', {
-                        env: this.env,
-                        thread: channel,
+        _notifyNewChannelMessageWhileOutOfFocus({channel,message}){
+            constauthor=message.author;
+            constmessaging=this.env.messaging;
+            letnotificationTitle;
+            if(!author){
+                notificationTitle=this.env._t("Newmessage");
+            }else{
+                constauthorName=author.nameOrDisplayName;
+                if(channel.channel_type==='channel'){
+                    //hack:notificationtemplatedoesnotsupportOWLcomponents,
+                    //sowesimplyusetheirtemplatetomakeHTMLasifitcomes
+                    //fromcomponent
+                    constchannelIcon=this.env.qweb.renderToString('mail.ThreadIcon',{
+                        env:this.env,
+                        thread:channel,
                     });
-                    const channelName = owl.utils.escape(channel.displayName);
-                    const channelNameWithIcon = channelIcon + channelName;
-                    notificationTitle = _.str.sprintf(
-                        this.env._t("%s from %s"),
+                    constchannelName=owl.utils.escape(channel.displayName);
+                    constchannelNameWithIcon=channelIcon+channelName;
+                    notificationTitle=_.str.sprintf(
+                        this.env._t("%sfrom%s"),
                         owl.utils.escape(authorName),
                         channelNameWithIcon
                     );
-                } else {
-                    notificationTitle = owl.utils.escape(authorName);
+                }else{
+                    notificationTitle=owl.utils.escape(authorName);
                 }
             }
-            const notificationContent = owl.utils.escape(
-                htmlToTextContentInline(message.body).substr(0, PREVIEW_MSG_MAX_SIZE)
+            constnotificationContent=owl.utils.escape(
+                htmlToTextContentInline(message.body).substr(0,PREVIEW_MSG_MAX_SIZE)
             );
-            this.env.services['bus_service'].sendNotification(notificationTitle, notificationContent);
-            messaging.update({ outOfFocusUnreadMessageCounter: increment() });
-            const titlePattern = messaging.outOfFocusUnreadMessageCounter === 1
-                ? this.env._t("%d Message")
-                : this.env._t("%d Messages");
-            this.env.bus.trigger('set_title_part', {
-                part: '_chat',
-                title: _.str.sprintf(titlePattern, messaging.outOfFocusUnreadMessageCounter),
+            this.env.services['bus_service'].sendNotification(notificationTitle,notificationContent);
+            messaging.update({outOfFocusUnreadMessageCounter:increment()});
+            consttitlePattern=messaging.outOfFocusUnreadMessageCounter===1
+                ?this.env._t("%dMessage")
+                :this.env._t("%dMessages");
+            this.env.bus.trigger('set_title_part',{
+                part:'_chat',
+                title:_.str.sprintf(titlePattern,messaging.outOfFocusUnreadMessageCounter),
             });
         }
 
         /**
-         * Notifies threadViews about the given message being just received.
-         * This can allow them adjust their scroll position if applicable.
+         *NotifiesthreadViewsaboutthegivenmessagebeingjustreceived.
+         *Thiscanallowthemadjusttheirscrollpositionifapplicable.
          *
-         * @private
-         * @param {mail.message}
+         *@private
+         *@param{mail.message}
          */
-        _notifyThreadViewsMessageReceived(message) {
-            for (const thread of message.threads) {
-                for (const threadView of thread.threadViews) {
-                    threadView.addComponentHint('message-received', { message });
+        _notifyThreadViewsMessageReceived(message){
+            for(constthreadofmessage.threads){
+                for(constthreadViewofthread.threadViews){
+                    threadView.addComponentHint('message-received',{message});
                 }
             }
         }
 
     }
 
-    MessagingNotificationHandler.fields = {
-        messaging: one2one('mail.messaging', {
-            inverse: 'notificationHandler',
+    MessagingNotificationHandler.fields={
+        messaging:one2one('mail.messaging',{
+            inverse:'notificationHandler',
         }),
     };
 
-    MessagingNotificationHandler.modelName = 'mail.messaging_notification_handler';
+    MessagingNotificationHandler.modelName='mail.messaging_notification_handler';
 
-    return MessagingNotificationHandler;
+    returnMessagingNotificationHandler;
 }
 
-registerNewModel('mail.messaging_notification_handler', factory);
+registerNewModel('mail.messaging_notification_handler',factory);
 
 });

@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models, _
+fromflectraimportapi,models,_
 
 
-class Contact(models.AbstractModel):
-    _inherit = 'ir.qweb.field.contact'
+classContact(models.AbstractModel):
+    _inherit='ir.qweb.field.contact'
 
     @api.model
-    def get_available_options(self):
-        options = super(Contact, self).get_available_options()
+    defget_available_options(self):
+        options=super(Contact,self).get_available_options()
         options.update(
-            website_description=dict(type='boolean', string=_('Display the website description')),
-            UserBio=dict(type='boolean', string=_('Display the biography')),
-            badges=dict(type='boolean', string=_('Display the badges'))
+            website_description=dict(type='boolean',string=_('Displaythewebsitedescription')),
+            UserBio=dict(type='boolean',string=_('Displaythebiography')),
+            badges=dict(type='boolean',string=_('Displaythebadges'))
         )
-        return options
+        returnoptions

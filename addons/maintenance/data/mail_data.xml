@@ -1,59 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-<data noupdate="1">
-    <!-- Maintenance-specific activities, for automatic generation mainly -->
-    <record id="mail_act_maintenance_request" model="mail.activity.type">
-        <field name="name">Maintenance Request</field>
-        <field name="icon">fa-wrench</field>
-        <field name="res_model_id" ref="maintenance.model_maintenance_request"/>
+<datanoupdate="1">
+    <!--Maintenance-specificactivities,forautomaticgenerationmainly-->
+    <recordid="mail_act_maintenance_request"model="mail.activity.type">
+        <fieldname="name">MaintenanceRequest</field>
+        <fieldname="icon">fa-wrench</field>
+        <fieldname="res_model_id"ref="maintenance.model_maintenance_request"/>
     </record>
 
-    <!-- email alias for maintenance requests -->
-    <record id="mail_alias_equipment" model="mail.alias">
-        <field name="alias_name">helpdesk</field>
-        <field name="alias_model_id" ref="model_maintenance_request"/>
-        <field name="alias_user_id" ref="base.user_admin"/>
+    <!--emailaliasformaintenancerequests-->
+    <recordid="mail_alias_equipment"model="mail.alias">
+        <fieldname="alias_name">helpdesk</field>
+        <fieldname="alias_model_id"ref="model_maintenance_request"/>
+        <fieldname="alias_user_id"ref="base.user_admin"/>
     </record>
 
-    <!-- Maintenance Request-related subtypes for messaging / Chatter -->
-    <record id="mt_req_created" model="mail.message.subtype">
-        <field name="name">Request Created</field>
-        <field name="res_model">maintenance.request</field>
-        <field name="default" eval="False"/>
-        <field name="hidden" eval="True"/>
-        <field name="description">Maintenance Request created</field>
+    <!--MaintenanceRequest-relatedsubtypesformessaging/Chatter-->
+    <recordid="mt_req_created"model="mail.message.subtype">
+        <fieldname="name">RequestCreated</field>
+        <fieldname="res_model">maintenance.request</field>
+        <fieldname="default"eval="False"/>
+        <fieldname="hidden"eval="True"/>
+        <fieldname="description">MaintenanceRequestcreated</field>
     </record>
-    <record id="mt_req_status" model="mail.message.subtype">
-        <field name="name">Status Changed</field>
-        <field name="res_model">maintenance.request</field>
-        <field name="default" eval="True"/>
-        <field name="description">Status changed</field>
-    </record>
-
-    <!-- Equipment-related subtypes for messaging / Chatter -->
-    <record id="mt_mat_assign" model="mail.message.subtype">
-        <field name="name">Equipment Assigned</field>
-        <field name="res_model">maintenance.equipment</field>
-        <field name="description">Equipment Assigned</field>
+    <recordid="mt_req_status"model="mail.message.subtype">
+        <fieldname="name">StatusChanged</field>
+        <fieldname="res_model">maintenance.request</field>
+        <fieldname="default"eval="True"/>
+        <fieldname="description">Statuschanged</field>
     </record>
 
-    <!-- Equipment Category-related subtypes for messaging / Chatter -->
-    <record id="mt_cat_req_created" model="mail.message.subtype">
-        <field name="name">Maintenance Request Created</field>
-        <field name="res_model">maintenance.equipment.category</field>
-        <field name="default" eval="True"/>
-        <field name="parent_id" ref="mt_req_created"/>
-        <field name="relation_field">category_id</field>
+    <!--Equipment-relatedsubtypesformessaging/Chatter-->
+    <recordid="mt_mat_assign"model="mail.message.subtype">
+        <fieldname="name">EquipmentAssigned</field>
+        <fieldname="res_model">maintenance.equipment</field>
+        <fieldname="description">EquipmentAssigned</field>
     </record>
-    <record id="mt_cat_mat_assign" model="mail.message.subtype">
-        <field name="name">Equipment Assigned</field>
-        <field name="res_model">maintenance.equipment.category</field>
-        <field name="default" eval="True"/>
-        <field name="parent_id" ref="mt_mat_assign"/>
-        <field name="relation_field">category_id</field>
+
+    <!--EquipmentCategory-relatedsubtypesformessaging/Chatter-->
+    <recordid="mt_cat_req_created"model="mail.message.subtype">
+        <fieldname="name">MaintenanceRequestCreated</field>
+        <fieldname="res_model">maintenance.equipment.category</field>
+        <fieldname="default"eval="True"/>
+        <fieldname="parent_id"ref="mt_req_created"/>
+        <fieldname="relation_field">category_id</field>
     </record>
-    <record id="equipment_team_maintenance" model="maintenance.team">
-        <field name="name">Internal Maintenance</field>
+    <recordid="mt_cat_mat_assign"model="mail.message.subtype">
+        <fieldname="name">EquipmentAssigned</field>
+        <fieldname="res_model">maintenance.equipment.category</field>
+        <fieldname="default"eval="True"/>
+        <fieldname="parent_id"ref="mt_mat_assign"/>
+        <fieldname="relation_field">category_id</field>
+    </record>
+    <recordid="equipment_team_maintenance"model="maintenance.team">
+        <fieldname="name">InternalMaintenance</field>
     </record>
 </data>
 </flectra>

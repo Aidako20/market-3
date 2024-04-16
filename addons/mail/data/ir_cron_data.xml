@@ -1,58 +1,58 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record forcecreate="True" id="ir_cron_mail_scheduler_action" model="ir.cron">
-            <field name="name">Mail: Email Queue Manager</field>
-            <field name="model_id" ref="model_mail_mail"/>
-            <field name="state">code</field>
-            <field name="code">model.process_email_queue()</field>
-            <field name="user_id" ref="base.user_root"/>
-            <field name="interval_number">1</field>
-            <field name="interval_type">hours</field>
-            <field name="numbercall">-1</field>
-            <field eval="False" name="doall"/>
+    <datanoupdate="1">
+        <recordforcecreate="True"id="ir_cron_mail_scheduler_action"model="ir.cron">
+            <fieldname="name">Mail:EmailQueueManager</field>
+            <fieldname="model_id"ref="model_mail_mail"/>
+            <fieldname="state">code</field>
+            <fieldname="code">model.process_email_queue()</field>
+            <fieldname="user_id"ref="base.user_root"/>
+            <fieldname="interval_number">1</field>
+            <fieldname="interval_type">hours</field>
+            <fieldname="numbercall">-1</field>
+            <fieldeval="False"name="doall"/>
         </record>
 
-        <record id="ir_cron_module_update_notification" model="ir.cron">
-            <field name="name">Publisher: Update Notification</field>
-            <field name="model_id" ref="model_publisher_warranty_contract"/>
-            <field name="state">code</field>
-            <field name="code">model.update_notification(None)</field>
-            <field name="user_id" ref="base.user_root" />
-            <field name="interval_number">1</field>
-            <field name="interval_type">weeks</field>
-            <field name="numbercall">-1</field>
-            <field name="nextcall" eval="(DateTime.now() + timedelta(days=7)).strftime('%Y-%m-%d %H:%M:%S')" />
-            <field eval="False" name="doall" />
-            <field name="priority">1000</field>
+        <recordid="ir_cron_module_update_notification"model="ir.cron">
+            <fieldname="name">Publisher:UpdateNotification</field>
+            <fieldname="model_id"ref="model_publisher_warranty_contract"/>
+            <fieldname="state">code</field>
+            <fieldname="code">model.update_notification(None)</field>
+            <fieldname="user_id"ref="base.user_root"/>
+            <fieldname="interval_number">1</field>
+            <fieldname="interval_type">weeks</field>
+            <fieldname="numbercall">-1</field>
+            <fieldname="nextcall"eval="(DateTime.now()+timedelta(days=7)).strftime('%Y-%m-%d%H:%M:%S')"/>
+            <fieldeval="False"name="doall"/>
+            <fieldname="priority">1000</field>
         </record>
 
-        <record id="base.ir_cron_act" model="ir.actions.act_window">
-            <field name="domain" eval="[('id','!=', ref('mail.ir_cron_module_update_notification'))]"/>
+        <recordid="base.ir_cron_act"model="ir.actions.act_window">
+            <fieldname="domain"eval="[('id','!=',ref('mail.ir_cron_module_update_notification'))]"/>
         </record>
 
-        <record id="ir_cron_mail_notify_channel_moderators" model="ir.cron">
-            <field name="name">Mail: Notify channel moderators</field>
-            <field name="model_id" ref="model_mail_message"/>
-            <field name="state">code</field>
-            <field name="code">model._notify_moderators</field>
-            <field name="user_id" ref="base.user_root" />
-            <field name="interval_number">1</field>
-            <field name="interval_type">days</field>
-            <field name="numbercall">-1</field>
-            <field eval="False" name="doall" />
-            <field name="priority">1000</field>
+        <recordid="ir_cron_mail_notify_channel_moderators"model="ir.cron">
+            <fieldname="name">Mail:Notifychannelmoderators</field>
+            <fieldname="model_id"ref="model_mail_message"/>
+            <fieldname="state">code</field>
+            <fieldname="code">model._notify_moderators</field>
+            <fieldname="user_id"ref="base.user_root"/>
+            <fieldname="interval_number">1</field>
+            <fieldname="interval_type">days</field>
+            <fieldname="numbercall">-1</field>
+            <fieldeval="False"name="doall"/>
+            <fieldname="priority">1000</field>
         </record>
 
-        <record id="ir_cron_delete_notification" model="ir.cron">
-            <field name="name">Notification: Delete Notifications older than 6 Month</field>
-            <field name="interval_number">1</field>
-            <field name="interval_type">days</field>
-            <field name="numbercall">-1</field>
-            <field name="doall" eval="False"/>
-            <field name="model_id" ref="model_mail_notification"/>
-            <field name="code">model._gc_notifications(max_age_days=180)</field>
-            <field name="state">code</field>
+        <recordid="ir_cron_delete_notification"model="ir.cron">
+            <fieldname="name">Notification:DeleteNotificationsolderthan6Month</field>
+            <fieldname="interval_number">1</field>
+            <fieldname="interval_type">days</field>
+            <fieldname="numbercall">-1</field>
+            <fieldname="doall"eval="False"/>
+            <fieldname="model_id"ref="model_mail_notification"/>
+            <fieldname="code">model._gc_notifications(max_age_days=180)</field>
+            <fieldname="state">code</field>
         </record>
 
     </data>

@@ -1,159 +1,159 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
+    <datanoupdate="1">
 
-        <record id="base.partner_root" model="res.partner">
-            <field name="name">FlectraBot</field>
-            <field name="email">flectrabot@example.com</field>
-            <field name="image_1920" type="base64" file="mail/static/src/img/flectrabot.png"/>
-        </record>
-
-        <!-- user root should not receive emails at creation -->
-        <record id="base.user_root" model="res.users">
-            <field name="notification_type">inbox</field>
+        <recordid="base.partner_root"model="res.partner">
+            <fieldname="name">FlectraBot</field>
+            <fieldname="email">flectrabot@example.com</field>
+            <fieldname="image_1920"type="base64"file="mail/static/src/img/flectrabot.png"/>
         </record>
 
-        <!-- Catchall Email Alias -->
-        <record id="icp_mail_catchall_alias" model="ir.config_parameter">
-            <field name="key">mail.catchall.alias</field>
-            <field name="value">catchall</field>
+        <!--userrootshouldnotreceiveemailsatcreation-->
+        <recordid="base.user_root"model="res.users">
+            <fieldname="notification_type">inbox</field>
         </record>
 
-        <!-- Bounce Email Alias -->
-        <record id="icp_mail_bounce_alias" model="ir.config_parameter">
-            <field name="key">mail.bounce.alias</field>
-            <field name="value">bounce</field>
+        <!--CatchallEmailAlias-->
+        <recordid="icp_mail_catchall_alias"model="ir.config_parameter">
+            <fieldname="key">mail.catchall.alias</field>
+            <fieldname="value">catchall</field>
         </record>
 
-        <!-- Discussion subtype for messaging / Chatter -->
-        <record id="mt_comment" model="mail.message.subtype">
-            <field name="name">Discussions</field>
-            <field name="sequence" eval="0"/>
+        <!--BounceEmailAlias-->
+        <recordid="icp_mail_bounce_alias"model="ir.config_parameter">
+            <fieldname="key">mail.bounce.alias</field>
+            <fieldname="value">bounce</field>
         </record>
-        <record id="mt_note" model="mail.message.subtype">
-            <field name="name">Note</field>
-            <field name="default" eval="False"/>
-            <field name="internal" eval="True"/>
-            <field name="sequence" eval="100"/>
+
+        <!--Discussionsubtypeformessaging/Chatter-->
+        <recordid="mt_comment"model="mail.message.subtype">
+            <fieldname="name">Discussions</field>
+            <fieldname="sequence"eval="0"/>
         </record>
-        <record id="mt_activities" model="mail.message.subtype">
-            <field name="name">Activities</field>
-            <field name="default" eval="False"/>
-            <field name="internal" eval="True"/>
-            <field name="sequence" eval="90"/>
+        <recordid="mt_note"model="mail.message.subtype">
+            <fieldname="name">Note</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="internal"eval="True"/>
+            <fieldname="sequence"eval="100"/>
+        </record>
+        <recordid="mt_activities"model="mail.message.subtype">
+            <fieldname="name">Activities</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="internal"eval="True"/>
+            <fieldname="sequence"eval="90"/>
         </record>
 
     </data>
     <data>
-        <template id="message_notification_email">
+        <templateid="message_notification_email">
 <div>
-<div t-if="has_button_access" itemscope="itemscope" itemtype="http://schema.org/EmailMessage">
-    <div itemprop="potentialAction" itemscope="itemscope" itemtype="http://schema.org/ViewAction">
-        <link itemprop="target" t-att-href="button_access['url']"/>
-        <link itemprop="url" t-att-href="button_access['url']"/>
-        <meta itemprop="name" t-att-content="button_access['title']"/>
+<divt-if="has_button_access"itemscope="itemscope"itemtype="http://schema.org/EmailMessage">
+    <divitemprop="potentialAction"itemscope="itemscope"itemtype="http://schema.org/ViewAction">
+        <linkitemprop="target"t-att-href="button_access['url']"/>
+        <linkitemprop="url"t-att-href="button_access['url']"/>
+        <metaitemprop="name"t-att-content="button_access['title']"/>
     </div>
 </div>
-<div t-if="has_button_access or len(actions) &gt; 0 or not is_discussion"
-        summary="o_mail_notification" style="padding: 0px; width:600px;">
-    <table cellspacing="0" cellpadding="0" border="0" style="width: 600px; margin-top: 5px;">
+<divt-if="has_button_accessorlen(actions)&gt;0ornotis_discussion"
+        summary="o_mail_notification"style="padding:0px;width:600px;">
+    <tablecellspacing="0"cellpadding="0"border="0"style="width:600px;margin-top:5px;">
     <tbody><tr>
-    <td valign="center">
-        <table cellspacing="0" cellpadding="0" border="0"><tr>
-            <td t-if="has_button_access" style="padding: 8px 12px; border-radius: 3px; background-color: #009EFB;">
-                <a t-att-href="button_access['url']" class="button-a button-a-primary"
-                    style="font-size: 12px; color: #FFFFFF; text-decoration: none !important; font-weight: 400;">
-                    <t t-esc="button_access['title']"/>
+    <tdvalign="center">
+        <tablecellspacing="0"cellpadding="0"border="0"><tr>
+            <tdt-if="has_button_access"style="padding:8px12px;border-radius:3px;background-color:#009EFB;">
+                <at-att-href="button_access['url']"class="button-abutton-a-primary"
+                    style="font-size:12px;color:#FFFFFF;text-decoration:none!important;font-weight:400;">
+                    <tt-esc="button_access['title']"/>
                 </a>
             </td>
-            <td t-if="actions">
-                <t t-foreach="actions" t-as="action">
+            <tdt-if="actions">
+                <tt-foreach="actions"t-as="action">
                     |
-                    <a t-att-href="action['url']" style="color: #009EFB; text-decoration:none !important;">
-                        <t t-esc="action['title']"/>
+                    <at-att-href="action['url']"style="color:#009EFB;text-decoration:none!important;">
+                        <tt-esc="action['title']"/>
                     </a>
                 </t>
             </td>
         </tr></table>
     </td>
-    <td valign="center" align="right">
-        <img t-att-src="'/logo.png?company=%s' % (company.id or 0)" style="padding: 0px; margin: 0px; height: auto; max-width: 200px; max-height: 36px;" t-att-alt="'%s' % company.name"/>
+    <tdvalign="center"align="right">
+        <imgt-att-src="'/logo.png?company=%s'%(company.idor0)"style="padding:0px;margin:0px;height:auto;max-width:200px;max-height:36px;"t-att-alt="'%s'%company.name"/>
     </td>
     </tr><tr>
-    <td colspan="2" style="text-align:center;">
-        <hr width="100%"
-            style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin:4px 0 12px 0;"/>
-        <p t-if="subtype.internal" style="background-color: #f2dede; padding: 5px; margin-bottom: 16px;">
-            <strong>Internal communication</strong>: Replying will post an internal note. Followers won't receive any email notification.
+    <tdcolspan="2"style="text-align:center;">
+        <hrwidth="100%"
+            style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:4px012px0;"/>
+        <pt-if="subtype.internal"style="background-color:#f2dede;padding:5px;margin-bottom:16px;">
+            <strong>Internalcommunication</strong>:Replyingwillpostaninternalnote.Followerswon'treceiveanyemailnotification.
         </p>
     </td>
     </tr></tbody>
     </table>
 </div>
-<div t-raw="message.body"/>
-<ul t-if="tracking_values">
-    <t t-foreach="tracking_values" t-as="tracking">
-        <li><t t-esc="tracking[0]"/>: <t t-esc="tracking[1]"/> -&gt; <t t-esc="tracking[2]"/></li>
+<divt-raw="message.body"/>
+<ult-if="tracking_values">
+    <tt-foreach="tracking_values"t-as="tracking">
+        <li><tt-esc="tracking[0]"/>:<tt-esc="tracking[1]"/>-&gt;<tt-esc="tracking[2]"/></li>
     </t>
 </ul>
-<div t-if="signature" t-raw="signature" style="font-size: 13px;"/>
-<p style="color: #555555; margin-top:32px;">
+<divt-if="signature"t-raw="signature"style="font-size:13px;"/>
+<pstyle="color:#555555;margin-top:32px;">
     Sent
-    <span t-if="company.name">
+    <spant-if="company.name">
     by
-    <a t-if="website_url" t-att-href="website_url" style="text-decoration:none; color: #009EFB;">
-        <span t-esc="company.name"/>
+    <at-if="website_url"t-att-href="website_url"style="text-decoration:none;color:#009EFB;">
+        <spant-esc="company.name"/>
     </a>
-    <span t-if="not website_url" t-esc="company.name"/>
+    <spant-if="notwebsite_url"t-esc="company.name"/>
     </span>
     using
-    <a target="_blank" href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=email" style="text-decoration:none; color: #009EFB;">Flectra</a>.
+    <atarget="_blank"href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=email"style="text-decoration:none;color:#009EFB;">Flectra</a>.
 </p>
 </div>
         </template>
 
-        <template id="mail_notification_borders">
+        <templateid="mail_notification_borders">
 <div>
-<table border="0" width="100%" cellpadding="0" bgcolor="#ededed" style="padding: 20px; background-color: #ededed; border-collapse:separate;" summary="o_mail_notification">
+<tableborder="0"width="100%"cellpadding="0"bgcolor="#ededed"style="padding:20px;background-color:#ededed;border-collapse:separate;"summary="o_mail_notification">
 <tbody>
-    <!-- HEADER -->
+    <!--HEADER-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table width="590" border="0" cellpadding="0" bgcolor="#009EFB" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px; border-collapse:separate;">
-                <tr><td valign="middle">
-                    <span style="font-size:20px; color:white; font-weight: bold;">
-                        <t t-esc="message.record_name"/>
+        <tdalign="center"style="min-width:590px;">
+            <tablewidth="590"border="0"cellpadding="0"bgcolor="#009EFB"style="min-width:590px;background-color:rgb(135,90,123);padding:20px;border-collapse:separate;">
+                <tr><tdvalign="middle">
+                    <spanstyle="font-size:20px;color:white;font-weight:bold;">
+                        <tt-esc="message.record_name"/>
                     </span>
-                </td><td valign="middle" align="right">
-                    <img t-att-src="'/logo.png?company=%s' % (company.id or 0)" style="padding: 0px; margin: 0px; height: auto; width: 80px;" t-att-alt="'%s' % company.name"/>
+                </td><tdvalign="middle"align="right">
+                    <imgt-att-src="'/logo.png?company=%s'%(company.idor0)"style="padding:0px;margin:0px;height:auto;width:80px;"t-att-alt="'%s'%company.name"/>
                 </td></tr>
             </table>
         </td>
     </tr>
-    <!-- CONTENT -->
+    <!--CONTENT-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table width="590" border="0" cellpadding="0" bgcolor="#ffffff" style="min-width: 590px; background-color: rgb(255, 255, 255); padding: 20px; border-collapse:separate;">
-                <tbody><td valign="top" style="font-family:Arial,Helvetica,sans-serif; color: #555; font-size: 14px;">
-                    <t t-raw="message.body"/>
+        <tdalign="center"style="min-width:590px;">
+            <tablewidth="590"border="0"cellpadding="0"bgcolor="#ffffff"style="min-width:590px;background-color:rgb(255,255,255);padding:20px;border-collapse:separate;">
+                <tbody><tdvalign="top"style="font-family:Arial,Helvetica,sans-serif;color:#555;font-size:14px;">
+                    <tt-raw="message.body"/>
                 </td></tbody>
             </table>
         </td>
     </tr>
-    <!-- FOOTER -->
+    <!--FOOTER-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table width="590" border="0" cellpadding="0" bgcolor="#009EFB" style="min-width: 590px; background-color: rgb(135,90,123); padding: 20px; border-collapse:separate;">
-                <tr><td valign="middle" align="left" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
-                    <t t-esc="company.name"/><br/>
-                    <t t-esc="company.phone"/>
-                </td><td valign="middle" align="right" style="color: #fff; padding-top: 10px; padding-bottom: 10px; font-size: 12px;">
-                    <t t-if="company.email">
-                        <a t-att-href="'mailto:%s' % company.email" style="text-decoration:none; color: white;"><t t-esc="company.email"/></a><br/>
+        <tdalign="center"style="min-width:590px;">
+            <tablewidth="590"border="0"cellpadding="0"bgcolor="#009EFB"style="min-width:590px;background-color:rgb(135,90,123);padding:20px;border-collapse:separate;">
+                <tr><tdvalign="middle"align="left"style="color:#fff;padding-top:10px;padding-bottom:10px;font-size:12px;">
+                    <tt-esc="company.name"/><br/>
+                    <tt-esc="company.phone"/>
+                </td><tdvalign="middle"align="right"style="color:#fff;padding-top:10px;padding-bottom:10px;font-size:12px;">
+                    <tt-if="company.email">
+                        <at-att-href="'mailto:%s'%company.email"style="text-decoration:none;color:white;"><tt-esc="company.email"/></a><br/>
                     </t>
-                    <t t-if="company.website">
-                        <a t-att-href="'%s' % company.website" style="text-decoration:none; color: white;">
-                            <t t-esc="company.website"/>
+                    <tt-if="company.website">
+                        <at-att-href="'%s'%company.website"style="text-decoration:none;color:white;">
+                            <tt-esc="company.website"/>
                         </a>
                     </t>
                 </td></tr>
@@ -161,8 +161,8 @@
         </td>
     </tr>
     <tr>
-        <td align="center" style="padding: 8px; font-size:11px;">
-            Powered by <a target="_blank" href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=email">Flectra</a>.
+        <tdalign="center"style="padding:8px;font-size:11px;">
+            Poweredby<atarget="_blank"href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=email">Flectra</a>.
         </td>
     </tr>
 </tbody>
@@ -170,47 +170,47 @@
 </div>
         </template>
 
-        <template id="mail_notification_light">
-<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;"><tr><td align="center">
-<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
+        <templateid="mail_notification_light">
+<tableborder="0"cellpadding="0"cellspacing="0"style="padding-top:16px;background-color:#F1F1F1;font-family:Verdana,Arial,sans-serif;color:#454748;width:100%;border-collapse:separate;"><tr><tdalign="center">
+<tableborder="0"cellpadding="0"cellspacing="0"width="590"style="padding:24px;background-color:white;color:#454748;border-collapse:separate;">
 <tbody>
-    <!-- HEADER -->
+    <!--HEADER-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: white; padding: 0; border-collapse:separate;">
-                <tr><td valign="middle">
-                    <span style="font-size: 10px;">Your <t t-esc="model_description or 'document'"/></span><br/>
-                    <span style="font-size: 20px; font-weight: bold;">
-                        <t t-esc="message.record_name and message.record_name.replace('/','-') or ''"/>
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="100%"style="background-color:white;padding:0;border-collapse:separate;">
+                <tr><tdvalign="middle">
+                    <spanstyle="font-size:10px;">Your<tt-esc="model_descriptionor'document'"/></span><br/>
+                    <spanstyle="font-size:20px;font-weight:bold;">
+                        <tt-esc="message.record_nameandmessage.record_name.replace('/','-')or''"/>
                     </span>
-                </td><td valign="middle" align="right">
-                    <img t-att-src="'/logo.png?company=%s' % (company.id or 0)" style="padding: 0px; margin: 0px; height: 48px;" t-att-alt="'%s' % company.name"/>
+                </td><tdvalign="middle"align="right">
+                    <imgt-att-src="'/logo.png?company=%s'%(company.idor0)"style="padding:0px;margin:0px;height:48px;"t-att-alt="'%s'%company.name"/>
                 </td></tr>
-                <tr><td colspan="2" style="text-align:center;">
-                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin:4px 0px 32px 0px;"/>
+                <tr><tdcolspan="2"style="text-align:center;">
+                  <hrwidth="100%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:4px0px32px0px;"/>
                 </td></tr>
             </table>
         </td>
     </tr>
-    <!-- CONTENT -->
+    <!--CONTENT-->
     <tr>
-        <td style="min-width: 590px;">
-            <t t-raw="message.body"/>
+        <tdstyle="min-width:590px;">
+            <tt-raw="message.body"/>
         </td>
     </tr>
-    <!-- FOOTER -->
+    <!--FOOTER-->
     <tr>
-        <td align="center" style="min-width: 590px; padding: 0 8px 0 8px; font-size:11px;">
-            <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 4px 0px;"/>
-            <b t-esc="company.name"/><br/>
-            <div style="color: #999999;">
-                <t t-esc="company.phone"/>
-                <t t-if="company.email"> |
-                    <a t-att-href="'mailto:%s' % company.email" style="text-decoration:none; color: #999999;"><t t-esc="company.email"/></a>
+        <tdalign="center"style="min-width:590px;padding:08px08px;font-size:11px;">
+            <hrwidth="100%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:16px0px4px0px;"/>
+            <bt-esc="company.name"/><br/>
+            <divstyle="color:#999999;">
+                <tt-esc="company.phone"/>
+                <tt-if="company.email">|
+                    <at-att-href="'mailto:%s'%company.email"style="text-decoration:none;color:#999999;"><tt-esc="company.email"/></a>
                 </t>
-                <t t-if="company.website"> |
-                    <a t-att-href="'%s' % company.website" style="text-decoration:none; color: #999999;">
-                        <t t-esc="company.website"/>
+                <tt-if="company.website">|
+                    <at-att-href="'%s'%company.website"style="text-decoration:none;color:#999999;">
+                        <tt-esc="company.website"/>
                     </a>
                 </t>
             </div>
@@ -219,83 +219,83 @@
 </tbody>
 </table>
 </td></tr>
-<!-- POWERED BY -->
-<tr><td align="center" style="min-width: 590px;">
-        Powered by <a target="_blank" href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=email" style="color: #009EFB;">Flectra</a>
+<!--POWEREDBY-->
+<tr><tdalign="center"style="min-width:590px;">
+        Poweredby<atarget="_blank"href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=email"style="color:#009EFB;">Flectra</a>
 </td></tr>
 </table>
         </template>
 
-        <!-- Information on model to use this notification template
-          * if the record has an online access defined in get_access_action, having
-            a _get_share_url methods is required (like sale order and invoice);
-          * this template works best with portal-enable models although it is not
-            a complete requirement currently;
+        <!--Informationonmodeltousethisnotificationtemplate
+          *iftherecordhasanonlineaccessdefinedinget_access_action,having
+            a_get_share_urlmethodsisrequired(likesaleorderandinvoice);
+          *thistemplateworksbestwithportal-enablemodelsalthoughitisnot
+            acompleterequirementcurrently;
         -->
-        <template id="mail_notification_paynow" name="Mail: Pay Now mail notification template">
-<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;"><tr><td align="center">
-<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
+        <templateid="mail_notification_paynow"name="Mail:PayNowmailnotificationtemplate">
+<tableborder="0"cellpadding="0"cellspacing="0"style="padding-top:16px;background-color:#F1F1F1;font-family:Verdana,Arial,sans-serif;color:#454748;width:100%;border-collapse:separate;"><tr><tdalign="center">
+<tableborder="0"cellpadding="0"cellspacing="0"width="590"style="padding:24px;background-color:white;color:#454748;border-collapse:separate;">
 <tbody>
-    <!-- HEADER -->
+    <!--HEADER-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <t t-set="access_action" t-value="record.with_context(force_website=True).get_access_action()"/>
-            <t t-set="is_online" t-value="access_action and access_action['type'] == 'ir.actions.act_url'"/>
-            <t t-set="base_url" t-value="record.get_base_url()"/>
-            <t t-set="share_url" t-value="record._get_share_url(redirect=True, signup_partner=notification_is_customer, share_token=notification_is_customer)"/>
-            <t t-set="access_url" t-value="is_online and share_url and base_url + share_url or ''"/>
-            <t t-set="access_name">
-                View <t t-esc="model_description or 'document'"/>
+        <tdalign="center"style="min-width:590px;">
+            <tt-set="access_action"t-value="record.with_context(force_website=True).get_access_action()"/>
+            <tt-set="is_online"t-value="access_actionandaccess_action['type']=='ir.actions.act_url'"/>
+            <tt-set="base_url"t-value="record.get_base_url()"/>
+            <tt-set="share_url"t-value="record._get_share_url(redirect=True,signup_partner=notification_is_customer,share_token=notification_is_customer)"/>
+            <tt-set="access_url"t-value="is_onlineandshare_urlandbase_url+share_urlor''"/>
+            <tt-set="access_name">
+                View<tt-esc="model_descriptionor'document'"/>
             </t>
-            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: white; padding: 0; border-collapse:separate;">
-                <tr><td valign="middle">
-                    <span style="font-size: 10px;">Your <t t-esc="model_description or 'document'"/></span><br/>
-                    <span style="font-size: 20px; font-weight: bold;">
-                        <t t-esc="message.record_name"/>
+            <tableborder="0"cellpadding="0"cellspacing="0"width="100%"style="background-color:white;padding:0;border-collapse:separate;">
+                <tr><tdvalign="middle">
+                    <spanstyle="font-size:10px;">Your<tt-esc="model_descriptionor'document'"/></span><br/>
+                    <spanstyle="font-size:20px;font-weight:bold;">
+                        <tt-esc="message.record_name"/>
                     </span>
-                </td><td valign="middle" align="right">
-                    <img t-att-src="'/logo.png?company=%s' % (company.id or 0)" style="padding: 0px; margin: 0px; height: 48px;" t-att-alt="'%s' % company.name"/>
+                </td><tdvalign="middle"align="right">
+                    <imgt-att-src="'/logo.png?company=%s'%(company.idor0)"style="padding:0px;margin:0px;height:48px;"t-att-alt="'%s'%company.name"/>
                 </td></tr>
-                <tr><td colspan="2" style="text-align:center;">
-                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin:4px 0px 32px 0px;"/>
+                <tr><tdcolspan="2"style="text-align:center;">
+                  <hrwidth="100%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:4px0px32px0px;"/>
                 </td></tr>
             </table>
         </td>
     </tr>
-    <!-- CONTENT -->
+    <!--CONTENT-->
     <tr>
-        <td style="padding: 0">
-            <t t-raw="message.body"/>
-            <div t-if="is_online and not record._context.get('proforma')" style="margin: 32px 0px 32px 0px; text-align: center;">
-                <a t-att-href="access_url"
-                    style="background-color: #009EFB; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
-                    <t t-esc="access_name"/>
+        <tdstyle="padding:0">
+            <tt-raw="message.body"/>
+            <divt-if="is_onlineandnotrecord._context.get('proforma')"style="margin:32px0px32px0px;text-align:center;">
+                <at-att-href="access_url"
+                    style="background-color:#009EFB;padding:8px16px8px16px;text-decoration:none;color:#fff;border-radius:5px;font-size:13px;">
+                    <tt-esc="access_name"/>
                 </a>
             </div>
-            <t t-if="record.user_id and not record.env.user._is_superuser() and signature != ''">
-                <div style="margin: 0px; padding: 0px; font-size:13px;">
-                    Best regards,
+            <tt-if="record.user_idandnotrecord.env.user._is_superuser()andsignature!=''">
+                <divstyle="margin:0px;padding:0px;font-size:13px;">
+                    Bestregards,
                 </div>
                 <div>&amp;nbsp;</div>
-                <div t-if="record.user_id.sudo().signature" style="font-size: 13px;">
-                    <div t-raw="record.user_id.sudo().signature"/>
+                <divt-if="record.user_id.sudo().signature"style="font-size:13px;">
+                    <divt-raw="record.user_id.sudo().signature"/>
                 </div>
             </t>
         </td>
     </tr>
-    <!-- FOOTER -->
+    <!--FOOTER-->
     <tr>
-        <td style="padding: 0; font-size:11px;">
-            <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 32px 0px 4px 0px;"/>
-            <b t-esc="company.name"/><br/>
-            <div style="color: #999999">
-                <t t-esc="company.phone"/>
-                <t t-if="company.email"> |
-                    <a t-att-href="'mailto:%s' % company.email" style="text-decoration:none; color: #999999;"><t t-esc="company.email"/></a>
+        <tdstyle="padding:0;font-size:11px;">
+            <hrwidth="100%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:32px0px4px0px;"/>
+            <bt-esc="company.name"/><br/>
+            <divstyle="color:#999999">
+                <tt-esc="company.phone"/>
+                <tt-if="company.email">|
+                    <at-att-href="'mailto:%s'%company.email"style="text-decoration:none;color:#999999;"><tt-esc="company.email"/></a>
                 </t>
-                <t t-if="company.website"> |
-                    <a t-att-href="'%s' % company.website" style="text-decoration:none; color: #999999;">
-                        <t t-esc="company.website"/>
+                <tt-if="company.website">|
+                    <at-att-href="'%s'%company.website"style="text-decoration:none;color:#999999;">
+                        <tt-esc="company.website"/>
                     </a>
                 </t>
             </div>
@@ -304,110 +304,110 @@
 </tbody>
 </table>
 </td></tr>
-<!-- POWERED BY -->
-<tr><td align="center" style="min-width: 590px; padding: 8px; font-size:11px;">
-    Powered by <a target="_blank" href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=email" style="color: #009EFB;">Flectra</a>
+<!--POWEREDBY-->
+<tr><tdalign="center"style="min-width:590px;padding:8px;font-size:11px;">
+    Poweredby<atarget="_blank"href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=email"style="color:#009EFB;">Flectra</a>
 </td></tr>
 </table>
         </template>
 
-        <!-- Discuss utility templates for notifications -->
-        <template id="message_user_assigned">
-<p style="margin: 0px;">
-    <span>Dear <t t-esc="object.user_id.sudo().name"/>,</span><br />
-    <span style="margin-top: 8px;">You have been assigned to the <t t-esc="model_description or 'document'"/> <t t-esc="object.display_name"/>.</span>
+        <!--Discussutilitytemplatesfornotifications-->
+        <templateid="message_user_assigned">
+<pstyle="margin:0px;">
+    <span>Dear<tt-esc="object.user_id.sudo().name"/>,</span><br/>
+    <spanstyle="margin-top:8px;">Youhavebeenassignedtothe<tt-esc="model_descriptionor'document'"/><tt-esc="object.display_name"/>.</span>
 </p>
-<p style="margin-top: 24px; margin-bottom: 16px;">
-    <a t-att-href="access_link" t-att-data-oe-model="object._name" t-att-data-oe-id="object.id" style="background-color:#009EFB; padding: 10px; text-decoration: none; color: #fff; border-radius: 5px;">
-            View <t t-esc="model_description or 'document'"/>
+<pstyle="margin-top:24px;margin-bottom:16px;">
+    <at-att-href="access_link"t-att-data-oe-model="object._name"t-att-data-oe-id="object.id"style="background-color:#009EFB;padding:10px;text-decoration:none;color:#fff;border-radius:5px;">
+            View<tt-esc="model_descriptionor'document'"/>
     </a>
 </p>
         </template>
 
-        <template id="message_activity_done">
+        <templateid="message_activity_done">
 <div>
     <p>
-        <span t-attf-class="fa #{activity.activity_type_id.icon} fa-fw"/><span t-field="activity.activity_type_id.name"/> done
-        <t t-if="display_assignee"> (originally assigned to <span t-field="activity.user_id.name"/>)</t>
-        <span t-if="activity.summary">: </span><span t-if="activity.summary" t-field="activity.summary"/>
+        <spant-attf-class="fa#{activity.activity_type_id.icon}fa-fw"/><spant-field="activity.activity_type_id.name"/>done
+        <tt-if="display_assignee">(originallyassignedto<spant-field="activity.user_id.name"/>)</t>
+        <spant-if="activity.summary">:</span><spant-if="activity.summary"t-field="activity.summary"/>
     </p>
-    <div t-if="feedback">
-        <t t-foreach="feedback.split('\n')" t-as="feedback_line">
-            <t t-esc="feedback_line"/>
-            <br t-if="not feedback_line_last"/>
+    <divt-if="feedback">
+        <tt-foreach="feedback.split('\n')"t-as="feedback_line">
+            <tt-esc="feedback_line"/>
+            <brt-if="notfeedback_line_last"/>
         </t>
     </div>
-    <t t-if="activity.note and activity.note != '&lt;p&gt;&lt;br&gt;&lt;/p&gt;'"><!-- <p></br></p> -->
-        <div class="o_mail_note_title"><strong>Original note:</strong></div>
-        <div t-field="activity.note"/>
+    <tt-if="activity.noteandactivity.note!='&lt;p&gt;&lt;br&gt;&lt;/p&gt;'"><!--<p></br></p>-->
+        <divclass="o_mail_note_title"><strong>Originalnote:</strong></div>
+        <divt-field="activity.note"/>
     </t>
 </div>
         </template>
 
-        <template id="message_activity_assigned">
-<div style="margin: 0px; padding: 0px; font-size: 13px;">
-    <span t-field="activity.create_uid.name"/> assigned you an activity <span t-field="activity.activity_type_id.name"/>
-    <t t-if="activity.summary">(<span t-field="activity.summary"/>)</t>
-    on <span t-field="activity.res_name"/>
-    to close for <span t-field="activity.date_deadline"/>.<br />
-    <p style="margin: 16px 0px 16px 0px;">
-        <a t-att-href="access_link" t-att-data-oe-model="activity.res_model" t-att-data-oe-id="activity.res_id"
-            style="background-color:#009EFB; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;">
-            View <t t-esc="model_description or 'document'"/>
+        <templateid="message_activity_assigned">
+<divstyle="margin:0px;padding:0px;font-size:13px;">
+    <spant-field="activity.create_uid.name"/>assignedyouanactivity<spant-field="activity.activity_type_id.name"/>
+    <tt-if="activity.summary">(<spant-field="activity.summary"/>)</t>
+    on<spant-field="activity.res_name"/>
+    toclosefor<spant-field="activity.date_deadline"/>.<br/>
+    <pstyle="margin:16px0px16px0px;">
+        <at-att-href="access_link"t-att-data-oe-model="activity.res_model"t-att-data-oe-id="activity.res_id"
+            style="background-color:#009EFB;padding:8px16px8px16px;text-decoration:none;color:#fff;border-radius:5px;">
+            View<tt-esc="model_descriptionor'document'"/>
         </a>
     </p>
-    <div t-if="activity.note" style="margin-top: 8px;" t-field="activity.note"/>
+    <divt-if="activity.note"style="margin-top:8px;"t-field="activity.note"/>
 </div>
         </template>
 
-        <template id="message_origin_link">
+        <templateid="message_origin_link">
             <p>
-                <t t-if="edit">This <t t-esc="self.env['ir.model']._get(self._name).name.lower()"/> has been modified from:</t>
-                <t t-else="">This <t t-esc="self.env['ir.model']._get(self._name).name.lower()"/> has been created from:</t>
-                <t t-foreach="origin" t-as="o">
-                    <a href="#" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id"> <t t-esc="o.display_name"/></a><span t-if="origin.ids[-1:] != o.ids">, </span>
+                <tt-if="edit">This<tt-esc="self.env['ir.model']._get(self._name).name.lower()"/>hasbeenmodifiedfrom:</t>
+                <tt-else="">This<tt-esc="self.env['ir.model']._get(self._name).name.lower()"/>hasbeencreatedfrom:</t>
+                <tt-foreach="origin"t-as="o">
+                    <ahref="#"t-att-data-oe-model="o._name"t-att-data-oe-id="o.id"><tt-esc="o.display_name"/></a><spant-if="origin.ids[-1:]!=o.ids">,</span>
                 </t>
             </p>
         </template>
 
-        <!-- Mail gateway templates -->
-        <template id="mail_bounce_catchall">
+        <!--Mailgatewaytemplates-->
+        <templateid="mail_bounce_catchall">
 <div>
-    <p>Hello <t t-esc="message['email_from']"/>,</p>
-    <p>The email sent to <t t-esc="message['to']"/> cannot be processed. This address
-    is used to collect replies and should not be used to directly contact <t t-esc="res_company.name"/>.</p>
-    <p>Please contact us instead using <a t-att-href="'mailto:%s' % res_company.email"><t t-esc="res_company.email"/></a></p>
+    <p>Hello<tt-esc="message['email_from']"/>,</p>
+    <p>Theemailsentto<tt-esc="message['to']"/>cannotbeprocessed.Thisaddress
+    isusedtocollectrepliesandshouldnotbeusedtodirectlycontact<tt-esc="res_company.name"/>.</p>
+    <p>Pleasecontactusinsteadusing<at-att-href="'mailto:%s'%res_company.email"><tt-esc="res_company.email"/></a></p>
     <p>Regards,</p>
-    <p>The <t t-esc="res_company.name"/> team.</p>
+    <p>The<tt-esc="res_company.name"/>team.</p>
 </div>
-<blockquote><t t-esc="message['body']"/></blockquote>
+<blockquote><tt-esc="message['body']"/></blockquote>
         </template>
 
-        <!-- Mail bounce alias mail template -->
-        <template id="mail_bounce_alias_security">
-<div><t t-raw="body"/></div>
-<blockquote><t t-raw="message['body']"/></blockquote>
+        <!--Mailbouncealiasmailtemplate-->
+        <templateid="mail_bounce_alias_security">
+<div><tt-raw="body"/></div>
+<blockquote><tt-raw="message['body']"/></blockquote>
         </template>
 
-        <!-- Channel and moderation related data -->
-        <template id="mail_channel_notify_moderation">
+        <!--Channelandmoderationrelateddata-->
+        <templateid="mail_channel_notify_moderation">
 <div>
-    <p>Hello <t t-esc='record.name'/></p>
-    <p>You have messages to moderate, please go for the proceedings.</p><br/><br/>
-    <div style="text-align: center;">
-        <a href="/web#action=mail.action_discuss&amp;active_id=mail.box_moderation" style="background-color: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" class="o_default_snippet_text">Moderate Messages</a>
+    <p>Hello<tt-esc='record.name'/></p>
+    <p>Youhavemessagestomoderate,pleasegofortheproceedings.</p><br/><br/>
+    <divstyle="text-align:center;">
+        <ahref="/web#action=mail.action_discuss&amp;active_id=mail.box_moderation"style="background-color:#1abc9c;padding:20px;text-decoration:none;color:#fff;border-radius:5px;font-size:16px;"class="o_default_snippet_text">ModerateMessages</a>
         <br/><br/><br/>
     </div>
-    <p>Thank you!</p>
+    <p>Thankyou!</p>
 </div>
         </template>
 
-       <template id="mail_channel_send_guidelines">
+       <templateid="mail_channel_send_guidelines">
 <div>
-<p>Hello <t t-esc="partner.name"/>,</p>
-<p>Please find below the guidelines of the <t t-esc="channel.name"/> channel.</p>
+<p>Hello<tt-esc="partner.name"/>,</p>
+<p>Pleasefindbelowtheguidelinesofthe<tt-esc="channel.name"/>channel.</p>
 <p>
-<t t-esc="channel.moderation_guidelines_msg"/>
+<tt-esc="channel.moderation_guidelines_msg"/>
 </p>
 <p></p>
 </div>

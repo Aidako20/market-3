@@ -1,33 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="event_track_location5" model="event.track.location">
-        <field name="name">Le Foyer du lac</field>
+    <recordid="event_track_location5"model="event.track.location">
+        <fieldname="name">LeFoyerdulac</field>
     </record>
-    <record id="event_track_location6" model="event.track.location">
-        <field name="name">Theatre</field>
+    <recordid="event_track_location6"model="event.track.location">
+        <fieldname="name">Theatre</field>
     </record>
-    <record id="event_track_location7" model="event.track.location">
-        <field name="name">Lauzelle</field>
+    <recordid="event_track_location7"model="event.track.location">
+        <fieldname="name">Lauzelle</field>
     </record>
-    <record id="event_track_location8" model="event.track.location">
-        <field name="name">Foyer Royal</field>
+    <recordid="event_track_location8"model="event.track.location">
+        <fieldname="name">FoyerRoyal</field>
     </record>
-    <record id="event_track_location9" model="event.track.location">
-        <field name="name">Biereau</field>
+    <recordid="event_track_location9"model="event.track.location">
+        <fieldname="name">Biereau</field>
     </record>
-    <record id="event_track_location10" model="event.track.location">
-        <field name="name">Bruyère</field>
+    <recordid="event_track_location10"model="event.track.location">
+        <fieldname="name">Bruyère</field>
     </record>
 
-    <record id="event_track_location_online_1" model="event.track.location">
-        <field name="name">RD and Sales</field>
+    <recordid="event_track_location_online_1"model="event.track.location">
+        <fieldname="name">RDandSales</field>
     </record>
-    <record id="event_track_location_online_2" model="event.track.location">
-        <field name="name">Furniture</field>
+    <recordid="event_track_location_online_2"model="event.track.location">
+        <fieldname="name">Furniture</field>
     </record>
-    <record id="event_track_location_online_3" model="event.track.location">
-        <field name="name">Live with Customers</field>
+    <recordid="event_track_location_online_3"model="event.track.location">
+        <fieldname="name">LivewithCustomers</field>
     </record>
 
 </flectra>

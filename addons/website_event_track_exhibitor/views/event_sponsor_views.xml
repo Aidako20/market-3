@@ -1,83 +1,83 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-    <record id="event_sponsor_view_search" model="ir.ui.view">
-        <field name="name">event.sponsor.view.search.inherit.exhibitor</field>
-        <field name="model">event.sponsor</field>
-        <field name="inherit_id" ref="website_event_track.event_sponsor_view_search"/>
-        <field name="arch" type="xml">
-            <xpath expr="//filter[@name='archived']" position="after">
+    <recordid="event_sponsor_view_search"model="ir.ui.view">
+        <fieldname="name">event.sponsor.view.search.inherit.exhibitor</field>
+        <fieldname="model">event.sponsor</field>
+        <fieldname="inherit_id"ref="website_event_track.event_sponsor_view_search"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//filter[@name='archived']"position="after">
                 <separator/>
-                <filter string="Exhibitor" name="filter_is_exhibitor" domain="[('is_exhibitor', '=', True)]"/>
+                <filterstring="Exhibitor"name="filter_is_exhibitor"domain="[('is_exhibitor','=',True)]"/>
             </xpath>
         </field>
     </record>
 
-    <record id="event_sponsor_view_tree" model="ir.ui.view">
-        <field name="name">event.sponsor.view.tree.inherit.exhibitor</field>
-        <field name="model">event.sponsor</field>
-        <field name="inherit_id" ref="website_event_track.event_sponsor_view_tree"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='sponsor_type_id']" position="after">
-                <field name="is_published" optional="show"/>
-                <field name="is_exhibitor"/>
+    <recordid="event_sponsor_view_tree"model="ir.ui.view">
+        <fieldname="name">event.sponsor.view.tree.inherit.exhibitor</field>
+        <fieldname="model">event.sponsor</field>
+        <fieldname="inherit_id"ref="website_event_track.event_sponsor_view_tree"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='sponsor_type_id']"position="after">
+                <fieldname="is_published"optional="show"/>
+                <fieldname="is_exhibitor"/>
             </xpath>
         </field>
     </record>
 
-    <record id="event_sponsor_view_kanban" model="ir.ui.view">
-        <field name="name">event.sponsor.view.kanban.inherit.kanban</field>
-        <field name="model">event.sponsor</field>
-        <field name="inherit_id" ref="website_event_track.event_sponsor_view_kanban"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='partner_id']" position="replace">
-                <field name="name"/>
+    <recordid="event_sponsor_view_kanban"model="ir.ui.view">
+        <fieldname="name">event.sponsor.view.kanban.inherit.kanban</field>
+        <fieldname="model">event.sponsor</field>
+        <fieldname="inherit_id"ref="website_event_track.event_sponsor_view_kanban"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='partner_id']"position="replace">
+                <fieldname="name"/>
             </xpath>
         </field>
     </record>
 
-    <record id="event_sponsor_view_form" model="ir.ui.view">
-        <field name="name">event.sponsor.view.form.inherit.exhibitor</field>
-        <field name="model">event.sponsor</field>
-        <field name="inherit_id" ref="website_event_track.event_sponsor_view_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//widget[@name='web_ribbon']" position="before">
-                <div class="oe_button_box" name="button_box">
-                    <field name="website_url" invisible="1"/>
-                    <field name="is_published" widget="website_redirect_button"/>
+    <recordid="event_sponsor_view_form"model="ir.ui.view">
+        <fieldname="name">event.sponsor.view.form.inherit.exhibitor</field>
+        <fieldname="model">event.sponsor</field>
+        <fieldname="inherit_id"ref="website_event_track.event_sponsor_view_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//widget[@name='web_ribbon']"position="before">
+                <divclass="oe_button_box"name="button_box">
+                    <fieldname="website_url"invisible="1"/>
+                    <fieldname="is_published"widget="website_redirect_button"/>
                 </div>
             </xpath>
-            <xpath expr="//h1" position="after">
-                <div class="oe_title">
-                    <label for="subtitle" class="oe_edit_only"/>
-                    <field name="subtitle" placeholder="e.g. : Your best choice for your home"/>
+            <xpathexpr="//h1"position="after">
+                <divclass="oe_title">
+                    <labelfor="subtitle"class="oe_edit_only"/>
+                    <fieldname="subtitle"placeholder="e.g.:Yourbestchoiceforyourhome"/>
                 </div>
             </xpath>
-            <xpath expr="//field[@name='sponsor_type_id']" position="after">
-                <field name="is_exhibitor"/>
+            <xpathexpr="//field[@name='sponsor_type_id']"position="after">
+                <fieldname="is_exhibitor"/>
             </xpath>
-            <xpath expr="//field[@name='mobile']" position="after">
-                <label for="hour_from" string="Opening Hours"/>
-                <div class="o_row">
-                    <field name="hour_from" widget="float_time" nolabel="1" class="oe_inline"/>
-                    <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"/>
-                    <field name="hour_to" widget="float_time" nolabel="1" class="oe_inline"/>
-                    <field name="event_date_tz" nolabel="1" class="oe_inline"/>
+            <xpathexpr="//field[@name='mobile']"position="after">
+                <labelfor="hour_from"string="OpeningHours"/>
+                <divclass="o_row">
+                    <fieldname="hour_from"widget="float_time"nolabel="1"class="oe_inline"/>
+                    <iclass="fafa-long-arrow-rightmx-2"aria-label="Arrowicon"title="Arrow"/>
+                    <fieldname="hour_to"widget="float_time"nolabel="1"class="oe_inline"/>
+                    <fieldname="event_date_tz"nolabel="1"class="oe_inline"/>
                 </div>
             </xpath>
-            <xpath expr="//sheet/group" position="after">
+            <xpathexpr="//sheet/group"position="after">
                 <notebook>
-                    <page string="Description">
+                    <pagestring="Description">
                         <group>
-                            <field name="website_description" nolabel="1"/>
+                            <fieldname="website_description"nolabel="1"/>
                         </group>
                     </page>
-                    <page string="Exhibitor" attrs="{'invisible': [('is_exhibitor', '=', False)]}">
+                    <pagestring="Exhibitor"attrs="{'invisible':[('is_exhibitor','=',False)]}">
                         <group>
                             <group>
-                                <field name="room_name" attrs="{'required': [('is_exhibitor', '=', True)]}" string="Jitsi Name"/>
-                                <field name="room_lang_id"/>
-                                <field name="room_max_capacity" attrs="{'required': [('is_exhibitor', '=', True)]}"/>
-                                <field name="chat_room_id" groups="base.group_no_one"/>
+                                <fieldname="room_name"attrs="{'required':[('is_exhibitor','=',True)]}"string="JitsiName"/>
+                                <fieldname="room_lang_id"/>
+                                <fieldname="room_max_capacity"attrs="{'required':[('is_exhibitor','=',True)]}"/>
+                                <fieldname="chat_room_id"groups="base.group_no_one"/>
                             </group>
                         </group>
                     </page>
@@ -86,27 +86,27 @@
         </field>
     </record>
 
-    <record id="event_sponsor_action" model="ir.actions.act_window">
-        <field name="name">Event Sponsors</field>
-        <field name="res_model">event.sponsor</field>
-        <field name="view_mode">kanban,tree,form</field>
-        <field name="help" type="html">
-<p class="o_view_nocontent_smiling_face">
-    Create a Sponsor / Exhibitor
+    <recordid="event_sponsor_action"model="ir.actions.act_window">
+        <fieldname="name">EventSponsors</field>
+        <fieldname="res_model">event.sponsor</field>
+        <fieldname="view_mode">kanban,tree,form</field>
+        <fieldname="help"type="html">
+<pclass="o_view_nocontent_smiling_face">
+    CreateaSponsor/Exhibitor
 </p><p>
-    Sponsors might be advertised on your event pages footer.<br />
-    Exhibitors might have a dedicated page with chat room for people to connect with them.
+    Sponsorsmightbeadvertisedonyoureventpagesfooter.<br/>
+    Exhibitorsmighthaveadedicatedpagewithchatroomforpeopletoconnectwiththem.
 </p>
         </field>
     </record>
 
-    <record id="website_event_track.event_sponsor_action_from_event" model="ir.actions.act_window">
-        <field name="help" type="html">
-<p class="o_view_nocontent_smiling_face">
-    Create a Sponsor / Exhibitor
+    <recordid="website_event_track.event_sponsor_action_from_event"model="ir.actions.act_window">
+        <fieldname="help"type="html">
+<pclass="o_view_nocontent_smiling_face">
+    CreateaSponsor/Exhibitor
 </p><p>
-    Sponsors might be advertised on your event pages footer.<br />
-    Exhibitors might have a dedicated page with chat room for people to connect with them.
+    Sponsorsmightbeadvertisedonyoureventpagesfooter.<br/>
+    Exhibitorsmighthaveadedicatedpagewithchatroomforpeopletoconnectwiththem.
 </p>
         </field>
     </record>

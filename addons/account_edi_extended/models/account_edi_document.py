@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import models, fields, _
-import logging
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportmodels,fields,_
+importlogging
 
-_logger = logging.getLogger(__name__)
-DEFAULT_BLOCKING_LEVEL = 'warning'  # Keep previous behavior. TODO : when account_edi_extended is merged with account_edi, should be 'error' (document will not be processed again until forced retry or reset to draft)
+_logger=logging.getLogger(__name__)
+DEFAULT_BLOCKING_LEVEL='warning' #Keeppreviousbehavior.TODO:whenaccount_edi_extendedismergedwithaccount_edi,shouldbe'error'(documentwillnotbeprocessedagainuntilforcedretryorresettodraft)
 
 
-class AccountEdiDocument(models.Model):
-    _inherit = 'account.edi.document'
+classAccountEdiDocument(models.Model):
+    _inherit='account.edi.document'
 
-    blocking_level = fields.Selection(selection=[('info', 'Info'), ('warning', 'Warning'), ('error', 'Error')],
-                                     help="Blocks the document current operation depending on the error severity :\n"
-                                          "  * Info: the document is not blocked and everything is working as it should.\n"
-                                          "  * Warning : there is an error that doesn't prevent the current Electronic Invoicing operation to succeed.\n"
-                                          "  * Error : there is an error that blocks the current Electronic Invoicing operation.")
+    blocking_level=fields.Selection(selection=[('info','Info'),('warning','Warning'),('error','Error')],
+                                     help="Blocksthedocumentcurrentoperationdependingontheerrorseverity:\n"
+                                          " *Info:thedocumentisnotblockedandeverythingisworkingasitshould.\n"
+                                          " *Warning:thereisanerrorthatdoesn'tpreventthecurrentElectronicInvoicingoperationtosucceed.\n"
+                                          " *Error:thereisanerrorthatblocksthecurrentElectronicInvoicingoperation.")
 

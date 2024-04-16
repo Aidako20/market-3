@@ -1,12 +1,12 @@
-flectra.define('point_of_sale.PosContext', function (require) {
-    'use strict';
+flectra.define('point_of_sale.PosContext',function(require){
+    'usestrict';
 
-    const { Context } = owl;
+    const{Context}=owl;
 
-    // Create global context objects
-    // e.g. component.env.device = new Context({ isMobile: false });
-    return {
-        orderManagement: new Context({ searchString: '', selectedOrder: null }),
-        chrome: new Context({ showOrderSelector: true }),
+    //Createglobalcontextobjects
+    //e.g.component.env.device=newContext({isMobile:false});
+    return{
+        orderManagement:newContext({searchString:'',selectedOrder:null}),
+        chrome:newContext({showOrderSelector:true}),
     };
 });

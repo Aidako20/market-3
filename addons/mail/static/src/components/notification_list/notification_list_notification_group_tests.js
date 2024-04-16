@@ -1,538 +1,538 @@
-flectra.define('mail/static/src/components/notification_list/notification_list_notification_group_tests.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/notification_list/notification_list_notification_group_tests.js',function(require){
+'usestrict';
 
-const components = {
-    NotificationList: require('mail/static/src/components/notification_list/notification_list.js'),
+constcomponents={
+    NotificationList:require('mail/static/src/components/notification_list/notification_list.js'),
 };
 
-const {
+const{
     afterEach,
     afterNextRender,
     beforeEach,
     createRootComponent,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+}=require('mail/static/src/utils/test_utils.js');
 
-const Bus = require('web.Bus');
+constBus=require('web.Bus');
 
-QUnit.module('mail', {}, function () {
-QUnit.module('components', {}, function () {
-QUnit.module('notification_list', {}, function () {
-QUnit.module('notification_list_notification_group_tests.js', {
-    beforeEach() {
+QUnit.module('mail',{},function(){
+QUnit.module('components',{},function(){
+QUnit.module('notification_list',{},function(){
+QUnit.module('notification_list_notification_group_tests.js',{
+    beforeEach(){
         beforeEach(this);
 
         /**
-         * @param {Object} param0
-         * @param {string} [param0.filter='all']
+         *@param{Object}param0
+         *@param{string}[param0.filter='all']
          */
-        this.createNotificationListComponent = async ({ filter = 'all' } = {}) => {
-            await createRootComponent(this, components.NotificationList, {
-                props: { filter },
-                target: this.widget.el,
+        this.createNotificationListComponent=async({filter='all'}={})=>{
+            awaitcreateRootComponent(this,components.NotificationList,{
+                props:{filter},
+                target:this.widget.el,
             });
         };
 
-        this.start = async params => {
-            const { env, widget } = await start(Object.assign({}, params, {
-                data: this.data,
+        this.start=asyncparams=>{
+            const{env,widget}=awaitstart(Object.assign({},params,{
+                data:this.data,
             }));
-            this.env = env;
-            this.widget = widget;
+            this.env=env;
+            this.widget=widget;
         };
     },
-    afterEach() {
+    afterEach(){
         afterEach(this);
     },
 });
 
-QUnit.test('notification group basic layout', async function (assert) {
+QUnit.test('notificationgroupbasiclayout',asyncfunction(assert){
     assert.expect(10);
 
-    // message that is expected to have a failure
+    //messagethatisexpectedtohaveafailure
     this.data['mail.message'].records.push({
-        id: 11, // random unique id, will be used to link failure to message
-        message_type: 'email', // message must be email (goal of the test)
-        model: 'mail.channel', // expected value to link message to channel
-        res_id: 31, // id of a random channel
-        res_model_name: "Channel", // random res model name, will be asserted in the test
+        id:11,//randomuniqueid,willbeusedtolinkfailuretomessage
+        message_type:'email',//messagemustbeemail(goalofthetest)
+        model:'mail.channel',//expectedvaluetolinkmessagetochannel
+        res_id:31,//idofarandomchannel
+        res_model_name:"Channel",//randomresmodelname,willbeassertedinthetest
     });
-    // failure that is expected to be used in the test
+    //failurethatisexpectedtobeusedinthetest
     this.data['mail.notification'].records.push({
-        mail_message_id: 11, // id of the related message
-        notification_status: 'exception', // necessary value to have a failure
-        notification_type: 'email', // expected failure type for email message
+        mail_message_id:11,//idoftherelatedmessage
+        notification_status:'exception',//necessaryvaluetohaveafailure
+        notification_type:'email',//expectedfailuretypeforemailmessage
     });
-    await this.start();
-    await this.createNotificationListComponent();
+    awaitthis.start();
+    awaitthis.createNotificationListComponent();
     assert.containsOnce(
         document.body,
         '.o_NotificationGroup',
-        "should have 1 notification group"
+        "shouldhave1notificationgroup"
     );
     assert.containsOnce(
         document.body,
         '.o_NotificationGroup_name',
-        "should have 1 group name"
+        "shouldhave1groupname"
     );
     assert.strictEqual(
         document.querySelector('.o_NotificationGroup_name').textContent,
         "Channel",
-        "should have model name as group name"
+        "shouldhavemodelnameasgroupname"
     );
     assert.containsOnce(
         document.body,
         '.o_NotificationGroup_counter',
-        "should have 1 group counter"
+        "shouldhave1groupcounter"
     );
     assert.strictEqual(
         document.querySelector('.o_NotificationGroup_counter').textContent.trim(),
         "(1)",
-        "should have only 1 notification in the group"
+        "shouldhaveonly1notificationinthegroup"
     );
     assert.containsOnce(
         document.body,
         '.o_NotificationGroup_date',
-        "should have 1 group date"
+        "shouldhave1groupdate"
     );
     assert.strictEqual(
         document.querySelector('.o_NotificationGroup_date').textContent,
-        "a few seconds ago",
-        "should have the group date corresponding to now"
+        "afewsecondsago",
+        "shouldhavethegroupdatecorrespondingtonow"
     );
     assert.containsOnce(
         document.body,
         '.o_NotificationGroup_inlineText',
-        "should have 1 group text"
+        "shouldhave1grouptext"
     );
     assert.strictEqual(
         document.querySelector('.o_NotificationGroup_inlineText').textContent.trim(),
-        "An error occurred when sending an email.",
-        "should have the group text corresponding to email"
+        "Anerroroccurredwhensendinganemail.",
+        "shouldhavethegrouptextcorrespondingtoemail"
     );
     assert.containsOnce(
         document.body,
         '.o_NotificationGroup_markAsRead',
-        "should have 1 mark as read button"
+        "shouldhave1markasreadbutton"
     );
 });
 
-QUnit.test('mark as read', async function (assert) {
+QUnit.test('markasread',asyncfunction(assert){
     assert.expect(6);
 
-    // message that is expected to have a failure
+    //messagethatisexpectedtohaveafailure
     this.data['mail.message'].records.push({
-        id: 11, // random unique id, will be used to link failure to message
-        message_type: 'email', // message must be email (goal of the test)
-        model: 'mail.channel', // expected value to link message to channel
-        res_id: 31, // id of a random channel
-        res_model_name: "Channel", // random res model name, will be asserted in the test
+        id:11,//randomuniqueid,willbeusedtolinkfailuretomessage
+        message_type:'email',//messagemustbeemail(goalofthetest)
+        model:'mail.channel',//expectedvaluetolinkmessagetochannel
+        res_id:31,//idofarandomchannel
+        res_model_name:"Channel",//randomresmodelname,willbeassertedinthetest
     });
-    // failure that is expected to be used in the test
+    //failurethatisexpectedtobeusedinthetest
     this.data['mail.notification'].records.push({
-        mail_message_id: 11, // id of the related message
-        notification_status: 'exception', // necessary value to have a failure
-        notification_type: 'email', // expected failure type for email message
+        mail_message_id:11,//idoftherelatedmessage
+        notification_status:'exception',//necessaryvaluetohaveafailure
+        notification_type:'email',//expectedfailuretypeforemailmessage
     });
-    const bus = new Bus();
-    bus.on('do-action', null, payload => {
+    constbus=newBus();
+    bus.on('do-action',null,payload=>{
         assert.step('do_action');
         assert.strictEqual(
             payload.action,
             'mail.mail_resend_cancel_action',
-            "action should be the one to cancel email"
+            "actionshouldbetheonetocancelemail"
         );
         assert.strictEqual(
             payload.options.additional_context.default_model,
             'mail.channel',
-            "action should have the group model as default_model"
+            "actionshouldhavethegroupmodelasdefault_model"
         );
         assert.strictEqual(
             payload.options.additional_context.unread_counter,
             1,
-            "action should have the group notification length as unread_counter"
+            "actionshouldhavethegroupnotificationlengthasunread_counter"
         );
     });
-    await this.start({ env: { bus } });
-    await this.createNotificationListComponent();
+    awaitthis.start({env:{bus}});
+    awaitthis.createNotificationListComponent();
     assert.containsOnce(
         document.body,
         '.o_NotificationGroup_markAsRead',
-        "should have 1 mark as read button"
+        "shouldhave1markasreadbutton"
     );
 
     document.querySelector('.o_NotificationGroup_markAsRead').click();
     assert.verifySteps(
         ['do_action'],
-        "should do an action to display the cancel email dialog"
+        "shoulddoanactiontodisplaythecancelemaildialog"
     );
 });
 
-QUnit.test('grouped notifications by document', async function (assert) {
-    // If some failures linked to a document refers to a same document, a single
-    // notification should group all those failures.
+QUnit.test('groupednotificationsbydocument',asyncfunction(assert){
+    //Ifsomefailureslinkedtoadocumentreferstoasamedocument,asingle
+    //notificationshouldgroupallthosefailures.
     assert.expect(5);
 
     this.data['mail.message'].records.push(
-        // first message that is expected to have a failure
+        //firstmessagethatisexpectedtohaveafailure
         {
-            id: 11, // random unique id, will be used to link failure to message
-            message_type: 'email', // message must be email (goal of the test)
-            model: 'res.partner', // same model as second message (and not `mail.channel`)
-            res_id: 31, // same res_id as second message
-            res_model_name: "Partner", // random related model name
+            id:11,//randomuniqueid,willbeusedtolinkfailuretomessage
+            message_type:'email',//messagemustbeemail(goalofthetest)
+            model:'res.partner',//samemodelassecondmessage(andnot`mail.channel`)
+            res_id:31,//sameres_idassecondmessage
+            res_model_name:"Partner",//randomrelatedmodelname
         },
-        // second message that is expected to have a failure
+        //secondmessagethatisexpectedtohaveafailure
         {
-            id: 12, // random unique id, will be used to link failure to message
-            message_type: 'email', // message must be email (goal of the test)
-            model: 'res.partner', // same model as first message (and not `mail.channel`)
-            res_id: 31, // same res_id as first message
-            res_model_name: "Partner", // same related model name for consistency
+            id:12,//randomuniqueid,willbeusedtolinkfailuretomessage
+            message_type:'email',//messagemustbeemail(goalofthetest)
+            model:'res.partner',//samemodelasfirstmessage(andnot`mail.channel`)
+            res_id:31,//sameres_idasfirstmessage
+            res_model_name:"Partner",//samerelatedmodelnameforconsistency
         }
     );
     this.data['mail.notification'].records.push(
-        // first failure that is expected to be used in the test
+        //firstfailurethatisexpectedtobeusedinthetest
         {
-            mail_message_id: 11, // id of the related first message
-            notification_status: 'exception', // one possible value to have a failure
-            notification_type: 'email', // expected failure type for email message
+            mail_message_id:11,//idoftherelatedfirstmessage
+            notification_status:'exception',//onepossiblevaluetohaveafailure
+            notification_type:'email',//expectedfailuretypeforemailmessage
         },
-        // second failure that is expected to be used in the test
+        //secondfailurethatisexpectedtobeusedinthetest
         {
-            mail_message_id: 12, // id of the related second message
-            notification_status: 'bounce', // other possible value to have a failure
-            notification_type: 'email', // expected failure type for email message
+            mail_message_id:12,//idoftherelatedsecondmessage
+            notification_status:'bounce',//otherpossiblevaluetohaveafailure
+            notification_type:'email',//expectedfailuretypeforemailmessage
         }
     );
-    await this.start({ hasChatWindow: true });
-    await this.createNotificationListComponent();
+    awaitthis.start({hasChatWindow:true});
+    awaitthis.createNotificationListComponent();
 
     assert.containsOnce(
         document.body,
         '.o_NotificationGroup',
-        "should have 1 notification group"
+        "shouldhave1notificationgroup"
     );
     assert.containsOnce(
         document.body,
         '.o_NotificationGroup_counter',
-        "should have 1 group counter"
+        "shouldhave1groupcounter"
     );
     assert.strictEqual(
         document.querySelector('.o_NotificationGroup_counter').textContent.trim(),
         "(2)",
-        "should have 2 notifications in the group"
+        "shouldhave2notificationsinthegroup"
     );
     assert.containsNone(
         document.body,
         '.o_ChatWindow',
-        "should have no chat window initially"
+        "shouldhavenochatwindowinitially"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_NotificationGroup').click()
     );
     assert.containsOnce(
         document.body,
         '.o_ChatWindow',
-        "should have opened the thread in a chat window after clicking on it"
+        "shouldhaveopenedthethreadinachatwindowafterclickingonit"
     );
 });
 
-QUnit.test('grouped notifications by document model', async function (assert) {
-    // If all failures linked to a document model refers to different documents,
-    // a single notification should group all failures that are linked to this
-    // document model.
+QUnit.test('groupednotificationsbydocumentmodel',asyncfunction(assert){
+    //Ifallfailureslinkedtoadocumentmodelreferstodifferentdocuments,
+    //asinglenotificationshouldgroupallfailuresthatarelinkedtothis
+    //documentmodel.
     assert.expect(12);
 
     this.data['mail.message'].records.push(
-        // first message that is expected to have a failure
+        //firstmessagethatisexpectedtohaveafailure
         {
-            id: 11, // random unique id, will be used to link failure to message
-            message_type: 'email', // message must be email (goal of the test)
-            model: 'res.partner', // same model as second message (and not `mail.channel`)
-            res_id: 31, // different res_id from second message
-            res_model_name: "Partner", // random related model name
+            id:11,//randomuniqueid,willbeusedtolinkfailuretomessage
+            message_type:'email',//messagemustbeemail(goalofthetest)
+            model:'res.partner',//samemodelassecondmessage(andnot`mail.channel`)
+            res_id:31,//differentres_idfromsecondmessage
+            res_model_name:"Partner",//randomrelatedmodelname
         },
-        // second message that is expected to have a failure
+        //secondmessagethatisexpectedtohaveafailure
         {
-            id: 12, // random unique id, will be used to link failure to message
-            message_type: 'email', // message must be email (goal of the test)
-            model: 'res.partner', // same model as first message (and not `mail.channel`)
-            res_id: 32, // different res_id from first message
-            res_model_name: "Partner", // same related model name for consistency
+            id:12,//randomuniqueid,willbeusedtolinkfailuretomessage
+            message_type:'email',//messagemustbeemail(goalofthetest)
+            model:'res.partner',//samemodelasfirstmessage(andnot`mail.channel`)
+            res_id:32,//differentres_idfromfirstmessage
+            res_model_name:"Partner",//samerelatedmodelnameforconsistency
         }
     );
     this.data['mail.notification'].records.push(
-        // first failure that is expected to be used in the test
+        //firstfailurethatisexpectedtobeusedinthetest
         {
-            mail_message_id: 11, // id of the related first message
-            notification_status: 'exception', // one possible value to have a failure
-            notification_type: 'email', // expected failure type for email message
+            mail_message_id:11,//idoftherelatedfirstmessage
+            notification_status:'exception',//onepossiblevaluetohaveafailure
+            notification_type:'email',//expectedfailuretypeforemailmessage
         },
-        // second failure that is expected to be used in the test
+        //secondfailurethatisexpectedtobeusedinthetest
         {
-            mail_message_id: 12, // id of the related second message
-            notification_status: 'bounce', // other possible value to have a failure
-            notification_type: 'email', // expected failure type for email message
+            mail_message_id:12,//idoftherelatedsecondmessage
+            notification_status:'bounce',//otherpossiblevaluetohaveafailure
+            notification_type:'email',//expectedfailuretypeforemailmessage
         }
     );
-    const bus = new Bus();
-    bus.on('do-action', null, payload => {
+    constbus=newBus();
+    bus.on('do-action',null,payload=>{
         assert.step('do_action');
         assert.strictEqual(
             payload.action.name,
-            "Mail Failures",
-            "action should have 'Mail Failures' as name",
+            "MailFailures",
+            "actionshouldhave'MailFailures'asname",
         );
         assert.strictEqual(
             payload.action.type,
             'ir.actions.act_window',
-            "action should have the type act_window"
+            "actionshouldhavethetypeact_window"
         );
         assert.strictEqual(
             payload.action.view_mode,
             'kanban,list,form',
-            "action should have 'kanban,list,form' as view_mode"
+            "actionshouldhave'kanban,list,form'asview_mode"
         );
         assert.strictEqual(
             JSON.stringify(payload.action.views),
-            JSON.stringify([[false, 'kanban'], [false, 'list'], [false, 'form']]),
-            "action should have correct views"
+            JSON.stringify([[false,'kanban'],[false,'list'],[false,'form']]),
+            "actionshouldhavecorrectviews"
         );
         assert.strictEqual(
             payload.action.target,
             'current',
-            "action should have 'current' as target"
+            "actionshouldhave'current'astarget"
         );
         assert.strictEqual(
             payload.action.res_model,
             'res.partner',
-            "action should have the group model as res_model"
+            "actionshouldhavethegroupmodelasres_model"
         );
         assert.strictEqual(
             JSON.stringify(payload.action.domain),
-            JSON.stringify([['message_has_error', '=', true]]),
-            "action should have 'message_has_error' as domain"
+            JSON.stringify([['message_has_error','=',true]]),
+            "actionshouldhave'message_has_error'asdomain"
         );
     });
 
-    await this.start({ env: { bus } });
-    await this.createNotificationListComponent();
+    awaitthis.start({env:{bus}});
+    awaitthis.createNotificationListComponent();
 
     assert.containsOnce(
         document.body,
         '.o_NotificationGroup',
-        "should have 1 notification group"
+        "shouldhave1notificationgroup"
     );
     assert.containsOnce(
         document.body,
         '.o_NotificationGroup_counter',
-        "should have 1 group counter"
+        "shouldhave1groupcounter"
     );
     assert.strictEqual(
         document.querySelector('.o_NotificationGroup_counter').textContent.trim(),
         "(2)",
-        "should have 2 notifications in the group"
+        "shouldhave2notificationsinthegroup"
     );
 
     document.querySelector('.o_NotificationGroup').click();
     assert.verifySteps(
         ['do_action'],
-        "should do an action to display the related records"
+        "shoulddoanactiontodisplaytherelatedrecords"
     );
 });
 
-QUnit.test('different mail.channel are not grouped', async function (assert) {
-    // `mail.channel` is a special case where notifications are not grouped when
-    // they are linked to different channels, even though the model is the same.
+QUnit.test('differentmail.channelarenotgrouped',asyncfunction(assert){
+    //`mail.channel`isaspecialcasewherenotificationsarenotgroupedwhen
+    //theyarelinkedtodifferentchannels,eventhoughthemodelisthesame.
     assert.expect(6);
 
-    this.data['mail.channel'].records.push({ id: 31 }, { id: 32 });
+    this.data['mail.channel'].records.push({id:31},{id:32});
     this.data['mail.message'].records.push(
-        // first message that is expected to have a failure
+        //firstmessagethatisexpectedtohaveafailure
         {
-            id: 11, // random unique id, will be used to link failure to message
-            message_type: 'email', // message must be email (goal of the test)
-            model: 'mail.channel', // testing a channel is the goal of the test
-            res_id: 31, // different res_id from second message
-            res_model_name: "Channel", // random related model name
+            id:11,//randomuniqueid,willbeusedtolinkfailuretomessage
+            message_type:'email',//messagemustbeemail(goalofthetest)
+            model:'mail.channel',//testingachannelisthegoalofthetest
+            res_id:31,//differentres_idfromsecondmessage
+            res_model_name:"Channel",//randomrelatedmodelname
         },
-        // second message that is expected to have a failure
+        //secondmessagethatisexpectedtohaveafailure
         {
-            id: 12, // random unique id, will be used to link failure to message
-            message_type: 'email', // message must be email (goal of the test)
-            model: 'mail.channel', // testing a channel is the goal of the test
-            res_id: 32, // different res_id from first message
-            res_model_name: "Channel", // same related model name for consistency
+            id:12,//randomuniqueid,willbeusedtolinkfailuretomessage
+            message_type:'email',//messagemustbeemail(goalofthetest)
+            model:'mail.channel',//testingachannelisthegoalofthetest
+            res_id:32,//differentres_idfromfirstmessage
+            res_model_name:"Channel",//samerelatedmodelnameforconsistency
         }
     );
     this.data['mail.notification'].records.push(
-        // first failure that is expected to be used in the test
+        //firstfailurethatisexpectedtobeusedinthetest
         {
-            mail_message_id: 11, // id of the related first message
-            notification_status: 'exception', // one possible value to have a failure
-            notification_type: 'email', // expected failure type for email message
+            mail_message_id:11,//idoftherelatedfirstmessage
+            notification_status:'exception',//onepossiblevaluetohaveafailure
+            notification_type:'email',//expectedfailuretypeforemailmessage
         },
-        // second failure that is expected to be used in the test
+        //secondfailurethatisexpectedtobeusedinthetest
         {
-            mail_message_id: 12, // id of the related second message
-            notification_status: 'bounce', // other possible value to have a failure
-            notification_type: 'email', // expected failure type for email message
+            mail_message_id:12,//idoftherelatedsecondmessage
+            notification_status:'bounce',//otherpossiblevaluetohaveafailure
+            notification_type:'email',//expectedfailuretypeforemailmessage
         }
     );
-    await this.start({
-        hasChatWindow: true, // needed to assert thread.open
+    awaitthis.start({
+        hasChatWindow:true,//neededtoassertthread.open
     });
-    await this.createNotificationListComponent();
+    awaitthis.createNotificationListComponent();
     assert.containsN(
         document.body,
         '.o_NotificationGroup',
         2,
-        "should have 2 notifications group"
+        "shouldhave2notificationsgroup"
     );
-    const groups = document.querySelectorAll('.o_NotificationGroup');
+    constgroups=document.querySelectorAll('.o_NotificationGroup');
     assert.containsOnce(
         groups[0],
         '.o_NotificationGroup_counter',
-        "should have 1 group counter in first group"
+        "shouldhave1groupcounterinfirstgroup"
     );
     assert.strictEqual(
         groups[0].querySelector('.o_NotificationGroup_counter').textContent.trim(),
         "(1)",
-        "should have 1 notification in first group"
+        "shouldhave1notificationinfirstgroup"
     );
     assert.containsOnce(
         groups[1],
         '.o_NotificationGroup_counter',
-        "should have 1 group counter in second group"
+        "shouldhave1groupcounterinsecondgroup"
     );
     assert.strictEqual(
         groups[1].querySelector('.o_NotificationGroup_counter').textContent.trim(),
         "(1)",
-        "should have 1 notification in second group"
+        "shouldhave1notificationinsecondgroup"
     );
 
-    await afterNextRender(() => groups[0].click());
+    awaitafterNextRender(()=>groups[0].click());
     assert.containsOnce(
         document.body,
         '.o_ChatWindow',
-        "should have opened the channel related to the first group in a chat window"
+        "shouldhaveopenedthechannelrelatedtothefirstgroupinachatwindow"
     );
 });
 
-QUnit.test('multiple grouped notifications by document model, sorted by the most recent message of each group', async function (assert) {
+QUnit.test('multiplegroupednotificationsbydocumentmodel,sortedbythemostrecentmessageofeachgroup',asyncfunction(assert){
     assert.expect(9);
 
     this.data['mail.message'].records.push(
-        // first message that is expected to have a failure
+        //firstmessagethatisexpectedtohaveafailure
         {
-            id: 11, // random unique id, will be used to link failure to message
-            message_type: 'email', // message must be email (goal of the test)
-            model: 'res.partner', // different model from second message
-            res_id: 31, // random unique id, useful to link failure to message
-            res_model_name: "Partner", // random related model name
+            id:11,//randomuniqueid,willbeusedtolinkfailuretomessage
+            message_type:'email',//messagemustbeemail(goalofthetest)
+            model:'res.partner',//differentmodelfromsecondmessage
+            res_id:31,//randomuniqueid,usefultolinkfailuretomessage
+            res_model_name:"Partner",//randomrelatedmodelname
         },
-        // second message that is expected to have a failure
+        //secondmessagethatisexpectedtohaveafailure
         {
-            id: 12, // random unique id, will be used to link failure to message
-            message_type: 'email', // message must be email (goal of the test)
-            model: 'res.company', // different model from first message
-            res_id: 32, // random unique id, useful to link failure to message
-            res_model_name: "Company", // random related model name
+            id:12,//randomuniqueid,willbeusedtolinkfailuretomessage
+            message_type:'email',//messagemustbeemail(goalofthetest)
+            model:'res.company',//differentmodelfromfirstmessage
+            res_id:32,//randomuniqueid,usefultolinkfailuretomessage
+            res_model_name:"Company",//randomrelatedmodelname
         }
     );
     this.data['mail.notification'].records.push(
-        // first failure that is expected to be used in the test
+        //firstfailurethatisexpectedtobeusedinthetest
         {
-            mail_message_id: 11, // id of the related first message
-            notification_status: 'exception', // one possible value to have a failure
-            notification_type: 'email', // expected failure type for email message
+            mail_message_id:11,//idoftherelatedfirstmessage
+            notification_status:'exception',//onepossiblevaluetohaveafailure
+            notification_type:'email',//expectedfailuretypeforemailmessage
         },
-        // second failure that is expected to be used in the test
+        //secondfailurethatisexpectedtobeusedinthetest
         {
-            mail_message_id: 12, // id of the related second message
-            notification_status: 'bounce', // other possible value to have a failure
-            notification_type: 'email', // expected failure type for email message
+            mail_message_id:12,//idoftherelatedsecondmessage
+            notification_status:'bounce',//otherpossiblevaluetohaveafailure
+            notification_type:'email',//expectedfailuretypeforemailmessage
         }
     );
-    await this.start();
-    await this.createNotificationListComponent();
+    awaitthis.start();
+    awaitthis.createNotificationListComponent();
     assert.containsN(
         document.body,
         '.o_NotificationGroup',
         2,
-        "should have 2 notifications group"
+        "shouldhave2notificationsgroup"
     );
-    const groups = document.querySelectorAll('.o_NotificationGroup');
+    constgroups=document.querySelectorAll('.o_NotificationGroup');
     assert.containsOnce(
         groups[0],
         '.o_NotificationGroup_name',
-        "should have 1 group name in first group"
+        "shouldhave1groupnameinfirstgroup"
     );
     assert.strictEqual(
         groups[0].querySelector('.o_NotificationGroup_name').textContent,
         "Company",
-        "should have first model name as group name"
+        "shouldhavefirstmodelnameasgroupname"
     );
     assert.containsOnce(
         groups[0],
         '.o_NotificationGroup_counter',
-        "should have 1 group counter in first group"
+        "shouldhave1groupcounterinfirstgroup"
     );
     assert.strictEqual(
         groups[0].querySelector('.o_NotificationGroup_counter').textContent.trim(),
         "(1)",
-        "should have 1 notification in first group"
+        "shouldhave1notificationinfirstgroup"
     );
     assert.containsOnce(
         groups[1],
         '.o_NotificationGroup_name',
-        "should have 1 group name in second group"
+        "shouldhave1groupnameinsecondgroup"
     );
     assert.strictEqual(
         groups[1].querySelector('.o_NotificationGroup_name').textContent,
         "Partner",
-        "should have second model name as group name"
+        "shouldhavesecondmodelnameasgroupname"
     );
     assert.containsOnce(
         groups[1],
         '.o_NotificationGroup_counter',
-        "should have 1 group counter in second group"
+        "shouldhave1groupcounterinsecondgroup"
     );
     assert.strictEqual(
         groups[1].querySelector('.o_NotificationGroup_counter').textContent.trim(),
         "(1)",
-        "should have 1 notification in second group"
+        "shouldhave1notificationinsecondgroup"
     );
 });
 
-QUnit.test('non-failure notifications are ignored', async function (assert) {
+QUnit.test('non-failurenotificationsareignored',asyncfunction(assert){
     assert.expect(1);
 
     this.data['mail.message'].records.push(
-        // message that is expected to have a notification
+        //messagethatisexpectedtohaveanotification
         {
-            id: 11, // random unique id, will be used to link failure to message
-            message_type: 'email', // message must be email (goal of the test)
-            model: 'res.partner', // random model
-            res_id: 31, // random unique id, useful to link failure to message
+            id:11,//randomuniqueid,willbeusedtolinkfailuretomessage
+            message_type:'email',//messagemustbeemail(goalofthetest)
+            model:'res.partner',//randommodel
+            res_id:31,//randomuniqueid,usefultolinkfailuretomessage
         }
     );
     this.data['mail.notification'].records.push(
-        // notification that is expected to be used in the test
+        //notificationthatisexpectedtobeusedinthetest
         {
-            mail_message_id: 11, // id of the related first message
-            notification_status: 'ready', // non-failure status
-            notification_type: 'email', // expected notification type for email message
+            mail_message_id:11,//idoftherelatedfirstmessage
+            notification_status:'ready',//non-failurestatus
+            notification_type:'email',//expectednotificationtypeforemailmessage
         },
     );
-    await this.start();
-    await this.createNotificationListComponent();
+    awaitthis.start();
+    awaitthis.createNotificationListComponent();
     assert.containsNone(
         document.body,
         '.o_NotificationGroup',
-        "should have 0 notification group"
+        "shouldhave0notificationgroup"
     );
 });
 

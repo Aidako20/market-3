@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<flectra noupdate="1">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<flectranoupdate="1">
 
-    <record id="product_product_ad_valorem" model="product.product">
-        <field name="name">Ad-Valorem</field>
-        <field name="type">service</field>
-        <field name="default_code">AD_VALOREM</field>
-        <field name="description">Cargo para calculo de Ad-Valorem en DIN</field>
-        <field name="sale_ok" eval="False"/>
-        <field name="uom_id" ref="uom.product_uom_unit"/>
+    <recordid="product_product_ad_valorem"model="product.product">
+        <fieldname="name">Ad-Valorem</field>
+        <fieldname="type">service</field>
+        <fieldname="default_code">AD_VALOREM</field>
+        <fieldname="description">CargoparacalculodeAd-ValoremenDIN</field>
+        <fieldname="sale_ok"eval="False"/>
+        <fieldname="uom_id"ref="uom.product_uom_unit"/>
     </record>
 
 </flectra>

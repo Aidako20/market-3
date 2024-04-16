@@ -1,108 +1,108 @@
-flectra.define("website.ace", function (require) {
-"use strict";
+flectra.define("website.ace",function(require){
+"usestrict";
 
-var AceEditor = require('web_editor.ace');
+varAceEditor=require('web_editor.ace');
 
 /**
- * Extends the default view editor so that the URL hash is updated with view ID
+ *ExtendsthedefaultvieweditorsothattheURLhashisupdatedwithviewID
  */
-var WebsiteAceEditor = AceEditor.extend({
-    hash: '#advanced-view-editor',
+varWebsiteAceEditor=AceEditor.extend({
+    hash:'#advanced-view-editor',
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    do_hide: function () {
-        this._super.apply(this, arguments);
-        window.location.hash = "";
+    do_hide:function(){
+        this._super.apply(this,arguments);
+        window.location.hash="";
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _displayResource: function () {
-        this._super.apply(this, arguments);
+    _displayResource:function(){
+        this._super.apply(this,arguments);
         this._updateHash();
     },
     /**
-     * @override
+     *@override
      */
-    _saveResources: function () {
-        return this._super.apply(this, arguments).then((function () {
-            var defs = [];
-            if (this.currentType === 'xml') {
-                // When saving a view, the view ID might change. Thus, the
-                // active ID in the URL will be incorrect. After the save
-                // reload, that URL ID won't be found and JS will crash.
-                // We need to find the new ID (either because the view became
-                // specific or because its parent was edited too and the view
-                // got copy/unlink).
-                var selectedView = _.findWhere(this.views, {id: this._getSelectedResource()});
-                var context;
-                this.trigger_up('context_get', {
-                    callback: function (ctx) {
-                        context = ctx;
+    _saveResources:function(){
+        returnthis._super.apply(this,arguments).then((function(){
+            vardefs=[];
+            if(this.currentType==='xml'){
+                //Whensavingaview,theviewIDmightchange.Thus,the
+                //activeIDintheURLwillbeincorrect.Afterthesave
+                //reload,thatURLIDwon'tbefoundandJSwillcrash.
+                //WeneedtofindthenewID(eitherbecausetheviewbecame
+                //specificorbecauseitsparentwaseditedtooandtheview
+                //gotcopy/unlink).
+                varselectedView=_.findWhere(this.views,{id:this._getSelectedResource()});
+                varcontext;
+                this.trigger_up('context_get',{
+                    callback:function(ctx){
+                        context=ctx;
                     },
                 });
                 defs.push(this._rpc({
-                    model: 'ir.ui.view',
-                    method: 'search_read',
-                    fields: ['id'],
-                    domain: [['key', '=', selectedView.key], ['website_id', '=', context.website_id]],
-                }).then((function (view) {
-                    if (view[0]) {
+                    model:'ir.ui.view',
+                    method:'search_read',
+                    fields:['id'],
+                    domain:[['key','=',selectedView.key],['website_id','=',context.website_id]],
+                }).then((function(view){
+                    if(view[0]){
                         this._updateHash(view[0].id);
                     }
                 }).bind(this)));
             }
-            return Promise.all(defs).then((function () {
+            returnPromise.all(defs).then((function(){
                 window.location.reload();
-                return new Promise(function () {});
+                returnnewPromise(function(){});
             }));
         }).bind(this));
     },
     /**
-     * @override
+     *@override
      */
-    _switchType(type) {
-        const ret = this._super(...arguments);
+    _switchType(type){
+        constret=this._super(...arguments);
 
-        if (type === 'scss') {
-            // By default show the user_custom_rules.scss one as some people
-            // would write rules in user_custom_bootstrap_overridden.scss
-            // otherwise, not reading the comment inside explaining how that
-            // file should be used.
+        if(type==='scss'){
+            //Bydefaultshowtheuser_custom_rules.scssoneassomepeople
+            //wouldwriterulesinuser_custom_bootstrap_overridden.scss
+            //otherwise,notreadingthecommentinsideexplaininghowthat
+            //fileshouldbeused.
             this._displayResource('/website/static/src/scss/user_custom_rules.scss');
         }
 
-        return ret;
+        returnret;
     },
     /**
-     * @override
+     *@override
      */
-    _resetResource: function () {
-        return this._super.apply(this, arguments).then((function () {
+    _resetResource:function(){
+        returnthis._super.apply(this,arguments).then((function(){
             window.location.reload();
-            return new Promise(function () {});
+            returnnewPromise(function(){});
         }).bind(this));
     },
     /**
-     * Adds the current resource ID in the URL.
+     *AddsthecurrentresourceIDintheURL.
      *
-     * @private
+     *@private
      */
-    _updateHash: function (resID) {
-        window.location.hash = this.hash + "?res=" + (resID || this._getSelectedResource());
+    _updateHash:function(resID){
+        window.location.hash=this.hash+"?res="+(resID||this._getSelectedResource());
     },
 });
 
-return WebsiteAceEditor;
+returnWebsiteAceEditor;
 });

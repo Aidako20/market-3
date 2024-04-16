@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<flectra noupdate="1">
-    <record id="payment.payment_acquirer_alipay" model="payment.acquirer">
-        <field name="name">Alipay</field>
-        <field name="provider">alipay</field>
-        <field name="company_id" ref="base.main_company"/>
-        <field name="view_template_id" ref="alipay_form"/>
+<?xmlversion="1.0"encoding="utf-8"?>
+<flectranoupdate="1">
+    <recordid="payment.payment_acquirer_alipay"model="payment.acquirer">
+        <fieldname="name">Alipay</field>
+        <fieldname="provider">alipay</field>
+        <fieldname="company_id"ref="base.main_company"/>
+        <fieldname="view_template_id"ref="alipay_form"/>
     </record>
 </flectra>

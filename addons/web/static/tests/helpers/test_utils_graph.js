@@ -1,28 +1,28 @@
-flectra.define('web.test_utils_graph', function () {
-"use strict";
+flectra.define('web.test_utils_graph',function(){
+"usestrict";
 
 /**
- * Graph Test Utils
+ *GraphTestUtils
  *
- * This module defines various utility functions to help test graph views.
+ *Thismoduledefinesvariousutilityfunctionstohelptestgraphviews.
  *
- * Note that all methods defined in this module are exported in the main
- * testUtils file.
+ *Notethatallmethodsdefinedinthismoduleareexportedinthemain
+ *testUtilsfile.
  */
 
 
 /**
- * Reloads a graph view.
+ *Reloadsagraphview.
  *
- * @param {GraphController} graph
- * @param {[Object]} params given to the controller reload method
+ *@param{GraphController}graph
+ *@param{[Object]}paramsgiventothecontrollerreloadmethod
  */
-function reload(graph, params) {
-    return graph.reload(params);
+functionreload(graph,params){
+    returngraph.reload(params);
 }
 
-return {
-    reload: reload,
+return{
+    reload:reload,
 };
 
 });

@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import logging
+importlogging
 
-from flectra import http
-from flectra.http import request
-from flectra.addons.payment_adyen.controllers.main import AdyenController
+fromflectraimporthttp
+fromflectra.httpimportrequest
+fromflectra.addons.payment_adyen.controllers.mainimportAdyenController
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
 
-class PosRestaurantAdyenController(AdyenController):
+classPosRestaurantAdyenController(AdyenController):
 
     @http.route()
-    def adyen_notification(self, **post):
-        if post.get('eventCode') in ['CAPTURE', 'AUTHORISATION_ADJUSTMENT'] and post.get('success') != 'true':
-                _logger.warning('%s for transaction_id %s failed', post.get('eventCode'), post.get('originalReference'))
-        return super(PosRestaurantAdyenController, self).adyen_notification(**post)
+    defadyen_notification(self,**post):
+        ifpost.get('eventCode')in['CAPTURE','AUTHORISATION_ADJUSTMENT']andpost.get('success')!='true':
+                _logger.warning('%sfortransaction_id%sfailed',post.get('eventCode'),post.get('originalReference'))
+        returnsuper(PosRestaurantAdyenController,self).adyen_notification(**post)

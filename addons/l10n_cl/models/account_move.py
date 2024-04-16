@@ -1,129 +1,129 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra.exceptions import ValidationError
-from flectra import models, fields, api, _
-from flectra.osv import expression
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectra.exceptionsimportValidationError
+fromflectraimportmodels,fields,api,_
+fromflectra.osvimportexpression
 
-SII_VAT = '60805000-0'
+SII_VAT='60805000-0'
 
 
-class AccountMove(models.Model):
-    _inherit = "account.move"
+classAccountMove(models.Model):
+    _inherit="account.move"
 
-    l10n_latam_document_type_id_code = fields.Char(related='l10n_latam_document_type_id.code', string='Doc Type')
-    partner_id_vat = fields.Char(related='partner_id.vat', string='VAT No')
-    l10n_latam_internal_type = fields.Selection(
-        related='l10n_latam_document_type_id.internal_type', string='L10n Latam Internal Type')
+    l10n_latam_document_type_id_code=fields.Char(related='l10n_latam_document_type_id.code',string='DocType')
+    partner_id_vat=fields.Char(related='partner_id.vat',string='VATNo')
+    l10n_latam_internal_type=fields.Selection(
+        related='l10n_latam_document_type_id.internal_type',string='L10nLatamInternalType')
 
-    def _get_l10n_latam_documents_domain(self):
+    def_get_l10n_latam_documents_domain(self):
         self.ensure_one()
-        if self.journal_id.company_id.country_id != self.env.ref('base.cl') or not \
+        ifself.journal_id.company_id.country_id!=self.env.ref('base.cl')ornot\
                 self.journal_id.l10n_latam_use_documents:
-            return super()._get_l10n_latam_documents_domain()
-        if self.journal_id.type == 'sale':
-            domain = [('country_id.code', '=', 'CL')]
-            if self.move_type in ['in_invoice', 'out_invoice']:
-                domain += [('internal_type', 'in', ['invoice', 'debit_note', 'invoice_in'])]
-            elif self.move_type in ['in_refund', 'out_refund']:
-                domain += [('internal_type', '=', 'credit_note')]
-            if self.company_id.partner_id.l10n_cl_sii_taxpayer_type == '1':
-                domain += [('code', '!=', '71')]  # Companies with VAT Affected doesn't have "Boleta de honorarios Electrónica"
-            return domain
-        if self.move_type == 'in_refund':
-            internal_types_domain = ('internal_type', '=', 'credit_note')
+            returnsuper()._get_l10n_latam_documents_domain()
+        ifself.journal_id.type=='sale':
+            domain=[('country_id.code','=','CL')]
+            ifself.move_typein['in_invoice','out_invoice']:
+                domain+=[('internal_type','in',['invoice','debit_note','invoice_in'])]
+            elifself.move_typein['in_refund','out_refund']:
+                domain+=[('internal_type','=','credit_note')]
+            ifself.company_id.partner_id.l10n_cl_sii_taxpayer_type=='1':
+                domain+=[('code','!=','71')] #CompanieswithVATAffecteddoesn'thave"BoletadehonorariosElectrónica"
+            returndomain
+        ifself.move_type=='in_refund':
+            internal_types_domain=('internal_type','=','credit_note')
         else:
-            internal_types_domain = ('internal_type', 'in', ['invoice', 'debit_note', 'invoice_in'])
-        domain = [
-            ('country_id.code', '=', 'CL'),
+            internal_types_domain=('internal_type','in',['invoice','debit_note','invoice_in'])
+        domain=[
+            ('country_id.code','=','CL'),
             internal_types_domain,
         ]
-        if self.partner_id.l10n_cl_sii_taxpayer_type == '1' and self.partner_id_vat != '60805000-0':
-            domain += [('code', 'not in', ['39', '70', '71', '914', '911'])]
-        elif self.partner_id.l10n_cl_sii_taxpayer_type == '1' and self.partner_id_vat == '60805000-0':
-            domain += [('code', 'not in', ['39', '70', '71'])]
-        elif self.partner_id.l10n_cl_sii_taxpayer_type == '2':
-            domain += [('code', 'in', ['70', '71', '56', '61'])]
-        elif self.partner_id.l10n_cl_sii_taxpayer_type == '3':
-            domain += [('code', 'in', ['35', '38', '39', '41', '56', '61'])]
-        elif self.partner_id.country_id.code != 'CL' or self.partner_id.l10n_cl_sii_taxpayer_type == '4':
-            domain += [('code', '=', '46')]
+        ifself.partner_id.l10n_cl_sii_taxpayer_type=='1'andself.partner_id_vat!='60805000-0':
+            domain+=[('code','notin',['39','70','71','914','911'])]
+        elifself.partner_id.l10n_cl_sii_taxpayer_type=='1'andself.partner_id_vat=='60805000-0':
+            domain+=[('code','notin',['39','70','71'])]
+        elifself.partner_id.l10n_cl_sii_taxpayer_type=='2':
+            domain+=[('code','in',['70','71','56','61'])]
+        elifself.partner_id.l10n_cl_sii_taxpayer_type=='3':
+            domain+=[('code','in',['35','38','39','41','56','61'])]
+        elifself.partner_id.country_id.code!='CL'orself.partner_id.l10n_cl_sii_taxpayer_type=='4':
+            domain+=[('code','=','46')]
         else:
-            domain += [('code', 'in', [])]
-        return domain
+            domain+=[('code','in',[])]
+        returndomain
 
-    def _check_document_types_post(self):
-        for rec in self.filtered(
-                lambda r: r.company_id.country_id.code == "CL" and
-                          r.journal_id.type in ['sale', 'purchase']):
-            tax_payer_type = rec.partner_id.l10n_cl_sii_taxpayer_type
-            vat = rec.partner_id.vat
-            country_id = rec.partner_id.country_id
-            latam_document_type_code = rec.l10n_latam_document_type_id.code
-            if (not tax_payer_type or not vat) and (country_id.code == "CL" and latam_document_type_code
-                                                  and latam_document_type_code not in ['35', '38', '39', '41']):
-                raise ValidationError(_('Tax payer type and vat number are mandatory for this type of '
-                                        'document. Please set the current tax payer type of this customer'))
-            if rec.journal_id.type == 'sale' and rec.journal_id.l10n_latam_use_documents:
-                if country_id.code != "CL":
-                    if not ((tax_payer_type == '4' and latam_document_type_code in ['110', '111', '112']) or (
-                            tax_payer_type == '3' and latam_document_type_code in ['39', '41', '61', '56'])):
-                        raise ValidationError(_(
-                            'Document types for foreign customers must be export type (codes 110, 111 or 112) or you \
-                            should define the customer as an end consumer and use receipts (codes 39 or 41)'))
-            if rec.journal_id.type == 'purchase' and rec.journal_id.l10n_latam_use_documents:
-                if vat != SII_VAT and latam_document_type_code == '914':
-                    raise ValidationError(_('The DIN document is intended to be used only with RUT 60805000-0'
-                                            ' (Tesorería General de La República)'))
-                if not tax_payer_type or not vat:
-                    if country_id.code == "CL" and latam_document_type_code not in [
-                            '35', '38', '39', '41']:
-                        raise ValidationError(_('Tax payer type and vat number are mandatory for this type of '
-                                                'document. Please set the current tax payer type of this supplier'))
-                if tax_payer_type == '2' and latam_document_type_code not in ['70', '71', '56', '61']:
-                    raise ValidationError(_('The tax payer type of this supplier is incorrect for the selected type'
-                                            ' of document.'))
-                if tax_payer_type in ['1', '3']:
-                    if latam_document_type_code in ['70', '71']:
-                        raise ValidationError(_('The tax payer type of this supplier is not entitled to deliver '
-                                                'fees documents'))
-                    if latam_document_type_code in ['110', '111', '112']:
-                        raise ValidationError(_('The tax payer type of this supplier is not entitled to deliver '
-                                                'imports documents'))
-                if (tax_payer_type == '4' or country_id.code != "CL") and latam_document_type_code != '46':
-                    raise ValidationError(_('You need a journal without the use of documents for foreign '
+    def_check_document_types_post(self):
+        forrecinself.filtered(
+                lambdar:r.company_id.country_id.code=="CL"and
+                          r.journal_id.typein['sale','purchase']):
+            tax_payer_type=rec.partner_id.l10n_cl_sii_taxpayer_type
+            vat=rec.partner_id.vat
+            country_id=rec.partner_id.country_id
+            latam_document_type_code=rec.l10n_latam_document_type_id.code
+            if(nottax_payer_typeornotvat)and(country_id.code=="CL"andlatam_document_type_code
+                                                  andlatam_document_type_codenotin['35','38','39','41']):
+                raiseValidationError(_('Taxpayertypeandvatnumberaremandatoryforthistypeof'
+                                        'document.Pleasesetthecurrenttaxpayertypeofthiscustomer'))
+            ifrec.journal_id.type=='sale'andrec.journal_id.l10n_latam_use_documents:
+                ifcountry_id.code!="CL":
+                    ifnot((tax_payer_type=='4'andlatam_document_type_codein['110','111','112'])or(
+                            tax_payer_type=='3'andlatam_document_type_codein['39','41','61','56'])):
+                        raiseValidationError(_(
+                            'Documenttypesforforeigncustomersmustbeexporttype(codes110,111or112)oryou\
+                            shoulddefinethecustomerasanendconsumerandusereceipts(codes39or41)'))
+            ifrec.journal_id.type=='purchase'andrec.journal_id.l10n_latam_use_documents:
+                ifvat!=SII_VATandlatam_document_type_code=='914':
+                    raiseValidationError(_('TheDINdocumentisintendedtobeusedonlywithRUT60805000-0'
+                                            '(TesoreríaGeneraldeLaRepública)'))
+                ifnottax_payer_typeornotvat:
+                    ifcountry_id.code=="CL"andlatam_document_type_codenotin[
+                            '35','38','39','41']:
+                        raiseValidationError(_('Taxpayertypeandvatnumberaremandatoryforthistypeof'
+                                                'document.Pleasesetthecurrenttaxpayertypeofthissupplier'))
+                iftax_payer_type=='2'andlatam_document_type_codenotin['70','71','56','61']:
+                    raiseValidationError(_('Thetaxpayertypeofthissupplierisincorrectfortheselectedtype'
+                                            'ofdocument.'))
+                iftax_payer_typein['1','3']:
+                    iflatam_document_type_codein['70','71']:
+                        raiseValidationError(_('Thetaxpayertypeofthissupplierisnotentitledtodeliver'
+                                                'feesdocuments'))
+                    iflatam_document_type_codein['110','111','112']:
+                        raiseValidationError(_('Thetaxpayertypeofthissupplierisnotentitledtodeliver'
+                                                'importsdocuments'))
+                if(tax_payer_type=='4'orcountry_id.code!="CL")andlatam_document_type_code!='46':
+                    raiseValidationError(_('Youneedajournalwithouttheuseofdocumentsforforeign'
                                             'suppliers'))
 
     @api.onchange('journal_id')
-    def _l10n_cl_onchange_journal(self):
-        self.l10n_latam_document_type_id = False
+    def_l10n_cl_onchange_journal(self):
+        self.l10n_latam_document_type_id=False
 
-    def _post(self, soft=True):
+    def_post(self,soft=True):
         self._check_document_types_post()
-        return super()._post(soft)
+        returnsuper()._post(soft)
 
-    def _l10n_cl_get_formatted_sequence(self, number=0):
-        return '%s %06d' % (self.l10n_latam_document_type_id.doc_code_prefix, number)
+    def_l10n_cl_get_formatted_sequence(self,number=0):
+        return'%s%06d'%(self.l10n_latam_document_type_id.doc_code_prefix,number)
 
-    def _get_starting_sequence(self):
-        """ If use documents then will create a new starting sequence using the document type code prefix and the
-        journal document number with a 6 padding number """
-        if self.journal_id.l10n_latam_use_documents and self.company_id.country_id.code == "CL":
-            if self.l10n_latam_document_type_id:
-                return self._l10n_cl_get_formatted_sequence()
-        return super()._get_starting_sequence()
+    def_get_starting_sequence(self):
+        """Ifusedocumentsthenwillcreateanewstartingsequenceusingthedocumenttypecodeprefixandthe
+        journaldocumentnumberwitha6paddingnumber"""
+        ifself.journal_id.l10n_latam_use_documentsandself.company_id.country_id.code=="CL":
+            ifself.l10n_latam_document_type_id:
+                returnself._l10n_cl_get_formatted_sequence()
+        returnsuper()._get_starting_sequence()
 
-    def _get_last_sequence_domain(self, relaxed=False):
-        where_string, param = super(AccountMove, self)._get_last_sequence_domain(relaxed)
-        if self.company_id.country_id.code == "CL" and self.l10n_latam_use_documents:
-            where_string = where_string.replace('journal_id = %(journal_id)s AND', '')
-            where_string += ' AND l10n_latam_document_type_id = %(l10n_latam_document_type_id)s AND ' \
-                            'company_id = %(company_id)s AND move_type IN (\'out_invoice\', \'out_refund\')'
-            param['company_id'] = self.company_id.id or False
-            param['l10n_latam_document_type_id'] = self.l10n_latam_document_type_id.id or 0
-        return where_string, param
+    def_get_last_sequence_domain(self,relaxed=False):
+        where_string,param=super(AccountMove,self)._get_last_sequence_domain(relaxed)
+        ifself.company_id.country_id.code=="CL"andself.l10n_latam_use_documents:
+            where_string=where_string.replace('journal_id=%(journal_id)sAND','')
+            where_string+='ANDl10n_latam_document_type_id=%(l10n_latam_document_type_id)sAND'\
+                            'company_id=%(company_id)sANDmove_typeIN(\'out_invoice\',\'out_refund\')'
+            param['company_id']=self.company_id.idorFalse
+            param['l10n_latam_document_type_id']=self.l10n_latam_document_type_id.idor0
+        returnwhere_string,param
 
-    def _get_name_invoice_report(self):
+    def_get_name_invoice_report(self):
         self.ensure_one()
-        if self.l10n_latam_use_documents and self.company_id.country_id.code == 'CL':
-            return 'l10n_cl.report_invoice_document'
-        return super()._get_name_invoice_report()
+        ifself.l10n_latam_use_documentsandself.company_id.country_id.code=='CL':
+            return'l10n_cl.report_invoice_document'
+        returnsuper()._get_name_invoice_report()

@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="view_partner_mrp_subcontracting_form" model="ir.ui.view">
-        <field name="name">res.partner.mrp_subcontracting.property.form.inherit</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="stock.view_partner_stock_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='property_stock_supplier']" position="after">
-                <field name="property_stock_subcontractor"/>
+    <recordid="view_partner_mrp_subcontracting_form"model="ir.ui.view">
+        <fieldname="name">res.partner.mrp_subcontracting.property.form.inherit</field>
+        <fieldname="model">res.partner</field>
+        <fieldname="inherit_id"ref="stock.view_partner_stock_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='property_stock_supplier']"position="after">
+                <fieldname="property_stock_subcontractor"/>
                 <separator/>
             </xpath>
         </field>
     </record>
-    <record id="view_partner_mrp_subcontracting_filter" model="ir.ui.view">
-        <field name="name">res.partner.select.inherit</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_res_partner_filter" />
-        <field name="groups_id" eval="[(4, ref('mrp.group_mrp_user'))]"/>
-        <field name="arch" type="xml">
-            <xpath expr="//filter[@name='inactive']" position="before">
-                <filter string="Subcontractors" name="type_subcontractors" domain="[('is_subcontractor', '=', True)]" />
+    <recordid="view_partner_mrp_subcontracting_filter"model="ir.ui.view">
+        <fieldname="name">res.partner.select.inherit</field>
+        <fieldname="model">res.partner</field>
+        <fieldname="inherit_id"ref="base.view_res_partner_filter"/>
+        <fieldname="groups_id"eval="[(4,ref('mrp.group_mrp_user'))]"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//filter[@name='inactive']"position="before">
+                <filterstring="Subcontractors"name="type_subcontractors"domain="[('is_subcontractor','=',True)]"/>
             </xpath>
         </field>
     </record>

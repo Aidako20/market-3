@@ -1,185 +1,185 @@
-flectra.define('point_of_sale.ClientListScreen', function(require) {
-    'use strict';
+flectra.define('point_of_sale.ClientListScreen',function(require){
+    'usestrict';
 
-    const { debounce } = owl.utils;
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
-    const { useListener } = require('web.custom_hooks');
-    const { isRpcError } = require('point_of_sale.utils');
-    const { useAsyncLockedMethod } = require('point_of_sale.custom_hooks');
+    const{debounce}=owl.utils;
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
+    const{useListener}=require('web.custom_hooks');
+    const{isRpcError}=require('point_of_sale.utils');
+    const{useAsyncLockedMethod}=require('point_of_sale.custom_hooks');
 
     /**
-     * Render this screen using `showTempScreen` to select client.
-     * When the shown screen is confirmed ('Set Customer' or 'Deselect Customer'
-     * button is clicked), the call to `showTempScreen` resolves to the
-     * selected client. E.g.
+     *Renderthisscreenusing`showTempScreen`toselectclient.
+     *Whentheshownscreenisconfirmed('SetCustomer'or'DeselectCustomer'
+     *buttonisclicked),thecallto`showTempScreen`resolvestothe
+     *selectedclient.E.g.
      *
-     * ```js
-     * const { confirmed, payload: selectedClient } = await showTempScreen('ClientListScreen');
-     * if (confirmed) {
-     *   // do something with the selectedClient
-     * }
-     * ```
+     *```js
+     *const{confirmed,payload:selectedClient}=awaitshowTempScreen('ClientListScreen');
+     *if(confirmed){
+     *  //dosomethingwiththeselectedClient
+     *}
+     *```
      *
-     * @props client - originally selected client
+     *@propsclient-originallyselectedclient
      */
-    class ClientListScreen extends PosComponent {
-        constructor() {
+    classClientListScreenextendsPosComponent{
+        constructor(){
             super(...arguments);
-            this.lockedSaveChanges = useAsyncLockedMethod(this.saveChanges);
-            useListener('click-save', () => this.env.bus.trigger('save-customer'));
-            useListener('click-edit', () => this.editClient());
-            useListener('save-changes', this.lockedSaveChanges);
+            this.lockedSaveChanges=useAsyncLockedMethod(this.saveChanges);
+            useListener('click-save',()=>this.env.bus.trigger('save-customer'));
+            useListener('click-edit',()=>this.editClient());
+            useListener('save-changes',this.lockedSaveChanges);
 
-            // We are not using useState here because the object
-            // passed to useState converts the object and its contents
-            // to Observer proxy. Not sure of the side-effects of making
-            // a persistent object, such as pos, into owl.Observer. But it
-            // is better to be safe.
-            this.state = {
-                query: null,
-                selectedClient: this.props.client,
-                detailIsShown: false,
-                isEditMode: false,
-                editModeProps: {
-                    partner: {
-                        country_id: this.env.pos.company.country_id,
-                        state_id: this.env.pos.company.state_id,
+            //WearenotusinguseStateherebecausetheobject
+            //passedtouseStateconvertstheobjectanditscontents
+            //toObserverproxy.Notsureoftheside-effectsofmaking
+            //apersistentobject,suchaspos,intoowl.Observer.Butit
+            //isbettertobesafe.
+            this.state={
+                query:null,
+                selectedClient:this.props.client,
+                detailIsShown:false,
+                isEditMode:false,
+                editModeProps:{
+                    partner:{
+                        country_id:this.env.pos.company.country_id,
+                        state_id:this.env.pos.company.state_id,
                     }
                 },
             };
-            this.updateClientList = debounce(this.updateClientList, 70);
+            this.updateClientList=debounce(this.updateClientList,70);
         }
 
-        // Lifecycle hooks
-        back() {
-            if(this.state.detailIsShown) {
-                this.state.detailIsShown = false;
+        //Lifecyclehooks
+        back(){
+            if(this.state.detailIsShown){
+                this.state.detailIsShown=false;
                 this.render();
-            } else {
-                this.props.resolve({ confirmed: false, payload: false });
+            }else{
+                this.props.resolve({confirmed:false,payload:false});
                 this.trigger('close-temp-screen');
             }
         }
-        confirm() {
-            this.props.resolve({ confirmed: true, payload: this.state.selectedClient });
+        confirm(){
+            this.props.resolve({confirmed:true,payload:this.state.selectedClient});
             this.trigger('close-temp-screen');
         }
-        // Getters
+        //Getters
 
-        get currentOrder() {
-            return this.env.pos.get_order();
+        getcurrentOrder(){
+            returnthis.env.pos.get_order();
         }
 
-        get clients() {
-            if (this.state.query && this.state.query.trim() !== '') {
-                return this.env.pos.db.search_partner(this.state.query.trim());
-            } else {
-                return this.env.pos.db.get_partners_sorted(1000);
+        getclients(){
+            if(this.state.query&&this.state.query.trim()!==''){
+                returnthis.env.pos.db.search_partner(this.state.query.trim());
+            }else{
+                returnthis.env.pos.db.get_partners_sorted(1000);
             }
         }
-        get isNextButtonVisible() {
-            return this.state.selectedClient ? true : false;
+        getisNextButtonVisible(){
+            returnthis.state.selectedClient?true:false;
         }
         /**
-         * Returns the text and command of the next button.
-         * The command field is used by the clickNext call.
+         *Returnsthetextandcommandofthenextbutton.
+         *ThecommandfieldisusedbytheclickNextcall.
          */
-        get nextButton() {
-            if (!this.props.client) {
-                return { command: 'set', text: this.env._t('Set Customer') };
-            } else if (this.props.client && this.props.client === this.state.selectedClient) {
-                return { command: 'deselect', text: this.env._t('Deselect Customer') };
-            } else {
-                return { command: 'set', text: this.env._t('Change Customer') };
+        getnextButton(){
+            if(!this.props.client){
+                return{command:'set',text:this.env._t('SetCustomer')};
+            }elseif(this.props.client&&this.props.client===this.state.selectedClient){
+                return{command:'deselect',text:this.env._t('DeselectCustomer')};
+            }else{
+                return{command:'set',text:this.env._t('ChangeCustomer')};
             }
         }
 
-        // Methods
+        //Methods
 
-        // We declare this event handler as a debounce function in
-        // order to lower its trigger rate.
-        updateClientList(event) {
-            this.state.query = event.target.value;
-            const clients = this.clients;
-            if (event.code === 'Enter' && clients.length === 1) {
-                this.state.selectedClient = clients[0];
+        //Wedeclarethiseventhandlerasadebouncefunctionin
+        //ordertoloweritstriggerrate.
+        updateClientList(event){
+            this.state.query=event.target.value;
+            constclients=this.clients;
+            if(event.code==='Enter'&&clients.length===1){
+                this.state.selectedClient=clients[0];
                 this.clickNext();
-            } else {
+            }else{
                 this.render();
             }
         }
-        clickClient(event) {
-            let partner = event.detail.client;
-            if (this.state.selectedClient === partner) {
-                this.state.selectedClient = null;
-            } else {
-                this.state.selectedClient = partner;
+        clickClient(event){
+            letpartner=event.detail.client;
+            if(this.state.selectedClient===partner){
+                this.state.selectedClient=null;
+            }else{
+                this.state.selectedClient=partner;
             }
             this.render();
         }
-        editClient() {
-            this.state.editModeProps = {
-                partner: this.state.selectedClient,
+        editClient(){
+            this.state.editModeProps={
+                partner:this.state.selectedClient,
             };
-            this.state.detailIsShown = true;
+            this.state.detailIsShown=true;
             this.render();
         }
-        clickNext() {
-            this.state.selectedClient = this.nextButton.command === 'set' ? this.state.selectedClient : null;
+        clickNext(){
+            this.state.selectedClient=this.nextButton.command==='set'?this.state.selectedClient:null;
             this.confirm();
         }
-        activateEditMode(event) {
-            const { isNewClient } = event.detail;
-            this.state.isEditMode = true;
-            this.state.detailIsShown = true;
-            this.state.isNewClient = isNewClient;
-            if (!isNewClient) {
-                this.state.editModeProps = {
-                    partner: this.state.selectedClient,
+        activateEditMode(event){
+            const{isNewClient}=event.detail;
+            this.state.isEditMode=true;
+            this.state.detailIsShown=true;
+            this.state.isNewClient=isNewClient;
+            if(!isNewClient){
+                this.state.editModeProps={
+                    partner:this.state.selectedClient,
                 };
             }
             this.render();
         }
-        deactivateEditMode() {
-            this.state.isEditMode = false;
-            this.state.editModeProps = {
-                partner: {
-                    country_id: this.env.pos.company.country_id,
-                    state_id: this.env.pos.company.state_id,
+        deactivateEditMode(){
+            this.state.isEditMode=false;
+            this.state.editModeProps={
+                partner:{
+                    country_id:this.env.pos.company.country_id,
+                    state_id:this.env.pos.company.state_id,
                 },
             };
             this.render();
         }
-        async saveChanges(event) {
-            try {
-                let partnerId = await this.rpc({
-                    model: 'res.partner',
-                    method: 'create_from_ui',
-                    args: [event.detail.processedChanges],
+        asyncsaveChanges(event){
+            try{
+                letpartnerId=awaitthis.rpc({
+                    model:'res.partner',
+                    method:'create_from_ui',
+                    args:[event.detail.processedChanges],
                 });
-                await this.env.pos.load_new_partners();
-                this.state.selectedClient = this.env.pos.db.get_partner_by_id(partnerId);
-                this.state.detailIsShown = false;
+                awaitthis.env.pos.load_new_partners();
+                this.state.selectedClient=this.env.pos.db.get_partner_by_id(partnerId);
+                this.state.detailIsShown=false;
                 this.render();
-            } catch (error) {
-                if (isRpcError(error) && error.message.code < 0) {
-                    await this.showPopup('OfflineErrorPopup', {
-                        title: this.env._t('Offline'),
-                        body: this.env._t('Unable to save changes.'),
+            }catch(error){
+                if(isRpcError(error)&&error.message.code<0){
+                    awaitthis.showPopup('OfflineErrorPopup',{
+                        title:this.env._t('Offline'),
+                        body:this.env._t('Unabletosavechanges.'),
                     });
-                } else {
-                    throw error;
+                }else{
+                    throwerror;
                 }
             }
         }
-        cancelEdit() {
+        cancelEdit(){
             this.deactivateEditMode();
         }
     }
-    ClientListScreen.template = 'ClientListScreen';
+    ClientListScreen.template='ClientListScreen';
 
     Registries.Component.add(ClientListScreen);
 
-    return ClientListScreen;
+    returnClientListScreen;
 });

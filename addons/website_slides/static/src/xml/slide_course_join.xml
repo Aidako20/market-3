@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <templates>
-    <t t-name="slide.course.join">
+    <tt-name="slide.course.join">
         <div>
-            <a role="button"
-                class="btn btn-primary o_wslides_js_course_join_link text-uppercase font-weight-bold"
-                title="Join the Course" aria-label="Join the Course"
+            <arole="button"
+                class="btnbtn-primaryo_wslides_js_course_join_linktext-uppercasefont-weight-bold"
+                title="JointheCourse"aria-label="JointheCourse"
                 href="#">
-                <t t-if="widget.channel.channelEnroll == 'public'">
-                    <t t-if="widget.publicUser">
-                        Sign in
+                <tt-if="widget.channel.channelEnroll=='public'">
+                    <tt-if="widget.publicUser">
+                        Signin
                     </t>
-                    <t t-else="" t-esc="widget.joinMessage" />
+                    <tt-else=""t-esc="widget.joinMessage"/>
                 </t>
             </a>
         </div>
     </t>
 
-    <t t-name="slide.course.join.request">
+    <tt-name="slide.course.join.request">
         <div>
-            <p>Do you want to request access to this course ?</p>
+            <p>Doyouwanttorequestaccesstothiscourse?</p>
         </div>
     </t>
 </templates>

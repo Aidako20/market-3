@@ -1,85 +1,85 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <!-- activate B2C portal by default -->
-        <function model="ir.config_parameter" name="set_param" eval="('auth_signup.invitation_scope', 'b2c')"/>
-        <!-- activate Reset password by default -->
-        <function model="ir.config_parameter" name="set_param" eval="('auth_signup.reset_password', 'True')"/>
-        <!-- Email template for reset password -->
-        <record id="reset_password_email" model="mail.template">
-            <field name="name">Auth Signup: Reset Password</field>
-            <field name="model_id" ref="base.model_res_users"/>
-            <field name="subject">Password reset</field>
-            <field name="email_from">"${object.company_id.name | safe}" &lt;${(object.company_id.email or user.email) | safe}&gt;</field>
-            <field name="email_to">${object.email_formatted | safe}</field>
-            <field name="body_html" type="html">
-<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;"><tr><td align="center">
-<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">
+    <datanoupdate="1">
+        <!--activateB2Cportalbydefault-->
+        <functionmodel="ir.config_parameter"name="set_param"eval="('auth_signup.invitation_scope','b2c')"/>
+        <!--activateResetpasswordbydefault-->
+        <functionmodel="ir.config_parameter"name="set_param"eval="('auth_signup.reset_password','True')"/>
+        <!--Emailtemplateforresetpassword-->
+        <recordid="reset_password_email"model="mail.template">
+            <fieldname="name">AuthSignup:ResetPassword</field>
+            <fieldname="model_id"ref="base.model_res_users"/>
+            <fieldname="subject">Passwordreset</field>
+            <fieldname="email_from">"${object.company_id.name|safe}"&lt;${(object.company_id.emailoruser.email)|safe}&gt;</field>
+            <fieldname="email_to">${object.email_formatted|safe}</field>
+            <fieldname="body_html"type="html">
+<tableborder="0"cellpadding="0"cellspacing="0"style="padding-top:16px;background-color:#F1F1F1;font-family:Verdana,Arial,sans-serif;color:#454748;width:100%;border-collapse:separate;"><tr><tdalign="center">
+<tableborder="0"cellpadding="0"cellspacing="0"width="590"style="padding:16px;background-color:white;color:#454748;border-collapse:separate;">
 <tbody>
-    <!-- HEADER -->
+    <!--HEADER-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
-                <tr><td valign="middle">
-                    <span style="font-size: 10px;">Your Account</span><br/>
-                    <span style="font-size: 20px; font-weight: bold;">
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;padding:0px8px0px8px;border-collapse:separate;">
+                <tr><tdvalign="middle">
+                    <spanstyle="font-size:10px;">YourAccount</span><br/>
+                    <spanstyle="font-size:20px;font-weight:bold;">
                         ${object.name}
                     </span>
-                </td><td valign="middle" align="right">
-                    <img src="/logo.png?company=${object.company_id.id}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="${object.company_id.name}"/>
+                </td><tdvalign="middle"align="right">
+                    <imgsrc="/logo.png?company=${object.company_id.id}"style="padding:0px;margin:0px;height:auto;width:80px;"alt="${object.company_id.name}"/>
                 </td></tr>
-                <tr><td colspan="2" style="text-align:center;">
-                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                <tr><tdcolspan="2"style="text-align:center;">
+                  <hrwidth="100%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:16px0px16px0px;"/>
                 </td></tr>
             </table>
         </td>
     </tr>
-    <!-- CONTENT -->
+    <!--CONTENT-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
-                <tr><td valign="top" style="font-size: 13px;">
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;padding:0px8px0px8px;border-collapse:separate;">
+                <tr><tdvalign="top"style="font-size:13px;">
                     <div>
-                        Dear ${object.name},<br/><br/>
-                        A password reset was requested for the Flectra account linked to this email.
-                        You may change your password by following this link which will remain valid during 24 hours:<br/>
-                        <div style="margin: 16px 0px 16px 0px;">
-                            <a href="${object.signup_url}"
-                                style="background-color: #009EFB; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
-                                Change password
+                        Dear${object.name},<br/><br/>
+                        ApasswordresetwasrequestedfortheFlectraaccountlinkedtothisemail.
+                        Youmaychangeyourpasswordbyfollowingthislinkwhichwillremainvalidduring24hours:<br/>
+                        <divstyle="margin:16px0px16px0px;">
+                            <ahref="${object.signup_url}"
+                                style="background-color:#009EFB;padding:8px16px8px16px;text-decoration:none;color:#fff;border-radius:5px;font-size:13px;">
+                                Changepassword
                             </a>
                         </div>
-                        If you do not expect this, you can safely ignore this email.<br/><br/>
+                        Ifyoudonotexpectthis,youcansafelyignorethisemail.<br/><br/>
                         Thanks,
-                        % if user.signature:
+                        %ifuser.signature:
                             <br/>
-                            ${user.signature | safe}
-                        % endif
+                            ${user.signature|safe}
+                        %endif
                     </div>
                 </td></tr>
-                <tr><td style="text-align:center;">
-                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                <tr><tdstyle="text-align:center;">
+                  <hrwidth="100%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:16px0px16px0px;"/>
                 </td></tr>
             </table>
         </td>
     </tr>
-    <!-- FOOTER -->
+    <!--FOOTER-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
-                <tr><td valign="middle" align="left">
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;font-size:11px;padding:0px8px0px8px;border-collapse:separate;">
+                <tr><tdvalign="middle"align="left">
                     ${object.company_id.name}
                 </td></tr>
-                <tr><td valign="middle" align="left" style="opacity: 0.7;">
+                <tr><tdvalign="middle"align="left"style="opacity:0.7;">
                     ${object.company_id.phone}
-                    % if object.company_id.email
-                        | <a href="'mailto:%s' % ${object.company_id.email}" style="text-decoration:none; color: #454748;">${object.company_id.email}</a>
-                    % endif
-                    % if object.company_id.website
-                        | <a href="'%s' % ${object.company_id.website}" style="text-decoration:none; color: #454748;">
+                    %ifobject.company_id.email
+                        |<ahref="'mailto:%s'%${object.company_id.email}"style="text-decoration:none;color:#454748;">${object.company_id.email}</a>
+                    %endif
+                    %ifobject.company_id.website
+                        |<ahref="'%s'%${object.company_id.website}"style="text-decoration:none;color:#454748;">
                         ${object.company_id.website}
                     </a>
-                    % endif
+                    %endif
                 </td></tr>
             </table>
         </td>
@@ -87,97 +87,97 @@
 </tbody>
 </table>
 </td></tr>
-<!-- POWERED BY -->
-<tr><td align="center" style="min-width: 590px;">
-    <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;">
-      <tr><td style="text-align: center; font-size: 13px;">
-        Powered by <a target="_blank" href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=auth" style="color: #009EFB;">Flectra</a>
+<!--POWEREDBY-->
+<tr><tdalign="center"style="min-width:590px;">
+    <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:#F1F1F1;color:#454748;padding:8px;border-collapse:separate;">
+      <tr><tdstyle="text-align:center;font-size:13px;">
+        Poweredby<atarget="_blank"href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=auth"style="color:#009EFB;">Flectra</a>
       </td></tr>
     </table>
 </td></tr>
 </table>
             </field>
-            <field name="lang">${object.lang}</field>
-            <field name="auto_delete" eval="True"/>
+            <fieldname="lang">${object.lang}</field>
+            <fieldname="auto_delete"eval="True"/>
         </record>
 
-        <!-- Email template for new users -->
-        <record id="set_password_email" model="mail.template">
-            <field name="name">Auth Signup: Flectra Connection</field>
-            <field name="model_id" ref="base.model_res_users"/>
-            <field name="subject">${object.create_uid.name} from ${object.company_id.name} invites you to connect to Flectra</field>
-            <field name="email_from">"${object.company_id.name | safe}" &lt;${(object.company_id.email or user.email) | safe}&gt;</field>
-            <field name="email_to">${object.email_formatted | safe}</field>
-            <field name="body_html" type="html">
-<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;"><tr><td align="center">
-<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">
+        <!--Emailtemplatefornewusers-->
+        <recordid="set_password_email"model="mail.template">
+            <fieldname="name">AuthSignup:FlectraConnection</field>
+            <fieldname="model_id"ref="base.model_res_users"/>
+            <fieldname="subject">${object.create_uid.name}from${object.company_id.name}invitesyoutoconnecttoFlectra</field>
+            <fieldname="email_from">"${object.company_id.name|safe}"&lt;${(object.company_id.emailoruser.email)|safe}&gt;</field>
+            <fieldname="email_to">${object.email_formatted|safe}</field>
+            <fieldname="body_html"type="html">
+<tableborder="0"cellpadding="0"cellspacing="0"style="padding-top:16px;background-color:#F1F1F1;font-family:Verdana,Arial,sans-serif;color:#454748;width:100%;border-collapse:separate;"><tr><tdalign="center">
+<tableborder="0"cellpadding="0"cellspacing="0"width="590"style="padding:16px;background-color:white;color:#454748;border-collapse:separate;">
 <tbody>
-    <!-- HEADER -->
+    <!--HEADER-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
-                <tr><td valign="middle">
-                    <span style="font-size: 10px;">Welcome to Flectra</span><br/>
-                    <span style="font-size: 20px; font-weight: bold;">
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;padding:0px8px0px8px;border-collapse:separate;">
+                <tr><tdvalign="middle">
+                    <spanstyle="font-size:10px;">WelcometoFlectra</span><br/>
+                    <spanstyle="font-size:20px;font-weight:bold;">
                         ${object.name}
                     </span>
-                </td><td valign="middle" align="right">
-                    <img src="/logo.png?company=${object.company_id.id}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="${object.company_id.name}"/>
+                </td><tdvalign="middle"align="right">
+                    <imgsrc="/logo.png?company=${object.company_id.id}"style="padding:0px;margin:0px;height:auto;width:80px;"alt="${object.company_id.name}"/>
                 </td></tr>
-                <tr><td colspan="2" style="text-align:center;">
-                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                <tr><tdcolspan="2"style="text-align:center;">
+                  <hrwidth="100%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:16px0px16px0px;"/>
                 </td></tr>
             </table>
         </td>
     </tr>
-    <!-- CONTENT -->
+    <!--CONTENT-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
-                <tr><td valign="top" style="font-size: 13px;">
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;padding:0px8px0px8px;border-collapse:separate;">
+                <tr><tdvalign="top"style="font-size:13px;">
                     <div>
-                        Dear ${object.name},<br /><br />
-                        You have been invited by ${object.create_uid.name} of ${object.company_id.name} to connect on Flectra.
-                        <div style="margin: 16px 0px 16px 0px;">
-                            <a href="${object.signup_url}"
-                                style="background-color: #009EFB; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
-                                Accept invitation
+                        Dear${object.name},<br/><br/>
+                        Youhavebeeninvitedby${object.create_uid.name}of${object.company_id.name}toconnectonFlectra.
+                        <divstyle="margin:16px0px16px0px;">
+                            <ahref="${object.signup_url}"
+                                style="background-color:#009EFB;padding:8px16px8px16px;text-decoration:none;color:#fff;border-radius:5px;font-size:13px;">
+                                Acceptinvitation
                             </a>
                         </div>
-                        % set website_url = object.env['ir.config_parameter'].sudo().get_param('web.base.url')
-                        Your Flectra domain is: <b><a href='${website_url}'>${website_url}</a></b><br />
-                        Your sign in email is: <b><a href="/web/login?login=${object.email}" target="_blank">${object.email}</a></b><br /><br />
-                        Never heard of Flectra? It’s an all-in-one business software loved by 3+ million users. It will considerably improve your experience at work and increase your productivity.
-                        <br /><br />
-                        Have a look at the <a href="https://www.flectrahq.com/page/tour?utm_source=db&amp;utm_medium=auth" style="color: #009EFB;">Flectra Tour</a> to discover the tool.
-                        <br /><br />
-                        Enjoy Flectra!<br />
-                        --<br/>The ${object.company_id.name} Team
+                        %setwebsite_url=object.env['ir.config_parameter'].sudo().get_param('web.base.url')
+                        YourFlectradomainis:<b><ahref='${website_url}'>${website_url}</a></b><br/>
+                        Yoursigninemailis:<b><ahref="/web/login?login=${object.email}"target="_blank">${object.email}</a></b><br/><br/>
+                        NeverheardofFlectra?It’sanall-in-onebusinesssoftwarelovedby3+millionusers.Itwillconsiderablyimproveyourexperienceatworkandincreaseyourproductivity.
+                        <br/><br/>
+                        Havealookatthe<ahref="https://www.flectrahq.com/page/tour?utm_source=db&amp;utm_medium=auth"style="color:#009EFB;">FlectraTour</a>todiscoverthetool.
+                        <br/><br/>
+                        EnjoyFlectra!<br/>
+                        --<br/>The${object.company_id.name}Team
                     </div>
                 </td></tr>
-                <tr><td style="text-align:center;">
-                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                <tr><tdstyle="text-align:center;">
+                  <hrwidth="100%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:16px0px16px0px;"/>
                 </td></tr>
             </table>
         </td>
     </tr>
-    <!-- FOOTER -->
+    <!--FOOTER-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
-                <tr><td valign="middle" align="left">
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;font-size:11px;padding:0px8px0px8px;border-collapse:separate;">
+                <tr><tdvalign="middle"align="left">
                     ${object.company_id.name}
                 </td></tr>
-                <tr><td valign="middle" align="left" style="opacity: 0.7;">
+                <tr><tdvalign="middle"align="left"style="opacity:0.7;">
                     ${object.company_id.phone}
-                    % if object.company_id.email
-                        | <a href="'mailto:%s' % ${object.company_id.email}" style="text-decoration:none; color: #454748;">${object.company_id.email}</a>
-                    % endif
-                    % if object.company_id.website
-                        | <a href="'%s' % ${object.company_id.website}" style="text-decoration:none; color: #454748;">
+                    %ifobject.company_id.email
+                        |<ahref="'mailto:%s'%${object.company_id.email}"style="text-decoration:none;color:#454748;">${object.company_id.email}</a>
+                    %endif
+                    %ifobject.company_id.website
+                        |<ahref="'%s'%${object.company_id.website}"style="text-decoration:none;color:#454748;">
                         ${object.company_id.website}
                     </a>
-                    % endif
+                    %endif
                 </td></tr>
             </table>
         </td>
@@ -185,57 +185,57 @@
 </tbody>
 </table>
 </td></tr>
-<!-- POWERED BY -->
-<tr><td align="center" style="min-width: 590px;">
-    <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;">
-      <tr><td style="text-align: center; font-size: 13px;">
-        Powered by <a target="_blank" href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=auth" style="color: #009EFB;">Flectra</a>
+<!--POWEREDBY-->
+<tr><tdalign="center"style="min-width:590px;">
+    <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:#F1F1F1;color:#454748;padding:8px;border-collapse:separate;">
+      <tr><tdstyle="text-align:center;font-size:13px;">
+        Poweredby<atarget="_blank"href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=auth"style="color:#009EFB;">Flectra</a>
       </td></tr>
     </table>
 </td></tr>
 </table></field>
-            <field name="lang">${object.lang}</field>
-            <field name="auto_delete" eval="True"/>
+            <fieldname="lang">${object.lang}</field>
+            <fieldname="auto_delete"eval="True"/>
         </record>
 
-        <!-- Email template for reminder of unregistered users -->
-        <record id="mail_template_data_unregistered_users" model="mail.template">
-            <field name="name">Auth Signup: Unregistered Users</field>
-            <field name="model_id" ref="base.model_res_users"/>
-            <field name="subject">Reminder for unregistered users</field>
-            <field name="email_from">${object.company_id.partner_id.email_formatted|safe}</field>
-            <field name="email_to">${object.email_formatted|safe}</field>
-            <field name="body_html" type="html">
-<table border="0" cellpadding="0" cellspacing="0" style="background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;"><tr><td align="center">
-<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">
+        <!--Emailtemplateforreminderofunregisteredusers-->
+        <recordid="mail_template_data_unregistered_users"model="mail.template">
+            <fieldname="name">AuthSignup:UnregisteredUsers</field>
+            <fieldname="model_id"ref="base.model_res_users"/>
+            <fieldname="subject">Reminderforunregisteredusers</field>
+            <fieldname="email_from">${object.company_id.partner_id.email_formatted|safe}</field>
+            <fieldname="email_to">${object.email_formatted|safe}</field>
+            <fieldname="body_html"type="html">
+<tableborder="0"cellpadding="0"cellspacing="0"style="background-color:#F1F1F1;font-family:Verdana,Arial,sans-serif;color:#454748;width:100%;border-collapse:separate;"><tr><tdalign="center">
+<tableborder="0"cellpadding="0"cellspacing="0"width="590"style="padding:16px;background-color:white;color:#454748;border-collapse:separate;">
 <tbody>
-    <!-- CONTENT -->
+    <!--CONTENT-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
-                 % set invited_users = ctx['invited_users']
-                <td style="text-align : left">
-                    <span style="font-size: 20px; font-weight: bold;">
-                        Pending Invitations
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;padding:0px8px0px8px;border-collapse:separate;">
+                 %setinvited_users=ctx['invited_users']
+                <tdstyle="text-align:left">
+                    <spanstyle="font-size:20px;font-weight:bold;">
+                        PendingInvitations
                     </span><br/><br/>
                 </td>
-                <tr><td valign="top" style="font-size: 13px;">
+                <tr><tdvalign="top"style="font-size:13px;">
                     <div>
-                        Dear ${object.name or ''},<br/> <br/>
-                        You added the following user(s) to your database but they haven't registered yet:
+                        Dear${object.nameor''},<br/><br/>
+                        Youaddedthefollowinguser(s)toyourdatabasebuttheyhaven'tregisteredyet:
                         <ul>
-                            % for invited_user in invited_users:
+                            %forinvited_userininvited_users:
                                 <li>${invited_user}</li>
-                            % endfor
+                            %endfor
                         </ul>
-                        Follow up with them so they can access your database and start working with you.
-                        <br /><br/>
-                        Have a nice day!<br />
-                        --<br/>The ${object.company_id.name} Team
+                        Followupwiththemsotheycanaccessyourdatabaseandstartworkingwithyou.
+                        <br/><br/>
+                        Haveaniceday!<br/>
+                        --<br/>The${object.company_id.name}Team
                     </div>
                 </td></tr>
-                <tr><td style="text-align:center;">
-                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                <tr><tdstyle="text-align:center;">
+                  <hrwidth="100%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:16px0px16px0px;"/>
                 </td></tr>
             </table>
         </td>
@@ -245,85 +245,85 @@
 </td></tr>
 </table>
             </field>
-            <field name="lang">${object.partner_id.lang}</field>
-            <field name="auto_delete" eval="True"/>
+            <fieldname="lang">${object.partner_id.lang}</field>
+            <fieldname="auto_delete"eval="True"/>
         </record>
 
-        <!-- Email template for new users that used a signup token -->
-        <record id="mail_template_user_signup_account_created" model="mail.template">
-            <field name="name">Auth Signup: Flectra Account Created</field>
-            <field name="model_id" ref="base.model_res_users"/>
-            <field name="subject">Welcome to ${object.company_id.name}!</field>
-            <field name="email_from">"${object.company_id.name | safe}" &lt;${(object.company_id.email or user.email) | safe}&gt;</field>
-            <field name="email_to">${object.email_formatted | safe}</field>
-            <field name="body_html" type="html">
-<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;"><tr><td align="center">
-<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">
+        <!--Emailtemplatefornewusersthatusedasignuptoken-->
+        <recordid="mail_template_user_signup_account_created"model="mail.template">
+            <fieldname="name">AuthSignup:FlectraAccountCreated</field>
+            <fieldname="model_id"ref="base.model_res_users"/>
+            <fieldname="subject">Welcometo${object.company_id.name}!</field>
+            <fieldname="email_from">"${object.company_id.name|safe}"&lt;${(object.company_id.emailoruser.email)|safe}&gt;</field>
+            <fieldname="email_to">${object.email_formatted|safe}</field>
+            <fieldname="body_html"type="html">
+<tableborder="0"cellpadding="0"cellspacing="0"style="padding-top:16px;background-color:#F1F1F1;font-family:Verdana,Arial,sans-serif;color:#454748;width:100%;border-collapse:separate;"><tr><tdalign="center">
+<tableborder="0"cellpadding="0"cellspacing="0"width="590"style="padding:16px;background-color:white;color:#454748;border-collapse:separate;">
 <tbody>
-    <!-- HEADER -->
+    <!--HEADER-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
-                <tr><td valign="middle">
-                    <span style="font-size: 10px;">Your Account</span><br/>
-                    <span style="font-size: 20px; font-weight: bold;">
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;padding:0px8px0px8px;border-collapse:separate;">
+                <tr><tdvalign="middle">
+                    <spanstyle="font-size:10px;">YourAccount</span><br/>
+                    <spanstyle="font-size:20px;font-weight:bold;">
                         ${object.name}
                     </span>
-                </td><td valign="middle" align="right">
-                    <img src="/logo.png?company=${object.company_id.id}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="${object.company_id.name}"/>
+                </td><tdvalign="middle"align="right">
+                    <imgsrc="/logo.png?company=${object.company_id.id}"style="padding:0px;margin:0px;height:auto;width:80px;"alt="${object.company_id.name}"/>
                 </td></tr>
-                <tr><td colspan="2" style="text-align:center;">
-                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                <tr><tdcolspan="2"style="text-align:center;">
+                  <hrwidth="100%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:16px0px16px0px;"/>
                 </td></tr>
             </table>
         </td>
     </tr>
-    <!-- CONTENT -->
+    <!--CONTENT-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
-                <tr><td valign="top" style="font-size: 13px;">
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;padding:0px8px0px8px;border-collapse:separate;">
+                <tr><tdvalign="top"style="font-size:13px;">
                     <div>
-                        Dear ${object.name},<br/><br/>
-                        Your account has been successfully created!<br/>
-                        Your login is <strong>${object.email}</strong><br/>
-                        To gain access to your account, you can use the following link:
-                        <div style="margin: 16px 0px 16px 0px;">
-                            <a href="/web/login?auth_login=${object.email}"
-                                style="background-color: #009EFB; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
-                                Go to My Account
+                        Dear${object.name},<br/><br/>
+                        Youraccounthasbeensuccessfullycreated!<br/>
+                        Yourloginis<strong>${object.email}</strong><br/>
+                        Togainaccesstoyouraccount,youcanusethefollowinglink:
+                        <divstyle="margin:16px0px16px0px;">
+                            <ahref="/web/login?auth_login=${object.email}"
+                                style="background-color:#009EFB;padding:8px16px8px16px;text-decoration:none;color:#fff;border-radius:5px;font-size:13px;">
+                                GotoMyAccount
                             </a>
                         </div>
                         Thanks,<br/>
-                        % if user.signature:
+                        %ifuser.signature:
                             <br/>
-                            ${user.signature | safe}
-                        % endif
+                            ${user.signature|safe}
+                        %endif
                     </div>
                 </td></tr>
-                <tr><td style="text-align:center;">
-                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                <tr><tdstyle="text-align:center;">
+                  <hrwidth="100%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:16px0px16px0px;"/>
                 </td></tr>
             </table>
         </td>
     </tr>
-    <!-- FOOTER -->
+    <!--FOOTER-->
     <tr>
-        <td align="center" style="min-width: 590px;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
-                <tr><td valign="middle" align="left">
+        <tdalign="center"style="min-width:590px;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;font-size:11px;padding:0px8px0px8px;border-collapse:separate;">
+                <tr><tdvalign="middle"align="left">
                     ${object.company_id.name}
                 </td></tr>
-                <tr><td valign="middle" align="left" style="opacity: 0.7;">
+                <tr><tdvalign="middle"align="left"style="opacity:0.7;">
                     ${object.company_id.phone}
-                    % if object.company_id.email
-                        | <a href="'mailto:%s' % ${object.company_id.email}" style="text-decoration:none; color: #454748;">${object.company_id.email}</a>
-                    % endif
-                    % if object.company_id.website
-                        | <a href="'%s' % ${object.company_id.website}" style="text-decoration:none; color: #454748;">
+                    %ifobject.company_id.email
+                        |<ahref="'mailto:%s'%${object.company_id.email}"style="text-decoration:none;color:#454748;">${object.company_id.email}</a>
+                    %endif
+                    %ifobject.company_id.website
+                        |<ahref="'%s'%${object.company_id.website}"style="text-decoration:none;color:#454748;">
                         ${object.company_id.website}
                     </a>
-                    % endif
+                    %endif
                 </td></tr>
             </table>
         </td>
@@ -331,17 +331,17 @@
 </tbody>
 </table>
 </td></tr>
-<!-- POWERED BY -->
-<tr><td align="center" style="min-width: 590px;">
-    <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;">
-      <tr><td style="text-align: center; font-size: 13px;">
-        Powered by <a target="_blank" href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=auth" style="color: #009EFB;">Flectra</a>
+<!--POWEREDBY-->
+<tr><tdalign="center"style="min-width:590px;">
+    <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:#F1F1F1;color:#454748;padding:8px;border-collapse:separate;">
+      <tr><tdstyle="text-align:center;font-size:13px;">
+        Poweredby<atarget="_blank"href="https://www.flectrahq.com?utm_source=db&amp;utm_medium=auth"style="color:#009EFB;">Flectra</a>
       </td></tr>
     </table>
 </td></tr>
 </table></field>
-            <field name="lang">${object.lang}</field>
-            <field name="auto_delete" eval="True"/>
+            <fieldname="lang">${object.lang}</field>
+            <fieldname="auto_delete"eval="True"/>
         </record>
 
     </data>

@@ -1,348 +1,348 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="tax_report_vat" model="account.tax.report">
-        <field name="name">VAT Report</field>
-        <field name="country_id" ref="base.it"/>
+    <recordid="tax_report_vat"model="account.tax.report">
+        <fieldname="name">VATReport</field>
+        <fieldname="country_id"ref="base.it"/>
     </record>
 
-    <record id="tax_report_line_operazione_imponibile" model="account.tax.report.line">
-        <field name="name">Operazione Imponibile</field>
-        <field name="code">h1</field>
-        <field name="sequence">1</field>
-        <field name="formula">None</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_operazione_imponibile"model="account.tax.report.line">
+        <fieldname="name">OperazioneImponibile</field>
+        <fieldname="code">h1</field>
+        <fieldname="sequence">1</field>
+        <fieldname="formula">None</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
 
-    <record id="tax_report_line_vp2" model="account.tax.report.line">
-        <field name="name">VP2 - Totale operazioni attive</field>
-        <field name="code">VP2</field>
-        <field name="parent_id" ref="tax_report_line_operazione_imponibile"/>
-        <field name="tag_name">02</field>
-        <field name="sequence">1</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp2"model="account.tax.report.line">
+        <fieldname="name">VP2-Totaleoperazioniattive</field>
+        <fieldname="code">VP2</field>
+        <fieldname="parent_id"ref="tax_report_line_operazione_imponibile"/>
+        <fieldname="tag_name">02</field>
+        <fieldname="sequence">1</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
 
-    <record id="tax_report_line_vp3" model="account.tax.report.line">
-        <field name="name">VP3 - Totale operazioni passive</field>
-        <field name="code">VP3</field>
-        <field name="parent_id" ref="tax_report_line_operazione_imponibile"/>
-        <field name="tag_name">03</field>
-        <field name="sequence">2</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp3"model="account.tax.report.line">
+        <fieldname="name">VP3-Totaleoperazionipassive</field>
+        <fieldname="code">VP3</field>
+        <fieldname="parent_id"ref="tax_report_line_operazione_imponibile"/>
+        <fieldname="tag_name">03</field>
+        <fieldname="sequence">2</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
 
-    <record id="tax_report_line_iva" model="account.tax.report.line">
-        <field name="name">IVA</field>
-        <field name="code">h2</field>
-        <field name="sequence">2</field>
-        <field name="formula">None</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_iva"model="account.tax.report.line">
+        <fieldname="name">IVA</field>
+        <fieldname="code">h2</field>
+        <fieldname="sequence">2</field>
+        <fieldname="formula">None</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
 
-    <record id="tax_report_line_vp4" model="account.tax.report.line">
-        <field name="name">VP4 - IVA esigibile</field>
-        <field name="code">VP4</field>
-        <field name="parent_id" ref="tax_report_line_iva"/>
-        <field name="tag_name">4v</field>
-        <field name="sequence">1</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp4"model="account.tax.report.line">
+        <fieldname="name">VP4-IVAesigibile</field>
+        <fieldname="code">VP4</field>
+        <fieldname="parent_id"ref="tax_report_line_iva"/>
+        <fieldname="tag_name">4v</field>
+        <fieldname="sequence">1</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
 
-    <record id="tax_report_line_vp5" model="account.tax.report.line">
-        <field name="name">VP5 - IVA detraibile</field>
-        <field name="code">VP5</field>
-        <field name="parent_id" ref="tax_report_line_iva"/>
-        <field name="tag_name">5v</field>
-        <field name="sequence">2</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp5"model="account.tax.report.line">
+        <fieldname="name">VP5-IVAdetraibile</field>
+        <fieldname="code">VP5</field>
+        <fieldname="parent_id"ref="tax_report_line_iva"/>
+        <fieldname="tag_name">5v</field>
+        <fieldname="sequence">2</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
 
-    <record id="tax_report_line_saldi_riporti_e_interessi" model="account.tax.report.line">
-        <field name="name">Saldi, riporti e interessi</field>
-        <field name="code">h3</field>
-        <field name="sequence">3</field>
-        <field name="formula">None</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_saldi_riporti_e_interessi"model="account.tax.report.line">
+        <fieldname="name">Saldi,riportieinteressi</field>
+        <fieldname="code">h3</field>
+        <fieldname="sequence">3</field>
+        <fieldname="formula">None</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
 
-    <record id="tax_report_line_vp6" model="account.tax.report.line">
-        <field name="name">VP6 - IVA dovuta</field>
-        <field name="code">VP6</field>
-        <field name="parent_id" ref="tax_report_line_saldi_riporti_e_interessi"/>
-        <field name="sequence">1</field>
-        <field name="formula">None</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp6"model="account.tax.report.line">
+        <fieldname="name">VP6-IVAdovuta</field>
+        <fieldname="code">VP6</field>
+        <fieldname="parent_id"ref="tax_report_line_saldi_riporti_e_interessi"/>
+        <fieldname="sequence">1</field>
+        <fieldname="formula">None</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vp6a" model="account.tax.report.line">
-        <field name="name">VP6a - IVA dovuta (debito)</field>
-        <field name="code">VP6a</field>
-        <field name="parent_id" ref="tax_report_line_vp6"/>
-        <field name="formula">VP4&gt;VP5 and VP4-VP5 or 0</field>
-        <field name="sequence">1</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp6a"model="account.tax.report.line">
+        <fieldname="name">VP6a-IVAdovuta(debito)</field>
+        <fieldname="code">VP6a</field>
+        <fieldname="parent_id"ref="tax_report_line_vp6"/>
+        <fieldname="formula">VP4&gt;VP5andVP4-VP5or0</field>
+        <fieldname="sequence">1</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vp6b" model="account.tax.report.line">
-        <field name="name">VP6b - IVA dovuta (credito)</field>
-        <field name="code">VP6b</field>
-        <field name="parent_id" ref="tax_report_line_vp6"/>
-        <field name="formula">VP5&gt;VP4 and VP5-VP4 or 0</field>
-        <field name="sequence">2</field>
-        <field name="report_id" ref="tax_report_vat"/>
-    </record>
-
-    <record id="tax_report_line_vp7" model="account.tax.report.line">
-        <field name="name">VP7 - Debito periodo precedente non superiore 25,82</field>
-        <field name="code">VP7</field>
-        <field name="parent_id" ref="tax_report_line_saldi_riporti_e_interessi"/>
-        <field name="sequence">2</field>
-        <field name="tag_name">vp7</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp6b"model="account.tax.report.line">
+        <fieldname="name">VP6b-IVAdovuta(credito)</field>
+        <fieldname="code">VP6b</field>
+        <fieldname="parent_id"ref="tax_report_line_vp6"/>
+        <fieldname="formula">VP5&gt;VP4andVP5-VP4or0</field>
+        <fieldname="sequence">2</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
 
-    <record id="tax_report_line_vp8" model="account.tax.report.line">
-        <field name="name">VP8 - Credito periodo precedente</field>
-        <field name="code">VP8</field>
-        <field name="parent_id" ref="tax_report_line_saldi_riporti_e_interessi"/>
-        <field name="sequence">3</field>
-        <field name="tag_name">vp8</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp7"model="account.tax.report.line">
+        <fieldname="name">VP7-Debitoperiodoprecedentenonsuperiore25,82</field>
+        <fieldname="code">VP7</field>
+        <fieldname="parent_id"ref="tax_report_line_saldi_riporti_e_interessi"/>
+        <fieldname="sequence">2</field>
+        <fieldname="tag_name">vp7</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
 
-    <record id="tax_report_line_vp9" model="account.tax.report.line">
-        <field name="name">VP9 - Credito anno precedente</field>
-        <field name="code">VP9</field>
-        <field name="parent_id" ref="tax_report_line_saldi_riporti_e_interessi"/>
-        <field name="sequence">4</field>
-        <field name="tag_name">vp9</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp8"model="account.tax.report.line">
+        <fieldname="name">VP8-Creditoperiodoprecedente</field>
+        <fieldname="code">VP8</field>
+        <fieldname="parent_id"ref="tax_report_line_saldi_riporti_e_interessi"/>
+        <fieldname="sequence">3</field>
+        <fieldname="tag_name">vp8</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
 
-    <record id="tax_report_line_vp10" model="account.tax.report.line">
-        <field name="name">VP10 - Versamenti auto UE</field>
-        <field name="code">VP10</field>
-        <field name="parent_id" ref="tax_report_line_saldi_riporti_e_interessi"/>
-        <field name="sequence">5</field>
-        <field name="tag_name">vp10</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp9"model="account.tax.report.line">
+        <fieldname="name">VP9-Creditoannoprecedente</field>
+        <fieldname="code">VP9</field>
+        <fieldname="parent_id"ref="tax_report_line_saldi_riporti_e_interessi"/>
+        <fieldname="sequence">4</field>
+        <fieldname="tag_name">vp9</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
 
-    <record id="tax_report_line_vp11" model="account.tax.report.line">
-        <field name="name">VP11 - Credito d'imposta</field>
-        <field name="code">VP11</field>
-        <field name="parent_id" ref="tax_report_line_saldi_riporti_e_interessi"/>
-        <field name="sequence">6</field>
-        <field name="tag_name">vp11</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp10"model="account.tax.report.line">
+        <fieldname="name">VP10-VersamentiautoUE</field>
+        <fieldname="code">VP10</field>
+        <fieldname="parent_id"ref="tax_report_line_saldi_riporti_e_interessi"/>
+        <fieldname="sequence">5</field>
+        <fieldname="tag_name">vp10</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
 
-    <record id="tax_report_line_vp12" model="account.tax.report.line">
-        <field name="name">VP12 - Interessi dovuti per liquidazioni trimestrali</field>
-        <field name="code">VP12</field>
-        <field name="parent_id" ref="tax_report_line_saldi_riporti_e_interessi"/>
-        <field name="sequence">7</field>
-        <field name="tag_name">vp12</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp11"model="account.tax.report.line">
+        <fieldname="name">VP11-Creditod'imposta</field>
+        <fieldname="code">VP11</field>
+        <fieldname="parent_id"ref="tax_report_line_saldi_riporti_e_interessi"/>
+        <fieldname="sequence">6</field>
+        <fieldname="tag_name">vp11</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
 
-    <record id="tax_report_line_vp13" model="account.tax.report.line">
-        <field name="name">VP13 - Acconto dovuto</field>
-        <field name="code">VP13</field>
-        <field name="parent_id" ref="tax_report_line_saldi_riporti_e_interessi"/>
-        <field name="sequence">8</field>
-        <field name="tag_name">vp13</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp12"model="account.tax.report.line">
+        <fieldname="name">VP12-Interessidovutiperliquidazionitrimestrali</field>
+        <fieldname="code">VP12</field>
+        <fieldname="parent_id"ref="tax_report_line_saldi_riporti_e_interessi"/>
+        <fieldname="sequence">7</field>
+        <fieldname="tag_name">vp12</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
 
-    <record id="tax_report_line_conto_corrente_iva" model="account.tax.report.line">
-        <field name="name">Conto corrente IVA</field>
-        <field name="code">h4</field>
-        <field name="sequence">4</field>
-        <field name="formula">None</field>
-        <field name="report_id" ref="tax_report_vat"/>
-    </record>
-    <record id="tax_report_line_vp14" model="account.tax.report.line">
-        <field name="name">VP14 - IVA da versare</field>
-        <field name="code">VP14</field>
-        <field name="parent_id" ref="tax_report_line_conto_corrente_iva"/>
-        <field name="sequence">1</field>
-        <field name="formula">None</field>
-        <field name="report_id" ref="tax_report_vat"/>
-    </record>
-    <record id="tax_report_line_vp14a" model="account.tax.report.line">
-        <field name="name">VP14a - IVA da versare (debito)</field>
-        <field name="code">VP14a</field>
-        <field name="parent_id" ref="tax_report_line_vp14"/>
-        <field name="sequence">1</field>
-        <field name="formula">max(((VP4&gt;VP5 and VP4-VP5 or 0) + VP7 + VP12) - ((VP5&gt;VP4 and VP5-VP4 or 0) + VP8 + VP9 + VP10 + VP11 + VP13), 0)</field>
-        <field name="report_id" ref="tax_report_vat"/>
-    </record>
-    <record id="tax_report_line_vp14b" model="account.tax.report.line">
-        <field name="name">VP14b - IVA da versare (credito)</field>
-        <field name="code">VP14b</field>
-        <field name="parent_id" ref="tax_report_line_vp14"/>
-        <field name="sequence">2</field>
-        <field name="formula">max(((VP5&gt;VP4 and VP5-VP4 or 0) + VP8 + VP9 + VP10 + VP11 + VP13) - ((VP4&gt;VP5 and VP4-VP5 or 0) + VP7 + VP12), 0)</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp13"model="account.tax.report.line">
+        <fieldname="name">VP13-Accontodovuto</field>
+        <fieldname="code">VP13</field>
+        <fieldname="parent_id"ref="tax_report_line_saldi_riporti_e_interessi"/>
+        <fieldname="sequence">8</field>
+        <fieldname="tag_name">vp13</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
 
-    <record id="tax_report_line_reverse_charge_iva" model="account.tax.report.line">
-        <field name="name">Reverse Charge</field>
-        <field name="code">VJ</field>
-        <field name="sequence">5</field>
-        <field name="formula">None</field>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_conto_corrente_iva"model="account.tax.report.line">
+        <fieldname="name">ContocorrenteIVA</field>
+        <fieldname="code">h4</field>
+        <fieldname="sequence">4</field>
+        <fieldname="formula">None</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj1" model="account.tax.report.line">
-        <field name="name">VJ1 - Acquisti di beni dalla Città del Vaticano e da San Marino</field>
-        <field name="code">VJ1</field>
-        <field name="sequence">1</field>
-        <field name="tag_name">vj1</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp14"model="account.tax.report.line">
+        <fieldname="name">VP14-IVAdaversare</field>
+        <fieldname="code">VP14</field>
+        <fieldname="parent_id"ref="tax_report_line_conto_corrente_iva"/>
+        <fieldname="sequence">1</field>
+        <fieldname="formula">None</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj2" model="account.tax.report.line">
-        <field name="name">VJ2 - Estrazione di beni da depositi Iva</field>
-        <field name="code">VJ2</field>
-        <field name="sequence">2</field>
-        <field name="tag_name">vj2</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp14a"model="account.tax.report.line">
+        <fieldname="name">VP14a-IVAdaversare(debito)</field>
+        <fieldname="code">VP14a</field>
+        <fieldname="parent_id"ref="tax_report_line_vp14"/>
+        <fieldname="sequence">1</field>
+        <fieldname="formula">max(((VP4&gt;VP5andVP4-VP5or0)+VP7+VP12)-((VP5&gt;VP4andVP5-VP4or0)+VP8+VP9+VP10+VP11+VP13),0)</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj3" model="account.tax.report.line">
-        <field name="name">VJ3 - Acquisti di beni giá presenti in Italia o servizi, da soggetti non residenti</field>
-        <field name="code">VJ3</field>
-        <field name="sequence">3</field>
-        <field name="tag_name">vj3</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vp14b"model="account.tax.report.line">
+        <fieldname="name">VP14b-IVAdaversare(credito)</field>
+        <fieldname="code">VP14b</field>
+        <fieldname="parent_id"ref="tax_report_line_vp14"/>
+        <fieldname="sequence">2</field>
+        <fieldname="formula">max(((VP5&gt;VP4andVP5-VP4or0)+VP8+VP9+VP10+VP11+VP13)-((VP4&gt;VP5andVP4-VP5or0)+VP7+VP12),0)</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj4" model="account.tax.report.line">
-        <field name="name">VJ4 - Compensi corrisposti ai rivenditori di biglietti di viaggio ed ai rivenditori di documenti di sosta </field>
-        <field name="code">VJ4</field>
-        <field name="sequence">4</field>
-        <field name="tag_name">vj4</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+
+    <recordid="tax_report_line_reverse_charge_iva"model="account.tax.report.line">
+        <fieldname="name">ReverseCharge</field>
+        <fieldname="code">VJ</field>
+        <fieldname="sequence">5</field>
+        <fieldname="formula">None</field>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj5" model="account.tax.report.line">
-        <field name="name">VJ5 - Provvigioni corrisposte dalle agenzie di viaggio ai propri intermediari</field>
-        <field name="code">VJ5</field>
-        <field name="sequence">5</field>
-        <field name="tag_name">vj5</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vj1"model="account.tax.report.line">
+        <fieldname="name">VJ1-AcquistidibenidallaCittàdelVaticanoedaSanMarino</field>
+        <fieldname="code">VJ1</field>
+        <fieldname="sequence">1</field>
+        <fieldname="tag_name">vj1</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj6" model="account.tax.report.line">
-        <field name="name">VJ6 - Acquisti di rottami e altri materiali di recupero</field>
-        <field name="code">VJ6</field>
-        <field name="sequence">6</field>
-        <field name="tag_name">vj6</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vj2"model="account.tax.report.line">
+        <fieldname="name">VJ2-EstrazionedibenidadepositiIva</field>
+        <fieldname="code">VJ2</field>
+        <fieldname="sequence">2</field>
+        <fieldname="tag_name">vj2</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj7" model="account.tax.report.line">
-        <field name="name">VJ7 - Acquisti di oro industriale e argento puro effettuati in Italia</field>
-        <field name="code">VJ7</field>
-        <field name="sequence">7</field>
-        <field name="tag_name">vj7</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vj3"model="account.tax.report.line">
+        <fieldname="name">VJ3-AcquistidibenigiápresentiinItaliaoservizi,dasoggettinonresidenti</field>
+        <fieldname="code">VJ3</field>
+        <fieldname="sequence">3</field>
+        <fieldname="tag_name">vj3</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj8" model="account.tax.report.line">
-        <field name="name">VJ8 - Acquisti di oro da investimento effettuati in Italia</field>
-        <field name="code">VJ8</field>
-        <field name="sequence">8</field>
-        <field name="tag_name">vj8</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vj4"model="account.tax.report.line">
+        <fieldname="name">VJ4-Compensicorrispostiairivenditoridibigliettidiviaggioedairivenditorididocumentidisosta</field>
+        <fieldname="code">VJ4</field>
+        <fieldname="sequence">4</field>
+        <fieldname="tag_name">vj4</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj9" model="account.tax.report.line">
-        <field name="name">VJ9 - Acquisti intracomunitari di beni</field>
-        <field name="code">VJ9</field>
-        <field name="sequence">9</field>
-        <field name="tag_name">vj9</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vj5"model="account.tax.report.line">
+        <fieldname="name">VJ5-Provvigionicorrispostedalleagenziediviaggioaipropriintermediari</field>
+        <fieldname="code">VJ5</field>
+        <fieldname="sequence">5</field>
+        <fieldname="tag_name">vj5</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj10" model="account.tax.report.line">
-        <field name="name">VJ10 - Importazioni di rottami e altri materiali di recupero</field>
-        <field name="code">VJ10</field>
-        <field name="sequence">10</field>
-        <field name="tag_name">vj10</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vj6"model="account.tax.report.line">
+        <fieldname="name">VJ6-Acquistidirottamiealtrimaterialidirecupero</field>
+        <fieldname="code">VJ6</field>
+        <fieldname="sequence">6</field>
+        <fieldname="tag_name">vj6</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj11" model="account.tax.report.line">
-        <field name="name">VJ11 - Importazioni di oro industriale e argento puro</field>
-        <field name="code">VJ11</field>
-        <field name="sequence">11</field>
-        <field name="tag_name">vj11</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vj7"model="account.tax.report.line">
+        <fieldname="name">VJ7-AcquistidioroindustrialeeargentopuroeffettuatiinItalia</field>
+        <fieldname="code">VJ7</field>
+        <fieldname="sequence">7</field>
+        <fieldname="tag_name">vj7</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj12" model="account.tax.report.line">
-        <field name="name">VJ12 - Subappalto di servizi in campo edile</field>
-        <field name="code">VJ12</field>
-        <field name="sequence">12</field>
-        <field name="tag_name">vj12</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vj8"model="account.tax.report.line">
+        <fieldname="name">VJ8-AcquistidiorodainvestimentoeffettuatiinItalia</field>
+        <fieldname="code">VJ8</field>
+        <fieldname="sequence">8</field>
+        <fieldname="tag_name">vj8</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj13" model="account.tax.report.line">
-        <field name="name">VJ13 - Acquisti di fabbricati o porzioni di fabbricati strumentali</field>
-        <field name="code">VJ13</field>
-        <field name="sequence">13</field>
-        <field name="tag_name">vj13</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vj9"model="account.tax.report.line">
+        <fieldname="name">VJ9-Acquistiintracomunitaridibeni</field>
+        <fieldname="code">VJ9</field>
+        <fieldname="sequence">9</field>
+        <fieldname="tag_name">vj9</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj14" model="account.tax.report.line">
-        <field name="name">VJ14 - Acquisti di telefoni cellulari</field>
-        <field name="code">VJ14</field>
-        <field name="sequence">14</field>
-        <field name="tag_name">vj14</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vj10"model="account.tax.report.line">
+        <fieldname="name">VJ10-Importazionidirottamiealtrimaterialidirecupero</field>
+        <fieldname="code">VJ10</field>
+        <fieldname="sequence">10</field>
+        <fieldname="tag_name">vj10</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj15" model="account.tax.report.line">
-        <field name="name">VJ15 - Acquisti di prodotti elettronici</field>
-        <field name="code">VJ15</field>
-        <field name="sequence">15</field>
-        <field name="tag_name">vj15</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vj11"model="account.tax.report.line">
+        <fieldname="name">VJ11-Importazionidioroindustrialeeargentopuro</field>
+        <fieldname="code">VJ11</field>
+        <fieldname="sequence">11</field>
+        <fieldname="tag_name">vj11</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj16" model="account.tax.report.line">
-        <field name="name">VJ16 - Prestazioni di servizi in campo edile</field>
-        <field name="code">VJ16</field>
-        <field name="sequence">16</field>
-        <field name="tag_name">vj16</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vj12"model="account.tax.report.line">
+        <fieldname="name">VJ12-Subappaltodiserviziincampoedile</field>
+        <fieldname="code">VJ12</field>
+        <fieldname="sequence">12</field>
+        <fieldname="tag_name">vj12</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj17" model="account.tax.report.line">
-        <field name="name">VJ17 - Acquiti di beni e servizi del settore energetico</field>
-        <field name="code">VJ17</field>
-        <field name="sequence">17</field>
-        <field name="tag_name">vj17</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vj13"model="account.tax.report.line">
+        <fieldname="name">VJ13-Acquistidifabbricatioporzionidifabbricatistrumentali</field>
+        <fieldname="code">VJ13</field>
+        <fieldname="sequence">13</field>
+        <fieldname="tag_name">vj13</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj18" model="account.tax.report.line">
-        <field name="name">VJ18 - acquisti effettuati dalle pubbliche amministrazioni titolari di partita IVA</field>
-        <field name="code">VJ18</field>
-        <field name="sequence">18</field>
-        <field name="tag_name">vj18</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vj14"model="account.tax.report.line">
+        <fieldname="name">VJ14-Acquistiditelefonicellulari</field>
+        <fieldname="code">VJ14</field>
+        <fieldname="sequence">14</field>
+        <fieldname="tag_name">vj14</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
-    <record id="tax_report_line_vj19" model="account.tax.report.line">
-        <field name="name">VJ19 - Totale quadro VJ</field>
-        <field name="code">VJ19</field>
-        <field name="sequence">19</field>
-        <field name="formula">VJ1 + VJ2 + VJ3 + VJ4 + VJ5 + VJ6 + VJ7 + VJ8 + VJ9 + VJ10 + VJ11 + VJ12 + VJ13 + VJ14 + VJ15 + VJ16 + VJ17 + VJ18</field>
-        <field name="parent_id" ref="tax_report_line_reverse_charge_iva"/>
-        <field name="report_id" ref="tax_report_vat"/>
+    <recordid="tax_report_line_vj15"model="account.tax.report.line">
+        <fieldname="name">VJ15-Acquistidiprodottielettronici</field>
+        <fieldname="code">VJ15</field>
+        <fieldname="sequence">15</field>
+        <fieldname="tag_name">vj15</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
+    </record>
+    <recordid="tax_report_line_vj16"model="account.tax.report.line">
+        <fieldname="name">VJ16-Prestazionidiserviziincampoedile</field>
+        <fieldname="code">VJ16</field>
+        <fieldname="sequence">16</field>
+        <fieldname="tag_name">vj16</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
+    </record>
+    <recordid="tax_report_line_vj17"model="account.tax.report.line">
+        <fieldname="name">VJ17-Acquitidibenieservizidelsettoreenergetico</field>
+        <fieldname="code">VJ17</field>
+        <fieldname="sequence">17</field>
+        <fieldname="tag_name">vj17</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
+    </record>
+    <recordid="tax_report_line_vj18"model="account.tax.report.line">
+        <fieldname="name">VJ18-acquistieffettuatidallepubblicheamministrazionititolaridipartitaIVA</field>
+        <fieldname="code">VJ18</field>
+        <fieldname="sequence">18</field>
+        <fieldname="tag_name">vj18</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
+    </record>
+    <recordid="tax_report_line_vj19"model="account.tax.report.line">
+        <fieldname="name">VJ19-TotalequadroVJ</field>
+        <fieldname="code">VJ19</field>
+        <fieldname="sequence">19</field>
+        <fieldname="formula">VJ1+VJ2+VJ3+VJ4+VJ5+VJ6+VJ7+VJ8+VJ9+VJ10+VJ11+VJ12+VJ13+VJ14+VJ15+VJ16+VJ17+VJ18</field>
+        <fieldname="parent_id"ref="tax_report_line_reverse_charge_iva"/>
+        <fieldname="report_id"ref="tax_report_vat"/>
     </record>
 </flectra>

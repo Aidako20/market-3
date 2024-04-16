@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra.exceptions import UserError
-from flectra.tests.common import TransactionCase, tagged
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectra.exceptionsimportUserError
+fromflectra.tests.commonimportTransactionCase,tagged
 
 
-@tagged('post_install_l10n', 'post_install', '-at_install')
-class TestResPartner(TransactionCase):
+@tagged('post_install_l10n','post_install','-at_install')
+classTestResPartner(TransactionCase):
 
-    def test_validate_fiscal_code(self):
-        valid_codes = [
+    deftest_validate_fiscal_code(self):
+        valid_codes=[
             "AORTHV05P30V295L",
             "SPDTHB43S93F42VH",
             "MDRTUV99H14X2MNU",
@@ -28,7 +28,7 @@ class TestResPartner(TransactionCase):
             "94567689990",
         ]
 
-        invalid_codes = [
+        invalid_codes=[
             "AORTHV05P34V295U",
             "SPDTHB43O93F42VH",
             "MDRTUVV9H14X2MNU",
@@ -49,13 +49,13 @@ class TestResPartner(TransactionCase):
             "45692151219",
         ]
 
-        partners = self.env['res.partner']
+        partners=self.env['res.partner']
 
-        for i, code in enumerate(invalid_codes):
-            with self.assertRaises(UserError):
-                partners += self.env['res.partner'].create({'name': f'partner_{i}', 'l10n_it_codice_fiscale': code})
+        fori,codeinenumerate(invalid_codes):
+            withself.assertRaises(UserError):
+                partners+=self.env['res.partner'].create({'name':f'partner_{i}','l10n_it_codice_fiscale':code})
 
-        for i, code in enumerate(valid_codes):
-            partners += self.env['res.partner'].create({'name': f'partner_{i}', 'l10n_it_codice_fiscale': code})
+        fori,codeinenumerate(valid_codes):
+            partners+=self.env['res.partner'].create({'name':f'partner_{i}','l10n_it_codice_fiscale':code})
 
-        self.assertEqual(len(partners), len(valid_codes))
+        self.assertEqual(len(partners),len(valid_codes))

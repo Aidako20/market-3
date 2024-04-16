@@ -1,292 +1,292 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from contextlib import contextmanager
+fromcontextlibimportcontextmanager
 
-from flectra.tests.common import SavepointCase, Form
-from flectra.exceptions import AccessError, UserError
+fromflectra.tests.commonimportSavepointCase,Form
+fromflectra.exceptionsimportAccessError,UserError
 
 
-class TestMultiCompanyCommon(SavepointCase):
+classTestMultiCompanyCommon(SavepointCase):
 
     @classmethod
-    def setUpMultiCompany(cls):
+    defsetUpMultiCompany(cls):
 
-        # create companies
-        cls.company_a = cls.env['res.company'].create({
-            'name': 'Company A'
+        #createcompanies
+        cls.company_a=cls.env['res.company'].create({
+            'name':'CompanyA'
         })
-        cls.company_b = cls.env['res.company'].create({
-            'name': 'Company B'
-        })
-
-        # shared customers
-        cls.partner_1 = cls.env['res.partner'].create({
-            'name': 'Valid Lelitre',
-            'email': 'valid.lelitre@agrolait.com',
-            'company_id': False,
-        })
-        cls.partner_2 = cls.env['res.partner'].create({
-            'name': 'Valid Poilvache',
-            'email': 'valid.other@gmail.com',
-            'company_id': False,
+        cls.company_b=cls.env['res.company'].create({
+            'name':'CompanyB'
         })
 
-        # users to use through the various tests
-        user_group_employee = cls.env.ref('base.group_user')
-        Users = cls.env['res.users'].with_context({'no_reset_password': True})
+        #sharedcustomers
+        cls.partner_1=cls.env['res.partner'].create({
+            'name':'ValidLelitre',
+            'email':'valid.lelitre@agrolait.com',
+            'company_id':False,
+        })
+        cls.partner_2=cls.env['res.partner'].create({
+            'name':'ValidPoilvache',
+            'email':'valid.other@gmail.com',
+            'company_id':False,
+        })
 
-        cls.user_employee_company_a = Users.create({
-            'name': 'Employee Company A',
-            'login': 'employee-a',
-            'email': 'employee@companya.com',
-            'company_id': cls.company_a.id,
-            'company_ids': [(6, 0, [cls.company_a.id])],
-            'groups_id': [(6, 0, [user_group_employee.id])]
+        #userstousethroughthevarioustests
+        user_group_employee=cls.env.ref('base.group_user')
+        Users=cls.env['res.users'].with_context({'no_reset_password':True})
+
+        cls.user_employee_company_a=Users.create({
+            'name':'EmployeeCompanyA',
+            'login':'employee-a',
+            'email':'employee@companya.com',
+            'company_id':cls.company_a.id,
+            'company_ids':[(6,0,[cls.company_a.id])],
+            'groups_id':[(6,0,[user_group_employee.id])]
         })
-        cls.user_manager_company_a = Users.create({
-            'name': 'Manager Company A',
-            'login': 'manager-a',
-            'email': 'manager@companya.com',
-            'company_id': cls.company_a.id,
-            'company_ids': [(6, 0, [cls.company_a.id])],
-            'groups_id': [(6, 0, [user_group_employee.id])]
+        cls.user_manager_company_a=Users.create({
+            'name':'ManagerCompanyA',
+            'login':'manager-a',
+            'email':'manager@companya.com',
+            'company_id':cls.company_a.id,
+            'company_ids':[(6,0,[cls.company_a.id])],
+            'groups_id':[(6,0,[user_group_employee.id])]
         })
-        cls.user_employee_company_b = Users.create({
-            'name': 'Employee Company B',
-            'login': 'employee-b',
-            'email': 'employee@companyb.com',
-            'company_id': cls.company_b.id,
-            'company_ids': [(6, 0, [cls.company_b.id])],
-            'groups_id': [(6, 0, [user_group_employee.id])]
+        cls.user_employee_company_b=Users.create({
+            'name':'EmployeeCompanyB',
+            'login':'employee-b',
+            'email':'employee@companyb.com',
+            'company_id':cls.company_b.id,
+            'company_ids':[(6,0,[cls.company_b.id])],
+            'groups_id':[(6,0,[user_group_employee.id])]
         })
-        cls.user_manager_company_b = Users.create({
-            'name': 'Manager Company B',
-            'login': 'manager-b',
-            'email': 'manager@companyb.com',
-            'company_id': cls.company_b.id,
-            'company_ids': [(6, 0, [cls.company_b.id])],
-            'groups_id': [(6, 0, [user_group_employee.id])]
+        cls.user_manager_company_b=Users.create({
+            'name':'ManagerCompanyB',
+            'login':'manager-b',
+            'email':'manager@companyb.com',
+            'company_id':cls.company_b.id,
+            'company_ids':[(6,0,[cls.company_b.id])],
+            'groups_id':[(6,0,[user_group_employee.id])]
         })
 
     @contextmanager
-    def sudo(self, login):
-        old_uid = self.uid
+    defsudo(self,login):
+        old_uid=self.uid
         try:
-            user = self.env['res.users'].sudo().search([('login', '=', login)])
-            # switch user
-            self.uid = user.id
-            self.env = self.env(user=self.uid)
+            user=self.env['res.users'].sudo().search([('login','=',login)])
+            #switchuser
+            self.uid=user.id
+            self.env=self.env(user=self.uid)
             yield
         finally:
-            # back
-            self.uid = old_uid
-            self.env = self.env(user=self.uid)
+            #back
+            self.uid=old_uid
+            self.env=self.env(user=self.uid)
 
     @contextmanager
-    def allow_companies(self, company_ids):
-        """ The current user will be allowed in each given companies (like he can sees all of them in the company switcher and they are all checked) """
-        old_allow_company_ids = self.env.user.company_ids.ids
-        current_user = self.env.user
+    defallow_companies(self,company_ids):
+        """Thecurrentuserwillbeallowedineachgivencompanies(likehecanseesalloftheminthecompanyswitcherandtheyareallchecked)"""
+        old_allow_company_ids=self.env.user.company_ids.ids
+        current_user=self.env.user
         try:
-            current_user.write({'company_ids': company_ids})
-            context = dict(self.env.context, allowed_company_ids=company_ids)
-            self.env = self.env(user=current_user, context=context)
+            current_user.write({'company_ids':company_ids})
+            context=dict(self.env.context,allowed_company_ids=company_ids)
+            self.env=self.env(user=current_user,context=context)
             yield
         finally:
-            # back
-            current_user.write({'company_ids': old_allow_company_ids})
-            context = dict(self.env.context, allowed_company_ids=old_allow_company_ids)
-            self.env = self.env(user=current_user, context=context)
+            #back
+            current_user.write({'company_ids':old_allow_company_ids})
+            context=dict(self.env.context,allowed_company_ids=old_allow_company_ids)
+            self.env=self.env(user=current_user,context=context)
 
     @contextmanager
-    def switch_company(self, company):
-        """ Change the company in which the current user is logged """
-        old_companies = self.env.context.get('allowed_company_ids', [])
+    defswitch_company(self,company):
+        """Changethecompanyinwhichthecurrentuserislogged"""
+        old_companies=self.env.context.get('allowed_company_ids',[])
         try:
-            # switch company in context
-            new_companies = list(old_companies)
-            if company.id not in new_companies:
-                new_companies = [company.id] + new_companies
+            #switchcompanyincontext
+            new_companies=list(old_companies)
+            ifcompany.idnotinnew_companies:
+                new_companies=[company.id]+new_companies
             else:
-                new_companies.insert(0, new_companies.pop(new_companies.index(company.id)))
-            context = dict(self.env.context, allowed_company_ids=new_companies)
-            self.env = self.env(context=context)
+                new_companies.insert(0,new_companies.pop(new_companies.index(company.id)))
+            context=dict(self.env.context,allowed_company_ids=new_companies)
+            self.env=self.env(context=context)
             yield
         finally:
-            # back
-            context = dict(self.env.context, allowed_company_ids=old_companies)
-            self.env = self.env(context=context)
+            #back
+            context=dict(self.env.context,allowed_company_ids=old_companies)
+            self.env=self.env(context=context)
 
 
-class TestMultiCompanyProject(TestMultiCompanyCommon):
+classTestMultiCompanyProject(TestMultiCompanyCommon):
 
     @classmethod
-    def setUpClass(cls):
-        super(TestMultiCompanyProject, cls).setUpClass()
+    defsetUpClass(cls):
+        super(TestMultiCompanyProject,cls).setUpClass()
 
         cls.setUpMultiCompany()
 
-        user_group_project_user = cls.env.ref('project.group_project_user')
-        user_group_project_manager = cls.env.ref('project.group_project_manager')
+        user_group_project_user=cls.env.ref('project.group_project_user')
+        user_group_project_manager=cls.env.ref('project.group_project_manager')
 
-        # setup users
+        #setupusers
         cls.user_employee_company_a.write({
-            'groups_id': [(4, user_group_project_user.id)]
+            'groups_id':[(4,user_group_project_user.id)]
         })
         cls.user_manager_company_a.write({
-            'groups_id': [(4, user_group_project_manager.id)]
+            'groups_id':[(4,user_group_project_manager.id)]
         })
         cls.user_employee_company_b.write({
-            'groups_id': [(4, user_group_project_user.id)]
+            'groups_id':[(4,user_group_project_user.id)]
         })
         cls.user_manager_company_b.write({
-            'groups_id': [(4, user_group_project_manager.id)]
+            'groups_id':[(4,user_group_project_manager.id)]
         })
 
-        # create project in both companies
-        Project = cls.env['project.project'].with_context({'mail_create_nolog': True, 'tracking_disable': True})
-        cls.project_company_a = Project.create({
-            'name': 'Project Company A',
-            'alias_name': 'project+companya',
-            'partner_id': cls.partner_1.id,
-            'company_id': cls.company_a.id,
-            'type_ids': [
-                (0, 0, {
-                    'name': 'New',
-                    'sequence': 1,
+        #createprojectinbothcompanies
+        Project=cls.env['project.project'].with_context({'mail_create_nolog':True,'tracking_disable':True})
+        cls.project_company_a=Project.create({
+            'name':'ProjectCompanyA',
+            'alias_name':'project+companya',
+            'partner_id':cls.partner_1.id,
+            'company_id':cls.company_a.id,
+            'type_ids':[
+                (0,0,{
+                    'name':'New',
+                    'sequence':1,
                 }),
-                (0, 0, {
-                    'name': 'Won',
-                    'sequence': 10,
+                (0,0,{
+                    'name':'Won',
+                    'sequence':10,
                 })
             ]
         })
-        cls.project_company_b = Project.create({
-            'name': 'Project Company B',
-            'alias_name': 'project+companyb',
-            'partner_id': cls.partner_1.id,
-            'company_id': cls.company_b.id,
-            'type_ids': [
-                (0, 0, {
-                    'name': 'New',
-                    'sequence': 1,
+        cls.project_company_b=Project.create({
+            'name':'ProjectCompanyB',
+            'alias_name':'project+companyb',
+            'partner_id':cls.partner_1.id,
+            'company_id':cls.company_b.id,
+            'type_ids':[
+                (0,0,{
+                    'name':'New',
+                    'sequence':1,
                 }),
-                (0, 0, {
-                    'name': 'Won',
-                    'sequence': 10,
+                (0,0,{
+                    'name':'Won',
+                    'sequence':10,
                 })
             ]
         })
-        # already-existing tasks in company A and B
-        Task = cls.env['project.task'].with_context({'mail_create_nolog': True, 'tracking_disable': True})
-        cls.task_1 = Task.create({
-            'name': 'Task 1 in Project A',
-            'user_id': cls.user_employee_company_a.id,
-            'project_id': cls.project_company_a.id
+        #already-existingtasksincompanyAandB
+        Task=cls.env['project.task'].with_context({'mail_create_nolog':True,'tracking_disable':True})
+        cls.task_1=Task.create({
+            'name':'Task1inProjectA',
+            'user_id':cls.user_employee_company_a.id,
+            'project_id':cls.project_company_a.id
         })
-        cls.task_2 = Task.create({
-            'name': 'Task 2 in Project B',
-            'user_id': cls.user_employee_company_b.id,
-            'project_id': cls.project_company_b.id
+        cls.task_2=Task.create({
+            'name':'Task2inProjectB',
+            'user_id':cls.user_employee_company_b.id,
+            'project_id':cls.project_company_b.id
         })
 
-    def test_create_project(self):
-        """ Check project creation in multiple companies """
-        with self.sudo('manager-a'):
-            project = self.env['project.project'].with_context({'tracking_disable': True}).create({
-                'name': 'Project Company A',
-                'partner_id': self.partner_1.id,
+    deftest_create_project(self):
+        """Checkprojectcreationinmultiplecompanies"""
+        withself.sudo('manager-a'):
+            project=self.env['project.project'].with_context({'tracking_disable':True}).create({
+                'name':'ProjectCompanyA',
+                'partner_id':self.partner_1.id,
             })
-            self.assertEqual(project.company_id, self.env.user.company_id, "A newly created project should be in the current user company")
+            self.assertEqual(project.company_id,self.env.user.company_id,"Anewlycreatedprojectshouldbeinthecurrentusercompany")
 
-            with self.switch_company(self.company_b):
-                with self.assertRaises(AccessError, msg="Manager can not create project in a company in which he is not allowed"):
-                    project = self.env['project.project'].with_context({'tracking_disable': True}).create({
-                        'name': 'Project Company B',
-                        'partner_id': self.partner_1.id,
-                        'company_id': self.company_b.id
+            withself.switch_company(self.company_b):
+                withself.assertRaises(AccessError,msg="Managercannotcreateprojectinacompanyinwhichheisnotallowed"):
+                    project=self.env['project.project'].with_context({'tracking_disable':True}).create({
+                        'name':'ProjectCompanyB',
+                        'partner_id':self.partner_1.id,
+                        'company_id':self.company_b.id
                     })
 
-                # when allowed in other company, can create a project in another company (different from the one in which you are logged)
-                with self.allow_companies([self.company_a.id, self.company_b.id]):
-                    project = self.env['project.project'].with_context({'tracking_disable': True}).create({
-                        'name': 'Project Company B',
-                        'partner_id': self.partner_1.id,
-                        'company_id': self.company_b.id
+                #whenallowedinothercompany,cancreateaprojectinanothercompany(differentfromtheoneinwhichyouarelogged)
+                withself.allow_companies([self.company_a.id,self.company_b.id]):
+                    project=self.env['project.project'].with_context({'tracking_disable':True}).create({
+                        'name':'ProjectCompanyB',
+                        'partner_id':self.partner_1.id,
+                        'company_id':self.company_b.id
                     })
 
-    def test_generate_analytic_account(self):
-        """ Check the analytic account generation, company propagation """
-        with self.sudo('manager-b'):
-            with self.allow_companies([self.company_a.id, self.company_b.id]):
+    deftest_generate_analytic_account(self):
+        """Checktheanalyticaccountgeneration,companypropagation"""
+        withself.sudo('manager-b'):
+            withself.allow_companies([self.company_a.id,self.company_b.id]):
                 self.project_company_a._create_analytic_account()
 
-                self.assertEqual(self.project_company_a.company_id, self.project_company_a.analytic_account_id.company_id, "The analytic account created from a project should be in the same company")
+                self.assertEqual(self.project_company_a.company_id,self.project_company_a.analytic_account_id.company_id,"Theanalyticaccountcreatedfromaprojectshouldbeinthesamecompany")
 
-    def test_create_task(self):
-        with self.sudo('employee-a'):
-            # create task, set project; the onchange will set the correct company
-            with Form(self.env['project.task'].with_context({'tracking_disable': True})) as task_form:
-                task_form.name = 'Test Task in company A'
-                task_form.project_id = self.project_company_a
-            task = task_form.save()
+    deftest_create_task(self):
+        withself.sudo('employee-a'):
+            #createtask,setproject;theonchangewillsetthecorrectcompany
+            withForm(self.env['project.task'].with_context({'tracking_disable':True}))astask_form:
+                task_form.name='TestTaskincompanyA'
+                task_form.project_id=self.project_company_a
+            task=task_form.save()
 
-            self.assertEqual(task.company_id, self.project_company_a.company_id, "The company of the task should be the one from its project.")
+            self.assertEqual(task.company_id,self.project_company_a.company_id,"Thecompanyofthetaskshouldbetheonefromitsproject.")
 
-    def test_move_task(self):
-        with self.sudo('employee-a'):
-            with self.allow_companies([self.company_a.id, self.company_b.id]):
-                with Form(self.task_1) as task_form:
-                    task_form.project_id = self.project_company_b
-                task = task_form.save()
+    deftest_move_task(self):
+        withself.sudo('employee-a'):
+            withself.allow_companies([self.company_a.id,self.company_b.id]):
+                withForm(self.task_1)astask_form:
+                    task_form.project_id=self.project_company_b
+                task=task_form.save()
 
-                self.assertEqual(task.company_id, self.company_b, "The company of the task should be the one from its project.")
+                self.assertEqual(task.company_id,self.company_b,"Thecompanyofthetaskshouldbetheonefromitsproject.")
 
-                with Form(self.task_1) as task_form:
-                    task_form.project_id = self.project_company_a
-                task = task_form.save()
+                withForm(self.task_1)astask_form:
+                    task_form.project_id=self.project_company_a
+                task=task_form.save()
 
-                self.assertEqual(task.company_id, self.company_a, "Moving a task should change its company.")
+                self.assertEqual(task.company_id,self.company_a,"Movingataskshouldchangeitscompany.")
 
-    def test_create_subtask(self):
-        with self.sudo('employee-a'):
-            with self.allow_companies([self.company_a.id, self.company_b.id]):
-                # create subtask, set parent; the onchange will set the correct company and subtask project
-                with Form(self.env['project.task'].with_context({'tracking_disable': True})) as task_form:
-                    task_form.name = 'Test Subtask in company B'
-                    task_form.parent_id = self.task_1
-                    task_form.project_id = self.project_company_b
+    deftest_create_subtask(self):
+        withself.sudo('employee-a'):
+            withself.allow_companies([self.company_a.id,self.company_b.id]):
+                #createsubtask,setparent;theonchangewillsetthecorrectcompanyandsubtaskproject
+                withForm(self.env['project.task'].with_context({'tracking_disable':True}))astask_form:
+                    task_form.name='TestSubtaskincompanyB'
+                    task_form.parent_id=self.task_1
+                    task_form.project_id=self.project_company_b
 
-                task = task_form.save()
+                task=task_form.save()
 
-                self.assertEqual(task.company_id, self.project_company_b.company_id, "The company of the subtask should be the one from its project, and not from its parent.")
+                self.assertEqual(task.company_id,self.project_company_b.company_id,"Thecompanyofthesubtaskshouldbetheonefromitsproject,andnotfromitsparent.")
 
-                # set parent on existing orphan task; the onchange will set the correct company and subtask project
-                self.task_2.write({'project_id': False})
-                with Form(self.task_2) as task_form:
-                    task_form.name = 'Test Task 2 becomes child of Task 1 (other company)'
-                    task_form.parent_id = self.task_1
-                task = task_form.save()
+                #setparentonexistingorphantask;theonchangewillsetthecorrectcompanyandsubtaskproject
+                self.task_2.write({'project_id':False})
+                withForm(self.task_2)astask_form:
+                    task_form.name='TestTask2becomeschildofTask1(othercompany)'
+                    task_form.parent_id=self.task_1
+                task=task_form.save()
 
-                self.assertEqual(task.company_id, task.project_id.company_id, "The company of the orphan subtask should be the one from its project.")
+                self.assertEqual(task.company_id,task.project_id.company_id,"Thecompanyoftheorphansubtaskshouldbetheonefromitsproject.")
 
-    def test_cross_subtask_project(self):
-        # set up default subtask project
-        self.project_company_a.write({'allow_subtasks': True, 'subtask_project_id': self.project_company_b.id})
+    deftest_cross_subtask_project(self):
+        #setupdefaultsubtaskproject
+        self.project_company_a.write({'allow_subtasks':True,'subtask_project_id':self.project_company_b.id})
 
-        with self.sudo('employee-a'):
-            with self.allow_companies([self.company_a.id, self.company_b.id]):
-                with Form(self.env['project.task'].with_context({'tracking_disable': True})) as task_form:
-                    task_form.name = 'Test Subtask in company B'
-                    task_form.parent_id = self.task_1
+        withself.sudo('employee-a'):
+            withself.allow_companies([self.company_a.id,self.company_b.id]):
+                withForm(self.env['project.task'].with_context({'tracking_disable':True}))astask_form:
+                    task_form.name='TestSubtaskincompanyB'
+                    task_form.parent_id=self.task_1
 
-                task = task_form.save()
+                task=task_form.save()
 
-                self.assertEqual(task.project_id, self.task_1.project_id.subtask_project_id, "The default project of a subtask should be the default subtask project of the project from the mother task")
-                self.assertEqual(task.company_id, task.project_id.subtask_project_id.company_id, "The company of the orphan subtask should be the one from its project.")
-                self.assertEqual(self.task_1.child_ids.ids, [task.id])
+                self.assertEqual(task.project_id,self.task_1.project_id.subtask_project_id,"Thedefaultprojectofasubtaskshouldbethedefaultsubtaskprojectoftheprojectfromthemothertask")
+                self.assertEqual(task.company_id,task.project_id.subtask_project_id.company_id,"Thecompanyoftheorphansubtaskshouldbetheonefromitsproject.")
+                self.assertEqual(self.task_1.child_ids.ids,[task.id])
 
-        with self.sudo('employee-a'):
-            with self.assertRaises(AccessError):
-                with Form(task) as task_form:
-                    task_form.name = "Testing changing name in a company I can not read/write"
+        withself.sudo('employee-a'):
+            withself.assertRaises(AccessError):
+                withForm(task)astask_form:
+                    task_form.name="TestingchangingnameinacompanyIcannotread/write"

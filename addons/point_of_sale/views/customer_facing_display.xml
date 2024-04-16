@@ -1,74 +1,74 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <template id="customer_facing_display_html" >
-        <t name="point_of_sale.customer_facing_display_html" >
-            <div class="pos-customer_facing_display pos-palette_01">
-                <div class="pos-customer_products" name="Products list">
-                    <div class="pos_orderlines">
-                        <div class="pos_orderlines_item pos_orderlines_header">
+    <templateid="customer_facing_display_html">
+        <tname="point_of_sale.customer_facing_display_html">
+            <divclass="pos-customer_facing_displaypos-palette_01">
+                <divclass="pos-customer_products"name="Productslist">
+                    <divclass="pos_orderlines">
+                        <divclass="pos_orderlines_itempos_orderlines_header">
                             <div/>
                             <div/>
                             <div>Quantity</div>
                             <div>Price</div>
                         </div>
-                        <div class="pos_orderlines_list">
-                            <div class="pos_orderlines_item">
-                                <div><div style="background-image:url(/point_of_sale/static/img/monitor_stand.png)"/></div>
-                                <div>Monitor Stand</div>
+                        <divclass="pos_orderlines_list">
+                            <divclass="pos_orderlines_item">
+                                <div><divstyle="background-image:url(/point_of_sale/static/img/monitor_stand.png)"/></div>
+                                <div>MonitorStand</div>
                                 <div>2</div>
-                                <div>$ 4.40</div>
+                                <div>$4.40</div>
                             </div>
-                            <div class="pos_orderlines_item">
-                                <div><div style="background-image:url(/point_of_sale/static/img/led_lamp.png)"/></div>
-                                <div>Led Lamp</div>
+                            <divclass="pos_orderlines_item">
+                                <div><divstyle="background-image:url(/point_of_sale/static/img/led_lamp.png)"/></div>
+                                <div>LedLamp</div>
                                 <div>3</div>
-                                <div>$ 3.12</div>
+                                <div>$3.12</div>
                             </div>
-                            <div class="pos_orderlines_item">
-                                <div><div style="background-image:url(/point_of_sale/static/img/whiteboard_pen.png)"/></div>
-                                <div>Whiteboard Pen</div>
+                            <divclass="pos_orderlines_item">
+                                <div><divstyle="background-image:url(/point_of_sale/static/img/whiteboard_pen.png)"/></div>
+                                <div>WhiteboardPen</div>
                                 <div>3</div>
-                                <div>$ 8.50</div>
+                                <div>$8.50</div>
                             </div>
-                            <div class="pos_orderlines_item">
-                                <div><div style="background-image:url(/point_of_sale/static/img/desk_organizer.png)"/></div>
-                                <div>Desk Organizer</div>
+                            <divclass="pos_orderlines_item">
+                                <div><divstyle="background-image:url(/point_of_sale/static/img/desk_organizer.png)"/></div>
+                                <div>DeskOrganizer</div>
                                 <div>1</div>
-                                <div>$ 4.50</div>
+                                <div>$4.50</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="pos-payment_info">
-                    <div class="pos-company_logo" t-attf-style="background-image:url(/logo?company=#{company.id})"/>
+                <divclass="pos-payment_info">
+                    <divclass="pos-company_logo"t-attf-style="background-image:url(/logo?company=#{company.id})"/>
 
-                    <div class="pos-payment_info_details">
-                        <div class="pos-total">
+                    <divclass="pos-payment_info_details">
+                        <divclass="pos-total">
                             <div>
-                                <span class="total-amount-formatting">TOTAL</span>
+                                <spanclass="total-amount-formatting">TOTAL</span>
                             </div>
                             <div>
-                                <span id="total-amount" class="pos_total-amount">$ 469.14</span>
-                            </div>
-                        </div>
-                        <div class="pos-paymentlines">
-                            <div>
-                                <span>Cash (USD):</span>
-                            </div>
-                            <div>
-                                <span>$ 470.00</span>
-                            </div>
-                            <div>
-                                <span class="pos-change_title">Change</span>
-                            </div>
-                            <div>
-                                <span class="pos-change_amount">$ 0.86</span>
+                                <spanid="total-amount"class="pos_total-amount">$469.14</span>
                             </div>
                         </div>
-                        <div class="pos-flectra_logo_container">
-                            <img src="/web/static/src/img/logo_inverse_white_206px.png" alt="Flectra Logo"/>
+                        <divclass="pos-paymentlines">
+                            <div>
+                                <span>Cash(USD):</span>
+                            </div>
+                            <div>
+                                <span>$470.00</span>
+                            </div>
+                            <div>
+                                <spanclass="pos-change_title">Change</span>
+                            </div>
+                            <div>
+                                <spanclass="pos-change_amount">$0.86</span>
+                            </div>
+                        </div>
+                        <divclass="pos-flectra_logo_container">
+                            <imgsrc="/web/static/src/img/logo_inverse_white_206px.png"alt="FlectraLogo"/>
                         </div>
                     </div>
                 </div>

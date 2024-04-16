@@ -1,58 +1,58 @@
-flectra.define('pos_reataurant.tour.synchronized_table_management', function (require) {
-    'use strict';
+flectra.define('pos_reataurant.tour.synchronized_table_management',function(require){
+    'usestrict';
 
-    const { PaymentScreen } = require('point_of_sale.tour.PaymentScreenTourMethods');
-    const { ReceiptScreen } = require('point_of_sale.tour.ReceiptScreenTourMethods');
-    const { Chrome } = require('pos_restaurant.tour.ChromeTourMethods');
-    const { FloorScreen } = require('pos_restaurant.tour.FloorScreenTourMethods');
-    const { ProductScreen } = require('pos_restaurant.tour.ProductScreenTourMethods');
-    const { TicketScreen } = require('point_of_sale.tour.TicketScreenTourMethods');
-    const { getSteps, startSteps } = require('point_of_sale.tour.utils');
-    const Tour = require('web_tour.tour');
+    const{PaymentScreen}=require('point_of_sale.tour.PaymentScreenTourMethods');
+    const{ReceiptScreen}=require('point_of_sale.tour.ReceiptScreenTourMethods');
+    const{Chrome}=require('pos_restaurant.tour.ChromeTourMethods');
+    const{FloorScreen}=require('pos_restaurant.tour.FloorScreenTourMethods');
+    const{ProductScreen}=require('pos_restaurant.tour.ProductScreenTourMethods');
+    const{TicketScreen}=require('point_of_sale.tour.TicketScreenTourMethods');
+    const{getSteps,startSteps}=require('point_of_sale.tour.utils');
+    constTour=require('web_tour.tour');
 
     startSteps();
 
     FloorScreen.do.clickTable('T5');
 
-    // Create first order
+    //Createfirstorder
     ProductScreen.do.clickDisplayedProduct('Coca-Cola');
     ProductScreen.check.selectedOrderlineHas('Coca-Cola');
     ProductScreen.do.clickDisplayedProduct('Water');
     ProductScreen.check.selectedOrderlineHas('Water');
     ProductScreen.check.totalAmountIs('4.40');
 
-    // Create 2nd order (paid)
+    //Create2ndorder(paid)
     Chrome.do.clickTicketButton();
     TicketScreen.do.clickNewTicket();
     ProductScreen.do.clickDisplayedProduct('Coca-Cola');
     ProductScreen.check.selectedOrderlineHas('Coca-Cola');
-    ProductScreen.do.clickDisplayedProduct('Minute Maid');
-    ProductScreen.check.selectedOrderlineHas('Minute Maid');
+    ProductScreen.do.clickDisplayedProduct('MinuteMaid');
+    ProductScreen.check.selectedOrderlineHas('MinuteMaid');
     ProductScreen.check.totalAmountIs('4.40');
     ProductScreen.do.clickPayButton();
     PaymentScreen.do.clickPaymentMethod('Cash');
     PaymentScreen.do.clickValidate();
     ReceiptScreen.do.clickNextOrder();
 
-    // After clicking next order, floor screen is shown.
-    // It should have 1 as number of draft synced order.
-    FloorScreen.check.orderCountSyncedInTableIs('T5', '1');
+    //Afterclickingnextorder,floorscreenisshown.
+    //Itshouldhave1asnumberofdraftsyncedorder.
+    FloorScreen.check.orderCountSyncedInTableIs('T5','1');
     FloorScreen.do.clickTable('T5');
     ProductScreen.check.totalAmountIs('4.40');
 
-    // Create another draft order and go back to floor
+    //Createanotherdraftorderandgobacktofloor
     Chrome.do.clickTicketButton();
     TicketScreen.do.clickNewTicket();
     ProductScreen.do.clickDisplayedProduct('Coca-Cola');
     ProductScreen.check.selectedOrderlineHas('Coca-Cola');
-    ProductScreen.do.clickDisplayedProduct('Minute Maid');
-    ProductScreen.check.selectedOrderlineHas('Minute Maid');
+    ProductScreen.do.clickDisplayedProduct('MinuteMaid');
+    ProductScreen.check.selectedOrderlineHas('MinuteMaid');
     Chrome.do.backToFloor();
 
-    // At floor screen, there should be 2 synced draft orders
-    FloorScreen.check.orderCountSyncedInTableIs('T5', '2');
+    //Atfloorscreen,thereshouldbe2synceddraftorders
+    FloorScreen.check.orderCountSyncedInTableIs('T5','2');
 
-    // Delete the first order then go back to floor
+    //Deletethefirstorderthengobacktofloor
     FloorScreen.do.clickTable('T5');
     ProductScreen.check.isShown();
     Chrome.do.clickTicketButton();
@@ -61,30 +61,30 @@ flectra.define('pos_reataurant.tour.synchronized_table_management', function (re
     TicketScreen.do.selectOrder('-0003');
     Chrome.do.backToFloor();
 
-    // There should be 1 synced draft order.
-    FloorScreen.check.orderCountSyncedInTableIs('T5', '1');
+    //Thereshouldbe1synceddraftorder.
+    FloorScreen.check.orderCountSyncedInTableIs('T5','1');
 
-    Tour.register('pos_restaurant_sync', { test: true, url: '/pos/ui' }, getSteps());
+    Tour.register('pos_restaurant_sync',{test:true,url:'/pos/ui'},getSteps());
 
     startSteps();
 
-    /* pos_restaurant_sync_second_login
+    /*pos_restaurant_sync_second_login
      *
-     * This tour should be run after the first tour is done.
+     *Thistourshouldberunafterthefirsttourisdone.
      */
 
-    // There is one draft synced order from the previous tour
-    FloorScreen.check.orderCountSyncedInTableIs('T5', '1');
+    //Thereisonedraftsyncedorderfromtheprevioustour
+    FloorScreen.check.orderCountSyncedInTableIs('T5','1');
     FloorScreen.do.clickTable('T5');
     ProductScreen.check.totalAmountIs('4.40');
 
-    // Test transfering an order
+    //Testtransferinganorder
     ProductScreen.do.clickTransferButton();
     FloorScreen.do.clickTable('T4');
 
-    // Test if products still get merged after transfering the order
+    //Testifproductsstillgetmergedaftertransferingtheorder
     ProductScreen.do.clickDisplayedProduct('Coca-Cola');
-    ProductScreen.check.selectedOrderlineHas('Coca-Cola', '2.0');
+    ProductScreen.check.selectedOrderlineHas('Coca-Cola','2.0');
     ProductScreen.check.totalAmountIs('6.60');
     ProductScreen.do.pressNumpad('1');
     ProductScreen.check.totalAmountIs('4.40');
@@ -92,7 +92,7 @@ flectra.define('pos_reataurant.tour.synchronized_table_management', function (re
     PaymentScreen.do.clickPaymentMethod('Cash');
     PaymentScreen.do.clickValidate();
     ReceiptScreen.do.clickNextOrder();
-    // At this point, there are no draft orders.
+    //Atthispoint,therearenodraftorders.
 
     FloorScreen.do.clickTable('T2');
     ProductScreen.check.isShown();
@@ -102,7 +102,7 @@ flectra.define('pos_reataurant.tour.synchronized_table_management', function (re
     ProductScreen.do.clickDisplayedProduct('Coca-Cola');
     ProductScreen.check.totalAmountIs('2.20');
     Chrome.do.backToFloor();
-    FloorScreen.check.orderCountSyncedInTableIs('T4', '1');
+    FloorScreen.check.orderCountSyncedInTableIs('T4','1');
 
-    Tour.register('pos_restaurant_sync_second_login', { test: true, url: '/pos/ui' }, getSteps());
+    Tour.register('pos_restaurant_sync_second_login',{test:true,url:'/pos/ui'},getSteps());
 });

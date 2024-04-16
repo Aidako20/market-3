@@ -1,99 +1,99 @@
-flectra.define('website_sale.tour_shop_mail', function (require) {
-'use strict';
+flectra.define('website_sale.tour_shop_mail',function(require){
+'usestrict';
 
-var rpc = require('web.rpc');
-var tour = require('web_tour.tour');
+varrpc=require('web.rpc');
+vartour=require('web_tour.tour');
 
 require('web.dom_ready');
 
-tour.register('shop_mail', {
-    test: true,
-    url: '/',
+tour.register('shop_mail',{
+    test:true,
+    url:'/',
 },
 [
     {
-        content: "Change the domain of the websites and go to shop",
-        trigger: 'body',
-        run: function () {
-            // We change the domain of the website to test that the email that
-            // will be sent uses the correct domain for its links.
-            var def1 = rpc.query({
-                'model': 'website',
-                'method': 'write',
-                'args': [[1], {
-                    'domain': "my-test-domain.com",
+        content:"Changethedomainofthewebsitesandgotoshop",
+        trigger:'body',
+        run:function(){
+            //Wechangethedomainofthewebsitetotestthattheemailthat
+            //willbesentusesthecorrectdomainforitslinks.
+            vardef1=rpc.query({
+                'model':'website',
+                'method':'write',
+                'args':[[1],{
+                    'domain':"my-test-domain.com",
                 }],
             });
-            // We need to change the domain of all the websites otherwise the
-            // website selector will return the website 2 since the domain we
-            // set on website 1 doesn't actually match our test server.
-            var def2 = rpc.query({
-                'model': 'website',
-                'method': 'write',
-                'args': [[2], {
-                    'domain': "https://domain-not-used.fr",
+            //Weneedtochangethedomainofallthewebsitesotherwisethe
+            //websiteselectorwillreturnthewebsite2sincethedomainwe
+            //setonwebsite1doesn'tactuallymatchourtestserver.
+            vardef2=rpc.query({
+                'model':'website',
+                'method':'write',
+                'args':[[2],{
+                    'domain':"https://domain-not-used.fr",
                 }],
             });
-            Promise.all([def1, def2]).then(function (data) {
-                window.location.href = '/shop?search=Acoustic Bloc Screens';
+            Promise.all([def1,def2]).then(function(data){
+                window.location.href='/shop?search=AcousticBlocScreens';
             });
         },
     },
     {
-        content: "select Acoustic Bloc Screens",
-        trigger: '.oe_product_cart a:containsExact("Acoustic Bloc Screens")',
+        content:"selectAcousticBlocScreens",
+        trigger:'.oe_product_carta:containsExact("AcousticBlocScreens")',
     },
     {
-        content: "click add to cart",
-        trigger: '#product_details #add_to_cart',
+        content:"clickaddtocart",
+        trigger:'#product_details#add_to_cart',
     },
     {
-        content: "check product is in cart, get cart id, go to backend",
-        trigger: 'td.td-product_name:contains("Acoustic Bloc Screens")',
-        run: function () {
-            var orderId = $('.my_cart_quantity').data('order-id');
-            window.location.href = "/web#action=sale.action_orders&view_type=form&id=" + orderId;
+        content:"checkproductisincart,getcartid,gotobackend",
+        trigger:'td.td-product_name:contains("AcousticBlocScreens")',
+        run:function(){
+            varorderId=$('.my_cart_quantity').data('order-id');
+            window.location.href="/web#action=sale.action_orders&view_type=form&id="+orderId;
         },
     },
     {
-        content: "click confirm",
-        trigger: '.btn[name="action_confirm"]',
+        content:"clickconfirm",
+        trigger:'.btn[name="action_confirm"]',
     },
     {
-        content: "click send by email",
-        trigger: '.btn[name="action_quotation_send"]',
-        extra_trigger: '.o_statusbar_status .btn-primary:contains("Sales Order")',
+        content:"clicksendbyemail",
+        trigger:'.btn[name="action_quotation_send"]',
+        extra_trigger:'.o_statusbar_status.btn-primary:contains("SalesOrder")',
     },
     {
-        content: "Open recipients dropdown",
-        trigger: '.o_field_many2one[name="partner_ids"] .ui-autocomplete-input',
-        run: 'click',
+        content:"Openrecipientsdropdown",
+        trigger:'.o_field_many2one[name="partner_ids"].ui-autocomplete-input',
+        run:'click',
     },
     {
-        content: "Select azure interior",
-        trigger: '.ui-menu-item a:contains(Interior24)',
-        in_modal: false,
+        content:"Selectazureinterior",
+        trigger:'.ui-menu-itema:contains(Interior24)',
+        in_modal:false,
     },
     {
-        content: "click Send email",
-        trigger: '.btn[name="action_send_mail"]',
-        extra_trigger: '.o_badge_text:contains("Azure")',
+        content:"clickSendemail",
+        trigger:'.btn[name="action_send_mail"]',
+        extra_trigger:'.o_badge_text:contains("Azure")',
     },
     {
-        content: "wait mail to be sent, and go see it",
-        trigger: '.o_Message_content:contains("Your"):contains("order")',
-        run: function () {
-            window.location.href = "/web#action=mail.action_view_mail_mail&view_type=list";
+        content:"waitmailtobesent,andgoseeit",
+        trigger:'.o_Message_content:contains("Your"):contains("order")',
+        run:function(){
+            window.location.href="/web#action=mail.action_view_mail_mail&view_type=list";
         },
     },
     {
-        content: "click on the first email",
-        trigger: '.o_data_cell:contains("(Ref S")',
+        content:"clickonthefirstemail",
+        trigger:'.o_data_cell:contains("(RefS")',
     },
     {
-        content: "check it's the correct email, and the URL is correct too",
-        trigger: 'div.oe_form_field_html[name="body_html"] p:contains("Your"):contains("order")',
-        extra_trigger: 'div.oe_form_field_html[name="body_html"] a[href^="http://my-test-domain.com"]',
+        content:"checkit'sthecorrectemail,andtheURLiscorrecttoo",
+        trigger:'div.oe_form_field_html[name="body_html"]p:contains("Your"):contains("order")',
+        extra_trigger:'div.oe_form_field_html[name="body_html"]a[href^="http://my-test-domain.com"]',
     },
 ]);
 });

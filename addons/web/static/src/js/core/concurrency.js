@@ -1,319 +1,319 @@
-flectra.define('web.concurrency', function (require) {
-"use strict";
+flectra.define('web.concurrency',function(require){
+"usestrict";
 
 /**
- * Concurrency Utils
+ *ConcurrencyUtils
  *
- * This file contains a short collection of useful helpers designed to help with
- * everything concurrency related in Flectra.
+ *Thisfilecontainsashortcollectionofusefulhelpersdesignedtohelpwith
+ *everythingconcurrencyrelatedinFlectra.
  *
- * The basic concurrency primitives in Flectra JS are the callback, and the
- * promises.  Promises (promise) are more composable, so we usually use them
- * whenever possible.  We use the jQuery implementation.
+ *ThebasicconcurrencyprimitivesinFlectraJSarethecallback,andthe
+ *promises. Promises(promise)aremorecomposable,soweusuallyusethem
+ *wheneverpossible. WeusethejQueryimplementation.
  *
- * Those functions are really nothing special, but are simply the result of how
- * we solved some concurrency issues, when we noticed that a pattern emerged.
+ *Thosefunctionsarereallynothingspecial,butaresimplytheresultofhow
+ *wesolvedsomeconcurrencyissues,whenwenoticedthatapatternemerged.
  */
 
-var Class = require('web.Class');
+varClass=require('web.Class');
 
-return {
+return{
     /**
-     * Returns a promise resolved after 'wait' milliseconds
+     *Returnsapromiseresolvedafter'wait'milliseconds
      *
-     * @param {int} [wait=0] the delay in ms
-     * @return {Promise}
+     *@param{int}[wait=0]thedelayinms
+     *@return{Promise}
      */
-    delay: function (wait) {
-        return new Promise(function (resolve) {
-            setTimeout(resolve, wait);
+    delay:function(wait){
+        returnnewPromise(function(resolve){
+            setTimeout(resolve,wait);
         });
     },
     /**
-     * The DropMisordered abstraction is useful for situations where you have
-     * a sequence of operations that you want to do, but if one of them
-     * completes after a subsequent operation, then its result is obsolete and
-     * should be ignored.
+     *TheDropMisorderedabstractionisusefulforsituationswhereyouhave
+     *asequenceofoperationsthatyouwanttodo,butifoneofthem
+     *completesafterasubsequentoperation,thenitsresultisobsoleteand
+     *shouldbeignored.
      *
-     * Note that is is kind of similar to the DropPrevious abstraction, but
-     * subtly different.  The DropMisordered operations will all resolves if
-     * they complete in the correct order.
+     *NotethatisiskindofsimilartotheDropPreviousabstraction,but
+     *subtlydifferent. TheDropMisorderedoperationswillallresolvesif
+     *theycompleteinthecorrectorder.
      */
-    DropMisordered: Class.extend({
+    DropMisordered:Class.extend({
         /**
-         * @constructor
+         *@constructor
          *
-         * @param {boolean} [failMisordered=false] whether mis-ordered responses
-         *   should be failed or just ignored
+         *@param{boolean}[failMisordered=false]whethermis-orderedresponses
+         *  shouldbefailedorjustignored
          */
-        init: function (failMisordered) {
-            // local sequence number, for requests sent
-            this.lsn = 0;
-            // remote sequence number, seqnum of last received request
-            this.rsn = -1;
-            this.failMisordered = failMisordered || false;
+        init:function(failMisordered){
+            //localsequencenumber,forrequestssent
+            this.lsn=0;
+            //remotesequencenumber,seqnumoflastreceivedrequest
+            this.rsn=-1;
+            this.failMisordered=failMisordered||false;
         },
         /**
-         * Adds a promise (usually an async request) to the sequencer
+         *Addsapromise(usuallyanasyncrequest)tothesequencer
          *
-         * @param {Promise} promise to ensure add
-         * @returns {Promise}
+         *@param{Promise}promisetoensureadd
+         *@returns{Promise}
          */
-        add: function (promise) {
-            var self = this;
-            var seq = this.lsn++;
-            var res = new Promise(function (resolve, reject) {
-                promise.then(function (result) {
-                    if (seq > self.rsn) {
-                        self.rsn = seq;
+        add:function(promise){
+            varself=this;
+            varseq=this.lsn++;
+            varres=newPromise(function(resolve,reject){
+                promise.then(function(result){
+                    if(seq>self.rsn){
+                        self.rsn=seq;
                         resolve(result);
-                    } else if (self.failMisordered) {
+                    }elseif(self.failMisordered){
                         reject();
                     }
-                }).guardedCatch(function (result) {
+                }).guardedCatch(function(result){
                     reject(result);
                 });
             });
-            return res;
+            returnres;
         },
     }),
     /**
-     * The DropPrevious abstraction is useful when you have a sequence of
-     * operations that you want to execute, but you only care of the result of
-     * the last operation.
+     *TheDropPreviousabstractionisusefulwhenyouhaveasequenceof
+     *operationsthatyouwanttoexecute,butyouonlycareoftheresultof
+     *thelastoperation.
      *
-     * For example, let us say that we have a _fetch method on a widget which
-     * fetches data.  We want to rerender the widget after.  We could do this::
+     *Forexample,letussaythatwehavea_fetchmethodonawidgetwhich
+     *fetchesdata. Wewanttorerenderthewidgetafter. Wecoulddothis::
      *
-     *      this._fetch().then(function (result) {
-     *          self.state = result;
-     *          self.render();
-     *      });
+     *     this._fetch().then(function(result){
+     *         self.state=result;
+     *         self.render();
+     *     });
      *
-     * Now, we have at least two problems:
+     *Now,wehaveatleasttwoproblems:
      *
-     * - if this code is called twice and the second _fetch completes before the
-     *   first, the end state will be the result of the first _fetch, which is
-     *   not what we expect
-     * - in any cases, the user interface will rerender twice, which is bad.
+     *-ifthiscodeiscalledtwiceandthesecond_fetchcompletesbeforethe
+     *  first,theendstatewillbetheresultofthefirst_fetch,whichis
+     *  notwhatweexpect
+     *-inanycases,theuserinterfacewillrerendertwice,whichisbad.
      *
-     * Now, if we have a DropPrevious::
+     *Now,ifwehaveaDropPrevious::
      *
-     *      this.dropPrevious = new DropPrevious();
+     *     this.dropPrevious=newDropPrevious();
      *
-     * Then we can wrap the _fetch in a DropPrevious and have the expected
-     * result::
+     *Thenwecanwrapthe_fetchinaDropPreviousandhavetheexpected
+     *result::
      *
-     *      this.dropPrevious
-     *          .add(this._fetch())
-     *          .then(function (result) {
-     *              self.state = result;
-     *              self.render();
-     *          });
+     *     this.dropPrevious
+     *         .add(this._fetch())
+     *         .then(function(result){
+     *             self.state=result;
+     *             self.render();
+     *         });
      */
-    DropPrevious: Class.extend({
+    DropPrevious:Class.extend({
         /**
-         * Registers a new promise and rejects the previous one
+         *Registersanewpromiseandrejectsthepreviousone
          *
-         * @param {Promise} promise the new promise
-         * @returns {Promise}
+         *@param{Promise}promisethenewpromise
+         *@returns{Promise}
          */
-        add: function (promise) {
-            if (this.currentDef) {
+        add:function(promise){
+            if(this.currentDef){
                 this.currentDef.reject();
             }
-            var rejection;
-            var res = new Promise(function (resolve, reject) {
-                rejection = reject;
-                promise.then(resolve).catch(function (reason) {
+            varrejection;
+            varres=newPromise(function(resolve,reject){
+                rejection=reject;
+                promise.then(resolve).catch(function(reason){
                     reject(reason);
                 });
             });
 
-            this.currentDef = res;
-            this.currentDef.reject = rejection;
-            return res;
+            this.currentDef=res;
+            this.currentDef.reject=rejection;
+            returnres;
         }
     }),
     /**
-     * A (Flectra) mutex is a primitive for serializing computations.  This is
-     * useful to avoid a situation where two computations modify some shared
-     * state and cause some corrupted state.
+     *A(Flectra)mutexisaprimitiveforserializingcomputations. Thisis
+     *usefultoavoidasituationwheretwocomputationsmodifysomeshared
+     *stateandcausesomecorruptedstate.
      *
-     * Imagine that we have a function to fetch some data _load(), which returns
-     * a promise which resolves to something useful. Now, we have some code
-     * looking like this::
+     *Imaginethatwehaveafunctiontofetchsomedata_load(),whichreturns
+     *apromisewhichresolvestosomethinguseful.Now,wehavesomecode
+     *lookinglikethis::
      *
-     *      return this._load().then(function (result) {
-     *          this.state = result;
-     *      });
+     *     returnthis._load().then(function(result){
+     *         this.state=result;
+     *     });
      *
-     * If this code is run twice, but the second execution ends before the
-     * first, then the final state will be the result of the first call to
-     * _load.  However, if we have a mutex::
+     *Ifthiscodeisruntwice,butthesecondexecutionendsbeforethe
+     *first,thenthefinalstatewillbetheresultofthefirstcallto
+     *_load. However,ifwehaveamutex::
      *
-     *      this.mutex = new Mutex();
+     *     this.mutex=newMutex();
      *
-     * and if we wrap the calls to _load in a mutex::
+     *andifwewrapthecallsto_loadinamutex::
      *
-     *      return this.mutex.exec(function() {
-     *          return this._load().then(function (result) {
-     *              this.state = result;
-     *          });
-     *      });
+     *     returnthis.mutex.exec(function(){
+     *         returnthis._load().then(function(result){
+     *             this.state=result;
+     *         });
+     *     });
      *
-     * Then, it is guaranteed that the final state will be the result of the
-     * second execution.
+     *Then,itisguaranteedthatthefinalstatewillbetheresultofthe
+     *secondexecution.
      *
-     * A Mutex has to be a class, and not a function, because we have to keep
-     * track of some internal state.
+     *AMutexhastobeaclass,andnotafunction,becausewehavetokeep
+     *trackofsomeinternalstate.
      */
-    Mutex: Class.extend({
-        init: function () {
-            this.lock = Promise.resolve();
-            this.queueSize = 0;
-            this.unlockedProm = undefined;
-            this._unlock = undefined;
+    Mutex:Class.extend({
+        init:function(){
+            this.lock=Promise.resolve();
+            this.queueSize=0;
+            this.unlockedProm=undefined;
+            this._unlock=undefined;
         },
         /**
-         * Add a computation to the queue, it will be executed as soon as the
-         * previous computations are completed.
+         *Addacomputationtothequeue,itwillbeexecutedassoonasthe
+         *previouscomputationsarecompleted.
          *
-         * @param {function} action a function which may return a Promise
-         * @returns {Promise}
+         *@param{function}actionafunctionwhichmayreturnaPromise
+         *@returns{Promise}
          */
-        exec: function (action) {
-            var self = this;
-            var currentLock = this.lock;
-            var result;
+        exec:function(action){
+            varself=this;
+            varcurrentLock=this.lock;
+            varresult;
             this.queueSize++;
-            this.unlockedProm = this.unlockedProm || new Promise(function (resolve) {
-                self._unlock = resolve;
+            this.unlockedProm=this.unlockedProm||newPromise(function(resolve){
+                self._unlock=resolve;
             });
-            this.lock = new Promise(function (unlockCurrent) {
-                currentLock.then(function () {
-                    result = action();
-                    var always = function (returnedResult) {
+            this.lock=newPromise(function(unlockCurrent){
+                currentLock.then(function(){
+                    result=action();
+                    varalways=function(returnedResult){
                         unlockCurrent();
                         self.queueSize--;
-                        if (self.queueSize === 0) {
-                            self.unlockedProm = undefined;
+                        if(self.queueSize===0){
+                            self.unlockedProm=undefined;
                             self._unlock();
                         }
-                        return returnedResult;
+                        returnreturnedResult;
                     };
                     Promise.resolve(result).then(always).guardedCatch(always);
                 });
             });
-            return this.lock.then(function () {
-                return result;
+            returnthis.lock.then(function(){
+                returnresult;
             });
         },
         /**
-         * @returns {Promise} resolved as soon as the Mutex is unlocked
-         *   (directly if it is currently idle)
+         *@returns{Promise}resolvedassoonastheMutexisunlocked
+         *  (directlyifitiscurrentlyidle)
          */
-        getUnlockedDef: function () {
-            return this.unlockedProm || Promise.resolve();
+        getUnlockedDef:function(){
+            returnthis.unlockedProm||Promise.resolve();
         },
     }),
     /**
-     * A MutexedDropPrevious is a primitive for serializing computations while
-     * skipping the ones that where executed between a current one and before
-     * the execution of a new one. This is useful to avoid useless RPCs.
+     *AMutexedDropPreviousisaprimitiveforserializingcomputationswhile
+     *skippingtheonesthatwhereexecutedbetweenacurrentoneandbefore
+     *theexecutionofanewone.ThisisusefultoavoiduselessRPCs.
      *
-     * You can read the Mutex description to understand its role ; for the
-     * DropPrevious part of this abstraction, imagine the following situation:
-     * you have a code that call the server with a fixed argument and a list of
-     * operations that only grows after each call and you only care about the
-     * RPC result (the server code doesn't do anything). If this code is called
-     * three times (A B C) and C is executed before B has started, it's useless
-     * to make an extra RPC (B) if you know that it won't have an impact and you
-     * won't use its result.
+     *YoucanreadtheMutexdescriptiontounderstanditsrole;forthe
+     *DropPreviouspartofthisabstraction,imaginethefollowingsituation:
+     *youhaveacodethatcalltheserverwithafixedargumentandalistof
+     *operationsthatonlygrowsaftereachcallandyouonlycareaboutthe
+     *RPCresult(theservercodedoesn'tdoanything).Ifthiscodeiscalled
+     *threetimes(ABC)andCisexecutedbeforeBhasstarted,it'suseless
+     *tomakeanextraRPC(B)ifyouknowthatitwon'thaveanimpactandyou
+     *won'tuseitsresult.
      *
-     * Note that the promise returned by the exec call won't be resolved if
-     * exec is called before the first exec call resolution ; only the promise
-     * returned by the last exec call will be resolved (the other are rejected);
+     *Notethatthepromisereturnedbytheexeccallwon'tberesolvedif
+     *execiscalledbeforethefirstexeccallresolution;onlythepromise
+     *returnedbythelastexeccallwillberesolved(theotherarerejected);
      *
-     * A MutexedDropPrevious has to be a class, and not a function, because we
-     * have to keep track of some internal state. The exec function takes as
-     * argument an action (and not a promise as DropPrevious for example)
-     * because it's the MutexedDropPrevious role to trigger the RPC call that
-     * returns a promise when it's time.
+     *AMutexedDropPrevioushastobeaclass,andnotafunction,becausewe
+     *havetokeeptrackofsomeinternalstate.Theexecfunctiontakesas
+     *argumentanaction(andnotapromiseasDropPreviousforexample)
+     *becauseit'stheMutexedDropPreviousroletotriggertheRPCcallthat
+     *returnsapromisewhenit'stime.
      */
-    MutexedDropPrevious: Class.extend({
-        init: function () {
-            this.locked = false;
-            this.currentProm = null;
-            this.pendingAction = null;
-            this.pendingProm = null;
+    MutexedDropPrevious:Class.extend({
+        init:function(){
+            this.locked=false;
+            this.currentProm=null;
+            this.pendingAction=null;
+            this.pendingProm=null;
         },
         /**
-         * @param {function} action a function which may return a promise
-         * @returns {Promise}
+         *@param{function}actionafunctionwhichmayreturnapromise
+         *@returns{Promise}
          */
-        exec: function (action) {
-            var self = this;
-            var resolution;
-            var rejection;
-            if (this.locked) {
-                this.pendingAction = action;
-                var oldPendingDef = this.pendingProm;
+        exec:function(action){
+            varself=this;
+            varresolution;
+            varrejection;
+            if(this.locked){
+                this.pendingAction=action;
+                varoldPendingDef=this.pendingProm;
 
-                this.pendingProm = new Promise(function (resolve, reject) {
-                    resolution = resolve;
-                    rejection = reject;
-                    if (oldPendingDef) {
+                this.pendingProm=newPromise(function(resolve,reject){
+                    resolution=resolve;
+                    rejection=reject;
+                    if(oldPendingDef){
                         oldPendingDef.reject();
                     }
                     self.currentProm.reject();
                 });
-                this.pendingProm.resolve = resolution;
-                this.pendingProm.reject = rejection;
-                return this.pendingProm;
-            } else {
-                this.locked = true;
-                this.currentProm = new Promise(function (resolve, reject) {
-                    resolution = resolve;
-                    rejection = reject;
-                    function unlock() {
-                        self.locked = false;
-                        if (self.pendingAction) {
-                            var action = self.pendingAction;
-                            var prom = self.pendingProm;
-                            self.pendingAction = null;
-                            self.pendingProm = null;
+                this.pendingProm.resolve=resolution;
+                this.pendingProm.reject=rejection;
+                returnthis.pendingProm;
+            }else{
+                this.locked=true;
+                this.currentProm=newPromise(function(resolve,reject){
+                    resolution=resolve;
+                    rejection=reject;
+                    functionunlock(){
+                        self.locked=false;
+                        if(self.pendingAction){
+                            varaction=self.pendingAction;
+                            varprom=self.pendingProm;
+                            self.pendingAction=null;
+                            self.pendingProm=null;
                             self.exec(action)
                                 .then(prom.resolve)
                                 .guardedCatch(prom.reject);
                         }
                     }
                     Promise.resolve(action())
-                        .then(function (result) {
+                        .then(function(result){
                             resolve(result);
                             unlock();
                         })
-                        .guardedCatch(function (reason) {
+                        .guardedCatch(function(reason){
                             reject(reason);
                             unlock();
                         });
                 });
-                this.currentProm.resolve = resolution;
-                this.currentProm.reject = rejection;
-                return this.currentProm;
+                this.currentProm.resolve=resolution;
+                this.currentProm.reject=rejection;
+                returnthis.currentProm;
             }
         }
     }),
     /**
-     * Rejects a promise as soon as a reference promise is either resolved or
-     * rejected
+     *Rejectsapromiseassoonasareferencepromiseiseitherresolvedor
+     *rejected
      *
-     * @param {Promise} [target_def] the promise to potentially reject
-     * @param {Promise} [reference_def] the reference target
-     * @returns {Promise}
+     *@param{Promise}[target_def]thepromisetopotentiallyreject
+     *@param{Promise}[reference_def]thereferencetarget
+     *@returns{Promise}
      */
-    rejectAfter: function (target_def, reference_def) {
-        return new Promise(function (resolve, reject) {
+    rejectAfter:function(target_def,reference_def){
+        returnnewPromise(function(resolve,reject){
             target_def.then(resolve).guardedCatch(reject);
             reference_def.then(reject).guardedCatch(reject);
         });

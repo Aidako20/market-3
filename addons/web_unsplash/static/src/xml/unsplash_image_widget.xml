@@ -1,82 +1,82 @@
-<?xml version="1.0" encoding="utf-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="utf-8"?>
+<templatesid="template"xml:space="preserve">
 
-<t t-extend="wysiwyg.widgets.file">
-    <t t-jquery=".o_we_load_more" t-operation="after">
-        <div class="unsplash_error"></div>
+<tt-extend="wysiwyg.widgets.file">
+    <tt-jquery=".o_we_load_more"t-operation="after">
+        <divclass="unsplash_error"></div>
     </t>
 </t>
-<t t-extend="wysiwyg.widgets.image">
-    <t t-jquery="option[value='media-library']" t-operation="after">
-        <option value="unsplash">Photos (via Unsplash)</option>
+<tt-extend="wysiwyg.widgets.image">
+    <tt-jquery="option[value='media-library']"t-operation="after">
+        <optionvalue="unsplash">Photos(viaUnsplash)</option>
     </t>
 </t>
-<t t-extend="wysiwyg.widgets.image.existing.attachments">
-    <t t-jquery="t[t-foreach='libraryMedia']" t-operation="after">
-        <t t-if="['all', 'unsplash'].includes(widget.searchService)" t-foreach="widget.unsplashRecords" t-as="record">
-            <t t-call="web_unsplash.dialog.image.content"/>
+<tt-extend="wysiwyg.widgets.image.existing.attachments">
+    <tt-jquery="t[t-foreach='libraryMedia']"t-operation="after">
+        <tt-if="['all','unsplash'].includes(widget.searchService)"t-foreach="widget.unsplashRecords"t-as="record">
+            <tt-call="web_unsplash.dialog.image.content"/>
         </t>
     </t>
 </t>
 
-<t t-name="web_unsplash.dialog.image.content">
-    <div class="o_existing_attachment_cell o_unsplash_attachment_cell position-relative align-items-center justify-content-center bg-light" t-att-data-imgid="record.id" t-att-data-id="record.id" t-att-data-url="record.urls.regular" t-att-data-download-url="record.links.download_location" t-att-data-description="record.alt_description">
-        <img class="img img-fluid o_we_attachment_highlight" t-att-src="record.url" t-att-alt="record.alt_description" style="max-height: 100%;"/>
-        <a class="o_we_media_author" t-att-href="record.user.links.html" target="_blank" t-esc="record.user.name" t-att-title="record.user.name"/>
+<tt-name="web_unsplash.dialog.image.content">
+    <divclass="o_existing_attachment_cello_unsplash_attachment_cellposition-relativealign-items-centerjustify-content-centerbg-light"t-att-data-imgid="record.id"t-att-data-id="record.id"t-att-data-url="record.urls.regular"t-att-data-download-url="record.links.download_location"t-att-data-description="record.alt_description">
+        <imgclass="imgimg-fluido_we_attachment_highlight"t-att-src="record.url"t-att-alt="record.alt_description"style="max-height:100%;"/>
+        <aclass="o_we_media_author"t-att-href="record.user.links.html"target="_blank"t-esc="record.user.name"t-att-title="record.user.name"/>
     </div>
 </t>
 
-<t t-name="web_unsplash.dialog.error.credentials">
-    <h4><t t-esc="title"/></h4>
-    <div class="details">
-        <t t-esc="subtitle"/>
-        <div class="form-group mt-4 access_key_box">
-            <input type="text" class="form-control w-100" id="accessKeyInput" placeholder="Paste your access key here"/>
+<tt-name="web_unsplash.dialog.error.credentials">
+    <h4><tt-esc="title"/></h4>
+    <divclass="details">
+        <tt-esc="subtitle"/>
+        <divclass="form-groupmt-4access_key_box">
+            <inputtype="text"class="form-controlw-100"id="accessKeyInput"placeholder="Pasteyouraccesskeyhere"/>
         </div>
-        <a href="https://doc.flectrahq.com/2.0/applications/general/unsplash/unsplash_access_key.html" target="_blank"><i class="fa fa-arrow-right"/> Generate an access key</a>
-        <div class="form-group mt-4 access_key_box">
-            <input type="text" class="form-control w-100" id="appIdInput" placeholder="Paste your application ID here"/>
+        <ahref="https://doc.flectrahq.com/2.0/applications/general/unsplash/unsplash_access_key.html"target="_blank"><iclass="fafa-arrow-right"/>Generateanaccesskey</a>
+        <divclass="form-groupmt-4access_key_box">
+            <inputtype="text"class="form-controlw-100"id="appIdInput"placeholder="PasteyourapplicationIDhere"/>
         </div>
-        <a href="https://doc.flectrahq.com/2.0/applications/general/unsplash/unsplash_application_id.html" target="_blank">
-            <i class="fa fa-arrow-right"/> How to find my Unsplash Application ID?</a>
-        <button type="button" class="btn btn-primary btn-block mt-4 save_unsplash">Apply</button>
+        <ahref="https://doc.flectrahq.com/2.0/applications/general/unsplash/unsplash_application_id.html"target="_blank">
+            <iclass="fafa-arrow-right"/>HowtofindmyUnsplashApplicationID?</a>
+        <buttontype="button"class="btnbtn-primarybtn-blockmt-4save_unsplash">Apply</button>
     </div>
 </t>
 
-<t t-name="web_unsplash.dialog.error.content">
-    <div class="d-flex mt-2 unsplash_error">
-        <div class="mx-auto text-center">
-            <t t-if="status == 'key_not_found'">
-                <t t-call="web_unsplash.dialog.error.credentials">
-                    <t t-set="title">
-                        Unsplash requires an access key and an application ID
+<tt-name="web_unsplash.dialog.error.content">
+    <divclass="d-flexmt-2unsplash_error">
+        <divclass="mx-autotext-center">
+            <tt-if="status=='key_not_found'">
+                <tt-call="web_unsplash.dialog.error.credentials">
+                    <tt-set="title">
+                        UnsplashrequiresanaccesskeyandanapplicationID
                     </t>
                 </t>
             </t>
-            <t t-elif="status == 403">
-                <h4 class="text-muted">
-                    Search is temporarily unavailable
+            <tt-elif="status==403">
+                <h4class="text-muted">
+                    Searchistemporarilyunavailable
                 </h4>
-                <div class="details">
-                    The max number of searches is exceeded. Please retry in an hour or extend to a better account.
+                <divclass="details">
+                    Themaxnumberofsearchesisexceeded.Pleaseretryinanhourorextendtoabetteraccount.
                 </div>
             </t>
-            <t t-elif="status == 401">
-                <t t-call="web_unsplash.dialog.error.credentials">
-                    <t t-set="title">
-                        Unauthorized Key
+            <tt-elif="status==401">
+                <tt-call="web_unsplash.dialog.error.credentials">
+                    <tt-set="title">
+                        UnauthorizedKey
                     </t>
-                    <t t-set="subtitle">
-                        Please check your Unsplash access key and application ID.
+                    <tt-set="subtitle">
+                        PleasecheckyourUnsplashaccesskeyandapplicationID.
                     </t>
                 </t>
             </t>
-            <t t-else="">
-                <h4 class="text-muted">
-                    Something went wrong
+            <tt-else="">
+                <h4class="text-muted">
+                    Somethingwentwrong
                 </h4>
-                <div class="details">
-                    Please check your internet connection or contact administrator.
+                <divclass="details">
+                    Pleasecheckyourinternetconnectionorcontactadministrator.
                 </div>
             </t>
         </div>

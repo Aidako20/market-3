@@ -1,9 +1,9 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import fields, models
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportfields,models
 
 
-class ResBank(models.Model):
-    _name = 'res.bank'
-    _inherit = 'res.bank'
+classResBank(models.Model):
+    _name='res.bank'
+    _inherit='res.bank'
 
-    l10n_cl_sbif_code = fields.Char('Cod. SBIF', size=10)
+    l10n_cl_sbif_code=fields.Char('Cod.SBIF',size=10)

@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.tests.common import TransactionCase
+fromflectra.tests.commonimportTransactionCase
 
 
-class TestIAP(TransactionCase):
-    def test_get_account(self):
-        account = self.env["iap.account"].get("random_service_name")
-        self.assertTrue(account.account_token, "Must be able to read the field")
+classTestIAP(TransactionCase):
+    deftest_get_account(self):
+        account=self.env["iap.account"].get("random_service_name")
+        self.assertTrue(account.account_token,"Mustbeabletoreadthefield")

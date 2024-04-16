@@ -1,107 +1,107 @@
-flectra.define('point_of_sale.tour.TicketScreenTourMethods', function (require) {
-    'use strict';
+flectra.define('point_of_sale.tour.TicketScreenTourMethods',function(require){
+    'usestrict';
 
-    const { createTourMethods } = require('point_of_sale.tour.utils');
+    const{createTourMethods}=require('point_of_sale.tour.utils');
 
-    class Do {
-        clickNewTicket() {
-            return [{ trigger: '.ticket-screen .highlight' }];
+    classDo{
+        clickNewTicket(){
+            return[{trigger:'.ticket-screen.highlight'}];
         }
-        clickDiscard() {
-            return [{ trigger: '.ticket-screen button.discard' }];
+        clickDiscard(){
+            return[{trigger:'.ticket-screenbutton.discard'}];
         }
-        selectOrder(orderName) {
-            return [
+        selectOrder(orderName){
+            return[
                 {
-                    trigger: `.ticket-screen .order-row > .col:nth-child(2):contains("${orderName}")`,
+                    trigger:`.ticket-screen.order-row>.col:nth-child(2):contains("${orderName}")`,
                 },
             ];
         }
-        deleteOrder(orderName) {
-            return [
+        deleteOrder(orderName){
+            return[
                 {
-                    trigger: `.ticket-screen .orders > .order-row > .col:contains("${orderName}") ~ .col[name="delete"]`,
+                    trigger:`.ticket-screen.orders>.order-row>.col:contains("${orderName}")~.col[name="delete"]`,
                 },
             ];
         }
-        selectFilter(name) {
-            return [
+        selectFilter(name){
+            return[
                 {
-                    trigger: `.pos-search-bar .filter`,
+                    trigger:`.pos-search-bar.filter`,
                 },
                 {
-                    trigger: `.pos-search-bar .filter ul`,
-                    run: () => {},
+                    trigger:`.pos-search-bar.filterul`,
+                    run:()=>{},
                 },
                 {
-                    trigger: `.pos-search-bar .filter ul li:contains("${name}")`,
+                    trigger:`.pos-search-bar.filterulli:contains("${name}")`,
                 },
             ];
         }
-        search(field, searchWord) {
-            return [
+        search(field,searchWord){
+            return[
                 {
-                    trigger: '.pos-search-bar input',
-                    run: `text ${searchWord}`,
+                    trigger:'.pos-search-barinput',
+                    run:`text${searchWord}`,
                 },
                 {
                     /**
-                     * Manually trigger keydown event to show the search field list
-                     * because the previous step do not trigger keydown event.
+                     *Manuallytriggerkeydowneventtoshowthesearchfieldlist
+                     *becausethepreviousstepdonottriggerkeydownevent.
                      */
-                    trigger: '.pos-search-bar input',
-                    run: function () {
+                    trigger:'.pos-search-barinput',
+                    run:function(){
                         document
-                            .querySelector('.pos-search-bar input')
-                            .dispatchEvent(new KeyboardEvent('keydown', { key: '' }));
+                            .querySelector('.pos-search-barinput')
+                            .dispatchEvent(newKeyboardEvent('keydown',{key:''}));
                     },
                 },
                 {
-                    trigger: `.pos-search-bar .search ul li:contains("${field}")`,
+                    trigger:`.pos-search-bar.searchulli:contains("${field}")`,
                 },
             ];
         }
-        settleTips() {
-            return [
+        settleTips(){
+            return[
                 {
-                    trigger: '.ticket-screen .buttons .settle-tips',
+                    trigger:'.ticket-screen.buttons.settle-tips',
                 },
             ];
         }
     }
 
-    class Check {
-        checkStatus(orderName, status) {
-            return [
+    classCheck{
+        checkStatus(orderName,status){
+            return[
                 {
-                    trigger: `.ticket-screen .order-row > .col:nth-child(2):contains("${orderName}") ~ .col:nth-child(6):contains(${status})`,
-                    run: () => {},
+                    trigger:`.ticket-screen.order-row>.col:nth-child(2):contains("${orderName}")~.col:nth-child(6):contains(${status})`,
+                    run:()=>{},
                 },
             ];
         }
         /**
-         * Check if the nth row contains the given string.
-         * Note that 1st row is the header-row.
+         *Checkifthenthrowcontainsthegivenstring.
+         *Notethat1strowistheheader-row.
          */
-        nthRowContains(n, string) {
-            return [
+        nthRowContains(n,string){
+            return[
                 {
-                    trigger: `.ticket-screen .orders > .order-row:nth-child(${n}):contains("${string}")`,
-                    run: () => {},
+                    trigger:`.ticket-screen.orders>.order-row:nth-child(${n}):contains("${string}")`,
+                    run:()=>{},
                 },
             ];
         }
-        noNewTicketButton() {
-            return [
+        noNewTicketButton(){
+            return[
                 {
-                    trigger: '.ticket-screen .controls .buttons:nth-child(1):has(.discard)',
-                    run: () => {},
+                    trigger:'.ticket-screen.controls.buttons:nth-child(1):has(.discard)',
+                    run:()=>{},
                 },
             ];
         }
     }
 
-    class Execute {}
+    classExecute{}
 
-    return createTourMethods('TicketScreen', Do, Check, Execute);
+    returncreateTourMethods('TicketScreen',Do,Check,Execute);
 });
